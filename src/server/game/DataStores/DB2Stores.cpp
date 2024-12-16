@@ -394,10 +394,8 @@ namespace
     WorldMapAreaByAreaIDContainer _worldMapAreaByAreaID;
 }
 
-typedef std::vector<std::string> DB2StoreProblemList;
-
 template<class T, template<class> class DB2>
-inline void LoadDB2(uint32& availableDb2Locales, DB2StoreProblemList& errlist, StorageMap& stores, DB2StorageBase* storage, std::string const& db2Path, uint32 defaultLocale, DB2<T> const& /*hint*/)
+inline void LoadDB2(uint32& availableDb2Locales, std::vector<std::string>& errlist, StorageMap& stores, DB2StorageBase* storage, std::string const& db2Path, uint32 defaultLocale, DB2<T> const& /*hint*/)
 {
     // validate structure
     DB2LoadInfo const* loadInfo = storage->GetLoadInfo();
@@ -471,7 +469,7 @@ void DB2Manager::LoadStores(std::string const& dataPath, uint32 defaultLocale)
 
     std::string db2Path = dataPath + "dbc/";
 
-    DB2StoreProblemList bad_db2_files;
+    std::vector<std::string> bad_db2_files;
     uint32 availableDb2Locales = 0xFF;
 
 #define LOAD_DB2(store) LoadDB2(availableDb2Locales, bad_db2_files, _stores, &store, db2Path, defaultLocale, store)
