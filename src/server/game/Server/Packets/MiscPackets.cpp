@@ -404,7 +404,7 @@ WorldPacket const* WorldPackets::Misc::PhaseShiftChange::Write()
 
     _worldPacket << uint32(PreloadMapIDs.size() * 2);           // size in bytes
     for (uint16 preloadMapId : PreloadMapIDs)
-        _worldPacket << uint16(preloadMapId);                            // Inactive terrain swap map id
+        _worldPacket << uint16(preloadMapId);                   // Inactive terrain swap map id
 
     _worldPacket << uint32(UiWorldMapAreaIDSwaps.size() * 2);   // size in bytes
     for (uint16 uiWorldMapAreaIDSwap : UiWorldMapAreaIDSwaps)

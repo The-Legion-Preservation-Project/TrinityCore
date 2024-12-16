@@ -201,13 +201,16 @@ void PhasingHandler::OnMapChange(WorldObject* object)
     object->GetPhaseShift().UiWorldMapAreaIdSwaps.clear();
     object->GetSuppressedPhaseShift().VisibleMapIds.clear();
 
-    if (std::vector<TerrainSwapInfo*> const* visibleMapIds = sObjectMgr->GetTerrainSwapsForMap(object->GetMapId()))
+    for (auto visibleMapPair : sObjectMgr->GetTerrainSwaps())
     {
-        for (TerrainSwapInfo const* visibleMapInfo : *visibleMapIds)
+        for (TerrainSwapInfo const* visibleMapInfo : visibleMapPair.second)
         {
             if (sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_TERRAIN_SWAP, visibleMapInfo->Id, srcInfo))
             {
-                phaseShift.AddVisibleMapId(visibleMapInfo->Id, visibleMapInfo);
+                if (visibleMapPair.first == object->GetMapId())
+                    phaseShift.AddVisibleMapId(visibleMapInfo->Id, visibleMapInfo);
+
+                // ui map is visible on all maps
                 for (uint32 uiWorldMapAreaIdSwap : visibleMapInfo->UiWorldMapAreaIDSwaps)
                     phaseShift.AddUiWorldMapAreaIdSwap(uiWorldMapAreaIdSwap);
             }

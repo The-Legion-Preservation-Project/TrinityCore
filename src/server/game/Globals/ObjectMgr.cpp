@@ -9758,11 +9758,6 @@ TerrainSwapInfo const* ObjectMgr::GetTerrainSwapInfo(uint32 terrainSwapId) const
     return Trinity::Containers::MapGetValuePtr(_terrainSwapInfoById, terrainSwapId);
 }
 
-std::vector<TerrainSwapInfo*> const* ObjectMgr::GetTerrainSwapsForMap(uint32 mapId) const
-{
-    return Trinity::Containers::MapGetValuePtr(_terrainSwapInfoByMap, mapId);
-}
-
 GameObjectTemplate const* ObjectMgr::GetGameObjectTemplate(uint32 entry) const
 {
     GameObjectTemplateContainer::const_iterator itr = _gameObjectTemplateStore.find(entry);
