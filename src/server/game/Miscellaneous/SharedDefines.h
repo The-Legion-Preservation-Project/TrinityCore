@@ -127,10 +127,10 @@ enum Gender
     GENDER_NONE                        =  2
 };
 
-// ChrRaces.dbc (6.0.2.18988)
+// ChrRaces.db2 (7.3.5.26972)
 enum Races
 {
-    RACE_NONE               = 0,
+    RACE_NONE                   = 0,
     RACE_HUMAN                  = 1,
     RACE_ORC                    = 2,
     RACE_DWARF                  = 3,
@@ -153,7 +153,7 @@ enum Races
     //RACE_NORTHREND_SKELETON = 20,
     //RACE_ICE_TROLL          = 21,
     RACE_WORGEN                 = 22,
-    //RACE_GILNEAN            = 23
+    //RACE_GILNEAN            = 23,
     RACE_PANDAREN_NEUTRAL       = 24,
     RACE_PANDAREN_ALLIANCE      = 25,
     RACE_PANDAREN_HORDE         = 26,
@@ -166,41 +166,41 @@ enum Races
 // max+1 for player race
 #define MAX_RACES         31
 
-#define RACEMASK_ALL_PLAYABLE      \
-    ((1<<(RACE_HUMAN-1))         | \
-     (1<<(RACE_ORC-1))           | \
-     (1<<(RACE_DWARF-1))         | \
-     (1<<(RACE_NIGHTELF-1))      | \
-     (1<<(RACE_UNDEAD_PLAYER-1)) | \
-     (1<<(RACE_TAUREN-1))        | \
-     (1<<(RACE_GNOME-1))         | \
-     (1<<(RACE_TROLL-1))         | \
-     (1<<(RACE_BLOODELF-1))      | \
-     (1<<(RACE_DRAENEI-1))       | \
-     (1<<(RACE_GOBLIN-1))        | \
-     (1<<(RACE_WORGEN-1))        | \
-     (1<<(RACE_PANDAREN_NEUTRAL-1))  |\
-     (1<<(RACE_PANDAREN_ALLIANCE-1)) |\
-     (1<<(RACE_PANDAREN_HORDE-1))|\
-     (1<<(RACE_NIGHTBORNE-1))|\
-     (1<<(RACE_HIGHMOUNTAIN_TAUREN-1))|\
-     (1<<(RACE_VOID_ELF-1))|\
-     (1<<(RACE_LIGHTFORGED_DRAENEI-1)))
+#define RACEMASK_ALL_PLAYABLE                     \
+    ((UI64LIT(1)<<(RACE_HUMAN-1))               | \
+     (UI64LIT(1)<<(RACE_ORC-1))                 | \
+     (UI64LIT(1)<<(RACE_DWARF-1))               | \
+     (UI64LIT(1)<<(RACE_NIGHTELF-1))            | \
+     (UI64LIT(1)<<(RACE_UNDEAD_PLAYER-1))       | \
+     (UI64LIT(1)<<(RACE_TAUREN-1))              | \
+     (UI64LIT(1)<<(RACE_GNOME-1))               | \
+     (UI64LIT(1)<<(RACE_TROLL-1))               | \
+     (UI64LIT(1)<<(RACE_BLOODELF-1))            | \
+     (UI64LIT(1)<<(RACE_DRAENEI-1))             | \
+     (UI64LIT(1)<<(RACE_GOBLIN-1))              | \
+     (UI64LIT(1)<<(RACE_WORGEN-1))              | \
+     (UI64LIT(1)<<(RACE_PANDAREN_NEUTRAL-1))    | \
+     (UI64LIT(1)<<(RACE_PANDAREN_ALLIANCE-1))   | \
+     (UI64LIT(1)<<(RACE_PANDAREN_HORDE-1))      | \
+     (UI64LIT(1)<<(RACE_NIGHTBORNE-1))          | \
+     (UI64LIT(1)<<(RACE_HIGHMOUNTAIN_TAUREN-1)) | \
+     (UI64LIT(1)<<(RACE_VOID_ELF-1))            | \
+     (UI64LIT(1)<<(RACE_LIGHTFORGED_DRAENEI-1)))
 
-#define RACEMASK_NEUTRAL (1<<(RACE_PANDAREN_NEUTRAL-1))
+#define RACEMASK_NEUTRAL (UI64LIT(1)<<(RACE_PANDAREN_NEUTRAL-1))
 
-#define RACEMASK_ALLIANCE     \
-    ((1<<(RACE_HUMAN-1))    | \
-     (1<<(RACE_DWARF-1))    | \
-     (1<<(RACE_NIGHTELF-1)) | \
-     (1<<(RACE_GNOME-1))    | \
-     (1<<(RACE_DRAENEI-1))  | \
-     (1<<(RACE_WORGEN-1))   | \
-     (1<<(RACE_PANDAREN_ALLIANCE-1)) |\
-     (1<<(RACE_VOID_ELF-1)) |\
-     (1<<(RACE_LIGHTFORGED_DRAENEI-1)))
+#define RACEMASK_ALLIANCE                         \
+    ((UI64LIT(1)<<(RACE_HUMAN-1))               | \
+     (UI64LIT(1)<<(RACE_DWARF-1))               | \
+     (UI64LIT(1)<<(RACE_NIGHTELF-1))            | \
+     (UI64LIT(1)<<(RACE_GNOME-1))               | \
+     (UI64LIT(1)<<(RACE_DRAENEI-1))             | \
+     (UI64LIT(1)<<(RACE_WORGEN-1))              | \
+     (UI64LIT(1)<<(RACE_PANDAREN_ALLIANCE-1))   | \
+     (UI64LIT(1)<<(RACE_VOID_ELF-1))            | \
+     (UI64LIT(1)<<(RACE_LIGHTFORGED_DRAENEI-1)))
 
-#define RACEMASK_HORDE RACEMASK_ALL_PLAYABLE & ~RACEMASK_ALLIANCE
+#define RACEMASK_HORDE (RACEMASK_ALL_PLAYABLE & ~RACEMASK_ALLIANCE)
 
 // Class value is index in ChrClasses.dbc
 enum Classes : uint8
