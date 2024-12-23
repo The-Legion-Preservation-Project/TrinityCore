@@ -176,7 +176,7 @@ namespace WorldPackets
             time_t Date = time_t(0);
             uint32 Flags = 0;
             int32 TextureID = 0;
-            ObjectGuid EventGuildID;
+            uint64 EventClubID = 0;
             ObjectGuid OwnerGuid;
         };
 
@@ -213,7 +213,7 @@ namespace WorldPackets
             WorldPacket const* Write() override;
 
             ObjectGuid OwnerGuid;
-            ObjectGuid EventGuildID;
+            uint64 EventClubID = 0;
             uint64 EventID = 0;
             time_t Date = time_t(0);
             time_t LockDate = time_t(0);
@@ -234,7 +234,7 @@ namespace WorldPackets
             WorldPacket const* Write() override;
 
             ObjectGuid OwnerGuid;
-            ObjectGuid EventGuildID;
+            uint64 EventClubID = 0;
             ObjectGuid InvitedByGuid;
             uint64 InviteID = 0;
             uint64 EventID = 0;

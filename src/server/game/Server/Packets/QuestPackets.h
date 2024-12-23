@@ -157,7 +157,7 @@ namespace WorldPackets
             int32 CompleteSoundKitID        = 0;
             int32 AreaGroupID               = 0;
             int32 TimeAllowed               = 0;
-            int32 QuestRewardID             = 0;
+            int32 TreasurePickerID          = 0;
             int32 Expansion                 = 0;
             std::vector<QuestObjective> Objectives;
             int32 RewardItems[QUEST_REWARD_ITEM_COUNT] = { };
@@ -225,7 +225,7 @@ namespace WorldPackets
 
         struct QuestChoiceItem
         {
-            int32 ItemID    = 0;
+            Item::ItemInstance Item;
             int32 Quantity  = 0;
         };
 
@@ -244,7 +244,7 @@ namespace WorldPackets
             int32 SpellCompletionID         = 0;
             int32 SkillLineID               = 0;
             int32 NumSkillUps               = 0;
-            int32 RewardID                  = 0;
+            int32 TreasurePickerID          = 0;
             QuestChoiceItem ChoiceItems[QUEST_REWARD_CHOICES_COUNT];
             int32 ItemID[QUEST_REWARD_ITEM_COUNT] = { };
             int32 ItemQty[QUEST_REWARD_ITEM_COUNT] = { };

@@ -68,18 +68,8 @@ namespace WorldPackets
         class AreaTriggerRePath final : public ServerPacket
         {
         public:
-            AreaTriggerRePath() : ServerPacket(SMSG_AREA_TRIGGER_RE_PATH, 50) { }
-
-            WorldPacket const* Write() override;
-
-            AreaTriggerSplineInfo AreaTriggerSpline;
-            ObjectGuid TriggerGUID;
-        };
-
-        class AreaTriggerReShape final : public ServerPacket
-        {
-        public:
-            AreaTriggerReShape() : ServerPacket(SMSG_AREA_TRIGGER_RE_SHAPE, 17) { }
+            // TODO: not sure if this should be SMSG_AREA_TRIGGER_RE_SHAPE - opcode was changed in TC BFA
+            AreaTriggerRePath() : ServerPacket(SMSG_AREA_TRIGGER_RE_PATH, 17) { }
 
             WorldPacket const* Write() override;
 

@@ -76,10 +76,11 @@ WorldPackets::Inspect::InspectItemData::InspectItemData(::Item const* item, uint
     {
         if (gemData.ItemId)
         {
-            WorldPackets::Item::ItemGemData gem;
+            Gems.emplace_back();
+
+            WorldPackets::Item::ItemGemData& gem = Gems.back();
             gem.Slot = i;
             gem.Item.Initialize(&gemData);
-            Gems.push_back(gem);
         }
         ++i;
     }

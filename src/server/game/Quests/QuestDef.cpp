@@ -121,7 +121,7 @@ Quest::Quest(Field* questRecord)
     AreaGroupID = questRecord[103].GetUInt32();
     LimitTime = questRecord[104].GetUInt32();
     AllowableRaces = questRecord[105].GetUInt64();
-    QuestRewardID = questRecord[106].GetUInt32();
+    TreasurePickerID = questRecord[106].GetInt32();
     Expansion = questRecord[107].GetInt32();
 
     LogTitle = questRecord[108].GetString();
@@ -255,20 +255,20 @@ void Quest::LoadQuestObjectiveVisualEffect(Field* fields)
     }
 }
 
-uint32 Quest::XPValue(uint32 playerLevel) const
+uint32 Quest::XPValue(Player const* player) const
 {
-    if (playerLevel)
+    if (player)
     {
-        uint32 questLevel = uint32(Level == -1 ? playerLevel : Level);
+        uint32 questLevel = player->GetQuestLevel(this);
         QuestXPEntry const* questXp = sQuestXPStore.LookupEntry(questLevel);
         if (!questXp || RewardXPDifficulty >= 10)
             return 0;
 
         float multiplier = 1.0f;
-        if (questLevel != playerLevel)
-            multiplier = sXpGameTable.GetRow(std::min(playerLevel, questLevel))->Divisor / sXpGameTable.GetRow(playerLevel)->Divisor;
+        if (questLevel != player->getLevel())
+            multiplier = sXpGameTable.GetRow(std::min<int32>(player->getLevel(), questLevel))->Divisor / sXpGameTable.GetRow(player->getLevel())->Divisor;
 
-        int32 diffFactor = 2 * (questLevel - playerLevel) + 20;
+        int32 diffFactor = 2 * (questLevel + (Level == -1 ? 0 : 5) - player->getLevel()) + 10;
         if (diffFactor < 1)
             diffFactor = 1;
         else if (diffFactor > 10)
@@ -290,11 +290,9 @@ uint32 Quest::XPValue(uint32 playerLevel) const
     return 0;
 }
 
-uint32 Quest::MoneyValue(uint8 playerLevel) const
+uint32 Quest::MoneyValue(Player const* player) const
 {
-    uint8 level = Level == -1 ? playerLevel : Level;
-
-    if (QuestMoneyRewardEntry const* money = sQuestMoneyRewardStore.LookupEntry(level))
+    if (QuestMoneyRewardEntry const* money = sQuestMoneyRewardStore.LookupEntry(player->GetQuestLevel(this)))
         return money->Difficulty[GetRewMoneyDifficulty()] * GetMoneyMultiplier();
     else
         return 0;
@@ -315,11 +313,11 @@ void Quest::BuildQuestRewards(WorldPackets::Quest::QuestRewards& rewards, Player
     rewards.SpellCompletionID       = GetRewSpell();
     rewards.SkillLineID             = GetRewardSkillId();
     rewards.NumSkillUps             = GetRewardSkillPoints();
-    rewards.RewardID                = GetRewardId();
+    rewards.TreasurePickerID        = GetTreasurePickerId();
 
     for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
     {
-        rewards.ChoiceItems[i].ItemID = RewardChoiceItemId[i];
+        rewards.ChoiceItems[i].Item.ItemID = RewardChoiceItemId[i];
         rewards.ChoiceItems[i].Quantity = RewardChoiceItemCount[i];
     }
 

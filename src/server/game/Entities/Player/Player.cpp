@@ -2587,8 +2587,8 @@ void Player::InitStatsForLevel(bool reapplyMods)
     InitStatBuffMods();
 
     //reset rating fields values
-    for (uint16 index = PLAYER_FIELD_COMBAT_RATING_1; index < PLAYER_FIELD_COMBAT_RATING_1 + MAX_COMBAT_RATING; ++index)
-        SetUInt32Value(index, 0);
+    for (uint16 index = 0; index < MAX_COMBAT_RATING; ++index)
+        SetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + index, 0);
 
     SetUInt32Value(PLAYER_FIELD_MOD_HEALING_DONE_POS, 0);
     SetFloatValue(PLAYER_FIELD_MOD_HEALING_PCT, 1.0f);
@@ -7515,6 +7515,9 @@ void Player::_ApplyItemBonuses(Item* item, uint8 slot, bool apply)
                 break;
             case ITEM_MOD_MASTERY_RATING:
                 ApplyRatingMod(CR_MASTERY, int32(val * combatRatingMultiplier), apply);
+                break;
+            case ITEM_MOD_EXTRA_ARMOR:
+                HandleStatModifier(UNIT_MOD_ARMOR, TOTAL_VALUE, float(val), apply);
                 break;
             case ITEM_MOD_FIRE_RESISTANCE:
                 HandleStatModifier(UNIT_MOD_RESISTANCE_FIRE, BASE_VALUE, float(val), apply);
@@ -14648,6 +14651,20 @@ uint32 Player::GetDefaultGossipMenuForSource(WorldObject* source)
 /***                    QUEST SYSTEM                   ***/
 /*********************************************************/
 
+int32 Player::GetQuestLevel(Quest const* quest) const
+{
+    if (!quest)
+        return 0;
+
+    if (quest->GetQuestLevel() == -1)
+    {
+        int32 level = getLevel();
+        return std::min(level, quest->GetQuestMaxScalingLevel());
+    }
+
+    return quest->GetQuestLevel();
+}
+
 void Player::PrepareQuestMenu(ObjectGuid guid)
 {
     QuestRelationBounds objectQR;
@@ -15241,7 +15258,7 @@ void Player::IncompleteQuest(uint32 quest_id)
 
 uint32 Player::GetQuestMoneyReward(Quest const* quest) const
 {
-    return quest->MoneyValue(getLevel()) * sWorld->getRate(RATE_MONEY_QUEST);
+    return quest->MoneyValue(this) * sWorld->getRate(RATE_MONEY_QUEST);
 }
 
 uint32 Player::GetQuestXPReward(Quest const* quest)
@@ -15252,7 +15269,7 @@ uint32 Player::GetQuestXPReward(Quest const* quest)
     if (rewarded && !quest->IsDFQuest())
         return 0;
 
-    uint32 XP = quest->XPValue(getLevel()) * sWorld->getRate(RATE_XP_QUEST);
+    uint32 XP = quest->XPValue(this) * sWorld->getRate(RATE_XP_QUEST);
 
     // handle SPELL_AURA_MOD_XP_QUEST_PCT auras
     Unit::AuraEffectList const& ModXPPctAuras = GetAuraEffectsByType(SPELL_AURA_MOD_XP_QUEST_PCT);
@@ -19703,7 +19720,7 @@ void Player::SendRaidInfo()
             {
                 InstanceSave* save = itr->second.save;
 
-                WorldPackets::Instance::InstanceLockInfos lockInfos;
+                WorldPackets::Instance::InstanceLock lockInfos;
 
                 lockInfos.InstanceID = save->GetInstanceId();
                 lockInfos.MapID = save->GetMapId();
@@ -21066,9 +21083,9 @@ void Player::outDebugValues() const
     TC_LOG_DEBUG("entities.unit", "INTELLECT is: \t\t%f", GetStat(STAT_INTELLECT));
     TC_LOG_DEBUG("entities.unit", "STAMINA is: \t\t%f", GetStat(STAT_STAMINA));
     TC_LOG_DEBUG("entities.unit", "Armor is: \t\t%u\t\tBlock is: \t\t%f", GetArmor(), GetFloatValue(PLAYER_BLOCK_PERCENTAGE));
-    TC_LOG_DEBUG("entities.unit", "HolyRes is: \t\t%u\t\tFireRes is: \t\t%u", GetResistance(SPELL_SCHOOL_HOLY), GetResistance(SPELL_SCHOOL_FIRE));
-    TC_LOG_DEBUG("entities.unit", "NatureRes is: \t\t%u\t\tFrostRes is: \t\t%u", GetResistance(SPELL_SCHOOL_NATURE), GetResistance(SPELL_SCHOOL_FROST));
-    TC_LOG_DEBUG("entities.unit", "ShadowRes is: \t\t%u\t\tArcaneRes is: \t\t%u", GetResistance(SPELL_SCHOOL_SHADOW), GetResistance(SPELL_SCHOOL_ARCANE));
+    TC_LOG_DEBUG("entities.unit", "HolyRes is: \t\t%u\t\tFireRes is: \t\t%u", GetResistance(SPELL_SCHOOL_MASK_HOLY), GetResistance(SPELL_SCHOOL_MASK_FIRE));
+    TC_LOG_DEBUG("entities.unit", "NatureRes is: \t\t%u\t\tFrostRes is: \t\t%u", GetResistance(SPELL_SCHOOL_MASK_NATURE), GetResistance(SPELL_SCHOOL_MASK_FROST));
+    TC_LOG_DEBUG("entities.unit", "ShadowRes is: \t\t%u\t\tArcaneRes is: \t\t%u", GetResistance(SPELL_SCHOOL_MASK_SHADOW), GetResistance(SPELL_SCHOOL_MASK_ARCANE));
     TC_LOG_DEBUG("entities.unit", "MIN_DAMAGE is: \t\t%f\tMAX_DAMAGE is: \t\t%f", GetFloatValue(UNIT_FIELD_MINDAMAGE), GetFloatValue(UNIT_FIELD_MAXDAMAGE));
     TC_LOG_DEBUG("entities.unit", "MIN_OFFHAND_DAMAGE is: \t%f\tMAX_OFFHAND_DAMAGE is: \t%f", GetFloatValue(UNIT_FIELD_MINOFFHANDDAMAGE), GetFloatValue(UNIT_FIELD_MAXOFFHANDDAMAGE));
     TC_LOG_DEBUG("entities.unit", "MIN_RANGED_DAMAGE is: \t%f\tMAX_RANGED_DAMAGE is: \t%f", GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE), GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE));
@@ -22156,6 +22173,21 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
         return false;
     }
 
+    // check node starting pos data set case if provided
+    if (node->Pos.X != 0.0f || node->Pos.Y != 0.0f || node->Pos.Z != 0.0f)
+    {
+        if (node->ContinentID != GetMapId() || !IsInDist(node->Pos.X, node->Pos.Y, node->Pos.Z, 2 * INTERACTION_DISTANCE))
+        {
+            GetSession()->SendActivateTaxiReply(ERR_TAXITOOFARAWAY);
+            return false;
+        }
+    }
+    // node must have pos if taxi master case (npc != NULL)
+    else if (npc)
+    {
+        GetSession()->SendActivateTaxiReply(ERR_TAXIUNSPECIFIEDSERVERERROR);
+        return false;
+    }
     // Prepare to flight start now
 
     // stop combat at start taxi flight if any
@@ -26250,6 +26282,9 @@ TalentLearnResult Player::LearnPvpTalent(uint32 talentID, int32* spellOnCooldown
 
     if (getLevel() < PLAYER_LEVEL_MIN_HONOR)
         return TALENT_FAILED_UNKNOWN;
+
+    if (isDead())
+        return TALENT_FAILED_CANT_DO_THAT_RIGHT_NOW;
 
     PvpTalentEntry const* talentInfo = sPvpTalentStore.LookupEntry(talentID);
     if (!talentInfo)

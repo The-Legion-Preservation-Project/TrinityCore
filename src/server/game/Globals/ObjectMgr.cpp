@@ -171,30 +171,30 @@ ExtendedPlayerName ExtractExtendedPlayerName(std::string const& name)
 
 LanguageDesc lang_description[LANGUAGES_COUNT] =
 {
-    { LANG_ADDON,           0, 0                       },
-    { LANG_UNIVERSAL,       0, 0                       },
-    { LANG_ORCISH,        669, SKILL_LANG_ORCISH       },
-    { LANG_DARNASSIAN,    671, SKILL_LANG_DARNASSIAN   },
-    { LANG_TAURAHE,       670, SKILL_LANG_TAURAHE      },
-    { LANG_DWARVISH,      672, SKILL_LANG_DWARVEN      },
-    { LANG_COMMON,        668, SKILL_LANG_COMMON       },
-    { LANG_DEMONIC,       815, SKILL_LANG_DEMON_TONGUE },
-    { LANG_TITAN,         816, SKILL_LANG_TITAN        },
-    { LANG_THALASSIAN,    813, SKILL_LANG_THALASSIAN   },
-    { LANG_DRACONIC,      814, SKILL_LANG_DRACONIC     },
-    { LANG_KALIMAG,       817, SKILL_LANG_OLD_TONGUE   },
-    { LANG_GNOMISH,      7340, SKILL_LANG_GNOMISH      },
-    { LANG_TROLL,        7341, SKILL_LANG_TROLL        },
-    { LANG_GUTTERSPEAK, 17737, SKILL_LANG_FORSAKEN     },
-    { LANG_DRAENEI,     29932, SKILL_LANG_DRAENEI      },
-    { LANG_ZOMBIE,          0, 0                       },
-    { LANG_GNOMISH_BINARY,  0, 0                       },
-    { LANG_GOBLIN_BINARY,   0, 0                       },
-    { LANG_WORGEN,      69270, SKILL_LANG_GILNEAN      },
-    { LANG_GOBLIN,      69269, SKILL_LANG_GOBLIN       },
-    { LANG_PANDAREN_NEUTRAL,  108127, SKILL_LANG_PANDAREN_NEUTRAL  },
-    { LANG_PANDAREN_ALLIANCE, 108130, SKILL_LANG_PANDAREN_ALLIANCE },
-    { LANG_PANDAREN_HORDE,    108131, SKILL_LANG_PANDAREN_HORDE    }
+    { LANG_ADDON,                  0, 0                               },
+    { LANG_UNIVERSAL,              0, 0                               },
+    { LANG_ORCISH,               669, SKILL_LANGUAGE_ORCISH           },
+    { LANG_DARNASSIAN,           671, SKILL_LANGUAGE_DARNASSIAN       },
+    { LANG_TAURAHE,              670, SKILL_LANGUAGE_TAURAHE          },
+    { LANG_DWARVISH,             672, SKILL_LANGUAGE_DWARVEN          },
+    { LANG_COMMON,               668, SKILL_LANGUAGE_COMMON           },
+    { LANG_DEMONIC,              815, SKILL_LANGUAGE_DEMON_TONGUE     },
+    { LANG_TITAN,                816, SKILL_LANGUAGE_TITAN            },
+    { LANG_THALASSIAN,           813, SKILL_LANGUAGE_THALASSIAN       },
+    { LANG_DRACONIC,             814, SKILL_LANGUAGE_DRACONIC         },
+    { LANG_KALIMAG,              817, SKILL_LANGUAGE_OLD_TONGUE       },
+    { LANG_GNOMISH,             7340, SKILL_LANGUAGE_GNOMISH          },
+    { LANG_TROLL,               7341, SKILL_LANGUAGE_TROLL            },
+    { LANG_GUTTERSPEAK,        17737, SKILL_LANGUAGE_FORSAKEN         },
+    { LANG_DRAENEI,            29932, SKILL_LANGUAGE_DRAENEI          },
+    { LANG_ZOMBIE,                 0, 0                               },
+    { LANG_GNOMISH_BINARY,         0, 0                               },
+    { LANG_GOBLIN_BINARY,          0, 0                               },
+    { LANG_WORGEN,             69270, SKILL_LANGUAGE_GILNEAN          },
+    { LANG_GOBLIN,             69269, SKILL_LANGUAGE_GOBLIN           },
+    { LANG_PANDAREN_NEUTRAL,  108127, SKILL_LANGUAGE_PANDAREN_NEUTRAL },
+    { LANG_PANDAREN_ALLIANCE, 108130, 0                               },
+    { LANG_PANDAREN_HORDE,    108131, 0                               },
 };
 
 LanguageDesc const* GetLanguageDescByID(uint32 lang)
@@ -3950,8 +3950,8 @@ void ObjectMgr::LoadQuests()
         "RewardFactionID5, RewardFactionValue5, RewardFactionOverride5, RewardFactionCapIn5, RewardFactionFlags, "
         //93                94                  95                 96                 97                  98                  99                 100
         "RewardCurrencyID1, RewardCurrencyQty1, RewardCurrencyID2, RewardCurrencyQty2, RewardCurrencyID3, RewardCurrencyQty3, RewardCurrencyID4, RewardCurrencyQty4, "
-        //101                102                 103          104          105             106            107
-        "AcceptedSoundKitID, CompleteSoundKitID, AreaGroupID, TimeAllowed, AllowableRaces, QuestRewardID, Expansion, "
+        //101                102                 103          104          105             106               107
+        "AcceptedSoundKitID, CompleteSoundKitID, AreaGroupID, TimeAllowed, AllowableRaces, TreasurePickerID, Expansion, "
         //108      109             110               111              112                113                114                 115                 116
         "LogTitle, LogDescription, QuestDescription, AreaDescription, PortraitGiverText, PortraitGiverName, PortraitTurnInText, PortraitTurnInName, QuestCompletionLog"
         " FROM quest_template");
@@ -7027,8 +7027,8 @@ void ObjectMgr::LoadGameObjectTemplate()
                                              "Data0, Data1, Data2, Data3, Data4, Data5, Data6, Data7, Data8, Data9, Data10, Data11, Data12, "
     //                                        21      22      23      24      25      26      27      28      29      30      31      32      33      34      35      36
                                              "Data13, Data14, Data15, Data16, Data17, Data18, Data19, Data20, Data21, Data22, Data23, Data24, Data25, Data26, Data27, Data28, "
-    //                                        37      38       39     40      41             42      43
-                                             "Data29, Data30, Data31, Data32, RequiredLevel, AIName, ScriptName "
+    //                                        37      38       39     40      41      42             43      44
+                                             "Data29, Data30, Data31, Data32, Data33, RequiredLevel, AIName, ScriptName "
                                              "FROM gameobject_template");
 
     if (!result)
@@ -7058,9 +7058,9 @@ void ObjectMgr::LoadGameObjectTemplate()
         for (uint8 i = 0; i < MAX_GAMEOBJECT_DATA; ++i)
             got.raw.data[i] = fields[8 + i].GetUInt32();
 
-        got.RequiredLevel = fields[41].GetInt32();
-        got.AIName = fields[42].GetString();
-        got.ScriptId = GetScriptId(fields[43].GetString());
+        got.RequiredLevel = fields[42].GetInt32();
+        got.AIName = fields[43].GetString();
+        got.ScriptId = GetScriptId(fields[44].GetString());
 
         // Checks
 
@@ -7697,7 +7697,7 @@ void ObjectMgr::LoadQuestPOI()
     uint32 count = 0;
 
     //                                                   0        1        2            3           4                 5           6         7            8       9       10         11              12             13               14
-    QueryResult result = WorldDatabase.Query("SELECT QuestID, BlobIndex, Idx1, ObjectiveIndex, QuestObjectiveID, QuestObjectID, MapID, WorldMapAreaId, Floor, Priority, Flags, WorldEffectID, PlayerConditionID, WoDUnk1, AlwaysAllowMergingBlobs FROM quest_poi order by QuestID, Idx1");
+    QueryResult result = WorldDatabase.Query("SELECT QuestID, BlobIndex, Idx1, ObjectiveIndex, QuestObjectiveID, QuestObjectID, MapID, WorldMapAreaId, Floor, Priority, Flags, WorldEffectID, PlayerConditionID, SpawnTrackingID, AlwaysAllowMergingBlobs FROM quest_poi order by QuestID, Idx1");
     if (!result)
     {
         TC_LOG_ERROR("server.loading", ">> Loaded 0 quest POI definitions. DB table `quest_poi` is empty.");
@@ -7737,33 +7737,33 @@ void ObjectMgr::LoadQuestPOI()
     {
         Field* fields = result->Fetch();
 
-        int32 QuestID               = fields[0].GetInt32();
-        int32 BlobIndex             = fields[1].GetInt32();
-        int32 Idx1                  = fields[2].GetInt32();
-        int32 ObjectiveIndex        = fields[3].GetInt32();
-        int32 QuestObjectiveID      = fields[4].GetInt32();
-        int32 QuestObjectID         = fields[5].GetInt32();
-        int32 MapID                 = fields[6].GetInt32();
-        int32 WorldMapAreaId        = fields[7].GetInt32();
-        int32 Floor                 = fields[8].GetInt32();
-        int32 Priority              = fields[9].GetInt32();
-        int32 Flags                 = fields[10].GetInt32();
-        int32 WorldEffectID         = fields[11].GetInt32();
-        int32 PlayerConditionID     = fields[12].GetInt32();
-        int32 WoDUnk1               = fields[13].GetInt32();
-        bool AlwaysAllowMergingBlobs = fields[14].GetBool();
+        int32 questID               = fields[0].GetInt32();
+        int32 blobIndex             = fields[1].GetInt32();
+        int32 idx1                  = fields[2].GetInt32();
+        int32 objectiveIndex        = fields[3].GetInt32();
+        int32 questObjectiveID      = fields[4].GetInt32();
+        int32 questObjectID         = fields[5].GetInt32();
+        int32 mapID                 = fields[6].GetInt32();
+        int32 worldMapAreaID        = fields[7].GetInt32();
+        int32 floor                 = fields[8].GetInt32();
+        int32 priority              = fields[9].GetInt32();
+        int32 flags                 = fields[10].GetInt32();
+        int32 worldEffectID         = fields[11].GetInt32();
+        int32 playerConditionID     = fields[12].GetInt32();
+        int32 spawnTrackingID       = fields[13].GetInt32();
+        bool alwaysAllowMergingBlobs = fields[14].GetBool();
 
-        if (!sObjectMgr->GetQuestTemplate(QuestID))
-            TC_LOG_ERROR("sql.sql", "`quest_poi` quest id (%u) Idx1 (%u) does not exist in `quest_template`", QuestID, Idx1);
+        if (!sObjectMgr->GetQuestTemplate(questID))
+            TC_LOG_ERROR("sql.sql", "`quest_poi` quest id (%u) Idx1 (%u) does not exist in `quest_template`", questID, idx1);
 
-        QuestPOI POI(BlobIndex, ObjectiveIndex, QuestObjectiveID, QuestObjectID, MapID, WorldMapAreaId, Floor, Priority, Flags, WorldEffectID, PlayerConditionID, WoDUnk1, AlwaysAllowMergingBlobs);
-        if (QuestID < int32(POIs.size()) && Idx1 < int32(POIs[QuestID].size()))
+        QuestPOI POI(blobIndex, objectiveIndex, questObjectiveID, questObjectID, mapID, worldMapAreaID, floor, priority, flags, worldEffectID, playerConditionID, spawnTrackingID, alwaysAllowMergingBlobs);
+        if (questID < int32(POIs.size()) && idx1 < int32(POIs[questID].size()))
         {
-            POI.points = POIs[QuestID][Idx1];
-            _questPOIStore[QuestID].push_back(POI);
+            POI.points = POIs[questID][idx1];
+            _questPOIStore[questID].push_back(POI);
         }
         else
-            TC_LOG_ERROR("sql.sql", "Table quest_poi references unknown quest points for quest %i POI id %i", QuestID, BlobIndex);
+            TC_LOG_ERROR("sql.sql", "Table quest_poi references unknown quest points for quest %i POI id %i", questID, blobIndex);
 
         ++count;
     } while (result->NextRow());

@@ -727,11 +727,11 @@ WorldPacket const* WorldPackets::Spells::PlaySpellVisual::Write()
     _worldPacket << Source;
     _worldPacket << Target;
     _worldPacket << TargetPosition;
-    _worldPacket << SpellVisualID;
-    _worldPacket << TravelSpeed;
-    _worldPacket << MissReason;
-    _worldPacket << ReflectStatus;
-    _worldPacket << Orientation;
+    _worldPacket << uint32(SpellVisualID);
+    _worldPacket << float(TravelSpeed);
+    _worldPacket << uint16(MissReason);
+    _worldPacket << uint16(ReflectStatus);
+    _worldPacket << float(Orientation);
     _worldPacket.WriteBit(SpeedAsTime);
     _worldPacket.FlushBits();
 

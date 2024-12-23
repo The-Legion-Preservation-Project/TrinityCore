@@ -120,6 +120,7 @@ struct GameObjectTemplate
             uint32 chestPersonalLoot;                       // 30 chest Personal Loot, References: Treasure, NoValue = 0
             uint32 turnpersonallootsecurityoff;             // 31 turn personal loot security off, enum { false, true, }; Default: false
             uint32 ChestProperties;                         // 32 Chest Properties, References: ChestProperties, NoValue = 0
+            uint32 chestPushLoot;                           // 33 chest Push Loot, References: Treasure, NoValue = 0
         } chest;
         // 4 GAMEOBJECT_TYPE_BINDER
         struct
@@ -332,6 +333,7 @@ struct GameObjectTemplate
         {
             uint32 creatureID;                              // 0 creatureID, References: Creature, NoValue = 0
             uint32 charges;                                 // 1 charges, int, Min value: 0, Max value: 65535, Default value: 1
+            uint32 Preferonlyifinlineofsight;               // 2 Prefer only if in line of sight (expensive), enum { false, true, }; Default: false
         } guardPost;
         // 22 GAMEOBJECT_TYPE_SPELLCASTER
         struct
@@ -503,7 +505,10 @@ struct GameObjectTemplate
             uint32 startOpen;                               // 1 startOpen, enum { false, true, }; Default: false
             uint32 autoClose;                               // 2 autoClose (ms), int, Min value: 0, Max value: 2147483647, Default value: 0
             uint32 BlocksPathsDown;                         // 3 Blocks Paths Down, enum { false, true, }; Default: false
-            uint32 PathBlockerBump;                         // 4 Path Blocker Bump (ft), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
+            int32 PathBlockerBump;                          // 4 Path Blocker Bump (ft), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
+            uint32 GiganticAOI;                             // 5 Gigantic AOI, enum { false, true, }; Default: false
+            uint32 InfiniteAOI;                             // 6 Infinite AOI, enum { false, true, }; Default: false
+            uint32 DoorisOpaque;                            // 7 Door is Opaque (Disable portal on close), enum { false, true, }; Default: false
         } trapdoor;
         // 36 GAMEOBJECT_TYPE_NEW_FLAG
         struct
@@ -581,7 +586,7 @@ struct GameObjectTemplate
         struct
         {
             int32 SpawnMap;                                 // 0 Spawn Map, References: Map, NoValue = -1
-            uint32 AreaNameSet;                             // 1 Area Name Set (Index), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
+            int32 AreaNameSet;                              // 1 Area Name Set (Index), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
             uint32 DoodadSetA;                              // 2 Doodad Set A, int, Min value: 0, Max value: 2147483647, Default value: 0
             uint32 DoodadSetB;                              // 3 Doodad Set B, int, Min value: 0, Max value: 2147483647, Default value: 0
         } phaseableMO;
@@ -650,12 +655,15 @@ struct GameObjectTemplate
             uint32 MaxNumberofLoots;                        // 18 Max Number of Loots, int, Min value: 1, Max value: 40, Default value: 10
             uint32 logloot;                                 // 19 log loot, enum { false, true, }; Default: false
             uint32 linkedTrap;                              // 20 linkedTrap, References: GameObjects, NoValue = 0
+            uint32 PlayOpenAnimationonOpening;              // 21 Play Open Animation on Opening, enum { false, true, }; Default: false
         } gatheringNode;
         // 51 GAMEOBJECT_TYPE_CHALLENGE_MODE_REWARD
         struct
         {
             uint32 chestLoot;                               // 0 chestLoot, References: Treasure, NoValue = 0
             uint32 WhenAvailable;                           // 1 When Available, References: GameObjectDisplayInfo, NoValue = 0
+            uint32 open;                                    // 2 open, References: Lock_, NoValue = 0
+            uint32 openTextID;                              // 3 openTextID, References: BroadcastText, NoValue = 0
         } challengeModeReward;
         struct
         {
@@ -709,6 +717,7 @@ struct GameObjectTemplate
             case GAMEOBJECT_TYPE_NEW_FLAG_DROP:     return newflagdrop.open;
             case GAMEOBJECT_TYPE_CAPTURE_POINT:     return capturePoint.open;
             case GAMEOBJECT_TYPE_GATHERING_NODE:    return gatheringNode.open;
+            case GAMEOBJECT_TYPE_CHALLENGE_MODE_REWARD: return challengeModeReward.open;
             default: return 0;
         }
     }

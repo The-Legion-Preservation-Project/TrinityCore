@@ -45,6 +45,15 @@ struct AchievementEntry
     uint32 CriteriaTree;
 };
 
+struct AnimationDataEntry
+{
+    int32 ID;
+    int32 Flags;
+    uint16 Fallback;
+    uint16 BehaviorID;
+    uint8 BehaviorTier;
+};
+
 struct AnimKitEntry
 {
     uint32 ID;

@@ -89,13 +89,13 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Battleground::PVPLogData:
         data << uint32(*playerData.PreMatchRating);
 
     if (playerData.RatingChange)
-        data << uint32(*playerData.RatingChange);
+        data << int32(*playerData.RatingChange);
 
     if (playerData.PreMatchMMR)
         data << uint32(*playerData.PreMatchMMR);
 
     if (playerData.MmrChange)
-        data << uint32(*playerData.MmrChange);
+        data << int32(*playerData.MmrChange);
 
     return data;
 }

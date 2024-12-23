@@ -170,22 +170,22 @@ namespace WorldPackets
 
             struct RaceUnlock
             {
-                int32 RaceID;
-                bool HasExpansion;
-                bool HasAchievement;
-                bool HasHeritageArmor;
+                int32 RaceID          = 0;
+                bool HasExpansion     = false;
+                bool HasAchievement   = false;
+                bool HasHeritageArmor = false;
             };
 
             EnumCharactersResult() : ServerPacket(SMSG_ENUM_CHARACTERS_RESULT) { }
 
             WorldPacket const* Write() override;
 
-            bool Success                = false; ///<
-            bool IsDeletedCharacters    = false; ///< used for character undelete list
-            bool IsDemonHunterCreationAllowed = false; ///< used for demon hunter early access
-            bool HasDemonHunterOnRealm  = false;
-            bool Unknown7x              = false;
-            bool IsAlliedRacesCreationAllowed = false;
+            bool Success                          = false; ///<
+            bool IsDeletedCharacters              = false; ///< used for character undelete list
+            bool IsTestDemonHunterCreationAllowed = false; ///< allows client to skip 1 per realm and level 70 requirements
+            bool HasDemonHunterOnRealm            = false;
+            bool IsDemonHunterCreationAllowed     = false; ///< used for demon hunter early access
+            bool IsAlliedRacesCreationAllowed     = false;
 
             int32 MaxCharacterLevel     = 1;
             Optional<uint32> DisabledClassesMask;
@@ -537,7 +537,7 @@ namespace WorldPackets
         class InitialSetup final : public ServerPacket
         {
         public:
-            InitialSetup() : ServerPacket(SMSG_INITIAL_SETUP, 1 + 1 + 4 + 4) { }
+            InitialSetup() : ServerPacket(SMSG_INITIAL_SETUP, 1 + 1) { }
 
             WorldPacket const* Write() override;
 

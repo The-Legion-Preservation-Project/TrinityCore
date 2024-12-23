@@ -534,18 +534,15 @@ void CalendarMgr::SendCalendarEventInviteAlert(CalendarEvent const& calendarEven
     packet.OwnerGuid = calendarEvent.GetOwnerGUID();
     packet.Status = invite.GetStatus();
     packet.TextureID = calendarEvent.GetTextureId();
-
-    Guild* guild = sGuildMgr->GetGuildById(calendarEvent.GetGuildId());
-    packet.EventGuildID = guild ? guild->GetGUID() : ObjectGuid::Empty;
+    packet.EventClubID = calendarEvent.GetGuildId();
 
     if (calendarEvent.IsGuildEvent() || calendarEvent.IsGuildAnnouncement())
     {
-        if (guild)
+        if (Guild* guild = sGuildMgr->GetGuildById(calendarEvent.GetGuildId()))
             guild->BroadcastPacket(packet.Write());
     }
-    else
-        if (Player* player = ObjectAccessor::FindConnectedPlayer(invite.GetInviteeGUID()))
-            player->SendDirectMessage(packet.Write());
+    else if (Player* player = ObjectAccessor::FindConnectedPlayer(invite.GetInviteeGUID()))
+        player->SendDirectMessage(packet.Write());
 }
 
 void CalendarMgr::SendCalendarEvent(ObjectGuid guid, CalendarEvent const& calendarEvent, CalendarSendEventType sendType)
@@ -567,9 +564,7 @@ void CalendarMgr::SendCalendarEvent(ObjectGuid guid, CalendarEvent const& calend
     packet.LockDate = calendarEvent.GetLockDate(); // Always 0 ?
     packet.OwnerGuid = calendarEvent.GetOwnerGUID();
     packet.TextureID = calendarEvent.GetTextureId();
-
-    Guild* guild = sGuildMgr->GetGuildById(calendarEvent.GetGuildId());
-    packet.EventGuildID = (guild ? guild->GetGUID() : ObjectGuid::Empty);
+    packet.EventClubID = calendarEvent.GetGuildId();
 
     for (auto const& calendarInvite : eventInviteeList)
     {

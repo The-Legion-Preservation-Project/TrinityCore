@@ -36,6 +36,9 @@ void HotfixDatabaseConnection::DoPrepareStatements()
         "Faction, Points, MinimumCriteria, ID, IconFileID, CriteriaTree FROM achievement ORDER BY ID DESC", CONNECTION_SYNCH);
     PREPARE_LOCALE_STMT(HOTFIX_SEL_ACHIEVEMENT, "SELECT ID, Title_lang, Description_lang, Reward_lang FROM achievement_locale WHERE locale = ?", CONNECTION_SYNCH);
 
+    // AnimationData.db2
+    PrepareStatement(HOTFIX_SEL_ANIMATION_DATA, "SELECT ID, Flags, Fallback, BehaviorID, BehaviorTier FROM animation_data ORDER BY ID DESC", CONNECTION_SYNCH);
+
     // AnimKit.db2
     PrepareStatement(HOTFIX_SEL_ANIM_KIT, "SELECT ID, OneShotDuration, OneShotStopAnimKitID, LowDefAnimKitID FROM anim_kit ORDER BY ID DESC", CONNECTION_SYNCH);
 

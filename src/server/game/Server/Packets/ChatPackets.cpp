@@ -162,17 +162,17 @@ void WorldPackets::Chat::Chat::SetReceiver(WorldObject const* receiver, LocaleCo
 
 WorldPacket const* WorldPackets::Chat::Chat::Write()
 {
-    _worldPacket << SlashCmd;
-    _worldPacket << _Language;
+    _worldPacket << uint8(SlashCmd);
+    _worldPacket << uint8(_Language);
     _worldPacket << SenderGUID;
     _worldPacket << SenderGuildGUID;
     _worldPacket << SenderAccountGUID;
     _worldPacket << TargetGUID;
-    _worldPacket << TargetVirtualAddress;
-    _worldPacket << SenderVirtualAddress;
+    _worldPacket << uint32(TargetVirtualAddress);
+    _worldPacket << uint32(SenderVirtualAddress);
     _worldPacket << PartyGUID;
-    _worldPacket << AchievementID;
-    _worldPacket << DisplayTime;
+    _worldPacket << uint32(AchievementID);
+    _worldPacket << float(DisplayTime);
     _worldPacket.WriteBits(SenderName.length(), 11);
     _worldPacket.WriteBits(TargetName.length(), 11);
     _worldPacket.WriteBits(Prefix.length(), 5);

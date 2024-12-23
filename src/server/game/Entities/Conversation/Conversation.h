@@ -47,8 +47,11 @@ struct ConversationDynamicFieldActor
     union
     {
         ObjectGuid ActorGuid;
-
-        ConversationActorTemplate ActorTemplate;
+        struct
+        {
+            uint32 CreatureId;
+            uint32 CreatureModelId;
+        } ActorTemplate;
 
         struct
         {

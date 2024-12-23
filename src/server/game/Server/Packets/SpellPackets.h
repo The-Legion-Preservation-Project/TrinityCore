@@ -613,7 +613,7 @@ namespace WorldPackets
         class SetSpellCharges final : public ServerPacket
         {
         public:
-            SetSpellCharges() : ServerPacket(SMSG_SET_SPELL_CHARGES, 1 + 4 + 4) { }
+            SetSpellCharges() : ServerPacket(SMSG_SET_SPELL_CHARGES, 4 + 4 + 1 + 4 + 1) { }
 
             WorldPacket const* Write() override;
 

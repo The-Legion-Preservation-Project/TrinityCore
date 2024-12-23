@@ -113,8 +113,7 @@ void WorldSession::HandleCreatureQuery(WorldPackets::Query::QueryCreature& packe
         stats.CursorName = creatureInfo->IconName;
 
         if (std::vector<uint32> const* items = sObjectMgr->GetCreatureQuestItemList(packet.CreatureID))
-            for (uint32 item : *items)
-                stats.QuestItems.push_back(item);
+            stats.QuestItems.insert(stats.QuestItems.begin(), items->begin(), items->end());
 
         LocaleConstant localeConstant = GetSessionDbLocaleIndex();
         if (localeConstant != LOCALE_enUS)
@@ -374,7 +373,7 @@ void WorldSession::HandleQuestPOIQuery(WorldPackets::Query::QuestPOIQuery& quest
                     questPOIBlobData.Flags              = data->Flags;
                     questPOIBlobData.WorldEffectID      = data->WorldEffectID;
                     questPOIBlobData.PlayerConditionID  = data->PlayerConditionID;
-                    questPOIBlobData.UnkWoD1            = data->UnkWoD1;
+                    questPOIBlobData.SpawnTrackingID    = data->SpawnTrackingID;
                     questPOIBlobData.AlwaysAllowMergingBlobs = data->AlwaysAllowMergingBlobs;
 
                     for (QuestPOIPoint const& point : data->points)

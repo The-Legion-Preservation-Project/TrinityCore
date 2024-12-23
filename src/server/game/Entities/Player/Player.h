@@ -391,7 +391,7 @@ enum PlayerFlags
     PLAYER_FLAGS_GM                     = 0x00000008,
     PLAYER_FLAGS_GHOST                  = 0x00000010,
     PLAYER_FLAGS_RESTING                = 0x00000020,
-    PLAYER_FLAGS_UNK6                   = 0x00000040,
+    PLAYER_FLAGS_VOICE_CHAT             = 0x00000040,
     PLAYER_FLAGS_UNK7                   = 0x00000080,       // pre-3.0.3 PLAYER_FLAGS_FFA_PVP flag for FFA PVP state
     PLAYER_FLAGS_CONTESTED_PVP          = 0x00000100,       // Player has been involved in a PvP combat and will be attacked by contested guards
     PLAYER_FLAGS_IN_PVP                 = 0x00000200,
@@ -1349,13 +1349,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         /***                    QUEST SYSTEM                   ***/
         /*********************************************************/
 
-        int32 GetQuestLevel(Quest const* quest) const
-        {
-            if (!quest)
-                return getLevel();
-            return quest->GetQuestLevel() > 0 ? quest->GetQuestLevel() : std::min<int32>(getLevel(), quest->GetQuestMaxScalingLevel());
-        }
-
+        int32 GetQuestLevel(Quest const* quest) const;
         void PrepareQuestMenu(ObjectGuid guid);
         void SendPreparedQuest(WorldObject* source);
         bool IsActiveQuest(uint32 quest_id) const;

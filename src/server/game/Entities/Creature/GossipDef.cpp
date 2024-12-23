@@ -585,7 +585,7 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
     packet.Info.POIPriority = quest->GetPOIPriority();
 
     packet.Info.AllowableRaces = quest->GetAllowableRaces();
-    packet.Info.QuestRewardID = quest->GetRewardId();
+    packet.Info.TreasurePickerID = quest->GetTreasurePickerId();
     packet.Info.Expansion = quest->GetExpansion();
 
     for (QuestObjective const& questObjective : quest->GetObjectives())

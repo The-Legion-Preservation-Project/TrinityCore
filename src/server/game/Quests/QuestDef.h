@@ -348,16 +348,14 @@ class TC_GAME_API Quest
         void LoadQuestObjective(Field* fields);
         void LoadQuestObjectiveVisualEffect(Field* fields);
 
-        uint32 XPValue(uint32 playerLevel) const;
-        uint32 MoneyValue(uint8 playerLevel) const;
+        uint32 XPValue(Player const* player) const;
+        uint32 MoneyValue(Player const* player) const;
 
-        bool HasFlag(uint32 flag) const { return (Flags & flag) != 0; }
-        void SetFlag(uint32 flag) { Flags |= flag; }
+        bool HasFlag(QuestFlags flag) const { return (Flags & uint32(flag)) != 0; }
+        bool HasFlagEx(QuestFlagsEx flag) const { return (FlagsEx & uint32(flag)) != 0; }
 
         bool HasSpecialFlag(uint32 flag) const { return (SpecialFlags & flag) != 0; }
         void SetSpecialFlag(uint32 flag) { SpecialFlags |= flag; }
-
-        bool HasFlagEx(QuestFlagsEx flag) const { return (FlagsEx & uint32(flag)) != 0; }
 
         // table data accessors:
         uint32 GetQuestId() const { return ID; }
@@ -433,7 +431,7 @@ class TC_GAME_API Quest
         uint32 GetRewardSkillId() const { return RewardSkillId; }
         uint32 GetRewardSkillPoints() const { return RewardSkillPoints; }
         uint32 GetRewardReputationMask() const { return RewardReputationMask; }
-        uint32 GetRewardId() const { return QuestRewardID; }
+        int32 GetTreasurePickerId() const { return TreasurePickerID; }
         int32 GetExpansion() const { return Expansion; }
         uint32 GetQuestGiverPortrait() const { return QuestGiverPortrait; }
         uint32 GetQuestTurnInPortrait() const { return QuestTurnInPortrait; }
@@ -521,7 +519,7 @@ class TC_GAME_API Quest
         uint32 AreaGroupID;
         uint32 LimitTime;
         uint64 AllowableRaces;
-        uint32 QuestRewardID;
+        int32 TreasurePickerID;
         int32 Expansion;
         QuestObjectives Objectives;
         std::string LogTitle;

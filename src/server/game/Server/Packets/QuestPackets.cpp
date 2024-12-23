@@ -141,7 +141,7 @@ WorldPacket const* WorldPackets::Quest::QueryQuestInfoResponse::Write()
 
         _worldPacket << uint32(Info.Objectives.size());
         _worldPacket << uint64(Info.AllowableRaces);
-        _worldPacket << int32(Info.QuestRewardID);
+        _worldPacket << int32(Info.TreasurePickerID);
         _worldPacket << int32(Info.Expansion);
 
         _worldPacket.WriteBits(Info.LogTitle.size(), 9);
@@ -225,7 +225,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Quest::QuestRewards const
 
     for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
     {
-        data << int32(questRewards.ChoiceItems[i].ItemID);
+        data << int32(questRewards.ChoiceItems[i].Item.ItemID);
         data << int32(questRewards.ChoiceItems[i].Quantity);
     }
 
@@ -266,7 +266,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Quest::QuestRewards const
 
     data << int32(questRewards.SkillLineID);
     data << int32(questRewards.NumSkillUps);
-    data << int32(questRewards.RewardID);
+    data << int32(questRewards.TreasurePickerID);
 
     data.WriteBit(questRewards.IsBoostSpell);
     data.FlushBits();

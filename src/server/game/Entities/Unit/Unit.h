@@ -682,6 +682,7 @@ struct CalcDamageInfo
     Unit  *target;               // Target for damage
     uint32 damageSchoolMask;
     uint32 damage;
+    uint32 originalDamage;
     uint32 absorb;
     uint32 resist;
     uint32 blocked_amount;

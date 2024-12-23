@@ -297,7 +297,7 @@ Unit::Unit(bool isWorldObject) :
     m_objectType |= TYPEMASK_UNIT;
     m_objectTypeId = TYPEID_UNIT;
 
-    m_updateFlag = UPDATEFLAG_LIVING;
+    m_updateFlag.MovementUpdate = true;
 
     for (uint32 i = 0; i < MAX_ATTACK; ++i)
     {
@@ -1227,6 +1227,7 @@ void Unit::CalculateMeleeDamage(Unit* victim, uint32 damage, CalcDamageInfo* dam
     damageInfo->damageSchoolMask = GetMeleeDamageSchoolMask();
     damageInfo->attackType       = attackType;
     damageInfo->damage           = 0;
+    damageInfo->originalDamage   = 0;
     damageInfo->cleanDamage      = 0;
     damageInfo->absorb           = 0;
     damageInfo->resist           = 0;
@@ -1295,17 +1296,20 @@ void Unit::CalculateMeleeDamage(Unit* victim, uint32 damage, CalcDamageInfo* dam
         case MELEE_HIT_EVADE:
             damageInfo->HitInfo        |= HITINFO_MISS | HITINFO_SWINGNOHITSOUND;
             damageInfo->TargetState     = VICTIMSTATE_EVADES;
+            damageInfo->originalDamage = damageInfo->damage;
             damageInfo->damage = 0;
             damageInfo->cleanDamage = 0;
             return;
         case MELEE_HIT_MISS:
             damageInfo->HitInfo        |= HITINFO_MISS;
             damageInfo->TargetState     = VICTIMSTATE_INTACT;
+            damageInfo->originalDamage = damageInfo->damage;
             damageInfo->damage          = 0;
             damageInfo->cleanDamage     = 0;
             break;
         case MELEE_HIT_NORMAL:
             damageInfo->TargetState     = VICTIMSTATE_HIT;
+            damageInfo->originalDamage = damageInfo->damage;
             break;
         case MELEE_HIT_CRIT:
         {
@@ -1320,21 +1324,26 @@ void Unit::CalculateMeleeDamage(Unit* victim, uint32 damage, CalcDamageInfo* dam
 
             if (mod != 0)
                 AddPct(damageInfo->damage, mod);
+
+            damageInfo->originalDamage = damageInfo->damage;
             break;
         }
         case MELEE_HIT_PARRY:
             damageInfo->TargetState  = VICTIMSTATE_PARRY;
+            damageInfo->originalDamage = damageInfo->damage;
             damageInfo->cleanDamage += damageInfo->damage;
             damageInfo->damage = 0;
             break;
         case MELEE_HIT_DODGE:
             damageInfo->TargetState  = VICTIMSTATE_DODGE;
+            damageInfo->originalDamage = damageInfo->damage;
             damageInfo->cleanDamage += damageInfo->damage;
             damageInfo->damage = 0;
             break;
         case MELEE_HIT_BLOCK:
             damageInfo->TargetState = VICTIMSTATE_HIT;
             damageInfo->HitInfo    |= HITINFO_BLOCK;
+            damageInfo->originalDamage = damageInfo->damage;
             // 30% damage blocked, double blocked amount if block is critical
             damageInfo->blocked_amount = CalculatePct(damageInfo->damage, damageInfo->target->isBlockCritical() ? damageInfo->target->GetBlockPercent() * 2 : damageInfo->target->GetBlockPercent());
             damageInfo->damage      -= damageInfo->blocked_amount;
@@ -1344,6 +1353,7 @@ void Unit::CalculateMeleeDamage(Unit* victim, uint32 damage, CalcDamageInfo* dam
         {
             damageInfo->HitInfo     |= HITINFO_GLANCING;
             damageInfo->TargetState  = VICTIMSTATE_HIT;
+            damageInfo->originalDamage = damageInfo->damage;
             int32 leveldif = int32(victim->getLevel()) - int32(getLevel());
             if (leveldif > 3)
                 leveldif = 3;
@@ -1358,6 +1368,7 @@ void Unit::CalculateMeleeDamage(Unit* victim, uint32 damage, CalcDamageInfo* dam
             damageInfo->TargetState  = VICTIMSTATE_HIT;
             // 150% normal damage
             damageInfo->damage += (damageInfo->damage / 2);
+            damageInfo->originalDamage = damageInfo->damage;
             break;
         default:
             break;
@@ -1372,6 +1383,7 @@ void Unit::CalculateMeleeDamage(Unit* victim, uint32 damage, CalcDamageInfo* dam
     resilienceReduction = damageInfo->damage - resilienceReduction;
     damageInfo->damage      -= resilienceReduction;
     damageInfo->cleanDamage += resilienceReduction;
+    damageInfo->originalDamage -= resilienceReduction;
 
     // Calculate absorb resist
     if (int32(damageInfo->damage) > 0)
@@ -1514,7 +1526,6 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
             DamageInfo damageInfo(this, victim, damage, spellInfo, spellInfo->GetSchoolMask(), SPELL_DIRECT_DAMAGE, BASE_ATTACK);
             victim->CalcAbsorbResist(damageInfo);
             damage = damageInfo.GetDamage();
-            // No Unit::CalcAbsorbResist here - opcode doesn't send that data - this damage is probably not affected by that
             victim->DealDamageMods(this, damage, nullptr);
 
             WorldPackets::CombatLog::SpellDamageShield damageShield;
@@ -2016,6 +2027,7 @@ void Unit::FakeAttackerStateUpdate(Unit* victim, WeaponAttackType attType /*= BA
     damageInfo.damageSchoolMask = GetMeleeDamageSchoolMask();
     damageInfo.attackType = attType;
     damageInfo.damage = 0;
+    damageInfo.originalDamage = 0;
     damageInfo.cleanDamage = 0;
     damageInfo.absorb = 0;
     damageInfo.resist = 0;
@@ -5045,7 +5057,6 @@ void Unit::SendPeriodicAuraLog(SpellPeriodicAuraLogInfo* info)
     data.SpellID = aura->GetId();
     data.LogData.Initialize(this);
 
-    /// @todo: should send more logs in one packet when multistrike
     WorldPackets::CombatLog::SpellPeriodicAuraLog::SpellLogEffect spellLogEffect;
     spellLogEffect.Effect = aura->GetAuraType();
     spellLogEffect.Amount = info->damage;
@@ -11686,7 +11697,7 @@ bool Unit::CreateVehicleKit(uint32 id, uint32 creatureEntry, bool loading /*= fa
         return false;
 
     m_vehicleKit = new Vehicle(this, vehInfo, creatureEntry);
-    m_updateFlag |= UPDATEFLAG_VEHICLE;
+    m_updateFlag.Vehicle = true;
     m_unitTypeMask |= UNIT_MASK_VEHICLE;
 
     if (!loading)
@@ -11708,7 +11719,7 @@ void Unit::RemoveVehicleKit(bool onRemoveFromWorld /*= false*/)
 
     m_vehicleKit = NULL;
 
-    m_updateFlag &= ~UPDATEFLAG_VEHICLE;
+    m_updateFlag.Vehicle = false;
     m_unitTypeMask &= ~UNIT_MASK_VEHICLE;
     RemoveFlag64(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK | UNIT_NPC_FLAG_PLAYER_VEHICLE);
 }

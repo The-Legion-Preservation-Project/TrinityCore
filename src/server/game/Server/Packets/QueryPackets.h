@@ -23,6 +23,7 @@
 #include "NPCHandler.h"
 #include "ObjectGuid.h"
 #include "Position.h"
+#include "QuestDef.h"
 #include "SharedDefines.h"
 #include "UnitDefines.h"
 #include <array>
@@ -182,8 +183,8 @@ namespace WorldPackets
 
             uint32 TextID = 0;
             bool Allow = false;
-            float Probabilities[MAX_NPC_TEXT_OPTIONS];
-            uint32 BroadcastTextID[MAX_NPC_TEXT_OPTIONS];
+            std::array<float, MAX_NPC_TEXT_OPTIONS> Probabilities;
+            std::array<uint32, MAX_NPC_TEXT_OPTIONS> BroadcastTextID;
         };
 
         class QueryGameObject final : public ClientPacket
@@ -297,7 +298,7 @@ namespace WorldPackets
             void Read() override;
 
             int32 MissingQuestCount = 0;
-            int32 MissingQuestPOIs[50];
+            std::array<int32, 50> MissingQuestPOIs;
         };
 
         struct QuestPOIBlobPoint
@@ -319,7 +320,7 @@ namespace WorldPackets
             int32 Flags = 0;
             int32 WorldEffectID = 0;
             int32 PlayerConditionID = 0;
-            int32 UnkWoD1 = 0;
+            int32 SpawnTrackingID = 0;
             std::vector<QuestPOIBlobPoint> QuestPOIBlobPointStats;
             bool AlwaysAllowMergingBlobs = false;
         };

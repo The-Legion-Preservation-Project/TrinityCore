@@ -184,7 +184,7 @@ void ConversationDataStore::LoadConversationTemplates()
                 currentConversationLine = sConversationLineStore.AssertEntry(currentConversationLine->NextConversationLineID);
             }
 
-            _conversationTemplateStore[conversationTemplate.Id] = conversationTemplate;
+            _conversationTemplateStore[conversationTemplate.Id] = std::move(conversationTemplate);
         }
         while (templates->NextRow());
 

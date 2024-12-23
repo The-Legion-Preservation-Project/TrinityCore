@@ -201,9 +201,9 @@ WorldPacket const* WorldPackets::Character::EnumCharactersResult::Write()
 
     _worldPacket.WriteBit(Success);
     _worldPacket.WriteBit(IsDeletedCharacters);
-    _worldPacket.WriteBit(IsDemonHunterCreationAllowed);
+    _worldPacket.WriteBit(IsTestDemonHunterCreationAllowed);
     _worldPacket.WriteBit(HasDemonHunterOnRealm);
-    _worldPacket.WriteBit(Unknown7x);
+    _worldPacket.WriteBit(IsDemonHunterCreationAllowed);
     _worldPacket.WriteBit(DisabledClassesMask.is_initialized());
     _worldPacket.WriteBit(IsAlliedRacesCreationAllowed);
     _worldPacket << uint32(Characters.size());

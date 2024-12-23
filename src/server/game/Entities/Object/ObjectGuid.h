@@ -349,6 +349,7 @@ class TC_GAME_API ObjectGuidGeneratorBase
 {
 public:
     ObjectGuidGeneratorBase(ObjectGuid::LowType start = UI64LIT(1)) : _nextGuid(start) { }
+    virtual ~ObjectGuidGeneratorBase() { }
 
     virtual void Set(uint64 val) { _nextGuid = val; }
     virtual ObjectGuid::LowType Generate() = 0;

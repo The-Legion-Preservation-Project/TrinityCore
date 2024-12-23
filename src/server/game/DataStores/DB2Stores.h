@@ -35,6 +35,7 @@
 class DB2HotfixGeneratorBase;
 
 TC_GAME_API extern DB2Storage<AchievementEntry>                     sAchievementStore;
+TC_GAME_API extern DB2Storage<AnimationDataEntry>                   sAnimationDataStore;
 TC_GAME_API extern DB2Storage<AnimKitEntry>                         sAnimKitStore;
 TC_GAME_API extern DB2Storage<AreaTableEntry>                       sAreaTableStore;
 TC_GAME_API extern DB2Storage<AreaTriggerEntry>                     sAreaTriggerStore;
@@ -300,11 +301,11 @@ public:
     MapDifficultyEntry const* GetDefaultMapDifficulty(uint32 mapId, Difficulty* difficulty = nullptr) const;
     MapDifficultyEntry const* GetMapDifficultyData(uint32 mapId, Difficulty difficulty) const;
     MapDifficultyEntry const* GetDownscaledMapDifficultyData(uint32 mapId, Difficulty &difficulty) const;
-    std::string GetNameGenEntry(uint8 race, uint8 gender) const;
     MountEntry const* GetMount(uint32 spellId) const;
     MountEntry const* GetMountById(uint32 id) const;
     MountTypeXCapabilitySet const* GetMountCapabilities(uint32 mountType) const;
     MountXDisplayContainer const* GetMountDisplays(uint32 mountId) const;
+    std::string GetNameGenEntry(uint8 race, uint8 gender) const;
     ResponseCodes ValidateName(std::wstring const& name, LocaleConstant locale) const;
     std::vector<uint32> const* GetPhasesForGroup(uint32 group) const;
     PowerTypeEntry const* GetPowerTypeEntry(Powers power) const;

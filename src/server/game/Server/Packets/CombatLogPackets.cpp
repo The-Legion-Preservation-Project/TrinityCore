@@ -61,12 +61,12 @@ WorldPacket const* WorldPackets::CombatLog::EnvironmentalDamageLog::Write()
 WorldPacket const* WorldPackets::CombatLog::SpellExecuteLog::Write()
 {
     *this << Caster;
-    *this << SpellID;
+    *this << int32(SpellID);
     *this << uint32(Effects.size());
 
     for (SpellLogEffect const& effect : Effects)
     {
-        *this << effect.Effect;
+        *this << int32(effect.Effect);
 
         *this << uint32(effect.PowerDrainTargets.size());
         *this << uint32(effect.ExtraAttacksTargets.size());
@@ -78,32 +78,32 @@ WorldPacket const* WorldPackets::CombatLog::SpellExecuteLog::Write()
         for (SpellLogEffectPowerDrainParams const& powerDrainTarget : effect.PowerDrainTargets)
         {
             *this << powerDrainTarget.Victim;
-            *this << powerDrainTarget.Points;
-            *this << powerDrainTarget.PowerType;
-            *this << powerDrainTarget.Amplitude;
+            *this << uint32(powerDrainTarget.Points);
+            *this << uint32(powerDrainTarget.PowerType);
+            *this << float(powerDrainTarget.Amplitude);
         }
 
         for (SpellLogEffectExtraAttacksParams const& extraAttacksTarget : effect.ExtraAttacksTargets)
         {
             *this << extraAttacksTarget.Victim;
-            *this << extraAttacksTarget.NumAttacks;
+            *this << uint32(extraAttacksTarget.NumAttacks);
         }
 
         for (SpellLogEffectDurabilityDamageParams const& durabilityDamageTarget : effect.DurabilityDamageTargets)
         {
             *this << durabilityDamageTarget.Victim;
-            *this << durabilityDamageTarget.ItemID;
-            *this << durabilityDamageTarget.Amount;
+            *this << int32(durabilityDamageTarget.ItemID);
+            *this << int32(durabilityDamageTarget.Amount);
         }
 
         for (SpellLogEffectGenericVictimParams const& genericVictimTarget : effect.GenericVictimTargets)
             *this << genericVictimTarget.Victim;
 
         for (SpellLogEffectTradeSkillItemParams const& tradeSkillTarget : effect.TradeSkillTargets)
-            *this << tradeSkillTarget.ItemID;
+            *this << int32(tradeSkillTarget.ItemID);
 
         for (SpellLogEffectFeedPetParams const& feedPetTarget : effect.FeedPetTargets)
-            *this << feedPetTarget.ItemID;
+            *this << int32(feedPetTarget.ItemID);
     }
 
     WriteLogDataBit();
@@ -172,7 +172,6 @@ WorldPacket const* WorldPackets::CombatLog::SpellPeriodicAuraLog::Write()
             *this << float(effect.DebugInfo->CritRollMade);
             *this << float(effect.DebugInfo->CritRollNeeded);
         }
-
     }
 
     WriteLogData();

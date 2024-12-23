@@ -349,6 +349,7 @@ void WorldSession::HandleCharEnum(PreparedQueryResult result)
         while (result->NextRow());
     }
 
+    charEnum.IsTestDemonHunterCreationAllowed = canAlwaysCreateDemonHunter;
     charEnum.IsDemonHunterCreationAllowed = GetAccountExpansion() >= EXPANSION_LEGION || canAlwaysCreateDemonHunter;
     charEnum.IsAlliedRacesCreationAllowed = GetAccountExpansion() >= EXPANSION_BATTLE_FOR_AZEROTH;
 
