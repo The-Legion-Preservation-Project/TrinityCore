@@ -208,8 +208,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petnumber, bool c
 
     m_charmInfo->SetPetNumber(petId, IsPermanentPetFor(owner));
 
-    SetDisplayId(fields[3].GetUInt32());
-    SetNativeDisplayId(fields[3].GetUInt32());
+    SetDisplayId(fields[3].GetUInt32(), true);
     uint32 petlevel = fields[4].GetUInt16();
     SetUInt64Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
     SetName(fields[8].GetString());
@@ -1780,9 +1779,9 @@ Player* Pet::GetOwner() const
     return Minion::GetOwner()->ToPlayer();
 }
 
-void Pet::SetDisplayId(uint32 modelId)
+void Pet::SetDisplayId(uint32 modelId, bool setNative /*= false*/)
 {
-    Guardian::SetDisplayId(modelId);
+    Guardian::SetDisplayId(modelId, setNative);
 
     if (!isControlled())
         return;

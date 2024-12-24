@@ -77,68 +77,67 @@ VendorItem const* VendorItemData::FindItemCostPair(uint32 item_id, uint32 extend
     return nullptr;
 }
 
-uint32 CreatureTemplate::GetRandomValidModelId() const
+CreatureModel const CreatureModel::DefaultInvisibleModel(11686, 1.0f, 1.0f);
+CreatureModel const CreatureModel::DefaultVisibleModel(17519, 1.0f, 1.0f);
+
+CreatureModel const* CreatureTemplate::GetModelByIdx(uint32 idx) const
 {
-    uint8 c = 0;
-    uint32 modelIDs[4];
-
-    if (Modelid1) modelIDs[c++] = Modelid1;
-    if (Modelid2) modelIDs[c++] = Modelid2;
-    if (Modelid3) modelIDs[c++] = Modelid3;
-    if (Modelid4) modelIDs[c++] = Modelid4;
-
-    return ((c>0) ? modelIDs[urand(0, c-1)] : 0);
+    return idx < Models.size() ? &Models[idx] : nullptr;
 }
 
-uint32 CreatureTemplate::GetFirstValidModelId() const
+CreatureModel const* CreatureTemplate::GetRandomValidModel() const
 {
-    if (Modelid1) return Modelid1;
-    if (Modelid2) return Modelid2;
-    if (Modelid3) return Modelid3;
-    if (Modelid4) return Modelid4;
-    return 0;
+    if (!Models.size())
+        return nullptr;
+
+    // If only one element, ignore the Probability (even if 0)
+    if (Models.size() == 1)
+        return &Models[0];
+
+    auto selectedItr = Trinity::Containers::SelectRandomWeightedContainerElement(Models, [](CreatureModel const& model)
+    {
+        return model.Probability;
+    });
+
+    return &(*selectedItr);
 }
 
-uint32 CreatureTemplate::GetFirstInvisibleModel() const
+CreatureModel const* CreatureTemplate::GetFirstValidModel() const
 {
-    CreatureModelInfo const* modelInfo = sObjectMgr->GetCreatureModelInfo(Modelid1);
-    if (modelInfo && modelInfo->is_trigger)
-        return Modelid1;
+    for (CreatureModel const& model : Models)
+        if (model.CreatureDisplayID)
+            return &model;
 
-    modelInfo = sObjectMgr->GetCreatureModelInfo(Modelid2);
-    if (modelInfo && modelInfo->is_trigger)
-        return Modelid2;
-
-    modelInfo = sObjectMgr->GetCreatureModelInfo(Modelid3);
-    if (modelInfo && modelInfo->is_trigger)
-        return Modelid3;
-
-    modelInfo = sObjectMgr->GetCreatureModelInfo(Modelid4);
-    if (modelInfo && modelInfo->is_trigger)
-        return Modelid4;
-
-    return 11686;
+    return nullptr;
 }
 
-uint32 CreatureTemplate::GetFirstVisibleModel() const
+CreatureModel const* CreatureTemplate::GetModelWithDisplayId(uint32 displayId) const
 {
-    CreatureModelInfo const* modelInfo = sObjectMgr->GetCreatureModelInfo(Modelid1);
-    if (modelInfo && !modelInfo->is_trigger)
-        return Modelid1;
+    for (CreatureModel const& model : Models)
+        if (displayId == model.CreatureDisplayID)
+            return &model;
 
-    modelInfo = sObjectMgr->GetCreatureModelInfo(Modelid2);
-    if (modelInfo && !modelInfo->is_trigger)
-        return Modelid2;
+    return nullptr;
+}
 
-    modelInfo = sObjectMgr->GetCreatureModelInfo(Modelid3);
-    if (modelInfo && !modelInfo->is_trigger)
-        return Modelid3;
+CreatureModel const* CreatureTemplate::GetFirstInvisibleModel() const
+{
+    for (CreatureModel const& model : Models)
+        if (CreatureModelInfo const* modelInfo = sObjectMgr->GetCreatureModelInfo(model.CreatureDisplayID))
+            if (modelInfo && modelInfo->is_trigger)
+                return &model;
 
-    modelInfo = sObjectMgr->GetCreatureModelInfo(Modelid4);
-    if (modelInfo && !modelInfo->is_trigger)
-        return Modelid4;
+    return &CreatureModel::DefaultInvisibleModel;
+}
 
-    return 17519;
+CreatureModel const* CreatureTemplate::GetFirstVisibleModel() const
+{
+    for (CreatureModel const& model : Models)
+        if (CreatureModelInfo const* modelInfo = sObjectMgr->GetCreatureModelInfo(model.CreatureDisplayID))
+            if (modelInfo && !modelInfo->is_trigger)
+                return &model;
+
+    return &CreatureModel::DefaultVisibleModel;
 }
 
 bool AssistDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
@@ -347,22 +346,21 @@ bool Creature::InitEntry(uint32 entry, CreatureData const* data /*= nullptr*/)
     SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_CLASS, uint8(cinfo->unit_class));
 
     // Cancel load if no model defined
-    if (!(cinfo->GetFirstValidModelId()))
+    if (!(cinfo->GetFirstValidModel()))
     {
         TC_LOG_ERROR("sql.sql", "Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", entry);
         return false;
     }
 
-    uint32 displayID = ObjectMgr::ChooseDisplayId(GetCreatureTemplate(), data);
-    CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&displayID);
+    CreatureModel model = *ObjectMgr::ChooseDisplayId(cinfo, data);
+    CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&model, cinfo);
     if (!minfo)                                             // Cancel load if no model defined
     {
-        TC_LOG_ERROR("sql.sql", "Creature (Entry: %u) has invalid model %u defined in table `creature_template`, can't load.", entry, displayID);
+        TC_LOG_ERROR("sql.sql", "Creature (Entry: %u) has invalid model %u defined in table `creature_template`, can't load.", entry, model.CreatureDisplayID);
         return false;
     }
 
-    SetDisplayId(displayID);
-    SetNativeDisplayId(displayID);
+    SetDisplayId(model.CreatureDisplayID, true);
     SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_GENDER, minfo->gender);
 
     // Load creature equipment
@@ -926,12 +924,11 @@ bool Creature::Create(ObjectGuid::LowType guidlow, Map* map, uint32 entry, float
         Relocate(x, y, z, ang);
     }
 
-    uint32 displayID = GetNativeDisplayId();
-    CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&displayID);
+    CreatureModel display(GetNativeDisplayId(), 0, 1.0f);
+    CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&display, GetCreatureTemplate());
     if (minfo && !IsTotem())                               // Cancel load if no model defined or if totem
     {
-        SetDisplayId(displayID);
-        SetNativeDisplayId(displayID);
+        SetDisplayId(display.CreatureDisplayID, true);
         SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_GENDER, minfo->gender);
     }
 
@@ -1131,9 +1128,9 @@ void Creature::SaveToDB(uint32 mapid, std::vector<Difficulty> const& spawnDiffic
     CreatureTemplate const* cinfo = GetCreatureTemplate();
     if (cinfo)
     {
-        if (displayId == cinfo->Modelid1 || displayId == cinfo->Modelid2 ||
-            displayId == cinfo->Modelid3 || displayId == cinfo->Modelid4)
-            displayId = 0;
+        for (CreatureModel model : cinfo->Models)
+            if (displayId && displayId == model.CreatureDisplayID)
+                displayId = 0;
 
         if (npcflag == cinfo->npcflag)
             npcflag = 0;
@@ -1846,12 +1843,11 @@ void Creature::Respawn(bool force)
 
         setDeathState(JUST_RESPAWNED);
 
-        uint32 displayID = GetNativeDisplayId();
-        CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&displayID);
+        CreatureModel display(GetNativeDisplayId(), 0, 1.0f);
+        CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&display, GetCreatureTemplate());
         if (minfo)                                             // Cancel load if no model defined
         {
-            SetDisplayId(displayID);
-            SetNativeDisplayId(displayID);
+            SetDisplayId(display.CreatureDisplayID, true);
             SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_GENDER, minfo->gender);
         }
 
@@ -2855,15 +2851,21 @@ void Creature::SetObjectScale(float scale)
     }
 }
 
-void Creature::SetDisplayId(uint32 modelId)
+void Creature::SetDisplayId(uint32 modelId, bool setNative /*= false*/)
 {
-    Unit::SetDisplayId(modelId);
+    Unit::SetDisplayId(modelId, setNative);
 
     if (CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelInfo(modelId))
     {
         SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, (IsPet() ? 1.0f : minfo->bounding_radius) * GetObjectScale());
         SetFloatValue(UNIT_FIELD_COMBATREACH, (IsPet() ? DEFAULT_COMBAT_REACH : minfo->combat_reach) * GetObjectScale());
     }
+}
+
+void Creature::SetDisplayFromModel(uint32 modelIdx)
+{
+    if (CreatureModel const* model = GetCreatureTemplate()->GetModelByIdx(modelIdx))
+        SetDisplayId(model->CreatureDisplayID);
 }
 
 void Creature::SetTarget(ObjectGuid const& guid)

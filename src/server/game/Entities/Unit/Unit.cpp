@@ -10351,12 +10351,16 @@ bool Unit::IsPolymorphed() const
     return spellInfo->GetSpellSpecific() == SPELL_SPECIFIC_MAGE_POLYMORPH;
 }
 
-void Unit::SetDisplayId(uint32 modelId)
+void Unit::SetDisplayId(uint32 modelId, bool setNative /*= false*/)
 {
     SetUInt32Value(UNIT_FIELD_DISPLAYID, modelId);
+
     // Set Gender by modelId
     if (CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelInfo(modelId))
         SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_GENDER, minfo->gender);
+
+    if (setNative)
+        SetUInt32Value(UNIT_FIELD_NATIVEDISPLAYID, modelId);
 }
 
 void Unit::RestoreDisplayId(bool ignorePositiveAurasPreventingMounting /*= false*/)
@@ -10376,7 +10380,7 @@ void Unit::RestoreDisplayId(bool ignorePositiveAurasPreventingMounting /*= false
                     if (!ignorePositiveAurasPreventingMounting)
                         handledAura = (*i);
                     else if (CreatureTemplate const* ci = sObjectMgr->GetCreatureTemplate((*i)->GetMiscValue()))
-                        if (!IsDisallowedMountForm((*i)->GetId(), FORM_NONE, sObjectMgr->ChooseDisplayId(ci)))
+                        if (!IsDisallowedMountForm((*i)->GetId(), FORM_NONE, ObjectMgr::ChooseDisplayId(ci)->CreatureDisplayID))
                             handledAura = (*i);
                 }
                 // prefer negative auras
@@ -13767,7 +13771,7 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* target)
 
                     if (cinfo->flags_extra & CREATURE_FLAG_EXTRA_TRIGGER)
                         if (target->IsGameMaster())
-                            displayId = cinfo->GetFirstVisibleModel();
+                            displayId = cinfo->GetFirstVisibleModel()->CreatureDisplayID;
                 }
 
                 *data << uint32(displayId);
