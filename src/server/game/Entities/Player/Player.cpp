@@ -5341,8 +5341,7 @@ bool Player::UpdateSkillPro(uint16 skillId, int32 chance, uint32 step)
     // levels sync. with spell requirement for skill levels to learn
     // bonus abilities in sSkillLineAbilityStore
     // Used only to avoid scan DBC at each skill grow
-    static uint32 bonusSkillLevels[] = { 75, 150, 225, 300, 375, 450, 525 };
-    static const size_t bonusSkillLevelsSize = sizeof(bonusSkillLevels) / sizeof(uint32);
+    uint32 const bonusSkillLevels[] = { 75, 150, 225, 300, 375, 450, 525 };
 
     TC_LOG_DEBUG("entities.player.skills", "Player::UpdateSkillPro: Player '%s' (%s), SkillID: %u, Chance: %3.1f%%)",
         GetName().c_str(), GetGUID().ToString().c_str(), skillId, chance / 10.0f);
@@ -5384,9 +5383,8 @@ bool Player::UpdateSkillPro(uint16 skillId, int32 chance, uint32 step)
     if (itr->second.uState != SKILL_NEW)
         itr->second.uState = SKILL_CHANGED;
 
-    for (size_t i = 0; i < bonusSkillLevelsSize; ++i)
+    for (uint32 bsl : bonusSkillLevels)
     {
-        uint32 bsl = bonusSkillLevels[i];
         if (value < bsl && new_value >= bsl)
         {
             LearnSkillRewardedSpells(skillId, new_value);
