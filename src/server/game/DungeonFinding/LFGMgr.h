@@ -386,7 +386,7 @@ class TC_GAME_API LFGMgr
 
         // LFGHandler
         /// Get locked dungeons
-        LfgLockMap const GetLockedDungeons(ObjectGuid guid);
+        LfgLockMap GetLockedDungeons(ObjectGuid guid);
         /// Returns current lfg status
         LfgUpdateData GetLfgStatus(ObjectGuid guid);
         /// Checks if Seasonal dungeon is active
@@ -447,7 +447,7 @@ class TC_GAME_API LFGMgr
         void SetState(ObjectGuid guid, LfgState state);
         void SetVoteKick(ObjectGuid gguid, bool active);
         void RemovePlayerData(ObjectGuid guid);
-        void GetCompatibleDungeons(LfgDungeonSet& dungeons, GuidSet const& players, LfgLockPartyMap& lockMap, bool isContinue);
+        void GetCompatibleDungeons(LfgDungeonSet* dungeons, GuidSet const& players, LfgLockPartyMap* lockMap, bool isContinue);
         void _SaveToDB(ObjectGuid guid, uint32 db_guid);
         LFGDungeonData const* GetLFGDungeon(uint32 id);
 

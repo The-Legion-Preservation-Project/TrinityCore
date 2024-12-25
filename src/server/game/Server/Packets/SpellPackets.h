@@ -296,6 +296,9 @@ namespace WorldPackets
 
         struct SpellMissStatus
         {
+            SpellMissStatus() { }
+            SpellMissStatus(uint8 reason, uint8 reflectStatus) : Reason(reason), ReflectStatus(reflectStatus) { }
+
             uint8 Reason = 0;
             uint8 ReflectStatus = 0;
         };
@@ -696,7 +699,7 @@ namespace WorldPackets
             int32 SpellVisualID = 0;
             bool SpeedAsTime = false;
             float TravelSpeed = 0.0f;
-            float UnkZero = 0.0f; // Always zero
+            float LaunchDelay = 0.0f; // Always zero
             TaggedPosition<Position::XYZ> SourceRotation; // Vector of rotations, Orientation is z
             TaggedPosition<Position::XYZ> TargetLocation; // Exclusive with Target
         };

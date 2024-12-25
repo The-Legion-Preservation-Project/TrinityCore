@@ -381,16 +381,16 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Spells::SpellCastData con
     data.WriteBits(spellCastData.TargetPoints.size(), 16);
     data.FlushBits();
 
-    for (WorldPackets::Spells::SpellMissStatus const& status : spellCastData.MissStatus)
-        data << status;
+    for (WorldPackets::Spells::SpellMissStatus const& missStatus : spellCastData.MissStatus)
+        data << missStatus;
 
     data << spellCastData.Target;
 
-    for (ObjectGuid const& target : spellCastData.HitTargets)
-        data << target;
+    for (ObjectGuid const& hitTarget : spellCastData.HitTargets)
+        data << hitTarget;
 
-    for (ObjectGuid const& target : spellCastData.MissTargets)
-        data << target;
+    for (ObjectGuid const& missTarget : spellCastData.MissTargets)
+        data << missTarget;
 
     for (WorldPackets::Spells::SpellPowerData const& power : spellCastData.RemainingPower)
         data << power;
@@ -715,7 +715,7 @@ WorldPacket const* WorldPackets::Spells::PlayOrphanSpellVisual::Write()
     _worldPacket << Target;
     _worldPacket << int32(SpellVisualID);
     _worldPacket << float(TravelSpeed);
-    _worldPacket << float(UnkZero);
+    _worldPacket << float(LaunchDelay);
     _worldPacket.WriteBit(SpeedAsTime);
     _worldPacket.FlushBits();
 

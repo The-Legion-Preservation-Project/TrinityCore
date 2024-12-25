@@ -146,7 +146,7 @@ namespace WorldPackets
                 uint32 LastPlayedTime    = 0;
                 uint16 SpecID            = 0;
                 uint32 Unknown703        = 0;
-                uint32 LastLoginBuild    = 0;
+                uint32 LastLoginVersion    = 0;
 
                 struct PetInfo
                 {

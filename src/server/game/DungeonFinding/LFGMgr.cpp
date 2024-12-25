@@ -507,7 +507,7 @@ void LFGMgr::JoinLfg(Player* player, uint8 roles, LfgDungeonSet& dungeons)
                 dungeons = GetDungeonsByRandom(rDungeonId);
 
             // if we have lockmap then there are no compatible dungeons
-            GetCompatibleDungeons(dungeons, players, joinData.lockmap, isContinue);
+            GetCompatibleDungeons(&dungeons, players, &joinData.lockmap, isContinue);
             if (dungeons.empty())
                 joinData.result = grp ? LFG_JOIN_NO_LFG_OBJECT : LFG_JOIN_NO_SLOTS_PLAYER;
         }
@@ -782,22 +782,23 @@ void LFGMgr::UpdateRoleCheck(ObjectGuid gguid, ObjectGuid guid /* = ObjectGuid::
    @param[in]     players Set of players to check their dungeon restrictions
    @param[out]    lockMap Map of players Lock status info of given dungeons (Empty if dungeons is not empty)
 */
-void LFGMgr::GetCompatibleDungeons(LfgDungeonSet& dungeons, GuidSet const& players, LfgLockPartyMap& lockMap, bool isContinue)
+void LFGMgr::GetCompatibleDungeons(LfgDungeonSet* dungeons, GuidSet const& players, LfgLockPartyMap* lockMap, bool isContinue)
 {
-    lockMap.clear();
+    lockMap->clear();
 
     std::map<uint32, uint32> lockedDungeons;
+    std::unordered_set<uint32> dungeonsToRemove;
 
-    for (GuidSet::const_iterator it = players.begin(); it != players.end() && !dungeons.empty(); ++it)
+    for (GuidSet::const_iterator it = players.begin(); it != players.end() && !dungeons->empty(); ++it)
     {
         ObjectGuid guid = (*it);
-        LfgLockMap const& cachedLockMap = GetLockedDungeons(guid);
+        LfgLockMap cachedLockMap = GetLockedDungeons(guid);
         Player* player = ObjectAccessor::FindConnectedPlayer(guid);
-        for (LfgLockMap::const_iterator it2 = cachedLockMap.begin(); it2 != cachedLockMap.end() && !dungeons.empty(); ++it2)
+        for (LfgLockMap::const_iterator it2 = cachedLockMap.begin(); it2 != cachedLockMap.end() && !dungeons->empty(); ++it2)
         {
             uint32 dungeonId = (it2->first & 0x00FFFFFF); // Compare dungeon ids
-            LfgDungeonSet::iterator itDungeon = dungeons.find(dungeonId);
-            if (itDungeon != dungeons.end())
+            LfgDungeonSet::iterator itDungeon = dungeons->find(dungeonId);
+            if (itDungeon != dungeons->end())
             {
                 bool eraseDungeon = true;
 
@@ -822,14 +823,18 @@ void LFGMgr::GetCompatibleDungeons(LfgDungeonSet& dungeons, GuidSet const& playe
                 }
 
                 if (eraseDungeon)
-                    dungeons.erase(itDungeon);
+                    dungeonsToRemove.insert(dungeonId);
 
-                lockMap[guid][dungeonId] = it2->second;
+                (*lockMap)[guid][dungeonId] = it2->second;
             }
         }
     }
-    if (!dungeons.empty())
-        lockMap.clear();
+
+    for (uint32 dungeonIdToRemove : dungeonsToRemove)
+        dungeons->erase(dungeonIdToRemove);
+
+    if (!dungeons->empty())
+        lockMap->clear();
 }
 
 /**
@@ -1601,7 +1606,7 @@ LfgDungeonSet const& LFGMgr::GetSelectedDungeons(ObjectGuid guid)
     return PlayersStore[guid].GetSelectedDungeons();
 }
 
-LfgLockMap const LFGMgr::GetLockedDungeons(ObjectGuid guid)
+LfgLockMap LFGMgr::GetLockedDungeons(ObjectGuid guid)
 {
     TC_LOG_TRACE("lfg.data.player.dungeons.locked.get", "Player: %s, LockedDungeons.", guid.ToString().c_str());
     LfgLockMap lock;

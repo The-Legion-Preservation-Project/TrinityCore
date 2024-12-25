@@ -528,7 +528,7 @@ WorldPacket const* WorldPackets::Party::RaidMarkersChanged::Write()
     _worldPacket.WriteBits(RaidMarkers.size(), 4);
     _worldPacket.FlushBits();
 
-    for (RaidMarker* raidMarker : RaidMarkers)
+    for (RaidMarker const* raidMarker : RaidMarkers)
     {
         _worldPacket << raidMarker->TransportGUID;
         _worldPacket << raidMarker->Location.GetMapId();

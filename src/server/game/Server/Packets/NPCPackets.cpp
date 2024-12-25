@@ -64,7 +64,6 @@ WorldPacket const* WorldPackets::NPC::GossipMessage::Write()
     return &_worldPacket;
 }
 
-
 ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::NPC::VendorItem const &item)
 {
     data << uint32(item.MuID);

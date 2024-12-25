@@ -145,7 +145,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPackets::Loot::LootItem& p
 void WorldSession::HandleLootMoneyOpcode(WorldPackets::Loot::LootMoney& /*packet*/)
 {
     Player* player = GetPlayer();
-    for (std::pair<ObjectGuid, ObjectGuid> const& lootView : player->GetAELootView())
+    for (std::pair<ObjectGuid const, ObjectGuid> const& lootView : player->GetAELootView())
     {
         ObjectGuid guid = lootView.second;
         Loot* loot = nullptr;
@@ -447,7 +447,7 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
 void WorldSession::DoLootReleaseAll()
 {
     std::unordered_map<ObjectGuid, ObjectGuid> lootView = _player->GetAELootView();
-    for (std::pair<ObjectGuid, ObjectGuid> lootPair : lootView)
+    for (std::pair<ObjectGuid const, ObjectGuid> const& lootPair : lootView)
         DoLootRelease(lootPair.second);
 }
 

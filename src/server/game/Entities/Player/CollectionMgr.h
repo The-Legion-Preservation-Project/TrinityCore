@@ -20,6 +20,7 @@
 
 #include "Define.h"
 #include "DatabaseEnvFwd.h"
+#include "EnumClassFlag.h"
 #include "ObjectGuid.h"
 #include <boost/dynamic_bitset_fwd.hpp>
 #include <map>
@@ -53,7 +54,13 @@ struct HeirloomData
     uint32 bonusId;
 };
 
-typedef std::map<uint32, bool> ToyBoxContainer;
+enum class ToyFlags : uint32
+{
+    None        = 0,
+    Favorite    = 0x01
+};
+
+typedef std::map<uint32, EnumClassFlag<ToyFlags>> ToyBoxContainer;
 typedef std::map<uint32, HeirloomData> HeirloomContainer;
 
 enum MountStatusFlags : uint8

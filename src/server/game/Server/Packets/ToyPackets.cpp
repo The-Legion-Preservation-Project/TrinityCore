@@ -36,11 +36,11 @@ WorldPacket const* WorldPackets::Toy::AccountToysUpdate::Write()
     _worldPacket << int32(Toys->size());
     _worldPacket << int32(Toys->size());
 
-    for (auto const& item : *Toys)
-        _worldPacket << uint32(item.first);
+    for (auto const& toy : *Toys)
+        _worldPacket << uint32(toy.first);
 
-    for (auto const& favourite : *Toys)
-        _worldPacket.WriteBit(favourite.second);
+    for (auto const& toy : *Toys)
+        _worldPacket.WriteBit(toy.second.HasFlag(ToyFlags::Favorite));
 
     _worldPacket.FlushBits();
 

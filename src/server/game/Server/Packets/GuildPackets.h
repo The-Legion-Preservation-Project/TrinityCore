@@ -882,7 +882,7 @@ namespace WorldPackets
         class GuildBankTextQueryResult : public ServerPacket
         {
         public:
-            GuildBankTextQueryResult() : ServerPacket(SMSG_GUILD_BANK_TEXT_QUERY_RESULT, 5) { }
+            GuildBankTextQueryResult() : ServerPacket(SMSG_GUILD_BANK_TEXT_QUERY_RESULT, 4 + 2) { }
 
             WorldPacket const* Write() override;
 

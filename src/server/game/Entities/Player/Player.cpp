@@ -2769,7 +2769,7 @@ void Player::SendMailResult(uint32 mailId, MailResponseType mailAction, MailResp
 void Player::SendNewMail() const
 {
     // deliver undelivered mail
-    WorldPackets::Mail::NotifyRecievedMail notify;
+    WorldPackets::Mail::NotifyReceivedMail notify;
     notify.Delay = 0.0f;
 
     GetSession()->SendPacket(notify.Write());

@@ -117,7 +117,7 @@ WorldPackets::Character::EnumCharactersResult::CharacterInfo::CharacterInfo(Fiel
     if (ChrSpecializationEntry const* spec = sDB2Manager.GetChrSpecializationByIndex(Class, fields[29].GetUInt8()))
         SpecID = spec->ID;
 
-    LastLoginBuild = fields[30].GetUInt32();
+    LastLoginVersion = fields[30].GetUInt32();
 
     for (uint8 slot = 0; slot < INVENTORY_SLOT_BAG_END; ++slot)
     {
@@ -171,7 +171,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Character::EnumCharacters
     data << uint32(charInfo.LastPlayedTime);
     data << uint16(charInfo.SpecID);
     data << uint32(charInfo.Unknown703);
-    data << uint32(charInfo.LastLoginBuild);
+    data << uint32(charInfo.LastLoginVersion);
     data << uint32(charInfo.Flags4);
     data.WriteBits(charInfo.Name.length(), 6);
     data.WriteBit(charInfo.FirstLogin);

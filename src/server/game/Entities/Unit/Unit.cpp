@@ -11923,7 +11923,7 @@ void Unit::SendPlayOrphanSpellVisual(ObjectGuid const& target, uint32 spellVisua
     playOrphanSpellVisual.SpellVisualID = spellVisualId;
     playOrphanSpellVisual.TravelSpeed = travelSpeed;
     playOrphanSpellVisual.SpeedAsTime = speedAsTime;
-    playOrphanSpellVisual.UnkZero = 0.0f;
+    playOrphanSpellVisual.LaunchDelay = 0.0f;
     SendMessageToSet(playOrphanSpellVisual.Write(), true);
 }
 
@@ -11937,7 +11937,7 @@ void Unit::SendPlayOrphanSpellVisual(Position const& targetLocation, uint32 spel
     playOrphanSpellVisual.SpellVisualID = spellVisualId;
     playOrphanSpellVisual.TravelSpeed = travelSpeed;
     playOrphanSpellVisual.SpeedAsTime = speedAsTime;
-    playOrphanSpellVisual.UnkZero = 0.0f;
+    playOrphanSpellVisual.LaunchDelay = 0.0f;
     SendMessageToSet(playOrphanSpellVisual.Write(), true);
 }
 
