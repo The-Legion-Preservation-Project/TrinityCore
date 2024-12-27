@@ -17,10 +17,10 @@
 
 #include "ScriptMgr.h"
 #include "InstanceScript.h"
+#include "MotionMaster.h"
 #include "ObjectAccessor.h"
 #include "ruby_sanctum.h"
 #include "ScriptedEscortAI.h"
-#include "MotionMaster.h"
 
 enum Texts
 {
