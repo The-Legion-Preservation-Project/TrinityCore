@@ -31,6 +31,7 @@
 #include "PetDefines.h"
 #include "PlayerTaxi.h"
 #include "QuestDef.h"
+#include "RestMgr.h"
 #include "SceneMgr.h"
 #include <queue>
 
@@ -81,7 +82,6 @@ class PlayerMenu;
 class PlayerSocial;
 class QuestObjectiveCriteriaMgr;
 class ReputationMgr;
-class RestMgr;
 class SpellCastTargets;
 class TradeData;
 
@@ -1084,14 +1084,14 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SendInstanceResetWarning(uint32 mapid, Difficulty difficulty, uint32 time, bool welcome) const;
 
         bool CanInteractWithQuestGiver(Object* questGiver) const;
-        Creature* GetNPCIfCanInteractWith(ObjectGuid const& guid, uint64 npcflagmask) const;
+        Creature* GetNPCIfCanInteractWith(ObjectGuid const& guid, NPCFlags npcFlags) const;
         GameObject* GetGameObjectIfCanInteractWith(ObjectGuid const& guid) const;
         GameObject* GetGameObjectIfCanInteractWith(ObjectGuid const& guid, GameobjectTypes type) const;
 
         void ToggleAFK();
         void ToggleDND();
-        bool isAFK() const { return HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_AFK); }
-        bool isDND() const { return HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_DND); }
+        bool isAFK() const { return HasPlayerFlag(PLAYER_FLAGS_AFK); }
+        bool isDND() const { return HasPlayerFlag(PLAYER_FLAGS_DND); }
         uint8 GetChatFlags() const;
         std::string autoReplyMsg;
 
@@ -1195,6 +1195,11 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool HasItemCount(uint32 item, uint32 count = 1, bool inBankAlso = false) const;
         bool HasItemFitToSpellRequirements(SpellInfo const* spellInfo, Item const* ignoreItem = nullptr) const;
         bool CanNoReagentCast(SpellInfo const* spellInfo) const;
+        void SetNoRegentCostMask(flag128 mask)
+        {
+            for (uint8 i = 0; i < 4; ++i)
+                SetUInt32Value(PLAYER_NO_REAGENT_COST_1 + i, mask[i]);
+        }
         bool HasItemOrGemWithIdEquipped(uint32 item, uint32 count, uint8 except_slot = NULL_SLOT) const;
         bool HasItemWithLimitCategoryEquipped(uint32 limitCategory, uint32 count, uint8 except_slot = NULL_SLOT) const;
         bool HasGemWithLimitCategoryEquipped(uint32 limitCategory, uint32 count, uint8 except_slot = NULL_SLOT) const;
@@ -1265,6 +1270,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         */
         void ModifyCurrency(uint32 id, int32 count, bool printLog = true, bool ignoreMultipliers = false);
 
+        void SetInvSlot(uint32 slot, ObjectGuid guid) { SetGuidValue(PLAYER_FIELD_INV_SLOT_HEAD + (slot * 4), guid); }
+
         void ApplyEquipCooldown(Item* pItem);
         void QuickEquipItem(uint16 pos, Item* pItem);
         void VisualizeItem(uint8 slot, Item* pItem);
@@ -1284,6 +1291,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SplitItem(uint16 src, uint16 dst, uint32 count);
         void SwapItem(uint16 src, uint16 dst);
         void AddItemToBuyBackSlot(Item* pItem);
+        void SetBuybackPrice(uint32 slot, uint32 price) { SetUInt32Value(PLAYER_FIELD_BUYBACK_PRICE_1 + slot, price); }
+        void SetBuybackTimestamp(uint32 slot, uint32 timestamp) { SetUInt32Value(PLAYER_FIELD_BUYBACK_TIMESTAMP_1 + slot, timestamp); }
         Item* GetItemFromBuyBackSlot(uint32 slot);
         void RemoveItemFromBuyBackSlot(uint32 slot, bool del);
         void SendEquipError(InventoryResult msg, Item* item1 = nullptr, Item* item2 = nullptr, uint32 itemId = 0) const;
@@ -1605,6 +1614,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void LearnSpellHighestRank(uint32 spellid);
         void AddTemporarySpell(uint32 spellId);
         void RemoveTemporarySpell(uint32 spellId);
+        void SetOverrideSpellsId(int32 overrideSpellsId) { SetUInt16Value(PLAYER_FIELD_BYTES3, PLAYER_BYTES_3_OVERRIDE_SPELLS_UINT16_OFFSET, overrideSpellsId);  }
         void AddOverrideSpell(uint32 overridenSpellId, uint32 newSpellId);
         void RemoveOverrideSpell(uint32 overridenSpellId, uint32 newSpellId);
         void LearnSpecializationSpells();
@@ -1714,6 +1724,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SendInitialActionButtons() const { SendActionButtons(0); }
         void SendActionButtons(uint32 state) const;
         bool IsActionButtonDataValid(uint8 button, uint32 action, uint8 type) const;
+        void SetMultiActionBars(uint8 mask) { SetByteValue(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_ACTION_BAR_TOGGLES, mask); }
 
         PvPInfo pvpInfo;
         void UpdatePvPState(bool onlyFFA = false);
@@ -1735,6 +1746,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void UpdateDuelFlag(time_t currTime);
         void CheckDuelDistance(time_t currTime);
         void DuelComplete(DuelCompleteType type);
+        void SetDuelArbiter(ObjectGuid guid) { SetGuidValue(PLAYER_DUEL_ARBITER, guid); }
+        void SetDuelTeam(uint32 duelTeam) { SetUInt32Value(PLAYER_DUEL_TEAM, duelTeam); }
 
         bool IsGroupVisibleFor(Player const* p) const;
         bool IsInSameGroupWith(Player const* p) const;
@@ -1792,6 +1805,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool UpdateStats(Stats stat) override;
         bool UpdateAllStats() override;
         void ApplySpellPenetrationBonus(int32 amount, bool apply);
+        void ApplyModTargetResistance(int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_TARGET_RESISTANCE, mod, apply); }
+        void ApplyModTargetPhysicalResistance(int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_TARGET_PHYSICAL_RESISTANCE, mod, apply); }
         void UpdateResistances(uint32 school) override;
         void UpdateArmor() override;
         void UpdateMaxHealth() override;
@@ -1800,6 +1815,9 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void UpdateAttackPowerAndDamage(bool ranged = false) override;
         void ApplySpellPowerBonus(int32 amount, bool apply);
         void UpdateSpellDamageAndHealingBonus();
+        void ApplyModDamageDonePos(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + school, mod, apply); }
+        void ApplyModDamageDoneNeg(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + school, mod, apply); }
+        void ApplyModDamageDonePercent(SpellSchools school, float pct, bool apply) { ApplyPercentModFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + school, pct, apply); }
         void ApplyRatingMod(CombatRating cr, int32 value, bool apply);
         void UpdateRating(CombatRating cr);
         void UpdateAllRatings();
@@ -1836,6 +1854,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void ApplyHealthRegenBonus(int32 amount, bool apply);
         void UpdateManaRegen();
         void UpdateAllRunesRegen();
+
+        void SetPetSpellPower(uint32 spellPower) { SetUInt32Value(PLAYER_PET_SPELL_POWER, spellPower); }
 
         ObjectGuid const& GetLootGUID() const { return GetGuidValue(PLAYER_LOOT_TARGET_GUID); }
         void SetLootGUID(ObjectGuid const& guid) { SetGuidValue(PLAYER_LOOT_TARGET_GUID, guid); }
@@ -1911,6 +1931,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         typedef std::list<Channel*> JoinedChannelsList;
         JoinedChannelsList const& GetJoinedChannels() const { return m_channels; }
 
+        void InitializeSkillFields();
         void SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal);
         uint16 GetMaxSkillValue(uint32 skill) const;        // max + perm. bonus + temp bonus
         uint16 GetPureMaxSkillValue(uint32 skill) const;    // max
@@ -1922,6 +1943,12 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         uint16 GetSkillStep(uint16 skill) const;            // 0...6
         bool HasSkill(uint32 skill) const;
         void LearnSkillRewardedSpells(uint32 skillId, uint32 skillValue);
+        void SetSkillLineId(uint32 pos, uint16 skillLineId) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_ID_OFFSET + pos / 2, pos & 1, skillLineId); }
+        void SetSkillStep(uint32 pos, uint16 step) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_STEP_OFFSET + pos / 2, pos & 1, step); }
+        void SetSkillRank(uint32 pos, uint16 rank) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_RANK_OFFSET + pos / 2, pos & 1, rank); }
+        void SetSkillMaxRank(uint32 pos, uint16 max) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_MAX_RANK_OFFSET + pos / 2, pos & 1, max); }
+        void SetSkillTempBonus(uint32 pos, uint16 bonus) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_TEMP_BONUS_OFFSET + pos / 2, pos & 1, bonus); }
+        void SetSkillPermBonus(uint32 pos, uint16 bonus) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_PERM_BONUS_OFFSET + pos / 2, pos & 1, bonus); }
 
         WorldLocation& GetTeleportDest() { return m_teleport_dest; }
         bool IsBeingTeleported() const { return mSemaphoreTeleport_Near || mSemaphoreTeleport_Far; }
@@ -1933,6 +1960,16 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void ProcessDelayedOperations();
 
         void CheckAreaExploreAndOutdoor(void);
+        void AddExploredZones(uint32 pos, uint64 mask)
+        {
+            uint32 currFields = GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + pos);
+            SetUInt32Value(PLAYER_EXPLORED_ZONES_1 + pos, uint32((currFields | mask)));
+        }
+        void RemoveExploredZones(uint32 pos, uint64 mask)
+        {
+            uint32 currFields = GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + pos);
+            SetUInt32Value(PLAYER_EXPLORED_ZONES_1 + pos, uint32((currFields & ~mask)));
+        }
 
         static uint32 TeamForRace(uint8 race);
         static TeamId TeamIdForRace(uint8 race);
@@ -1970,6 +2007,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         // TODO: Properly implement correncies as of Cataclysm
         void UpdateHonorFields();
         bool RewardHonor(Unit* victim, uint32 groupsize, int32 honor = -1, bool pvptoken = false);
+        void ResetHonorStats();
         uint32 GetMaxPersonalArenaRatingRequirement(uint32 minarenaslot) const;
 
         // duel health and mana reset methods
@@ -2292,7 +2330,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SetMap(Map* map) override;
         void ResetMap() override;
 
-        bool isAllowedToLoot(const Creature* creature);
+        bool isAllowedToLoot(const Creature* creature) const;
 
         DeclinedName const* GetDeclinedNames() const { return m_declinedname; }
         uint8 GetRunesState() const;
@@ -2316,6 +2354,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool HasTitle(uint32 bitIndex) const;
         bool HasTitle(CharTitlesEntry const* title) const;
         void SetTitle(CharTitlesEntry const* title, bool lost = false);
+        void SetChosenTitle(int32 title) { SetUInt32Value(PLAYER_CHOSEN_TITLE, title); }
+        void SetKnownTitles(uint32 index, uint64 mask) { SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + index, mask); }
 
         //bool isActiveObject() const { return true; }
         bool CanSeeSpellClickOn(Creature const* creature) const;
@@ -2345,9 +2385,9 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         std::string GetCoordsMapAreaAndZoneString() const;
 
         // Void Storage
-        bool IsVoidStorageUnlocked() const { return HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_VOID_UNLOCKED); }
-        void UnlockVoidStorage() { SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_VOID_UNLOCKED); }
-        void LockVoidStorage() { RemoveFlag(PLAYER_FLAGS, PLAYER_FLAGS_VOID_UNLOCKED); }
+        bool IsVoidStorageUnlocked() const { return HasPlayerFlag(PLAYER_FLAGS_VOID_UNLOCKED); }
+        void UnlockVoidStorage() { AddPlayerFlag(PLAYER_FLAGS_VOID_UNLOCKED); }
+        void LockVoidStorage() { RemovePlayerFlag(PLAYER_FLAGS_VOID_UNLOCKED); }
         uint8 GetNextVoidStorageFreeSlot() const;
         uint8 GetNumOfVoidStorageFreeSlots() const;
         uint8 AddVoidStorageItem(VoidStorageItem&& item);
@@ -2367,10 +2407,108 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         SceneMgr& GetSceneMgr() { return m_sceneMgr; }
         RestMgr& GetRestMgr() const { return *_restMgr; }
+        void SetRestState(RestTypes type, PlayerRestState state)
+        {
+            switch (type)
+            {
+                case REST_TYPE_XP:
+                    SetUInt32Value(PLAYER_FIELD_REST_INFO + REST_STATE_XP, state);
+                    break;
+                case REST_TYPE_HONOR:
+                    SetUInt32Value(PLAYER_FIELD_REST_INFO + REST_STATE_HONOR, state);
+                    break;
+                default:
+                    break;
+            }
+        }
+        void SetRestThreshold(RestTypes type, uint32 threshold)
+        {
+            switch (type)
+            {
+                case REST_TYPE_XP:
+                    SetUInt32Value(PLAYER_FIELD_REST_INFO + REST_RESTED_XP, threshold);
+                    break;
+                case REST_TYPE_HONOR:
+                    SetUInt32Value(PLAYER_FIELD_REST_INFO + REST_RESTED_HONOR, threshold);
+                    break;
+                default:
+                    break;
+            }
+        }
 
         void SendPlayerChoice(ObjectGuid sender, int32 choiceId);
 
         bool MeetPlayerCondition(uint32 conditionId) const;
+
+        bool HasPlayerFlag(PlayerFlags flags) const { return HasFlag(PLAYER_FLAGS, flags); }
+        void AddPlayerFlag(PlayerFlags flags) { SetFlag(PLAYER_FLAGS, flags); }
+        void RemovePlayerFlag(PlayerFlags flags) { RemoveFlag(PLAYER_FLAGS, flags); }
+        void SetPlayerFlags(PlayerFlags flags) { SetUInt32Value(PLAYER_FLAGS, flags); }
+
+        bool HasPlayerFlagEx(PlayerFlagsEx flags) const { return HasFlag(PLAYER_FLAGS_EX, flags); }
+        void AddPlayerFlagEx(PlayerFlagsEx flags) { SetFlag(PLAYER_FLAGS_EX, flags); }
+        void RemovePlayerFlagEx(PlayerFlagsEx flags) { RemoveFlag(PLAYER_FLAGS_EX, flags); }
+        void SetPlayerFlagsEx(PlayerFlagsEx flags) { SetUInt32Value(PLAYER_FLAGS_EX, flags); }
+
+        void SetSkinId(uint8 skinId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_SKIN_ID, skinId); }
+        void SetFaceId(uint8 faceId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_FACE_ID, faceId); }
+        void SetHairStyleId(uint8 hairStyleId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_HAIR_STYLE_ID, hairStyleId); }
+        void SetHairColorId(uint8 hairColorId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_HAIR_COLOR_ID, hairColorId); }
+        void SetFacialHairStyleId(uint8 facialHairStyleId) { SetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_FACIAL_STYLE, facialHairStyleId); }
+        void SetNativeSex(uint8 sex) { SetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_GENDER, sex); }
+        void SetPvpTitle(uint8 pvpTitle) { SetByteValue(PLAYER_BYTES_4, PLAYER_BYTES_4_OFFSET_PVP_TITLE, pvpTitle); }
+        void SetArenaFaction(uint8 arenaFaction) { SetByteValue(PLAYER_BYTES_4, PLAYER_BYTES_4_OFFSET_ARENA_FACTION, arenaFaction); }
+        void ApplyModFakeInebriation(int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FAKE_INEBRIATION, mod, apply); }
+        void SetVirtualPlayerRealm(uint32 virtualRealmAddress) { SetUInt32Value(PLAYER_FIELD_VIRTUAL_PLAYER_REALM, virtualRealmAddress); }
+        void SetCustomDisplayOption(uint32 slot, uint8 customDisplayOption) { SetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_CUSTOM_DISPLAY_OPTION + slot, customDisplayOption); }
+
+        void AddHeirloom(int32 itemId, uint32 flags)
+        {
+            AddDynamicValue(PLAYER_DYNAMIC_FIELD_HEIRLOOMS, itemId);
+            AddDynamicValue(PLAYER_DYNAMIC_FIELD_HEIRLOOM_FLAGS, flags);
+        }
+        void SetHeirloom(uint32 slot, int32 itemId) { SetDynamicValue(PLAYER_DYNAMIC_FIELD_HEIRLOOMS, slot, itemId); }
+        void SetHeirloomFlags(uint32 slot, uint32 flags) { SetDynamicValue(PLAYER_DYNAMIC_FIELD_HEIRLOOM_FLAGS, slot, flags); }
+
+        void AddToy(uint32 itemId) { AddDynamicValue(PLAYER_DYNAMIC_FIELD_TOYS, itemId); }
+
+        void AddTransmogBlock(uint32 blockValue) { AddDynamicValue(PLAYER_DYNAMIC_FIELD_TRANSMOG, blockValue); }
+        void AddTransmogFlag(uint32 slot, uint32 flag)
+        {
+            uint32 currentMask = GetDynamicValue(PLAYER_DYNAMIC_FIELD_TRANSMOG, slot);
+            SetDynamicValue(PLAYER_DYNAMIC_FIELD_TRANSMOG, slot, currentMask | flag);
+        }
+
+        void AddConditionalTransmog(uint32 itemModifiedAppearanceId) { AddDynamicValue(PLAYER_DYNAMIC_FIELD_CONDITIONAL_TRANSMOG, itemModifiedAppearanceId); }
+        void RemoveConditionalTransmog(uint32 itemModifiedAppearanceId) { RemoveDynamicValue(PLAYER_DYNAMIC_FIELD_CONDITIONAL_TRANSMOG, itemModifiedAppearanceId); }
+
+        void AddSelfResSpell(int32 spellId) { AddDynamicValue(PLAYER_DYNAMIC_FIELD_SELF_RES_SPELLS, spellId); }
+        void RemoveSelfResSpell(int32 spellId) { RemoveDynamicValue(PLAYER_DYNAMIC_FIELD_SELF_RES_SPELLS, spellId); }
+        void ClearSelfResSpell() { ClearDynamicValue(PLAYER_DYNAMIC_FIELD_SELF_RES_SPELLS); }
+
+        void SetSummonedBattlePetGUID(ObjectGuid guid) { SetGuidValue(PLAYER_FIELD_SUMMONED_BATTLE_PET_ID, guid);  }
+
+        void AddTrackCreatureFlag(uint32 flags) { SetFlag(PLAYER_TRACK_CREATURES, flags); }
+        void RemoveTrackCreatureFlag(uint32 flags) { RemoveFlag(PLAYER_TRACK_CREATURES, flags); }
+
+        void AddTrackResourceFlag(uint32 flags) { SetFlag(PLAYER_TRACK_RESOURCES, flags); }
+        void RemoveTrackResourceFlag(uint32 flags) { RemoveFlag(PLAYER_TRACK_RESOURCES, flags); }
+
+        void SetVersatilityBonus(float value) { SetStatFloatValue(PLAYER_VERSATILITY_BONUS, value); }
+
+        void ApplyModOverrideSpellPowerByAPPercent(float mod, bool apply) { ApplyModSignedFloatValue(PLAYER_FIELD_OVERRIDE_SPELL_POWER_BY_AP_PCT, mod, apply); }
+
+        void ApplyModOverrideAPBySpellPowerPercent(float mod, bool apply) { ApplyModSignedFloatValue(PLAYER_FIELD_OVERRIDE_AP_BY_SPELL_POWER_PERCENT, mod, apply); }
+
+        bool HasPlayerLocalFlag(PlayerLocalFlags flags) const { return HasFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
+        void AddPlayerLocalFlag(PlayerLocalFlags flags) { SetFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
+        void RemovePlayerLocalFlag(PlayerLocalFlags flags) { RemoveFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
+        void SetPlayerLocalFlags(PlayerLocalFlags flags) { SetUInt32Value(PLAYER_FIELD_LOCAL_FLAGS, flags); }
+
+        void SetWatchedFactionIndex(int32 index) { SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, index);  }
+
+        void AddAuraVision(PlayerFieldByte2Flags flags) { SetByteFlag(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_AURA_VISION, flags); }
+        void RemoveAuraVision(PlayerFieldByte2Flags flags) { RemoveByteFlag(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_AURA_VISION, flags); }
 
     protected:
         // Gamemaster whisper whitelist
@@ -2720,7 +2858,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         std::unordered_map<ObjectGuid /*LootObject*/, ObjectGuid /*world object*/> m_AELootView;
 
-        void _InitHonorLevelOnLoadFromDB(uint32 /*honor*/, uint32 /*honorLevel*/, uint32 /*prestigeLevel*/);
+        void _InitHonorLevelOnLoadFromDB(uint32 honor, uint32 honorLevel, uint32 prestigeLevel);
         std::unique_ptr<RestMgr> _restMgr;
 
         bool _usePvpItemLevels;

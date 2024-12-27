@@ -66,23 +66,27 @@ void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
     float rest_bonus_max = float(_player->GetUInt32Value(next_level_xp_field)) * 1.5f / 2;
 
     if (restBonus > rest_bonus_max)
-        _restBonus[restType] = rest_bonus_max;
-    else
-        _restBonus[restType] = restBonus;
+        restBonus = rest_bonus_max;
+
+    _restBonus[restType] = restBonus;
+
+    uint32 oldBonus = uint32(_restBonus[restType]);
+    if (oldBonus == uint32(restBonus))
+        return;
 
     // update data for client
     if (affectedByRaF && _player->GetsRecruitAFriendBonus(true) && (_player->GetSession()->IsARecruiter() || _player->GetSession()->GetRecruiterId() != 0))
-        _player->SetUInt32Value(PLAYER_FIELD_REST_INFO + rest_state_offset, REST_STATE_RAF_LINKED);
+        _player->SetRestState(restType, REST_STATE_RAF_LINKED);
     else
     {
         if (_restBonus[restType] > 10)
-            _player->SetUInt32Value(PLAYER_FIELD_REST_INFO + rest_state_offset, REST_STATE_RESTED);
+            _player->SetRestState(restType, REST_STATE_RESTED);
         else if (_restBonus[restType] <= 1)
-            _player->SetUInt32Value(PLAYER_FIELD_REST_INFO + rest_state_offset, REST_STATE_NOT_RAF_LINKED);
+            _player->SetRestState(restType, REST_STATE_NOT_RAF_LINKED);
     }
 
     // RestTickUpdate
-    _player->SetUInt32Value(PLAYER_FIELD_REST_INFO + rest_rested_offset, uint32(_restBonus[restType]));
+    _player->SetRestThreshold(restType, uint32(_restBonus[restType]));
 }
 
 void RestMgr::AddRestBonus(RestTypes restType, float restBonus)
@@ -103,7 +107,7 @@ void RestMgr::SetRestFlag(RestFlag restFlag, uint32 triggerID)
     if (!oldRestMask && _restFlagMask) // only set flag/time on the first rest state
     {
         _restTime = time(nullptr);
-        _player->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
+        _player->AddPlayerFlag(PLAYER_FLAGS_RESTING);
     }
 
     if (triggerID)
@@ -118,7 +122,7 @@ void RestMgr::RemoveRestFlag(RestFlag restFlag)
     if (oldRestMask && !_restFlagMask) // only remove flag/time on the last rest state remove
     {
         _restTime = 0;
-        _player->RemoveFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
+        _player->RemovePlayerFlag(PLAYER_FLAGS_RESTING);
     }
 }
 
@@ -153,8 +157,8 @@ void RestMgr::Update(time_t now)
 void RestMgr::LoadRestBonus(RestTypes restType, PlayerRestState state, float restBonus)
 {
     _restBonus[restType] = restBonus;
-    _player->SetUInt32Value(PLAYER_FIELD_REST_INFO + restType * 2, state);
-    _player->SetUInt32Value(PLAYER_FIELD_REST_INFO + restType * 2 + 1, uint32(restBonus));
+    _player->SetRestState(restType, state);
+    _player->SetRestThreshold(restType, uint32(restBonus));
 }
 
 float RestMgr::CalcExtraPerSec(RestTypes restType, float bubble) const

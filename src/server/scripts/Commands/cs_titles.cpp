@@ -93,7 +93,7 @@ public:
         std::string tNameLink = handler->GetNameLink(target);
 
         target->SetTitle(titleInfo);                            // to be sure that title now known
-        target->SetUInt32Value(PLAYER_CHOSEN_TITLE, titleInfo->MaskID);
+        target->SetChosenTitle(titleInfo->MaskID);
 
         handler->PSendSysMessage(LANG_TITLE_CURRENT_RES, id,
             (target->getGender() == GENDER_MALE ? titleInfo->Name : titleInfo->Name1)->Str[handler->GetSessionDbcLocale()],
@@ -197,7 +197,7 @@ public:
 
         if (!target->HasTitle(target->GetInt32Value(PLAYER_CHOSEN_TITLE)))
         {
-            target->SetUInt32Value(PLAYER_CHOSEN_TITLE, 0);
+            target->SetChosenTitle(0);
             handler->PSendSysMessage(LANG_CURRENT_TITLE_RESET, tNameLink.c_str());
         }
 
@@ -234,12 +234,12 @@ public:
 
         titles &= ~titles2;                                     // remove non-existing titles
 
-        target->SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES, titles);
+        target->SetKnownTitles(0, titles);
         handler->SendSysMessage(LANG_DONE);
 
         if (!target->HasTitle(target->GetInt32Value(PLAYER_CHOSEN_TITLE)))
         {
-            target->SetUInt32Value(PLAYER_CHOSEN_TITLE, 0);
+            target->SetChosenTitle(0);
             handler->PSendSysMessage(LANG_CURRENT_TITLE_RESET, handler->GetNameLink(target).c_str());
         }
 

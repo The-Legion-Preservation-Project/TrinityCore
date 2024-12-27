@@ -2446,7 +2446,7 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
     if (summoner)
         PhasingHandler::InheritPhaseShift(summon, summoner);
 
-    summon->SetUInt32Value(UNIT_CREATED_BY_SPELL, spellId);
+    summon->SetCreatedBySpell(spellId);
 
     summon->SetHomePosition(pos);
 
@@ -2749,7 +2749,10 @@ void WorldObject::GetContactPoint(const WorldObject* obj, float &x, float &y, fl
 
 float WorldObject::GetObjectSize() const
 {
-    return (m_valuesCount > UNIT_FIELD_COMBATREACH) ? m_floatValues[UNIT_FIELD_COMBATREACH] : DEFAULT_WORLD_OBJECT_SIZE;
+    if (Unit const* thisUnit = ToUnit())
+        return thisUnit->GetCombatReach();
+
+    return DEFAULT_WORLD_OBJECT_SIZE;
 }
 
 void WorldObject::MovePosition(Position &pos, float dist, float angle)

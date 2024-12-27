@@ -85,6 +85,9 @@ class TC_GAME_API Pet : public Guardian
 
         void GivePetXP(uint32 xp);
         void GivePetLevel(uint8 level);
+        uint32 GetPetExperience() const { return GetUInt32Value(UNIT_FIELD_PETEXPERIENCE); }
+        void SetPetExperience(uint32 xp) { SetUInt32Value(UNIT_FIELD_PETEXPERIENCE, xp); }
+        void SetPetNextLevelExperience(uint32 xp) { SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, xp); }
         void SynchronizeLevelWithOwner();
         bool HaveInDiet(ItemTemplate const* item) const;
         uint32 GetCurrentFoodBenefitLevel(uint32 itemlevel) const;

@@ -65,7 +65,15 @@ class TC_GAME_API Corpse : public WorldObject, public GridObject<Corpse>
         void DeleteFromDB(SQLTransaction& trans);
         static void DeleteFromDB(ObjectGuid const& ownerGuid, SQLTransaction& trans);
 
+        void AddCorpseDynamicFlag(CorpseDynFlags dynamicFlags) { SetFlag(CORPSE_FIELD_DYNAMIC_FLAGS, dynamicFlags); }
+        void RemoveCorpseDynamicFlag(CorpseDynFlags dynamicFlags) { RemoveFlag(CORPSE_FIELD_DYNAMIC_FLAGS, dynamicFlags); }
+        void SetCorpseDynamicFlags(CorpseDynFlags dynamicFlags) { SetUInt32Value(CORPSE_FIELD_DYNAMIC_FLAGS, dynamicFlags); }
         ObjectGuid GetOwnerGUID() const { return GetGuidValue(CORPSE_FIELD_OWNER); }
+        void SetOwnerGUID(ObjectGuid owner) { SetGuidValue(CORPSE_FIELD_OWNER, owner); }
+        void SetDisplayId(uint32 displayId) { SetUInt32Value(CORPSE_FIELD_DISPLAY_ID, displayId); }
+        void SetFlags(uint32 flags) { SetUInt32Value(CORPSE_FIELD_FLAGS, flags); }
+        void SetFactionTemplate(int32 factionTemplate) { SetUInt32Value(CORPSE_FIELD_FACTIONTEMPLATE, factionTemplate); }
+        void SetItem(uint32 slot, uint32 item) { SetUInt32Value(CORPSE_FIELD_ITEM + slot, item); }
 
         time_t const& GetGhostTime() const { return m_time; }
         void ResetGhostTime() { m_time = time(NULL); }

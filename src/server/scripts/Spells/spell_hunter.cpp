@@ -510,7 +510,7 @@ class spell_hun_misdirection : public SpellScriptLoader
             {
                 if (GetTargetApplication()->GetRemoveMode() == AURA_REMOVE_BY_DEFAULT || GetTargetApplication()->GetRemoveMode() == AURA_REMOVE_BY_INTERRUPT)
                     return;
-                
+
                 if (!GetTarget()->HasAura(SPELL_HUNTER_MISDIRECTION_PROC))
                     GetTarget()->ResetRedirectThreat();
             }
@@ -590,7 +590,7 @@ class spell_hun_multi_shot : public SpellScriptLoader
             void HandleOnHit()
             {
                 // We need to check hunter's spec because it doesn't generate focus on other specs than MM
-                if (GetCaster()->GetUInt32Value(PLAYER_FIELD_CURRENT_SPEC_ID) == TALENT_SPEC_HUNTER_MARKSMAN)
+                if (GetCaster()->ToPlayer()->GetPrimarySpecialization() == TALENT_SPEC_HUNTER_MARKSMAN)
                     GetCaster()->CastSpell(GetCaster(), SPELL_HUNTER_MULTI_SHOT_FOCUS, true);
             }
 

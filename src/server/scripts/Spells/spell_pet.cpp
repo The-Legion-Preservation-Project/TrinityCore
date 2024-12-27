@@ -298,7 +298,7 @@ public:
             if (Unit* pet = GetUnitOwner())
                 if (pet->IsPet())
 
-                if (Unit* owner = pet->ToPet()->GetOwner())
+                if (Player* owner = pet->ToPet()->GetOwner())
                 {
                     int32 fire  = owner->GetInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE) - owner->GetInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_FIRE);
                     int32 shadow = owner->GetInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_SHADOW) - owner->GetInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_SHADOW);
@@ -325,7 +325,7 @@ public:
         {
             if (Unit* pet = GetUnitOwner())
                 if (pet->IsPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (Player* owner = pet->ToPet()->GetOwner())
                     {
                         //the damage bonus used for pets is either fire or shadow damage, whatever is higher
                         int32 fire  = owner->GetInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE) - owner->GetInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_FIRE);

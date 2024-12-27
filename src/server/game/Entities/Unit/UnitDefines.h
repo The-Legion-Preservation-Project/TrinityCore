@@ -47,14 +47,14 @@ enum UnitStandStateType : uint8
 };
 
 // byte flag value (UNIT_FIELD_BYTES_1, 2)
-enum UnitStandFlags : uint8
+enum UnitVisFlags : uint8
 {
-    UNIT_STAND_FLAGS_UNK1         = 0x01,
-    UNIT_STAND_FLAGS_CREEP        = 0x02,
-    UNIT_STAND_FLAGS_UNTRACKABLE  = 0x04,
-    UNIT_STAND_FLAGS_UNK4         = 0x08,
-    UNIT_STAND_FLAGS_UNK5         = 0x10,
-    UNIT_STAND_FLAGS_ALL          = 0xFF
+    UNIT_VIS_FLAGS_UNK1         = 0x01,
+    UNIT_VIS_FLAGS_CREEP        = 0x02,
+    UNIT_VIS_FLAGS_UNTRACKABLE  = 0x04,
+    UNIT_VIS_FLAGS_UNK4         = 0x08,
+    UNIT_VIS_FLAGS_UNK5         = 0x10,
+    UNIT_VIS_FLAGS_ALL          = 0xFF
 };
 
 enum UnitBytes0Offsets : uint8
@@ -84,6 +84,7 @@ enum UnitBytes2Offsets : uint8
 // byte flags value (UNIT_FIELD_BYTES_1, 3)
 enum UnitBytes1_Flags : uint8
 {
+    UNIT_BYTE1_FLAG_NONE            = 0x00,
     UNIT_BYTE1_FLAG_ALWAYS_STAND    = 0x01,
     UNIT_BYTE1_FLAG_HOVER           = 0x02,
     UNIT_BYTE1_FLAG_UNK_3           = 0x04,
@@ -103,6 +104,7 @@ enum SheathState : uint8
 // byte (1 from 0..3) of UNIT_FIELD_BYTES_2
 enum UnitPVPStateFlags : uint8
 {
+    UNIT_BYTE2_FLAG_NONE        = 0x00,
     UNIT_BYTE2_FLAG_PVP         = 0x01,
     UNIT_BYTE2_FLAG_UNK1        = 0x02,
     UNIT_BYTE2_FLAG_FFA_PVP     = 0x04,
@@ -114,10 +116,11 @@ enum UnitPVPStateFlags : uint8
 };
 
 // byte (2 from 0..3) of UNIT_FIELD_BYTES_2
-enum UnitRename : uint8
+enum UnitPetFlag : uint8
 {
-    UNIT_CAN_BE_RENAMED     = 0x01,
-    UNIT_CAN_BE_ABANDONED   = 0x02
+    UNIT_PET_FLAG_NONE              = 0x0,
+    UNIT_PET_FLAG_CAN_BE_RENAMED    = 0x01,
+    UNIT_PET_FLAG_CAN_BE_ABANDONED  = 0x02
 };
 
 // high byte (3 from 0..3) of UNIT_FIELD_BYTES_2

@@ -276,9 +276,9 @@ public:
         for (uint16 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
         {
             if (flag != 0)
-                handler->GetSession()->GetPlayer()->SetFlag(PLAYER_EXPLORED_ZONES_1+i, 0xFFFFFFFF);
+                handler->GetSession()->GetPlayer()->AddExploredZones(i, 0xFFFFFFFF);
             else
-                handler->GetSession()->GetPlayer()->SetFlag(PLAYER_EXPLORED_ZONES_1+i, 0);
+                handler->GetSession()->GetPlayer()->RemoveExploredZones(i, 0xFFFFFFFF);
         }
 
         return true;

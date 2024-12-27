@@ -262,9 +262,9 @@ public:
         handler->PSendSysMessage(LANG_YOU_CHANGE_FACTION, target->GetGUID().ToString().c_str(), factionid, flag, std::to_string(npcflag).c_str(), dyflag);
 
         target->setFaction(factionid);
-        target->SetUInt32Value(UNIT_FIELD_FLAGS, flag);
-        target->SetUInt64Value(UNIT_NPC_FLAGS, npcflag);
-        target->SetUInt32Value(OBJECT_DYNAMIC_FLAGS, dyflag);
+        target->SetUnitFlags(UnitFlags(flag));
+        target->SetNpcFlags(NPCFlags(npcflag));
+        target->SetDynamicFlags(dyflag);
 
         return true;
     }
@@ -886,7 +886,7 @@ public:
             return false;
 
         uint32 anim_id = atoi((char*)args);
-        handler->GetSession()->GetPlayer()->SetUInt32Value(UNIT_NPC_EMOTESTATE, anim_id);
+        handler->GetSession()->GetPlayer()->SetEmoteState(Emote(anim_id));
 
         return true;
     }
@@ -936,8 +936,8 @@ public:
         }
 
         // Set gender
-        target->SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_GENDER, gender);
-        target->SetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_GENDER, gender);
+        target->SetGender(gender);
+        target->SetNativeSex(gender);
 
         // Change display ID
         target->InitDisplayIds();

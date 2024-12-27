@@ -86,7 +86,7 @@ bool Corpse::Create(ObjectGuid::LowType guidlow, Player* owner)
     Object::_Create(ObjectGuid::Create<HighGuid::Corpse>(owner->GetMapId(), 0, guidlow));
 
     SetObjectScale(1.0f);
-    SetGuidValue(CORPSE_FIELD_OWNER, owner->GetGUID());
+    SetOwnerGUID(owner->GetGUID());
 
     _cellCoord = Trinity::ComputeCellCoord(GetPositionX(), GetPositionY());
 
@@ -162,15 +162,15 @@ bool Corpse::LoadCorpseFromDB(ObjectGuid::LowType guid, Field* fields)
     Object::_Create(ObjectGuid::Create<HighGuid::Corpse>(mapId, 0, guid));
 
     SetObjectScale(1.0f);
-    SetUInt32Value(CORPSE_FIELD_DISPLAY_ID, fields[5].GetUInt32());
+    SetDisplayId(fields[5].GetUInt32());
     _LoadIntoDataField(fields[6].GetString(), CORPSE_FIELD_ITEM, EQUIPMENT_SLOT_END);
     SetUInt32Value(CORPSE_FIELD_BYTES_1, fields[7].GetUInt32());
     SetUInt32Value(CORPSE_FIELD_BYTES_2, fields[8].GetUInt32());
-    SetUInt32Value(CORPSE_FIELD_FLAGS, fields[9].GetUInt8());
-    SetUInt32Value(CORPSE_FIELD_DYNAMIC_FLAGS, fields[10].GetUInt8());
-    SetGuidValue(CORPSE_FIELD_OWNER, ObjectGuid::Create<HighGuid::Player>(fields[14].GetUInt64()));
+    SetFlags(fields[9].GetUInt8());
+    SetCorpseDynamicFlags(CorpseDynFlags(fields[10].GetUInt8()));
+    SetOwnerGUID(ObjectGuid::Create<HighGuid::Player>(fields[14].GetUInt64()));
     if (CharacterInfo const* characterInfo = sWorld->GetCharacterInfo(GetGuidValue(CORPSE_FIELD_OWNER)))
-        SetUInt32Value(CORPSE_FIELD_FACTIONTEMPLATE, sChrRacesStore.AssertEntry(characterInfo->Race)->FactionID);
+        SetFactionTemplate(sChrRacesStore.AssertEntry(characterInfo->Race)->FactionID);
 
     m_time = time_t(fields[11].GetUInt32());
 

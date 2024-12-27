@@ -22,6 +22,7 @@
 #include "CollectionMgr.h"
 #include "Common.h"
 #include "ConditionMgr.h"
+#include "Containers.h"
 #include "DatabaseEnv.h"
 #include "DB2Stores.h"
 #include "GameTables.h"
@@ -110,7 +111,7 @@ void AddItemsSetItem(Player* player, Item* item)
 
             eff->SetBonuses.insert(itemSetSpell);
             // spell cast only if fit form requirement, in other case will cast at form change
-            if (!itemSetSpell->ChrSpecID || itemSetSpell->ChrSpecID == player->GetUInt32Value(PLAYER_FIELD_CURRENT_SPEC_ID))
+            if (!itemSetSpell->ChrSpecID || itemSetSpell->ChrSpecID == player->GetPrimarySpecialization())
                 player->ApplyEquipSpell(spellInfo, NULL, true);
         }
     }
@@ -301,7 +302,7 @@ bool Item::Create(ObjectGuid::LowType guidlow, uint32 itemId, Player const* owne
     if (owner)
     {
         SetOwnerGUID(owner->GetGUID());
-        SetGuidValue(ITEM_FIELD_CONTAINED, owner->GetGUID());
+        SetContainedIn(owner->GetGUID());
     }
 
     ItemTemplate const* itemProto = sObjectMgr->GetItemTemplate(itemId);
@@ -309,9 +310,9 @@ bool Item::Create(ObjectGuid::LowType guidlow, uint32 itemId, Player const* owne
         return false;
 
     _bonusData.Initialize(itemProto);
-    SetUInt32Value(ITEM_FIELD_STACK_COUNT, 1);
+    SetCount(1);
     SetUInt32Value(ITEM_FIELD_MAXDURABILITY, itemProto->MaxDurability);
-    SetUInt32Value(ITEM_FIELD_DURABILITY, itemProto->MaxDurability);
+    SetDurability(itemProto->MaxDurability);
 
     for (std::size_t i = 0; i < itemProto->Effects.size(); ++i)
     {
@@ -323,8 +324,8 @@ bool Item::Create(ObjectGuid::LowType guidlow, uint32 itemId, Player const* owne
                     SetModifier(ITEM_MODIFIER_ARTIFACT_KNOWLEDGE_LEVEL, artifactKnowledgeLevel + 1);
     }
 
-    SetUInt32Value(ITEM_FIELD_DURATION, itemProto->GetDuration());
-    SetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME, 0);
+    SetExpiration(itemProto->GetDuration());
+    SetCreatePlayedTime(0);
 
     if (itemProto->GetArtifactID())
     {
@@ -363,19 +364,20 @@ bool Item::IsNotEmptyBag() const
 
 void Item::UpdateDuration(Player* owner, uint32 diff)
 {
-    if (!GetUInt32Value(ITEM_FIELD_DURATION))
+    uint32 duration = GetExpiration();
+    if (!duration)
         return;
 
-    TC_LOG_DEBUG("entities.player.items", "Item::UpdateDuration Item (Entry: %u Duration %u Diff %u)", GetEntry(), GetUInt32Value(ITEM_FIELD_DURATION), diff);
+    TC_LOG_DEBUG("entities.player.items", "Item::UpdateDuration Item (Entry: %u Duration %u Diff %u)", GetEntry(), duration, diff);
 
-    if (GetUInt32Value(ITEM_FIELD_DURATION) <= diff)
+    if (duration <= diff)
     {
         sScriptMgr->OnItemExpire(owner, GetTemplate());
         owner->DestroyItem(GetBagSlot(), GetSlot(), true);
         return;
     }
 
-    SetUInt32Value(ITEM_FIELD_DURATION, GetUInt32Value(ITEM_FIELD_DURATION) - diff);
+    SetExpiration(duration - diff);
     SetState(ITEM_CHANGED, owner);                          // save new time in database
 }
 
@@ -394,10 +396,10 @@ void Item::SaveToDB(SQLTransaction& trans)
             PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(uState == ITEM_NEW ? CHAR_REP_ITEM_INSTANCE : CHAR_UPD_ITEM_INSTANCE);
             stmt->setUInt32(  index, GetEntry());
             stmt->setUInt64(++index, GetOwnerGUID().GetCounter());
-            stmt->setUInt64(++index, GetGuidValue(ITEM_FIELD_CREATOR).GetCounter());
-            stmt->setUInt64(++index, GetGuidValue(ITEM_FIELD_GIFTCREATOR).GetCounter());
+            stmt->setUInt64(++index, GetCreator().GetCounter());
+            stmt->setUInt64(++index, GetGiftCreator().GetCounter());
             stmt->setUInt32(++index, GetCount());
-            stmt->setUInt32(++index, GetUInt32Value(ITEM_FIELD_DURATION));
+            stmt->setUInt32(++index, GetExpiration());
 
             std::ostringstream ssSpells;
             if (ItemTemplate const* itemProto = sObjectMgr->GetItemTemplate(GetEntry()))
@@ -437,7 +439,7 @@ void Item::SaveToDB(SQLTransaction& trans)
 
             trans->Append(stmt);
 
-            if ((uState == ITEM_CHANGED) && HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_WRAPPED))
+            if ((uState == ITEM_CHANGED) && HasItemFlag(ITEM_FIELD_FLAG_WRAPPED))
             {
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_GIFT_OWNER);
                 stmt->setUInt64(0, GetOwnerGUID().GetCounter());
@@ -597,7 +599,7 @@ void Item::SaveToDB(SQLTransaction& trans)
             stmt->setUInt64(0, GetGUID().GetCounter());
             trans->Append(stmt);
 
-            if (HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_WRAPPED))
+            if (HasItemFlag(ITEM_FIELD_FLAG_WRAPPED))
             {
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GIFT);
                 stmt->setUInt64(0, GetGUID().GetCounter());
@@ -662,20 +664,20 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
     if (uint64 creator = fields[2].GetUInt64())
     {
         if (!(itemFlags & ITEM_FIELD_FLAG_CHILD))
-            SetGuidValue(ITEM_FIELD_CREATOR, ObjectGuid::Create<HighGuid::Player>(creator));
+            SetCreator(ObjectGuid::Create<HighGuid::Player>(creator));
         else
-            SetGuidValue(ITEM_FIELD_CREATOR, ObjectGuid::Create<HighGuid::Item>(creator));
+            SetCreator(ObjectGuid::Create<HighGuid::Item>(creator));
     }
     if (uint64 giftCreator = fields[3].GetUInt64())
-        SetGuidValue(ITEM_FIELD_GIFTCREATOR, ObjectGuid::Create<HighGuid::Player>(giftCreator));
+        SetGiftCreator(ObjectGuid::Create<HighGuid::Player>(giftCreator));
     SetCount(fields[4].GetUInt32());
 
     uint32 duration = fields[5].GetUInt32();
-    SetUInt32Value(ITEM_FIELD_DURATION, duration);
+    SetExpiration(duration);
     // update duration if need, and remove if not need
     if ((proto->GetDuration() == 0) != (duration == 0))
     {
-        SetUInt32Value(ITEM_FIELD_DURATION, proto->GetDuration());
+        SetExpiration(proto->GetDuration());
         need_save = true;
     }
 
@@ -684,19 +686,19 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
         for (uint8 i = 0; i < proto->Effects.size(); ++i)
             SetSpellCharges(i, atoi(tokens[i]));
 
-    SetUInt32Value(ITEM_FIELD_FLAGS, itemFlags);
+    SetItemFlags(ItemFieldFlags(itemFlags));
 
     uint32 durability = fields[11].GetUInt16();
-    SetUInt32Value(ITEM_FIELD_DURABILITY, durability);
+    SetDurability(durability);
     // update max durability (and durability) if need
     SetUInt32Value(ITEM_FIELD_MAXDURABILITY, proto->MaxDurability);
     if (durability > proto->MaxDurability)
     {
-        SetUInt32Value(ITEM_FIELD_DURABILITY, proto->MaxDurability);
+        SetDurability(proto->MaxDurability);
         need_save = true;
     }
 
-    SetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME, fields[12].GetUInt32());
+    SetCreatePlayedTime(fields[12].GetUInt32());
     SetText(fields[13].GetString());
 
     uint32 upgradeId = fields[14].GetUInt32();
@@ -720,7 +722,7 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
     SetModifier(ITEM_MODIFIER_BATTLE_PET_LEVEL, fields[17].GetUInt16());
     SetModifier(ITEM_MODIFIER_BATTLE_PET_DISPLAY_ID, fields[18].GetUInt32());
 
-    SetUInt32Value(ITEM_FIELD_CONTEXT, fields[19].GetUInt8());
+    SetContext(fields[19].GetUInt8());
 
     Tokenizer bonusListIDs(fields[20].GetString(), ' ');
     for (char const* token : bonusListIDs)
@@ -777,7 +779,7 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
     // Remove bind flag for items vs BIND_NONE set
     if (IsSoulBound() && GetBonding() == BIND_NONE)
     {
-        ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_SOULBOUND, false);
+        RemoveItemFlag(ITEM_FIELD_FLAG_SOULBOUND);
         need_save = true;
     }
 
@@ -785,7 +787,7 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
     {
         uint8 index = 0;
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ITEM_INSTANCE_ON_LOAD);
-        stmt->setUInt32(index++, GetUInt32Value(ITEM_FIELD_DURATION));
+        stmt->setUInt32(index++, GetExpiration());
         stmt->setUInt32(index++, GetUInt32Value(ITEM_FIELD_FLAGS));
         stmt->setUInt32(index++, GetUInt32Value(ITEM_FIELD_DURABILITY));
         stmt->setUInt32(index++, GetModifier(ITEM_MODIFIER_UPGRADE_ID));
@@ -1073,7 +1075,7 @@ bool Item::CanBeTraded(bool mail, bool trade) const
     if (m_lootGenerated)
         return false;
 
-    if ((!mail || !IsBoundAccountWide()) && (IsSoulBound() && (!HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_BOP_TRADEABLE) || !trade)))
+    if ((!mail || !IsBoundAccountWide()) && (IsSoulBound() && (!HasItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE) || !trade)))
         return false;
 
     if (IsBag() && (Player::IsBagPos(GetPos()) || !ToBag()->IsEmpty()))
@@ -1387,7 +1389,7 @@ void Item::SendUpdateSockets()
 // time.
 void Item::SendTimeUpdate(Player* owner)
 {
-    uint32 duration = GetUInt32Value(ITEM_FIELD_DURATION);
+    uint32 duration = GetExpiration();
     if (!duration)
         return;
 
@@ -1430,10 +1432,10 @@ Item* Item::CloneItem(uint32 count, Player const* player /*= nullptr*/) const
     if (!newItem)
         return nullptr;
 
-    newItem->SetGuidValue(ITEM_FIELD_CREATOR, GetGuidValue(ITEM_FIELD_CREATOR));
-    newItem->SetGuidValue(ITEM_FIELD_GIFTCREATOR, GetGuidValue(ITEM_FIELD_GIFTCREATOR));
-    newItem->SetUInt32Value(ITEM_FIELD_FLAGS,        GetUInt32Value(ITEM_FIELD_FLAGS) & ~(ITEM_FIELD_FLAG_REFUNDABLE | ITEM_FIELD_FLAG_BOP_TRADEABLE));
-    newItem->SetUInt32Value(ITEM_FIELD_DURATION,     GetUInt32Value(ITEM_FIELD_DURATION));
+    newItem->SetCreator(GetCreator());
+    newItem->SetGiftCreator(GetGiftCreator());
+    newItem->RemoveItemFlag(ItemFieldFlags(ITEM_FIELD_FLAG_REFUNDABLE | ITEM_FIELD_FLAG_BOP_TRADEABLE));
+    newItem->SetExpiration(GetExpiration());
     // player CAN be NULL in which case we must not update random properties because that accesses player's item update queue
     if (player)
         newItem->SetItemRandomProperties(GetItemRandomEnchantmentId());
@@ -1450,7 +1452,7 @@ bool Item::IsBindedNotWith(Player const* player) const
     if (GetOwnerGUID() == player->GetGUID())
         return false;
 
-    if (HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_BOP_TRADEABLE))
+    if (HasItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE))
         if (allowedGUIDs.find(player->GetGUID()) != allowedGUIDs.end())
             return false;
 
@@ -1583,14 +1585,14 @@ void Item::DeleteRefundDataFromDB(SQLTransaction* trans)
 
 void Item::SetNotRefundable(Player* owner, bool changestate /*= true*/, SQLTransaction* trans /*= nullptr*/, bool addToCollection /*= true*/)
 {
-    if (!HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_REFUNDABLE))
+    if (!HasItemFlag(ITEM_FIELD_FLAG_REFUNDABLE))
         return;
 
     WorldPackets::Item::ItemExpirePurchaseRefund itemExpirePurchaseRefund;
     itemExpirePurchaseRefund.ItemGUID = GetGUID();
     owner->SendDirectMessage(itemExpirePurchaseRefund.Write());
 
-    RemoveFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_REFUNDABLE);
+    RemoveItemFlag(ITEM_FIELD_FLAG_REFUNDABLE);
     // Following is not applicable in the trading procedure
     if (changestate)
         SetState(ITEM_CHANGED, owner);
@@ -1622,7 +1624,7 @@ void Item::UpdatePlayedTime(Player* owner)
     {
         // No? Proceed.
         // Update the data field
-        SetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME, new_playtime);
+        SetCreatePlayedTime(new_playtime);
         // Flag as changed to get saved to DB
         SetState(ITEM_CHANGED, owner);
         // Speaks for itself
@@ -1647,13 +1649,13 @@ bool Item::IsRefundExpired()
 
 void Item::SetSoulboundTradeable(GuidSet const& allowedLooters)
 {
-    SetFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_BOP_TRADEABLE);
+    AddItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE);
     allowedGUIDs = allowedLooters;
 }
 
 void Item::ClearSoulboundTradeable(Player* currentOwner)
 {
-    RemoveFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_BOP_TRADEABLE);
+    RemoveItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE);
     if (allowedGUIDs.empty())
         return;
 

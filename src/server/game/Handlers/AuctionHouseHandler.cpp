@@ -174,7 +174,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
         }
 
         if (sAuctionMgr->GetAItem(items[i]->GetGUID().GetCounter()) || !items[i]->CanBeTraded() || items[i]->IsNotEmptyBag() ||
-            items[i]->GetTemplate()->GetFlags() & ITEM_FLAG_CONJURED || items[i]->GetUInt32Value(ITEM_FIELD_DURATION) ||
+            items[i]->GetTemplate()->GetFlags() & ITEM_FLAG_CONJURED || items[i]->GetExpiration() ||
             items[i]->GetCount() < packet.Items[i].UseCount)
         {
             SendAuctionCommandResult(NULL, AUCTION_SELL_ITEM, ERR_AUCTION_DATABASE_ERROR);

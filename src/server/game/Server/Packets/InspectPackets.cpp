@@ -61,7 +61,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Inspect::InspectGuildData
 
 WorldPackets::Inspect::InspectItemData::InspectItemData(::Item const* item, uint8 index)
 {
-    CreatorGUID = item->GetGuidValue(ITEM_FIELD_CREATOR);
+    CreatorGUID = item->GetCreator();
 
     Item.Initialize(item);
     Index = index;

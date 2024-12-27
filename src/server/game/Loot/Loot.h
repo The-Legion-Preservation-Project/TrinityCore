@@ -262,7 +262,7 @@ struct TC_GAME_API Loot
     LootItem* LootItemInSlot(uint32 lootslot, Player* player, NotNormalLootItem** qitem = NULL, NotNormalLootItem** ffaitem = NULL, NotNormalLootItem** conditem = NULL);
     uint32 GetMaxSlotInLootFor(Player* player) const;
     bool hasItemForAll() const;
-    bool hasItemFor(Player* player) const;
+    bool hasItemFor(Player const* player) const;
     bool hasOverThresholdItem() const;
 
     // Builds data for SMSG_LOOT_RESPONSE

@@ -43,6 +43,7 @@ class DynamicObject;
 class GameObject;
 class InstanceScript;
 class Map;
+class Object;
 class Player;
 class Scenario;
 class TempSummon;
@@ -156,6 +157,12 @@ class TC_GAME_API Object
 
         float GetObjectScale() const { return GetFloatValue(OBJECT_FIELD_SCALE_X); }
         virtual void SetObjectScale(float scale) { SetFloatValue(OBJECT_FIELD_SCALE_X, scale); }
+
+        uint32 GetDynamicFlags() const { return GetUInt32Value(OBJECT_DYNAMIC_FLAGS); }
+        bool HasDynamicFlag(uint32 flag) const { return HasFlag(OBJECT_DYNAMIC_FLAGS, flag); }
+        void AddDynamicFlag(uint32 flag) { SetFlag(OBJECT_DYNAMIC_FLAGS, flag); }
+        void RemoveDynamicFlag(uint32 flag) { RemoveFlag(OBJECT_DYNAMIC_FLAGS, flag); }
+        void SetDynamicFlags(uint32 flag) { SetUInt32Value(OBJECT_DYNAMIC_FLAGS, flag); }
 
         TypeID GetTypeId() const { return m_objectTypeId; }
         bool isType(uint16 mask) const { return (mask & m_objectType) != 0; }
@@ -362,7 +369,7 @@ class TC_GAME_API Object
     private:
         bool m_inWorld;
 
-        // for output helpfull error messages from asserts
+        // for output helpful error messages from asserts
         bool PrintIndexError(uint32 index, bool set) const;
         Object(Object const& right) = delete;
         Object& operator=(Object const& right) = delete;
