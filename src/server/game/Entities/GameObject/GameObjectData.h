@@ -22,6 +22,7 @@
 #include "DBCEnums.h"
 #include "QuaternionData.h"
 #include "SharedDefines.h"
+#include "WorldPacket.h"
 #include <string>
 #include <vector>
 
@@ -674,6 +675,7 @@ struct GameObjectTemplate
 
     std::string AIName;
     uint32 ScriptId;
+    WorldPacket QueryData[TOTAL_LOCALES];
 
     // helpers
     bool IsDespawnAtAction() const
@@ -875,6 +877,9 @@ struct GameObjectTemplate
             default: return false;
         }
     }
+
+    void InitializeQueryData();
+    WorldPacket BuildQueryData(LocaleConstant loc) const;
 };
 
 // From `gameobject_template_addon`
