@@ -57,7 +57,8 @@ requiredItemLevel(0)
 }
 
 LFGMgr::LFGMgr() : m_QueueTimer(0), m_lfgProposalId(1),
-    m_options(sWorld->getIntConfig(CONFIG_LFG_OPTIONSMASK))
+    m_options(sWorld->getIntConfig(CONFIG_LFG_OPTIONSMASK)),
+    m_isSoloLFG(false)
 {
 }
 
@@ -2074,6 +2075,12 @@ LfgDungeonSet LFGMgr::GetRandomAndSeasonalDungeons(uint8 level, uint8 expansion)
             randomDungeons.insert(dungeon.Entry());
     }
     return randomDungeons;
+}
+
+// TheLegionPreservationProject
+void LFGMgr::ToggleSoloLFG()
+{
+    m_isSoloLFG = !m_isSoloLFG;
 }
 
 } // namespace lfg
