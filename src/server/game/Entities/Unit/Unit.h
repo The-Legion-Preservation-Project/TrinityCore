@@ -1410,6 +1410,8 @@ class TC_GAME_API Unit : public WorldObject
         void SetCritterGUID(ObjectGuid guid) { SetGuidValue(UNIT_FIELD_CRITTER, guid); }
         ObjectGuid GetBattlePetCompanionGUID() const { return GetGuidValue(UNIT_FIELD_BATTLE_PET_COMPANION_GUID); }
         void SetBattlePetCompanionGUID(ObjectGuid guid) { SetGuidValue(UNIT_FIELD_BATTLE_PET_COMPANION_GUID, guid); }
+        ObjectGuid GetDemonCreatorGUID() const { return GetGuidValue(UNIT_FIELD_DEMON_CREATOR); }
+        void SetDemonCreatorGUID(ObjectGuid guid) { SetGuidValue(UNIT_FIELD_DEMON_CREATOR, guid); }
 
         bool IsControlledByPlayer() const { return m_ControlledByPlayer; }
         ObjectGuid GetCharmerOrOwnerGUID() const;
