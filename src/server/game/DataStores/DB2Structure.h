@@ -2791,6 +2791,16 @@ struct SpellTotemsEntry
     uint16 RequiredTotemCategoryID[MAX_SPELL_TOTEMS];
 };
 
+struct SpellVisualKitEntry
+{
+    uint32 ID;
+    int32 Flags;
+    float FallbackPriority;
+    uint32 FallbackSpellVisualKitId;
+    uint16 DelayMin;
+    uint16 DelayMax;
+};
+
 struct SpellXSpellVisualEntry
 {
     uint32 SpellVisualID;
