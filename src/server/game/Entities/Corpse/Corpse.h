@@ -62,8 +62,8 @@ class TC_GAME_API Corpse : public WorldObject, public GridObject<Corpse>
         void SaveToDB();
         bool LoadCorpseFromDB(ObjectGuid::LowType guid, Field* fields);
 
-        void DeleteFromDB(SQLTransaction& trans);
-        static void DeleteFromDB(ObjectGuid const& ownerGuid, SQLTransaction& trans);
+        void DeleteFromDB(CharacterDatabaseTransaction& trans);
+        static void DeleteFromDB(ObjectGuid const& ownerGuid, CharacterDatabaseTransaction& trans);
 
         void AddCorpseDynamicFlag(CorpseDynFlags dynamicFlags) { SetFlag(CORPSE_FIELD_DYNAMIC_FLAGS, dynamicFlags); }
         void RemoveCorpseDynamicFlag(CorpseDynFlags dynamicFlags) { RemoveFlag(CORPSE_FIELD_DYNAMIC_FLAGS, dynamicFlags); }

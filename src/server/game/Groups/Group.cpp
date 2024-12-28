@@ -701,7 +701,7 @@ void Group::ChangeLeader(ObjectGuid newLeaderGuid, int8 partyIndex)
 
     if (!isBGGroup() && !isBFGroup())
     {
-        SQLTransaction trans = CharacterDatabase.BeginTransaction();
+        CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
         // Remove the groups permanent instance bindings
         for (auto difficultyItr = m_boundInstances.begin(); difficultyItr != m_boundInstances.end(); ++difficultyItr)
@@ -834,7 +834,7 @@ void Group::Disband(bool hideDestroy /* = false */)
 
     if (!isBGGroup() && !isBFGroup())
     {
-        SQLTransaction trans = CharacterDatabase.BeginTransaction();
+        CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
         CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GROUP);
         stmt->setUInt32(0, m_dbStoreId);
@@ -1632,7 +1632,7 @@ void Group::SwapMembersGroups(ObjectGuid firstGuid, ObjectGuid secondGuid)
     slots[0]->group = slots[1]->group;
     slots[1]->group = tmp;
 
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
     for (uint8 i = 0; i < 2; i++)
     {
         // Preserve new sub group in database for non-raid groups
