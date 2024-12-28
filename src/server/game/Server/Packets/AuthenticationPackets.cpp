@@ -73,7 +73,7 @@ const WorldPacket* WorldPackets::Auth::Pong::Write()
 
 WorldPacket const* WorldPackets::Auth::AuthChallenge::Write()
 {
-    _worldPacket.append(DosChallenge, 8);
+    _worldPacket.append(DosChallenge.data(), DosChallenge.size());
     _worldPacket.append(Challenge.data(), Challenge.size());
     _worldPacket << uint8(DosZeroBits);
     return &_worldPacket;

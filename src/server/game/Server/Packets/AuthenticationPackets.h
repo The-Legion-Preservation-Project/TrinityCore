@@ -63,12 +63,12 @@ namespace WorldPackets
         class AuthChallenge final : public ServerPacket
         {
         public:
-            AuthChallenge() : ServerPacket(SMSG_AUTH_CHALLENGE, 4 + 32 + 1) { }
+            AuthChallenge() : ServerPacket(SMSG_AUTH_CHALLENGE, 16 + 4 * 8 + 1) { }
 
             WorldPacket const* Write() override;
 
             std::array<uint8, 16> Challenge = { };
-            uint32 DosChallenge[8] = { }; ///< Encryption seeds
+            std::array<uint32, 8> DosChallenge = { };
             uint8 DosZeroBits = 0;
         };
 
