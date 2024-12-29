@@ -125,7 +125,25 @@ struct ItemDynamicFieldGems
     uint8 Context;
     uint8 Padding[3];
 };
+
 #pragma pack(pop)
+
+struct ArtifactData
+{
+    uint64 Xp;
+    uint32 ArtifactAppearanceId;
+    uint32 ArtifactTierId;
+    std::vector<ItemDynamicFieldArtifactPowers> ArtifactPowers;
+};
+
+struct ItemAdditionalLoadInfo
+{
+    static void Init(std::unordered_map<ObjectGuid::LowType, ItemAdditionalLoadInfo>* loadInfo, PreparedQueryResult artifactResult);
+
+    Optional<ArtifactData> Artifact;
+};
+
+Item* NewItemOrBag(ItemTemplate const* proto);
 
 class TC_GAME_API Item : public Object
 {

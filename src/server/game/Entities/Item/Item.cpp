@@ -271,6 +271,43 @@ static uint32 const IllusionModifierMaskSpecSpecific =
     (1 << ITEM_MODIFIER_ENCHANT_ILLUSION_SPEC_3) |
     (1 << ITEM_MODIFIER_ENCHANT_ILLUSION_SPEC_4);
 
+void ItemAdditionalLoadInfo::Init(std::unordered_map<ObjectGuid::LowType, ItemAdditionalLoadInfo>* loadInfo, PreparedQueryResult artifactResult)
+{
+    //                 0     1                       2                 3                   4                 5
+    // SELECT a.itemGuid, a.xp, a.artifactAppearanceId, a.artifactTierId, ap.artifactPowerId, ap.purchasedRank FROM item_instance_artifact_powers ap LEFT JOIN item_instance_artifact a ON ap.itemGuid = a.itemGuid ...
+    if (artifactResult)
+    {
+        do
+        {
+            Field* fields = artifactResult->Fetch();
+            ItemAdditionalLoadInfo& info = (*loadInfo)[fields[0].GetUInt64()];
+            if (!info.Artifact)
+                info.Artifact = boost::in_place();
+            info.Artifact->Xp = fields[1].GetUInt64();
+            info.Artifact->ArtifactAppearanceId = fields[2].GetUInt32();
+            info.Artifact->ArtifactTierId = fields[3].GetUInt32();
+            ItemDynamicFieldArtifactPowers artifactPowerData;
+            artifactPowerData.ArtifactPowerId = fields[4].GetUInt32();
+            artifactPowerData.PurchasedRank = fields[5].GetUInt8();
+            if (ArtifactPowerEntry const* artifactPower = sArtifactPowerStore.LookupEntry(artifactPowerData.ArtifactPowerId))
+            {
+                uint32 maxRank = artifactPower->MaxPurchasableRank;
+                // allow ARTIFACT_POWER_FLAG_FINAL to overflow maxrank here - needs to be handled in Item::CheckArtifactUnlock (will refund artifact power)
+                if (artifactPower->Flags & ARTIFACT_POWER_FLAG_MAX_RANK_WITH_TIER && artifactPower->Tier < info.Artifact->ArtifactTierId)
+                    maxRank += info.Artifact->ArtifactTierId - artifactPower->Tier;
+
+                if (artifactPowerData.PurchasedRank > maxRank)
+                    artifactPowerData.PurchasedRank = maxRank;
+
+                artifactPowerData.CurrentRankWithBonus = (artifactPower->Flags & ARTIFACT_POWER_FLAG_FIRST) == ARTIFACT_POWER_FLAG_FIRST ? 1 : 0;
+
+                info.Artifact->ArtifactPowers.push_back(artifactPowerData);
+            }
+
+        } while (artifactResult->NextRow());
+    }
+}
+
 Item::Item()
 {
     m_objectType |= TYPEMASK_ITEM;

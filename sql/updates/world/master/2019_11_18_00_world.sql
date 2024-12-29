@@ -23,7 +23,7 @@ INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orient
 (1604, -3914.34,  4540.62,  86.5838, 5.77318, 1456, 'EyeOfAzsharaDungeon'),
 (1605,  3801.21,  529.078,  603.332, 3.13103, 1477, 'HallsOfValorDungeon'),
 (1606,  3498.26,  4806.19,  590.072, 3.09508, 1516, 'TheArcwayDungeon'),
-(1607,  3247.98,  1828.70,  236.767, 3.17381, 1466, 'DarkheartThicketDungeon'),
+(1607,  3247.98,  1828.70,  236.767, 3.17381, 1466, 'DarkheartThicketDungeon');
 
 -- (1608,  744.752, -279.092,  51.4723, 5.03383, 1643, 'Boralus'),
 -- (1609, -604.097, -346.101,  158.319, 6.20878, 1643, 'TiragardeSoundSouth'),
