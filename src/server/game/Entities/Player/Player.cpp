@@ -12855,31 +12855,61 @@ void Player::DestroyConjuredItems(bool update)
                 DestroyItem(INVENTORY_SLOT_BAG_0, i, update);
 }
 
-Item* Player::GetItemByEntry(uint32 entry) const
+Item* Player::GetItemByEntry(uint32 entry, ItemSearchLocation where /*= ITEM_SEARCH_DEFAULT*/) const
 {
-    // in inventory
-    uint8 inventoryEnd = INVENTORY_SLOT_ITEM_START + GetInventorySlotCount();
-    for (uint8 i = INVENTORY_SLOT_ITEM_START; i < inventoryEnd; ++i)
-        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-            if (pItem->GetEntry() == entry)
-                return pItem;
+    if (where & ITEM_SEARCH_IN_EQUIPMENT)
+    {
+        for (uint8 i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_BAG_END; ++i)
+            if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                if (pItem->GetEntry() == entry)
+                    return pItem;
 
-    for (uint8 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
-        if (Bag* pBag = GetBagByPos(i))
-            for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
-                if (Item* pItem = pBag->GetItemByPos(j))
-                    if (pItem->GetEntry() == entry)
-                        return pItem;
+    }
 
-    for (uint8 i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_BAG_END; ++i)
-        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-            if (pItem->GetEntry() == entry)
-                return pItem;
+    if (where & ITEM_SEARCH_IN_INVENTORY)
+    {
+        // in inventory
+        uint8 inventoryEnd = INVENTORY_SLOT_ITEM_START + GetInventorySlotCount();
+        for (uint8 i = INVENTORY_SLOT_ITEM_START; i < inventoryEnd; ++i)
+            if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                if (pItem->GetEntry() == entry)
+                    return pItem;
 
-    for (uint8 i = CHILD_EQUIPMENT_SLOT_START; i < CHILD_EQUIPMENT_SLOT_END; ++i)
-        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-            if (pItem->GetEntry() == entry)
-                return pItem;
+        for (uint8 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+            if (Bag* pBag = GetBagByPos(i))
+                for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+                    if (Item* pItem = pBag->GetItemByPos(j))
+                        if (pItem->GetEntry() == entry)
+                            return pItem;
+
+        for (uint8 i = CHILD_EQUIPMENT_SLOT_START; i < CHILD_EQUIPMENT_SLOT_END; ++i)
+            if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                if (pItem->GetEntry() == entry)
+                    return pItem;
+    }
+
+    if (where & ITEM_SEARCH_IN_BANK)
+    {
+        for (uint8 i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; ++i)
+            if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                if (pItem->GetEntry() == entry)
+                    return pItem;
+
+        for (uint8 i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
+            if (Bag* pBag = GetBagByPos(i))
+                for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+                    if (Item* pItem = pBag->GetItemByPos(j))
+                        if (pItem->GetEntry() == entry)
+                            return pItem;
+    }
+
+    if (where & ITEM_SEARCH_IN_REAGENT_BANK)
+    {
+        for (uint8 i = REAGENT_SLOT_START; i < REAGENT_SLOT_END; ++i)
+            if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                if (pItem->GetEntry() == entry)
+                    return pItem;
+    }
 
     return nullptr;
 }
