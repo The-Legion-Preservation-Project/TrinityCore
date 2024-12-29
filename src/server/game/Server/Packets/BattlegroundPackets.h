@@ -23,6 +23,7 @@
 #include "ObjectGuid.h"
 #include "Optional.h"
 #include "Position.h"
+#include <array>
 
 namespace WorldPackets
 {
