@@ -5849,13 +5849,10 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
             // if it is mail from non-player, or if it's already return mail, it shouldn't be returned, but deleted
             if (m->messageType != MAIL_NORMAL || (m->checked & (MAIL_CHECK_MASK_COD_PAYMENT | MAIL_CHECK_MASK_RETURNED)))
             {
+                CharacterDatabaseTransaction nonTransactional(nullptr);
                 // mail open and then not returned
                 for (MailItemInfoVec::iterator itr2 = m->items.begin(); itr2 != m->items.end(); ++itr2)
-                {
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
-                    stmt->setUInt64(0, itr2->item_guid);
-                    CharacterDatabase.Execute(stmt);
-                }
+                    Item::DeleteFromDB(nonTransactional, itr2->item_guid);
 
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM_BY_ID);
                 stmt->setUInt32(0, m->messageID);
