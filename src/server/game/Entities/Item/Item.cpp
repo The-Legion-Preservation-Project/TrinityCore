@@ -1345,9 +1345,7 @@ void Item::SetGem(uint16 slot, ItemDynamicFieldGems const* gem, uint32 gemScalin
                 BonusData gemBonus;
                 gemBonus.Initialize(gemTemplate);
                 for (uint16 bonusListId : gem->BonusListIDs)
-                    if (DB2Manager::ItemBonusList const* bonuses = sDB2Manager.GetItemBonusList(bonusListId))
-                        for (ItemBonusEntry const* itemBonus : *bonuses)
-                            gemBonus.AddBonus(itemBonus->Type, itemBonus->Value);
+                    gemBonus.AddBonusList(bonusListId);
 
                 uint32 gemBaseItemLevel = gemTemplate->GetBaseItemLevel();
                 if (ScalingStatDistributionEntry const* ssd = sScalingStatDistributionStore.LookupEntry(gemBonus.ScalingStatDistribution))
@@ -2736,9 +2734,14 @@ void BonusData::Initialize(WorldPackets::Item::ItemInstance const& itemInstance)
 
     if (itemInstance.ItemBonus)
         for (uint32 bonusListID : itemInstance.ItemBonus->BonusListIDs)
-            if (DB2Manager::ItemBonusList const* bonuses = sDB2Manager.GetItemBonusList(bonusListID))
-                for (ItemBonusEntry const* bonus : *bonuses)
-                    AddBonus(bonus->Type, bonus->Value);
+            AddBonusList(bonusListID);
+}
+
+void BonusData::AddBonusList(uint32 bonusListId)
+{
+    if (DB2Manager::ItemBonusList const* bonuses = sDB2Manager.GetItemBonusList(bonusListId))
+        for (ItemBonusEntry const* bonus : *bonuses)
+            AddBonus(bonus->Type, bonus->Value);
 }
 
 void BonusData::AddBonus(uint32 type, int32 const (&values)[3])

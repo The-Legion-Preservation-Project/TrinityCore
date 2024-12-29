@@ -98,6 +98,7 @@ struct BonusData
 
     void Initialize(ItemTemplate const* proto);
     void Initialize(WorldPackets::Item::ItemInstance const& itemInstance);
+    void AddBonusList(uint32 bonusListId);
     void AddBonus(uint32 type, int32 const (&values)[3]);
 
 private:
@@ -207,8 +208,8 @@ class TC_GAME_API Item : public Object
         void SaveRefundDataToDB();
         void DeleteRefundDataFromDB(CharacterDatabaseTransaction* trans);
 
-        Bag* ToBag() { if (IsBag()) return reinterpret_cast<Bag*>(this); else return NULL; }
-        const Bag* ToBag() const { if (IsBag()) return reinterpret_cast<const Bag*>(this); else return NULL; }
+        Bag* ToBag() { if (IsBag()) return reinterpret_cast<Bag*>(this); else return nullptr; }
+        Bag const* ToBag() const { if (IsBag()) return reinterpret_cast<const Bag*>(this); else return nullptr; }
 
         bool IsLocked() const { return !HasItemFlag(ITEM_FIELD_FLAG_UNLOCKED); }
         bool IsBag() const { return GetTemplate()->GetInventoryType() == INVTYPE_BAG; }
@@ -383,6 +384,7 @@ class TC_GAME_API Item : public Object
         //void SetPetitionNumSignatures(uint32 signatures) { SetUpdateFieldValue(m_values.ModifyValue(&Item::m_itemData).ModifyValue(&UF::ItemData::Enchantment, 0).ModifyValue(&UF::ItemEnchantment::Duration), signatures); }
 
     protected:
+        void ApplyBonusList(uint32 itemBonusListId);
         BonusData _bonusData;
 
     private:

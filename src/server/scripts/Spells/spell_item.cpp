@@ -4885,7 +4885,7 @@ void AddSC_item_spell_scripts()
     new spell_item_world_queller_focus();
     new spell_item_water_strider();
     new spell_item_brutal_kinship();
-    
+
     new spell_item_mad_alchemists_potion();
     new spell_item_crazy_alchemists_potion();
 }
