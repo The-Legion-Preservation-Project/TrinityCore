@@ -112,10 +112,10 @@ private:
 #pragma pack(push, 1)
 struct ItemDynamicFieldArtifactPowers
 {
-    uint32 ArtifactPowerId;
-    uint8 PurchasedRank;
-    uint8 CurrentRankWithBonus;
-    uint16 Padding;
+    uint32 ArtifactPowerId = 0;
+    uint8 PurchasedRank = 0;
+    uint8 CurrentRankWithBonus = 0;
+    uint16 Padding = 0;
 };
 
 struct ItemDynamicFieldGems
@@ -130,9 +130,9 @@ struct ItemDynamicFieldGems
 
 struct ArtifactData
 {
-    uint64 Xp;
-    uint32 ArtifactAppearanceId;
-    uint32 ArtifactTierId;
+    uint64 Xp = 0;
+    uint32 ArtifactAppearanceId = 0;
+    uint32 ArtifactTierId = 0;
     std::vector<ItemDynamicFieldArtifactPowers> ArtifactPowers;
 };
 

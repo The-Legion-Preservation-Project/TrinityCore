@@ -3258,7 +3258,7 @@ bool Player::IsCurrentSpecMasterySpell(SpellInfo const* spellInfo) const
     return false;
 }
 
-void Player::LearnSpell(uint32 spell_id, bool dependent, int32 fromSkill /*= 0*/)
+void Player::LearnSpell(uint32 spell_id, bool dependent, int32 fromSkill /*= 0*/, bool suppressMessaging /*= false*/)
 {
     PlayerSpellMap::iterator itr = m_spells.find(spell_id);
 
@@ -3272,6 +3272,7 @@ void Player::LearnSpell(uint32 spell_id, bool dependent, int32 fromSkill /*= 0*/
     {
         WorldPackets::Spells::LearnedSpells packet;
         packet.SpellID.push_back(spell_id);
+        packet.SuppressMessaging = suppressMessaging;
         GetSession()->SendPacket(packet.Write());
     }
 
@@ -3295,7 +3296,7 @@ void Player::LearnSpell(uint32 spell_id, bool dependent, int32 fromSkill /*= 0*/
     }
 }
 
-void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
+void Player::RemoveSpell(uint32 spell_id, bool disabled /*= false*/, bool learn_low_rank /*= true*/, bool suppressMessaging /*= false*/)
 {
     PlayerSpellMap::iterator itr = m_spells.find(spell_id);
     if (itr == m_spells.end())
@@ -3463,6 +3464,7 @@ void Player::RemoveSpell(uint32 spell_id, bool disabled, bool learn_low_rank)
     {
         WorldPackets::Spells::UnlearnedSpells unlearnedSpells;
         unlearnedSpells.SpellID.push_back(spell_id);
+        unlearnedSpells.SuppressMessaging = suppressMessaging;
         SendDirectMessage(unlearnedSpells.Write());
     }
 }
