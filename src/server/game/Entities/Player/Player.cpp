@@ -7858,6 +7858,9 @@ void Player::UpdateItemSetAuras(bool formChange /*= false*/)
 
 void Player::ApplyArtifactPowers(Item* item, bool apply)
 {
+    if (item->IsArtifactDisabled())
+        return;
+
     for (ItemDynamicFieldArtifactPowers const& artifactPower : item->GetArtifactPowers())
     {
         uint8 rank = artifactPower.CurrentRankWithBonus;

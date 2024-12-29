@@ -362,6 +362,8 @@ class TC_GAME_API Item : public Object
         ObjectGuid GetChildItem() const { return m_childItem; }
         void SetChildItem(ObjectGuid childItem) { m_childItem = childItem; }
 
+        bool IsArtifactDisabled() const;
+
         DynamicFieldStructuredView<ItemDynamicFieldArtifactPowers> GetArtifactPowers() const;
         ItemDynamicFieldArtifactPowers const* GetArtifactPower(uint32 artifactPowerId) const;
         void SetArtifactPower(ItemDynamicFieldArtifactPowers const* artifactPower, bool createIfMissing = false);

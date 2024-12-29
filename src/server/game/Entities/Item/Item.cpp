@@ -2449,6 +2449,15 @@ DynamicFieldStructuredView<ItemDynamicFieldArtifactPowers> Item::GetArtifactPowe
     return GetDynamicStructuredValues<ItemDynamicFieldArtifactPowers>(ITEM_DYNAMIC_FIELD_ARTIFACT_POWERS);
 }
 
+bool Item::IsArtifactDisabled() const
+{
+    return false;
+    // if (ArtifactEntry const* artifact = sArtifactStore.LookupEntry(GetTemplate()->GetArtifactID()))
+    //     return artifact->ArtifactCategoryID != 2; // fishing artifact
+    //
+    // return true;
+}
+
 ItemDynamicFieldArtifactPowers const* Item::GetArtifactPower(uint32 artifactPowerId) const
 {
     auto indexItr = m_artifactPowerIdToIndex.find(artifactPowerId);
