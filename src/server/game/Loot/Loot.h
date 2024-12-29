@@ -18,6 +18,7 @@
 #ifndef Loot_h__
 #define Loot_h__
 
+#include "DBCEnums.h"
 #include "Define.h"
 #include "ConditionMgr.h"
 #include "ItemEnchantmentMgr.h"
@@ -137,7 +138,7 @@ struct TC_GAME_API LootItem
     ItemRandomEnchantmentId randomPropertyId;
     int32   upgradeId;
     std::vector<int32> BonusListIDs;
-    uint8   context;
+    ItemContext context;
     ConditionContainer conditions;                               // additional loot condition
     GuidSet allowedGUIDs;
     ObjectGuid rollWinnerGUID;                                   // Stores the guid of person who won loot, if his bags are full only he can see the item in loot list!
@@ -156,7 +157,7 @@ struct TC_GAME_API LootItem
     explicit LootItem(LootStoreItem const& li);
 
     // Empty constructor for creating an empty LootItem to be filled in with DB data
-    LootItem() : itemid(0), randomSuffix(0), randomPropertyId(), upgradeId(0), context(0), count(0), is_looted(false), is_blocked(false),
+    LootItem() : itemid(0), randomSuffix(0), randomPropertyId(), upgradeId(0), context(ItemContext::NONE), count(0), is_looted(false), is_blocked(false),
                  freeforall(false), is_underthreshold(false), is_counted(false), needs_quest(false), follow_loot_rules(false),
                  canSave(true){ };
 
@@ -253,7 +254,7 @@ struct TC_GAME_API Loot
     void RemoveLooter(ObjectGuid GUID) { PlayersLooting.erase(GUID); }
 
     void generateMoneyLoot(uint32 minAmount, uint32 maxAmount);
-    bool FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bool personal, bool noEmptyError = false, uint16 lootMode = LOOT_MODE_DEFAULT);
+    bool FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bool personal, bool noEmptyError = false, uint16 lootMode = LOOT_MODE_DEFAULT, ItemContext context = ItemContext::NONE);
 
     // Inserts the item into the loot (called by LootTemplate processors)
     void AddItem(LootStoreItem const & item);
@@ -285,7 +286,7 @@ private:
 
     // Loot GUID
     ObjectGuid _GUID;
-    uint8 _itemContext;
+    ItemContext _itemContext;
 };
 
 class TC_GAME_API AELootResult

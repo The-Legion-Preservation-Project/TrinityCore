@@ -70,7 +70,7 @@ void Bag::RemoveFromWorld()
     Item::RemoveFromWorld();
 }
 
-bool Bag::Create(ObjectGuid::LowType guidlow, uint32 itemid, Player const* owner)
+bool Bag::Create(ObjectGuid::LowType guidlow, uint32 itemid, ItemContext context, Player const* owner)
 {
     ItemTemplate const* itemProto = sObjectMgr->GetItemTemplate(itemid);
 
@@ -93,6 +93,7 @@ bool Bag::Create(ObjectGuid::LowType guidlow, uint32 itemid, Player const* owner
     SetUInt32Value(ITEM_FIELD_MAXDURABILITY, itemProto->MaxDurability);
     SetDurability(itemProto->MaxDurability);
     SetCount(1);
+    SetContext(context);
 
     // Setting the number of Slots the Container has
     SetBagSize(itemProto->GetContainerSlots());

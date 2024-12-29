@@ -49,7 +49,7 @@ LootItem::LootItem(LootStoreItem const& li)
     randomSuffix = GenerateEnchSuffixFactor(itemid);
     randomPropertyId = GenerateItemRandomPropertyId(itemid);
     upgradeId = sDB2Manager.GetRulesetItemUpgrade(itemid);
-    context = 0;
+    context = ItemContext::NONE;
     count = 0;
     is_looted = 0;
     is_blocked = 0;
@@ -97,7 +97,7 @@ void LootItem::AddAllowedLooter(const Player* player)
 // --------- Loot ---------
 //
 
-Loot::Loot(uint32 _gold /*= 0*/) : gold(_gold), unlootedCount(0), roundRobinPlayer(), loot_type(LOOT_NONE), maxDuplicates(1), _itemContext(0)
+Loot::Loot(uint32 _gold /*= 0*/) : gold(_gold), unlootedCount(0), roundRobinPlayer(), loot_type(LOOT_NONE), maxDuplicates(1), _itemContext(ItemContext::NONE)
 {
 }
 
@@ -155,7 +155,7 @@ void Loot::clear()
     roundRobinPlayer.Clear();
     loot_type = LOOT_NONE;
     i_LootValidatorRefManager.clearReferences();
-    _itemContext = 0;
+    _itemContext = ItemContext::NONE;
 }
 
 void Loot::NotifyItemRemoved(uint8 lootIndex)
@@ -237,7 +237,7 @@ void Loot::generateMoneyLoot(uint32 minAmount, uint32 maxAmount)
 }
 
 // Calls processor of corresponding LootTemplate (which handles everything including references)
-bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bool personal, bool noEmptyError, uint16 lootMode /*= LOOT_MODE_DEFAULT*/)
+bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bool personal, bool noEmptyError, uint16 lootMode /*= LOOT_MODE_DEFAULT*/, ItemContext context /*= ItemContext::NONE*/)
 {
     // Must be provided
     if (!lootOwner)
@@ -252,7 +252,7 @@ bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bo
         return false;
     }
 
-    _itemContext = lootOwner->GetMap()->GetDifficultyLootItemContext();
+    _itemContext = context;
 
     items.reserve(MAX_NR_LOOT_ITEMS);
     quest_items.reserve(MAX_NR_QUEST_ITEMS);
@@ -302,7 +302,7 @@ void Loot::AddItem(LootStoreItem const& item)
         LootItem generatedLoot(item);
         generatedLoot.context = _itemContext;
         generatedLoot.count = std::min(count, proto->GetMaxStackSize());
-        if (_itemContext)
+        if (_itemContext != ItemContext::NONE)
         {
             std::set<uint32> bonusListIDs = sDB2Manager.GetItemBonusTree(generatedLoot.itemid, _itemContext);
             generatedLoot.BonusListIDs.insert(generatedLoot.BonusListIDs.end(), bonusListIDs.begin(), bonusListIDs.end());

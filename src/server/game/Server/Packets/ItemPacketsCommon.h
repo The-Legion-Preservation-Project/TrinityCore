@@ -28,6 +28,7 @@ class Item;
 struct ItemDynamicFieldGems;
 struct LootItem;
 struct VoidStorageItem;
+enum class ItemContext : uint8;
 
 namespace WorldPackets
 {
@@ -35,7 +36,7 @@ namespace WorldPackets
     {
         struct ItemBonusInstanceData
         {
-            uint8 Context = 0;
+            ItemContext Context = ItemContext(0);
             std::vector<int32> BonusListIDs;
 
             bool operator==(ItemBonusInstanceData const& r) const;

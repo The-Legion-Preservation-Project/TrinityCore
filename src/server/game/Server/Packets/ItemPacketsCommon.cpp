@@ -40,7 +40,7 @@ void WorldPackets::Item::ItemInstance::Initialize(::Item const* item)
     {
         ItemBonus = boost::in_place();
         ItemBonus->BonusListIDs.insert(ItemBonus->BonusListIDs.end(), bonusListIds.begin(), bonusListIds.end());
-        ItemBonus->Context = item->GetUInt32Value(ITEM_FIELD_CONTEXT);
+        ItemBonus->Context = item->GetContext();
     }
 
     if (uint32 mask = item->GetUInt32Value(ITEM_FIELD_MODIFIERS_MASK))
@@ -58,12 +58,12 @@ void WorldPackets::Item::ItemInstance::Initialize(::ItemDynamicFieldGems const* 
     ItemID = gem->ItemId;
 
     ItemBonusInstanceData bonus;
-    bonus.Context = gem->Context;
+    bonus.Context = ItemContext(gem->Context);
     for (uint16 bonusListId : gem->BonusListIDs)
         if (bonusListId)
             bonus.BonusListIDs.push_back(bonusListId);
 
-    if (bonus.Context || !bonus.BonusListIDs.empty())
+    if (bonus.Context != ItemContext::NONE || !bonus.BonusListIDs.empty())
         ItemBonus = bonus;
 }
 
@@ -145,7 +145,7 @@ ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Item::ItemBonusInstanceDa
 {
     uint32 bonusListIdSize;
 
-    data >> itemBonusInstanceData.Context;
+    itemBonusInstanceData.Context = data.read<ItemContext>();
     data >> bonusListIdSize;
 
     for (uint32 i = 0u; i < bonusListIdSize; ++i)

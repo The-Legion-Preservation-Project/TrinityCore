@@ -329,7 +329,7 @@ Item::Item()
     memset(&_bonusData, 0, sizeof(_bonusData));
 }
 
-bool Item::Create(ObjectGuid::LowType guidlow, uint32 itemId, Player const* owner)
+bool Item::Create(ObjectGuid::LowType guidlow, uint32 itemId, ItemContext context, Player const* owner)
 {
     Object::_Create(ObjectGuid::Create<HighGuid::Item>(guidlow));
 
@@ -363,6 +363,7 @@ bool Item::Create(ObjectGuid::LowType guidlow, uint32 itemId, Player const* owne
 
     SetExpiration(itemProto->GetDuration());
     SetCreatePlayedTime(0);
+    SetContext(context);
 
     if (itemProto->GetArtifactID())
     {
@@ -759,7 +760,7 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
     SetModifier(ITEM_MODIFIER_BATTLE_PET_LEVEL, fields[17].GetUInt16());
     SetModifier(ITEM_MODIFIER_BATTLE_PET_DISPLAY_ID, fields[18].GetUInt32());
 
-    SetContext(fields[19].GetUInt8());
+    SetContext(ItemContext(fields[19].GetUInt8()));
 
     Tokenizer bonusListIDs(fields[20].GetString(), ' ');
     for (char const* token : bonusListIDs)
@@ -1436,7 +1437,7 @@ void Item::SendTimeUpdate(Player* owner)
     owner->GetSession()->SendPacket(itemTimeUpdate.Write());
 }
 
-Item* Item::CreateItem(uint32 itemEntry, uint32 count, Player const* player /*= nullptr*/)
+Item* Item::CreateItem(uint32 itemEntry, uint32 count, ItemContext context, Player const* player /*= nullptr*/)
 {
     if (count < 1)
         return nullptr;                                        //don't create item at zero count
@@ -1450,7 +1451,7 @@ Item* Item::CreateItem(uint32 itemEntry, uint32 count, Player const* player /*= 
         ASSERT(count != 0, "proto->Stackable == 0 but checked at loading already");
 
         Item* item = NewItemOrBag(proto);
-        if (item->Create(sObjectMgr->GetGenerator<HighGuid::Item>().Generate(), itemEntry, player))
+        if (item->Create(sObjectMgr->GetGenerator<HighGuid::Item>().Generate(), itemEntry, context, player))
         {
             item->SetCount(count);
             return item;
@@ -1465,7 +1466,7 @@ Item* Item::CreateItem(uint32 itemEntry, uint32 count, Player const* player /*= 
 
 Item* Item::CloneItem(uint32 count, Player const* player /*= nullptr*/) const
 {
-    Item* newItem = CreateItem(GetEntry(), count, player);
+    Item* newItem = CreateItem(GetEntry(), count, GetContext(), player);
     if (!newItem)
         return nullptr;
 
@@ -2114,7 +2115,7 @@ void Item::ItemContainerSaveLootToDB()
             stmt_items->setUInt8(9, uint8(_li->randomPropertyId.Type));
             stmt_items->setUInt32(10, _li->randomPropertyId.Id);
             stmt_items->setUInt32(11, _li->randomSuffix);
-            stmt_items->setUInt8(12, _li->context);
+            stmt_items->setUInt8(12, AsUnderlyingType(_li->context));
             std::ostringstream bonusListIDs;
             for (int32 bonusListID : _li->BonusListIDs)
                 bonusListIDs << bonusListID << ' ';
@@ -2178,7 +2179,7 @@ bool Item::ItemContainerLoadLootFromDB()
                 loot_item.needs_quest = fields[7].GetBool();
                 loot_item.randomPropertyId = { ItemRandomEnchantmentType(fields[8].GetUInt8()), fields[9].GetUInt32() };
                 loot_item.randomSuffix = fields[10].GetUInt32();
-                loot_item.context = fields[11].GetUInt8();
+                loot_item.context = ItemContext(fields[11].GetUInt8());
                 Tokenizer bonusLists(fields[12].GetString(), ' ');
                 std::transform(bonusLists.begin(), bonusLists.end(), std::back_inserter(loot_item.BonusListIDs), [](char const* token)
                 {
