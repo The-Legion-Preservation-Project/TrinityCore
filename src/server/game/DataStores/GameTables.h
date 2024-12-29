@@ -22,6 +22,8 @@
 #include "Common.h"
 #include <vector>
 
+enum InventoryType : uint8;
+
 struct GtArmorMitigationByLvlEntry
 {
     float Mitigation = 0.0f;
@@ -307,5 +309,8 @@ inline float GetSpellScalingColumnForClass(GtSpellScalingEntry const* row, int32
 
     return 0.0f;
 }
+
+template<class T>
+float GetIlvlStatMultiplier(T const* row, InventoryType invType);
 
 #endif // GameTables_h__

@@ -457,7 +457,7 @@ bool SpellEffectInfo::IsUnitOwnedAuraEffect() const
     return IsAreaAuraEffect() || Effect == SPELL_EFFECT_APPLY_AURA;
 }
 
-int32 SpellEffectInfo::CalcValue(Unit const* caster /*= nullptr*/, int32 const* bp /*= nullptr*/, Unit const* target /*= nullptr*/, float* variance /*= nullptr*/, int32 itemLevel /*= -1*/) const
+int32 SpellEffectInfo::CalcValue(Unit const* caster /*= nullptr*/, int32 const* bp /*= nullptr*/, Unit const* target /*= nullptr*/, float* variance /*= nullptr*/, uint32 itemId, int32 itemLevel /*= -1*/) const
 {
     float basePointsPerLevel = RealPointsPerLevel;
     int32 basePoints = bp ? *bp : BasePoints;
@@ -495,9 +495,10 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster /*= nullptr*/, int32 const* 
                 {
                     uint32 effectiveItemLevel = itemLevel != -1 ? uint32(itemLevel) : 1u;
                     value = GetRandomPropertyPoints(effectiveItemLevel, ITEM_QUALITY_RARE, INVTYPE_CHEST, 0);
-                    if (IsAura() && ApplyAuraName == SPELL_AURA_MOD_RATING)
+                    if (IsAura(SPELL_AURA_MOD_RATING))
                         if (GtCombatRatingsMultByILvl const* ratingMult = sCombatRatingsMultByILvlGameTable.GetRow(effectiveItemLevel))
-                            value *= ratingMult->ArmorMultiplier;
+                            if (ItemSparseEntry const* itemSparse = sItemSparseStore.LookupEntry(itemId))
+                                value *= GetIlvlStatMultiplier(ratingMult, InventoryType(itemSparse->InventoryType));
                 }
             }
             else

@@ -7344,31 +7344,7 @@ void Player::_ApplyItemBonuses(Item* item, uint8 slot, bool apply)
     uint32 itemLevel = item->GetItemLevel(this);
     float combatRatingMultiplier = 1.0f;
     if (GtCombatRatingsMultByILvl const* ratingMult = sCombatRatingsMultByILvlGameTable.GetRow(itemLevel))
-    {
-        switch (proto->GetInventoryType())
-        {
-            case INVTYPE_WEAPON:
-            case INVTYPE_SHIELD:
-            case INVTYPE_RANGED:
-            case INVTYPE_2HWEAPON:
-            case INVTYPE_WEAPONMAINHAND:
-            case INVTYPE_WEAPONOFFHAND:
-            case INVTYPE_HOLDABLE:
-            case INVTYPE_RANGEDRIGHT:
-                combatRatingMultiplier = ratingMult->WeaponMultiplier;
-                break;
-            case INVTYPE_TRINKET:
-                combatRatingMultiplier = ratingMult->TrinketMultiplier;
-                break;
-            case INVTYPE_NECK:
-            case INVTYPE_FINGER:
-                combatRatingMultiplier = ratingMult->JewelryMultiplier;
-                break;
-            default:
-                combatRatingMultiplier = ratingMult->ArmorMultiplier;
-                break;
-        }
-    }
+        combatRatingMultiplier = GetIlvlStatMultiplier(ratingMult, proto->GetInventoryType());
 
     // req. check at equip, but allow use for extended range if range limit max level, set proper level
     for (uint8 i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
@@ -18620,8 +18596,8 @@ void Player::_LoadAuras(PreparedQueryResult auraResult, PreparedQueryResult effe
     }
 
     /*
-                    0         1      2           3                4           5            6           7              8              9
-    SELECT casterGuid, itemGuid, spell, effectMask, recalculateMask, stackCount, maxDuration, remainTime, remainCharges, castItemLevel FROM character_aura WHERE guid = ?
+                    0         1      2           3                4           5            6           7              8           9             10
+    SELECT casterGuid, itemGuid, spell, effectMask, recalculateMask, stackCount, maxDuration, remainTime, remainCharges, castItemId, castItemLevel FROM character_aura WHERE guid = ?
     */
     if (auraResult)
     {
@@ -18636,7 +18612,8 @@ void Player::_LoadAuras(PreparedQueryResult auraResult, PreparedQueryResult effe
             int32 maxDuration = fields[6].GetInt32();
             int32 remainTime = fields[7].GetInt32();
             uint8 remainCharges = fields[8].GetUInt8();
-            int32 castItemLevel = fields[9].GetInt32();
+            uint32 castItemId = fields[9].GetUInt32();
+            int32 castItemLevel = fields[10].GetInt32();
 
             SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(key.SpellId);
             if (!spellInfo)
@@ -18668,7 +18645,7 @@ void Player::_LoadAuras(PreparedQueryResult auraResult, PreparedQueryResult effe
 
             AuraLoadEffectInfo& info = effectInfo[key];
             ObjectGuid castId = ObjectGuid::Create<HighGuid::Cast>(SPELL_CAST_SOURCE_NORMAL, GetMapId(), spellInfo->Id, GetMap()->GenerateLowGuid<HighGuid::Cast>());
-            if (Aura* aura = Aura::TryCreate(spellInfo, castId, key.EffectMask, this, nullptr, info.BaseAmounts.data(), nullptr, casterGuid, itemGuid, castItemLevel))
+            if (Aura* aura = Aura::TryCreate(spellInfo, castId, key.EffectMask, this, nullptr, info.BaseAmounts.data(), nullptr, casterGuid, itemGuid, castItemId, castItemLevel))
             {
                 if (!aura->CanBeSaved())
                 {
@@ -20545,6 +20522,7 @@ void Player::_SaveAuras(CharacterDatabaseTransaction& trans)
         stmt->setInt32(index++, aura->GetMaxDuration());
         stmt->setInt32(index++, aura->GetDuration());
         stmt->setUInt8(index++, aura->GetCharges());
+        stmt->setUInt32(index++, aura->GetCastItemId());
         stmt->setInt32(index++, aura->GetCastItemLevel());
         trans->Append(stmt);
 

@@ -2659,7 +2659,7 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask, bool scaleA
             bool const resetPeriodicTimer = !(_triggeredCastFlags & TRIGGERED_DONT_RESET_PERIODIC_TIMER);
             m_spellAura = Aura::TryRefreshStackOrCreate(aurSpellInfo, m_castId, effectMask, unit,
                 m_originalCaster, (aurSpellInfo == m_spellInfo) ? m_spellValue->EffectBasePoints : basePoints,
-                m_CastItem, ObjectGuid::Empty, &refresh, resetPeriodicTimer, ObjectGuid::Empty, m_castItemLevel);
+                m_CastItem, ObjectGuid::Empty, &refresh, resetPeriodicTimer, ObjectGuid::Empty, m_castItemEntry, m_castItemLevel);
             if (m_spellAura)
             {
                 // Set aura stack amount to desired value
@@ -6122,7 +6122,7 @@ SpellCastResult Spell::CheckArenaAndRatedBattlegroundCastRules()
 
 int32 Spell::CalculateDamage(uint8 i, Unit const* target, float* var /*= nullptr*/) const
 {
-    return m_caster->CalculateSpellDamage(target, m_spellInfo, i, &m_spellValue->EffectBasePoints[i], var, m_castItemLevel);
+    return m_caster->CalculateSpellDamage(target, m_spellInfo, i, &m_spellValue->EffectBasePoints[i], var, m_castItemEntry, m_castItemLevel);
 }
 
 bool Spell::CanAutoCast(Unit* target)

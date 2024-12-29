@@ -16,6 +16,7 @@
  */
 
 #include "GameTables.h"
+#include "ItemTemplate.h"
 #include "Timer.h"
 #include "Log.h"
 #include "Util.h"
@@ -152,3 +153,33 @@ void LoadGameTables(std::string const& dataPath)
 
     TC_LOG_INFO("server.loading", ">> Initialized %d GameTables in %u ms", gameTableCount, GetMSTimeDiffToNow(oldMSTime));
 }
+
+template<class T>
+float GetIlvlStatMultiplier(T const* row, InventoryType invType)
+{
+    switch (invType)
+    {
+        case INVTYPE_NECK:
+        case INVTYPE_FINGER:
+            return row->JewelryMultiplier;
+            break;
+        case INVTYPE_TRINKET:
+            return row->TrinketMultiplier;
+            break;
+        case INVTYPE_WEAPON:
+        case INVTYPE_SHIELD:
+        case INVTYPE_RANGED:
+        case INVTYPE_2HWEAPON:
+        case INVTYPE_WEAPONMAINHAND:
+        case INVTYPE_WEAPONOFFHAND:
+        case INVTYPE_HOLDABLE:
+        case INVTYPE_RANGEDRIGHT:
+            return row->WeaponMultiplier;
+            break;
+        default:
+            return row->ArmorMultiplier;
+            break;
+    }
+}
+
+template float GetIlvlStatMultiplier(GtCombatRatingsMultByILvl const* row, InventoryType invType);
