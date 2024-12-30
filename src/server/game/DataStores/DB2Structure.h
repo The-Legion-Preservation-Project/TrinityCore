@@ -1556,6 +1556,13 @@ struct ItemModifiedAppearanceEntry
     int8 TransmogSourceTypeEnum;
 };
 
+struct ItemNameDescriptionEntry
+{
+    uint32 ID;
+    LocalizedString* Description;
+    int32 Color;
+};
+
 struct ItemPriceBaseEntry
 {
     uint32 ID;

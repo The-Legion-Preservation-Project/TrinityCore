@@ -535,6 +535,10 @@ void HotfixDatabaseConnection::DoPrepareStatements()
     PrepareStatement(HOTFIX_SEL_ITEM_MODIFIED_APPEARANCE, "SELECT ItemID, ID, ItemAppearanceModifierID, ItemAppearanceID, OrderIndex, "
         "TransmogSourceTypeEnum FROM item_modified_appearance ORDER BY ID DESC", CONNECTION_SYNCH);
 
+    // ItemNameDescription.db2
+    PrepareStatement(HOTFIX_SEL_ITEM_NAME_DESCRIPTION, "SELECT ID, Description, Color FROM item_name_description ORDER BY ID DESC", CONNECTION_SYNCH);
+    PREPARE_LOCALE_STMT(HOTFIX_SEL_ITEM_NAME_DESCRIPTION, "SELECT ID, Description_lang FROM item_name_description_locale WHERE locale = ?", CONNECTION_SYNCH);
+
     // ItemPriceBase.db2
     PrepareStatement(HOTFIX_SEL_ITEM_PRICE_BASE, "SELECT ID, Armor, Weapon, ItemLevel FROM item_price_base ORDER BY ID DESC", CONNECTION_SYNCH);
 
