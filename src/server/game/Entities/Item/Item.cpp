@@ -1529,7 +1529,7 @@ void Item::BuildUpdate(UpdateDataMapType& data_map)
     ClearUpdateMask(false);
 }
 
-void Item::BuildDynamicValuesUpdate(uint8 updateType, ByteBuffer* data, Player* target) const
+void Item::BuildDynamicValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const
 {
     if (!target)
         return;

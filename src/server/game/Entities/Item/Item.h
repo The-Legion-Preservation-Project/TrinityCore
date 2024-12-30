@@ -336,7 +336,7 @@ class TC_GAME_API Item : public Object
         bool CheckSoulboundTradeExpire();
 
         void BuildUpdate(UpdateDataMapType&) override;
-        void BuildDynamicValuesUpdate(uint8 updatetype, ByteBuffer* data, Player* target) const override;
+        void BuildDynamicValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const override;
         void AddToObjectUpdate() override;
         void RemoveFromObjectUpdate() override;
 

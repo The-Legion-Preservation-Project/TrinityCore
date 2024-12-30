@@ -1976,7 +1976,7 @@ class TC_GAME_API Unit : public WorldObject
     protected:
         explicit Unit (bool isWorldObject);
 
-        void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player* target) const override;
+        void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const override;
         void DestroyForPlayer(Player* target) const override;
 
         UnitAI* i_AI, *i_disabledAI;
