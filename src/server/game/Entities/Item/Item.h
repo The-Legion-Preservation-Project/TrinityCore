@@ -93,6 +93,7 @@ struct BonusData
     int32 RelicType;
     int32 RequiredLevelOverride;
     bool HasItemLevelBonus;
+    uint32 Suffix;
     bool HasFixedLevel;
 
     void Initialize(ItemTemplate const* proto);
@@ -103,6 +104,7 @@ struct BonusData
 private:
     struct
     {
+        int32 SuffixPriority;
         int32 AppearanceModPriority;
         int32 ScalingStatDistributionPriority;
         bool HasQualityBonus;
@@ -156,6 +158,8 @@ class TC_GAME_API Item : public Object
         Item();
 
         virtual bool Create(ObjectGuid::LowType guidlow, uint32 itemId, ItemContext context, Player const* owner);
+
+        std::string GetNameForLocaleIdx(LocaleConstant locale) const override;
 
         ItemTemplate const* GetTemplate() const;
         BonusData const* GetBonus() const { return &_bonusData; }
