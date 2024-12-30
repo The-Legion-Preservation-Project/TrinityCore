@@ -41,7 +41,7 @@ namespace WorldPackets
             int32 Charges = 0;
             std::vector<Item::ItemEnchantData> Enchantments;
             int32 Flags = 0;
-            int32 AuctionItemID = 0;
+            int32 AuctionID = 0;
             ObjectGuid Owner;
             uint64 MinBid = 0;
             uint64 MinIncrement = 0;
@@ -62,7 +62,7 @@ namespace WorldPackets
         {
             void Initialize(::AuctionEntry const* auction, ::Item const* item);
 
-            int32 AuctionItemID = 0;
+            int32 AuctionID = 0;
             uint64 BidAmount = 0;
             Item::ItemInstance Item;
         };
@@ -71,7 +71,7 @@ namespace WorldPackets
         {
             void Initialize(::AuctionEntry const* auction, ::Item const* item);
 
-            int32 AuctionItemID = 0;
+            int32 AuctionID = 0;
             ObjectGuid Bidder;
             Item::ItemInstance Item;
         };
@@ -82,6 +82,7 @@ namespace WorldPackets
             AuctionHelloRequest(WorldPacket&& packet) : ClientPacket(CMSG_AUCTION_HELLO_REQUEST, std::move(packet)) { }
 
             void Read() override;
+
             ObjectGuid Guid;
         };
 
@@ -112,7 +113,7 @@ namespace WorldPackets
 
                 WorldPacket const* Write() override;
 
-                uint32 AuctionItemID = 0; ///< the id of the auction that triggered this notification
+                uint32 AuctionID     = 0; ///< the id of the auction that triggered this notification
                 uint32 Command       = 0; ///< the type of action that triggered this notification. Possible values are @ref AuctionAction
                 int32 ErrorCode      = 0; ///< the error code that was generated when trying to perform the action. Possible values are @ref AuctionError
                 uint64 Money         = 0; ///< the amount of money that the player bid in copper
@@ -150,7 +151,7 @@ namespace WorldPackets
 
             ObjectGuid Auctioneer;
             uint64 BidAmount = 0;
-            int32 AuctionItemID = 0;
+            int32 AuctionID = 0;
         };
 
         class AuctionListBidderItems final : public ClientPacket
@@ -161,7 +162,7 @@ namespace WorldPackets
             void Read() override;
 
             uint32 Offset = 0;
-            std::vector<uint32> AuctionItemIDs;
+            std::vector<uint32> AuctionIDs;
             ObjectGuid Auctioneer;
         };
 
@@ -173,7 +174,7 @@ namespace WorldPackets
             void Read() override;
 
             ObjectGuid Auctioneer;
-            int32 AuctionItemID = 0;
+            int32 AuctionID = 0;
         };
 
         class AuctionReplicateItems final : public ClientPacket
@@ -332,10 +333,10 @@ namespace WorldPackets
             AuctionBidderNotification Info;
         };
 
-        class AuctionOutBidNotification final : public ServerPacket
+        class AuctionOutbidNotification final : public ServerPacket
         {
         public:
-            AuctionOutBidNotification() : ServerPacket(SMSG_AUCTION_OUTBID_NOTIFICATION, 62) { }
+            AuctionOutbidNotification() : ServerPacket(SMSG_AUCTION_OUTBID_NOTIFICATION, 62) { }
 
             WorldPacket const* Write() override;
 

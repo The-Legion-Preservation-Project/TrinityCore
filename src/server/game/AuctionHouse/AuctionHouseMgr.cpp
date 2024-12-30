@@ -516,7 +516,7 @@ void AuctionHouseMgr::UpdatePendingAuctions()
             {
                 AuctionEntry* AH = (*AHitr);
                 ++AHitr;
-                AH->expire_time = time(NULL);
+                AH->expire_time = time(nullptr);
                 AH->DeleteFromDB(trans);
                 AH->SaveToDB(trans);
             }
@@ -824,7 +824,7 @@ void AuctionHouseObject::BuildReplicate(WorldPackets::AuctionHouse::AuctionRepli
     }
 
     auctionReplicateResult.ChangeNumberGlobal = throttleItr->second.Global;
-    auctionReplicateResult.ChangeNumberCursor = throttleItr->second.Cursor = !auctionReplicateResult.Items.empty() ? auctionReplicateResult.Items.back().AuctionItemID : 0;
+    auctionReplicateResult.ChangeNumberCursor = throttleItr->second.Cursor = !auctionReplicateResult.Items.empty() ? auctionReplicateResult.Items.back().AuctionID : 0;
     auctionReplicateResult.ChangeNumberTombstone = throttleItr->second.Tombstone = !count ? AuctionsMap.rbegin()->first : 0;
 }
 
@@ -840,7 +840,7 @@ void AuctionEntry::BuildAuctionInfo(std::vector<WorldPackets::AuctionHouse::Auct
 
     WorldPackets::AuctionHouse::AuctionItem auctionItem;
 
-    auctionItem.AuctionItemID = Id;
+    auctionItem.AuctionID = Id;
     auctionItem.Item.Initialize(item);
     auctionItem.BuyoutPrice = buyout;
     auctionItem.CensorBidInfo = false;
@@ -848,7 +848,7 @@ void AuctionEntry::BuildAuctionInfo(std::vector<WorldPackets::AuctionHouse::Auct
     auctionItem.Charges = item->GetSpellCharges();
     auctionItem.Count = item->GetCount();
     auctionItem.DeleteReason = 0; // Always 0 ?
-    auctionItem.DurationLeft = (expire_time - time(NULL)) * IN_MILLISECONDS;
+    auctionItem.DurationLeft = (expire_time - time(nullptr)) * IN_MILLISECONDS;
     auctionItem.EndTime = expire_time;
     auctionItem.Flags = 0; // todo
     auctionItem.ItemGuid = item->GetGUID();

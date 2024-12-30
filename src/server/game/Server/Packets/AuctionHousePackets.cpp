@@ -26,7 +26,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::AuctionHouse::AuctionItem
     data << int32(auctionItem.Count);
     data << int32(auctionItem.Charges);
     data << int32(auctionItem.Flags);
-    data << int32(auctionItem.AuctionItemID);
+    data << int32(auctionItem.AuctionID);
     data << auctionItem.Owner;
     data << uint64(auctionItem.MinBid);
     data << uint64(auctionItem.MinIncrement);
@@ -63,7 +63,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::AuctionHouse::AuctionItem
 
 ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::AuctionHouse::AuctionOwnerNotification const& ownerNotification)
 {
-    data << int32(ownerNotification.AuctionItemID);
+    data << int32(ownerNotification.AuctionID);
     data << uint64(ownerNotification.BidAmount);
     data << ownerNotification.Item;
     return data;
@@ -71,7 +71,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::AuctionHouse::AuctionOwne
 
 ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::AuctionHouse::AuctionBidderNotification const& bidderNotification)
 {
-    data << int32(bidderNotification.AuctionItemID);
+    data << int32(bidderNotification.AuctionID);
     data << bidderNotification.Bidder;
     data << bidderNotification.Item;
     return data;
@@ -79,14 +79,14 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::AuctionHouse::AuctionBidd
 
 void WorldPackets::AuctionHouse::AuctionOwnerNotification::Initialize(::AuctionEntry const* auction, ::Item const* item)
 {
-    AuctionItemID = auction->Id;
+    AuctionID = auction->Id;
     Item.Initialize(item);
     BidAmount = auction->bid;
 }
 
 void WorldPackets::AuctionHouse::AuctionBidderNotification::Initialize(::AuctionEntry const* auction, ::Item const* item)
 {
-    AuctionItemID = auction->Id;
+    AuctionID = auction->Id;
     Item.Initialize(item);
     Bidder = ObjectGuid::Create<HighGuid::Player>(auction->bidder);
 }
@@ -112,7 +112,7 @@ void WorldPackets::AuctionHouse::AuctionCommandResult::InitializeAuction(::Aucti
 {
     if (auction)
     {
-        AuctionItemID   = auction->Id;
+        AuctionID   = auction->Id;
         Money           = auction->bid == auction->buyout ? 0 : auction->bid;
         MinIncrement    = auction->bid == auction->buyout ? 0 : auction->GetAuctionOutBid();
         Guid            = ObjectGuid::Create<HighGuid::Player>(auction->bidder);
@@ -121,7 +121,7 @@ void WorldPackets::AuctionHouse::AuctionCommandResult::InitializeAuction(::Aucti
 
 WorldPacket const* WorldPackets::AuctionHouse::AuctionCommandResult::Write()
 {
-    _worldPacket << uint32(AuctionItemID);
+    _worldPacket << uint32(AuctionID);
     _worldPacket << int32(Command);
     _worldPacket << int32(ErrorCode);
     _worldPacket << int32(BagResult);
@@ -152,7 +152,7 @@ void WorldPackets::AuctionHouse::AuctionSellItem::Read()
 void WorldPackets::AuctionHouse::AuctionPlaceBid::Read()
 {
     _worldPacket >> Auctioneer;
-    _worldPacket >> AuctionItemID;
+    _worldPacket >> AuctionID;
     _worldPacket >> BidAmount;
 }
 
@@ -160,21 +160,21 @@ void WorldPackets::AuctionHouse::AuctionListBidderItems::Read()
 {
     _worldPacket >> Auctioneer;
     _worldPacket >> Offset;
-    uint8 auctionItemIDsCount = _worldPacket.ReadBits(7);
+    uint8 AuctionIDsCount = _worldPacket.ReadBits(7);
     _worldPacket.ResetBitPos();
 
-    for (uint8 i = 0; i < auctionItemIDsCount; i++)
+    for (uint8 i = 0; i < AuctionIDsCount; i++)
     {
-        uint32 AuctionItemID = 0;
-        _worldPacket >> AuctionItemID;
-        AuctionItemIDs.emplace_back(AuctionItemID);
+        uint32 AuctionID = 0;
+        _worldPacket >> AuctionID;
+        AuctionIDs.emplace_back(AuctionID);
     }
 }
 
 void WorldPackets::AuctionHouse::AuctionRemoveItem::Read()
 {
     _worldPacket >> Auctioneer;
-    _worldPacket >> AuctionItemID;
+    _worldPacket >> AuctionID;
 }
 
 void WorldPackets::AuctionHouse::AuctionReplicateItems::Read()
@@ -314,7 +314,7 @@ WorldPacket const* WorldPackets::AuctionHouse::AuctionWonNotification::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::AuctionHouse::AuctionOutBidNotification::Write()
+WorldPacket const* WorldPackets::AuctionHouse::AuctionOutbidNotification::Write()
 {
     _worldPacket << Info;
     _worldPacket << uint64(BidAmount);
