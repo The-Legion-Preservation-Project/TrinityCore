@@ -156,18 +156,18 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Garrison::GarrisonInfo co
         data << *mission;
 
     for (std::vector<WorldPackets::Garrison::GarrisonMissionReward> const& missionReward : garrison.MissionRewards)
-    {
         data << uint32(missionReward.size());
+
+    for (std::vector<WorldPackets::Garrison::GarrisonMissionReward> const& missionReward : garrison.MissionRewards)
         for (WorldPackets::Garrison::GarrisonMissionReward const& missionRewardItem : missionReward)
             data << missionRewardItem;
-    }
 
     for (std::vector<WorldPackets::Garrison::GarrisonMissionReward> const& missionReward : garrison.MissionOvermaxRewards)
-    {
         data << uint32(missionReward.size());
+
+    for (std::vector<WorldPackets::Garrison::GarrisonMissionReward> const& missionReward : garrison.MissionOvermaxRewards)
         for (WorldPackets::Garrison::GarrisonMissionReward const& missionRewardItem : missionReward)
             data << missionRewardItem;
-    }
 
     for (WorldPackets::Garrison::GarrisonMissionBonusAbility const* areaBonus : garrison.MissionAreaBonuses)
         data << *areaBonus;
