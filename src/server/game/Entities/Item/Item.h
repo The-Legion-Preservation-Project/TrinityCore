@@ -383,7 +383,6 @@ class TC_GAME_API Item : public Object
         //void SetPetitionNumSignatures(uint32 signatures) { SetUpdateFieldValue(m_values.ModifyValue(&Item::m_itemData).ModifyValue(&UF::ItemData::Enchantment, 0).ModifyValue(&UF::ItemEnchantment::Duration), signatures); }
 
     protected:
-        void ApplyBonusList(uint32 itemBonusListId);
         BonusData _bonusData;
 
     private:
