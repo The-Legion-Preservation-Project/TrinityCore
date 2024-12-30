@@ -208,7 +208,7 @@ MAKE_GUID_TRAIT(HighGuid::Cast, ObjectGuidSequenceSource::Map, ObjectGuidFormatT
 class ByteBuffer;
 class ObjectGuid;
 
-class ObjectGuidFactory
+class TC_GAME_API ObjectGuidFactory
 {
 public:
     static ObjectGuid CreateNull();
