@@ -24675,7 +24675,20 @@ void Player::UpdateForQuestWorldObjects()
         if (itr->IsGameObject())
         {
             if (GameObject* obj = ObjectAccessor::GetGameObject(*this, *itr))
-                obj->BuildValuesUpdateBlockForPlayer(&udata, this);
+            {
+                switch (obj->GetGoType())
+                {
+                    case GAMEOBJECT_TYPE_QUESTGIVER:
+                    case GAMEOBJECT_TYPE_CHEST:
+                    case GAMEOBJECT_TYPE_GOOBER:
+                    case GAMEOBJECT_TYPE_GENERIC:
+                        if (sObjectMgr->IsGameObjectForQuests(obj->GetEntry()))
+                            obj->BuildValuesUpdateBlockForPlayer(&udata, this);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         else if (itr->IsCreatureOrVehicle())
         {

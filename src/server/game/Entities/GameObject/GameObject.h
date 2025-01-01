@@ -84,8 +84,10 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
         explicit GameObject();
         ~GameObject();
 
+    protected:
         void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const override;
 
+    public:
         void AddToWorld() override;
         void RemoveFromWorld() override;
         void CleanupsBeforeDelete(bool finalCleanup = true) override;
