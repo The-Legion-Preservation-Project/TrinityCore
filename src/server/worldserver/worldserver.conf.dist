@@ -515,13 +515,12 @@ CleanCharacterDB = 0
 PersistentCharacterCleanFlags = 0
 
 #
-#    Auction.GetAllScanDelay
-#        Description: Sets the minimum time in seconds, a single player character can perform a getall scan.
+#    Auction.ReplicateItemsCooldown
+#        Description: Sets the minimum time in seconds, a single player character can perform a complete auction house scan.
 #                     The value is only held in memory so a server restart will clear it.
-#                     Setting this to zero, will disable GetAll functions completely.
-#        Default:     900 - (GetAll scan limited to once every 15mins per player character)
+#        Default:     900 - (Replicate scan limited to once every 15mins per player character)
 
-Auction.GetAllScanDelay = 900
+Auction.ReplicateItemsCooldown = 900
 
 #
 #    Auction.SearchDelay
@@ -1247,7 +1246,7 @@ BirthdayTime = 1222964635
 
 #
 #   CacheDataQueries
-#        Description: Server caches data queries at startup. 
+#        Description: Server caches data queries at startup.
 #                     Can be disabled if not enough memory is available.
 #        Default:     1 - (Enabled)
 #                     0 - (Disabled)
@@ -1255,7 +1254,7 @@ BirthdayTime = 1222964635
 #
 
  CacheDataQueries = 1
- 
+
 #
 #   FeatureSystem.BpayStore.Enabled
 #        Description: Not yet implemented
