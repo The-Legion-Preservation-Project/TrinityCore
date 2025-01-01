@@ -339,6 +339,8 @@ class TC_GAME_API Object
         virtual void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const;
         virtual void BuildDynamicValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const;
 
+        void ApplyPercentModFloatVar(float& var, float val, bool apply);
+
         uint16 m_objectType;
 
         TypeID m_objectTypeId;

@@ -1186,8 +1186,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         Item* GetWeaponForAttack(WeaponAttackType attackType, bool useable = false) const;
         Item* GetShield(bool useable = false) const;
         Item* GetChildItemByGuid(ObjectGuid guid) const;
-        static uint8 GetAttackBySlot(uint8 slot, InventoryType inventoryType);        // MAX_ATTACK if not weapon slot
-        std::vector<Item*> &GetItemUpdateQueue() { return m_itemUpdateQueue; }
+        static WeaponAttackType GetAttackBySlot(uint8 slot, InventoryType inventoryType);        // MAX_ATTACK if not weapon slot
+        std::vector<Item*>& GetItemUpdateQueue() { return m_itemUpdateQueue; }
         static bool IsInventoryPos(uint16 pos) { return IsInventoryPos(pos >> 8, pos & 255); }
         static bool IsInventoryPos(uint8 bag, uint8 slot);
         static bool IsEquipmentPos(uint16 pos) { return IsEquipmentPos(pos >> 8, pos & 255); }
@@ -1830,6 +1830,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void ApplyModDamageDonePos(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + school, mod, apply); }
         void ApplyModDamageDoneNeg(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + school, mod, apply); }
         void ApplyModDamageDonePercent(SpellSchools school, float pct, bool apply) { ApplyPercentModFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + school, pct, apply); }
+        void SetModDamageDonePercent(uint8 school, float pct) { SetFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + school, pct); }
         void ApplyRatingMod(CombatRating cr, int32 value, bool apply);
         void UpdateRating(CombatRating cr);
         void UpdateAllRatings();
@@ -1838,7 +1839,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void UpdateHealingDonePercentMod();
         bool CanUseMastery() const;
 
-        void CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bool addTotalPct, float& minDamage, float& maxDamage) override;
+        void CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bool addTotalPct, float& minDamage, float& maxDamage) const override;
 
         void RecalculateRating(CombatRating cr) { ApplyRatingMod(cr, 0, true);}
         void GetDodgeFromAgility(float &diminishing, float &nondiminishing) const;
@@ -2064,11 +2065,19 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool CanTameExoticPets() const { return IsGameMaster() || HasAuraType(SPELL_AURA_ALLOW_TAME_PET_TYPE); }
 
         void SetRegularAttackTime();
-        void SetBaseModValue(BaseModGroup modGroup, BaseModType modType, float value) { m_auraBaseMod[modGroup][modType] = value; }
-        void HandleBaseModValue(BaseModGroup modGroup, BaseModType modType, float amount, bool apply);
+
+        void HandleBaseModFlatValue(BaseModGroup modGroup, float amount, bool apply);
+        void ApplyBaseModPctValue(BaseModGroup modGroup, float pct);
+
+        void SetBaseModFlatValue(BaseModGroup modGroup, float val);
+        void SetBaseModPctValue(BaseModGroup modGroup, float val);
+
+        void UpdateDamageDoneMods(WeaponAttackType attackType) override;
+        void UpdateBaseModGroup(BaseModGroup modGroup);
+
         float GetBaseModValue(BaseModGroup modGroup, BaseModType modType) const;
         float GetTotalBaseModValue(BaseModGroup modGroup) const;
-        float GetTotalPercentageModValue(BaseModGroup modGroup) const { return m_auraBaseMod[modGroup][FLAT_MOD] + m_auraBaseMod[modGroup][PCT_MOD]; }
+
         void _ApplyAllStatBonuses();
         void _RemoveAllStatBonuses();
 
@@ -2076,6 +2085,11 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         void CastAllObtainSpells();
         void ApplyItemObtainSpells(Item* item, bool apply);
+
+        void UpdateWeaponDependentCritAuras(WeaponAttackType attackType);
+        void UpdateAllWeaponDependentCritAuras();
+
+        void UpdateWeaponDependentAuras(WeaponAttackType attackType);
         void ApplyItemDependentAuras(Item* item, bool apply);
 
         void _ApplyItemMods(Item* item, uint8 slot, bool apply, bool updateItemAuras = true);
@@ -2702,7 +2716,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         ActionButtonList m_actionButtons;
 
-        float m_auraBaseMod[BASEMOD_END][MOD_END];
+        float m_auraBaseFlatMod[BASEMOD_END];
+        float m_auraBasePctMod[BASEMOD_END];
         int16 m_baseRatingValue[MAX_COMBAT_RATING];
         uint32 m_baseSpellPower;
         uint32 m_baseManaRegen;
