@@ -23,7 +23,8 @@
 #include "ItemPacketsCommon.h"
 #include "ObjectGuid.h"
 
-struct AuctionEntry;
+struct AuctionPosting;
+enum class AuctionHouseSortOrder : uint8;
 
 namespace WorldPackets
 {
@@ -34,6 +35,24 @@ namespace WorldPackets
 
     namespace AuctionHouse
     {
+        struct AuctionListFilterSubClass
+        {
+            int32 ItemSubclass = 0;
+            uint32 InvTypeMask = 0;
+        };
+
+        struct AuctionListFilterClass
+        {
+            int32 ItemClass = 0;
+            Array<AuctionListFilterSubClass, 31> SubClassFilters;
+        };
+
+        struct AuctionSortDef
+        {
+            AuctionHouseSortOrder SortOrder = AuctionHouseSortOrder(0);
+            bool ReverseSort = false;
+        };
+
         struct AuctionItem
         {
             Item::ItemInstance Item;
@@ -60,7 +79,7 @@ namespace WorldPackets
 
         struct AuctionOwnerNotification
         {
-            void Initialize(::AuctionEntry const* auction, ::Item const* item);
+            void Initialize(::AuctionPosting const* auction);
 
             int32 AuctionID = 0;
             uint64 BidAmount = 0;
@@ -69,7 +88,7 @@ namespace WorldPackets
 
         struct AuctionBidderNotification
         {
-            void Initialize(::AuctionEntry const* auction, ::Item const* item);
+            void Initialize(::AuctionPosting const* auction);
 
             int32 AuctionID = 0;
             ObjectGuid Bidder;
@@ -109,7 +128,7 @@ namespace WorldPackets
                  *
                  * @param   auction         The relevant auction object
                  */
-                void InitializeAuction(::AuctionEntry* auction);
+                void InitializeAuction(::AuctionPosting const* auction);
 
                 WorldPacket const* Write() override;
 
@@ -250,24 +269,6 @@ namespace WorldPackets
         class AuctionListItems final : public ClientPacket
         {
         public:
-            struct Sort
-            {
-                uint8 Type = 0;
-                uint8 Direction = 0;
-            };
-
-            struct ClassFilter
-            {
-                struct SubClassFilter
-                {
-                    int32 ItemSubclass;
-                    uint32 InvTypeMask;
-                };
-
-                int32 ItemClass;
-                Array<SubClassFilter, 31> SubClassFilters;
-            };
-
             AuctionListItems(WorldPacket&& packet) : ClientPacket(CMSG_AUCTION_LIST_ITEMS, std::move(packet)) { }
 
             void Read() override;
@@ -277,14 +278,13 @@ namespace WorldPackets
             uint8 MinLevel = 1;
             uint8 MaxLevel = 100;
             int32 Quality = 0;
-            uint8 SortCount = 0;
             Array<uint8, BATTLE_PET_SPECIES_MAX_ID / 8 + 1> KnownPets;
             int8 MaxPetLevel = 0;
             std::string Name;
-            Array<ClassFilter, 7> ClassFilters;
+            Array<AuctionListFilterClass, 7> ClassFilters;
             bool ExactMatch = true;
             bool OnlyUsable = false;
-            std::vector<Sort> DataSort;
+            std::vector<AuctionSortDef> DataSort;
         };
 
         class AuctionListPendingSalesResult final : public ServerPacket

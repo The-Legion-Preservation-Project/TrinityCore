@@ -46,12 +46,15 @@ class Unit;
 class Warden;
 class WorldSession;
 class WorldSocket;
-struct AuctionEntry;
+struct AuctionPosting;
 struct BlackMarketTemplate;
 struct DeclinedName;
 struct ItemTemplate;
 struct MovementInfo;
 struct Position;
+enum class AuctionCommand : int8;
+enum class AuctionResult : int8;
+enum InventoryResult : uint8;
 
 namespace lfg
 {
@@ -1029,20 +1032,19 @@ class TC_GAME_API WorldSession
         void SendAuctionHello(ObjectGuid guid, Creature* unit);
 
         /**
-         * @fn  void WorldSession::SendAuctionCommandResult(AuctionEntry* auction, uint32 Action, uint32 ErrorCode, uint32 bidError = 0);
+         * @fn  void WorldSession::SendAuctionCommandResult(uint32 auctionId, uint32 action, uint32 errorCode, uint32 bidError = 0);
          *
          * @brief   Notifies the client of the result of his last auction operation. It is called when the player bids, creates, or deletes an auction
          *
-         * @param   auction         The relevant auction object
-         * @param   Action          The action that was performed.
-         * @param   ErrorCode       The resulting error code.
+         * @param   auctionId       The relevant auction id
+         * @param   command         The action that was performed.
+         * @param   errorCode       The resulting error code.
          * @param   bidError        (Optional) the bid error.
          */
-        void SendAuctionCommandResult(AuctionEntry* auction, uint32 Action, uint32 ErrorCode, uint32 bidError = 0);
-        void SendAuctionOutBidNotification(AuctionEntry const* auction, Item const* item);
-        void SendAuctionClosedNotification(AuctionEntry const* auction, float mailDelay, bool sold, Item const* item);
-        void SendAuctionWonNotification(AuctionEntry const* auction, Item const* item);
-        void SendAuctionOwnerBidNotification(AuctionEntry const* auction, Item const* item);
+        void SendAuctionCommandResult(AuctionPosting const* auction, AuctionCommand command, AuctionResult errorCode, InventoryResult bagError = InventoryResult(0));
+        void SendAuctionClosedNotification(AuctionPosting const* auction, float mailDelay, bool sold);
+        //void SendAuctionWonNotification(AuctionEntry const* auction, Item const* item);
+        void SendAuctionOwnerBidNotification(AuctionPosting const* auction);
 
         // Black Market
         void SendBlackMarketOpenResult(ObjectGuid guid, Creature* auctioneer);
@@ -1378,12 +1380,12 @@ class TC_GAME_API WorldSession
         void HandleUnacceptTradeOpcode(WorldPackets::Trade::UnacceptTrade& unacceptTrade);
 
         void HandleAuctionHelloOpcode(WorldPackets::AuctionHouse::AuctionHelloRequest& packet);
-        void HandleAuctionListItems(WorldPackets::AuctionHouse::AuctionListItems& packet);
-        void HandleAuctionListBidderItems(WorldPackets::AuctionHouse::AuctionListBidderItems& packet);
+        void HandleAuctionListItems(WorldPackets::AuctionHouse::AuctionListItems& listItems);
+        void HandleAuctionListBidderItems(WorldPackets::AuctionHouse::AuctionListBidderItems& listBidderItems);
         void HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSellItem& packet);
-        void HandleAuctionRemoveItem(WorldPackets::AuctionHouse::AuctionRemoveItem& packet);
-        void HandleAuctionListOwnerItems(WorldPackets::AuctionHouse::AuctionListOwnerItems& packet);
-        void HandleAuctionPlaceBid(WorldPackets::AuctionHouse::AuctionPlaceBid& packet);
+        void HandleAuctionRemoveItem(WorldPackets::AuctionHouse::AuctionRemoveItem& removeItem);
+        void HandleAuctionListOwnerItems(WorldPackets::AuctionHouse::AuctionListOwnerItems& listOwnerItems);
+        void HandleAuctionPlaceBid(WorldPackets::AuctionHouse::AuctionPlaceBid& placeBid);
         void HandleAuctionListPendingSales(WorldPackets::AuctionHouse::AuctionListPendingSales& packet);
         void HandleReplicateItems(WorldPackets::AuctionHouse::AuctionReplicateItems& packet);
 

@@ -167,17 +167,18 @@ DROP TABLE IF EXISTS `auctionhouse`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `auctionhouse` (
   `id` int(10) unsigned NOT NULL DEFAULT '0',
-  `auctioneerguid` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `itemguid` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `itemowner` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `buyoutprice` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `time` int(10) unsigned NOT NULL DEFAULT '0',
-  `buyguid` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `lastbid` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `startbid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `auctionHouseId` int(10) unsigned NOT NULL DEFAULT '0',
+  `itemGuid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `owner` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `bidder` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `minBid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `buyoutPrice` bigint(20) unsigned NOT NULL DEFAULT '0',
   `deposit` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `bidAmount` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `startTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `endTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `item_guid` (`itemguid`)
+  UNIQUE KEY `item_guid` (`itemGuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3569,7 +3570,8 @@ INSERT INTO `updates` VALUES
 ('2018_07_28_00_characters.sql','31F66AE7831251A8915625EC7F10FA138AB8B654','RELEASED','2018-07-28 18:30:19',0),
 ('2018_07_31_00_characters.sql','7DA8D4A4534520B23E6F5BBD5B8EE205B799C798','RELEASED','2018-07-31 20:54:39',0),
 ('2019_06_25_00_characters.sql','B8CBF79DEE02B40B01424327D31E52C70335BEC6','RELEASED','2019-06-25 22:40:37',0),
-('2019_11_30_00_characters.sql','D0678E62B651AECA60C2DD6989BF80BD999AD12B','RELEASED','2019-11-29 22:42:01',0);
+('2019_11_30_00_characters.sql','D0678E62B651AECA60C2DD6989BF80BD999AD12B','RELEASED','2019-11-29 22:42:01',0),
+('2020_04_20_00_characters.sql','8007C1265D3087466141097B81B1A9BC8E00707B','RELEASED','2020-04-20 19:08:18',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 

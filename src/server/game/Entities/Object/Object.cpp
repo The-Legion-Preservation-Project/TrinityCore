@@ -140,6 +140,7 @@ void Object::_Create(ObjectGuid const& guid)
 {
     if (!m_uint32Values) _InitValues();
 
+    m_guid = guid;
     SetGuidValue(OBJECT_FIELD_GUID, guid);
     SetUInt16Value(OBJECT_FIELD_TYPE, 0, m_objectType);
 }

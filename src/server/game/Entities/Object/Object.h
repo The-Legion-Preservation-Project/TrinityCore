@@ -150,7 +150,7 @@ class TC_GAME_API Object
         virtual void AddToWorld();
         virtual void RemoveFromWorld();
 
-        ObjectGuid const& GetGUID() const { return GetGuidValue(OBJECT_FIELD_GUID); }
+        ObjectGuid const& GetGUID() const { return m_guid; }
         uint32 GetEntry() const { return GetUInt32Value(OBJECT_FIELD_ENTRY); }
         void SetEntry(uint32 entry) { SetUInt32Value(OBJECT_FIELD_ENTRY, entry); }
 
@@ -369,6 +369,7 @@ class TC_GAME_API Object
         bool m_objectUpdated;
 
     private:
+        ObjectGuid m_guid;
         bool m_inWorld;
 
         // for output helpful error messages from asserts
