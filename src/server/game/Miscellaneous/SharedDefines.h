@@ -6192,4 +6192,19 @@ enum class GameError : uint32
     ERR_GLYPH_TARGET_NOT_AVAILABLE                          = 987,
 };
 
+enum class MountResult : uint32
+{
+    InvalidMountee = 0,
+    TooFarAway     = 1,
+    AlreadyMounted = 2,
+    NotMountable   = 3,
+    NotYourPet     = 4,
+    Other          = 5,
+    Looting        = 6,
+    RaceCantMount  = 7,
+    Shapeshifted   = 8,
+    ForcedDismount = 9,
+    Ok             = 10 // never sent
+};
+
 #endif
