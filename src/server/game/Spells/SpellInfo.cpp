@@ -4250,6 +4250,10 @@ bool SpellInfo::_IsPositiveEffect(uint32 effIndex, bool deep) const
     if (HasAttribute(SPELL_ATTR0_NEGATIVE_1))
         return false;
 
+    // these spells must not be downscaled, thus marking them negative (see GetAuraRankForLevel)
+    if (HasAttribute(SPELL_ATTR2_UNK3))
+        return false;
+
     switch (SpellFamilyName)
     {
         case SPELLFAMILY_GENERIC:
