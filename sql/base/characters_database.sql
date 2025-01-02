@@ -1824,7 +1824,7 @@ DROP TABLE IF EXISTS `creature_respawn`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `creature_respawn` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
-  `respawnTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `respawnTime` bigint(20) unsigned NOT NULL DEFAULT '0',
   `mapId` smallint(10) unsigned NOT NULL DEFAULT '0',
   `instanceId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Instance Identifier',
   PRIMARY KEY (`guid`,`instanceId`),
@@ -1898,7 +1898,7 @@ DROP TABLE IF EXISTS `gameobject_respawn`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gameobject_respawn` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
-  `respawnTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `respawnTime` bigint(20) unsigned NOT NULL DEFAULT '0',
   `mapId` smallint(10) unsigned NOT NULL DEFAULT '0',
   `instanceId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Instance Identifier',
   PRIMARY KEY (`guid`,`instanceId`),
@@ -2545,7 +2545,7 @@ DROP TABLE IF EXISTS `instance`;
 CREATE TABLE `instance` (
   `id` int(10) unsigned NOT NULL DEFAULT '0',
   `map` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `resettime` int(10) unsigned NOT NULL DEFAULT '0',
+  `resettime` bigint(20) unsigned NOT NULL DEFAULT '0',
   `difficulty` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `completedEncounters` int(10) unsigned NOT NULL DEFAULT '0',
   `data` tinytext NOT NULL,
@@ -2576,7 +2576,7 @@ DROP TABLE IF EXISTS `instance_reset`;
 CREATE TABLE `instance_reset` (
   `mapid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `difficulty` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `resettime` int(10) unsigned NOT NULL DEFAULT '0',
+  `resettime` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`mapid`,`difficulty`),
   KEY `difficulty` (`difficulty`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -3573,7 +3573,9 @@ INSERT INTO `updates` VALUES
 ('2019_11_30_00_characters.sql','D0678E62B651AECA60C2DD6989BF80BD999AD12B','RELEASED','2019-11-29 22:42:01',0),
 ('2020_04_20_00_characters.sql','6E95279485BBA63CF57AA85ADD58A826F3E8296A','RELEASED','2020-04-20 19:08:18',0),
 ('2020_04_25_00_characters_2017_04_03_00_characters.sql','00FA3EFADAF807AC96619A3FE47216E21C3FCB19','RELEASED','2020-04-25 00:00:00',0),
-('2020_04_26_00_characters_2017_04_12_00_characters.sql','86AA94DA9B1EA283101100886C10F648C0CE6494','RELEASED','2020-04-26 00:00:00',0);
+('2020_04_26_00_characters_2017_04_12_00_characters.sql','86AA94DA9B1EA283101100886C10F648C0CE6494','RELEASED','2020-04-26 00:00:00',0),
+('2020_04_26_01_characters_2017_04_12_01_characters.sql','5A8A1215E3A2356722F52CD7A64BBE03D21FBEA3','RELEASED','2020-04-26 00:00:00',0);
+
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
