@@ -1623,7 +1623,7 @@ struct BattlegroundAVScore final : public BattlegroundScore
 class BattlegroundAV : public Battleground
 {
     public:
-        BattlegroundAV();
+        BattlegroundAV(BattlegroundTemplate const* battlegroundTemplate);
         ~BattlegroundAV();
 
         /* inherited from BattlegroundClass */

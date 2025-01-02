@@ -558,7 +558,7 @@ struct BattlegroundSAScore final : public BattlegroundScore
 class BattlegroundSA : public Battleground
 {
     public:
-        BattlegroundSA();
+        BattlegroundSA(BattlegroundTemplate const* battlegroundTemplate);
         ~BattlegroundSA();
 
         /**

@@ -737,6 +737,20 @@ void DB2Manager::LoadStores(std::string const& dataPath, uint32 defaultLocale)
     for (ArtifactPowerRankEntry const* artifactPowerRank : sArtifactPowerRankStore)
         _artifactPowerRanks[std::pair<uint32, uint8>{ artifactPowerRank->ArtifactPowerID, artifactPowerRank->RankIndex }] = artifactPowerRank;
 
+    for (BattlemasterListEntry const* battlemaster : sBattlemasterListStore)
+    {
+        if (battlemaster->MaxLevel < battlemaster->MinLevel)
+        {
+            TC_LOG_ERROR("db2.hotfix.battlemaster_list", "Battlemaster (%u) contains bad values for MinLevel (%u) and MaxLevel (%u). Swapping values.", battlemaster->ID, battlemaster->MinLevel, battlemaster->MaxLevel);
+            std::swap(*(int8*)&battlemaster->MaxLevel, *(int8*)&battlemaster->MinLevel);
+        }
+        if (battlemaster->MaxPlayers < battlemaster->MinPlayers)
+        {
+            TC_LOG_ERROR("db2.hotfix.battlemaster_list", "Battlemaster (%u) contains bad values for MinPlayers (%u) and MaxPlayers (%u). Swapping values.", battlemaster->ID, battlemaster->MinPlayers, battlemaster->MaxPlayers);
+            std::swap(*(int8*)&battlemaster->MaxPlayers, *(int8*)&battlemaster->MinPlayers);
+        }
+    }
+
     ASSERT(BATTLE_PET_SPECIES_MAX_ID >= sBattlePetSpeciesStore.GetNumRows(),
         "BATTLE_PET_SPECIES_MAX_ID (%d) must be equal to or greater than %u", BATTLE_PET_SPECIES_MAX_ID, sBattlePetSpeciesStore.GetNumRows());
 
