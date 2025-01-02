@@ -377,7 +377,7 @@ class TC_GAME_API Item : public Object
         void SetContext(ItemContext context) { SetInt32Value(ITEM_FIELD_CONTEXT, int32(context)); }
 
         void SetPetitionId(uint32 petitionId) { SetUInt32Value(ITEM_FIELD_ENCHANTMENT, petitionId); }
-        //void SetPetitionNumSignatures(uint32 signatures) { SetUpdateFieldValue(m_values.ModifyValue(&Item::m_itemData).ModifyValue(&UF::ItemData::Enchantment, 0).ModifyValue(&UF::ItemEnchantment::Duration), signatures); }
+        void SetPetitionNumSignatures(uint32 signatures) { SetUInt32Value(ITEM_FIELD_ENCHANTMENT + 1, signatures); }
 
     protected:
         BonusData _bonusData;
