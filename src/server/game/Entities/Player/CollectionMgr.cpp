@@ -72,7 +72,7 @@ void CollectionMgr::LoadMountDefinitions()
 
 namespace
 {
-    EnumFlag_t<ToyFlags> GetToyFlags(bool isFavourite)
+    EnumFlag<ToyFlags> GetToyFlags(bool isFavourite)
     {
         ToyFlags flags = ToyFlags::None;
         if (isFavourite)
