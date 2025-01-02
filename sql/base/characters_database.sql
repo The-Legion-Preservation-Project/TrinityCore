@@ -436,9 +436,9 @@ DROP TABLE IF EXISTS `character_arena_stats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `character_arena_stats` (
-  `guid` bigint(20) NOT NULL,
-  `slot` tinyint(3) NOT NULL,
-  `matchMakerRating` smallint(5) NOT NULL,
+  `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `slot` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `matchMakerRating` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`slot`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -693,8 +693,8 @@ DROP TABLE IF EXISTS `character_equipmentsets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `character_equipmentsets` (
-  `guid` bigint(20) NOT NULL DEFAULT '0',
-  `setguid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `setguid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `setindex` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `name` varchar(31) NOT NULL,
   `iconname` varchar(100) NOT NULL,
@@ -2994,7 +2994,7 @@ DROP TABLE IF EXISTS `item_loot_money`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `item_loot_money` (
-  `container_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'guid of container (item_instance.guid)',
+  `container_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'guid of container (item_instance.guid)',
   `money` int(10) NOT NULL DEFAULT '0' COMMENT 'money loot (in copper)',
   PRIMARY KEY (`container_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -3571,7 +3571,8 @@ INSERT INTO `updates` VALUES
 ('2018_07_31_00_characters.sql','7DA8D4A4534520B23E6F5BBD5B8EE205B799C798','RELEASED','2018-07-31 20:54:39',0),
 ('2019_06_25_00_characters.sql','B8CBF79DEE02B40B01424327D31E52C70335BEC6','RELEASED','2019-06-25 22:40:37',0),
 ('2019_11_30_00_characters.sql','D0678E62B651AECA60C2DD6989BF80BD999AD12B','RELEASED','2019-11-29 22:42:01',0),
-('2020_04_20_00_characters.sql','6E95279485BBA63CF57AA85ADD58A826F3E8296A','RELEASED','2020-04-20 19:08:18',0);
+('2020_04_20_00_characters.sql','6E95279485BBA63CF57AA85ADD58A826F3E8296A','RELEASED','2020-04-20 19:08:18',0),
+('2020_04_25_00_characters_2017_04_03_00_characters.sql','00FA3EFADAF807AC96619A3FE47216E21C3FCB19','RELEASED','2020-04-25 00:00:00',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
