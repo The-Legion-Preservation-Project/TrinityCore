@@ -258,14 +258,18 @@ void LFGMgr::LoadLFGDungeons(bool reload /* = false */)
             if (!at)
             {
                 TC_LOG_ERROR("sql.sql", "Failed to load dungeon %s (Id: %u), cant find areatrigger for map %u", dungeon.name.c_str(), dungeon.id, dungeon.map);
-                continue;
-            }
 
-            dungeon.map = at->target_mapId;
-            dungeon.x = at->target_X;
-            dungeon.y = at->target_Y;
-            dungeon.z = at->target_Z;
-            dungeon.o = at->target_Orientation;
+                // TheLegionPreservationProject: "disable" by marking as future expansion
+                dungeon.expansion = EXPANSION_BATTLE_FOR_AZEROTH;
+            }
+            else
+            {
+                dungeon.map = at->target_mapId;
+                dungeon.x = at->target_X;
+                dungeon.y = at->target_Y;
+                dungeon.z = at->target_Z;
+                dungeon.o = at->target_Orientation;
+            }
         }
 
         if (dungeon.type != LFG_TYPE_RANDOM)
