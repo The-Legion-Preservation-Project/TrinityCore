@@ -21,7 +21,6 @@
 #include "Define.h"
 #include "DatabaseEnvFwd.h"
 #include "Duration.h"
-#include "EnumClassFlag.h"
 #include "ItemTemplate.h"
 #include "ObjectGuid.h"
 #include "Optional.h"
@@ -126,7 +125,7 @@ struct AuctionSearchClassFilters
     std::array<SubclassFilter, MAX_ITEM_CLASS> Classes = { };
 };
 
-struct TC_GAME_API AuctionPosting
+struct AuctionPosting
 {
     uint32 Id = 0;
 

@@ -72,9 +72,9 @@ void CollectionMgr::LoadMountDefinitions()
 
 namespace
 {
-    EnumClassFlag<ToyFlags> GetToyFlags(bool isFavourite)
+    EnumFlag_t<ToyFlags> GetToyFlags(bool isFavourite)
     {
-        EnumClassFlag<ToyFlags> flags(ToyFlags::None);
+        ToyFlags flags = ToyFlags::None;
         if (isFavourite)
             flags |= ToyFlags::Favorite;
 
@@ -147,7 +147,7 @@ void CollectionMgr::ToySetFavorite(uint32 itemId, bool favorite)
     if (favorite)
         itr->second |= ToyFlags::Favorite;
     else
-        itr->second.RemoveFlag(ToyFlags::Favorite);
+        itr->second &= ~ToyFlags::Favorite;
 }
 
 void CollectionMgr::OnItemAdded(Item* item)
