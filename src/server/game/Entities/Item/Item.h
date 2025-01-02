@@ -220,6 +220,7 @@ class TC_GAME_API Item : public Object
         bool IsNotEmptyBag() const;
         bool IsBroken() const { return GetUInt32Value(ITEM_FIELD_MAXDURABILITY) > 0 && GetUInt32Value(ITEM_FIELD_DURABILITY) == 0; }
         void SetDurability(uint32 durability) { SetUInt32Value(ITEM_FIELD_DURABILITY, durability); }
+        void SetMaxDurability(uint32 maxDurability) { SetUInt32Value(ITEM_FIELD_MAXDURABILITY, maxDurability); }
         bool CanBeTraded(bool mail = false, bool trade = false) const;
         void SetInTrade(bool b = true) { mb_in_trade = b; }
         bool IsInTrade() const { return mb_in_trade; }

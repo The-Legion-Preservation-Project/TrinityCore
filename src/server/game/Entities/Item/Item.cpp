@@ -739,7 +739,9 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
     SetDurability(durability);
     // update max durability (and durability) if need
     SetUInt32Value(ITEM_FIELD_MAXDURABILITY, proto->MaxDurability);
-    if (durability > proto->MaxDurability)
+
+    // do not overwrite durability for wrapped items
+    if (durability > proto->MaxDurability && !HasItemFlag(ITEM_FIELD_FLAG_WRAPPED))
     {
         SetDurability(proto->MaxDurability);
         need_save = true;
