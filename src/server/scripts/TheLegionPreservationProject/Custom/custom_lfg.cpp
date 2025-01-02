@@ -110,7 +110,7 @@ private:
             _playerDifficultyMap[player->GetGUID()] = difficulty;
 
             for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
-                player->ApplyStatPctModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, float(difficulty * 100));
+                player->ApplyStatPctModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, float(difficulty * 100.f));
 
             player->SetFullHealth();
 
@@ -123,9 +123,9 @@ private:
     {
         if (_playerDifficultyMap.find(player->GetGUID()) != _playerDifficultyMap.end())
         {
-            //int difficulty = _playerDifficultyMap[player->GetGUID()];
+            int difficulty = _playerDifficultyMap[player->GetGUID()];
             for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
-                player->SetStatPctModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, 0.f);
+                player->ApplyStatPctModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, 100.f / (1.f + float(difficulty * 100) / 100.f) - 100.f);
             _playerDifficultyMap.erase(player->GetGUID());
         }
     }
