@@ -1763,8 +1763,6 @@ void Battleground::PlayerAddedToBGCheckIfBGIsRunning(Player* player)
     if (GetStatus() != STATUS_WAIT_LEAVE)
         return;
 
-    BattlegroundQueueTypeId bgQueueTypeId = GetQueueId();
-
     BlockMovement(player);
 
     WorldPackets::Battleground::PVPLogData pvpLogData;
