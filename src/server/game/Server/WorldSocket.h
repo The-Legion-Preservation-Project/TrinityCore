@@ -56,7 +56,7 @@ struct PacketHeader
     uint32 Size;
     uint16 Command;
 
-    bool IsValidSize() { return Size < 0x10000; }
+    bool IsValidSize() { return Size < 0x40000; }
     bool IsValidOpcode();
 };
 
