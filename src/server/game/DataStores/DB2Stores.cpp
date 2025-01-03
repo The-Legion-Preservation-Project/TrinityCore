@@ -866,14 +866,7 @@ void DB2Manager::LoadStores(std::string const& dataPath, uint32 defaultLocale)
         _itemLevelDeltaToBonusListContainer[itemBonusListLevelDelta->ItemLevelDelta] = itemBonusListLevelDelta->ID;
 
     for (ItemBonusTreeNodeEntry const* bonusTreeNode : sItemBonusTreeNodeStore)
-    {
-        uint32 bonusTreeId = bonusTreeNode->ParentItemBonusTreeID;
-        while (bonusTreeNode)
-        {
-            _itemBonusTrees[bonusTreeId].insert(bonusTreeNode);
-            bonusTreeNode = sItemBonusTreeNodeStore.LookupEntry(bonusTreeNode->ChildItemBonusTreeID);
-        }
-    }
+        _itemBonusTrees[bonusTreeNode->ParentItemBonusTreeID].insert(bonusTreeNode);
 
     for (ItemChildEquipmentEntry const* itemChildEquipment : sItemChildEquipmentStore)
     {
@@ -1658,26 +1651,21 @@ uint32 DB2Manager::GetItemBonusListForItemLevelDelta(int16 delta) const
 }
 
 template<typename Visitor>
-void VisitItemBonusTree(uint32 itemId, Visitor visitor)
+void VisitItemBonusTree(uint32 itemBonusTreeId, bool visitChildren, Visitor visitor)
 {
-    auto itemIdRange = _itemToBonusTree.equal_range(itemId);
-    if (itemIdRange.first == itemIdRange.second)
+    auto treeItr = _itemBonusTrees.find(itemBonusTreeId);
+    if (treeItr == _itemBonusTrees.end())
         return;
 
-    for (auto itemTreeItr = itemIdRange.first; itemTreeItr != itemIdRange.second; ++itemTreeItr)
+    for (ItemBonusTreeNodeEntry const* bonusTreeNode : treeItr->second)
     {
-        auto treeItr = _itemBonusTrees.find(itemTreeItr->second);
-        if (treeItr == _itemBonusTrees.end())
-            continue;
-
-        for (ItemBonusTreeNodeEntry const* bonusTreeNode : treeItr->second)
-        {
-            visitor(bonusTreeNode);
-        }
+        visitor(bonusTreeNode);
+        if (visitChildren && bonusTreeNode->ChildItemBonusTreeID)
+            VisitItemBonusTree(bonusTreeNode->ChildItemBonusTreeID, true, visitor);
     }
 }
 
-std::set<uint32> DB2Manager::GetItemBonusTree(uint32 itemId, ItemContext itemContext) const
+std::set<uint32> DB2Manager::GetDefaultItemBonusTree(uint32 itemId, ItemContext itemContext) const
 {
     std::set<uint32> bonusListIDs;
 
@@ -1685,46 +1673,66 @@ std::set<uint32> DB2Manager::GetItemBonusTree(uint32 itemId, ItemContext itemCon
     if (!proto)
         return bonusListIDs;
 
-    VisitItemBonusTree(itemId, [this, proto, itemContext, &bonusListIDs](ItemBonusTreeNodeEntry const* bonusTreeNode)
-    {
-        if (ItemContext(bonusTreeNode->ItemContext) != itemContext)
-            return;
+    auto itemIdRange = _itemToBonusTree.equal_range(itemId);
+    if (itemIdRange.first == itemIdRange.second)
+        return bonusListIDs;
 
-        if (bonusTreeNode->ChildItemBonusListID)
+    uint16 itemLevelSelectorId = 0;
+    for (auto itemTreeItr = itemIdRange.first; itemTreeItr != itemIdRange.second; ++itemTreeItr)
+    {
+        uint32 matchingNodes = 0;
+        VisitItemBonusTree(itemTreeItr->second, false, [itemContext, &matchingNodes](ItemBonusTreeNodeEntry const* bonusTreeNode)
         {
-            bonusListIDs.insert(bonusTreeNode->ChildItemBonusListID);
-        }
-        else if (bonusTreeNode->ChildItemLevelSelectorID)
+            if (ItemContext(bonusTreeNode->ItemContext) == ItemContext::NONE || itemContext == ItemContext(bonusTreeNode->ItemContext))
+                ++matchingNodes;
+        });
+
+        if (matchingNodes != 1)
+            continue;
+
+        VisitItemBonusTree(itemTreeItr->second, true, [itemContext, &bonusListIDs, &itemLevelSelectorId](ItemBonusTreeNodeEntry const* bonusTreeNode)
         {
-            ItemLevelSelectorEntry const* selector = sItemLevelSelectorStore.LookupEntry(bonusTreeNode->ChildItemLevelSelectorID);
-            if (!selector)
+            ItemContext requiredContext = ItemContext(bonusTreeNode->ItemContext) != ItemContext::Force_to_NONE ? ItemContext(bonusTreeNode->ItemContext) : ItemContext::NONE;
+            if (ItemContext(bonusTreeNode->ItemContext) != ItemContext::NONE && itemContext != requiredContext)
                 return;
 
-            int16 delta = int16(selector->MinItemLevel) - proto->ItemLevel;
-
-            if (uint32 bonus = GetItemBonusListForItemLevelDelta(delta))
-                bonusListIDs.insert(bonus);
-
-            if (ItemLevelSelectorQualitySetEntry const* selectorQualitySet = sItemLevelSelectorQualitySetStore.LookupEntry(selector->ItemLevelSelectorQualitySetID))
+            if (bonusTreeNode->ChildItemBonusListID)
             {
-                auto itemSelectorQualities = _itemLevelQualitySelectorQualities.find(selector->ItemLevelSelectorQualitySetID);
-                if (itemSelectorQualities != _itemLevelQualitySelectorQualities.end())
-                {
-                    ItemQualities quality = ITEM_QUALITY_UNCOMMON;
-                    if (selector->MinItemLevel >= selectorQualitySet->IlvlEpic)
-                        quality = ITEM_QUALITY_EPIC;
-                    else if (selector->MinItemLevel >= selectorQualitySet->IlvlRare)
-                        quality = ITEM_QUALITY_RARE;
+                bonusListIDs.insert(bonusTreeNode->ChildItemBonusListID);
+            }
+            else if (bonusTreeNode->ChildItemLevelSelectorID)
+            {
+                itemLevelSelectorId = bonusTreeNode->ChildItemLevelSelectorID;
+            }
+        });
+    }
 
-                    auto itemSelectorQuality = std::lower_bound(itemSelectorQualities->second.begin(), itemSelectorQualities->second.end(),
-                        quality, ItemLevelSelectorQualityEntryComparator{});
+    if (ItemLevelSelectorEntry const* selector = sItemLevelSelectorStore.LookupEntry(itemLevelSelectorId))
+    {
+        int16 delta = int16(selector->MinItemLevel) - proto->ItemLevel;
 
-                    if (itemSelectorQuality != itemSelectorQualities->second.end())
-                        bonusListIDs.insert((*itemSelectorQuality)->QualityItemBonusListID);
-                }
+        if (uint32 bonus = GetItemBonusListForItemLevelDelta(delta))
+            bonusListIDs.insert(bonus);
+
+        if (ItemLevelSelectorQualitySetEntry const* selectorQualitySet = sItemLevelSelectorQualitySetStore.LookupEntry(selector->ItemLevelSelectorQualitySetID))
+        {
+            auto itemSelectorQualities = _itemLevelQualitySelectorQualities.find(selector->ItemLevelSelectorQualitySetID);
+            if (itemSelectorQualities != _itemLevelQualitySelectorQualities.end())
+            {
+                ItemQualities quality = ITEM_QUALITY_UNCOMMON;
+                if (selector->MinItemLevel >= selectorQualitySet->IlvlEpic)
+                    quality = ITEM_QUALITY_EPIC;
+                else if (selector->MinItemLevel >= selectorQualitySet->IlvlRare)
+                    quality = ITEM_QUALITY_RARE;
+
+                auto itemSelectorQuality = std::lower_bound(itemSelectorQualities->second.begin(), itemSelectorQualities->second.end(),
+                    quality, ItemLevelSelectorQualityEntryComparator{});
+
+                if (itemSelectorQuality != itemSelectorQualities->second.end())
+                    bonusListIDs.insert((*itemSelectorQuality)->QualityItemBonusListID);
             }
         }
-    });
+    }
 
     return bonusListIDs;
 }
@@ -2351,7 +2359,7 @@ bool ChrClassesXPowerTypesEntryComparator::Compare(ChrClassesXPowerTypesEntry co
 
 bool ItemLevelSelectorQualityEntryComparator::Compare(ItemLevelSelectorQualityEntry const* left, ItemLevelSelectorQualityEntry const* right)
 {
-    return left->Quality > right->Quality;
+    return left->Quality < right->Quality;
 }
 
 bool DB2Manager::MountTypeXCapabilityEntryComparator::Compare(MountTypeXCapabilityEntry const* left, MountTypeXCapabilityEntry const* right)
