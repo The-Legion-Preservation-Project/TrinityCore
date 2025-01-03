@@ -2342,7 +2342,6 @@ void Item::InitArtifactPowers(uint8 artifactId, uint8 artifactTier)
             continue;
 
         ItemDynamicFieldArtifactPowers powerData;
-        memset(&powerData, 0, sizeof(powerData));
         powerData.ArtifactPowerId = artifactPower->ID;
         powerData.PurchasedRank = 0;
         powerData.CurrentRankWithBonus = (artifactPower->Flags & ARTIFACT_POWER_FLAG_FIRST) == ARTIFACT_POWER_FLAG_FIRST ? 1 : 0;

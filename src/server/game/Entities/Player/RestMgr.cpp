@@ -30,9 +30,7 @@ RestMgr::RestMgr(Player* player) : _player(player), _restTime(0), _innAreaTrigge
 
 void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
 {
-    uint8 rest_rested_offset;
-    uint8 rest_state_offset;
-    uint16 next_level_xp_field;
+    int32 next_level_xp_field;
     bool affectedByRaF = false;
 
     switch (restType)
@@ -42,8 +40,6 @@ void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
             if (_player->getLevel() >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
                 restBonus = 0;
 
-            rest_rested_offset = REST_RESTED_XP;
-            rest_state_offset = REST_STATE_XP;
             next_level_xp_field = PLAYER_NEXT_LEVEL_XP;
             affectedByRaF = true;
             break;
@@ -52,18 +48,16 @@ void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
             if (_player->IsMaxHonorLevelAndPrestige())
                 restBonus = 0;
 
-            rest_rested_offset = REST_RESTED_HONOR;
-            rest_state_offset = REST_STATE_HONOR;
             next_level_xp_field = PLAYER_FIELD_HONOR_NEXT_LEVEL;
             break;
         default:
             return;
     }
 
+    float rest_bonus_max = float(_player->GetUInt32Value(next_level_xp_field)) * 1.5f / 2;
+
     if (restBonus < 0)
         restBonus = 0;
-
-    float rest_bonus_max = float(_player->GetUInt32Value(next_level_xp_field)) * 1.5f / 2;
 
     if (restBonus > rest_bonus_max)
         restBonus = rest_bonus_max;

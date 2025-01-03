@@ -112,6 +112,7 @@ private:
 };
 
 #pragma pack(push, 1)
+
 struct ItemDynamicFieldArtifactPowers
 {
     uint32 ArtifactPowerId = 0;
