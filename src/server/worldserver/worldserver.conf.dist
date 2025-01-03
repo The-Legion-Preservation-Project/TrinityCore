@@ -767,6 +767,10 @@ CharacterCreating.Disabled = 0
 #                     8388608 - (Disabled, Pandaren Neutral)
 #                     16777216 - (Disabled, Pandaren Alliance)
 #                     33554432 - (Disabled, Pandaren Horde)
+#                     67108864 - (Disabled, Nightborne)
+#                     134217728 - (Disabled, Highmountain Tauren)
+#                     268435456 - (Disabled, Void Elf)
+#                     536870912 - (Disabled, Lightforged Draenei)
 
 CharacterCreating.Disabled.RaceMask = 0
 
@@ -786,6 +790,7 @@ CharacterCreating.Disabled.RaceMask = 0
 #                     256  - (Disabled, Warlock)
 #                     512  - (Disabled, Monk)
 #                     1024 - (Disabled, Druid)
+#                     2048 - (Disabled, Demon Hunter)
 
 CharacterCreating.Disabled.ClassMask = 0
 
