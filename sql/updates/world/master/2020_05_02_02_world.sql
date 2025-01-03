@@ -1332,19 +1332,15 @@ INSERT INTO `player_classlevelstats` (`class`, `level`, `str`, `agi`, `sta`, `in
 (12, 109, 7728, 8394, 5906, 4556),
 (12, 110, 8481, 9030, 6259, 5000);
 
-
+DROP TABLE IF EXISTS `player_racestats`;
 CREATE TABLE `player_racestats` (
-	`race` TINYINT(3) UNSIGNED NOT NULL,
-	`str` SMALLINT(6) SIGNED NOT NULL COMMENT 'strength',
-	`agi` SMALLINT(6) SIGNED NOT NULL COMMENT 'agility',
-	`sta` SMALLINT(6) SIGNED NOT NULL COMMENT 'stamina',
-	`inte` SMALLINT(6) SIGNED NOT NULL COMMENT 'intellect',
-	PRIMARY KEY (`race`)
-)
-COMMENT='Stores race stats.'
-COLLATE='utf8_general_ci'
-ENGINE=MyISAM
-;
+  `race` tinyint(3) unsigned NOT NULL,
+  `str` smallint(6) NOT NULL COMMENT 'strength',
+  `agi` smallint(6) NOT NULL COMMENT 'agility',
+  `sta` smallint(6) NOT NULL COMMENT 'stamina',
+  `inte` smallint(6) NOT NULL COMMENT 'intellect',
+  PRIMARY KEY (`race`)
+) ENGINE=MyISAM CHARSET=utf8 COMMENT='Stores race stats.';
 
 INSERT INTO `player_racestats` (`race`, `str`, `agi`, `sta`, `inte`) VALUES 
 (1, 0, 0, 0, 0),
