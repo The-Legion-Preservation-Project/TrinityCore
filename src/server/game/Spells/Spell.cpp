@@ -4608,7 +4608,7 @@ void Spell::TakeCastItem()
 
     for (ItemEffectEntry const* itemEffect : m_CastItem->GetEffects())
     {
-        if (itemEffect->LegacySlotIndex >= m_CastItem->m_itemData->SpellCharges.size())
+        if (itemEffect->LegacySlotIndex >= MAX_ITEM_SPELLS)
             continue;
 
         // item has limited charges
@@ -4795,7 +4795,7 @@ void Spell::TakeReagents()
         {
             for (ItemEffectEntry const* itemEffect : m_CastItem->GetEffects())
             {
-                if (itemEffect->LegacySlotIndex >= m_CastItem->m_itemData->SpellCharges.size())
+                if (itemEffect->LegacySlotIndex >= MAX_ITEM_SPELLS)
                     continue;
 
                 // CastItem will be used up and does not count as reagent
@@ -6366,7 +6366,7 @@ SpellCastResult Spell::CheckItems(uint32* param1 /*= nullptr*/, uint32* param2 /
             return SPELL_FAILED_ITEM_NOT_READY;
 
         for (ItemEffectEntry const* itemEffect : m_CastItem->GetEffects())
-            if (itemEffect->LegacySlotIndex < m_CastItem->m_itemData->SpellCharges.size() && itemEffect->Charges)
+            if (itemEffect->LegacySlotIndex < MAX_ITEM_SPELLS && itemEffect->Charges)
                 if (m_CastItem->GetSpellCharges(itemEffect->LegacySlotIndex) == 0)
                     return SPELL_FAILED_NO_CHARGES_REMAIN;
 
@@ -6470,7 +6470,7 @@ SpellCastResult Spell::CheckItems(uint32* param1 /*= nullptr*/, uint32* param2 /
 
                     for (ItemEffectEntry const* itemEffect : m_CastItem->GetEffects())
                     {
-                        if (itemEffect->LegacySlotIndex >= m_CastItem->m_itemData->SpellCharges.size())
+                        if (itemEffect->LegacySlotIndex >= MAX_ITEM_SPELLS)
                             continue;
 
                         // CastItem will be used up and does not count as reagent
@@ -6801,7 +6801,7 @@ SpellCastResult Spell::CheckItems(uint32* param1 /*= nullptr*/, uint32* param2 /
 
                  if (Item* item = player->GetItemByEntry(itemId))
                      for (ItemEffectEntry const* itemEffect : item->GetEffects())
-                         if (itemEffect->LegacySlotIndex <= item->m_itemData->SpellCharges.size()
+                         if (itemEffect->LegacySlotIndex <= MAX_ITEM_SPELLS
                              && itemEffect->Charges != 0
                              && item->GetSpellCharges(itemEffect->LegacySlotIndex) == itemEffect->Charges)
                              return SPELL_FAILED_ITEM_AT_MAX_CHARGES;
