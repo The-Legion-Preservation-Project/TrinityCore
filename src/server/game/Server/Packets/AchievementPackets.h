@@ -61,6 +61,16 @@ namespace WorldPackets
             AllAchievements Data;
         };
 
+        class AllAccountCriteria final : public ServerPacket
+        {
+        public:
+            AllAccountCriteria() : ServerPacket(SMSG_ALL_ACCOUNT_CRITERIA) { }
+
+            WorldPacket const* Write() override;
+
+            std::vector<CriteriaProgress> Progress;
+        };
+
         class RespondInspectAchievements final : public ServerPacket
         {
         public:
@@ -86,6 +96,16 @@ namespace WorldPackets
             time_t CurrentTime = time_t(0);
             uint32 ElapsedTime = 0;
             uint32 CreationTime = 0;
+        };
+
+        class AccountCriteriaUpdate final : public ServerPacket
+        {
+        public:
+            AccountCriteriaUpdate() : ServerPacket(SMSG_ACCOUNT_CRITERIA_UPDATE) { }
+
+            WorldPacket const* Write() override;
+
+            CriteriaProgress Progress;
         };
 
         class CriteriaDeleted final : public ServerPacket
