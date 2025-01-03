@@ -24,11 +24,10 @@
 
 struct DB2CascFileSource : public DB2FileSource
 {
-    DB2CascFileSource(std::shared_ptr<CASC::Storage const> storage, std::string fileName, bool printErrors = true);
+    DB2CascFileSource(std::shared_ptr<CASC::Storage const> storage, uint32 fileDataId, bool printErrors = true);
     bool IsOpen() const override;
     bool Read(void* buffer, std::size_t numBytes) override;
     int64 GetPosition() const override;
-    bool SetPosition(int64 position) override;
     int64 GetFileSize() const override;
     CASC::File* GetNativeHandle() const;
     char const* GetFileName() const override;

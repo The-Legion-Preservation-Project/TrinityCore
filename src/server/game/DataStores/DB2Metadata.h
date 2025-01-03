@@ -213,7 +213,7 @@ struct AreaFarClipOverrideMeta
     {
         static char const* types = "iffii";
         static uint8 const arraySizes[5] = { 1, 1, 1, 1, 1 };
-        static DB2Meta instance(4, 5, 0xEB5921CC, types, arraySizes, -1);
+        static DB2Meta instance(1537162, 4, 5, 0xEB5921CC, types, arraySizes, -1);
         return &instance;
     }
 };

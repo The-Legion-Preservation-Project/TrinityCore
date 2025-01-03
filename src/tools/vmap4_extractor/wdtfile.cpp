@@ -19,6 +19,7 @@
 #include "wdtfile.h"
 #include "adtfile.h"
 #include "Common.h"
+#include "Errors.h"
 #include "StringFormat.h"
 #include <cstdio>
 
@@ -76,7 +77,7 @@ bool WDTFile::init(uint32 mapId)
         if (!strcmp(fourcc,"MAIN"))
         {
         }
-        if (!strcmp(fourcc,"MWMO"))
+        else if (!strcmp(fourcc,"MWMO"))
         {
             // global map objects
             if (size)
@@ -140,12 +141,13 @@ ADTFile* WDTFile::GetMap(int32 x, int32 y)
     if (_adtCache && _adtCache->file[x][y])
         return _adtCache->file[x][y].get();
 
-    char name[512];
+    ADTFile* adt;
+    std::string name = Trinity::StringFormat("World\\Maps\\%s\\%s_%d_%d_obj0.adt", _mapName.c_str(), _mapName.c_str(), x, y);
+    adt = new ADTFile(name, _adtCache != nullptr);
 
-    sprintf(name, "World\\Maps\\%s\\%s_%d_%d_obj0.adt", _mapName.c_str(), _mapName.c_str(), x, y);
-    ADTFile* adt =  new ADTFile(name, _adtCache != nullptr);
     if (_adtCache)
         _adtCache->file[x][y].reset(adt);
+
     return adt;
 }
 

@@ -16,12 +16,13 @@
  */
 
 #include "DB2CascFileSource.h"
+#include "StringFormat.h"
 #include <CascLib.h>
 
-DB2CascFileSource::DB2CascFileSource(std::shared_ptr<CASC::Storage const> storage, std::string fileName, bool printErrors /*= true */)
+DB2CascFileSource::DB2CascFileSource(std::shared_ptr<CASC::Storage const> storage, uint32 fileDataId, bool printErrors /*= true */)
 {
-    _fileHandle.reset(storage->OpenFile(fileName.c_str(), CASC_LOCALE_NONE, printErrors, true));
-    _fileName = std::move(fileName);
+    _fileHandle.reset(storage->OpenFile(fileDataId, CASC_LOCALE_NONE, printErrors, true));
+    _fileName = Trinity::StringFormat("FileDataId: %u", fileDataId);
 }
 
 bool DB2CascFileSource::IsOpen() const
@@ -38,11 +39,6 @@ bool DB2CascFileSource::Read(void* buffer, std::size_t numBytes)
 int64 DB2CascFileSource::GetPosition() const
 {
     return _fileHandle->GetPointer();
-}
-
-bool DB2CascFileSource::SetPosition(int64 position)
-{
-    return _fileHandle->SetPointer(position);
 }
 
 int64 DB2CascFileSource::GetFileSize() const

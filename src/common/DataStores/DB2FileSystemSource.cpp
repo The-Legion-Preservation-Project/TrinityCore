@@ -45,11 +45,6 @@ int64 DB2FileSystemSource::GetPosition() const
     return ftell(_file);
 }
 
-bool DB2FileSystemSource::SetPosition(int64 position)
-{
-    return fseek(_file, position, SEEK_SET) == 0;
-}
-
 int64 DB2FileSystemSource::GetFileSize() const
 {
     boost::system::error_code error;

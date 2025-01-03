@@ -38,7 +38,7 @@ struct CinematicCameraLoadInfo
         };
         static char const* types = "iffi";
         static uint8 const arraySizes[4] = { 1, 3, 1, 1 };
-        static DB2Meta const meta(-1, 4, 0x0062B0F4, types, arraySizes, -1);
+        static DB2Meta const meta(1294214, -1, 4, 0x0062B0F4, types, arraySizes, -1);
         static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
         return &loadInfo;
     }
@@ -64,7 +64,7 @@ struct GameobjectDisplayInfoLoadInfo
         };
         static char const* types = "ifffh";
         static uint8 const arraySizes[5] = { 1, 6, 1, 1, 1 };
-        static DB2Meta const meta(-1, 5, 0x9F2098D1, types, arraySizes, -1);
+        static DB2Meta const meta(1266277, -1, 5, 0x9F2098D1, types, arraySizes, -1);
         static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
         return &loadInfo;
     }
@@ -82,7 +82,7 @@ struct LiquidMaterialLoadInfo
         };
         static char const* types = "bb";
         static uint8 const arraySizes[2] = { 1, 1 };
-        static DB2Meta meta(-1, 2, 0x62BE0340, types, arraySizes, -1);
+        static DB2Meta meta(1132538, -1, 2, 0x62BE0340, types, arraySizes, -1);
         static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
         return &loadInfo;
     }
@@ -103,7 +103,7 @@ struct LiquidObjectLoadInfo
         };
         static char const* types = "ffhbb";
         static uint8 const arraySizes[5] = { 1, 1, 1, 1, 1 };
-        static DB2Meta meta(-1, 5, 0xACC168A6, types, arraySizes, -1);
+        static DB2Meta meta(1308058, -1, 5, 0xACC168A6, types, arraySizes, -1);
         static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
         return &loadInfo;
     }
@@ -169,7 +169,7 @@ struct LiquidTypeLoadInfo
         };
         static char const* types = "ssifffffifihhbbbbbi";
         static uint8 const arraySizes[19] = { 1, 6, 1, 1, 1, 1, 1, 1, 2, 18, 4, 1, 1, 1, 1, 1, 1, 6, 1 };
-        static DB2Meta const meta(-1, 19, 0x3313BBF3, types, arraySizes, -1);
+        static DB2Meta const meta(1371380, -1, 19, 0x3313BBF3, types, arraySizes, -1);
         static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
         return &loadInfo;
     }
@@ -208,7 +208,7 @@ struct MapLoadInfo
         };
         static char const* types = "ssssssiffhhhhhhhbbbbb";
         static uint8 const arraySizes[21] = { 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-        static DB2Meta const meta(-1, 21, 0xF568DF12, types, arraySizes, -1);
+        static DB2Meta const meta(1349477, -1, 21, 0xF568DF12, types, arraySizes, -1);
         static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
         return &loadInfo;
     }

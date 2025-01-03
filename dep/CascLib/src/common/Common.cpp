@@ -81,6 +81,19 @@ void SetLastError(DWORD dwErrCode)
 //-----------------------------------------------------------------------------
 // Linear data stream manipulation
 
+LPBYTE CaptureInteger16_BE(LPBYTE pbDataPtr, LPBYTE pbDataEnd, PDWORD PtrValue)
+{
+    // Is there enough data?
+    if((pbDataPtr + sizeof(USHORT)) > pbDataEnd)
+        return NULL;
+
+    // Convert data from Little endian to 
+    PtrValue[0] = ConvertBytesToInteger_2(pbDataPtr);
+
+    // Return the pointer to data following after the integer
+    return pbDataPtr + sizeof(USHORT);
+}
+
 LPBYTE CaptureInteger32(LPBYTE pbDataPtr, LPBYTE pbDataEnd, PDWORD PtrValue)
 {
     // Is there enough data?
@@ -131,6 +144,49 @@ LPBYTE CaptureContentKey(LPBYTE pbDataPtr, LPBYTE pbDataEnd, PCONTENT_KEY * PtrC
 
     // Return the pointer to data following after the integer
     return pbDataPtr + sizeof(CONTENT_KEY);
+}
+
+LPBYTE CaptureEncodedKey(LPBYTE pbEKey, LPBYTE pbData, BYTE EKeyLength)
+{
+    // Two usual lengths of EKey
+    assert(EKeyLength == 0x09 || EKeyLength == 0x10);
+
+    // Copy the first 0x09 bytes
+    if(EKeyLength >= 0x09)
+    {
+        pbEKey[0x00] = pbData[0x00];
+        pbEKey[0x01] = pbData[0x01];
+        pbEKey[0x02] = pbData[0x02];
+        pbEKey[0x03] = pbData[0x03];
+        pbEKey[0x04] = pbData[0x04];
+        pbEKey[0x05] = pbData[0x05];
+        pbEKey[0x06] = pbData[0x06];
+        pbEKey[0x07] = pbData[0x07];
+        pbEKey[0x08] = pbData[0x08];
+
+        if(EKeyLength == 0x10)
+        {
+            pbEKey[0x09] = pbData[0x09];
+            pbEKey[0x0A] = pbData[0x0A];
+            pbEKey[0x0B] = pbData[0x0B];
+            pbEKey[0x0C] = pbData[0x0C];
+            pbEKey[0x0D] = pbData[0x0D];
+            pbEKey[0x0E] = pbData[0x0E];
+            pbEKey[0x0F] = pbData[0x0F];
+        }
+        else
+        {
+            pbEKey[0x09] = 0;
+            pbEKey[0x0A] = 0;
+            pbEKey[0x0B] = 0;
+            pbEKey[0x0C] = 0;
+            pbEKey[0x0D] = 0;
+            pbEKey[0x0E] = 0;
+            pbEKey[0x0F] = 0;
+        }
+    }
+
+    return pbData + EKeyLength;
 }
 
 LPBYTE CaptureArray_(LPBYTE pbDataPtr, LPBYTE pbDataEnd, LPBYTE * PtrArray, size_t ItemSize, size_t ItemCount)
@@ -229,6 +285,7 @@ size_t CascStrPrintf(char * buffer, size_t nCount, const char * format, ...)
     
 #ifdef PLATFORM_WINDOWS
     StringCchVPrintfExA(buffer, nCount, &buffend, NULL, 0, format, argList);
+//  buffend = buffer + vsnprintf(buffer, nCount, format, argList);
 #else
     buffend = buffer + vsnprintf(buffer, nCount, format, argList);
 #endif
@@ -248,6 +305,7 @@ size_t CascStrPrintf(wchar_t * buffer, size_t nCount, const wchar_t * format, ..
 
 #ifdef PLATFORM_WINDOWS
     StringCchVPrintfExW(buffer, nCount, &buffend, NULL, 0, format, argList);
+//  buffend = buffer + vswprintf(buffer, nCount, format, argList);
 #else
     buffend = buffer + vswprintf(buffer, nCount, format, argList);
 #endif
@@ -268,7 +326,7 @@ char * CascNewStr(const char * szString, size_t nCharsToReserve)
     if(szString != NULL)
     {
         nLength = strlen(szString);
-        szNewString = CASC_ALLOC(char, nLength + nCharsToReserve + 1);
+        szNewString = CASC_ALLOC<char>(nLength + nCharsToReserve + 1);
         if(szNewString != NULL)
         {
             memcpy(szNewString, szString, nLength);
@@ -287,7 +345,7 @@ wchar_t * CascNewStr(const wchar_t * szString, size_t nCharsToReserve)
     if(szString != NULL)
     {
         nLength = wcslen(szString);
-        szNewString = CASC_ALLOC(wchar_t, nLength + nCharsToReserve + 1);
+        szNewString = CASC_ALLOC<wchar_t>(nLength + nCharsToReserve + 1);
         if(szNewString != NULL)
         {
             memcpy(szNewString, szString, nLength * sizeof(wchar_t));
@@ -298,43 +356,46 @@ wchar_t * CascNewStr(const wchar_t * szString, size_t nCharsToReserve)
     return szNewString;
 }
 
-template <typename XCHAR>
-TCHAR * AppendPathFragment(TCHAR * szBuffer, TCHAR * szBufferEnd, const XCHAR * szPath, char chSeparator, bool bFirstFragment = false)
+LPSTR CascNewStrT2A(LPCTSTR szString, size_t nCharsToReserve)
 {
-    // The "Path" must not be empty
-    if(szPath && szPath[0])
+    LPSTR szNewString = NULL;
+    size_t nLength;
+
+    if(szString != NULL)
     {
-        // Append the path separator after the first fragment
-        if(szBuffer < szBufferEnd && bFirstFragment == false)
+        nLength = _tcslen(szString);
+        szNewString = CASC_ALLOC<char>(nLength + nCharsToReserve + 1);
+        if(szNewString != NULL)
         {
-            if(szBuffer[-1] != chSeparator)
-            {
-                *szBuffer++ = chSeparator;
-            }
+            CascStrCopy(szNewString, nLength + nCharsToReserve + 1, szString, nLength);
+//          szNewString[nLength] = 0;
         }
-
-        // Copy the sub path
-        while(szBuffer < szBufferEnd && szPath[0] != 0)
-        {
-            // If there is a path separator, we skip it (all of them) and put single separator there
-            if(szPath[0] == '\\' || szPath[0] == '/')
-            {
-                while(szPath[0] == '\\' || szPath[0] == '/')
-                    szPath++;
-                *szBuffer++ = chSeparator;
-            }
-            else
-            {
-                *szBuffer++ = *szPath++;
-            }
-        }
-
-        // Append end of string
-        szBuffer[0] = 0;
     }
 
-    return szBuffer;
+    return szNewString;
 }
+
+LPTSTR CascNewStrA2T(LPCSTR szString, size_t nCharsToReserve)
+{
+    LPTSTR szNewString = NULL;
+    size_t nLength;
+
+    if(szString != NULL)
+    {
+        nLength = strlen(szString);
+        szNewString = CASC_ALLOC<TCHAR>(nLength + nCharsToReserve + 1);
+        if(szNewString != NULL)
+        {
+            CascStrCopy(szNewString, nLength + nCharsToReserve + 1, szString, nLength);
+//          szNewString[nLength] = 0;
+        }
+    }
+
+    return szNewString;
+}
+
+//-----------------------------------------------------------------------------
+// String merging
 
 LPTSTR GetLastPathPart(LPTSTR szWorkPath)
 {
@@ -364,7 +425,7 @@ LPTSTR GetLastPathPart(LPTSTR szWorkPath)
     return NULL;
 }
 
-bool CutLastPathPart(TCHAR * szWorkPath)
+bool CutLastPathPart(LPTSTR szWorkPath)
 {
     // Get the last part of the path
     szWorkPath = GetLastPathPart(szWorkPath);
@@ -377,19 +438,18 @@ bool CutLastPathPart(TCHAR * szWorkPath)
 
 size_t CombinePath(LPTSTR szBuffer, size_t nMaxChars, char chSeparator, va_list argList)
 {
-    LPTSTR szSaveBuffer = szBuffer;
-    LPTSTR szBufferEnd = szBuffer + nMaxChars - 1;
-    LPTSTR szFragment;
-    bool bFirstFragment = true;
+    CASC_PATH<TCHAR> Path(chSeparator);
+    LPCTSTR szFragment;
+    bool bWithSeparator = false;
 
     // Combine all parts of the path here
     while((szFragment = va_arg(argList, LPTSTR)) != NULL)
     {
-        szBuffer = AppendPathFragment(szBuffer, szBufferEnd, szFragment, chSeparator, bFirstFragment);
-        bFirstFragment = false;
+        Path.AppendString(szFragment, bWithSeparator);
+        bWithSeparator = true;
     }
 
-    return (szBuffer - szSaveBuffer);
+    return Path.Copy(szBuffer, nMaxChars);
 }
 
 size_t CombinePath(LPTSTR szBuffer, size_t nMaxChars, char chSeparator, ...)
@@ -406,40 +466,12 @@ size_t CombinePath(LPTSTR szBuffer, size_t nMaxChars, char chSeparator, ...)
 
 LPTSTR CombinePath(LPCTSTR szDirectory, LPCTSTR szSubDir)
 {
-    LPTSTR szFullPath;
-    size_t nLength = 0;
+    CASC_PATH<TCHAR> Path(PATH_SEP_CHAR);
 
-    // Calculate length
-    if(szDirectory != NULL)
-        nLength += (_tcslen(szDirectory) + 1);
-    if(szSubDir != NULL)
-        nLength += (_tcslen(szSubDir) + 1);
-
-    // Allocate buffer
-    if((szFullPath = CASC_ALLOC(TCHAR, nLength)) != NULL)
-    {
-        CombinePath(szFullPath, nLength, PATH_SEP_CHAR, szDirectory, szSubDir, NULL);
-    }
-
-    return szFullPath;
-}
-
-size_t CreateCascSubdirectoryName(LPTSTR szBuffer, size_t nMaxChars, LPCTSTR szSubDir, LPCTSTR szExtension, LPBYTE pbEKey)
-{
-    TCHAR * szSaveBuffer = szBuffer;
-    TCHAR * szBufferEnd = szBuffer + nMaxChars - 1;
-    char szHashSubPath[0x80];
-    char szHashText[MD5_STRING_SIZE+1];
-
-    // Prepare the subpath
-    StringFromBinary(pbEKey, MD5_HASH_SIZE, szHashText);
-    CascStrPrintf(szHashSubPath, _countof(szHashSubPath), "%02x/%02x/%s", pbEKey[0], pbEKey[1], szHashText);
-
-    // Combine the path together
-    szBuffer = AppendPathFragment(szBuffer, szBufferEnd, szSubDir, URL_SEP_CHAR, true);
-    szBuffer = AppendPathFragment(szBuffer, szBufferEnd, szHashSubPath, URL_SEP_CHAR);
-    szBuffer = AppendPathFragment(szBuffer, szBufferEnd, szExtension, URL_SEP_CHAR, true);
-    return (szBuffer - szSaveBuffer);
+    // Merge the path
+    Path.AppendString(szDirectory, false);
+    Path.AppendString(szSubDir, true);
+    return Path.New();
 }
 
 size_t NormalizeFileName(const unsigned char * NormTable, char * szNormName, const char * szFileName, size_t cchMaxChars)
@@ -488,7 +520,7 @@ ULONGLONG CalcFileNameHash(const char * szFileName)
     return CalcNormNameHash(szNormName, nLength);
 }
 
-int ConvertDigitToInt32(const TCHAR * szString, PDWORD PtrValue)
+DWORD ConvertDigitToInt32(LPCTSTR szString, PDWORD PtrValue)
 {
     BYTE Digit;
 
@@ -500,7 +532,7 @@ int ConvertDigitToInt32(const TCHAR * szString, PDWORD PtrValue)
     return (Digit > 0x0F) ? ERROR_BAD_FORMAT : ERROR_SUCCESS;
 }
 
-int ConvertStringToInt08(const char * szString, PDWORD PtrValue)
+DWORD ConvertStringToInt08(LPCSTR szString, PDWORD PtrValue)
 {
     BYTE DigitOne = AsciiToUpperTable_BkSlash[szString[0]] - '0';
     BYTE DigitTwo = AsciiToUpperTable_BkSlash[szString[1]] - '0';
@@ -516,7 +548,7 @@ int ConvertStringToInt08(const char * szString, PDWORD PtrValue)
     return (DigitOne <= 0x0F && DigitTwo <= 0x0F) ? ERROR_SUCCESS : ERROR_BAD_FORMAT;
 }
 
-int ConvertStringToInt32(const TCHAR * szString, size_t nMaxDigits, PDWORD PtrValue)
+DWORD ConvertStringToInt32(LPCTSTR szString, size_t nMaxDigits, PDWORD PtrValue)
 {
     // The number of digits must be even
     assert((nMaxDigits & 0x01) == 0);
@@ -551,8 +583,8 @@ int ConvertStringToInt32(const TCHAR * szString, size_t nMaxDigits, PDWORD PtrVa
 }
 
 // Converts string blob to binary blob.
-int ConvertStringToBinary(
-    const char * szString,
+DWORD ConvertStringToBinary(
+    LPCSTR szString,
     size_t nMaxDigits,
     LPBYTE pbBinary)
 {
@@ -583,32 +615,6 @@ int ConvertStringToBinary(
     }
 
     return ERROR_SUCCESS;
-}
-
-char * StringFromBinary(LPBYTE pbBinary, size_t cbBinary, char * szBuffer)
-{
-    char * szSaveBuffer = szBuffer;
-
-    // Verify the binary pointer
-    if(pbBinary && cbBinary)
-    {
-        // Convert the string to the array of MD5
-        // Copy the blob data as text
-        for(size_t i = 0; i < cbBinary; i++)
-        {
-            *szBuffer++ = IntToHexChar[pbBinary[i] >> 0x04];
-            *szBuffer++ = IntToHexChar[pbBinary[i] & 0x0F];
-        }
-    }
-
-    // Terminate the string
-    *szBuffer = 0;
-    return szSaveBuffer;
-}
-
-char * StringFromMD5(LPBYTE md5, char * szBuffer)
-{
-    return StringFromBinary(md5, MD5_HASH_SIZE, szBuffer);
 }
 
 //-----------------------------------------------------------------------------
@@ -693,10 +699,8 @@ bool CascCheckWildCard(const char * szString, const char * szWildCard)
         {
             if(szWildCardPtr[0] == '*')
             {
-                szWildCardPtr++;
-
-                if(szWildCardPtr[0] == '*')
-                    continue;
+                while(szWildCardPtr[0] == '*')
+                    szWildCardPtr++;
 
                 if(szWildCardPtr[0] == 0)
                     return true;

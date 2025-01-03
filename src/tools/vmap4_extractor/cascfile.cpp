@@ -25,7 +25,7 @@ CASCFile::CASCFile(std::shared_ptr<CASC::Storage const> casc, const char* filena
     pointer(0),
     size(0)
 {
-    std::unique_ptr<CASC::File> file(casc->OpenFile(filename, CASC_LOCALE_ALL, false));
+    std::unique_ptr<CASC::File> file(casc->OpenFile(filename, CASC_LOCALE_ALL_WOW, false));
     if (!file)
     {
         if (warnNoExist || GetLastError() != ERROR_FILE_NOT_FOUND)
@@ -35,6 +35,24 @@ CASCFile::CASCFile(std::shared_ptr<CASC::Storage const> casc, const char* filena
     }
 
     init(file.get(), filename);
+}
+
+CASCFile::CASCFile(std::shared_ptr<CASC::Storage const> casc, uint32 fileDataId, std::string const& description, bool warnNoExist /*= true*/) :
+    eof(false),
+    buffer(nullptr),
+    pointer(0),
+    size(0)
+{
+    std::unique_ptr<CASC::File> file(casc->OpenFile(fileDataId, CASC_LOCALE_ALL_WOW, false));
+    if (!file)
+    {
+        if (warnNoExist || GetLastError() != ERROR_FILE_NOT_FOUND)
+            fprintf(stderr, "Can't open %s: %s\n", description.c_str(), CASC::HumanReadableCASCError(GetLastError()));
+        eof = true;
+        return;
+    }
+
+    init(file.get(), description.c_str());
 }
 
 void CASCFile::init(CASC::File* file, const char* description)

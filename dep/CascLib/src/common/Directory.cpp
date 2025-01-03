@@ -15,7 +15,7 @@
 //-----------------------------------------------------------------------------
 // Public functions
 
-bool DirectoryExists(const TCHAR * szDirectory)
+bool DirectoryExists(LPCTSTR szDirectory)
 {
 #ifdef PLATFORM_WINDOWS
 
@@ -38,7 +38,7 @@ bool DirectoryExists(const TCHAR * szDirectory)
     return false;
 }
 
-bool MakeDirectory(const TCHAR * szDirectory)
+bool MakeDirectory(LPCTSTR szDirectory)
 {
 #ifdef PLATFORM_WINDOWS
 
@@ -53,16 +53,14 @@ bool MakeDirectory(const TCHAR * szDirectory)
 }
 
 int ScanIndexDirectory(
-    const TCHAR * szIndexPath,
+    LPCTSTR szIndexPath,
     INDEX_FILE_FOUND pfnOnFileFound,
-    PDWORD MainIndexes,
-    PDWORD OldIndexArray,
     void * pvContext)
 {
 #ifdef PLATFORM_WINDOWS
 
     WIN32_FIND_DATA wf;
-    TCHAR * szSearchMask;
+    LPTSTR szSearchMask;
     HANDLE hFind;
 
     // Prepare the search mask
@@ -81,7 +79,7 @@ int ScanIndexDirectory(
             if(!(wf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
                 // Let the callback scan the file name
-                pfnOnFileFound(wf.cFileName, MainIndexes, OldIndexArray, pvContext);
+                pfnOnFileFound(wf.cFileName, pvContext);
             }
         }
 
@@ -103,7 +101,7 @@ int ScanIndexDirectory(
         {
             if(dir_entry->d_type != DT_DIR)
             {
-                pfnOnFileFound(dir_entry->d_name, MainIndexes, OldIndexArray, pvContext);
+                pfnOnFileFound(dir_entry->d_name, pvContext);
             }
         }
 

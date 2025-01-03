@@ -18,6 +18,7 @@
 #include "vmapexport.h"
 #include "adtfile.h"
 #include "cascfile.h"
+#include "StringFormat.h"
 #include "vec3d.h"
 #include "VMapDefinitions.h"
 #include "wmo.h"
@@ -82,6 +83,8 @@ bool WMORoot::open()
         }
         else if (!strcmp(fourcc,"MODN"))
         {
+            ASSERT(!DoodadData.FileDataIds);
+
             char* ptr = f.getPointer();
             char* end = ptr + size;
             DoodadData.Paths = std::make_unique<char[]>(size);
@@ -99,6 +102,23 @@ bool WMORoot::open()
 
                 if (ExtractSingleModel(path))
                     ValidDoodadNames.insert(doodadNameIndex);
+            }
+        }
+        else if (!strcmp(fourcc, "MODI"))
+        {
+            ASSERT(!DoodadData.Paths);
+
+            uint32 fileDataIdCount = size / sizeof(uint32);
+            DoodadData.FileDataIds = std::make_unique<uint32[]>(fileDataIdCount);
+            f.read(DoodadData.FileDataIds.get(), size);
+            for (uint32 i = 0; i < fileDataIdCount; ++i)
+            {
+                if (!DoodadData.FileDataIds[i])
+                    continue;
+
+                std::string path = Trinity::StringFormat("FILE%08X.xxx", DoodadData.FileDataIds[i]);
+                if (ExtractSingleModel(path))
+                    ValidDoodadNames.insert(i);
             }
         }
         else if (!strcmp(fourcc,"MODD"))

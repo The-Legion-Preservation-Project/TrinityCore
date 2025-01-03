@@ -29,7 +29,6 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <cstdio>
-#include <deque>
 #include <fstream>
 #include <set>
 #include <unordered_map>
@@ -42,6 +41,7 @@ struct MapEntry
 {
     uint32 Id = 0;
     std::string Name;
+    std::string Directory;
 };
 
 struct LiquidMaterialEntry
@@ -64,7 +64,7 @@ std::vector<MapEntry> map_ids;
 std::unordered_map<uint32, LiquidMaterialEntry> LiquidMaterials;
 std::unordered_map<uint32, LiquidObjectEntry> LiquidObjects;
 std::unordered_map<uint32, LiquidTypeEntry> LiquidTypes;
-std::set<std::string> CameraFileNames;
+std::set<uint32> CameraFileDataIds;
 boost::filesystem::path input_path;
 boost::filesystem::path output_path;
 
@@ -215,29 +215,41 @@ void HandleArgs(int argc, char* arg[])
     }
 }
 
+void TryLoadDB2(char const* name, DB2CascFileSource* source, DB2FileLoader* db2, DB2FileLoadInfo const* loadInfo)
+{
+    try
+    {
+        db2->Load(source, loadInfo);
+    }
+    catch (std::exception const& e)
+    {
+        printf("Fatal error: Invalid %s file format! %s\n%s\n", name, CASC::HumanReadableCASCError(GetLastError()), e.what());
+        exit(1);
+    }
+}
+
 void ReadMapDBC()
 {
     printf("Read Map.db2 file...\n");
 
-    DB2CascFileSource source(CascStorage, "DBFilesClient\\Map.db2");
+    DB2CascFileSource source(CascStorage, MapLoadInfo::Instance()->Meta->FileDataId);
     DB2FileLoader db2;
-    if (!db2.Load(&source, MapLoadInfo::Instance()))
-    {
-        printf("Fatal error: Invalid Map.db2 file format! %s\n", CASC::HumanReadableCASCError(GetLastError()));
-        exit(1);
-    }
+    TryLoadDB2("Map.db2", &source, &db2, MapLoadInfo::Instance());
 
-    map_ids.resize(db2.GetRecordCount());
-    std::unordered_map<uint32, uint32> idToIndex;
+    map_ids.reserve(db2.GetRecordCount());
+    std::unordered_map<uint32, std::size_t> idToIndex;
     for (uint32 x = 0; x < db2.GetRecordCount(); ++x)
     {
         DB2Record record = db2.GetRecord(x);
         if (!record)
             continue;
 
-        map_ids[x].Id = record.GetId();
-        map_ids[x].Name = record.GetString("Directory");
-        idToIndex[map_ids[x].Id] = x;
+        MapEntry map;
+        map.Id = record.GetId();
+        map.Name = record.GetString("MapName");
+        map.Directory = record.GetString("Directory");
+        idToIndex[map.Id] = map_ids.size();
+        map_ids.push_back(map);
     }
 
     for (uint32 x = 0; x < db2.GetRecordCopyCount(); ++x)
@@ -246,10 +258,11 @@ void ReadMapDBC()
         auto itr = idToIndex.find(copy.SourceRowId);
         if (itr != idToIndex.end())
         {
-            MapEntry id;
-            id.Id = copy.NewRowId;
-            id.Name = map_ids[itr->second].Name;
-            map_ids.push_back(id);
+            MapEntry map;
+            map.Id = copy.NewRowId;
+            map.Name = map_ids[itr->second].Name;
+            map.Directory = map_ids[itr->second].Directory;
+            map_ids.push_back(map);
         }
     }
 
@@ -260,13 +273,9 @@ void ReadLiquidMaterialTable()
 {
     printf("Read LiquidMaterial.db2 file...\n");
 
-    DB2CascFileSource source(CascStorage, "DBFilesClient\\LiquidMaterial.db2");
+    DB2CascFileSource source(CascStorage, LiquidMaterialLoadInfo::Instance()->Meta->FileDataId);
     DB2FileLoader db2;
-    if (!db2.Load(&source, LiquidMaterialLoadInfo::Instance()))
-    {
-        printf("Fatal error: Invalid LiquidMaterial.db2 file format!\n");
-        exit(1);
-    }
+    TryLoadDB2("LiquidMaterial.db2", &source, &db2, LiquidMaterialLoadInfo::Instance());
 
     for (uint32 x = 0; x < db2.GetRecordCount(); ++x)
     {
@@ -288,13 +297,9 @@ void ReadLiquidObjectTable()
 {
     printf("Read LiquidObject.db2 file...\n");
 
-    DB2CascFileSource source(CascStorage, "DBFilesClient\\LiquidObject.db2");
+    DB2CascFileSource source(CascStorage, LiquidObjectLoadInfo::Instance()->Meta->FileDataId);
     DB2FileLoader db2;
-    if (!db2.Load(&source, LiquidObjectLoadInfo::Instance()))
-    {
-        printf("Fatal error: Invalid LiquidObject.db2 file format!\n");
-        exit(1);
-    }
+    TryLoadDB2("LiquidObject.db2", &source, &db2, LiquidObjectLoadInfo::Instance());
 
     for (uint32 x = 0; x < db2.GetRecordCount(); ++x)
     {
@@ -316,13 +321,9 @@ void ReadLiquidTypeTable()
 {
     printf("Read LiquidType.db2 file...\n");
 
-    DB2CascFileSource source(CascStorage, "DBFilesClient\\LiquidType.db2");
+    DB2CascFileSource source(CascStorage, LiquidTypeLoadInfo::Instance()->Meta->FileDataId);
     DB2FileLoader db2;
-    if (!db2.Load(&source, LiquidTypeLoadInfo::Instance()))
-    {
-        printf("Fatal error: Invalid LiquidType.db2 file format!\n");
-        exit(1);
-    }
+    TryLoadDB2("LiquidType.db2", &source, &db2, LiquidTypeLoadInfo::Instance());
 
     for (uint32 x = 0; x < db2.GetRecordCount(); ++x)
     {
@@ -345,19 +346,21 @@ bool ReadCinematicCameraDBC()
 {
     printf("Read CinematicCamera.db2 file...\n");
 
-    DB2CascFileSource source(CascStorage, "DBFilesClient\\CinematicCamera.db2");
+    DB2CascFileSource source(CascStorage, CinematicCameraLoadInfo::Instance()->Meta->FileDataId);
     DB2FileLoader db2;
-    if (!db2.Load(&source, CinematicCameraLoadInfo::Instance()))
-    {
-        printf("Invalid CinematicCamera.db2 file format. Camera extract aborted. %s\n", CASC::HumanReadableCASCError(GetLastError()));
-        return false;
-    }
+    TryLoadDB2("CinematicCamera.db2", &source, &db2, CinematicCameraLoadInfo::Instance());
 
     // get camera file list from DB2
     for (size_t i = 0; i < db2.GetRecordCount(); ++i)
-        CameraFileNames.insert(Trinity::StringFormat("FILE%08X.xxx", db2.GetRecord(i).GetUInt32("FileDataID")));
+    {
+        DB2Record record = db2.GetRecord(i);
+        if (!record)
+            continue;
 
-    printf("Done! (" SZFMTD " CinematicCameras loaded)\n", CameraFileNames.size());
+        CameraFileDataIds.insert(record.GetUInt32("FileDataID"));
+    }
+
+    printf("Done! (" SZFMTD " CinematicCameras loaded)\n", CameraFileDataIds.size());
     return true;
 }
 
@@ -1103,7 +1106,7 @@ void ExtractMaps(uint32 build)
     {
         printf("Extract %s (" SZFMTD "/" SZFMTD ")                  \n", map_ids[z].Name.c_str(), z + 1, map_ids.size());
         // Loadup map grid data
-        storagePath = Trinity::StringFormat("World\\Maps\\%s\\%s.wdt", map_ids[z].Name, map_ids[z].Name);
+        storagePath = Trinity::StringFormat("World\\Maps\\%s\\%s.wdt", map_ids[z].Directory, map_ids[z].Directory);
         ChunkedFile wdt;
         if (!wdt.loadFile(CascStorage, storagePath, false))
             continue;
@@ -1116,10 +1119,10 @@ void ExtractMaps(uint32 build)
                 if (!(main->As<wdt_MAIN>()->adt_list[y][x].flag & 0x1))
                     continue;
 
-                outputFileName =  Trinity::StringFormat("%s/maps/%04u_%02u_%02u.map", output_path.string().c_str(), map_ids[z].Id, y, x);
+                outputFileName = Trinity::StringFormat("%s/maps/%04u_%02u_%02u.map", output_path.string().c_str(), map_ids[z].Id, y, x);
                 bool ignoreDeepWater = IsDeepWaterIgnored(map_ids[z].Id, y, x);
-                std::string storagePath = Trinity::StringFormat("World\\Maps\\%s\\%s_%u_%u.adt", map_ids[z].Name.c_str(), map_ids[z].Name.c_str(), x, y);
-                ConvertADT(storagePath, map_ids[z].Name, outputFileName, y, x, build, ignoreDeepWater);
+                std::string adtStoragePath = Trinity::StringFormat("World\\Maps\\%s\\%s_%u_%u.adt", map_ids[z].Directory.c_str(), map_ids[z].Directory.c_str(), x, y);
+                ConvertADT(adtStoragePath, map_ids[z].Name, outputFileName, y, x, build, ignoreDeepWater);
             }
 
             // draw progress bar
@@ -1174,6 +1177,60 @@ bool ExtractFile(CASC::File* fileInArchive, std::string const& filename)
     return true;
 }
 
+bool ExtractDB2File(uint32 fileDataId, char const* cascFileName, int locale, boost::filesystem::path const& outputPath)
+{
+    DB2CascFileSource source(CascStorage, fileDataId, false);
+    if (!source.IsOpen())
+    {
+        printf("Unable to open file %s in the archive for locale %s: %s\n", cascFileName, localeNames[locale], CASC::HumanReadableCASCError(GetLastError()));
+        return false;
+    }
+
+    int64 fileSize = source.GetFileSize();
+    if (fileSize == -1)
+    {
+        printf("Can't read file size of '%s'\n", cascFileName);
+        return false;
+    }
+
+    std::string outputFileName = outputPath.string();
+    FILE* output = fopen(outputFileName.c_str(), "wb");
+    if (!output)
+    {
+        printf("Can't create the output file '%s'\n", outputFileName.c_str());
+        return false;
+    }
+
+    char buffer[0x10000];
+    uint32 readBatchSize = 0x10000;
+    uint32 readBytes;
+
+    do
+    {
+        readBytes = 0;
+        if (!source.GetNativeHandle()->ReadFile(buffer, std::min<uint32>(fileSize, readBatchSize), &readBytes))
+        {
+            printf("Can't read file '%s'\n", outputFileName.c_str());
+            fclose(output);
+            boost::filesystem::remove(outputPath);
+            return false;
+        }
+
+        if (!readBytes)
+            break;
+
+        fwrite(buffer, 1, readBytes, output);
+        fileSize -= readBytes;
+        readBatchSize = 0x10000;
+        if (!fileSize) // now we have read entire file
+            break;
+
+    } while (true);
+
+    fclose(output);
+    return true;
+}
+
 char const* GetCascFilenamePart(char const* cascPath)
 {
     if (char const* lastSep = strrchr(cascPath, '\\'))
@@ -1194,19 +1251,13 @@ void ExtractDBFilesClient(int l)
     printf("locale %s output path %s\n", localeNames[l], localePath.string().c_str());
 
     uint32 count = 0;
-    for (char const* fileName : DBFilesClientList)
+    for (DB2FileInfo const& db2 : DBFilesClientList)
     {
-        std::unique_ptr<CASC::File> dbcFile(CascStorage->OpenFile(fileName, CASC_LOCALE_NONE));
-        if (dbcFile)
-        {
-            boost::filesystem::path filePath = localePath / GetCascFilenamePart(fileName);
+        boost::filesystem::path filePath = localePath / db2.Name;
 
-            if (!boost::filesystem::exists(filePath))
-                if (ExtractFile(dbcFile.get(), filePath.string()))
-                    ++count;
-        }
-        else
-            printf("Unable to open file %s in the archive for locale %s: %s\n", fileName, localeNames[l], CASC::HumanReadableCASCError(GetLastError()));
+        if (!boost::filesystem::exists(filePath))
+            if (ExtractDB2File(db2.FileDataId, db2.Name, l, filePath.string()))
+                ++count;
     }
 
     printf("Extracted %u files\n\n", count);
@@ -1227,19 +1278,19 @@ void ExtractCameraFiles()
 
     // extract M2s
     uint32 count = 0;
-    for (std::string const& cameraFileName : CameraFileNames)
+    for (uint32 cameraFileDataId : CameraFileDataIds)
     {
-        std::unique_ptr<CASC::File> cameraFile(CascStorage->OpenFile(cameraFileName.c_str(), CASC_LOCALE_NONE));
+        std::unique_ptr<CASC::File> cameraFile(CascStorage->OpenFile(cameraFileDataId, CASC_LOCALE_NONE));
         if (cameraFile)
         {
-            boost::filesystem::path filePath = outputPath / GetCascFilenamePart(cameraFileName.c_str());
+            boost::filesystem::path filePath = outputPath / Trinity::StringFormat("FILE%08X.xxx", cameraFileDataId);
 
             if (!boost::filesystem::exists(filePath))
                 if (ExtractFile(cameraFile.get(), filePath.string()))
                     ++count;
         }
         else
-            printf("Unable to open file %s in the archive: %s\n", cameraFileName.c_str(), CASC::HumanReadableCASCError(GetLastError()));
+            printf("Unable to open file %u in the archive: %s\n", cameraFileDataId, CASC::HumanReadableCASCError(GetLastError()));
     }
 
     printf("Extracted %u camera files\n", count);
@@ -1255,57 +1306,56 @@ void ExtractGameTables()
 
     printf("output path %s\n", outputPath.string().c_str());
 
-    char const* GameTables[] =
+    DB2FileInfo GameTables[] =
     {
-        "GameTables\\ArmorMitigationByLvl.txt",
-        "GameTables\\ArtifactKnowledgeMultiplier.txt",
-        "GameTables\\ArtifactLevelXP.txt",
-        "GameTables\\BarberShopCostBase.txt",
-        "GameTables\\BaseMp.txt",
-        "GameTables\\BattlePetTypeDamageMod.txt",
-        "GameTables\\BattlePetXP.txt",
-        "GameTables\\ChallengeModeDamage.txt",
-        "GameTables\\ChallengeModeHealth.txt",
-        "GameTables\\CombatRatings.txt",
-        "GameTables\\CombatRatingsMultByILvl.txt",
-        "GameTables\\HonorLevel.txt",
-        "GameTables\\HpPerSta.txt",
-        "GameTables\\ItemSocketCostPerLevel.txt",
-        "GameTables\\NpcDamageByClass.txt",
-        "GameTables\\NpcDamageByClassExp1.txt",
-        "GameTables\\NpcDamageByClassExp2.txt",
-        "GameTables\\NpcDamageByClassExp3.txt",
-        "GameTables\\NpcDamageByClassExp4.txt",
-        "GameTables\\NpcDamageByClassExp5.txt",
-        "GameTables\\NpcDamageByClassExp6.txt",
-        "GameTables\\NPCManaCostScaler.txt",
-        "GameTables\\NpcTotalHp.txt",
-        "GameTables\\NpcTotalHpExp1.txt",
-        "GameTables\\NpcTotalHpExp2.txt",
-        "GameTables\\NpcTotalHpExp3.txt",
-        "GameTables\\NpcTotalHpExp4.txt",
-        "GameTables\\NpcTotalHpExp5.txt",
-        "GameTables\\NpcTotalHpExp6.txt",
-        "GameTables\\SandboxScaling.txt",
-        "GameTables\\SpellScaling.txt",
-        "GameTables\\xp.txt",
-        nullptr
+        { 1385707, "ArmorMitigationByLvl.txt" },
+        { 1582086, "ArtifactKnowledgeMultiplier.txt" },
+        { 1391662, "ArtifactLevelXP.txt" },
+        { 1391663, "BarberShopCostBase.txt" },
+        { 1391664, "BaseMp.txt" },
+        { 1391665, "BattlePetTypeDamageMod.txt" },
+        { 1391666, "BattlePetXP.txt" },
+        { 1391667, "ChallengeModeDamage.txt" },
+        { 1391668, "ChallengeModeHealth.txt" },
+        { 1391669, "CombatRatings.txt" },
+        { 1391670, "CombatRatingsMultByILvl.txt" },
+        { 1391671, "HonorLevel.txt" },
+        { 1391642, "HpPerSta.txt" },
+        { 1391643, "ItemSocketCostPerLevel.txt" },
+        { 1391644, "NpcDamageByClass.txt" },
+        { 1391645, "NpcDamageByClassExp1.txt" },
+        { 1391646, "NpcDamageByClassExp2.txt" },
+        { 1391647, "NpcDamageByClassExp3.txt" },
+        { 1391648, "NpcDamageByClassExp4.txt" },
+        { 1391649, "NpcDamageByClassExp5.txt" },
+        { 1391650, "NpcDamageByClassExp6.txt" },
+        { 1391651, "NPCManaCostScaler.txt" },
+        { 1391652, "NpcTotalHp.txt" },
+        { 1391653, "NpcTotalHpExp1.txt" },
+        { 1391654, "NpcTotalHpExp2.txt" },
+        { 1391655, "NpcTotalHpExp3.txt" },
+        { 1391656, "NpcTotalHpExp4.txt" },
+        { 1391657, "NpcTotalHpExp5.txt" },
+        { 1391658, "NpcTotalHpExp6.txt" },
+        { 1391659, "SandboxScaling.txt" },
+        { 1391660, "SpellScaling.txt" },
+        { 1391661, "xp.txt" }
     };
 
     uint32 count = 0;
-    for (char const* fileName : GameTables)
+    for (DB2FileInfo const& gt : GameTables)
     {
-        std::unique_ptr<CASC::File> dbcFile(CascStorage->OpenFile(fileName, CASC_LOCALE_NONE));
+        std::unique_ptr<CASC::File> dbcFile(CascStorage->OpenFile(gt.FileDataId, CASC_LOCALE_NONE));
         if (dbcFile)
         {
-            boost::filesystem::path filePath = outputPath / GetCascFilenamePart(fileName);
+            boost::filesystem::path filePath = outputPath / gt.Name;
 
             if (!boost::filesystem::exists(filePath))
                 if (ExtractFile(dbcFile.get(), filePath.string()))
                     ++count;
         }
         else
-            printf("Unable to open file %s in the archive: %s\n", fileName, CASC::HumanReadableCASCError(GetLastError()));
+            printf("Unable to open file %s in the archive: %s\n", gt.Name, CASC::HumanReadableCASCError(GetLastError()));
     }
 
     printf("Extracted %u files\n\n", count);

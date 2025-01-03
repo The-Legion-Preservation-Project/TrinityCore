@@ -22,7 +22,7 @@
 
 struct TC_COMMON_API DB2Meta
 {
-    DB2Meta(int32 indexField, uint32 fieldCount, uint32 layoutHash, char const* types, uint8 const* arraySizes, int32 parentIndexField);
+    DB2Meta(uint32 fileDataId, int32 indexField, uint32 fieldCount, uint32 layoutHash, char const* types, uint8 const* arraySizes, int32 parentIndexField);
 
     bool HasIndexFieldInData() const;
 
@@ -37,6 +37,7 @@ struct TC_COMMON_API DB2Meta
     uint32 GetDbIndexField() const;
     uint32 GetDbFieldCount() const;
 
+    uint32 FileDataId;
     int32 IndexField;
     int32 ParentIndexField;
     uint32 FieldCount;

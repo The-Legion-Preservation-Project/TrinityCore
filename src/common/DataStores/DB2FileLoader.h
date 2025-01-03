@@ -27,6 +27,7 @@ struct DB2FieldMeta;
 struct DB2Meta;
 
 #pragma pack(push, 1)
+
 struct DB2Header
 {
     uint32 Signature;
@@ -81,8 +82,6 @@ struct TC_COMMON_API DB2FileSource
 
     // Returns current read position in file
     virtual int64 GetPosition() const = 0;
-
-    virtual bool SetPosition(int64 position) = 0;
 
     virtual int64 GetFileSize() const = 0;
 

@@ -94,7 +94,7 @@ class CASC_MAP
         Free();
     }
 
-    int Create(size_t MaxItems, size_t KeyLength, size_t KeyOffset, KEY_TYPE KeyType = KeyIsHash)
+    DWORD Create(size_t MaxItems, size_t KeyLength, size_t KeyOffset, KEY_TYPE KeyType = KeyIsHash)
     {
         // Set the class variables
         m_KeyLength = CASCLIB_MAX(KeyLength, 8);
@@ -129,13 +129,8 @@ class CASC_MAP
             return ERROR_NOT_ENOUGH_MEMORY;
 
         // Allocate new map for the objects
-        m_HashTable = (void **)CASC_ALLOC(void *, m_HashTableSize);
-        if(m_HashTable == NULL)
-            return ERROR_NOT_ENOUGH_MEMORY;
-
-        // Initialize the map object
-        memset(m_HashTable, 0, m_HashTableSize * sizeof(void *));
-        return ERROR_SUCCESS;
+        m_HashTable = (void **)CASC_ALLOC_ZERO<void *>(m_HashTableSize);
+        return (m_HashTable != NULL) ? ERROR_SUCCESS : ERROR_NOT_ENOUGH_MEMORY;
     }
 
     void * FindObject(void * pvKey, PDWORD PtrIndex = NULL)
@@ -336,7 +331,7 @@ class CASC_MAP
         size_t PowerOfTwo;
         
         // Round the hash table size up to the nearest power of two
-        for(PowerOfTwo = MIN_HASH_TABLE_SIZE; PowerOfTwo < MAX_HASH_TABLE_SIZE; PowerOfTwo <<= 1)
+        for(PowerOfTwo = MIN_HASH_TABLE_SIZE; PowerOfTwo <= MAX_HASH_TABLE_SIZE; PowerOfTwo <<= 1)
         {
             if(PowerOfTwo > MaxItems)
             {

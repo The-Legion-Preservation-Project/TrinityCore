@@ -36,7 +36,7 @@ ChunkedFile::~ChunkedFile()
 bool ChunkedFile::loadFile(std::shared_ptr<CASC::Storage const> mpq, std::string const& fileName, bool log)
 {
     free();
-    std::unique_ptr<CASC::File> file(mpq->OpenFile(fileName.c_str(), CASC_LOCALE_ALL, log));
+    std::unique_ptr<CASC::File> file(mpq->OpenFile(fileName.c_str(), CASC_LOCALE_ALL_WOW, log));
     if (!file)
         return false;
 
@@ -63,7 +63,7 @@ bool ChunkedFile::loadFile(std::shared_ptr<CASC::Storage const> mpq, std::string
 bool ChunkedFile::loadFile(std::shared_ptr<CASC::Storage const> mpq, uint32 fileDataId, std::string const& description, bool log)
 {
     free();
-    std::unique_ptr<CASC::File> file(mpq->OpenFile(fileDataId, CASC_LOCALE_ALL, log));
+    std::unique_ptr<CASC::File> file(mpq->OpenFile(fileDataId, CASC_LOCALE_ALL_WOW, log));
     if (!file)
         return false;
 
