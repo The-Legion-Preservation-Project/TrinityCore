@@ -142,6 +142,20 @@ CreatureModel const* CreatureTemplate::GetFirstVisibleModel() const
     return &CreatureModel::DefaultVisibleModel;
 }
 
+std::pair<int16, int16> CreatureTemplate::GetMinMaxLevel() const
+{
+    return
+    {
+        HealthScalingExpansion != EXPANSION_LEVEL_CURRENT ? minlevel : minlevel + MAX_LEVEL,
+        HealthScalingExpansion != EXPANSION_LEVEL_CURRENT ? maxlevel : maxlevel + MAX_LEVEL
+    };
+}
+
+int32 CreatureTemplate::GetHealthScalingExpansion() const
+{
+    return HealthScalingExpansion == EXPANSION_LEVEL_CURRENT ? CURRENT_EXPANSION : HealthScalingExpansion;
+}
+
 void CreatureTemplate::InitializeQueryData()
 {
     WorldPacket queryTemp;
@@ -190,7 +204,7 @@ WorldPacket CreatureTemplate::BuildQueryData(LocaleConstant loc) const
 
     stats.CreatureMovementInfoID = movementId;
     stats.RequiredExpansion = RequiredExpansion;
-    stats.HealthScalingExpansion = HealthScalingExpansion;
+    stats.HealthScalingExpansion = GetHealthScalingExpansion();
     stats.VignetteID = VignetteID;
 
     stats.Title = SubName;
@@ -1364,8 +1378,9 @@ void Creature::SelectLevel()
     CreatureTemplate const* cInfo = GetCreatureTemplate();
 
     // level
-    uint8 minlevel = std::min(cInfo->maxlevel, cInfo->minlevel);
-    uint8 maxlevel = std::max(cInfo->maxlevel, cInfo->minlevel);
+    std::pair<int16, int16> levels = cInfo->GetMinMaxLevel();
+    uint8 minlevel = std::min(levels.first, levels.second);
+    uint8 maxlevel = std::max(levels.first, levels.second);
     uint8 level = minlevel == maxlevel ? minlevel : urand(minlevel, maxlevel);
     SetLevel(level);
 
@@ -2733,12 +2748,24 @@ uint8 Creature::GetLevelForTarget(WorldObject const* target) const
         // between UNIT_FIELD_SCALING_LEVEL_MIN and UNIT_FIELD_SCALING_LEVEL_MAX
         if (HasScalableLevels())
         {
-            uint8 targetLevelWithDelta = unitTarget->getLevel() + GetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA);
+            int32 scalingLevelMin = GetInt32Value(UNIT_FIELD_SCALING_LEVEL_MIN);
+            int32 scalingLevelMax = GetInt32Value(UNIT_FIELD_SCALING_LEVEL_MAX);
+            int32 scalingLevelDelta = GetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA);
+            int32 targetLevel = GetInt32Value(UNIT_FIELD_EFFECTIVE_LEVEL);
+            if (!targetLevel)
+                targetLevel = unitTarget->getLevel();
 
-            if (target->IsPlayer())
-                targetLevelWithDelta += target->GetUInt32Value(PLAYER_FIELD_SCALING_PLAYER_LEVEL_DELTA);
+            int32 targetLevelDelta = 0;
 
-            return RoundToInterval<uint8>(targetLevelWithDelta, GetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MIN), GetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MAX));
+            if (Player const* playerTarget = target->ToPlayer())
+            {
+                int32 maxCreatureScalingLevel = playerTarget->GetUInt32Value(PLAYER_FIELD_MAX_CREATURE_SCALING_LEVEL);
+                targetLevelDelta = std::min(maxCreatureScalingLevel > 0 ? maxCreatureScalingLevel - targetLevel : 0, playerTarget->GetInt32Value(PLAYER_FIELD_SCALING_PLAYER_LEVEL_DELTA));
+            }
+
+            int32 levelWithDelta = targetLevel + targetLevelDelta;
+            int32 level = RoundToInterval(levelWithDelta, scalingLevelMin, scalingLevelMax) + scalingLevelDelta;
+            return RoundToInterval(level, 1, MAX_LEVEL + 3);
         }
     }
 
