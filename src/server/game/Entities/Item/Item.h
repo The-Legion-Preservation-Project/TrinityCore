@@ -24,6 +24,7 @@
 #include "ItemDefines.h"
 #include "ItemEnchantmentMgr.h"
 #include "ItemTemplate.h"
+#include "IteratorPair.h"
 #include "Loot.h"
 
 class SpellInfo;
@@ -63,7 +64,6 @@ enum ItemUpdateState
     ITEM_REMOVED                                 = 3
 };
 
-
 #define MAX_ITEM_SPELLS 5
 
 bool ItemCanGoIntoBag(ItemTemplate const* proto, ItemTemplate const* pBagProto);
@@ -94,6 +94,8 @@ struct BonusData
     int32 RequiredLevelOverride;
     bool HasItemLevelBonus;
     uint32 Suffix;
+    std::array<ItemEffectEntry const*, 13> Effects;
+    std::size_t EffectCount;
     bool HasFixedLevel;
 
     void Initialize(ItemTemplate const* proto);
@@ -313,6 +315,12 @@ class TC_GAME_API Item : public Object
         ItemDisenchantLootEntry const* GetDisenchantLoot(Player const* owner) const;
         static ItemDisenchantLootEntry const* GetDisenchantLoot(ItemTemplate const* itemTemplate, uint32 quality, uint32 itemLevel);
         void SetFixedLevel(uint8 level);
+        Trinity::IteratorPair<ItemEffectEntry const* const*> GetEffects() const { return { std::make_pair(&_bonusData.Effects[0], &_bonusData.Effects[0] + _bonusData.EffectCount) }; }
+        ItemEffectEntry const* GetEffect(std::size_t i) const
+        {
+            ASSERT(i < _bonusData.EffectCount, "Attempted to get effect at index " SZFMTD " but item has only " SZFMTD " effects!", i, _bonusData.EffectCount);
+            return _bonusData.Effects[i];
+        }
 
         // Item Refund system
         void SetNotRefundable(Player* owner, bool changestate = true, CharacterDatabaseTransaction* trans = nullptr, bool addToCollection = true);

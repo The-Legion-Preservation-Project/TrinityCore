@@ -354,8 +354,9 @@ bool Item::Create(ObjectGuid::LowType guidlow, uint32 itemId, ItemContext contex
 
     for (std::size_t i = 0; i < itemProto->Effects.size(); ++i)
     {
-        if (i < 5)
-            SetSpellCharges(i, itemProto->Effects[i]->Charges);
+        if (itemProto->Effects[i]->LegacySlotIndex < 5)
+            SetSpellCharges(itemProto->Effects[i]->LegacySlotIndex, itemProto->Effects[i]->Charges);
+
         if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itemProto->Effects[i]->SpellID))
             if (owner && spellInfo->HasEffect(SPELL_EFFECT_GIVE_ARTIFACT_POWER))
                 if (uint32 artifactKnowledgeLevel = sWorld->getIntConfig(CONFIG_CURRENCY_START_ARTIFACT_KNOWLEDGE))
@@ -451,7 +452,7 @@ void Item::SaveToDB(CharacterDatabaseTransaction& trans)
 
             std::ostringstream ssSpells;
             if (ItemTemplate const* itemProto = sObjectMgr->GetItemTemplate(GetEntry()))
-                for (uint8 i = 0; i < itemProto->Effects.size(); ++i)
+                for (uint8 i = 0; i < itemProto->Effects.size() && i < _bonusData.EffectCount; ++i)
                     ssSpells << GetSpellCharges(i) << ' ';
             stmt->setString(++index, ssSpells.str());
 
@@ -729,11 +730,6 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
         need_save = true;
     }
 
-    Tokenizer tokens(fields[6].GetString(), ' ', proto->Effects.size());
-    if (tokens.size() == proto->Effects.size())
-        for (uint8 i = 0; i < proto->Effects.size(); ++i)
-            SetSpellCharges(i, atoi(tokens[i]));
-
     SetItemFlags(ItemFieldFlags(itemFlags));
 
     uint32 durability = fields[11].GetUInt16();
@@ -780,6 +776,12 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
         uint32 bonusListID = atoul(token);
         AddBonuses(bonusListID);
     }
+
+    // load charges after bonuses, they can add more item effects
+    Tokenizer tokens(fields[6].GetString(), ' ', proto->Effects.size());
+    if (tokens.size() == proto->Effects.size())
+        for (uint8 i = 0; i < proto->Effects.size(); ++i)
+            SetSpellCharges(i, atoi(tokens[i]));
 
     SetModifier(ITEM_MODIFIER_TRANSMOG_APPEARANCE_ALL_SPECS, fields[21].GetUInt32());
     SetModifier(ITEM_MODIFIER_TRANSMOG_APPEARANCE_SPEC_1, fields[22].GetUInt32());
@@ -2543,6 +2545,13 @@ void BonusData::Initialize(ItemTemplate const* proto)
     RequiredLevelOverride = 0;
 
     Suffix = 0;
+
+    EffectCount = 0;
+    for (ItemEffectEntry const* itemEffect : proto->Effects)
+        Effects[EffectCount++] = itemEffect;
+
+    for (std::size_t i = EffectCount; i < Effects.size(); ++i)
+        Effects[i] = nullptr;
 
     _state.SuffixPriority = std::numeric_limits<int32>::max();
     _state.AppearanceModPriority = std::numeric_limits<int32>::max();
