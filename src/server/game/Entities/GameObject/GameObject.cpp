@@ -42,6 +42,7 @@
 #include "SpellMgr.h"
 #include "Transport.h"
 #include "UpdateFieldFlags.h"
+#include "GossipDef.h"
 #include "World.h"
 #include <G3D/Quat.h>
 #include <sstream>
@@ -885,7 +886,6 @@ void GameObject::Update(uint32 diff)
             break;
         }
     }
-    sScriptMgr->OnGameObjectUpdate(this, diff);
 }
 
 void GameObject::Refresh()
@@ -1416,9 +1416,7 @@ void GameObject::Use(Unit* user)
 
     if (Player* playerUser = user->ToPlayer())
     {
-        if (sScriptMgr->OnGossipHello(playerUser, this))
-            return;
-
+        playerUser->PlayerTalkClass->ClearMenus();
         if (AI()->GossipHello(playerUser, false))
             return;
     }
@@ -2285,7 +2283,7 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
         case GO_DESTRUCTIBLE_DAMAGED:
         {
             EventInform(m_goInfo->destructibleBuilding.DamagedEvent, eventInvoker);
-            sScriptMgr->OnGameObjectDamaged(this, eventInvoker);
+            AI()->Damaged(eventInvoker, m_goInfo->destructibleBuilding.DamagedEvent);
 
             RemoveFlag(GO_FLAG_DESTROYED);
             AddFlag(GO_FLAG_DAMAGED);
@@ -2309,8 +2307,8 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
         }
         case GO_DESTRUCTIBLE_DESTROYED:
         {
-            sScriptMgr->OnGameObjectDestroyed(this, eventInvoker);
             EventInform(m_goInfo->destructibleBuilding.DestroyedEvent, eventInvoker);
+            AI()->Destroyed(eventInvoker, m_goInfo->destructibleBuilding.DestroyedEvent);
             if (eventInvoker)
                 if (Battleground* bg = eventInvoker->GetBattleground())
                     bg->DestroyGate(eventInvoker, this);
@@ -2363,8 +2361,7 @@ void GameObject::SetLootState(LootState state, Unit* unit)
     else
         m_lootStateUnitGUID.Clear();
 
-    AI()->OnStateChanged(state, unit);
-    sScriptMgr->OnGameObjectLootStateChanged(this, state, unit);
+    AI()->OnLootStateChanged(state, unit);
 
     if (GetGoType() == GAMEOBJECT_TYPE_DOOR) // only set collision for doors on SetGoState
         return;
@@ -2383,7 +2380,8 @@ void GameObject::SetLootState(LootState state, Unit* unit)
 void GameObject::SetGoState(GOState state)
 {
     SetByteValue(GAMEOBJECT_BYTES_1, 0, state);
-    sScriptMgr->OnGameObjectStateChanged(this, state);
+    if (AI())
+        AI()->OnStateChanged(state);
     if (m_model && !IsTransport())
     {
         if (!IsInWorld())
