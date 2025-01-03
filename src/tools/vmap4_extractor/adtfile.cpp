@@ -74,7 +74,7 @@ char* GetExtension(char* FileName)
     return NULL;
 }
 
-extern CASC::StorageHandle CascStorage;
+extern std::shared_ptr<CASC::Storage> CascStorage;
 
 ADTFile::ADTFile(char* filename, bool cache) : _file(CascStorage, filename, false)
 {

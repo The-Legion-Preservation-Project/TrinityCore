@@ -40,12 +40,17 @@ bool DB2FileSystemSource::Read(void* buffer, std::size_t numBytes)
     return fread(buffer, numBytes, 1, _file) == 1;
 }
 
-std::size_t DB2FileSystemSource::GetPosition() const
+int64 DB2FileSystemSource::GetPosition() const
 {
     return ftell(_file);
 }
 
-std::size_t DB2FileSystemSource::GetFileSize() const
+bool DB2FileSystemSource::SetPosition(int64 position)
+{
+    return fseek(_file, position, SEEK_SET) == 0;
+}
+
+int64 DB2FileSystemSource::GetFileSize() const
 {
     boost::system::error_code error;
     std::size_t size = boost::filesystem::file_size(_fileName, error);

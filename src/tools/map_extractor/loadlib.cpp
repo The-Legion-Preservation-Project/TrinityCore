@@ -24,7 +24,7 @@ u_map_fcc MverMagic = { { 'R','E','V','M' } };
 
 ChunkedFile::ChunkedFile()
 {
-    data = 0;
+    data = nullptr;
     data_size = 0;
 }
 
@@ -33,21 +33,21 @@ ChunkedFile::~ChunkedFile()
     free();
 }
 
-bool ChunkedFile::loadFile(CASC::StorageHandle const& mpq, std::string const& fileName, bool log)
+bool ChunkedFile::loadFile(std::shared_ptr<CASC::Storage const> mpq, std::string const& fileName, bool log)
 {
     free();
-    CASC::FileHandle file = CASC::OpenFile(mpq, fileName.c_str(), CASC_LOCALE_ALL, log);
+    std::unique_ptr<CASC::File> file(mpq->OpenFile(fileName.c_str(), CASC_LOCALE_ALL, log));
     if (!file)
         return false;
 
-    DWORD fileSize = CASC::GetFileSize(file, nullptr);
-    if (fileSize == CASC_INVALID_SIZE)
+    int64 fileSize = file->GetSize();
+    if (fileSize == -1)
         return false;
 
-    data_size = fileSize;
+    data_size = uint32(fileSize);
     data = new uint8[data_size];
-    DWORD bytesRead = 0;
-    if (!CASC::ReadFile(file, data, data_size, &bytesRead) || bytesRead != data_size)
+    uint32 bytesRead = 0;
+    if (!file->ReadFile(data, data_size, &bytesRead) || bytesRead != data_size)
         return false;
 
     parseChunks();
@@ -55,6 +55,33 @@ bool ChunkedFile::loadFile(CASC::StorageHandle const& mpq, std::string const& fi
         return true;
 
     printf("Error loading %s\n", fileName.c_str());
+    free();
+
+    return false;
+}
+
+bool ChunkedFile::loadFile(std::shared_ptr<CASC::Storage const> mpq, uint32 fileDataId, std::string const& description, bool log)
+{
+    free();
+    std::unique_ptr<CASC::File> file(mpq->OpenFile(fileDataId, CASC_LOCALE_ALL, log));
+    if (!file)
+        return false;
+
+    int64 fileSize = file->GetSize();
+    if (fileSize == -1)
+        return false;
+
+    data_size = fileSize;
+    data = new uint8[data_size];
+    uint32 bytesRead = 0;
+    if (!file->ReadFile(data, data_size, &bytesRead) || bytesRead != data_size)
+        return false;
+
+    parseChunks();
+    if (prepareLoadedData())
+        return true;
+
+    printf("Error loading %s\n", description.c_str());
     free();
 
     return false;
@@ -77,13 +104,13 @@ bool ChunkedFile::prepareLoadedData()
 
 void ChunkedFile::free()
 {
-    for (auto chunk : chunks)
+    for (auto& chunk : chunks)
         delete chunk.second;
 
     chunks.clear();
 
     delete[] data;
-    data = 0;
+    data = nullptr;
     data_size = 0;
 }
 
@@ -96,7 +123,9 @@ u_map_fcc InterestingChunks[] =
     { { 'T', 'V', 'C', 'M' } },
     { { 'O', 'M', 'W', 'M' } },
     { { 'Q', 'L', 'C', 'M' } },
-    { { 'O', 'B', 'F', 'M' } }
+    { { 'O', 'B', 'F', 'M' } },
+    { { 'D', 'H', 'P', 'M' } },
+    { { 'D', 'I', 'A', 'M' } }
 };
 
 bool IsInterestingChunk(u_map_fcc const& fcc)
@@ -142,12 +171,12 @@ FileChunk* ChunkedFile::GetChunk(std::string const& name)
     if (std::distance(range.first, range.second) == 1)
         return range.first->second;
 
-    return NULL;
+    return nullptr;
 }
 
 FileChunk::~FileChunk()
 {
-    for (auto subchunk : subchunks)
+    for (auto& subchunk : subchunks)
         delete subchunk.second;
 
     subchunks.clear();
@@ -186,5 +215,5 @@ FileChunk* FileChunk::GetSubChunk(std::string const& name)
     if (std::distance(range.first, range.second) == 1)
         return range.first->second;
 
-    return NULL;
+    return nullptr;
 }

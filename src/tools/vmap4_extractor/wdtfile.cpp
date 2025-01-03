@@ -31,7 +31,7 @@ char * wdtGetPlainName(char * FileName)
     return FileName;
 }
 
-extern CASC::StorageHandle CascStorage;
+extern std::shared_ptr<CASC::Storage> CascStorage;
 
 WDTFile::WDTFile(char const* storagePath, std::string mapName, bool cache)
     : _file(CascStorage, storagePath), _mapName(std::move(mapName))

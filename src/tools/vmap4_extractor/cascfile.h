@@ -38,8 +38,9 @@ class CASCFile
     CASCFile& operator=(const CASCFile &f) = delete;
 
 public:
-    CASCFile(CASC::StorageHandle const& casc, const char* filename, bool warnNoExist = true);    // filenames are not case sensitive
+    CASCFile(std::shared_ptr<CASC::Storage const> casc, const char* filename, bool warnNoExist = true);    // filenames are not case sensitive
     ~CASCFile() { close(); }
+    void init(CASC::File* file, const char* description);
     size_t read(void* dest, size_t bytes);
     size_t getSize() { return size; }
     size_t getPos() { return pointer; }

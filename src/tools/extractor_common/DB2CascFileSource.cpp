@@ -18,9 +18,9 @@
 #include "DB2CascFileSource.h"
 #include <CascLib.h>
 
-DB2CascFileSource::DB2CascFileSource(CASC::StorageHandle const& storage, std::string fileName)
+DB2CascFileSource::DB2CascFileSource(std::shared_ptr<CASC::Storage const> storage, std::string fileName, bool printErrors /*= true */)
 {
-    _fileHandle = CASC::OpenFile(storage, fileName.c_str(), CASC_LOCALE_NONE, true);
+    _fileHandle.reset(storage->OpenFile(fileName.c_str(), CASC_LOCALE_NONE, printErrors, true));
     _fileName = std::move(fileName);
 }
 
@@ -31,21 +31,28 @@ bool DB2CascFileSource::IsOpen() const
 
 bool DB2CascFileSource::Read(void* buffer, std::size_t numBytes)
 {
-    DWORD bytesRead = 0;
-    return CASC::ReadFile(_fileHandle, buffer, numBytes, &bytesRead) && numBytes == bytesRead;
+    uint32 bytesRead = 0;
+    return _fileHandle->ReadFile(buffer, numBytes, &bytesRead) && numBytes == bytesRead;
 }
 
-std::size_t DB2CascFileSource::GetPosition() const
+int64 DB2CascFileSource::GetPosition() const
 {
-    return CASC::GetFilePointer(_fileHandle);
+    return _fileHandle->GetPointer();
 }
 
-std::size_t DB2CascFileSource::GetFileSize() const
+bool DB2CascFileSource::SetPosition(int64 position)
 {
-    DWORD sizeLow = 0;
-    DWORD sizeHigh = 0;
-    sizeLow = CASC::GetFileSize(_fileHandle, &sizeHigh);
-    return std::size_t(uint64(sizeLow) | (uint64(sizeHigh) << 32));
+    return _fileHandle->SetPointer(position);
+}
+
+int64 DB2CascFileSource::GetFileSize() const
+{
+    return _fileHandle->GetSize();
+}
+
+CASC::File* DB2CascFileSource::GetNativeHandle() const
+{
+    return _fileHandle.get();
 }
 
 char const* DB2CascFileSource::GetFileName() const
