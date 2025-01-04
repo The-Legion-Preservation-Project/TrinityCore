@@ -202,6 +202,16 @@ SpellCastResult SpellScript::CheckCastHandler::Call(SpellScript* spellScript)
     return (spellScript->*_checkCastHandlerScript)();
 }
 
+void SpellScript::OnCalcCastTimeHandler::Call(SpellScript* spellScript, int32& castTime)
+{
+    (spellScript->*_onCalcCastTimeHandlerScript)(castTime);
+}
+
+SpellScript::OnCalcCastTimeHandler::OnCalcCastTimeHandler(SpellOnCalcCastTimeFnType OnCalcCastTimeHandlerScript)
+{
+    _onCalcCastTimeHandlerScript = OnCalcCastTimeHandlerScript;
+}
+
 SpellScript::EffectHandler::EffectHandler(SpellEffectFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName)
     : _SpellScript::EffectNameCheck(_effName), _SpellScript::EffectHook(_effIndex)
 {

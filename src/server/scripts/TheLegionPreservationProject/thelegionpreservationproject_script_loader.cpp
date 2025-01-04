@@ -20,10 +20,12 @@ void AddCustomLfgScripts();
 
 // spells
 void AddCustomWarriorSpellScripts();
+void AddCustomShamanSpellScripts();
 
 void AddTheLegionPreservationProjectScripts()
 {
     AddCustomLfgScripts();
 
     AddCustomWarriorSpellScripts();
+    AddCustomShamanSpellScripts();
 }

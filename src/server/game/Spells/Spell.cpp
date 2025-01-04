@@ -3073,6 +3073,8 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
     else
         m_casttime = m_spellInfo->CalcCastTime(m_caster->getLevel(), this);
 
+    CallScriptOnCalcCastTimeHandlers();
+
     // don't allow channeled spells / spells with cast time to be cast while moving
     // exception are only channeled spells that have no casttime and SPELL_ATTR5_CAN_CHANNEL_WHEN_MOVING
     // (even if they are interrupted on moving, spells with almost immediate effect get to have their effect processed before movement interrupter kicks in)
@@ -7591,6 +7593,18 @@ void Spell::CallScriptAfterCastHandlers()
         for (; hookItr != hookItrEnd; ++hookItr)
             (*hookItr).Call(*scritr);
 
+        (*scritr)->_FinishScriptCall();
+    }
+}
+
+void Spell::CallScriptOnCalcCastTimeHandlers()
+{
+    for (auto scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end(); ++scritr)
+    {
+        (*scritr)->_PrepareScriptCall(SPELL_SCRIPT_HOOK_CALC_CAST_TIME);
+        auto hookItrEnd = (*scritr)->OnCalcCastTime.end(), hookItr = (*scritr)->OnCalcCastTime.begin();
+        for (; hookItr != hookItrEnd; ++hookItr)
+            (*hookItr).Call(*scritr, m_casttime);
         (*scritr)->_FinishScriptCall();
     }
 }
