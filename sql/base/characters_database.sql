@@ -466,6 +466,7 @@ CREATE TABLE `character_aura` (
   `spell` int(10) unsigned NOT NULL,
   `effectMask` int(10) unsigned NOT NULL,
   `recalculateMask` int(10) unsigned NOT NULL DEFAULT '0',
+  `difficulty` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `stackCount` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `maxDuration` int(11) NOT NULL DEFAULT '0',
   `remainTime` int(11) NOT NULL DEFAULT '0',
@@ -3156,6 +3157,7 @@ CREATE TABLE `pet_aura` (
   `spell` int(10) unsigned NOT NULL,
   `effectMask` int(10) unsigned NOT NULL,
   `recalculateMask` int(10) unsigned NOT NULL DEFAULT '0',
+  `difficulty` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `stackCount` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `maxDuration` int(11) NOT NULL DEFAULT '0',
   `remainTime` int(11) NOT NULL DEFAULT '0',
@@ -3574,8 +3576,8 @@ INSERT INTO `updates` VALUES
 ('2020_04_20_00_characters.sql','6E95279485BBA63CF57AA85ADD58A826F3E8296A','RELEASED','2020-04-20 19:08:18',0),
 ('2020_04_25_00_characters_2017_04_03_00_characters.sql','00FA3EFADAF807AC96619A3FE47216E21C3FCB19','RELEASED','2020-04-25 00:00:00',0),
 ('2020_04_26_00_characters_2017_04_12_00_characters.sql','86AA94DA9B1EA283101100886C10F648C0CE6494','RELEASED','2020-04-26 00:00:00',0),
-('2020_04_26_01_characters_2017_04_12_01_characters.sql','5A8A1215E3A2356722F52CD7A64BBE03D21FBEA3','RELEASED','2020-04-26 00:00:00',0);
-
+('2020_04_26_01_characters_2017_04_12_01_characters.sql','5A8A1215E3A2356722F52CD7A64BBE03D21FBEA3','RELEASED','2020-04-26 00:00:00',0),
+('2020_06_12_00_characters.sql','DF16C99EFACA4DFADDDF35644AAC63F9B4AA2BD6','RELEASED','2020-06-11 16:24:56',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 

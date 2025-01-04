@@ -157,7 +157,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petnumber, bool c
         return false;
 
     uint32 summonSpellId = fields[14].GetUInt32();
-    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(summonSpellId);
+    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(summonSpellId, owner->GetMap()->GetDifficultyID());
 
     bool isTemporarySummon = spellInfo && spellInfo->GetDuration() > 0;
     if (current && isTemporarySummon)
@@ -1165,8 +1165,8 @@ void Pet::_LoadAuras(uint32 timediff)
     stmt->setUInt32(0, m_charmInfo->GetPetNumber());
 
     /*
-                    0      1           2                3           4            5           6              7
-    SELECT casterGuid, spell, effectMask, recalculateMask, stackCount, maxDuration, remainTime, remainCharges FROM pet_aura WHERE guid = ?
+                    0      1           2                3           4           5            6           7              8
+    SELECT casterGuid, spell, effectMask, recalculateMask, difficulty, stackCount, maxDuration, remainTime, remainCharges FROM pet_aura WHERE guid = ?
     */
     if (PreparedQueryResult auraResult = CharacterDatabase.Query(stmt))
     {
@@ -1180,15 +1180,22 @@ void Pet::_LoadAuras(uint32 timediff)
 
             AuraKey key{ casterGuid, itemGuid, fields[1].GetUInt32(), fields[2].GetUInt32() };
             uint32 recalculateMask = fields[3].GetUInt32();
-            uint8 stackCount = fields[4].GetUInt8();
-            int32 maxDuration = fields[5].GetInt32();
-            int32 remainTime = fields[6].GetInt32();
-            uint8 remainCharges = fields[7].GetUInt8();
+            Difficulty difficulty = Difficulty(fields[4].GetUInt8());
+            uint8 stackCount = fields[5].GetUInt8();
+            int32 maxDuration = fields[6].GetInt32();
+            int32 remainTime = fields[7].GetInt32();
+            uint8 remainCharges = fields[8].GetUInt8();
 
-            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(key.SpellId);
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(key.SpellId, difficulty);
             if (!spellInfo)
             {
-                TC_LOG_ERROR("entities.pet", "Unknown aura (spellid %u), ignore.", key.SpellId);
+                TC_LOG_ERROR("entities.pet", "Pet::_LoadAuras: Unknown aura (spellid %u), ignore.", key.SpellId);
+                continue;
+            }
+
+            if (difficulty != DIFFICULTY_NONE && !sDifficultyStore.LookupEntry(difficulty))
+            {
+                TC_LOG_ERROR("entities.pet", "Pet::_LoadAuras: Unknown difficulty %u (spellid %u), ignore.", uint32(difficulty), key.SpellId);
                 continue;
             }
 
@@ -1214,7 +1221,7 @@ void Pet::_LoadAuras(uint32 timediff)
 
             AuraLoadEffectInfo& info = effectInfo[key];
             ObjectGuid castId = ObjectGuid::Create<HighGuid::Cast>(SPELL_CAST_SOURCE_NORMAL, GetMapId(), spellInfo->Id, GetMap()->GenerateLowGuid<HighGuid::Cast>());
-            if (Aura* aura = Aura::TryCreate(spellInfo, castId, key.EffectMask, this, NULL, info.BaseAmounts.data(), NULL, casterGuid))
+            if (Aura* aura = Aura::TryCreate(spellInfo, castId, key.EffectMask, this, NULL, difficulty, info.BaseAmounts.data(), NULL, casterGuid))
             {
                 if (!aura->CanBeSaved())
                 {
@@ -1263,6 +1270,7 @@ void Pet::_SaveAuras(CharacterDatabaseTransaction& trans)
         stmt->setUInt32(index++, key.SpellId);
         stmt->setUInt32(index++, key.EffectMask);
         stmt->setUInt32(index++, recalculateMask);
+        stmt->setUInt8(index++, aura->GetCastDifficulty());
         stmt->setUInt8(index++, aura->GetStackAmount());
         stmt->setInt32(index++, aura->GetMaxDuration());
         stmt->setInt32(index++, aura->GetDuration());
@@ -1290,7 +1298,7 @@ void Pet::_SaveAuras(CharacterDatabaseTransaction& trans)
 
 bool Pet::addSpell(uint32 spellId, ActiveStates active /*= ACT_DECIDE*/, PetSpellState state /*= PETSPELL_NEW*/, PetSpellType type /*= PETSPELL_NORMAL*/)
 {
-    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
+    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId, DIFFICULTY_NONE);
     if (!spellInfo)
     {
         // do pet spell book cleanup
@@ -1356,7 +1364,7 @@ bool Pet::addSpell(uint32 spellId, ActiveStates active /*= ACT_DECIDE*/, PetSpel
             if (itr2->second.state == PETSPELL_REMOVED)
                 continue;
 
-            SpellInfo const* oldRankSpellInfo = sSpellMgr->GetSpellInfo(itr2->first);
+            SpellInfo const* oldRankSpellInfo = sSpellMgr->GetSpellInfo(itr2->first, DIFFICULTY_NONE);
 
             if (!oldRankSpellInfo)
                 continue;
@@ -1449,7 +1457,7 @@ void Pet::InitLevelupSpellsForLevel()
     {
         for (uint8 i = 0; i < MAX_CREATURE_SPELL_DATA_SLOT; ++i)
         {
-            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(defSpells->spellid[i]);
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(defSpells->spellid[i], DIFFICULTY_NONE);
             if (!spellInfo)
                 continue;
 
@@ -1538,7 +1546,7 @@ void Pet::CleanupActionBar()
                     m_charmInfo->SetActionBar(i, 0, ACT_PASSIVE);
                 else if (ab->GetType() == ACT_ENABLED)
                 {
-                    if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(ab->GetAction()))
+                    if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(ab->GetAction(), DIFFICULTY_NONE))
                         ToggleAutocast(spellInfo, true);
                 }
             }
@@ -1780,7 +1788,7 @@ void Pet::LearnSpecializationSpells()
         for (size_t j = 0; j < specSpells->size(); ++j)
         {
             SpecializationSpellsEntry const* specSpell = specSpells->at(j);
-            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(specSpell->SpellID);
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(specSpell->SpellID, DIFFICULTY_NONE);
             if (!spellInfo || spellInfo->SpellLevel > getLevel())
                 continue;
 

@@ -297,7 +297,7 @@ class TC_GAME_API SpellCastTargets
 
 struct SpellValue
 {
-    explicit  SpellValue(Difficulty diff, SpellInfo const* proto);
+    explicit  SpellValue(SpellInfo const* proto);
     int32     EffectBasePoints[MAX_SPELL_EFFECTS];
     uint32    MaxAffectedTargets;
     float     RadiusMod;
@@ -674,6 +674,7 @@ class TC_GAME_API Spell
         Unit* GetCaster() const { return m_caster; }
         Unit* GetOriginalCaster() const { return m_originalCaster; }
         SpellInfo const* GetSpellInfo() const { return m_spellInfo; }
+        Difficulty GetCastDifficulty() const;
         std::vector<SpellPowerCost> const& GetPowerCost() const { return m_powerCost; }
 
         bool UpdatePointers();                              // must be used at call Spell code after time delay (non triggered spell cast/update spell call/etc)
@@ -681,17 +682,6 @@ class TC_GAME_API Spell
         void CleanupTargetList();
 
         void SetSpellValue(SpellValueMod mod, int32 value);
-
-        std::vector<SpellEffectInfo const*> const& GetEffects() const { return _effects; }
-        SpellEffectInfo const* GetEffect(uint32 index) const
-        {
-            if (index >= _effects.size())
-                return nullptr;
-
-            return _effects[index];
-        }
-
-        bool HasEffect(SpellEffectName effect) const;
 
         Spell** m_selfContainer;                            // pointer to our spell container (if applicable)
 
@@ -904,8 +894,6 @@ class TC_GAME_API Spell
 
         Spell(Spell const& right) = delete;
         Spell& operator=(Spell const& right) = delete;
-
-        std::vector<SpellEffectInfo const*> _effects;
 };
 
 namespace Trinity

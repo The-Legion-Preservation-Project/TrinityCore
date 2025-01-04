@@ -246,5 +246,5 @@ void DynamicObject::UnbindFromCaster()
 
 SpellInfo const* DynamicObject::GetSpellInfo() const
 {
-    return sSpellMgr->GetSpellInfo(GetSpellId());
+    return sSpellMgr->GetSpellInfo(GetSpellId(), GetMap()->GetDifficultyID());
 }

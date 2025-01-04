@@ -16,6 +16,7 @@
  */
 
 #include "DatabaseEnv.h"
+#include "DB2Stores.h"
 #include "Log.h"
 #include "World.h"
 #include "Util.h"
@@ -84,7 +85,7 @@ void LoadSkillDiscoveryTable()
         if (reqSkillOrSpell > 0)                            // spell case
         {
             uint32 absReqSkillOrSpell = uint32(reqSkillOrSpell);
-            SpellInfo const* reqSpellInfo = sSpellMgr->GetSpellInfo(absReqSkillOrSpell);
+            SpellInfo const* reqSpellInfo = sSpellMgr->GetSpellInfo(absReqSkillOrSpell, DIFFICULTY_NONE);
             if (!reqSpellInfo)
             {
                 if (reportedReqSpells.find(absReqSkillOrSpell) == reportedReqSpells.end())
@@ -139,18 +140,18 @@ void LoadSkillDiscoveryTable()
         TC_LOG_ERROR("sql.sql", "Some items can't be successfully discovered, their chance field value is < 0.000001 in the `skill_discovery_template` DB table. List:\n%s", ssNonDiscoverableEntries.str().c_str());
 
     // report about empty data for explicit discovery spells
-    for (uint32 spell_id = 1; spell_id < sSpellMgr->GetSpellInfoStoreSize(); ++spell_id)
+    for (SpellEntry const* spellEntry : sSpellStore)
     {
-        SpellInfo const* spellEntry = sSpellMgr->GetSpellInfo(spell_id);
-        if (!spellEntry)
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellEntry->ID, DIFFICULTY_NONE);
+        if (!spellInfo)
             continue;
 
         // skip not explicit discovery spells
-        if (!spellEntry->IsExplicitDiscovery())
+        if (!spellInfo->IsExplicitDiscovery())
             continue;
 
-        if (SkillDiscoveryStore.find(int32(spell_id)) == SkillDiscoveryStore.end())
-            TC_LOG_ERROR("sql.sql", "Spell (ID: %u) has got 100%% chance random discovery ability, but does not have data in the `skill_discovery_template` table.", spell_id);
+        if (SkillDiscoveryStore.find(int32(spellInfo->Id)) == SkillDiscoveryStore.end())
+            TC_LOG_ERROR("sql.sql", "Spell (ID: %u) has got 100%% chance random discovery ability, but does not have data in the `skill_discovery_template` table.", spellInfo->Id);
     }
 
     TC_LOG_INFO("server.loading", ">> Loaded %u skill discovery definitions in %u ms.", count, GetMSTimeDiffToNow(oldMSTime));
