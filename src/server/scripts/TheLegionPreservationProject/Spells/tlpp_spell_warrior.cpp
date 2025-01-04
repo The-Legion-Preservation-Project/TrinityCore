@@ -29,9 +29,9 @@ enum WarriorSpells
 };
 
 //190456 - Ignore Pain
-class spell_warr_ignore_pain : public SpellScript
+class tlpp_spell_warr_ignore_pain : public SpellScript
 {
-    PrepareSpellScript(spell_warr_ignore_pain);
+    PrepareSpellScript(tlpp_spell_warr_ignore_pain);
 
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
@@ -51,14 +51,14 @@ class spell_warr_ignore_pain : public SpellScript
 
     void Register() override
     {
-        OnEffectHitTarget += SpellEffectFn(spell_warr_ignore_pain::HandleDummy, EFFECT_1, SPELL_EFFECT_DUMMY);
+        OnEffectHitTarget += SpellEffectFn(tlpp_spell_warr_ignore_pain::HandleDummy, EFFECT_1, SPELL_EFFECT_DUMMY);
     }
 };
 
 //190456 - Ignore Pain
-class aura_warr_ignore_pain : public AuraScript
+class tlpp_aura_warr_ignore_pain : public AuraScript
 {
-    PrepareAuraScript(aura_warr_ignore_pain);
+    PrepareAuraScript(tlpp_aura_warr_ignore_pain);
 
     int32 m_ExtraSpellCost = 400;
 
@@ -99,12 +99,12 @@ class aura_warr_ignore_pain : public AuraScript
 
     void Register() override
     {
-        DoEffectCalcAmount += AuraEffectCalcAmountFn(aura_warr_ignore_pain::CalcAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
-        OnEffectAbsorb += AuraEffectAbsorbFn(aura_warr_ignore_pain::OnAbsorb, EFFECT_0);
+        DoEffectCalcAmount += AuraEffectCalcAmountFn(tlpp_aura_warr_ignore_pain::CalcAmount, EFFECT_0, SPELL_AURA_SCHOOL_ABSORB);
+        OnEffectAbsorb += AuraEffectAbsorbFn(tlpp_aura_warr_ignore_pain::OnAbsorb, EFFECT_0);
     }
 };
 
 void AddCustomWarriorSpellScripts()
 {
-    RegisterSpellAndAuraScriptPair(spell_warr_ignore_pain, aura_warr_ignore_pain);
+    RegisterSpellAndAuraScriptPair(tlpp_spell_warr_ignore_pain, tlpp_aura_warr_ignore_pain);
 }
