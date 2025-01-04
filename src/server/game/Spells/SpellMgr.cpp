@@ -2766,6 +2766,8 @@ void SpellMgr::LoadSpellInfoCustomAttributes()
                     case SPELL_EFFECT_APPLY_AREA_AURA_ENEMY:
                     case SPELL_EFFECT_APPLY_AREA_AURA_PET:
                     case SPELL_EFFECT_APPLY_AREA_AURA_OWNER:
+                    case SPELL_EFFECT_APPLY_AURA_ON_PET:
+                    case SPELL_EFFECT_202:
                         if (effect->ApplyAuraName == SPELL_AURA_PERIODIC_DAMAGE ||
                             effect->ApplyAuraName == SPELL_AURA_PERIODIC_DAMAGE_PERCENT ||
                             effect->ApplyAuraName == SPELL_AURA_DUMMY ||

@@ -2285,7 +2285,7 @@ void UnitAura::FillTargetMap(std::unordered_map<Unit*, uint32>& targets, Unit* c
 
         std::deque<Unit*> units;
         // non-area aura
-        if (effect->Effect == SPELL_EFFECT_APPLY_AURA)
+        if (effect->Effect == SPELL_EFFECT_APPLY_AURA || effect->Effect == SPELL_EFFECT_202)
         {
             units.push_back(GetUnitOwner());
         }
@@ -2329,6 +2329,12 @@ void UnitAura::FillTargetMap(std::unordered_map<Unit*, uint32>& targets, Unit* c
                         if (Unit* owner = GetUnitOwner()->GetCharmerOrOwner())
                             if (GetUnitOwner()->IsWithinDistInMap(owner, radius))
                                 units.push_back(owner);
+                        break;
+                    }
+                    case SPELL_EFFECT_APPLY_AURA_ON_PET:
+                    {
+                        if (Unit* pet = ObjectAccessor::GetUnit(*GetUnitOwner(), GetUnitOwner()->GetPetGUID()))
+                            units.push_back(pet);
                         break;
                     }
                 }

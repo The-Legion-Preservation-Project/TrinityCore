@@ -457,7 +457,7 @@ bool SpellEffectInfo::IsFarDestTargetEffect() const
 
 bool SpellEffectInfo::IsUnitOwnedAuraEffect() const
 {
-    return IsAreaAuraEffect() || Effect == SPELL_EFFECT_APPLY_AURA;
+    return IsAreaAuraEffect() || Effect == SPELL_EFFECT_APPLY_AURA || Effect == SPELL_EFFECT_APPLY_AURA_ON_PET || Effect == SPELL_EFFECT_202;
 }
 
 int32 SpellEffectInfo::CalcValue(Unit const* caster /*= nullptr*/, int32 const* bp /*= nullptr*/, Unit const* target /*= nullptr*/, float* variance /*= nullptr*/, uint32 itemId, int32 itemLevel /*= -1*/) const
