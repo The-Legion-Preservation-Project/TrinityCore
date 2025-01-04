@@ -30,7 +30,7 @@ WDTFile::WDTFile(char const* storagePath, std::string mapName, bool cache)
 {
     if (cache)
     {
-        _adtCache = Trinity::make_unique<ADTCache>();
+        _adtCache = std::make_unique<ADTCache>();
         memset(_adtCache->file, 0, sizeof(_adtCache->file));
     }
     else

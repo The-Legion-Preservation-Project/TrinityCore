@@ -301,7 +301,7 @@ DB2FileLoaderRegularImpl::DB2FileLoaderRegularImpl(char const* fileName, DB2File
 
 bool DB2FileLoaderRegularImpl::LoadTableData(DB2FileSource* source)
 {
-    _data = Trinity::make_unique<uint8[]>(_header->RecordSize * _header->RecordCount + _header->StringTableSize);
+    _data = std::make_unique<uint8[]>(_header->RecordSize * _header->RecordCount + _header->StringTableSize);
     _stringTable = &_data[_header->RecordSize * _header->RecordCount];
     return source->Read(_data.get(), _header->RecordSize * _header->RecordCount + _header->StringTableSize);
 }
@@ -836,7 +836,7 @@ DB2FileLoaderSparseImpl::DB2FileLoaderSparseImpl(char const* fileName, DB2FileLo
     _loadInfo(loadInfo),
     _header(header),
     _dataStart(0),
-    _fieldAndArrayOffsets(Trinity::make_unique<std::size_t[]>(loadInfo->Meta->FieldCount + loadInfo->FieldCount - (!loadInfo->Meta->HasIndexFieldInData() ? 1 : 0)))
+    _fieldAndArrayOffsets(std::make_unique<std::size_t[]>(loadInfo->Meta->FieldCount + loadInfo->FieldCount - (!loadInfo->Meta->HasIndexFieldInData() ? 1 : 0)))
 {
 }
 
@@ -847,13 +847,13 @@ DB2FileLoaderSparseImpl::~DB2FileLoaderSparseImpl()
 bool DB2FileLoaderSparseImpl::LoadTableData(DB2FileSource* source)
 {
     _dataStart = source->GetPosition();
-    _data = Trinity::make_unique<uint8[]>(_header->CatalogDataOffset - _dataStart);
+    _data = std::make_unique<uint8[]>(_header->CatalogDataOffset - _dataStart);
     return source->Read(_data.get(), _header->CatalogDataOffset - _dataStart);
 }
 
 bool DB2FileLoaderSparseImpl::LoadCatalogData(DB2FileSource* source)
 {
-    _catalog = Trinity::make_unique<DB2CatalogEntry[]>(_header->MaxId - _header->MinId + 1);
+    _catalog = std::make_unique<DB2CatalogEntry[]>(_header->MaxId - _header->MinId + 1);
     return source->Read(_catalog.get(), sizeof(DB2CatalogEntry) * (_header->MaxId - _header->MinId + 1));
 }
 
@@ -1453,7 +1453,7 @@ bool DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
     else
         _impl = new DB2FileLoaderSparseImpl(source->GetFileName(), loadInfo, &_header);
 
-    std::unique_ptr<DB2FieldEntry[]> fieldData = Trinity::make_unique<DB2FieldEntry[]>(_header.FieldCount);
+    std::unique_ptr<DB2FieldEntry[]> fieldData = std::make_unique<DB2FieldEntry[]>(_header.FieldCount);
     if (!source->Read(fieldData.get(), sizeof(DB2FieldEntry) * _header.FieldCount))
         return false;
 
@@ -1469,7 +1469,7 @@ bool DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
     std::unique_ptr<uint32[]> idTable;
     if (!loadInfo->Meta->HasIndexFieldInData() && _header.IdTableSize)
     {
-        idTable = Trinity::make_unique<uint32[]>(_header.RecordCount);
+        idTable = std::make_unique<uint32[]>(_header.RecordCount);
         if (!source->Read(idTable.get(), _header.IdTableSize))
             return false;
     }
@@ -1477,7 +1477,7 @@ bool DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
     std::unique_ptr<DB2RecordCopy[]> copyTable;
     if (_header.CopyTableSize)
     {
-        copyTable = Trinity::make_unique<DB2RecordCopy[]>(_header.CopyTableSize / sizeof(DB2RecordCopy));
+        copyTable = std::make_unique<DB2RecordCopy[]>(_header.CopyTableSize / sizeof(DB2RecordCopy));
         if (!source->Read(copyTable.get(), _header.CopyTableSize))
             return false;
     }
@@ -1488,7 +1488,7 @@ bool DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
     std::unique_ptr<std::unordered_map<uint32, uint32>[]> commonValues;
     if (_header.ColumnMetaSize)
     {
-        columnMeta = Trinity::make_unique<DB2ColumnMeta[]>(_header.TotalFieldCount);
+        columnMeta = std::make_unique<DB2ColumnMeta[]>(_header.TotalFieldCount);
         if (!source->Read(columnMeta.get(), _header.ColumnMetaSize))
             return false;
 
@@ -1496,30 +1496,30 @@ bool DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
             columnMeta[loadInfo->Meta->IndexField].CompressionType == DB2ColumnCompression::None ||
             columnMeta[loadInfo->Meta->IndexField].CompressionType == DB2ColumnCompression::Immediate);
 
-        palletValues = Trinity::make_unique<std::unique_ptr<DB2PalletValue[]>[]>(_header.TotalFieldCount);
+        palletValues = std::make_unique<std::unique_ptr<DB2PalletValue[]>[]>(_header.TotalFieldCount);
         for (uint32 i = 0; i < _header.TotalFieldCount; ++i)
         {
             if (columnMeta[i].CompressionType != DB2ColumnCompression::Pallet)
                 continue;
 
-            palletValues[i] = Trinity::make_unique<DB2PalletValue[]>(columnMeta[i].AdditionalDataSize / sizeof(DB2PalletValue));
+            palletValues[i] = std::make_unique<DB2PalletValue[]>(columnMeta[i].AdditionalDataSize / sizeof(DB2PalletValue));
             if (!source->Read(palletValues[i].get(), columnMeta[i].AdditionalDataSize))
                 return false;
         }
 
-        palletArrayValues = Trinity::make_unique<std::unique_ptr<DB2PalletValue[]>[]>(_header.TotalFieldCount);
+        palletArrayValues = std::make_unique<std::unique_ptr<DB2PalletValue[]>[]>(_header.TotalFieldCount);
         for (uint32 i = 0; i < _header.TotalFieldCount; ++i)
         {
             if (columnMeta[i].CompressionType != DB2ColumnCompression::PalletArray)
                 continue;
 
-            palletArrayValues[i] = Trinity::make_unique<DB2PalletValue[]>(columnMeta[i].AdditionalDataSize / sizeof(DB2PalletValue));
+            palletArrayValues[i] = std::make_unique<DB2PalletValue[]>(columnMeta[i].AdditionalDataSize / sizeof(DB2PalletValue));
             if (!source->Read(palletArrayValues[i].get(), columnMeta[i].AdditionalDataSize))
                 return false;
         }
 
-        std::unique_ptr<std::unique_ptr<DB2CommonValue[]>[]> commonData = Trinity::make_unique<std::unique_ptr<DB2CommonValue[]>[]>(_header.TotalFieldCount);
-        commonValues = Trinity::make_unique<std::unordered_map<uint32, uint32>[]>(_header.TotalFieldCount);
+        std::unique_ptr<std::unique_ptr<DB2CommonValue[]>[]> commonData = std::make_unique<std::unique_ptr<DB2CommonValue[]>[]>(_header.TotalFieldCount);
+        commonValues = std::make_unique<std::unordered_map<uint32, uint32>[]>(_header.TotalFieldCount);
         for (uint32 i = 0; i < _header.TotalFieldCount; ++i)
         {
             if (columnMeta[i].CompressionType != DB2ColumnCompression::CommonData)
@@ -1528,7 +1528,7 @@ bool DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
             if (!columnMeta[i].AdditionalDataSize)
                 continue;
 
-            commonData[i] = Trinity::make_unique<DB2CommonValue[]>(columnMeta[i].AdditionalDataSize / sizeof(DB2CommonValue));
+            commonData[i] = std::make_unique<DB2CommonValue[]>(columnMeta[i].AdditionalDataSize / sizeof(DB2CommonValue));
             if (!source->Read(commonData[i].get(), columnMeta[i].AdditionalDataSize))
                 return false;
 
@@ -1546,7 +1546,7 @@ bool DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
     std::unique_ptr<DB2IndexData[]> parentIndexes;
     if (_header.ParentLookupCount)
     {
-        parentIndexes = Trinity::make_unique<DB2IndexData[]>(_header.ParentLookupCount);
+        parentIndexes = std::make_unique<DB2IndexData[]>(_header.ParentLookupCount);
         for (uint32 i = 0; i < _header.ParentLookupCount; ++i)
         {
             if (!source->Read(&parentIndexes[i].Info, sizeof(DB2IndexDataInfo)))
@@ -1555,7 +1555,7 @@ bool DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
             if (!parentIndexes[i].Info.NumEntries)
                 continue;
 
-            parentIndexes[i].Entries = Trinity::make_unique<DB2IndexEntry[]>(parentIndexes[i].Info.NumEntries);
+            parentIndexes[i].Entries = std::make_unique<DB2IndexEntry[]>(parentIndexes[i].Info.NumEntries);
             if (!source->Read(parentIndexes[i].Entries.get(), sizeof(DB2IndexEntry) * parentIndexes[i].Info.NumEntries))
                 return false;
         }
