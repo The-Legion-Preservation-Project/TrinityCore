@@ -25,6 +25,7 @@
 
 #include "Define.h"
 #include "CascHandles.h"
+#include <string>
 #include <utility>
 
 class CASCFile
