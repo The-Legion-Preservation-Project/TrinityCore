@@ -141,6 +141,33 @@ public:
     }
 
 private:
+    int32 GetSortLevel(ItemTemplate const* itemTemplate) const
+    {
+        switch (itemTemplate->GetClass())
+        {
+            case ITEM_CLASS_WEAPON:
+            case ITEM_CLASS_ARMOR:
+                return itemTemplate->GetBaseItemLevel();
+            case ITEM_CLASS_CONTAINER:
+                return itemTemplate->GetContainerSlots();
+            case ITEM_CLASS_GEM:
+            case ITEM_CLASS_ITEM_ENHANCEMENT:
+                return itemTemplate->GetBaseItemLevel();
+                break;
+            case ITEM_CLASS_CONSUMABLE:
+                return std::max<uint8>(1, itemTemplate->GetBaseRequiredLevel());
+            case ITEM_CLASS_MISCELLANEOUS:
+            case ITEM_CLASS_BATTLE_PETS:
+                return 1;
+            case ITEM_CLASS_RECIPE:
+                return itemTemplate->GetSubClass() != ITEM_SUBCLASS_BOOK ? itemTemplate->GetRequiredSkillRank() : itemTemplate->GetBaseRequiredLevel();
+            default:
+                break;
+        }
+
+        return 1;
+    }
+
     int32 CompareColumns(AuctionHouseSortOrder column, AuctionPosting const* left, AuctionPosting const* right) const
     {
         switch (column)
@@ -148,10 +175,10 @@ private:
             case AuctionHouseSortOrder::Level:
             {
                 int32 leftLevel = !left->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_SPECIES_ID)
-                    ? left->Item->GetRequiredLevel()
+                    ? GetSortLevel(left->Item->GetTemplate())
                     : left->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_LEVEL);
                 int32 rightLevel = !right->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_SPECIES_ID)
-                    ? right->Item->GetRequiredLevel()
+                    ? GetSortLevel(right->Item->GetTemplate())
                     : right->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_LEVEL);
                 return leftLevel - rightLevel;
             }
