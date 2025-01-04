@@ -24,14 +24,12 @@
 */
 
 #include "Chat.h"
-#include "Configuration/Config.h"
+#include "Config.h"
 #include "Group.h"
 #include "LFGMgr.h"
 #include "Map.h"
-#include "Opcodes.h"
 #include "Player.h"
 #include "ScriptMgr.h"
-#include "World.h"
 
 class lfg_solo_announce : public PlayerScript
 {
@@ -41,7 +39,8 @@ public:
     void OnLogin(Player* player, bool /*firstLogin*/) override
     {
         // Announce Module
-        if (sConfigMgr->GetBoolDefault("SoloLFG.Announce", true))
+        if (sConfigMgr->GetIntDefault("SoloLFG.Enable", false) &&
+            sConfigMgr->GetBoolDefault("SoloLFG.Announce", true))
         {
             ChatHandler(player->GetSession()).SendSysMessage("This server is running |cff4CFF00Solo Dungeon Finder|r.");
         }
@@ -55,7 +54,7 @@ public:
 
     void OnLogin(Player* /*player*/, bool /*firstLogin*/) override
     {
-        if (sConfigMgr->GetIntDefault("SoloLFG.Enable", true))
+        if (sConfigMgr->GetIntDefault("SoloLFG.Enable", false))
         {
             if (!sLFGMgr->IsSoloLFG())
             {
@@ -72,14 +71,33 @@ public:
 
     void OnMapChanged(Player* player) override
     {
-        Map* map = player->GetMap();
-        int difficulty = CalculateDifficulty(map, player);
-        int numInGroup = GetNumInGroup(player);
-        ApplyBuffs(player, map, difficulty, numInGroup);
+        if (sConfigMgr->GetIntDefault("SoloCraft.Enable", false))
+        {
+            Map* map = player->GetMap();
+            int difficulty = CalculateDifficulty(map, player);
+            int numInGroup = GetNumInGroup(player);
+            ApplyBuffs(player, map, difficulty, numInGroup);
+        }
+    }
+
+    void OnLogin(Player* player, bool /*firstLogin*/) override
+    {
+        if (sConfigMgr->GetIntDefault("SoloCraft.Enable", false))
+        {
+            Map* map = player->GetMap();
+            int difficulty = CalculateDifficulty(map, player);
+            int numInGroup = GetNumInGroup(player);
+            ApplyBuffs(player, map, difficulty, numInGroup);
+        }
+    }
+
+    void OnLogout(Player* player) override
+    {
+        _playerDifficultyMap.erase(player->GetGUID());
     }
 
 private:
-    int CalculateDifficulty(Map *map, Player *player)
+    int CalculateDifficulty(Map* map, Player* /*player*/)
     {
         int difficulty = 1;
         if (map)
@@ -109,7 +127,7 @@ private:
         return difficulty;
     }
 
-    int GetNumInGroup(Player *player)
+    int GetNumInGroup(Player* player)
     {
         int numInGroup = 1;
 
@@ -119,15 +137,17 @@ private:
         return numInGroup;
     }
 
-    void ApplyBuffs(Player* player, Map* map, int difficulty, int numInGroup)
+    void ApplyBuffs(Player* player, Map* map, int difficulty, int /*numInGroup*/)
     {
         ClearBuffs(player, map);
         if (difficulty > 1)
         {
             _playerDifficultyMap[player->GetGUID()] = difficulty;
 
+            float statsMultiplier = sConfigMgr->GetFloatDefault("SoloCraft.Stats.Mult", 55.0f);
+
             for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
-                player->ApplyStatPctModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, float(difficulty * 100.f));
+                player->ApplyStatPctModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, float(difficulty * statsMultiplier));
 
             player->SetFullHealth();
 
@@ -136,13 +156,17 @@ private:
         }
     }
 
-    void ClearBuffs(Player* player, Map* map)
+    void ClearBuffs(Player* player, Map* /*map*/)
     {
         if (_playerDifficultyMap.find(player->GetGUID()) != _playerDifficultyMap.end())
         {
             int difficulty = _playerDifficultyMap[player->GetGUID()];
+
+            float statsMultiplier = sConfigMgr->GetFloatDefault("SoloCraft.Stats.Mult", 55.0f);
+
             for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
-                player->ApplyStatPctModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, 100.f / (1.f + float(difficulty * 100) / 100.f) - 100.f);
+                player->ApplyStatPctModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, 100.f / (1.f + float(difficulty * statsMultiplier) / 100.f) - 100.f);
+
             _playerDifficultyMap.erase(player->GetGUID());
         }
     }
