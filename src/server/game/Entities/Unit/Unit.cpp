@@ -3389,8 +3389,8 @@ void Unit::_ApplyAura(AuraApplication * aurApp, uint32 effMask)
     {
         uint32 aStateMask = (1 << (aState - 1));
         // force update so the new caster registers it
-        if ((aStateMask & PER_CASTER_AURA_STATE_MASK) && *m_unitData->AuraState & aStateMask)
-            ForceUpdateFieldChange(m_values.ModifyValue(&Unit::m_unitData).ModifyValue(&UF::UnitData::AuraState));
+        if ((aStateMask & PER_CASTER_AURA_STATE_MASK) && HasFlag(UNIT_FIELD_AURASTATE, aStateMask))
+            ForceValuesUpdateAtIndex(UNIT_FIELD_AURASTATE);
         else
             ModifyAuraState(aState, true);
     }
@@ -3496,7 +3496,7 @@ void Unit::_UnapplyAura(AuraApplicationMap::iterator &i, AuraRemoveMode removeMo
             // update for casters, some shouldn't 'see' the aura state
             uint32 aStateMask = (1 << (auraState - 1));
             if ((aStateMask & PER_CASTER_AURA_STATE_MASK) != 0)
-                ForceUpdateFieldChange(m_values.ModifyValue(&Unit::m_unitData).ModifyValue(&UF::UnitData::AuraState));
+                ForceValuesUpdateAtIndex(UNIT_FIELD_AURASTATE);
         }
     }
 
