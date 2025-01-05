@@ -263,7 +263,7 @@ public:
     DB2StorageBase const* GetStorage(uint32 type) const;
 
     void LoadHotfixData();
-    void LoadHotfixBlob();
+    void LoadHotfixBlob(uint32 localeMask);
     std::map<uint64, int32> const& GetHotfixData() const;
     std::vector<uint8> const* GetHotfixBlobData(uint32 tableHash, int32 recordId, LocaleConstant locale);
 

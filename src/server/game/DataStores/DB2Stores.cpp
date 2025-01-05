@@ -474,7 +474,8 @@ void LoadDB2(std::bitset<TOTAL_LOCALES>& availableDb2Locales, std::vector<std::s
     }
 
     for (LocaleConstant i = LOCALE_koKR; i < TOTAL_LOCALES; i = LocaleConstant(i + 1))
-        storage->LoadStringsFromDB(i);
+        if (availableDb2Locales[i])
+            storage->LoadStringsFromDB(i);
 
     stores[storage->GetTableHash()] = storage;
 }
@@ -1237,7 +1238,7 @@ void DB2Manager::LoadHotfixData()
     TC_LOG_INFO("server.loading", ">> Loaded " SZFMTD " hotfix records in %u ms", _hotfixData.size(), GetMSTimeDiffToNow(oldMSTime));
 }
 
-void DB2Manager::LoadHotfixBlob()
+void DB2Manager::LoadHotfixBlob(uint32 localeMask)
 {
     uint32 oldMSTime = getMSTime();
 
@@ -1249,6 +1250,7 @@ void DB2Manager::LoadHotfixBlob()
         return;
     }
 
+    std::bitset<TOTAL_LOCALES> availableDb2Locales = localeMask;
     uint32 hotfixBlobCount = 0;
     do
     {
@@ -1272,6 +1274,9 @@ void DB2Manager::LoadHotfixBlob()
             TC_LOG_ERROR("server.loading", "`hotfix_blob` contains invalid locale: %s at TableHash: 0x%X and RecordID: %d", localeName.c_str(), tableHash, recordId);
             continue;
         }
+
+        if (!availableDb2Locales[locale])
+            continue;
 
         _hotfixBlob[locale][std::make_pair(tableHash, recordId)] = fields[3].GetBinary();
         hotfixBlobCount++;
