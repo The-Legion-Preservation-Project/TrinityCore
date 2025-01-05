@@ -265,7 +265,7 @@ public:
     void LoadHotfixData();
     void LoadHotfixBlob();
     std::map<uint64, int32> const& GetHotfixData() const;
-    std::vector<uint8> const* GetHotfixBlobData(uint32 tableHash, int32 recordId);
+    std::vector<uint8> const* GetHotfixBlobData(uint32 tableHash, int32 recordId, LocaleConstant locale);
 
     std::vector<uint32> GetAreasForGroup(uint32 areaGroupId) const;
     static bool IsInArea(uint32 objectAreaId, uint32 areaId);
