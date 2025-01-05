@@ -149,7 +149,7 @@ public:
     ~DB2FileLoader();
 
     bool Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo);
-    char* AutoProduceData(uint32& count, char**& indexTable, std::vector<char*>& stringPool);
+    char* AutoProduceData(uint32& indexTableSize, char**& indexTable);
     char* AutoProduceStrings(char** indexTable, uint32 indexTableSize, LocaleConstant locale);
     void AutoProduceRecordCopies(uint32 records, char** indexTable, char* dataTable);
 
