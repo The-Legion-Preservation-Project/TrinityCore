@@ -1853,7 +1853,7 @@ bool Battleground::CheckAchievementCriteriaMeet(uint32 criteriaId, Player const*
 
 char const* Battleground::GetName() const
 {
-    return _battlegroundTemplate->BattlemasterEntry->Name->Str[sWorld->GetDefaultDbcLocale()];
+    return _battlegroundTemplate->BattlemasterEntry->Name[sWorld->GetDefaultDbcLocale()];
 }
 
 BattlegroundTypeId Battleground::GetTypeID(bool getRandom) const

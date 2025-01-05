@@ -1007,7 +1007,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
     }
     _effects.shrink_to_fit();
 
-    SpellName = spellEntry->Name;
+    SpellName = &spellEntry->Name;
 
     // SpellMiscEntry
     SpellMiscEntry const* _misc = data.Misc;

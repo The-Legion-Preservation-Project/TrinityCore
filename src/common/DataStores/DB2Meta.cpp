@@ -16,6 +16,7 @@
  */
 
 #include "DB2Meta.h"
+#include "Common.h"
 #include "Errors.h"
 
 DB2MetaField::DB2MetaField(DBCFormer type, uint8 arraySize, bool isSigned) : Type(type), ArraySize(arraySize), IsSigned(isSigned)
@@ -60,6 +61,8 @@ uint32 DB2Meta::GetRecordSize() const
                     size += 8;
                     break;
                 case FT_STRING:
+                    size += sizeof(LocalizedString);
+                    break;
                 case FT_STRING_NOT_LOCALIZED:
                     size += sizeof(char*);
                     break;
@@ -105,6 +108,8 @@ int32 DB2Meta::GetParentIndexFieldOffset() const
                     offset += 8;
                     break;
                 case FT_STRING:
+                    offset += sizeof(LocalizedString);
+                    break;
                 case FT_STRING_NOT_LOCALIZED:
                     offset += sizeof(char*);
                     break;

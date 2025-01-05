@@ -18,7 +18,7 @@
 #ifndef DB2_FILE_LOADER_H
 #define DB2_FILE_LOADER_H
 
-#include "Define.h"
+#include "Common.h"
 #include <string>
 #include <vector>
 
@@ -67,7 +67,6 @@ struct TC_COMMON_API DB2FieldMeta
 
 struct TC_COMMON_API DB2FileLoadInfo
 {
-    DB2FileLoadInfo();
     DB2FileLoadInfo(DB2FieldMeta const* fields, std::size_t fieldCount, DB2Meta const* meta);
 
     uint32 GetStringFieldCount(bool localizedOnly) const;
@@ -151,7 +150,7 @@ public:
 
     bool Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo);
     char* AutoProduceData(uint32& count, char**& indexTable, std::vector<char*>& stringPool);
-    char* AutoProduceStrings(char** indexTable, uint32 indexTableSize, uint32 locale);
+    char* AutoProduceStrings(char** indexTable, uint32 indexTableSize, LocaleConstant locale);
     void AutoProduceRecordCopies(uint32 records, char** indexTable, char* dataTable);
 
     uint32 GetCols() const { return _header.TotalFieldCount; }
