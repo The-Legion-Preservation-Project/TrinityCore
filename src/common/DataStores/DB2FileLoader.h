@@ -19,6 +19,7 @@
 #define DB2_FILE_LOADER_H
 
 #include "Common.h"
+#include <exception>
 #include <string>
 #include <vector>
 
@@ -142,13 +143,25 @@ struct DB2RecordCopy
 };
 #pragma pack(pop)
 
+class TC_COMMON_API DB2FileLoadException : public std::exception
+{
+public:
+    DB2FileLoadException(std::string msg) : _msg(std::move(msg)) { }
+
+    char const* what() const noexcept override { return _msg.c_str(); }
+
+private:
+    std::string _msg;
+};
+
 class TC_COMMON_API DB2FileLoader
 {
 public:
     DB2FileLoader();
     ~DB2FileLoader();
 
-    bool Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo);
+    // loadInfo argument is required when trying to read data from the file
+    void Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo);
     char* AutoProduceData(uint32& indexTableSize, char**& indexTable);
     char* AutoProduceStrings(char** indexTable, uint32 indexTableSize, LocaleConstant locale);
     void AutoProduceRecordCopies(uint32 records, char** indexTable, char* dataTable);
