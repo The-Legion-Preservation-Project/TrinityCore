@@ -794,11 +794,16 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
         uint32 rage = uint32(GetBaseAttackTime(cleanDamage->attackType) / 1000.f * 1.75f);
         if (cleanDamage->attackType == OFF_ATTACK)
             rage /= 2;
-        RewardRage(rage);
+        RewardRage(rage, true);
     }
 
     if (!damage)
+    {
+        // Rage from absorbed damage
+        if (cleanDamage && cleanDamage->absorbed_damage && victim->GetPowerType() == POWER_RAGE)
+            victim->RewardRage(cleanDamage->absorbed_damage, false);
         return 0;
+    }
 
     TC_LOG_DEBUG("entities.unit", "DealDamageStart");
 
@@ -894,6 +899,13 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
                 EquipmentSlots slot = EquipmentSlots(urand(0, EQUIPMENT_SLOT_END-1));
                 victim->ToPlayer()->DurabilityPointLossForEquipSlot(slot);
             }
+        }
+
+        // Rage from damage received
+        if (this != victim && victim->GetPowerType() == POWER_RAGE)
+        {
+            uint32 rage_damage = damage + (cleanDamage ? cleanDamage->absorbed_damage : 0);
+            victim->RewardRage(rage_damage, false);
         }
 
         if (GetTypeId() == TYPEID_PLAYER)
@@ -13457,12 +13469,19 @@ void Unit::SendRemoveFromThreatListOpcode(HostileReference* pHostileReference)
 }
 
 // baseRage means damage taken when attacker = false
-void Unit::RewardRage(uint32 baseRage)
+void Unit::RewardRage(uint32 baseRage, bool attacker)
 {
     float addRage = baseRage;
 
-    // talent who gave more rage on attack
-    AddPct(addRage, GetTotalAuraModifier(SPELL_AURA_MOD_RAGE_FROM_DAMAGE_DEALT));
+    if (attacker)
+    {
+        // talent who gave more rage on attack
+        AddPct(addRage, GetTotalAuraModifier(SPELL_AURA_MOD_RAGE_FROM_DAMAGE_DEALT));
+    }
+    // TODO: use expected max health, not actual
+    else if (Player const* player = ToPlayer())
+        if (player->GetPrimarySpecialization() == TALENT_SPEC_WARRIOR_PROTECTION)
+            addRage = 50.0f * baseRage / static_cast<float>(GetMaxHealth());
 
     addRage *= sWorld->getRate(RATE_POWER_RAGE_INCOME);
 
