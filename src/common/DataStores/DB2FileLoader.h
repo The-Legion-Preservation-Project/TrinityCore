@@ -53,7 +53,17 @@ struct DB2Header
     uint32 PalletDataSize;
     uint32 ParentLookupDataSize;
 };
+
 #pragma pack(pop)
+
+struct TC_COMMON_API DB2FieldMeta
+{
+    DB2FieldMeta(bool isSigned, DBCFormer type, char const* name);
+
+    bool IsSigned;
+    DBCFormer Type;
+    char const* Name;
+};
 
 struct TC_COMMON_API DB2FileLoadInfo
 {

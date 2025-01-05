@@ -107,6 +107,11 @@ struct DB2IndexData
     std::unique_ptr<DB2IndexEntry[]> Entries;
 };
 
+DB2FieldMeta::DB2FieldMeta(bool isSigned, DBCFormer type, char const* name)
+    : IsSigned(isSigned), Type(type), Name(name)
+{
+}
+
 DB2FileLoadInfo::DB2FileLoadInfo() : Fields(nullptr), FieldCount(0), Meta(nullptr)
 {
 }
@@ -134,7 +139,7 @@ std::pair<int32, int32> DB2FileLoadInfo::GetFieldIndexByName(char const* fieldNa
     std::size_t ourIndex = Meta->HasIndexFieldInData() ? 0 : 1;
     for (uint32 i = 0; i < Meta->FieldCount; ++i)
     {
-        for (uint8 arr = 0; arr < Meta->ArraySizes[i]; ++arr)
+        for (uint8 arr = 0; arr < Meta->Fields[i].ArraySize; ++arr)
         {
             if (!strcmp(Fields[ourIndex].Name, fieldName))
                 return std::make_pair(int32(i), int32(arr));
@@ -169,6 +174,7 @@ public:
     virtual uint32 GetRecordCopyCount() const = 0;
     virtual uint32 GetMaxId() const = 0;
     virtual DB2FileLoadInfo const* GetLoadInfo() const = 0;
+    virtual bool IsSignedField(uint32 field) const = 0;
 
 private:
     friend class DB2Record;
@@ -206,6 +212,7 @@ public:
     uint32 GetRecordCopyCount() const override;
     uint32 GetMaxId() const override;
     DB2FileLoadInfo const* GetLoadInfo() const override;
+    bool IsSignedField(uint32 field) const override;
 
 private:
     void FillParentLookup(char* dataTable);
@@ -260,6 +267,7 @@ public:
     uint32 GetRecordCopyCount() const override;
     uint32 GetMaxId() const override;
     DB2FileLoadInfo const* GetLoadInfo() const override;
+    bool IsSignedField(uint32 field) const override;
 
 private:
     uint8 const* GetRawRecordData(uint32 recordNumber) const override;
@@ -384,7 +392,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceData(uint32& records, char**& indexTa
 
         for (uint32 x = 0; x < _header->FieldCount; ++x)
         {
-            for (uint32 z = 0; z < _loadInfo->Meta->ArraySizes[x]; ++z)
+            for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
                 switch (_loadInfo->TypesString[fieldIndex])
                 {
@@ -423,7 +431,8 @@ char* DB2FileLoaderRegularImpl::AutoProduceData(uint32& records, char**& indexTa
                         break;
                     }
                     default:
-                        ASSERT(false, "Unknown format character '%c' found in %s meta", _loadInfo->TypesString[x], _fileName);
+                        ASSERT(false, "Unknown format character '%c' found in %s meta for field %s",
+                            _loadInfo->TypesString[fieldIndex], _fileName, _loadInfo->Fields[fieldIndex].Name);
                         break;
                 }
                 ++fieldIndex;
@@ -432,7 +441,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceData(uint32& records, char**& indexTa
 
         for (uint32 x = _header->FieldCount; x < _loadInfo->Meta->FieldCount; ++x)
         {
-            for (uint32 z = 0; z < _loadInfo->Meta->ArraySizes[x]; ++z)
+            for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
                 switch (_loadInfo->TypesString[fieldIndex])
                 {
@@ -471,7 +480,8 @@ char* DB2FileLoaderRegularImpl::AutoProduceData(uint32& records, char**& indexTa
                         break;
                     }
                     default:
-                        ASSERT(false, "Unknown format character '%c' found in %s meta", _loadInfo->TypesString[x], _fileName);
+                        ASSERT(false, "Unknown format character '%c' found in %s meta for field %s",
+                            _loadInfo->TypesString[fieldIndex], _fileName, _loadInfo->Fields[fieldIndex].Name);
                         break;
                 }
                 ++fieldIndex;
@@ -529,7 +539,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceStrings(char** indexTable, uint32 ind
 
         for (uint32 x = 0; x < _loadInfo->Meta->FieldCount; ++x)
         {
-            for (uint32 z = 0; z < _loadInfo->Meta->ArraySizes[x]; ++z)
+            for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
                 switch (_loadInfo->TypesString[fieldIndex])
                 {
@@ -568,7 +578,8 @@ char* DB2FileLoaderRegularImpl::AutoProduceStrings(char** indexTable, uint32 ind
                         break;
                     }
                     default:
-                        ASSERT(false, "Unknown format character '%c' found in %s meta", _loadInfo->TypesString[x], _fileName);
+                        ASSERT(false, "Unknown format character '%c' found in %s meta for field %s",
+                            _loadInfo->TypesString[fieldIndex], _fileName, _loadInfo->Fields[fieldIndex].Name);
                         break;
                 }
                 ++fieldIndex;
@@ -606,7 +617,7 @@ void DB2FileLoaderRegularImpl::FillParentLookup(char* dataTable)
         uint32 parentId = _parentIndexes[0].Entries[i].ParentId;
         char* recordData = &dataTable[_parentIndexes[0].Entries[i].RecordIndex * recordSize];
 
-        switch (_loadInfo->Meta->Types[_loadInfo->Meta->ParentIndexField])
+        switch (_loadInfo->Meta->Fields[_loadInfo->Meta->ParentIndexField].Type)
         {
             case FT_SHORT:
                 *reinterpret_cast<uint16*>(&recordData[parentIdOffset]) = uint16(parentId);
@@ -618,7 +629,7 @@ void DB2FileLoaderRegularImpl::FillParentLookup(char* dataTable)
                 *reinterpret_cast<uint32*>(&recordData[parentIdOffset]) = parentId;
                 break;
             default:
-                ASSERT(false, "Unhandled parent id type '%c' found in %s", _loadInfo->Meta->Types[_loadInfo->Meta->ParentIndexField], _fileName);
+                ASSERT(false, "Unhandled parent id type '%c' found in %s", _loadInfo->Meta->Fields[_loadInfo->Meta->ParentIndexField].Type, _fileName);
                 break;
         }
     }
@@ -831,6 +842,37 @@ DB2FileLoadInfo const* DB2FileLoaderRegularImpl::GetLoadInfo() const
     return _loadInfo;
 }
 
+bool DB2FileLoaderRegularImpl::IsSignedField(uint32 field) const
+{
+    if (field >= _header->TotalFieldCount)
+    {
+        ASSERT(field == _header->TotalFieldCount);
+        //ASSERT(int32(field) == _loadInfo->Meta->ParentIndexField);
+        return _loadInfo->Meta->IsSignedField(field);
+    }
+
+    DB2ColumnCompression compressionType = _columnMeta ? _columnMeta[field].CompressionType : DB2ColumnCompression::None;
+    switch (compressionType)
+    {
+        case DB2ColumnCompression::None:
+        case DB2ColumnCompression::CommonData:
+        case DB2ColumnCompression::Pallet:
+        case DB2ColumnCompression::PalletArray:
+            return _loadInfo->Meta->IsSignedField(field);
+        // case DB2ColumnCompression::SignedImmediate:
+        //     return field != uint32(_loadInfo->Meta->IndexField);
+        case DB2ColumnCompression::Immediate:
+            return _loadInfo->Meta->IsSignedField(field);
+            // return false;
+        default:
+            ASSERT(false, "Unhandled compression type %u in %s", uint32(_columnMeta[field].CompressionType), _fileName);
+            break;
+    }
+
+    return false;
+}
+
+
 DB2FileLoaderSparseImpl::DB2FileLoaderSparseImpl(char const* fileName, DB2FileLoadInfo const* loadInfo, DB2Header const* header) :
     _fileName(fileName),
     _loadInfo(loadInfo),
@@ -935,7 +977,7 @@ char* DB2FileLoaderSparseImpl::AutoProduceData(uint32& maxId, char**& indexTable
         uint32 stringFieldOffset = 0;
         for (uint32 x = 0; x < _header->FieldCount; ++x)
         {
-            for (uint32 z = 0; z < _loadInfo->Meta->ArraySizes[x]; ++z)
+            for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
                 switch (_loadInfo->TypesString[fieldIndex])
                 {
@@ -1053,7 +1095,7 @@ char* DB2FileLoaderSparseImpl::AutoProduceStrings(char** indexTable, uint32 inde
 
         for (uint32 x = 0; x < _header->FieldCount; ++x)
         {
-            for (uint32 z = 0; z < _loadInfo->Meta->ArraySizes[x]; ++z)
+            for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
                 switch (_loadInfo->TypesString[fieldIndex])
                 {
@@ -1230,10 +1272,10 @@ void DB2FileLoaderSparseImpl::CalculateAndStoreFieldOffsets(uint8 const* rawReco
     for (uint32 field = 0; field < _loadInfo->Meta->FieldCount; ++field)
     {
         _fieldAndArrayOffsets[field] = combinedField;
-        for (uint32 arr = 0; arr < _loadInfo->Meta->ArraySizes[field]; ++arr)
+        for (uint32 arr = 0; arr < _loadInfo->Meta->Fields[field].ArraySize; ++arr)
         {
             _fieldAndArrayOffsets[combinedField] = offset;
-            switch (_loadInfo->Meta->Types[field])
+            switch (_loadInfo->Meta->Fields[field].Type)
             {
                 case FT_BYTE:
                 case FT_SHORT:
@@ -1245,10 +1287,11 @@ void DB2FileLoaderSparseImpl::CalculateAndStoreFieldOffsets(uint8 const* rawReco
                     offset += sizeof(float);
                     break;
                 case FT_STRING:
+                case FT_STRING_NOT_LOCALIZED:
                     offset += strlen(reinterpret_cast<char const*>(rawRecord) + offset) + 1;
                     break;
                 default:
-                    ASSERT(false, "Unknown format character '%c' found in %s meta", _loadInfo->Meta->Types[field], _fileName);
+                    ASSERT(false, "Unknown format character '%c' found in %s meta", _loadInfo->Meta->Fields[field].Type, _fileName);
                     break;
             }
             ++combinedField;
@@ -1264,6 +1307,12 @@ uint32 DB2FileLoaderSparseImpl::GetMaxId() const
 DB2FileLoadInfo const* DB2FileLoaderSparseImpl::GetLoadInfo() const
 {
     return _loadInfo;
+}
+
+bool DB2FileLoaderSparseImpl::IsSignedField(uint32 field) const
+{
+    ASSERT(field < _header->FieldCount);
+    return _loadInfo->Meta->IsSignedField(field);
 }
 
 DB2Record::DB2Record(DB2FileLoaderImpl const& db2, uint32 recordIndex, std::size_t* fieldOffsets)
@@ -1563,6 +1612,22 @@ bool DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
 
     _impl->SetAdditionalData(std::move(fieldData), std::move(idTable), std::move(copyTable), std::move(columnMeta),
         std::move(palletValues), std::move(palletArrayValues), std::move(commonValues), std::move(parentIndexes));
+
+    uint32 fieldIndex = 0;
+    if (!loadInfo->Meta->HasIndexFieldInData())
+    {
+        //ASSERT(!loadInfo->Fields[0].IsSigned, "ID must be unsigned");
+        ++fieldIndex;
+    }
+
+    for (uint32 f = 0; f < loadInfo->Meta->FieldCount; ++f)
+    {
+        ASSERT(loadInfo->Fields[fieldIndex].IsSigned == _impl->IsSignedField(f),
+            "Field %s in %s must be %s", loadInfo->Fields[fieldIndex].Name, source->GetFileName(), loadInfo->Fields[fieldIndex].IsSigned ? "signed" : "unsigned");
+        // using loadInfo->Fields[fieldIndex].IsSigned ? "signed" : "unsigned"
+        // because db2metadata.h was manually generated, not dumped
+        fieldIndex += loadInfo->Meta->Fields[f].ArraySize;
+    }
 
     return true;
 }
