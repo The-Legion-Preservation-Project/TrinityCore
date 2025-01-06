@@ -3302,7 +3302,7 @@ class spell_item_brewfest_mount_transformation : public SpellScriptLoader
         }
 };
 
-enum NitroBoots
+enum NitroBoosts
 {
     SPELL_NITRO_BOOSTS_SUCCESS       = 54861,
     SPELL_NITRO_BOOSTS_BACKFIRE      = 46014,
