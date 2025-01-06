@@ -75,7 +75,7 @@ class TC_GAME_API Corpse : public WorldObject, public GridObject<Corpse>
         void SetItem(uint32 slot, uint32 item) { SetUInt32Value(CORPSE_FIELD_ITEM + slot, item); }
 
         time_t const& GetGhostTime() const { return m_time; }
-        void ResetGhostTime() { m_time = time(NULL); }
+        void ResetGhostTime() { m_time = time(nullptr); }
         CorpseType GetType() const { return m_type; }
 
         CellCoord const& GetCellCoord() const { return _cellCoord; }

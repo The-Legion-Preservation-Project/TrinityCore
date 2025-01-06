@@ -392,7 +392,7 @@ void Spell::EffectInstaKill(SpellEffIndex /*effIndex*/)
 
     m_caster->SendMessageToSet(data.Write(), true);
 
-    m_caster->DealDamage(unitTarget, unitTarget->GetHealth(), NULL, NODAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+    m_caster->DealDamage(unitTarget, unitTarget->GetHealth(), nullptr, NODAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 }
 
 void Spell::EffectEnvironmentalDMG(SpellEffIndex /*effIndex*/)
@@ -722,7 +722,7 @@ void Spell::EffectTriggerSpell(SpellEffIndex /*effIndex*/)
     }
 
     // original caster guid only for GO cast
-    m_caster->CastSpell(targets, spellInfo, &values, TRIGGERED_FULL_MASK, NULL, NULL, m_originalCasterGUID);
+    m_caster->CastSpell(targets, spellInfo, &values, TRIGGERED_FULL_MASK, nullptr, nullptr, m_originalCasterGUID);
 }
 
 void Spell::EffectTriggerMissileSpell(SpellEffIndex /*effIndex*/)
@@ -770,7 +770,7 @@ void Spell::EffectTriggerMissileSpell(SpellEffIndex /*effIndex*/)
     }
 
     // original caster guid only for GO cast
-    m_caster->CastSpell(targets, spellInfo, &values, TRIGGERED_FULL_MASK, NULL, NULL, m_originalCasterGUID);
+    m_caster->CastSpell(targets, spellInfo, &values, TRIGGERED_FULL_MASK, nullptr, nullptr, m_originalCasterGUID);
 }
 
 void Spell::EffectForceCast(SpellEffIndex /*effIndex*/)
@@ -802,7 +802,7 @@ void Spell::EffectForceCast(SpellEffIndex /*effIndex*/)
                 break;
             case 52463: // Hide In Mine Car
             case 52349: // Overtake
-                unitTarget->CastCustomSpell(unitTarget, spellInfo->Id, &damage, NULL, NULL, true, NULL, NULL, m_originalCasterGUID);
+                unitTarget->CastCustomSpell(unitTarget, spellInfo->Id, &damage, nullptr, nullptr, true, nullptr, nullptr, m_originalCasterGUID);
                 return;
         }
     }
@@ -810,7 +810,7 @@ void Spell::EffectForceCast(SpellEffIndex /*effIndex*/)
     switch (spellInfo->Id)
     {
         case 72298: // Malleable Goo Summon
-            unitTarget->CastSpell(unitTarget, spellInfo->Id, true, NULL, NULL, m_originalCasterGUID);
+            unitTarget->CastSpell(unitTarget, spellInfo->Id, true, nullptr, nullptr, m_originalCasterGUID);
             return;
     }
 
@@ -846,7 +846,7 @@ void Spell::EffectTriggerRitualOfSummoning(SpellEffIndex /*effIndex*/)
 
     finish();
 
-    m_caster->CastSpell((Unit*)NULL, spellInfo, false);
+    m_caster->CastSpell(nullptr, spellInfo, false);
 }
 
 void Spell::EffectJump(SpellEffIndex /*effIndex*/)
@@ -1115,7 +1115,7 @@ void Spell::EffectSendEvent(SpellEffIndex /*effIndex*/)
         && effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
         return;
 
-    WorldObject* target = NULL;
+    WorldObject* target = nullptr;
 
     // call events for object target if present
     if (effectHandleMode == SPELL_EFFECT_HANDLE_HIT_TARGET)
@@ -1308,7 +1308,7 @@ void Spell::DoCreateItem(uint32 /*i*/, uint32 itemtype, ItemContext context /*= 
     ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(newitemid);
     if (!pProto)
     {
-        player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
+        player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, nullptr, nullptr);
         return;
     }
 
@@ -1366,7 +1366,7 @@ void Spell::DoCreateItem(uint32 /*i*/, uint32 itemtype, ItemContext context /*= 
         else
         {
             // if not created by another reason from full inventory or unique items amount limitation
-            player->SendEquipError(msg, NULL, NULL, newitemid);
+            player->SendEquipError(msg, nullptr, nullptr, newitemid);
             return;
         }
     }
@@ -1379,7 +1379,7 @@ void Spell::DoCreateItem(uint32 /*i*/, uint32 itemtype, ItemContext context /*= 
         // was it successful? return error if not
         if (!pItem)
         {
-            player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, NULL, NULL);
+            player->SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, nullptr, nullptr);
             return;
         }
 
@@ -1783,9 +1783,9 @@ void Spell::EffectSummonChangeItem(SpellEffIndex /*effIndex*/)
 
             // prevent crash at access and unexpected charges counting with item update queue corrupt
             if (m_CastItem == m_targets.GetItemTarget())
-                m_targets.SetItemTarget(NULL);
+                m_targets.SetItemTarget(nullptr);
 
-            m_CastItem = NULL;
+            m_CastItem = nullptr;
             m_castItemGUID.Clear();
             m_castItemEntry = 0;
             m_castItemLevel = -1;
@@ -1805,9 +1805,9 @@ void Spell::EffectSummonChangeItem(SpellEffIndex /*effIndex*/)
 
             // prevent crash at access and unexpected charges counting with item update queue corrupt
             if (m_CastItem == m_targets.GetItemTarget())
-                m_targets.SetItemTarget(NULL);
+                m_targets.SetItemTarget(nullptr);
 
-            m_CastItem = NULL;
+            m_CastItem = nullptr;
             m_castItemGUID.Clear();
             m_castItemEntry = 0;
             m_castItemLevel = -1;
@@ -1830,9 +1830,9 @@ void Spell::EffectSummonChangeItem(SpellEffIndex /*effIndex*/)
 
             // prevent crash at access and unexpected charges counting with item update queue corrupt
             if (m_CastItem == m_targets.GetItemTarget())
-                m_targets.SetItemTarget(NULL);
+                m_targets.SetItemTarget(nullptr);
 
-            m_CastItem = NULL;
+            m_CastItem = nullptr;
             m_castItemGUID.Clear();
             m_castItemEntry = 0;
             m_castItemLevel = -1;
@@ -1894,7 +1894,7 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
 
     int32 duration = m_spellInfo->CalcDuration(m_originalCaster);
 
-    TempSummon* summon = NULL;
+    TempSummon* summon = nullptr;
 
     // determine how many units should be summoned
     uint32 numSummons;
@@ -2353,8 +2353,8 @@ void Spell::EffectEnchantItemPerm(SpellEffIndex effIndex)
         // and add a scroll
         damage = 1;
         DoCreateItem(effIndex, effectInfo->ItemType, m_spellInfo->HasAttribute(SPELL_ATTR0_TRADESPELL) ? ItemContext::Trade_Skill : ItemContext::NONE);
-        itemTarget = NULL;
-        m_targets.SetItemTarget(NULL);
+        itemTarget = nullptr;
+        m_targets.SetItemTarget(nullptr);
     }
     else
     {
@@ -2594,7 +2594,7 @@ void Spell::EffectSummonPet(SpellEffIndex effIndex)
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
         return;
 
-    Player* owner = NULL;
+    Player* owner = nullptr;
     if (m_originalCaster)
     {
         owner = m_originalCaster->ToPlayer();
@@ -2800,7 +2800,7 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
             // Skyshatter Harness item set bonus
             // Stormstrike
             if (AuraEffect* aurEff = m_caster->IsScriptOverriden(m_spellInfo, 5634))
-                m_caster->CastSpell(m_caster, 38430, true, NULL, aurEff);
+                m_caster->CastSpell(m_caster, 38430, true, nullptr, aurEff);
             break;
         }
         case SPELLFAMILY_DRUID:
@@ -3069,7 +3069,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
 
                     uint32 spell_id = roll_chance_i(20) ? 8854 : 8855;
 
-                    m_caster->CastSpell(m_caster, spell_id, true, NULL);
+                    m_caster->CastSpell(m_caster, spell_id, true, nullptr);
                     return;
                 }
                 // Brittle Armor - need remove one 24575 Brittle Armor aura
@@ -3150,7 +3150,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
 
                     uint8 bag = 19;
                     uint8 slot = 0;
-                    Item* item = NULL;
+                    Item* item = nullptr;
 
                     while (bag) // 256 = 0 due to var type
                     {
@@ -3379,7 +3379,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     // proc a spellcast
                     if (Aura* chargesAura = m_caster->GetAura(59907))
                     {
-                        m_caster->CastSpell(unitTarget, spell_heal, true, NULL, NULL, m_caster->ToTempSummon()->GetSummonerGUID());
+                        m_caster->CastSpell(unitTarget, spell_heal, true, nullptr, nullptr, m_caster->ToTempSummon()->GetSummonerGUID());
                         if (chargesAura->ModCharges(-1))
                             m_caster->ToTempSummon()->UnSummon();
                     }
@@ -3408,7 +3408,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                         Creature* totem = unitTarget->GetMap()->GetCreature(unitTarget->m_SummonSlot[slot]);
                         if (totem && totem->IsTotem())
                         {
-                            m_caster->CastCustomSpell(totem, 55277, &basepoints0, NULL, NULL, true);
+                            m_caster->CastCustomSpell(totem, 55277, &basepoints0, nullptr, nullptr, true);
                         }
                     }
                     break;
@@ -3827,7 +3827,7 @@ void Spell::EffectFeedPet(SpellEffIndex effIndex)
     player->DestroyItemCount(foodItem, count, true);
     /// @todo fix crash when a spell has two effects, both pointed at the same item target
 
-    m_caster->CastCustomSpell(pet, effectInfo->TriggerSpell, &benefit, NULL, NULL, true);
+    m_caster->CastCustomSpell(pet, effectInfo->TriggerSpell, &benefit, nullptr, nullptr, true);
 }
 
 void Spell::EffectDismissPet(SpellEffIndex effIndex)
@@ -4471,7 +4471,7 @@ void Spell::EffectDestroyAllTotems(SpellEffIndex /*effIndex*/)
     ApplyPct(mana, damage);
 
     if (mana)
-        m_caster->CastCustomSpell(m_caster, 39104, &mana, NULL, NULL, true);
+        m_caster->CastCustomSpell(m_caster, 39104, &mana, nullptr, nullptr, true);
 }
 
 void Spell::EffectDurabilityDamage(SpellEffIndex effIndex)

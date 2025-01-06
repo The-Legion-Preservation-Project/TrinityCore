@@ -94,7 +94,7 @@ void LootItemStorage::LoadStorageFromDB()
             Tokenizer bonusLists(fields[13].GetString(), ' ');
             std::transform(bonusLists.begin(), bonusLists.end(), std::back_inserter(lootItem.BonusListIDs), [](char const* token)
                 {
-                    return int32(strtol(token, NULL, 10));
+                    return int32(strtol(token, nullptr, 10));
                 });
 
             storedContainer.AddLootItem(lootItem, trans);

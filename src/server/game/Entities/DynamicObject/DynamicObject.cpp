@@ -33,7 +33,7 @@
 #include "World.h"
 
 DynamicObject::DynamicObject(bool isWorldObject) : WorldObject(isWorldObject),
-    _aura(NULL), _removedAura(NULL), _caster(NULL), _duration(0), _spellXSpellVisualId(0), _isViewpoint(false)
+    _aura(nullptr), _removedAura(nullptr), _caster(nullptr), _duration(0), _spellXSpellVisualId(0), _isViewpoint(false)
 {
     m_objectType |= TYPEMASK_DYNAMICOBJECT;
     m_objectTypeId = TYPEID_DYNAMICOBJECT;
@@ -205,7 +205,7 @@ void DynamicObject::RemoveAura()
 {
     ASSERT(_aura && !_removedAura);
     _removedAura = _aura;
-    _aura = NULL;
+    _aura = nullptr;
     if (!_removedAura->IsRemoved())
         _removedAura->_Remove(AURA_REMOVE_BY_DEFAULT);
 }
@@ -241,7 +241,7 @@ void DynamicObject::UnbindFromCaster()
 {
     ASSERT(_caster);
     _caster->_UnregisterDynObject(this);
-    _caster = NULL;
+    _caster = nullptr;
 }
 
 SpellInfo const* DynamicObject::GetSpellInfo() const

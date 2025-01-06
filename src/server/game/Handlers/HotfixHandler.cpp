@@ -48,7 +48,7 @@ void WorldSession::HandleDBQueryBulk(WorldPackets::Hotfix::DBQueryBulk& dbQuery)
         else
         {
             TC_LOG_TRACE("network", "CMSG_DB_QUERY_BULK: %s requested non-existing entry %u in datastore: %u", GetPlayerInfo().c_str(), record.RecordID, dbQuery.TableHash);
-            dbReply.Timestamp = time(NULL);
+            dbReply.Timestamp = time(nullptr);
         }
 
         SendPacket(dbReply.Write());
