@@ -27,8 +27,7 @@ enum ShamanSpells
     SPELL_SHAMAN_STORMBRINGER_PROC      = 201846,
     SPELL_SHAMAN_STORMSTRIKE            = 17364,
     SPELL_SHAMAN_MAELSTROM_WEAPON_POWER = 187890,
-    SPELL_SHAMAN_WINDFURY_ATTACK        = 25504,
-
+    SPELL_SHAMAN_WINDFURY_ATTACK        = 25504
 };
 
 // 188070 - Healing Surge
@@ -71,14 +70,6 @@ class tlpp_spell_sha_maelstrom_weapon : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_MAELSTROM_WEAPON_POWER });
     }
 
-    bool CheckEffectProc(ProcEventInfo& eventInfo)
-    {
-        return true;
-        // return eventInfo.GetDamageInfo()->GetAttackType() == BASE_ATTACK ||
-        //        eventInfo.GetDamageInfo()->GetAttackType() == OFF_ATTACK ||
-        //        eventInfo.GetSpellInfo()->Id == SPELL_SHAMAN_WINDFURY_ATTACK;
-    }
-
     void HandleEffectProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
     {
         if (Unit* caster = GetCaster())
@@ -87,7 +78,6 @@ class tlpp_spell_sha_maelstrom_weapon : public AuraScript
 
     void Register() override
     {
-        DoCheckProc += AuraCheckProcFn(tlpp_spell_sha_maelstrom_weapon::CheckEffectProc);
         OnEffectProc += AuraEffectProcFn(tlpp_spell_sha_maelstrom_weapon::HandleEffectProc, EFFECT_0, SPELL_AURA_DUMMY);
     }
 };

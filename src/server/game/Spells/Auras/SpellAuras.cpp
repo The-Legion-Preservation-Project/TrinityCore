@@ -1757,7 +1757,8 @@ uint32 Aura::GetProcEffectMask(AuraApplication* aurApp, ProcEventInfo& eventInfo
                 else if (attType == OFF_ATTACK)
                     item = target->ToPlayer()->GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
 
-                if (!item || item->IsBroken() || item->GetTemplate()->GetClass() != ITEM_CLASS_WEAPON || !((1 << item->GetTemplate()->GetSubClass()) & GetSpellInfo()->EquippedItemSubClassMask))
+                // TheLegionPreservationProject: fixed by b27e741096b59d3e07503bb8db30df6596dee1f2 in the future
+                if (!item || item->IsBroken() || !item->IsFitToSpellRequirements(GetSpellInfo()))
                     return 0;
             }
         }
@@ -1765,7 +1766,9 @@ uint32 Aura::GetProcEffectMask(AuraApplication* aurApp, ProcEventInfo& eventInfo
         {
             // Check if player is wearing shield
             Item* item = target->ToPlayer()->GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
-            if (!item || item->IsBroken() || item->GetTemplate()->GetClass() != ITEM_CLASS_ARMOR || !((1 << item->GetTemplate()->GetSubClass()) & GetSpellInfo()->EquippedItemSubClassMask))
+
+            // TheLegionPreservationProject: fixed by b27e741096b59d3e07503bb8db30df6596dee1f2 in the future
+            if (!item || item->IsBroken() || !item->IsFitToSpellRequirements(GetSpellInfo()))
                 return 0;
         }
     }
