@@ -57,7 +57,6 @@
 #include "Realm.h"
 #include "ReputationMgr.h"
 #include "ScriptMgr.h"
-#include "SharedDefines.h"
 #include "SocialMgr.h"
 #include "SystemPackets.h"
 #include "Util.h"

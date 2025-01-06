@@ -22,7 +22,7 @@
 #include "CUFProfile.h"
 #include "DatabaseEnvFwd.h"
 #include "DBCEnums.h"
-#include "EquipementSet.h"
+#include "EquipmentSet.h"
 #include "GroupReference.h"
 #include "ItemDefines.h"
 #include "ItemEnchantmentMgr.h"
@@ -1071,7 +1071,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SetObjectScale(float scale) override;
 
         bool TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options = 0);
-        bool TeleportTo(WorldLocation const &loc, uint32 options = 0);
+        bool TeleportTo(WorldLocation const& loc, uint32 options = 0);
         bool TeleportToBGEntryPoint();
 
         bool HasSummonPending() const;
@@ -1088,7 +1088,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         bool IsInWater() const override { return m_isInWater; }
         bool IsUnderWater() const override;
-        bool IsInAreaTriggerRadius(const AreaTriggerEntry* trigger) const;
+        bool IsInAreaTriggerRadius(AreaTriggerEntry const* trigger) const;
 
         void SendInitialPacketsBeforeAddToMap();
         void SendInitialPacketsAfterAddToMap();
@@ -1753,7 +1753,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         PvPInfo pvpInfo;
         void UpdatePvPState(bool onlyFFA = false);
         void SetPvP(bool state) override;
-        void UpdatePvP(bool state, bool override=false);
+        void UpdatePvP(bool state, bool override = false);
         void UpdateZone(uint32 newZone, uint32 newArea);
         void UpdateArea(uint32 newArea);
         void UpdateZoneDependentAuras(uint32 zone_id);    // zones
@@ -1778,7 +1778,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool IsInSameGroupWith(Player const* p) const;
         bool IsInSameRaidWith(Player const* p) const;
         void UninviteFromGroup();
-        static void RemoveFromGroup(Group* group, ObjectGuid guid, RemoveMethod method = GROUP_REMOVEMETHOD_DEFAULT, ObjectGuid kicker = ObjectGuid::Empty, const char* reason = nullptr);
+        static void RemoveFromGroup(Group* group, ObjectGuid guid, RemoveMethod method = GROUP_REMOVEMETHOD_DEFAULT, ObjectGuid kicker = ObjectGuid::Empty, char const* reason = nullptr);
         void RemoveFromGroup(RemoveMethod method = GROUP_REMOVEMETHOD_DEFAULT) { RemoveFromGroup(GetGroup(), GetGUID(), method); }
         void SendUpdateToOutOfRangeGroupMembers();
 
@@ -1911,7 +1911,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SendResetFailedNotify(uint32 mapid) const;
 
         bool UpdatePosition(float x, float y, float z, float orientation, bool teleport = false) override;
-        bool UpdatePosition(const Position &pos, bool teleport = false) override { return UpdatePosition(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), teleport); }
+        bool UpdatePosition(Position const& pos, bool teleport = false) override { return UpdatePosition(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), teleport); }
         void ProcessTerrainStatusUpdate(ZLiquidStatus status, Optional<LiquidData> const& liquidData) override;
 
         void SendMessageToSet(WorldPacket const* data, bool self) const override { SendMessageToSetInRange(data, GetVisibilityRange(), self); }
@@ -2367,7 +2367,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SetMap(Map* map) override;
         void ResetMap() override;
 
-        bool isAllowedToLoot(const Creature* creature) const;
+        bool isAllowedToLoot(Creature const* creature) const;
 
         DeclinedName const* GetDeclinedNames() const { return m_declinedname; }
         uint8 GetRunesState() const;

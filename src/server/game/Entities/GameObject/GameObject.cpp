@@ -25,6 +25,7 @@
 #include "GameObjectModel.h"
 #include "GameObjectPackets.h"
 #include "GameTime.h"
+#include "GossipDef.h"
 #include "GridNotifiersImpl.h"
 #include "Group.h"
 #include "GroupMgr.h"
@@ -42,7 +43,6 @@
 #include "SpellMgr.h"
 #include "Transport.h"
 #include "UpdateFieldFlags.h"
-#include "GossipDef.h"
 #include "World.h"
 #include <G3D/Quat.h>
 #include <sstream>
@@ -96,7 +96,7 @@ WorldPacket GameObjectTemplate::BuildQueryData(LocaleConstant loc) const
 
 bool QuaternionData::isUnit() const
 {
-    return fabs(x * x + y * y + z * z + w * w - 1.0f) < 1e-5;
+    return fabs(x * x + y * y + z * z + w * w - 1.0f) < 1e-5f;
 }
 
 QuaternionData QuaternionData::fromEulerAnglesZYX(float Z, float Y, float X)
@@ -1015,8 +1015,7 @@ void GameObject::SaveToDB()
 
 void GameObject::SaveToDB(uint32 mapid, std::vector<Difficulty> const& spawnDifficulties)
 {
-    const GameObjectTemplate* goI = GetGOInfo();
-
+    GameObjectTemplate const* goI = GetGOInfo();
     if (!goI)
         return;
 
@@ -1424,7 +1423,7 @@ void GameObject::SetGoArtKit(uint8 kit)
 
 void GameObject::SetGoArtKit(uint8 artkit, GameObject* go, ObjectGuid::LowType lowguid)
 {
-    const GameObjectData* data = nullptr;
+    GameObjectData const* data = nullptr;
     if (go)
     {
         go->SetGoArtKit(artkit);

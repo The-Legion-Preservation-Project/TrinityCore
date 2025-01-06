@@ -21,6 +21,7 @@
 #include "ObjectRegistry.h"
 #include "FactoryHolder.h"
 
+class Creature;
 class CreatureAI;
 
 typedef FactoryHolder<CreatureAI, Creature> CreatureAICreator;

@@ -630,7 +630,7 @@ void BattlegroundAB::EndBattleground(uint32 winner)
     Battleground::EndBattleground(winner);
 }
 
-WorldSafeLocsEntry const* BattlegroundAB::GetClosestGraveYard(Player* player)
+WorldSafeLocsEntry const* BattlegroundAB::GetClosestGraveyard(Player* player)
 {
     TeamId teamIndex = GetTeamIndexByTeamId(player->GetTeam());
 
@@ -650,7 +650,7 @@ WorldSafeLocsEntry const* BattlegroundAB::GetClosestGraveYard(Player* player)
         float mindist = 999999.0f;
         for (uint8 i = 0; i < nodes.size(); ++i)
         {
-            WorldSafeLocsEntry const*entry = sWorldSafeLocsStore.LookupEntry(BG_AB_GraveyardIds[nodes[i]]);
+            WorldSafeLocsEntry const* entry = sWorldSafeLocsStore.LookupEntry(BG_AB_GraveyardIds[nodes[i]]);
             if (!entry)
                 continue;
             float dist = (entry->Loc.X - plr_x)*(entry->Loc.X - plr_x)+(entry->Loc.Y - plr_y)*(entry->Loc.Y - plr_y);

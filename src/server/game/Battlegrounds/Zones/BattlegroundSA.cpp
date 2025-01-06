@@ -686,7 +686,7 @@ void BattlegroundSA::DestroyGate(Player* /*player*/, GameObject* /*go*/)
 {
 }
 
-WorldSafeLocsEntry const* BattlegroundSA::GetClosestGraveYard(Player* player)
+WorldSafeLocsEntry const* BattlegroundSA::GetClosestGraveyard(Player* player)
 {
     uint32 safeloc = 0;
     WorldSafeLocsEntry const* ret;

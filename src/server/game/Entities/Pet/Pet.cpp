@@ -202,7 +202,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petnumber, bool c
             return false;
         }
 
-        map->AddToMap(this->ToCreature());
+        map->AddToMap(ToCreature());
         return true;
     }
 
@@ -313,7 +313,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petnumber, bool c
     }
 
     owner->SetMinion(this, true);
-    map->AddToMap(this->ToCreature());
+    map->AddToMap(ToCreature());
 
     uint32 timediff = uint32(time(nullptr) - fields[13].GetUInt32());
     _LoadAuras(timediff);
@@ -1410,7 +1410,7 @@ bool Pet::learnSpell(uint32 spell_id)
     {
         WorldPackets::Pet::PetLearnedSpells packet;
         packet.Spells.push_back(spell_id);
-        GetOwner()->GetSession()->SendPacket(packet.Write());
+        GetOwner()->SendDirectMessage(packet.Write());
         GetOwner()->PetSpellInitialize();
     }
     return true;
@@ -1477,7 +1477,7 @@ bool Pet::unlearnSpell(uint32 spell_id, bool learn_prev, bool clear_ab)
         {
             WorldPackets::Pet::PetUnlearnedSpells packet;
             packet.Spells.push_back(spell_id);
-            GetOwner()->GetSession()->SendPacket(packet.Write());
+            GetOwner()->SendDirectMessage(packet.Write());
         }
         return true;
     }

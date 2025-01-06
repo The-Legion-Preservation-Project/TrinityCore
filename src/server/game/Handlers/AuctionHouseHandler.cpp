@@ -32,7 +32,7 @@
 #include "Player.h"
 #include "Util.h"
 #include "World.h"
-#include "WorldPacket.h"
+#include <sstream>
 
 //void called when player click on auctioneer npc
 void WorldSession::HandleAuctionHelloOpcode(WorldPackets::AuctionHouse::AuctionHelloRequest& packet)

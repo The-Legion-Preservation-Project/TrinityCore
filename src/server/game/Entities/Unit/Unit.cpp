@@ -80,6 +80,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
+#include <sstream>
 #include <cmath>
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =
@@ -107,6 +108,13 @@ float playerBaseMoveSpeed[MAX_MOVE_TYPE] =
     4.5f,                  // MOVE_FLIGHT_BACK
     3.14f                  // MOVE_PITCH_RATE
 };
+
+DispelableAura::DispelableAura(Aura* aura, int32 dispelChance, uint8 dispelCharges) :
+    _aura(aura), _chance(dispelChance), _charges(dispelCharges)
+{
+}
+
+DispelableAura::~DispelableAura() = default;
 
 bool DispelableAura::RollDispel() const
 {
@@ -293,7 +301,7 @@ Unit::Unit(bool isWorldObject) :
     m_ControlledByPlayer(false), movespline(new Movement::MoveSpline()),
     i_AI(nullptr), i_disabledAI(nullptr), m_AutoRepeatFirstCast(false), m_procDeep(0),
     m_removedAurasCount(0), i_motionMaster(new MotionMaster(this)), m_regenTimer(0), m_ThreatManager(this),
-    m_vehicle(nullptr), m_vehicleKit(nullptr), m_unitTypeMask(UNIT_MASK_NONE),
+    m_vehicle(nullptr), m_vehicleKit(nullptr), m_unitTypeMask(UNIT_MASK_NONE), m_Diminishing(),
     m_HostileRefManager(this), _aiAnimKitId(0), _movementAnimKitId(0), _meleeAnimKitId(0),
     _spellHistory(new SpellHistory(this))
 {
@@ -575,7 +583,7 @@ void Unit::resetAttackTimer(WeaponAttackType type)
     m_attackTimer[type] = uint32(GetBaseAttackTime(type) * m_modAttackSpeedPct[type]);
 }
 
-bool Unit::IsWithinCombatRange(const Unit* obj, float dist2compare) const
+bool Unit::IsWithinCombatRange(Unit const* obj, float dist2compare) const
 {
     if (!obj || !IsInMap(obj) || !IsInPhase(obj))
         return false;
@@ -622,7 +630,7 @@ bool Unit::IsWithinBoundaryRadius(const Unit* obj) const
     return IsInDist(obj, objBoundaryRadius);
 }
 
-void Unit::GetRandomContactPoint(const Unit* obj, float &x, float &y, float &z, float distance2dMin, float distance2dMax) const
+void Unit::GetRandomContactPoint(Unit const* obj, float &x, float &y, float &z, float distance2dMin, float distance2dMax) const
 {
     float combat_reach = GetCombatReach();
     if (combat_reach < 0.1f) // sometimes bugged for players
@@ -944,7 +952,7 @@ uint32 Unit::DealDamage(Unit* victim, uint32 damage, CleanDamage const* cleanDam
 
             ASSERT(he && he->duel);
 
-            if (duel_wasMounted) // In this case victim==mount
+            if (duel_wasMounted) // In this case victim == mount
                 victim->SetHealth(1);
             else
                 he->SetHealth(1);
@@ -1576,6 +1584,7 @@ bool Unit::IsDamageReducedByArmor(SpellSchoolMask schoolMask, SpellInfo const* s
         if (spellInfo->HasAttribute(SPELL_ATTR0_CU_IGNORE_ARMOR))
             return false;
 
+        // bleeding effects are not reduced by armor
         if (effIndex != -1)
         {
             // bleeding effects are not reduced by armor
@@ -2905,7 +2914,7 @@ void Unit::_UpdateSpells(uint32 time)
 
 void Unit::_UpdateAutoRepeatSpell()
 {
-    const SpellInfo* autoRepeatSpellInfo = m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo;
+    SpellInfo const* autoRepeatSpellInfo = m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo;
 
     // check "realtime" interrupts
     // don't cancel spells which are affected by a SPELL_AURA_CAST_WHILE_WALKING effect
@@ -9365,8 +9374,8 @@ void Unit::ApplyDiminishingAura(DiminishingGroup group, bool apply)
 
 void Unit::ClearDiminishings()
 {
-    for (uint32 i = 0; i < DIMINISHING_MAX; ++i)
-        m_Diminishing[i].Clear();
+    for (DiminishingReturn& dim : m_Diminishing)
+        dim.Clear();
 }
 
 float Unit::GetSpellMaxRangeForTarget(Unit const* target, SpellInfo const* spellInfo) const
@@ -10712,12 +10721,12 @@ void Unit::SendPetAIReaction(ObjectGuid guid)
     owner->ToPlayer()->SendDirectMessage(packet.Write());
 }
 
+///----------End of Pet responses methods----------
+
 void Unit::PropagateSpeedChange()
 {
     GetMotionMaster()->PropagateSpeedChange();
 }
-
-///----------End of Pet responses methods----------
 
 void Unit::StopMoving()
 {
@@ -10778,7 +10787,7 @@ void Unit::SetStandState(UnitStandStateType state, uint32 animKitID /* = 0*/)
     if (GetTypeId() == TYPEID_PLAYER)
     {
         WorldPackets::Misc::StandStateUpdate packet(state, animKitID);
-        ToPlayer()->GetSession()->SendPacket(packet.Write());
+        ToPlayer()->SendDirectMessage(packet.Write());
     }
 }
 
@@ -12159,7 +12168,7 @@ void Unit::RemoveVehicleKit(bool onRemoveFromWorld /*= false*/)
     RemoveNpcFlag(NPCFlags(UNIT_NPC_FLAG_SPELLCLICK | UNIT_NPC_FLAG_PLAYER_VEHICLE));
 }
 
-bool Unit::IsOnVehicle(const Unit* vehicle) const
+bool Unit::IsOnVehicle(Unit const* vehicle) const
 {
     return m_vehicle && m_vehicle == vehicle->GetVehicleKit();
 }
@@ -13413,7 +13422,7 @@ bool Unit::UpdatePosition(float x, float y, float z, float orientation, bool tel
     return (relocated || turn);
 }
 
-bool Unit::UpdatePosition(const Position &pos, bool teleport)
+bool Unit::UpdatePosition(Position const& pos, bool teleport)
 {
     return UpdatePosition(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), teleport);
 }

@@ -1583,7 +1583,7 @@ void ObjectMgr::LoadLinkedRespawn()
         {
             case CREATURE_TO_CREATURE:
             {
-                const CreatureData* slave = GetCreatureData(guidLow);
+                CreatureData const* slave = GetCreatureData(guidLow);
                 if (!slave)
                 {
                     TC_LOG_ERROR("sql.sql", "LinkedRespawn: Creature (guid) '" UI64FMTD "' not found in creature table", guidLow);
@@ -1591,7 +1591,7 @@ void ObjectMgr::LoadLinkedRespawn()
                     break;
                 }
 
-                const CreatureData* master = GetCreatureData(linkedGuidLow);
+                CreatureData const* master = GetCreatureData(linkedGuidLow);
                 if (!master)
                 {
                     TC_LOG_ERROR("sql.sql", "LinkedRespawn: Creature (linkedGuid) '" UI64FMTD "' not found in creature table", linkedGuidLow);
@@ -1621,7 +1621,7 @@ void ObjectMgr::LoadLinkedRespawn()
             }
             case CREATURE_TO_GO:
             {
-                const CreatureData* slave = GetCreatureData(guidLow);
+                CreatureData const* slave = GetCreatureData(guidLow);
                 if (!slave)
                 {
                     TC_LOG_ERROR("sql.sql", "LinkedRespawn: Creature (guid) '" UI64FMTD "' not found in creature table", guidLow);
@@ -1705,7 +1705,7 @@ void ObjectMgr::LoadLinkedRespawn()
                     break;
                 }
 
-                const CreatureData* master = GetCreatureData(linkedGuidLow);
+                CreatureData const* master = GetCreatureData(linkedGuidLow);
                 if (!master)
                 {
                     TC_LOG_ERROR("sql.sql", "LinkedRespawn: Creature (linkedGuid) '" UI64FMTD "' not found in creature table", linkedGuidLow);
@@ -6388,7 +6388,7 @@ void ObjectMgr::LoadGraveyardZones()
 {
     uint32 oldMSTime = getMSTime();
 
-    GraveYardStore.clear(); // needed for reload case
+    GraveyardStore.clear(); // needed for reload case
 
     //                                               0   1          2
     QueryResult result = WorldDatabase.Query("SELECT ID, GhostZone, Faction FROM graveyard_zone");
@@ -6431,14 +6431,14 @@ void ObjectMgr::LoadGraveyardZones()
             continue;
         }
 
-        if (!AddGraveYardLink(safeLocId, zoneId, team, false))
+        if (!AddGraveyardLink(safeLocId, zoneId, team, false))
             TC_LOG_ERROR("sql.sql", "Table `graveyard_zone` has a duplicate record for Graveyard (ID: %u) and Zone (ID: %u), skipped.", safeLocId, zoneId);
     } while (result->NextRow());
 
     TC_LOG_INFO("server.loading", ">> Loaded %u graveyard-zone links in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
-WorldSafeLocsEntry const* ObjectMgr::GetDefaultGraveYard(uint32 team) const
+WorldSafeLocsEntry const* ObjectMgr::GetDefaultGraveyard(uint32 team) const
 {
     enum DefaultGraveyard
     {
@@ -6453,7 +6453,7 @@ WorldSafeLocsEntry const* ObjectMgr::GetDefaultGraveYard(uint32 team) const
     else return nullptr;
 }
 
-WorldSafeLocsEntry const* ObjectMgr::GetClosestGraveYard(WorldLocation const& location, uint32 team, WorldObject* conditionObject) const
+WorldSafeLocsEntry const* ObjectMgr::GetClosestGraveyard(WorldLocation const& location, uint32 team, WorldObject* conditionObject) const
 {
     float x, y, z;
     location.GetPosition(x, y, z);
@@ -6467,7 +6467,7 @@ WorldSafeLocsEntry const* ObjectMgr::GetClosestGraveYard(WorldLocation const& lo
         if (z > -500)
         {
             TC_LOG_ERROR("misc", "ZoneId not found for map %u coords (%f, %f, %f)", MapId, x, y, z);
-            return GetDefaultGraveYard(team);
+            return GetDefaultGraveyard(team);
         }
     }
 
@@ -6478,7 +6478,7 @@ WorldSafeLocsEntry const* ObjectMgr::GetClosestGraveYard(WorldLocation const& lo
     //     then check faction
     //   if mapId != graveyard.mapId (ghost in instance) and search any graveyard associated
     //     then check faction
-    GraveYardMapBounds range = GraveYardStore.equal_range(zoneId);
+    GraveyardMapBounds range = GraveyardStore.equal_range(zoneId);
     MapEntry const* map = sMapStore.LookupEntry(MapId);
 
     // not need to check validity of map object; MapId _MUST_ be valid here
@@ -6486,7 +6486,7 @@ WorldSafeLocsEntry const* ObjectMgr::GetClosestGraveYard(WorldLocation const& lo
     {
         if (zoneId != 0) // zone == 0 can't be fixed, used by bliz for bugged zones
             TC_LOG_ERROR("sql.sql", "Table `game_graveyard_zone` incomplete: Zone %u Team %u does not have a linked graveyard.", zoneId, team);
-        return GetDefaultGraveYard(team);
+        return GetDefaultGraveyard(team);
     }
 
     // at corpse map
@@ -6508,7 +6508,7 @@ WorldSafeLocsEntry const* ObjectMgr::GetClosestGraveYard(WorldLocation const& lo
 
     for (; range.first != range.second; ++range.first)
     {
-        GraveYardData const& data = range.first->second;
+        GraveyardData const& data = range.first->second;
 
         WorldSafeLocsEntry const* entry = sWorldSafeLocsStore.AssertEntry(data.safeLocId);
 
@@ -6588,12 +6588,12 @@ WorldSafeLocsEntry const* ObjectMgr::GetClosestGraveYard(WorldLocation const& lo
     return entryFar;
 }
 
-GraveYardData const* ObjectMgr::FindGraveYardData(uint32 id, uint32 zoneId) const
+GraveyardData const* ObjectMgr::FindGraveyardData(uint32 id, uint32 zoneId) const
 {
-    GraveYardMapBounds range = GraveYardStore.equal_range(zoneId);
+    GraveyardMapBounds range = GraveyardStore.equal_range(zoneId);
     for (; range.first != range.second; ++range.first)
     {
-        GraveYardData const& data = range.first->second;
+        GraveyardData const& data = range.first->second;
         if (data.safeLocId == id)
             return &data;
     }
@@ -6616,17 +6616,17 @@ AccessRequirement const* ObjectMgr::GetAccessRequirement(uint32 mapid, Difficult
     return nullptr;
 }
 
-bool ObjectMgr::AddGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool persist /*= true*/)
+bool ObjectMgr::AddGraveyardLink(uint32 id, uint32 zoneId, uint32 team, bool persist /*= true*/)
 {
-    if (FindGraveYardData(id, zoneId))
+    if (FindGraveyardData(id, zoneId))
         return false;
 
     // add link to loaded data
-    GraveYardData data;
+    GraveyardData data;
     data.safeLocId = id;
     data.team = team;
 
-    GraveYardStore.insert(GraveYardContainer::value_type(zoneId, data));
+    GraveyardStore.insert(GraveyardContainer::value_type(zoneId, data));
 
     // add link to DB
     if (persist)
@@ -6643,9 +6643,9 @@ bool ObjectMgr::AddGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool per
     return true;
 }
 
-void ObjectMgr::RemoveGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool persist /*= false*/)
+void ObjectMgr::RemoveGraveyardLink(uint32 id, uint32 zoneId, uint32 team, bool persist /*= false*/)
 {
-    GraveYardMapBoundsNonConst range = GraveYardStore.equal_range(zoneId);
+    GraveyardMapBoundsNonConst range = GraveyardStore.equal_range(zoneId);
     if (range.first == range.second)
     {
         //TC_LOG_ERROR("sql.sql", "Table `graveyard_zone` incomplete: Zone %u Team %u does not have a linked graveyard.", zoneId, team);
@@ -6657,7 +6657,7 @@ void ObjectMgr::RemoveGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool 
 
     for (; range.first != range.second; ++range.first)
     {
-        GraveYardData & data = range.first->second;
+        GraveyardData & data = range.first->second;
 
         // skip not matching safezone id
         if (data.safeLocId != id)
@@ -6677,7 +6677,7 @@ void ObjectMgr::RemoveGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool 
         return;
 
     // remove from links
-    GraveYardStore.erase(range.first);
+    GraveyardStore.erase(range.first);
 
     // remove link from DB
     if (persist)
@@ -6861,13 +6861,13 @@ AreaTriggerStruct const* ObjectMgr::GetGoBackTrigger(uint32 Map) const
 {
     bool useParentDbValue = false;
     uint32 parentId = 0;
-    const MapEntry* mapEntry = sMapStore.LookupEntry(Map);
+    MapEntry const* mapEntry = sMapStore.LookupEntry(Map);
     if (!mapEntry || mapEntry->CorpseMapID < 0)
         return nullptr;
 
     if (mapEntry->IsDungeon())
     {
-        const InstanceTemplate* iTemplate = sObjectMgr->GetInstanceTemplate(Map);
+        InstanceTemplate const* iTemplate = sObjectMgr->GetInstanceTemplate(Map);
 
         if (!iTemplate)
             return nullptr;

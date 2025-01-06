@@ -312,7 +312,7 @@ void AuctionBotBuyer::BuyAndBidItems(BuyerConfiguration& config)
             bidPrice = auction->MinBid;
         }
 
-        const BuyerItemInfo* ahInfo = nullptr;
+        BuyerItemInfo const* ahInfo = nullptr;
         BuyerItemInfoMap::const_iterator sameItemItr = config.SameItemInfo.find(auction->Item->GetEntry());
         if (sameItemItr != config.SameItemInfo.end())
             ahInfo = &sameItemItr->second;

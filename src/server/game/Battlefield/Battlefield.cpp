@@ -588,7 +588,7 @@ BfGraveyard* Battlefield::GetGraveyardById(uint32 id) const
     return nullptr;
 }
 
-WorldSafeLocsEntry const* Battlefield::GetClosestGraveYard(Player* player)
+WorldSafeLocsEntry const* Battlefield::GetClosestGraveyard(Player* player)
 {
     BfGraveyard* closestGY = nullptr;
     float maxdist = -1;
@@ -762,7 +762,7 @@ void BfGraveyard::RelocateDeadPlayers()
             player->TeleportTo(player->GetMapId(), closestGrave->Loc.X, closestGrave->Loc.Y, closestGrave->Loc.Z, player->GetOrientation());
         else
         {
-            closestGrave = m_Bf->GetClosestGraveYard(player);
+            closestGrave = m_Bf->GetClosestGraveyard(player);
             if (closestGrave)
                 player->TeleportTo(player->GetMapId(), closestGrave->Loc.X, closestGrave->Loc.Y, closestGrave->Loc.Z, player->GetOrientation());
         }

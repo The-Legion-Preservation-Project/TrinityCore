@@ -108,10 +108,10 @@ void BattlegroundEY::PostUpdateImpl(uint32 diff)
             /*I used this order of calls, because although we will check if one player is in gameobject's distance 2 times
               but we can count of players on current point in CheckSomeoneLeftPoint
             */
-            this->CheckSomeoneJoinedPoint();
+            CheckSomeoneJoinedPoint();
             //check if player left point
-            this->CheckSomeoneLeftPoint();
-            this->UpdatePointStatuses();
+            CheckSomeoneLeftPoint();
+            UpdatePointStatuses();
             m_TowerCapCheckTimer = BG_EY_FPOINTS_TICK_TIME;
         }
     }
@@ -790,10 +790,10 @@ void BattlegroundEY::EventTeamCapturedPoint(Player* player, uint32 Point)
     if (!BgCreatures[Point].IsEmpty())
         DelCreature(Point);
 
-    WorldSafeLocsEntry const* sg = sWorldSafeLocsStore.LookupEntry(m_CapturingPointTypes[Point].GraveYardId);
+    WorldSafeLocsEntry const* sg = sWorldSafeLocsStore.LookupEntry(m_CapturingPointTypes[Point].GraveyardId);
     if (!sg || !AddSpiritGuide(Point, sg->Loc.X, sg->Loc.Y, sg->Loc.Z, 3.124139f, GetTeamIndexByTeamId(Team)))
         TC_LOG_ERROR("bg.battleground", "BatteGroundEY: Failed to spawn spirit guide. point: %u, team: %u, graveyard_id: %u",
-            Point, Team, m_CapturingPointTypes[Point].GraveYardId);
+            Point, Team, m_CapturingPointTypes[Point].GraveyardId);
 
 //    SpawnBGCreature(Point, RESPAWN_IMMEDIATELY);
 
@@ -915,7 +915,7 @@ void BattlegroundEY::FillInitialWorldStates(WorldPackets::WorldState::InitWorldS
     }
 }
 
-WorldSafeLocsEntry const* BattlegroundEY::GetClosestGraveYard(Player* player)
+WorldSafeLocsEntry const* BattlegroundEY::GetClosestGraveyard(Player* player)
 {
     uint32 g_id = 0;
 
@@ -950,9 +950,9 @@ WorldSafeLocsEntry const* BattlegroundEY::GetClosestGraveYard(Player* player)
     {
         if (m_PointOwnedByTeam[i] == player->GetTeam() && m_PointState[i] == EY_POINT_UNDER_CONTROL)
         {
-            entry = sWorldSafeLocsStore.LookupEntry(m_CapturingPointTypes[i].GraveYardId);
+            entry = sWorldSafeLocsStore.LookupEntry(m_CapturingPointTypes[i].GraveyardId);
             if (!entry)
-                TC_LOG_ERROR("bg.battleground", "BattlegroundEY: Graveyard %u could not be found.", m_CapturingPointTypes[i].GraveYardId);
+                TC_LOG_ERROR("bg.battleground", "BattlegroundEY: Graveyard %u could not be found.", m_CapturingPointTypes[i].GraveyardId);
             else
             {
                 distance = (entry->Loc.X - plr_x)*(entry->Loc.X - plr_x) + (entry->Loc.Y - plr_y)*(entry->Loc.Y - plr_y) + (entry->Loc.Z - plr_z)*(entry->Loc.Z - plr_z);

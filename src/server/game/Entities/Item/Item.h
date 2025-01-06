@@ -154,6 +154,7 @@ class TC_GAME_API Item : public Object
 {
     friend void AddItemToUpdateQueueOf(Item* item, Player* player);
     friend void RemoveItemFromUpdateQueueOf(Item* item, Player* player);
+
     public:
         static Item* CreateItem(uint32 itemEntry, uint32 count, ItemContext context, Player const* player = nullptr);
         Item* CloneItem(uint32 count, Player const* player = nullptr) const;
@@ -220,7 +221,7 @@ class TC_GAME_API Item : public Object
         void SetInTrade(bool b = true) { mb_in_trade = b; }
         bool IsInTrade() const { return mb_in_trade; }
 
-        bool HasEnchantRequiredSkill(const Player* player) const;
+        bool HasEnchantRequiredSkill(Player const* player) const;
         uint32 GetEnchantRequiredLevel() const;
 
         bool IsFitToSpellRequirements(SpellInfo const* spellInfo) const;
@@ -282,7 +283,6 @@ class TC_GAME_API Item : public Object
         // Update States
         ItemUpdateState GetState() const { return uState; }
         void SetState(ItemUpdateState state, Player* forplayer = nullptr);
-        void RemoveFromUpdateQueueOf(Player* player);
         bool IsInUpdateQueue() const { return uQueuePos != -1; }
         uint16 GetQueuePos() const { return uQueuePos; }
         void FSetState(ItemUpdateState state)               // forced
