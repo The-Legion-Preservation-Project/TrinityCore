@@ -23993,6 +23993,14 @@ void Player::SendInitialPacketsAfterAddToMap()
         _garrison->SendRemoteInfo();
 
     UpdateItemLevelAreaBasedScaling();
+
+    if (!GetPlayerSharingQuest().IsEmpty())
+    {
+        if (Quest const* quest = sObjectMgr->GetQuestTemplate(GetSharedQuestID()))
+            PlayerTalkClass->SendQuestGiverQuestDetails(quest, GetGUID(), true, false);
+        else
+            ClearQuestSharingInfo();
+    }
 }
 
 void Player::SendUpdateToOutOfRangeGroupMembers()
