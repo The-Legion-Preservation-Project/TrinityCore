@@ -439,7 +439,11 @@ void Creature::RemoveCorpse(bool setSpawnTime, bool destroyForNearbyPlayers)
 
             SaveRespawnTime(0, false);
         }
-        AddObjectToRemoveList();
+
+        if (TempSummon* summon = ToTempSummon())
+            summon->UnSummon();
+        else
+            AddObjectToRemoveList();
     }
 }
 
@@ -644,10 +648,10 @@ void Creature::Update(uint32 diff)
 {
     if (IsAIEnabled && m_triggerJustAppeared && m_deathState == ALIVE)
     {
-        m_triggerJustAppeared = false;
-        AI()->JustAppeared();
         if (m_respawnCompatibilityMode && m_vehicleKit)
             m_vehicleKit->Reset();
+        m_triggerJustAppeared = false;
+        AI()->JustAppeared();
     }
 
     UpdateMovementFlags();
