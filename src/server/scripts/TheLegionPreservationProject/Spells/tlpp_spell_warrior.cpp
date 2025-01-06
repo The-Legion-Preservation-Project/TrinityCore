@@ -28,7 +28,7 @@ enum WarriorSpells
     SPELL_WARRIOR_VENGEANCE_FOCUSED_RAGE            = 202573,
 };
 
-//190456 - Ignore Pain
+// 190456 - Ignore Pain
 class tlpp_spell_warr_ignore_pain : public SpellScript
 {
     PrepareSpellScript(tlpp_spell_warr_ignore_pain);
@@ -55,7 +55,7 @@ class tlpp_spell_warr_ignore_pain : public SpellScript
     }
 };
 
-//190456 - Ignore Pain
+// 190456 - Ignore Pain
 class tlpp_aura_warr_ignore_pain : public AuraScript
 {
     PrepareAuraScript(tlpp_aura_warr_ignore_pain);
