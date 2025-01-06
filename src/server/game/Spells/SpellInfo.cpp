@@ -3285,6 +3285,7 @@ void SpellInfo::_LoadImmunityInfo()
         switch (Id)
         {
             case 22812: // Barkskin
+            case 47585: // Dispersion
                 _allowedMechanicMask |=
                     (1 << MECHANIC_STUN) |
                     (1 << MECHANIC_FREEZE) |
@@ -3306,8 +3307,8 @@ void SpellInfo::_LoadImmunityInfo()
     {
         switch (Id)
         {
-            case 47585: // Dispersion
             case 22812: // Barkskin
+            case 47585: // Dispersion
                 _allowedMechanicMask |= (1 << MECHANIC_FEAR) | (1 << MECHANIC_HORROR);
                 break;
             default:
