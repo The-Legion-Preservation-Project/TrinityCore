@@ -26,7 +26,7 @@ struct CinematicCameraLoadInfo
 {
     static DB2FileLoadInfo const* Instance()
     {
-        static DB2FieldMeta const fields[] =
+        static DB2FieldMeta const loadedFields[] =
         {
             { false, FT_INT, "ID" },
             { false, FT_INT, "SoundID" },
@@ -36,10 +36,15 @@ struct CinematicCameraLoadInfo
             { false, FT_FLOAT, "OriginFacing" },
             { false, FT_INT, "FileDataID" },
         };
-        static char const* types = "iffi";
-        static uint8 const arraySizes[4] = { 1, 3, 1, 1 };
-        static DB2Meta const meta(1294214, -1, 4, 0x0062B0F4, types, arraySizes, -1);
-        static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
+        static DB2MetaField const fields[4] =
+        {
+            { FT_INT, 1, false },
+            { FT_FLOAT, 3, false },
+            { FT_FLOAT, 1, false },
+            { FT_INT, 1, false },
+        };
+        static DB2Meta const meta(1294214, -1, 4, 0x0062B0F4, fields, -1);
+        static DB2FileLoadInfo const loadInfo(&loadedFields[0], std::extent<decltype(loadedFields)>::value, &meta);
         return &loadInfo;
     }
 };
@@ -48,7 +53,7 @@ struct GameobjectDisplayInfoLoadInfo
 {
     static DB2FileLoadInfo const* Instance()
     {
-        static DB2FieldMeta const fields[] =
+        static DB2FieldMeta const loadedFields[] =
         {
             { false, FT_INT, "ID" },
             { true, FT_INT, "FileDataID" },
@@ -62,10 +67,16 @@ struct GameobjectDisplayInfoLoadInfo
             { false, FT_FLOAT, "OverrideNameScale" },
             { true, FT_SHORT, "ObjectEffectPackageID" },
         };
-        static char const* types = "ifffh";
-        static uint8 const arraySizes[5] = { 1, 6, 1, 1, 1 };
-        static DB2Meta const meta(1266277, -1, 5, 0x9F2098D1, types, arraySizes, -1);
-        static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
+        static DB2MetaField const fields[5] =
+        {
+            { FT_INT, 1, true },
+            { FT_FLOAT, 6, false },
+            { FT_FLOAT, 1, false },
+            { FT_FLOAT, 1, false },
+            { FT_SHORT, 1, true },
+        };
+        static DB2Meta const meta(1266277, -1, 5, 0x9F2098D1, fields, -1);
+        static DB2FileLoadInfo const loadInfo(&loadedFields[0], std::extent<decltype(loadedFields)>::value, &meta);
         return &loadInfo;
     }
 };
@@ -74,16 +85,19 @@ struct LiquidMaterialLoadInfo
 {
     static DB2FileLoadInfo const* Instance()
     {
-        static DB2FieldMeta const fields[] =
+        static DB2FieldMeta const loadedFields[] =
         {
             { false, FT_INT, "ID" },
             { true, FT_BYTE, "LVF" },
             { true, FT_BYTE, "Flags" },
         };
-        static char const* types = "bb";
-        static uint8 const arraySizes[2] = { 1, 1 };
-        static DB2Meta meta(1132538, -1, 2, 0x62BE0340, types, arraySizes, -1);
-        static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
+        static DB2MetaField const fields[2] =
+        {
+            { FT_BYTE, 1, true },
+            { FT_BYTE, 1, true },
+        };
+        static DB2Meta meta(1132538, -1, 2, 0x62BE0340, fields, -1);
+        static DB2FileLoadInfo const loadInfo(&loadedFields[0], std::extent<decltype(loadedFields)>::value, &meta);
         return &loadInfo;
     }
 };
@@ -92,7 +106,7 @@ struct LiquidObjectLoadInfo
 {
     static DB2FileLoadInfo const* Instance()
     {
-        static DB2FieldMeta const fields[] =
+        static DB2FieldMeta const loadedFields[] =
         {
             { false, FT_INT, "ID" },
             { false, FT_FLOAT, "FlowDirection" },
@@ -101,10 +115,16 @@ struct LiquidObjectLoadInfo
             { false, FT_BYTE, "Fishable" },
             { false, FT_BYTE, "Reflection" },
         };
-        static char const* types = "ffhbb";
-        static uint8 const arraySizes[5] = { 1, 1, 1, 1, 1 };
-        static DB2Meta meta(1308058, -1, 5, 0xACC168A6, types, arraySizes, -1);
-        static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
+        static DB2MetaField const fields[5] =
+        {
+            { FT_FLOAT, 1, false },
+            { FT_FLOAT, 1, false },
+            { FT_SHORT, 1, true },
+            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, false },
+        };
+        static DB2Meta meta(1308058, -1, 5, 0xACC168A6, fields, -1);
+        static DB2FileLoadInfo const loadInfo(&loadedFields[0], std::extent<decltype(loadedFields)>::value, &meta);
         return &loadInfo;
     }
 };
@@ -113,7 +133,7 @@ struct LiquidTypeLoadInfo
 {
     static DB2FileLoadInfo const* Instance()
     {
-        static DB2FieldMeta const fields[] =
+        static DB2FieldMeta const loadedFields[] =
         {
             { false, FT_INT, "ID" },
             { false, FT_STRING_NOT_LOCALIZED, "Name" },
@@ -167,10 +187,30 @@ struct LiquidTypeLoadInfo
             { false, FT_BYTE, "FrameCountTexture6" },
             { false, FT_INT, "SoundID" },
         };
-        static char const* types = "ssifffffifihhbbbbbi";
-        static uint8 const arraySizes[19] = { 1, 6, 1, 1, 1, 1, 1, 1, 2, 18, 4, 1, 1, 1, 1, 1, 1, 6, 1 };
-        static DB2Meta const meta(1371380, -1, 19, 0x3313BBF3, types, arraySizes, -1);
-        static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
+                static DB2MetaField const fields[19] =
+        {
+            { FT_STRING, 1, false },
+            { FT_STRING, 6, false },
+            { FT_INT, 1, false },
+            { FT_FLOAT, 1, false },
+            { FT_FLOAT, 1, false },
+            { FT_FLOAT, 1, false },
+            { FT_FLOAT, 1, false },
+            { FT_FLOAT, 1, false },
+            { FT_INT, 2, true },
+            { FT_FLOAT, 18, false },
+            { FT_INT, 4, false },
+            { FT_SHORT, 1, false },
+            { FT_SHORT, 1, false },
+            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, false },
+            { FT_BYTE, 6, false },
+            { FT_INT, 1, false },
+        };
+        static DB2Meta const meta(1371380, -1, 19, 0x3313BBF3, fields, -1);
+        static DB2FileLoadInfo const loadInfo(&loadedFields[0], std::extent<decltype(loadedFields)>::value, &meta);
         return &loadInfo;
     }
 };
@@ -179,7 +219,7 @@ struct MapLoadInfo
 {
     static DB2FileLoadInfo const* Instance()
     {
-        static DB2FieldMeta const fields[] =
+        static DB2FieldMeta const loadedFields[] =
         {
             { false, FT_INT, "ID" },
             { false, FT_STRING_NOT_LOCALIZED, "Directory" },
@@ -206,10 +246,32 @@ struct MapLoadInfo
             { false, FT_BYTE, "MaxPlayers" },
             { false, FT_BYTE, "TimeOffset" },
         };
-        static char const* types = "ssssssiffhhhhhhhbbbbb";
-        static uint8 const arraySizes[21] = { 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-        static DB2Meta const meta(1349477, -1, 21, 0xF568DF12, types, arraySizes, -1);
-        static DB2FileLoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, &meta);
+        static DB2MetaField const fields[21] =
+        {
+            { FT_STRING, 1, false },
+            { FT_STRING, 1, false },
+            { FT_STRING, 1, false },
+            { FT_STRING, 1, false },
+            { FT_STRING, 1, false },
+            { FT_STRING, 1, false },
+            { FT_INT, 2, true },
+            { FT_FLOAT, 1, false },
+            { FT_FLOAT, 2, false },
+            { FT_SHORT, 1, false },
+            { FT_SHORT, 1, true },
+            { FT_SHORT, 1, true },
+            { FT_SHORT, 1, true },
+            { FT_SHORT, 1, true },
+            { FT_SHORT, 1, true },
+            { FT_SHORT, 1, true },
+            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, false },
+        };
+        static DB2Meta const meta(1349477, -1, 21, 0xF568DF12, fields, -1);
+        static DB2FileLoadInfo const loadInfo(&loadedFields[0], std::extent<decltype(loadedFields)>::value, &meta);
         return &loadInfo;
     }
 };
