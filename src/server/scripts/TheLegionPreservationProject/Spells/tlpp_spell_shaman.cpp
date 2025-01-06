@@ -18,13 +18,24 @@
 #include "Player.h"
 #include "ScriptMgr.h"
 #include "SpellScript.h"
+#include "SpellHistory.h"
 #include "SpellInfo.h"
 
-// 188070 Healing Surge
+enum ShamanSpells
+{
+    SPELL_SHAMAN_STORMBRINGER           = 201845,
+    SPELL_SHAMAN_STORMBRINGER_PROC      = 201846,
+    SPELL_SHAMAN_STORMSTRIKE            = 17364,
+    SPELL_SHAMAN_MAELSTROM_WEAPON_POWER = 187890,
+    SPELL_SHAMAN_WINDFURY_ATTACK        = 25504
+};
+
+// 188070 - Healing Surge
 class tlpp_spell_sha_healing_surge: public SpellScript
 {
     PrepareSpellScript(tlpp_spell_sha_healing_surge);
 
+public:
     void HandleCalcCastTime(int32& castTime)
     {
         int32 requiredMaelstrom = GetEffectInfo(EFFECT_2)->BasePoints;
@@ -49,7 +60,63 @@ private:
     int32 _takenPower = 0;
 };
 
+// 187880 - Maelstrom Weapon
+class tlpp_spell_sha_maelstrom_weapon : public AuraScript
+{
+    PrepareAuraScript(tlpp_spell_sha_maelstrom_weapon);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_SHAMAN_MAELSTROM_WEAPON_POWER });
+    }
+
+    void HandleEffectProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
+    {
+        if (Unit* caster = GetCaster())
+            caster->CastSpell(caster, SPELL_SHAMAN_MAELSTROM_WEAPON_POWER, true);
+    }
+
+    void Register() override
+    {
+        OnEffectProc += AuraEffectProcFn(tlpp_spell_sha_maelstrom_weapon::HandleEffectProc, EFFECT_0, SPELL_AURA_DUMMY);
+    }
+};
+
+// 201845 - Stormbringer
+class tlpp_spell_sha_stormbringer : public AuraScript
+{
+    PrepareAuraScript(tlpp_spell_sha_stormbringer);
+
+public:
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_SHAMAN_STORMBRINGER_PROC, SPELL_SHAMAN_STORMSTRIKE });
+    }
+
+    bool CheckProc(ProcEventInfo& eventInfo)
+    {
+        return eventInfo.GetDamageInfo()->GetAttackType() == BASE_ATTACK;
+    }
+
+    void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
+    {
+        if (Unit* caster = GetCaster())
+        {
+            caster->CastSpell(caster, SPELL_SHAMAN_STORMBRINGER_PROC, true);
+            caster->GetSpellHistory()->ResetCooldown(SPELL_SHAMAN_STORMSTRIKE, true);
+        }
+    }
+
+    void Register() override
+    {
+        DoCheckProc += AuraCheckProcFn(tlpp_spell_sha_stormbringer::CheckProc);
+        OnEffectProc += AuraEffectProcFn(tlpp_spell_sha_stormbringer::HandleProc, EFFECT_0, SPELL_AURA_DUMMY);
+    }
+};
+
 void AddCustomShamanSpellScripts()
 {
     RegisterSpellScript(tlpp_spell_sha_healing_surge);
+    RegisterAuraScript(tlpp_spell_sha_maelstrom_weapon);
+    RegisterAuraScript(tlpp_spell_sha_stormbringer);
 }
