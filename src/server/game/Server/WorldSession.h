@@ -24,6 +24,7 @@
 
 #include "Common.h"
 #include "AsyncCallbackProcessor.h"
+#include "AuthDefines.h"
 #include "DatabaseEnvFwd.h"
 #include "LockedQueue.h"
 #include "ObjectGuid.h"
@@ -945,7 +946,7 @@ class TC_GAME_API WorldSession
         uint8 GetExpansion() const { return m_expansion; }
         std::string const& GetOS() const { return _os; }
 
-        void InitWarden(std::array<uint8, 40> const& k);
+        void InitWarden(SessionKey const& k);
 
         /// Session in auth.queue currently
         void SetInQueue(bool state) { m_inQueue = state; }
