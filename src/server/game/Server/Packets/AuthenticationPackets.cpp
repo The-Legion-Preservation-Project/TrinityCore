@@ -18,7 +18,8 @@
 #include "AuthenticationPackets.h"
 #include "BigNumber.h"
 #include "CharacterTemplateDataStore.h"
-#include "HmacHash.h"
+#include "CryptoHash.h"
+#include "HMAC.h"
 #include "ObjectMgr.h"
 #include "RSA.h"
 #include "Util.h"
@@ -279,7 +280,7 @@ WorldPackets::Auth::ConnectTo::ConnectTo() : ServerPacket(SMSG_CONNECT_TO, 8 + 4
 
 WorldPacket const* WorldPackets::Auth::ConnectTo::Write()
 {
-    HmacSha1 hmacHash(64, WherePacketHmac);
+    Trinity::Crypto::HMAC_SHA1 hmacHash(WherePacketHmac, 64);
     hmacHash.UpdateData(Payload.Where.data(), 16);
     hmacHash.UpdateData((uint8* const)&Payload.Type, 1);
     hmacHash.UpdateData((uint8* const)&Payload.Port, 2);
@@ -298,7 +299,7 @@ WorldPacket const* WorldPackets::Auth::ConnectTo::Write()
     payload.append(Payload.PanamaKey, 32);
     payload.append(PiDigits, 108);
     payload << uint8(Payload.XorMagic);
-    payload.append(hmacHash.GetDigest(), hmacHash.GetLength());
+    payload.append(hmacHash.GetDigest());
 
     uint32 rsaSize = ConnectToRSA->GetOutputSize();
     if (payload.size() < rsaSize)

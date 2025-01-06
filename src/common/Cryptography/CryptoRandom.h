@@ -15,25 +15,33 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PacketCrypt.h"
+#ifndef TRINITY_CRYPTORANDOM_H
+#define TRINITY_CRYPTORANDOM_H
 
-PacketCrypt::PacketCrypt(uint32 rc4InitSize)
-    : _clientDecrypt(rc4InitSize), _serverEncrypt(rc4InitSize), _initialized(false)
+#include "Define.h"
+#include <array>
+#include "advstd.h"
+
+namespace Trinity
 {
+namespace Crypto
+{
+    void TC_COMMON_API GetRandomBytes(uint8* buf, size_t len);
+
+    template <typename Container>
+    void GetRandomBytes(Container& c)
+    {
+        GetRandomBytes(advstd::data(c), advstd::size(c));
+    }
+
+    template <size_t S>
+    std::array<uint8, S> GetRandomBytes()
+    {
+        std::array<uint8, S> arr;
+        GetRandomBytes(arr);
+        return arr;
+    }
+}
 }
 
-void PacketCrypt::DecryptRecv(uint8* data, size_t len)
-{
-    if (!_initialized)
-        return;
-
-    _clientDecrypt.UpdateData(len, data);
-}
-
-void PacketCrypt::EncryptSend(uint8* data, size_t len)
-{
-    if (!_initialized)
-        return;
-
-    _serverEncrypt.UpdateData(len, data);
-}
+#endif

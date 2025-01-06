@@ -15,29 +15,21 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _PACKETCRYPT_H
-#define _PACKETCRYPT_H
+#ifndef TRINITY_CRYPTO_CONSTANTS_H
+#define TRINITY_CRYPTO_CONSTANTS_H
 
-#include "Cryptography/ARC4.h"
+#include "Define.h"
 
-class BigNumber;
-
-class TC_COMMON_API PacketCrypt
+namespace Trinity
 {
-    public:
-        PacketCrypt(uint32 rc4InitSize);
-        virtual ~PacketCrypt() { }
+namespace Crypto
+{
+    struct Constants
+    {
+        static constexpr size_t SHA1_DIGEST_LENGTH_BYTES = 20;
+        static constexpr size_t SHA256_DIGEST_LENGTH_BYTES = 32;
+    };
+}
+}
 
-        virtual void Init(BigNumber* K) = 0;
-        void DecryptRecv(uint8* data, size_t length);
-        void EncryptSend(uint8* data, size_t length);
-
-        bool IsInitialized() const { return _initialized; }
-
-    protected:
-        ARC4 _clientDecrypt;
-        ARC4 _serverEncrypt;
-        bool _initialized;
-};
-
-#endif // _PACKETCRYPT_H
+#endif

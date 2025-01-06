@@ -28,10 +28,11 @@
 #include "Banner.h"
 #include "BigNumber.h"
 #include "RSA.h"
-#include "SHA256.h"
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/program_options.hpp>
+
+#include "CryptoHash.h"
 
 #if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
 #include <Shlobj.h>
@@ -65,8 +66,8 @@ namespace Connection_Patcher
             std::cout << "patching BNet certificate file signature\n";
             Trinity::Crypto::RSA rsa;
             rsa.LoadFromString(Patches::Common::CertificatePrivateKey(), Trinity::Crypto::RSA::PrivateKey{});
-            std::unique_ptr<uint8[]> modulusArray = rsa.GetModulus().AsByteArray(256);
-            patcher->Patch(std::vector<uint8>(modulusArray.get(), modulusArray.get() + 256), Patterns::Common::CertSignatureModulus());
+            std::vector<uint8> modulusArray = rsa.GetModulus().ToByteVector(256, true);
+            patcher->Patch(modulusArray, Patterns::Common::CertSignatureModulus());
 
             std::cout << "patching Versions\n";
             // sever the connection to blizzard's versions file to stop it from updating and replace with custom version
@@ -100,7 +101,7 @@ namespace Connection_Patcher
 
             ofs << std::noskipws << Patches::Common::CertificateBundle() << "NGIS";
 
-            SHA256Hash signatureHash;
+            Trinity::Crypto::SHA256 signatureHash;
             signatureHash.UpdateData(Patches::Common::CertificateBundle());
             signatureHash.UpdateData("Blizzard Certificate Bundle");
             signatureHash.Finalize();
@@ -108,7 +109,7 @@ namespace Connection_Patcher
 
             Trinity::Crypto::RSA rsa;
             rsa.LoadFromString(Patches::Common::CertificatePrivateKey(), Trinity::Crypto::RSA::PrivateKey{});
-            rsa.Sign(signatureHash.GetDigest(), signatureHash.GetLength(), signature.data(), Trinity::Crypto::RSA::SHA256{});
+            rsa.Sign(signatureHash.GetDigest(), signature.data(), Trinity::Crypto::RSA::SHA256{});
 
             ofs.write(reinterpret_cast<char const*>(signature.data()), signature.size());
         }

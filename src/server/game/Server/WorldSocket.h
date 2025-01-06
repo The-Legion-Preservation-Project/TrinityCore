@@ -56,8 +56,8 @@ struct PacketHeader
     uint32 Size;
     uint16 Command;
 
-    bool IsValidSize() { return Size < 0x40000; }
-    bool IsValidOpcode();
+    bool IsValidSize() const { return Size < 0x40000; }
+    bool IsValidOpcode() const;
 };
 
 #pragma pack(pop)
@@ -130,11 +130,11 @@ private:
     ConnectionType _type;
     uint64 _key;
 
-    BigNumber _serverChallenge;
+    std::array<uint8, 16> _serverChallenge;
     WorldPacketCrypt _authCrypt;
-    BigNumber _encryptSeed;
-    BigNumber _decryptSeed;
-    BigNumber _sessionKey;
+    std::array<uint8, 16> _encryptSeed;
+    std::array<uint8, 16> _decryptSeed;
+    std::array<uint8, 40> _sessionKey;
 
     std::chrono::steady_clock::time_point _LastPingTime;
     uint32 _OverSpeedPings;

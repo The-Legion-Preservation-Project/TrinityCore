@@ -18,17 +18,25 @@
 #ifndef _WORLDPACKETCRYPT_H
 #define _WORLDPACKETCRYPT_H
 
-#include "PacketCrypt.h"
+#include "ARC4.h"
+#include <array>
 
-class BigNumber;
-
-class TC_COMMON_API WorldPacketCrypt : public PacketCrypt
+class TC_COMMON_API WorldPacketCrypt
 {
     public:
         WorldPacketCrypt();
 
-        void Init(BigNumber* K) override;
-        void Init(BigNumber* k, uint8 const* serverKey, uint8 const* clientKey);
+        void Init(std::array<uint8, 40> const& K);
+        void Init(std::array<uint8, 40> const& K, std::array<uint8, 16> serverKey, std::array<uint8, 16> clientKey);
+        void DecryptRecv(uint8* data, size_t length);
+        void EncryptSend(uint8* data, size_t length);
+
+        bool IsInitialized() const { return _initialized; }
+
+    private:
+        Trinity::Crypto::ARC4 _clientDecrypt;
+        Trinity::Crypto::ARC4 _serverEncrypt;
+        bool _initialized;
 };
 
 #endif // _WORLDPACKETCRYPT_H
