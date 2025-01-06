@@ -7599,21 +7599,11 @@ void Player::_ApplyItemBonuses(Item* item, uint8 slot, bool apply)
         }
     }
 
-    if (uint32 armor = item->GetArmor(this))
+    if (uint32 armor = proto->GetArmor(itemLevel))
         HandleStatFlatModifier(UNIT_MOD_ARMOR, BASE_VALUE, float(armor), apply);
 
-    WeaponAttackType attType = BASE_ATTACK;
-
-    if (slot == EQUIPMENT_SLOT_MAINHAND && (proto->GetInventoryType() == INVTYPE_RANGED || proto->GetInventoryType() == INVTYPE_RANGEDRIGHT))
-    {
-        attType = RANGED_ATTACK;
-    }
-    else if (slot == EQUIPMENT_SLOT_OFFHAND)
-    {
-        attType = OFF_ATTACK;
-    }
-
-    if (CanUseAttackType(attType))
+    WeaponAttackType attType = GetAttackBySlot(slot, proto->GetInventoryType());
+    if (attType != MAX_ATTACK && CanUseAttackType(attType))
         _ApplyWeaponDamage(slot, item, apply);
 }
 
@@ -7628,8 +7618,9 @@ void Player::_ApplyWeaponDamage(uint8 slot, Item* item, bool apply)
     else if (slot == EQUIPMENT_SLOT_OFFHAND)
         attType = OFF_ATTACK;
 
+    uint32 itemLevel = item->GetItemLevel(this);
     float minDamage, maxDamage;
-    item->GetDamage(this, minDamage, maxDamage);
+    proto->GetDamage(itemLevel, minDamage, maxDamage);
 
     if (minDamage > 0)
     {
