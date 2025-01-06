@@ -28,6 +28,7 @@
 #include <CascLib.h>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <bitset>
 #include <cstdio>
 #include <fstream>
 #include <set>
@@ -1108,25 +1109,35 @@ void ExtractMaps(uint32 build)
         // Loadup map grid data
         storagePath = Trinity::StringFormat("World\\Maps\\%s\\%s.wdt", map_ids[z].Directory, map_ids[z].Directory);
         ChunkedFile wdt;
-        if (!wdt.loadFile(CascStorage, storagePath, false))
-            continue;
-
-        FileChunk* main = wdt.GetChunk("MAIN");
-        for (uint32 y = 0; y < WDT_MAP_SIZE; ++y)
+        std::bitset<(WDT_MAP_SIZE) * (WDT_MAP_SIZE)> existingTiles;
+        if (wdt.loadFile(CascStorage, storagePath, false))
         {
-            for (uint32 x = 0; x < WDT_MAP_SIZE; ++x)
+            FileChunk* main = wdt.GetChunk("MAIN");
+            for (uint32 y = 0; y < WDT_MAP_SIZE; ++y)
             {
-                if (!(main->As<wdt_MAIN>()->adt_list[y][x].flag & 0x1))
-                    continue;
+                for (uint32 x = 0; x < WDT_MAP_SIZE; ++x)
+                {
+                    if (!(main->As<wdt_MAIN>()->adt_list[y][x].flag & 0x1))
+                        continue;
 
-                outputFileName = Trinity::StringFormat("%s/maps/%04u_%02u_%02u.map", output_path.string().c_str(), map_ids[z].Id, y, x);
-                bool ignoreDeepWater = IsDeepWaterIgnored(map_ids[z].Id, y, x);
-                std::string adtStoragePath = Trinity::StringFormat("World\\Maps\\%s\\%s_%u_%u.adt", map_ids[z].Directory.c_str(), map_ids[z].Directory.c_str(), x, y);
-                ConvertADT(adtStoragePath, map_ids[z].Name, outputFileName, y, x, build, ignoreDeepWater);
+                    outputFileName = Trinity::StringFormat("%s/maps/%04u_%02u_%02u.map", output_path.string().c_str(), map_ids[z].Id, y, x);
+                    bool ignoreDeepWater = IsDeepWaterIgnored(map_ids[z].Id, y, x);
+                    std::string adtStoragePath = Trinity::StringFormat("World\\Maps\\%s\\%s_%u_%u.adt", map_ids[z].Directory.c_str(), map_ids[z].Directory.c_str(), x, y);
+                    existingTiles[y * WDT_MAP_SIZE + x] = ConvertADT(adtStoragePath, map_ids[z].Name, outputFileName, y, x, build, ignoreDeepWater);
+                }
+
+                // draw progress bar
+                printf("Processing........................%d%%\r", (100 * (y + 1)) / WDT_MAP_SIZE);
             }
+        }
 
-            // draw progress bar
-            printf("Processing........................%d%%\r", (100 * (y+1)) / WDT_MAP_SIZE);
+        if (FILE* tileList = fopen(Trinity::StringFormat("%s/maps/%04u.tilelist", output_path.string().c_str(), map_ids[z].Id).c_str(), "wb"))
+        {
+            fwrite(MAP_MAGIC, 1, strlen(MAP_MAGIC), tileList);
+            fwrite(MAP_VERSION_MAGIC, 1, strlen(MAP_VERSION_MAGIC), tileList);
+            fwrite(&build, sizeof(build), 1, tileList);
+            fwrite(existingTiles.to_string().c_str(), 1, existingTiles.size(), tileList);
+            fclose(tileList);
         }
     }
 
