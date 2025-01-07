@@ -309,14 +309,6 @@ const uint32 MAX_CREATURE_NAMES = 4;
 const uint32 MAX_CREATURE_SPELLS = 8;
 const uint32 MAX_CREATURE_DIFFICULTIES = 3;
 
-struct CreatureLevelScaling
-{
-    uint16 MinLevel;
-    uint16 MaxLevel;
-    int16 DeltaLevelMin;
-    int16 DeltaLevelMax;
-};
-
 struct CreatureModel
 {
     static CreatureModel const DefaultInvisibleModel;
@@ -331,6 +323,14 @@ struct CreatureModel
     uint32 CreatureDisplayID;
     uint8 Idx;
     float Probability;
+};
+
+struct CreatureLevelScaling
+{
+    uint16 MinLevel;
+    uint16 MaxLevel;
+    int16 DeltaLevelMin;
+    int16 DeltaLevelMax;
 };
 
 // from `creature_template` table
@@ -476,12 +476,12 @@ struct TC_GAME_API CreatureTemplate
 // Defines base stats for creatures (used to calculate HP/mana/armor/attackpower/rangedattackpower/all damage).
 struct TC_GAME_API CreatureBaseStats
 {
-    uint32 BaseHealth[MAX_EXPANSIONS];
+    std::array<uint32, MAX_EXPANSIONS> BaseHealth;
     uint32 BaseMana;
     uint32 BaseArmor;
     uint32 AttackPower;
     uint32 RangedAttackPower;
-    float BaseDamage[MAX_EXPANSIONS];
+    std::array<float,MAX_EXPANSIONS> BaseDamage;
 
     // Helpers
 

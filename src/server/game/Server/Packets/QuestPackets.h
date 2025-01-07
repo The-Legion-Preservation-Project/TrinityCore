@@ -106,6 +106,12 @@ namespace WorldPackets
             int32 DisplayID = 0;
         };
 
+        struct QuestCompleteDisplaySpell
+        {
+            int32 SpellID = 0;
+            int32 PlayerConditionID = 0;
+        };
+
         struct QuestInfo
         {
             int32 QuestID                   = 0;
@@ -124,7 +130,7 @@ namespace WorldPackets
             int32 RewardMoneyDifficulty     = 0;
             float RewardMoneyMultiplier     = 1.0f;
             int32 RewardBonusMoney          = 0;
-            int32 RewardDisplaySpell[QUEST_REWARD_DISPLAY_SPELL_COUNT] = { }; // reward spell, this spell will be displayed (icon)
+            std::array<QuestCompleteDisplaySpell, QUEST_REWARD_DISPLAY_SPELL_COUNT> RewardDisplaySpell; // reward spell, this spell will be displayed (icon)
             int32 RewardSpell               = 0;
             int32 RewardHonor               = 0;
             float RewardKillHonor           = 0.0f;
