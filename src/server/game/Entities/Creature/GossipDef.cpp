@@ -229,9 +229,6 @@ void PlayerMenu::SendGossipMenu(uint32 titleTextId, ObjectGuid objectGUID)
         ++count;
     }
 
-    // Store this instead of checking the Singleton every loop iteration
-    bool questLevelInTitle = sWorld->getBoolConfig(CONFIG_UI_QUESTLEVELS_IN_DIALOGS);
-
     packet.GossipText.resize(_questMenu.GetMenuItemCount());
     count = 0;
     for (uint8 i = 0; i < _questMenu.GetMenuItemCount(); ++i)
@@ -254,9 +251,6 @@ void PlayerMenu::SendGossipMenu(uint32 titleTextId, ObjectGuid objectGUID)
             if (localeConstant != LOCALE_enUS)
                 if (QuestTemplateLocale const* localeData = sObjectMgr->GetQuestLocale(questID))
                     ObjectMgr::GetLocaleString(localeData->LogTitle, localeConstant, text.QuestTitle);
-
-            if (questLevelInTitle)
-                Quest::AddQuestLevelToTitle(text.QuestTitle, quest->GetQuestLevel());
 
             ++count;
         }
@@ -430,9 +424,6 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, ObjectGuid npcGU
         }
     }
 
-    if (sWorld->getBoolConfig(CONFIG_UI_QUESTLEVELS_IN_DIALOGS))
-        Quest::AddQuestLevelToTitle(packet.QuestTitle, quest->GetQuestLevel());
-
     packet.QuestGiverGUID = npcGUID;
     packet.InformUnit = _session->GetPlayer()->GetPlayerSharingQuest();
     packet.QuestID = quest->GetQuestId();
@@ -514,9 +505,6 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, ObjectGuid npcGUI
             ObjectMgr::GetLocaleString(questOfferRewardLocale->RewardText, locale, packet.RewardText);
     }
 
-    if (sWorld->getBoolConfig(CONFIG_UI_QUESTLEVELS_IN_DIALOGS))
-        Quest::AddQuestLevelToTitle(packet.QuestTitle, quest->GetQuestLevel());
-
     WorldPackets::Quest::QuestGiverOfferReward& offer = packet.QuestData;
 
     quest->BuildQuestRewards(offer.Rewards, _session->GetPlayer());
@@ -569,9 +557,6 @@ void PlayerMenu::SendQuestGiverRequestItems(Quest const* quest, ObjectGuid npcGU
         if (QuestRequestItemsLocale const* questRequestItemsLocale = sObjectMgr->GetQuestRequestItemsLocale(quest->GetQuestId()))
             ObjectMgr::GetLocaleString(questRequestItemsLocale->CompletionText, locale, packet.CompletionText);
     }
-
-    if (sWorld->getBoolConfig(CONFIG_UI_QUESTLEVELS_IN_DIALOGS))
-        Quest::AddQuestLevelToTitle(packet.QuestTitle, quest->GetQuestLevel());
 
     packet.QuestGiverGUID = npcGUID;
 
