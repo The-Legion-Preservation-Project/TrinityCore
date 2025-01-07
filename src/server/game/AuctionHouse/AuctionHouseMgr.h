@@ -38,8 +38,8 @@ namespace WorldPackets
     {
         struct AuctionItem;
         struct AuctionSortDef;
-        class AuctionListBidderItemsResult;
-        class AuctionListOwnerItemsResult;
+        class AuctionListBiddedItemsResult;
+        class AuctionListOwnedItemsResult;
         class AuctionListItemsResult;
         class AuctionReplicateResponse;
     }
@@ -186,8 +186,8 @@ public:
 
     void Update();
 
-    void BuildListBidderItems(WorldPackets::AuctionHouse::AuctionListBidderItemsResult& listBidderItemsResult, Player* player, uint32 /*offset*/) const;
-    void BuildListOwnerItems(WorldPackets::AuctionHouse::AuctionListOwnerItemsResult& listOwnerItemsResult, Player* player, uint32 /*offset*/);
+    void BuildListBiddedItems(WorldPackets::AuctionHouse::AuctionListBiddedItemsResult& listBiddedItemsResult, Player* player, uint32 /*offset*/) const;
+    void BuildListOwnedItems(WorldPackets::AuctionHouse::AuctionListOwnedItemsResult& listOwnedItemsResult, Player* player, uint32 /*offset*/);
     void BuildListAuctionItems(WorldPackets::AuctionHouse::AuctionListItemsResult& listItemsResult, Player* player,
         std::wstring const& searchedName, uint8 minLevel, uint8 maxLevel, bool onlyUsable, Optional<AuctionSearchClassFilters> const& filters, uint32 quality, uint32 offset, WorldPackets::AuctionHouse::AuctionSortDef const* sorts, std::size_t sortCount);
     void BuildReplicate(WorldPackets::AuctionHouse::AuctionReplicateResponse& auctionReplicateResult, Player* player,

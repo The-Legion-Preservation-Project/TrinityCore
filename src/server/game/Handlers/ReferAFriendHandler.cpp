@@ -48,7 +48,7 @@ void WorldSession::HandleGrantLevel(WorldPackets::RaF::GrantLevel& grantLevel)
 
     if (error)
     {
-        WorldPackets::RaF::ReferAFriendFailure failure;
+        WorldPackets::RaF::RecruitAFriendFailure failure;
         failure.Reason = error;
         if (error == ERR_REFER_A_FRIEND_NOT_IN_GROUP)
             failure.Str = target->GetName();

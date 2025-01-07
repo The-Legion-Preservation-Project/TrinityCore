@@ -29,10 +29,10 @@ namespace WorldPackets
 {
     namespace Battleground
     {
-        class PVPSeason final : public ServerPacket
+        class SeasonInfo final : public ServerPacket
         {
         public:
-            PVPSeason() : ServerPacket(SMSG_PVP_SEASON, 8) { }
+            SeasonInfo() : ServerPacket(SMSG_SEASON_INFO, 8) { }
 
             WorldPacket const* Write() override;
 
@@ -87,10 +87,10 @@ namespace WorldPackets
             void Read() override { }
         };
 
-        class PVPLogData final : public ServerPacket
+        class PVPMatchStatistics final : public ServerPacket
         {
         public:
-            PVPLogData() : ServerPacket(SMSG_PVP_LOG_DATA, 0) { }
+            PVPMatchStatistics() : ServerPacket(SMSG_PVP_MATCH_STATISTICS, 0) { }
 
             WorldPacket const* Write() override;
 
@@ -407,10 +407,10 @@ namespace WorldPackets
             void Read() override { }
         };
 
-        class RatedBattlefieldInfo final : public ServerPacket
+        class RatedPvpInfo final : public ServerPacket
         {
         public:
-            RatedBattlefieldInfo() : ServerPacket(SMSG_RATED_BATTLEFIELD_INFO, 6 * sizeof(BracketInfo)) { }
+            RatedPvpInfo() : ServerPacket(SMSG_RATED_PVP_INFO, 6 * sizeof(BracketInfo)) { }
             WorldPacket const* Write() override;
             struct BracketInfo
             {

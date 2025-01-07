@@ -52,7 +52,7 @@ enum eAuctionHouse
 void AuctionPosting::BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* auctionItem,
     bool alwaysSendItem, bool sendKey, bool censorServerInfo, bool censorBidInfo) const
 {
-    // SMSG_AUCTION_LIST_BIDDER_ITEMS_RESULT, SMSG_AUCTION_LIST_ITEMS_RESULT (if not commodity), SMSG_AUCTION_LIST_OWNER_ITEMS_RESULT, SMSG_AUCTION_REPLICATE_RESPONSE (if not commodity)
+    // SMSG_AUCTION_LIST_BIDDED_ITEMS_RESULT, SMSG_AUCTION_LIST_ITEMS_RESULT (if not commodity), SMSG_AUCTION_LIST_OWNER_ITEMS_RESULT, SMSG_AUCTION_REPLICATE_RESPONSE (if not commodity)
     //auctionItem->Item - here to unify comment
 
     // all (not optional<>)
@@ -104,7 +104,7 @@ void AuctionPosting::BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* a
     auctionItem->OwnerAccountID = OwnerAccount;
     auctionItem->EndTime = uint32(std::chrono::system_clock::to_time_t(EndTime));
 
-    // SMSG_AUCTION_LIST_BIDDER_ITEMS_RESULT, SMSG_AUCTION_LIST_ITEMS_RESULT (if has bid), SMSG_AUCTION_LIST_OWNER_ITEMS_RESULT, SMSG_AUCTION_REPLICATE_RESPONSE (if has bid)
+    // SMSG_AUCTION_LIST_BIDDED_ITEMS_RESULT, SMSG_AUCTION_LIST_ITEMS_RESULT (if has bid), SMSG_AUCTION_LIST_OWNER_ITEMS_RESULT, SMSG_AUCTION_REPLICATE_RESPONSE (if has bid)
     auctionItem->CensorBidInfo = censorBidInfo;
     if (!Bidder.IsEmpty())
     {
@@ -845,7 +845,7 @@ void AuctionHouseObject::Update()
     CharacterDatabase.CommitTransaction(trans);
 }
 
-void AuctionHouseObject::BuildListBidderItems(WorldPackets::AuctionHouse::AuctionListBidderItemsResult& listBidderItemsResult, Player* player, uint32 /*offset*/) const
+void AuctionHouseObject::BuildListBiddedItems(WorldPackets::AuctionHouse::AuctionListBiddedItemsResult& listBiddedItemsResult, Player* player, uint32 /*offset*/) const
 {
     // always full list
     std::vector<AuctionPosting const*> auctions;
@@ -858,15 +858,15 @@ void AuctionHouseObject::BuildListBidderItems(WorldPackets::AuctionHouse::Auctio
 
     for (AuctionPosting const* resultAuction : auctions)
     {
-        listBidderItemsResult.Items.emplace_back();
-        WorldPackets::AuctionHouse::AuctionItem& auctionItem = listBidderItemsResult.Items.back();
+        listBiddedItemsResult.Items.emplace_back();
+        WorldPackets::AuctionHouse::AuctionItem& auctionItem = listBiddedItemsResult.Items.back();
         resultAuction->BuildAuctionItem(&auctionItem, true, true, true, false);
     }
 
-    //listBidderItemsResult.HasMoreResults = false;
+    //listBiddedItemsResult.HasMoreResults = false;
 }
 
-void AuctionHouseObject::BuildListOwnerItems(WorldPackets::AuctionHouse::AuctionListOwnerItemsResult& listOwnerItemsResult, Player* player, uint32 /*offset*/)
+void AuctionHouseObject::BuildListOwnedItems(WorldPackets::AuctionHouse::AuctionListOwnedItemsResult& listOwnedItemsResult, Player* player, uint32 /*offset*/)
 {
     // always full list
     std::vector<AuctionPosting const*> auctions;
@@ -879,8 +879,8 @@ void AuctionHouseObject::BuildListOwnerItems(WorldPackets::AuctionHouse::Auction
 
     for (AuctionPosting const* resultAuction : auctions)
     {
-        listOwnerItemsResult.Items.emplace_back();
-        WorldPackets::AuctionHouse::AuctionItem& auctionItem = listOwnerItemsResult.Items.back();
+        listOwnedItemsResult.Items.emplace_back();
+        WorldPackets::AuctionHouse::AuctionItem& auctionItem = listOwnedItemsResult.Items.back();
         resultAuction->BuildAuctionItem(&auctionItem, true, true, false, false);
     }
 

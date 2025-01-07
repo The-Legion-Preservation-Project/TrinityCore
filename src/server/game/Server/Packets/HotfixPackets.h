@@ -81,7 +81,7 @@ namespace WorldPackets
             std::vector<uint64> Hotfixes;
         };
 
-        class HotfixResponse final : public ServerPacket
+        class HotfixConnect final : public ServerPacket
         {
         public:
             struct HotfixData
@@ -91,7 +91,7 @@ namespace WorldPackets
                 Optional<ByteBuffer> Data;
             };
 
-            HotfixResponse() : ServerPacket(SMSG_HOTFIX_RESPONSE) { }
+            HotfixConnect() : ServerPacket(SMSG_HOTFIX_CONNECT) { }
 
             WorldPacket const* Write() override;
 

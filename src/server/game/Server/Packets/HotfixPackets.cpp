@@ -69,7 +69,7 @@ void HotfixRequest::Read()
         _worldPacket >> hotfixId;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, HotfixResponse::HotfixData const& hotfixData)
+ByteBuffer& operator<<(ByteBuffer& data, HotfixConnect::HotfixData const& hotfixData)
 {
     data << uint64(hotfixData.ID);
     data << int32(hotfixData.RecordID);
@@ -85,7 +85,7 @@ ByteBuffer& operator<<(ByteBuffer& data, HotfixResponse::HotfixData const& hotfi
     return data;
 }
 
-WorldPacket const* HotfixResponse::Write()
+WorldPacket const* HotfixConnect::Write()
 {
     _worldPacket << uint32(Hotfixes.size());
     for (HotfixData const& hotfix : Hotfixes)

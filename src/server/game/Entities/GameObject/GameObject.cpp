@@ -2043,7 +2043,7 @@ void GameObject::Use(Unit* user)
                 return;
             }
 
-            WorldPackets::Artifact::ArtifactForgeOpened artifactForgeOpened;
+            WorldPackets::Artifact::OpenArtifactForge artifactForgeOpened;
             artifactForgeOpened.ArtifactGUID = item->GetGUID();
             artifactForgeOpened.ForgeGUID = GetGUID();
             player->SendDirectMessage(artifactForgeOpened.Write());
@@ -2055,10 +2055,10 @@ void GameObject::Use(Unit* user)
             if (!player)
                 return;
 
-            WorldPackets::GameObject::GameObjectUIAction gameObjectUIAction;
-            gameObjectUIAction.ObjectGUID = GetGUID();
-            gameObjectUIAction.UILink = GetGOInfo()->UILink.UILinkType;
-            player->SendDirectMessage(gameObjectUIAction.Write());
+            WorldPackets::GameObject::GameObjectUILink gameObjectUILink;
+            gameObjectUILink.ObjectGUID = GetGUID();
+            gameObjectUILink.UILink = GetGOInfo()->UILink.UILinkType;
+            player->SendDirectMessage(gameObjectUILink.Write());
             return;
         }
         default:
@@ -2126,7 +2126,7 @@ void GameObject::CastSpell(Unit* target, uint32 spellId, TriggerCastFlags trigge
     // remove immunity flags, to allow spell to target anything
     trigger->SetImmuneToAll(false);
     PhasingHandler::InheritPhaseShift(trigger, this);
-    
+
     if (Unit* owner = GetOwner())
     {
         trigger->SetFaction(owner->GetFaction());

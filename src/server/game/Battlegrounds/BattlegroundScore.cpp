@@ -56,7 +56,7 @@ void BattlegroundScore::UpdateScore(uint32 type, uint32 value)
     }
 }
 
-void BattlegroundScore::BuildPvPLogPlayerDataPacket(WorldPackets::Battleground::PVPLogData::PlayerData& playerData) const
+void BattlegroundScore::BuildPvPLogPlayerDataPacket(WorldPackets::Battleground::PVPMatchStatistics::PlayerData& playerData) const
 {
     playerData.PlayerGUID = PlayerGuid;
     playerData.Kills = KillingBlows;

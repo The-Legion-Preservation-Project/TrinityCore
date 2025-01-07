@@ -22,7 +22,7 @@ ArenaScore::ArenaScore(ObjectGuid playerGuid, uint32 team) : BattlegroundScore(p
 {
 }
 
-void ArenaScore::BuildPvPLogPlayerDataPacket(WorldPackets::Battleground::PVPLogData::PlayerData& playerData) const
+void ArenaScore::BuildPvPLogPlayerDataPacket(WorldPackets::Battleground::PVPMatchStatistics::PlayerData& playerData) const
 {
     BattlegroundScore::BuildPvPLogPlayerDataPacket(playerData);
 

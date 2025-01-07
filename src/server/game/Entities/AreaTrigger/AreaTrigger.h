@@ -88,9 +88,9 @@ class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigge
         ::Movement::Spline<int32> const& GetSpline() const { return *_spline; }
         uint32 GetElapsedTimeForMovement() const { return GetTimeSinceCreated(); } /// @todo: research the right value, in sniffs both timers are nearly identical
 
-        void InitCircularMovement(AreaTriggerCircularMovementInfo const& cmi, uint32 timeToTarget);
-        bool HasCircularMovement() const;
-        Optional<AreaTriggerCircularMovementInfo> const& GetCircularMovementInfo() const { return _circularMovementInfo; }
+        void InitOrbit(AreaTriggerOrbitInfo const& cmi, uint32 timeToTarget);
+        bool HasOrbit() const;
+        Optional<AreaTriggerOrbitInfo> const& GetCircularMovementInfo() const { return _orbitInfo; }
 
         void UpdateShape();
 
@@ -110,11 +110,11 @@ class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigge
         void UndoActions(Unit* unit);
 
         void UpdatePolygonOrientation();
-        void UpdateCircularMovementPosition(uint32 diff);
+        void UpdateOrbitPosition(uint32 diff);
         void UpdateSplinePosition(uint32 diff);
 
-        Position const* GetCircularMovementCenterPosition() const;
-        Position CalculateCircularMovementPosition() const;
+        Position const* GetOrbitCenterPosition() const;
+        Position CalculateOrbitPosition() const;
 
         void DebugVisualizePosition(); // Debug purpose only
 
@@ -137,7 +137,7 @@ class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigge
         int32 _lastSplineIndex;
         uint32 _movementTime;
 
-        Optional<AreaTriggerCircularMovementInfo> _circularMovementInfo;
+        Optional<AreaTriggerOrbitInfo> _orbitInfo;
 
         AreaTriggerMiscTemplate const* _areaTriggerMiscTemplate;
         GuidUnorderedSet _insideUnits;

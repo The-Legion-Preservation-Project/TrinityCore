@@ -83,10 +83,10 @@ namespace WorldPackets
             uint8 RespecType = 0;
         };
 
-        class LearnTalentsFailed final : public ServerPacket
+        class LearnTalentFailed final : public ServerPacket
         {
         public:
-            LearnTalentsFailed() : ServerPacket(SMSG_LEARN_TALENTS_FAILED, 1 + 4 + 4 + 2 * MAX_TALENT_TIERS) { }
+            LearnTalentFailed() : ServerPacket(SMSG_LEARN_TALENT_FAILED, 1 + 4 + 4 + 2 * MAX_TALENT_TIERS) { }
 
             WorldPacket const* Write() override;
 
@@ -124,10 +124,10 @@ namespace WorldPackets
             Array<uint16, 6> Talents;
         };
 
-        class LearnPvpTalentsFailed final : public ServerPacket
+        class LearnPvpTalentFailed final : public ServerPacket
         {
         public:
-            LearnPvpTalentsFailed() : ServerPacket(SMSG_LEARN_PVP_TALENTS_FAILED, 1 + 4 + 4 + 2 * MAX_PVP_TALENT_TIERS) { }
+            LearnPvpTalentFailed() : ServerPacket(SMSG_LEARN_PVP_TALENT_FAILED, 1 + 4 + 4 + 2 * MAX_PVP_TALENT_TIERS) { }
 
             WorldPacket const* Write() override;
 

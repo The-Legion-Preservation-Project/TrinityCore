@@ -173,10 +173,10 @@ namespace WorldPackets
             int32 AuctionID = 0;
         };
 
-        class AuctionListBidderItems final : public ClientPacket
+        class AuctionListBiddedItems final : public ClientPacket
         {
         public:
-            AuctionListBidderItems(WorldPacket&& packet) : ClientPacket(CMSG_AUCTION_LIST_BIDDER_ITEMS, std::move(packet)) { }
+            AuctionListBiddedItems(WorldPacket&& packet) : ClientPacket(CMSG_AUCTION_LIST_BIDDED_ITEMS, std::move(packet)) { }
 
             void Read() override;
 
@@ -231,10 +231,10 @@ namespace WorldPackets
             uint32 TotalCount = 0;
         };
 
-        class AuctionListOwnerItemsResult final : public ServerPacket
+        class AuctionListOwnedItemsResult final : public ServerPacket
         {
         public:
-            AuctionListOwnerItemsResult() : ServerPacket(SMSG_AUCTION_LIST_OWNER_ITEMS_RESULT, 149) { }
+            AuctionListOwnedItemsResult() : ServerPacket(SMSG_AUCTION_LIST_OWNED_ITEMS_RESULT, 149) { }
 
             WorldPacket const* Write() override;
 
@@ -243,10 +243,10 @@ namespace WorldPackets
             std::vector<AuctionItem> Items;
         };
 
-        class AuctionListBidderItemsResult final : public ServerPacket
+        class AuctionListBiddedItemsResult final : public ServerPacket
         {
         public:
-            AuctionListBidderItemsResult() : ServerPacket(SMSG_AUCTION_LIST_BIDDER_ITEMS_RESULT, 149) { }
+            AuctionListBiddedItemsResult() : ServerPacket(SMSG_AUCTION_LIST_BIDDED_ITEMS_RESULT, 149) { }
 
             WorldPacket const* Write() override;
 
@@ -255,10 +255,10 @@ namespace WorldPackets
             std::vector<AuctionItem> Items;
         };
 
-        class AuctionListOwnerItems final : public ClientPacket
+        class AuctionListOwnedItems final : public ClientPacket
         {
         public:
-            AuctionListOwnerItems(WorldPacket&& packet) : ClientPacket(CMSG_AUCTION_LIST_OWNER_ITEMS, std::move(packet)) { }
+            AuctionListOwnedItems(WorldPacket&& packet) : ClientPacket(CMSG_AUCTION_LIST_OWNED_ITEMS, std::move(packet)) { }
 
             void Read() override;
 

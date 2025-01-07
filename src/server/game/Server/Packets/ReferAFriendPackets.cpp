@@ -34,7 +34,7 @@ WorldPacket const* WorldPackets::RaF::ProposeLevelGrant::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::RaF::ReferAFriendFailure::Write()
+WorldPacket const* WorldPackets::RaF::RecruitAFriendFailure::Write()
 {
     _worldPacket << int32(Reason);
     // Client uses this string only if Reason == ERR_REFER_A_FRIEND_NOT_IN_GROUP || Reason == ERR_REFER_A_FRIEND_SUMMON_OFFLINE_S

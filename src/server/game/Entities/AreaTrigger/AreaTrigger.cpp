@@ -141,13 +141,13 @@ bool AreaTrigger::Create(uint32 spellMiscId, Unit* caster, Unit* target, SpellIn
 
     if (GetTemplate()->HasFlag(AREATRIGGER_FLAG_HAS_CIRCULAR_MOVEMENT))
     {
-        AreaTriggerCircularMovementInfo cmi = GetMiscTemplate()->CircularMovementInfo;
+        AreaTriggerOrbitInfo cmi = GetMiscTemplate()->OrbitInfo;
         if (target && GetTemplate()->HasFlag(AREATRIGGER_FLAG_HAS_ATTACHED))
             cmi.PathTarget = target->GetGUID();
         else
             cmi.Center = pos;
 
-        InitCircularMovement(cmi, timeToTarget);
+        InitOrbit(cmi, timeToTarget);
     }
     else if (GetMiscTemplate()->HasSplines())
     {
@@ -170,8 +170,8 @@ bool AreaTrigger::Create(uint32 spellMiscId, Unit* caster, Unit* target, SpellIn
     AI_Initialize();
 
     // Relocate areatriggers with circular movement again
-    if (HasCircularMovement())
-        Relocate(CalculateCircularMovementPosition());
+    if (HasOrbit())
+        Relocate(CalculateOrbitPosition());
 
     if (!GetMap()->AddToMap(this))
     {
@@ -205,10 +205,10 @@ void AreaTrigger::Update(uint32 diff)
     WorldObject::Update(diff);
     _timeSinceCreated += diff;
 
-    // "If" order matter here, Circular Movement > Attached > Splines
-    if (HasCircularMovement())
+    // "If" order matter here, Orbit > Attached > Splines
+    if (HasOrbit())
     {
-        UpdateCircularMovementPosition(diff);
+        UpdateOrbitPosition(diff);
     }
     else if (GetTemplate()->HasFlag(AREATRIGGER_FLAG_HAS_ATTACHED))
     {
@@ -662,7 +662,7 @@ bool AreaTrigger::HasSplines() const
     return bool(_spline);
 }
 
-void AreaTrigger::InitCircularMovement(AreaTriggerCircularMovementInfo const& cmi, uint32 timeToTarget)
+void AreaTrigger::InitOrbit(AreaTriggerOrbitInfo const& cmi, uint32 timeToTarget)
 {
     // Circular movement requires either a center position or an attached unit
     ASSERT(cmi.Center.is_initialized() || cmi.PathTarget.is_initialized());
@@ -670,48 +670,48 @@ void AreaTrigger::InitCircularMovement(AreaTriggerCircularMovementInfo const& cm
     // should be sent in object create packets only
     m_uint32Values[AREATRIGGER_TIME_TO_TARGET] = timeToTarget;
 
-    _circularMovementInfo = cmi;
+    _orbitInfo = cmi;
 
-    _circularMovementInfo->TimeToTarget = timeToTarget;
-    _circularMovementInfo->ElapsedTimeForMovement = 0;
+    _orbitInfo->TimeToTarget = timeToTarget;
+    _orbitInfo->ElapsedTimeForMovement = 0;
 
     if (IsInWorld())
     {
         WorldPackets::AreaTrigger::AreaTriggerRePath reshape;
         reshape.TriggerGUID = GetGUID();
-        reshape.AreaTriggerCircularMovement = _circularMovementInfo;
+        reshape.AreaTriggerOrbit = _orbitInfo;
 
         SendMessageToSet(reshape.Write(), true);
     }
 }
 
-bool AreaTrigger::HasCircularMovement() const
+bool AreaTrigger::HasOrbit() const
 {
-    return _circularMovementInfo.is_initialized();
+    return _orbitInfo.is_initialized();
 }
 
-Position const* AreaTrigger::GetCircularMovementCenterPosition() const
+Position const* AreaTrigger::GetOrbitCenterPosition() const
 {
-    if (!_circularMovementInfo.is_initialized())
+    if (!_orbitInfo.is_initialized())
         return nullptr;
 
-    if (_circularMovementInfo->PathTarget.is_initialized())
-        if (WorldObject* center = ObjectAccessor::GetWorldObject(*this, *_circularMovementInfo->PathTarget))
+    if (_orbitInfo->PathTarget.is_initialized())
+        if (WorldObject* center = ObjectAccessor::GetWorldObject(*this, *_orbitInfo->PathTarget))
             return center;
 
-    if (_circularMovementInfo->Center.is_initialized())
-        return &_circularMovementInfo->Center->Pos;
+    if (_orbitInfo->Center.is_initialized())
+        return &_orbitInfo->Center->Pos;
 
     return nullptr;
 }
 
-Position AreaTrigger::CalculateCircularMovementPosition() const
+Position AreaTrigger::CalculateOrbitPosition() const
 {
-    Position const* centerPos = GetCircularMovementCenterPosition();
+    Position const* centerPos = GetOrbitCenterPosition();
     if (!centerPos)
         return GetPosition();
 
-    AreaTriggerCircularMovementInfo const& cmi = *_circularMovementInfo;
+    AreaTriggerOrbitInfo const& cmi = *_orbitInfo;
 
     // AreaTrigger make exactly "Duration / TimeToTarget" loops during his life time
     float pathProgress = float(cmi.ElapsedTimeForMovement) / float(cmi.TimeToTarget);
@@ -742,14 +742,14 @@ Position AreaTrigger::CalculateCircularMovementPosition() const
     return { x, y, z, angle };
 }
 
-void AreaTrigger::UpdateCircularMovementPosition(uint32 /*diff*/)
+void AreaTrigger::UpdateOrbitPosition(uint32 /*diff*/)
 {
-    if (_circularMovementInfo->StartDelay > GetElapsedTimeForMovement())
+    if (_orbitInfo->StartDelay > GetElapsedTimeForMovement())
         return;
 
-    _circularMovementInfo->ElapsedTimeForMovement = GetElapsedTimeForMovement() - _circularMovementInfo->StartDelay;
+    _orbitInfo->ElapsedTimeForMovement = GetElapsedTimeForMovement() - _orbitInfo->StartDelay;
 
-    Position pos = CalculateCircularMovementPosition();
+    Position pos = CalculateOrbitPosition();
 
     GetMap()->AreaTriggerRelocation(this, pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation());
 #ifdef TRINITY_DEBUG

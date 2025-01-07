@@ -63,7 +63,7 @@ void WorldSession::SendAvailableHotfixes(int32 version)
 void WorldSession::HandleHotfixRequest(WorldPackets::Hotfix::HotfixRequest& hotfixQuery)
 {
     std::map<uint64, int32> const& hotfixes = sDB2Manager.GetHotfixData();
-    WorldPackets::Hotfix::HotfixResponse hotfixQueryResponse;
+    WorldPackets::Hotfix::HotfixConnect hotfixQueryResponse;
     hotfixQueryResponse.Hotfixes.reserve(hotfixQuery.Hotfixes.size());
     for (uint64 hotfixId : hotfixQuery.Hotfixes)
     {
@@ -71,7 +71,7 @@ void WorldSession::HandleHotfixRequest(WorldPackets::Hotfix::HotfixRequest& hotf
         {
             DB2StorageBase const* storage = sDB2Manager.GetStorage(PAIR64_HIPART(hotfixId));
 
-            WorldPackets::Hotfix::HotfixResponse::HotfixData hotfixData;
+            WorldPackets::Hotfix::HotfixConnect::HotfixData hotfixData;
             hotfixData.ID = hotfixId;
             hotfixData.RecordID = *hotfix;
             if (storage && storage->HasRecord(hotfixData.RecordID))

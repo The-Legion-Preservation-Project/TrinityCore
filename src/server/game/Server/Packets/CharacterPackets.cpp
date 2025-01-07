@@ -530,8 +530,8 @@ WorldPacket const* WorldPackets::Character::SetFactionVisible::Write()
     return &_worldPacket;
 }
 
-WorldPackets::Character::CharCustomizeResponse::CharCustomizeResponse(WorldPackets::Character::CharCustomizeInfo const* info)
-    : ServerPacket(SMSG_CHAR_CUSTOMIZE, 16 + 1 + 1 + 1 + 1 + 1 + 1 + 1)
+WorldPackets::Character::CharCustomizeSuccess::CharCustomizeSuccess(WorldPackets::Character::CharCustomizeInfo const* info)
+    : ServerPacket(SMSG_CHAR_CUSTOMIZE_SUCCESS, 16 + 1 + 1 + 1 + 1 + 1 + 1 + 1)
 {
     CharGUID = info->CharGUID;
     SexID = info->SexID;
@@ -544,7 +544,7 @@ WorldPackets::Character::CharCustomizeResponse::CharCustomizeResponse(WorldPacke
     CustomDisplay = info->CustomDisplay;
 }
 
-WorldPacket const* WorldPackets::Character::CharCustomizeResponse::Write()
+WorldPacket const* WorldPackets::Character::CharCustomizeSuccess::Write()
 {
     _worldPacket << CharGUID;
     _worldPacket << uint8(SexID);
@@ -561,7 +561,7 @@ WorldPacket const* WorldPackets::Character::CharCustomizeResponse::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Character::CharCustomizeFailed::Write()
+WorldPacket const* WorldPackets::Character::CharCustomizeFailure::Write()
 {
     _worldPacket << uint8(Result);
     _worldPacket << CharGUID;

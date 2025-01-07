@@ -273,10 +273,10 @@ namespace WorldPackets
             void Read() override;
         };
 
-        class EnableEncryption final : public ServerPacket
+        class EnterEncryptedMode final : public ServerPacket
         {
         public:
-            EnableEncryption() : ServerPacket(SMSG_ENABLE_ENCRYPTION, 0) { }
+            EnterEncryptedMode() : ServerPacket(SMSG_ENTER_ENCRYPTED_MODE, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };

@@ -443,9 +443,9 @@ WorldSocket::ReadDataHandlerResult WorldSocket::ReadDataHandler()
             HandleConnectToFailed(connectToFailed);
             break;
         }
-        case CMSG_ENABLE_ENCRYPTION_ACK:
+        case CMSG_ENTER_ENCRYPTED_MODE_ACK:
             LogOpcodeText(opcode, sessionGuard);
-            HandleEnableEncryptionAck();
+            HandleEnterEncryptedModeAck();
             break;
         default:
         {
@@ -841,7 +841,7 @@ void WorldSocket::LoadSessionPermissionsCallback(PreparedQueryResult result)
     // RBAC must be loaded before adding session to check for skip queue permission
     _worldSession->GetRBACData()->LoadFromDBCallback(result);
 
-    SendPacketAndLogOpcode(*WorldPackets::Auth::EnableEncryption().Write());
+    SendPacketAndLogOpcode(*WorldPackets::Auth::EnterEncryptedMode().Write());
 }
 
 void WorldSocket::HandleAuthContinuedSession(std::shared_ptr<WorldPackets::Auth::AuthContinuedSession> authSession)
@@ -895,7 +895,7 @@ void WorldSocket::HandleAuthContinuedSessionCallback(std::shared_ptr<WorldPacket
         return;
     }
 
-    SendPacketAndLogOpcode(*WorldPackets::Auth::EnableEncryption().Write());
+    SendPacketAndLogOpcode(*WorldPackets::Auth::EnterEncryptedMode().Write());
     AsyncRead();
 }
 
@@ -937,7 +937,7 @@ void WorldSocket::HandleConnectToFailed(WorldPackets::Auth::ConnectToFailed& con
     }
 }
 
-void WorldSocket::HandleEnableEncryptionAck()
+void WorldSocket::HandleEnterEncryptedModeAck()
 {
     if (_type == CONNECTION_TYPE_REALM)
     {

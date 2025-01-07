@@ -436,7 +436,7 @@ void CalendarMgr::SendCalendarEventInvite(CalendarInvite const& invite)
 
     uint8 level = player ? player->getLevel() : sCharacterCache->GetCharacterLevelByGuid(invitee);
 
-    WorldPackets::Calendar::SCalendarEventInvite packet;
+    WorldPackets::Calendar::CalendarInviteAdded packet;
     packet.EventID = calendarEvent ? calendarEvent->GetEventId() : 0;
     packet.InviteGuid = invitee;
     packet.InviteID = calendarEvent ? invite.GetInviteId() : 0;
@@ -477,7 +477,7 @@ void CalendarMgr::SendCalendarEventUpdateAlert(CalendarEvent const& calendarEven
 
 void CalendarMgr::SendCalendarEventStatus(CalendarEvent const& calendarEvent, CalendarInvite const& invite)
 {
-    WorldPackets::Calendar::CalendarEventInviteStatus packet;
+    WorldPackets::Calendar::CalendarInviteStatus packet;
     packet.ClearPending = true; // FIXME
     packet.Date = calendarEvent.GetDate();
     packet.EventID = calendarEvent.GetEventId();
@@ -501,7 +501,7 @@ void CalendarMgr::SendCalendarEventRemovedAlert(CalendarEvent const& calendarEve
 
 void CalendarMgr::SendCalendarEventInviteRemove(CalendarEvent const& calendarEvent, CalendarInvite const& invite, uint32 flags)
 {
-    WorldPackets::Calendar::CalendarEventInviteRemoved packet;
+    WorldPackets::Calendar::CalendarInviteRemoved packet;
     packet.ClearPending = true; // FIXME
     packet.EventID = calendarEvent.GetEventId();
     packet.Flags = flags;
@@ -512,7 +512,7 @@ void CalendarMgr::SendCalendarEventInviteRemove(CalendarEvent const& calendarEve
 
 void CalendarMgr::SendCalendarEventModeratorStatusAlert(CalendarEvent const& calendarEvent, CalendarInvite const& invite)
 {
-    WorldPackets::Calendar::CalendarEventInviteModeratorStatus packet;
+    WorldPackets::Calendar::CalendarInviteModeratorStatus packet;
     packet.ClearPending = true; // FIXME
     packet.EventID = calendarEvent.GetEventId();
     packet.InviteGuid = invite.GetInviteeGUID();
@@ -523,7 +523,7 @@ void CalendarMgr::SendCalendarEventModeratorStatusAlert(CalendarEvent const& cal
 
 void CalendarMgr::SendCalendarEventInviteAlert(CalendarEvent const& calendarEvent, CalendarInvite const& invite)
 {
-    WorldPackets::Calendar::CalendarEventInviteAlert packet;
+    WorldPackets::Calendar::CalendarInviteAlert packet;
     packet.Date = calendarEvent.GetDate();
     packet.EventID = calendarEvent.GetEventId();
     packet.EventName = calendarEvent.GetTitle();
@@ -595,7 +595,7 @@ void CalendarMgr::SendCalendarEventInviteRemoveAlert(ObjectGuid guid, CalendarEv
 {
     if (Player* player = ObjectAccessor::FindConnectedPlayer(guid))
     {
-        WorldPackets::Calendar::CalendarEventInviteRemovedAlert packet;
+        WorldPackets::Calendar::CalendarInviteRemovedAlert packet;
         packet.Date = calendarEvent.GetDate();
         packet.EventID = calendarEvent.GetEventId();
         packet.Flags = calendarEvent.GetFlags();

@@ -731,7 +731,7 @@ void Battleground::EndBattleground(uint32 winner)
     //we must set it this way, because end time is sent in packet!
     SetRemainingTime(TIME_AUTOCLOSE_BATTLEGROUND);
 
-    WorldPackets::Battleground::PVPLogData pvpLogData;
+    WorldPackets::Battleground::PVPMatchStatistics pvpLogData;
     BuildPvPLogDataPacket(pvpLogData);
 
     BattlegroundQueueTypeId bgQueueTypeId = GetQueueId();
@@ -1264,7 +1264,7 @@ bool Battleground::HasFreeSlots() const
     return GetPlayersSize() < GetMaxPlayers();
 }
 
-void Battleground::BuildPvPLogDataPacket(WorldPackets::Battleground::PVPLogData& pvpLogData) const
+void Battleground::BuildPvPLogDataPacket(WorldPackets::Battleground::PVPMatchStatistics& pvpLogData) const
 {
     if (GetStatus() == STATUS_WAIT_LEAVE)
         pvpLogData.Winner = GetWinner();
@@ -1272,7 +1272,7 @@ void Battleground::BuildPvPLogDataPacket(WorldPackets::Battleground::PVPLogData&
     pvpLogData.Players.reserve(GetPlayerScoresSize());
     for (auto const& score : PlayerScores)
     {
-        WorldPackets::Battleground::PVPLogData::PlayerData playerData;
+        WorldPackets::Battleground::PVPMatchStatistics::PlayerData playerData;
         score.second->BuildPvPLogPlayerDataPacket(playerData);
 
         if (Player* player = ObjectAccessor::GetPlayer(GetBgMap(), playerData.PlayerGUID))
@@ -1762,7 +1762,7 @@ void Battleground::PlayerAddedToBGCheckIfBGIsRunning(Player* player)
 
     BlockMovement(player);
 
-    WorldPackets::Battleground::PVPLogData pvpLogData;
+    WorldPackets::Battleground::PVPMatchStatistics pvpLogData;
     BuildPvPLogDataPacket(pvpLogData);
     player->SendDirectMessage(pvpLogData.Write());
 }

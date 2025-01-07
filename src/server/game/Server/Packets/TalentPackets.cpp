@@ -60,7 +60,7 @@ void WorldPackets::Talent::ConfirmRespecWipe::Read()
     _worldPacket >> RespecType;
 }
 
-WorldPacket const* WorldPackets::Talent::LearnTalentsFailed::Write()
+WorldPacket const* WorldPackets::Talent::LearnTalentFailed::Write()
 {
     _worldPacket.WriteBits(Reason, 4);
     _worldPacket << int32(SpellID);
@@ -97,7 +97,7 @@ void WorldPackets::Talent::LearnPvpTalents::Read()
         _worldPacket >> Talents[i];
 }
 
-WorldPacket const* WorldPackets::Talent::LearnPvpTalentsFailed::Write()
+WorldPacket const* WorldPackets::Talent::LearnPvpTalentFailed::Write()
 {
     _worldPacket.WriteBits(Reason, 4);
     _worldPacket << int32(SpellID);

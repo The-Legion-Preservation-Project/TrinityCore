@@ -186,7 +186,7 @@ void AuctionPlaceBid::Read()
     _worldPacket >> BidAmount;
 }
 
-void AuctionListBidderItems::Read()
+void AuctionListBiddedItems::Read()
 {
     _worldPacket >> Auctioneer;
     _worldPacket >> Offset;
@@ -230,7 +230,7 @@ WorldPacket const* AuctionListItemsResult::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* AuctionListOwnerItemsResult::Write()
+WorldPacket const* AuctionListOwnedItemsResult::Write()
 {
     _worldPacket << int32(Items.size());
     _worldPacket << uint32(TotalCount);
@@ -242,7 +242,7 @@ WorldPacket const* AuctionListOwnerItemsResult::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* AuctionListBidderItemsResult::Write()
+WorldPacket const* AuctionListBiddedItemsResult::Write()
 {
     _worldPacket << int32(Items.size());
     _worldPacket << uint32(TotalCount);
@@ -280,7 +280,7 @@ void AuctionListItems::Read()
         _worldPacket >> sort;
 }
 
-void AuctionListOwnerItems::Read()
+void AuctionListOwnedItems::Read()
 {
     _worldPacket >> Auctioneer;
     _worldPacket >> Offset;

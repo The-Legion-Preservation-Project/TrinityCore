@@ -416,16 +416,16 @@ void WorldSession::HandleAuctionRemoveItem(WorldPackets::AuctionHouse::AuctionRe
 }
 
 //called when player lists his bids
-void WorldSession::HandleAuctionListBidderItems(WorldPackets::AuctionHouse::AuctionListBidderItems& listBidderItems)
+void WorldSession::HandleAuctionListBiddedItems(WorldPackets::AuctionHouse::AuctionListBiddedItems& listBiddedItems)
 {
     AuctionThrottleResult throttle = sAuctionMgr->CheckThrottle(_player);
     if (throttle.Throttled)
         return;
 
-    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(listBidderItems.Auctioneer, UNIT_NPC_FLAG_AUCTIONEER);
+    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(listBiddedItems.Auctioneer, UNIT_NPC_FLAG_AUCTIONEER);
     if (!creature)
     {
-        TC_LOG_DEBUG("network", "WORLD: HandleAuctionListBidderItems - %s not found or you can't interact with him.", listBidderItems.Auctioneer.ToString().c_str());
+        TC_LOG_DEBUG("network", "WORLD: HandleAuctionListBiddedItems - %s not found or you can't interact with him.", listBiddedItems.Auctioneer.ToString().c_str());
         return;
     }
 
@@ -435,16 +435,16 @@ void WorldSession::HandleAuctionListBidderItems(WorldPackets::AuctionHouse::Auct
 
     AuctionHouseObject* auctionHouse = sAuctionMgr->GetAuctionsMap(creature->GetFaction());
 
-    WorldPackets::AuctionHouse::AuctionListBidderItemsResult result;
+    WorldPackets::AuctionHouse::AuctionListBiddedItemsResult result;
 
     Player* player = GetPlayer();
-    auctionHouse->BuildListBidderItems(result, player, listBidderItems.Offset);
+    auctionHouse->BuildListBiddedItems(result, player, listBiddedItems.Offset);
     result.DesiredDelay = uint32(throttle.DelayUntilNext.count());
     SendPacket(result.Write());
 }
 
 //this void sends player info about his auctions
-void WorldSession::HandleAuctionListOwnerItems(WorldPackets::AuctionHouse::AuctionListOwnerItems& listOwnerItems)
+void WorldSession::HandleAuctionListOwnerItems(WorldPackets::AuctionHouse::AuctionListOwnedItems& listOwnerItems)
 {
     AuctionThrottleResult throttle = sAuctionMgr->CheckThrottle(_player);
     if (throttle.Throttled)
@@ -463,9 +463,9 @@ void WorldSession::HandleAuctionListOwnerItems(WorldPackets::AuctionHouse::Aucti
 
     AuctionHouseObject* auctionHouse = sAuctionMgr->GetAuctionsMap(creature->GetFaction());
 
-    WorldPackets::AuctionHouse::AuctionListOwnerItemsResult result;
+    WorldPackets::AuctionHouse::AuctionListOwnedItemsResult result;
 
-    auctionHouse->BuildListOwnerItems(result, _player, listOwnerItems.Offset);
+    auctionHouse->BuildListOwnedItems(result, _player, listOwnerItems.Offset);
     result.DesiredDelay = uint32(throttle.DelayUntilNext.count());
     SendPacket(result.Write());
 }
