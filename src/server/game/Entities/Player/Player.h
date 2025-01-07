@@ -1661,8 +1661,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SetLootSpecId(uint32 id) { SetUInt32Value(PLAYER_FIELD_LOOT_SPEC_ID, id); }
         uint32 GetLootSpecId() const { return GetUInt32Value(PLAYER_FIELD_LOOT_SPEC_ID); }
 
-        ZonePVPTypeOverride GetOverrideZonePVPType() const { return ZonePVPTypeOverride(*m_activePlayerData->OverrideZonePVPType); }
-        void SetOverrideZonePVPType(ZonePVPTypeOverride type) { SetUpdateFieldValue(m_values.ModifyValue(&Player::m_activePlayerData).ModifyValue(&UF::ActivePlayerData::OverrideZonePVPType), uint32(type)); }
+        ZonePVPTypeOverride GetOverrideZonePVPType() const { return ZonePVPTypeOverride(GetUInt32Value(PLAYER_FIELD_OVERRIDE_ZONE_PVP_TYPE)); }
+        void SetOverrideZonePVPType(ZonePVPTypeOverride type) { SetUInt32Value(PLAYER_FIELD_OVERRIDE_ZONE_PVP_TYPE, uint32(type)); }
 
         // Talents
         uint32 GetTalentResetCost() const { return _specializationInfo.ResetTalentsCost; }
