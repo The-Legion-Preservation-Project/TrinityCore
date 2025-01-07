@@ -26,27 +26,27 @@ namespace WorldPackets
 {
     namespace System
     {
+        struct SavedThrottleObjectState
+        {
+            uint32 MaxTries               = 0;
+            uint32 PerMilliseconds        = 0;
+            uint32 TryCount               = 0;
+            uint32 LastResetTimeBeforeNow = 0;
+        };
+
+        struct EuropaTicketConfig
+        {
+            bool TicketsEnabled     = false;
+            bool BugsEnabled        = false;
+            bool ComplaintsEnabled  = false;
+            bool SuggestionsEnabled = false;
+
+            SavedThrottleObjectState ThrottleState;
+        };
+
         class FeatureSystemStatus final : public ServerPacket
         {
         public:
-            struct SavedThrottleObjectState
-            {
-                uint32 MaxTries               = 0;
-                uint32 PerMilliseconds        = 0;
-                uint32 TryCount               = 0;
-                uint32 LastResetTimeBeforeNow = 0;
-            };
-
-            struct EuropaTicketConfig
-            {
-                bool TicketsEnabled     = false;
-                bool BugsEnabled        = false;
-                bool ComplaintsEnabled  = false;
-                bool SuggestionsEnabled = false;
-
-                SavedThrottleObjectState ThrottleState;
-            };
-
             struct SessionAlertConfig
             {
                 int32 Delay       = 0;

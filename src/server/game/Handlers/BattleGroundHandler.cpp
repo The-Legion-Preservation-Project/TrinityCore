@@ -595,10 +595,10 @@ void WorldSession::HandleReportPvPAFK(WorldPackets::Battleground::ReportPvPPlaye
     reportedPlayer->ReportedAfkBy(_player);
 }
 
-void WorldSession::HandleRequestRatedBattlefieldInfo(WorldPackets::Battleground::RequestRatedBattlefieldInfo& /*packet*/)
+void WorldSession::HandleRequestRatedPvpInfo(WorldPackets::Battleground::RequestRatedPvpInfo& /*packet*/)
 {
-    WorldPackets::Battleground::RatedPvpInfo ratedBattlefieldInfo;
-    SendPacket(ratedBattlefieldInfo.Write());
+    WorldPackets::Battleground::RatedPvpInfo ratedPvpInfo;
+    SendPacket(ratedPvpInfo.Write());
 }
 
 void WorldSession::HandleGetPVPOptionsEnabled(WorldPackets::Battleground::GetPVPOptionsEnabled& /*getPvPOptionsEnabled*/)

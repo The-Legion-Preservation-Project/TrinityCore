@@ -48,7 +48,7 @@ namespace WorldPackets
         class DBReply final : public ServerPacket
         {
         public:
-            DBReply() : ServerPacket(SMSG_DB_REPLY, 12) { }
+            DBReply() : ServerPacket(SMSG_DB_REPLY, 4 + 4 + 4 + 1 + 4) { }
 
             WorldPacket const* Write() override;
 

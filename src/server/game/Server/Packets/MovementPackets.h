@@ -601,7 +601,7 @@ namespace WorldPackets
             {
                 float Height = 0.0f;
                 float Scale = 0.0f;
-                UpdateCollisionHeightReason Reason;
+                UpdateCollisionHeightReason Reason = UPDATE_COLLISION_HEIGHT_MOUNT;
             };
 
             struct KnockBackInfo

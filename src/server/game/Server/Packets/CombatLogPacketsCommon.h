@@ -70,6 +70,9 @@ namespace WorldPackets
             template<class T, class U>
             bool GenerateDataForUnits(T* attacker, U* target);
         };
+
+        ByteBuffer& operator<<(ByteBuffer& data, SpellCastLogData const& spellCastLogData);
+        ByteBuffer& operator<<(ByteBuffer& data, SandboxScalingData const& sandboxScalingData);
     }
 
     namespace CombatLog
@@ -124,8 +127,5 @@ namespace WorldPackets
         };
     }
 }
-
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Spells::SpellCastLogData const& spellCastLogData);
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Spells::SandboxScalingData const& sandboxScalingData);
 
 #endif // CombatLogPacketsCommon_h__

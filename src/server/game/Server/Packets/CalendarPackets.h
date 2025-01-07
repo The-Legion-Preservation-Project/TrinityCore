@@ -46,10 +46,10 @@ namespace WorldPackets
             uint64 EventID = 0;
         };
 
-        class CalendarGuildFilter final : public ClientPacket
+        class CalendarCommunityInviteRequest final : public ClientPacket
         {
         public:
-            CalendarGuildFilter(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_GUILD_FILTER, std::move(packet)) { }
+            CalendarCommunityInviteRequest(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_COMMUNITY_INVITE, std::move(packet)) { }
 
             void Read() override;
 
@@ -248,10 +248,10 @@ namespace WorldPackets
             std::string EventName;
         };
 
-        class CalendarEventInvite final : public ClientPacket
+        class CalendarInvite final : public ClientPacket
         {
         public:
-            CalendarEventInvite(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_EVENT_INVITE, std::move(packet)) { }
+            CalendarInvite(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_INVITE, std::move(packet)) { }
 
             void Read() override;
 
@@ -262,10 +262,10 @@ namespace WorldPackets
             std::string Name;
         };
 
-        class CalendarEventRSVP final : public ClientPacket
+        class CalendarRSVP final : public ClientPacket
         {
         public:
-            CalendarEventRSVP(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_EVENT_RSVP, std::move(packet)) { }
+            CalendarRSVP(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_RSVP, std::move(packet)) { }
 
             void Read() override;
 
@@ -411,10 +411,10 @@ namespace WorldPackets
             uint64 InviteID = 0;
         };
 
-        class CalendarEventStatus final : public ClientPacket
+        class CalendarStatus final : public ClientPacket
         {
         public:
-            CalendarEventStatus(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_EVENT_STATUS, std::move(packet)) { }
+            CalendarStatus(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_EVENT_STATUS, std::move(packet)) { }
 
             void Read() override;
 
@@ -437,10 +437,10 @@ namespace WorldPackets
             uint32 DifficultyID = 0;
         };
 
-        class CalendarEventModeratorStatus final : public ClientPacket
+        class CalendarModeratorStatusQuery final : public ClientPacket
         {
         public:
-            CalendarEventModeratorStatus(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_EVENT_MODERATOR_STATUS, std::move(packet)) { }
+            CalendarModeratorStatusQuery(WorldPacket&& packet) : ClientPacket(CMSG_CALENDAR_MODERATOR_STATUS, std::move(packet)) { }
 
             void Read() override;
 

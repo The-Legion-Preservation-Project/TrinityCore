@@ -119,6 +119,7 @@ namespace WorldPackets
 
         struct VirtualRealmInfo
         {
+            VirtualRealmInfo(): RealmAddress(0) { }
             VirtualRealmInfo(uint32 realmAddress, bool isHomeRealm, bool isInternalRealm, std::string const& realmNameActual, std::string const& realmNameNormalized) :
                 RealmAddress(realmAddress), RealmNameInfo(isHomeRealm, isInternalRealm, realmNameActual, realmNameNormalized) { }
 
@@ -131,7 +132,7 @@ namespace WorldPackets
         public:
             struct AuthSuccessInfo
             {
-                struct BillingInfo
+                struct GameTime
                 {
                     uint32 BillingPlan = 0;
                     uint32 TimeRemain = 0;
@@ -148,7 +149,7 @@ namespace WorldPackets
                 uint32 CurrencyID = 0; ///< this is probably used for the ingame shop. @todo implement
                 int32 Time = 0;
 
-                BillingInfo Billing;
+                GameTime GameTimeInfo;
 
                 std::vector<VirtualRealmInfo> VirtualRealms;     ///< list of realms connected to this one (inclusive) @todo implement
                 std::vector<CharacterTemplate const*> Templates; ///< list of pre-made character templates.
@@ -283,6 +284,7 @@ namespace WorldPackets
     }
 }
 
+ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Auth::VirtualRealmInfo const& realmInfo);
 ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Auth::VirtualRealmNameInfo const& realmInfo);
 
 #endif // AuthenticationPacketsWorld_h__

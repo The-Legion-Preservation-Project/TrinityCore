@@ -340,9 +340,9 @@ void WorldPackets::Query::QuestPOIQuery::Read()
 ByteBuffer& operator<<(ByteBuffer& data, QuestPOIData const& questPOIData)
 {
     data << int32(questPOIData.QuestID);
-    data << int32(questPOIData.QuestPOIBlobDataStats.size());
+    data << int32(questPOIData.Blobs.size());
 
-    for (QuestPOIBlobData const& questPOIBlobData : questPOIData.QuestPOIBlobDataStats)
+    for (QuestPOIBlobData const& questPOIBlobData : questPOIData.Blobs)
     {
         data << int32(questPOIBlobData.BlobIndex);
         data << int32(questPOIBlobData.ObjectiveIndex);
@@ -356,9 +356,9 @@ ByteBuffer& operator<<(ByteBuffer& data, QuestPOIData const& questPOIData)
         data << int32(questPOIBlobData.WorldEffectID);
         data << int32(questPOIBlobData.PlayerConditionID);
         data << int32(questPOIBlobData.SpawnTrackingID);
-        data << int32(questPOIBlobData.QuestPOIBlobPointStats.size());
+        data << int32(questPOIBlobData.Points.size());
 
-        for (QuestPOIBlobPoint const& questPOIBlobPoint : questPOIBlobData.QuestPOIBlobPointStats)
+        for (QuestPOIBlobPoint const& questPOIBlobPoint : questPOIBlobData.Points)
         {
             data << int32(questPOIBlobPoint.X);
             data << int32(questPOIBlobPoint.Y);

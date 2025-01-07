@@ -23,7 +23,11 @@
 #include "SpellInfo.h"
 #include "Unit.h"
 
-void WorldPackets::Spells::SpellCastLogData::Initialize(Unit const* unit)
+namespace WorldPackets
+{
+namespace Spells
+{
+void SpellCastLogData::Initialize(Unit const* unit)
 {
     Health = unit->GetHealth();
     AttackPower = unit->GetTotalAttackPowerValue(unit->getClass() == CLASS_HUNTER ? RANGED_ATTACK : BASE_ATTACK);
@@ -31,7 +35,7 @@ void WorldPackets::Spells::SpellCastLogData::Initialize(Unit const* unit)
     PowerData.emplace_back(int32(unit->GetPowerType()), unit->GetPower(unit->GetPowerType()), int32(0));
 }
 
-void WorldPackets::Spells::SpellCastLogData::Initialize(Spell const* spell)
+void SpellCastLogData::Initialize(Spell const* spell)
 {
     Health = spell->GetCaster()->GetHealth();
     AttackPower = spell->GetCaster()->GetTotalAttackPowerValue(spell->GetCaster()->getClass() == CLASS_HUNTER ? RANGED_ATTACK : BASE_ATTACK);
@@ -49,106 +53,95 @@ void WorldPackets::Spells::SpellCastLogData::Initialize(Spell const* spell)
         PowerData.insert(PowerData.begin(), SpellLogPowerData(int32(primaryPowerType), spell->GetCaster()->GetPower(primaryPowerType), 0));
 }
 
-namespace WorldPackets
+template<class T, class U>
+bool SandboxScalingData::GenerateDataForUnits(T* /*attacker*/, U* /*target*/)
 {
-    namespace Spells
+    return false;
+}
+
+template<>
+bool SandboxScalingData::GenerateDataForUnits<Creature, Player>(Creature* attacker, Player* target)
+{
+    CreatureTemplate const* creatureTemplate = attacker->GetCreatureTemplate();
+
+    Type = TYPE_CREATURE_TO_PLAYER_DAMAGE;
+    PlayerLevelDelta = target->GetInt32Value(PLAYER_FIELD_SCALING_PLAYER_LEVEL_DELTA);
+    PlayerItemLevel = target->GetAverageItemLevel();
+    TargetLevel = target->getLevel();
+    Expansion = creatureTemplate->RequiredExpansion;
+    Class = creatureTemplate->unit_class;
+    TargetMinScalingLevel = uint8(creatureTemplate->levelScaling->MinLevel);
+    TargetMaxScalingLevel = uint8(creatureTemplate->levelScaling->MaxLevel);
+    TargetScalingLevelDelta = int8(attacker->GetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA));
+    return true;
+}
+
+template<>
+bool SandboxScalingData::GenerateDataForUnits<Player, Creature>(Player* attacker, Creature* target)
+{
+    CreatureTemplate const* creatureTemplate = target->GetCreatureTemplate();
+
+    Type = TYPE_PLAYER_TO_CREATURE_DAMAGE;
+    PlayerLevelDelta = attacker->GetInt32Value(PLAYER_FIELD_SCALING_PLAYER_LEVEL_DELTA);
+    PlayerItemLevel = attacker->GetAverageItemLevel();
+    TargetLevel = target->getLevel();
+    Expansion = creatureTemplate->RequiredExpansion;
+    Class = creatureTemplate->unit_class;
+    TargetMinScalingLevel = uint8(creatureTemplate->levelScaling->MinLevel);
+    TargetMaxScalingLevel = uint8(creatureTemplate->levelScaling->MaxLevel);
+    TargetScalingLevelDelta = int8(target->GetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA));
+    return true;
+}
+
+template<>
+bool SandboxScalingData::GenerateDataForUnits<Creature, Creature>(Creature* attacker, Creature* target)
+{
+    Creature* accessor = target->HasScalableLevels() ? target : attacker;
+    CreatureTemplate const* creatureTemplate = accessor->GetCreatureTemplate();
+
+    Type = TYPE_CREATURE_TO_CREATURE_DAMAGE;
+    PlayerLevelDelta = 0;
+    PlayerItemLevel = 0;
+    TargetLevel = target->getLevel();
+    Expansion = creatureTemplate->RequiredExpansion;
+    Class = creatureTemplate->unit_class;
+    TargetMinScalingLevel = uint8(creatureTemplate->levelScaling->MinLevel);
+    TargetMaxScalingLevel = uint8(creatureTemplate->levelScaling->MaxLevel);
+    TargetScalingLevelDelta = int8(accessor->GetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA));
+    return true;
+}
+
+template<>
+bool SandboxScalingData::GenerateDataForUnits<Unit, Unit>(Unit* attacker, Unit* target)
+{
+    if (Player* playerAttacker = attacker->ToPlayer())
     {
-        template<class T, class U>
-        bool SandboxScalingData::GenerateDataForUnits(T* /*attacker*/, U* /*target*/)
+        if (Player* playerTarget = target->ToPlayer())
+            return GenerateDataForUnits(playerAttacker, playerTarget);
+        else if (Creature* creatureTarget = target->ToCreature())
         {
-            return false;
-        }
-
-        template<>
-        bool SandboxScalingData::GenerateDataForUnits<Creature, Player>(Creature* attacker, Player* target)
-        {
-            CreatureTemplate const* creatureTemplate = attacker->GetCreatureTemplate();
-
-            Type = TYPE_CREATURE_TO_PLAYER_DAMAGE;
-            PlayerLevelDelta = target->GetInt32Value(PLAYER_FIELD_SCALING_PLAYER_LEVEL_DELTA);
-            PlayerItemLevel = target->GetAverageItemLevel();
-            TargetLevel = target->getLevel();
-            Expansion = creatureTemplate->RequiredExpansion;
-            Class = creatureTemplate->unit_class;
-            TargetMinScalingLevel = uint8(creatureTemplate->levelScaling->MinLevel);
-            TargetMaxScalingLevel = uint8(creatureTemplate->levelScaling->MaxLevel);
-            TargetScalingLevelDelta = int8(attacker->GetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA));
-            return true;
-        }
-
-        template<>
-        bool SandboxScalingData::GenerateDataForUnits<Player, Creature>(Player* attacker, Creature* target)
-        {
-            CreatureTemplate const* creatureTemplate = target->GetCreatureTemplate();
-
-            Type = TYPE_PLAYER_TO_CREATURE_DAMAGE;
-            PlayerLevelDelta = attacker->GetInt32Value(PLAYER_FIELD_SCALING_PLAYER_LEVEL_DELTA);
-            PlayerItemLevel = attacker->GetAverageItemLevel();
-            TargetLevel = target->getLevel();
-            Expansion = creatureTemplate->RequiredExpansion;
-            Class = creatureTemplate->unit_class;
-            TargetMinScalingLevel = uint8(creatureTemplate->levelScaling->MinLevel);
-            TargetMaxScalingLevel = uint8(creatureTemplate->levelScaling->MaxLevel);
-            TargetScalingLevelDelta = int8(target->GetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA));
-            return true;
-        }
-
-        template<>
-        bool SandboxScalingData::GenerateDataForUnits<Creature, Creature>(Creature* attacker, Creature* target)
-        {
-            Creature* accessor = target->HasScalableLevels() ? target : attacker;
-            CreatureTemplate const* creatureTemplate = accessor->GetCreatureTemplate();
-
-            Type = TYPE_CREATURE_TO_CREATURE_DAMAGE;
-            PlayerLevelDelta = 0;
-            PlayerItemLevel = 0;
-            TargetLevel = target->getLevel();
-            Expansion = creatureTemplate->RequiredExpansion;
-            Class = creatureTemplate->unit_class;
-            TargetMinScalingLevel = uint8(creatureTemplate->levelScaling->MinLevel);
-            TargetMaxScalingLevel = uint8(creatureTemplate->levelScaling->MaxLevel);
-            TargetScalingLevelDelta = int8(accessor->GetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA));
-            return true;
-        }
-
-        template<>
-        bool SandboxScalingData::GenerateDataForUnits<Unit, Unit>(Unit* attacker, Unit* target)
-        {
-            if (Player* playerAttacker = attacker->ToPlayer())
-            {
-                if (Player* playerTarget = target->ToPlayer())
-                    return GenerateDataForUnits(playerAttacker, playerTarget);
-                else if (Creature* creatureTarget = target->ToCreature())
-                {
-                    if (creatureTarget->HasScalableLevels())
-                        return GenerateDataForUnits(playerAttacker, creatureTarget);
-                }
-            }
-            else if (Creature* creatureAttacker = attacker->ToCreature())
-            {
-                if (Player* playerTarget = target->ToPlayer())
-                {
-                    if (creatureAttacker->HasScalableLevels())
-                        return GenerateDataForUnits(creatureAttacker, playerTarget);
-                }
-                else if (Creature* creatureTarget = target->ToCreature())
-                {
-                    if (creatureAttacker->HasScalableLevels() || creatureTarget->HasScalableLevels())
-                        return GenerateDataForUnits(creatureAttacker, creatureTarget);
-                }
-            }
-
-            return false;
+            if (creatureTarget->HasScalableLevels())
+                return GenerateDataForUnits(playerAttacker, creatureTarget);
         }
     }
+    else if (Creature* creatureAttacker = attacker->ToCreature())
+    {
+        if (Player* playerTarget = target->ToPlayer())
+        {
+            if (creatureAttacker->HasScalableLevels())
+                return GenerateDataForUnits(creatureAttacker, playerTarget);
+        }
+        else if (Creature* creatureTarget = target->ToCreature())
+        {
+            if (creatureAttacker->HasScalableLevels() || creatureTarget->HasScalableLevels())
+                return GenerateDataForUnits(creatureAttacker, creatureTarget);
+        }
+    }
+
+    return false;
 }
 
-ByteBuffer& WorldPackets::CombatLog::CombatLogServerPacket::WriteLogData()
-{
-    return _fullLogPacket << LogData;
-}
-
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Spells::SpellCastLogData const& spellCastLogData)
+ByteBuffer& operator<<(ByteBuffer& data, SpellCastLogData const& spellCastLogData)
 {
     data << int64(spellCastLogData.Health);
     data << int32(spellCastLogData.AttackPower);
@@ -156,7 +149,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Spells::SpellCastLogData 
     data.WriteBits(spellCastLogData.PowerData.size(), 9);
     data.FlushBits();
 
-    for (WorldPackets::Spells::SpellLogPowerData const& powerData : spellCastLogData.PowerData)
+    for (SpellLogPowerData const& powerData : spellCastLogData.PowerData)
     {
         data << int32(powerData.PowerType);
         data << int32(powerData.Amount);
@@ -166,7 +159,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Spells::SpellCastLogData 
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Spells::SandboxScalingData const& sandboxScalingData)
+ByteBuffer& operator<<(ByteBuffer& data, SandboxScalingData const& sandboxScalingData)
 {
     data.WriteBits(sandboxScalingData.Type, 4);
     data << int16(sandboxScalingData.PlayerLevelDelta);
@@ -178,4 +171,11 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Spells::SandboxScalingDat
     data << uint8(sandboxScalingData.TargetMaxScalingLevel);
     data << int8(sandboxScalingData.TargetScalingLevelDelta);
     return data;
+}
+}
+}
+
+ByteBuffer& WorldPackets::CombatLog::CombatLogServerPacket::WriteLogData()
+{
+    return _fullLogPacket << LogData;
 }

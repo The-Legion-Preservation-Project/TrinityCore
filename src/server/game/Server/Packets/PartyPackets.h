@@ -19,6 +19,7 @@
 #define PartyPackets_h__
 
 #include "Packet.h"
+#include "AuthenticationPackets.h"
 #include "ObjectGuid.h"
 #include "Group.h"
 #include "Optional.h"
@@ -67,22 +68,19 @@ namespace WorldPackets
             bool MightCRZYou = false;
             bool MustBeBNetFriend = false;
             bool AllowMultipleRoles = false;
-            bool Unk2 = false;
+            bool QuestSessionActive = false;
             uint16 Unk1 = 0;
 
             bool CanAccept = false;
 
             // Inviter
+            Auth::VirtualRealmInfo InviterRealm;
             ObjectGuid InviterGUID;
             ObjectGuid InviterBNetAccountId;
             std::string InviterName;
 
             // Realm
             bool IsXRealm = false;
-            bool IsLocal = true;
-            uint32 InviterVirtualRealmAddress = 0u;
-            std::string InviterRealmNameActual;
-            std::string InviterRealmNameNormalized;
 
             // Lfg
             uint32 ProposedRoles = 0;

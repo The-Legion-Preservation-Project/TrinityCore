@@ -413,7 +413,7 @@ namespace WorldPackets
         class SpellFailure final : public ServerPacket
         {
         public:
-            SpellFailure() : ServerPacket(SMSG_SPELL_FAILURE, 16+4+2+1) { }
+            SpellFailure() : ServerPacket(SMSG_SPELL_FAILURE, 16 + 4 + 4 + 2 + 16) { }
 
             WorldPacket const* Write() override;
 
@@ -427,7 +427,7 @@ namespace WorldPackets
         class SpellFailedOther final : public ServerPacket
         {
         public:
-            SpellFailedOther() : ServerPacket(SMSG_SPELL_FAILED_OTHER, 16+4+1+1) { }
+            SpellFailedOther() : ServerPacket(SMSG_SPELL_FAILED_OTHER, 16 + 4 + 4 + 1 + 16) { }
 
             WorldPacket const* Write() override;
 

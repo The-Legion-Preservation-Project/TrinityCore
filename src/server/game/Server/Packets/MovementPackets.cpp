@@ -256,6 +256,7 @@ ByteBuffer& WorldPackets::operator<<(ByteBuffer& data, Movement::MovementSpline 
 
     for (TaggedPosition<Position::XYZ> const& pos : movementSpline.Points)
         data << pos;
+
     for (TaggedPosition<Position::PackedXYZ> const& pos : movementSpline.PackedDeltas)
         data << pos;
 
@@ -418,7 +419,7 @@ void WorldPackets::Movement::MonsterMove::InitializeSplineData(::Movement::MoveS
 
     if (splineFlags.animation)
     {
-        movementSpline.AnimTier = splineFlags.getAnimTier();
+        movementSpline.AnimTier = moveSpline.anim_tier->AnimTier;
         movementSpline.TierTransStartTime = moveSpline.effect_start_time;
     }
 
@@ -435,7 +436,7 @@ void WorldPackets::Movement::MonsterMove::InitializeSplineData(::Movement::MoveS
 
     if (moveSpline.spell_effect_extra)
     {
-        movementSpline.SpellEffectExtraData = boost::in_place();
+        movementSpline.SpellEffectExtraData.emplace();
         movementSpline.SpellEffectExtraData->TargetGUID = moveSpline.spell_effect_extra->Target;
         movementSpline.SpellEffectExtraData->SpellVisualID = moveSpline.spell_effect_extra->SpellVisualId;
         movementSpline.SpellEffectExtraData->ProgressCurveID = moveSpline.spell_effect_extra->ProgressCurveId;

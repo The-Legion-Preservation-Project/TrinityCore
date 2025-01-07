@@ -19,7 +19,11 @@
 #include "Item.h"
 #include "Player.h"
 
-bool WorldPackets::Item::ItemBonusInstanceData::operator==(ItemBonusInstanceData const& r) const
+namespace WorldPackets
+{
+namespace Item
+{
+bool ItemBonuses::operator==(ItemBonuses const& r) const
 {
     if (Context != r.Context)
         return false;
@@ -30,7 +34,7 @@ bool WorldPackets::Item::ItemBonusInstanceData::operator==(ItemBonusInstanceData
     return std::is_permutation(BonusListIDs.begin(), BonusListIDs.end(), r.BonusListIDs.begin());
 }
 
-void WorldPackets::Item::ItemInstance::Initialize(::Item const* item)
+void ItemInstance::Initialize(::Item const* item)
 {
     ItemID               = item->GetEntry();
     RandomPropertiesSeed = item->GetItemSuffixFactor();
@@ -53,11 +57,11 @@ void WorldPackets::Item::ItemInstance::Initialize(::Item const* item)
     }
 }
 
-void WorldPackets::Item::ItemInstance::Initialize(::ItemDynamicFieldGems const* gem)
+void ItemInstance::Initialize(::ItemDynamicFieldGems const* gem)
 {
     ItemID = gem->ItemId;
 
-    ItemBonusInstanceData bonus;
+    ItemBonuses bonus;
     bonus.Context = ItemContext(gem->Context);
     for (uint16 bonusListId : gem->BonusListIDs)
         if (bonusListId)
@@ -67,7 +71,7 @@ void WorldPackets::Item::ItemInstance::Initialize(::ItemDynamicFieldGems const* 
         ItemBonus = bonus;
 }
 
-void WorldPackets::Item::ItemInstance::Initialize(::LootItem const& lootItem)
+void ItemInstance::Initialize(::LootItem const& lootItem)
 {
     ItemID               = lootItem.itemid;
     RandomPropertiesSeed = lootItem.randomSuffix;
@@ -88,7 +92,7 @@ void WorldPackets::Item::ItemInstance::Initialize(::LootItem const& lootItem)
     }
 }
 
-void WorldPackets::Item::ItemInstance::Initialize(::VoidStorageItem const* voidItem)
+void ItemInstance::Initialize(::VoidStorageItem const* voidItem)
 {
     ItemID = voidItem->ItemEntry;
     RandomPropertiesSeed = voidItem->ItemSuffixFactor;
@@ -114,7 +118,7 @@ void WorldPackets::Item::ItemInstance::Initialize(::VoidStorageItem const* voidI
     }
 }
 
-bool WorldPackets::Item::ItemInstance::operator==(ItemInstance const& r) const
+bool ItemInstance::operator==(ItemInstance const& r) const
 {
     if (ItemID != r.ItemID || RandomPropertiesID != r.RandomPropertiesID || RandomPropertiesSeed != r.RandomPropertiesSeed)
         return false;
@@ -131,7 +135,7 @@ bool WorldPackets::Item::ItemInstance::operator==(ItemInstance const& r) const
     return true;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Item::ItemBonusInstanceData const& itemBonusInstanceData)
+ByteBuffer& operator<<(ByteBuffer& data, ItemBonuses const& itemBonusInstanceData)
 {
     data << uint8(itemBonusInstanceData.Context);
     data << uint32(itemBonusInstanceData.BonusListIDs.size());
@@ -141,7 +145,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Item::ItemBonusInstanceDa
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Item::ItemBonusInstanceData& itemBonusInstanceData)
+ByteBuffer& operator>>(ByteBuffer& data, ItemBonuses& itemBonusInstanceData)
 {
     uint32 bonusListIdSize;
 
@@ -158,7 +162,7 @@ ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Item::ItemBonusInstanceDa
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Item::ItemInstance const& itemInstance)
+ByteBuffer& operator<<(ByteBuffer& data, ItemInstance const& itemInstance)
 {
     data << int32(itemInstance.ItemID);
     data << int32(itemInstance.RandomPropertiesSeed);
@@ -177,7 +181,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Item::ItemInstance const&
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Item::ItemInstance& itemInstance)
+ByteBuffer& operator>>(ByteBuffer& data, ItemInstance& itemInstance)
 {
     data >> itemInstance.ItemID;
     data >> itemInstance.RandomPropertiesSeed;
@@ -202,7 +206,7 @@ ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Item::ItemInstance& itemI
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Item::ItemEnchantData const& itemEnchantData)
+ByteBuffer& operator<<(ByteBuffer& data, ItemEnchantData const& itemEnchantData)
 {
     data << int32(itemEnchantData.ID);
     data << uint32(itemEnchantData.Expiration);
@@ -211,28 +215,30 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Item::ItemEnchantData con
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Item::ItemGemData const& itemGemData)
+ByteBuffer& operator<<(ByteBuffer& data, ItemGemData const& itemGemData)
 {
     data << uint8(itemGemData.Slot);
     data << itemGemData.Item;
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Item::ItemGemData& itemGemData)
+ByteBuffer& operator>>(ByteBuffer& data, ItemGemData& itemGemData)
 {
     data >> itemGemData.Slot;
     data >> itemGemData.Item;
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Item::InvUpdate& invUpdate)
+ByteBuffer& operator>>(ByteBuffer& data, InvUpdate& invUpdate)
 {
     invUpdate.Items.resize(data.ReadBits(2));
-    for (size_t i = 0; i < invUpdate.Items.size(); ++i)
+    for (InvUpdate::InvItem& item : invUpdate.Items)
     {
-        data >> invUpdate.Items[i].ContainerSlot;
-        data >> invUpdate.Items[i].Slot;
+        data >> item.ContainerSlot;
+        data >> item.Slot;
     }
 
     return data;
+}
+}
 }

@@ -20,8 +20,10 @@
 
 #include "Packet.h"
 #include "ItemPacketsCommon.h"
+#include "NPCPackets.h"
 #include "ObjectGuid.h"
 #include "QuestDef.h"
+#include <array>
 
 namespace WorldPackets
 {
@@ -240,20 +242,20 @@ namespace WorldPackets
             int32 Honor                     = 0;
             int32 Title                     = 0;
             int32 FactionFlags              = 0;
-            int32 SpellCompletionDisplayID[QUEST_REWARD_DISPLAY_SPELL_COUNT] = { };
+            std::array<int32, QUEST_REWARD_DISPLAY_SPELL_COUNT> SpellCompletionDisplayID = { };
             int32 SpellCompletionID         = 0;
             int32 SkillLineID               = 0;
             int32 NumSkillUps               = 0;
             int32 TreasurePickerID          = 0;
-            QuestChoiceItem ChoiceItems[QUEST_REWARD_CHOICES_COUNT];
-            int32 ItemID[QUEST_REWARD_ITEM_COUNT] = { };
-            int32 ItemQty[QUEST_REWARD_ITEM_COUNT] = { };
-            int32 FactionID[QUEST_REWARD_REPUTATIONS_COUNT] = { };
-            int32 FactionValue[QUEST_REWARD_REPUTATIONS_COUNT] = { };
-            int32 FactionOverride[QUEST_REWARD_REPUTATIONS_COUNT] = { };
-            int32 FactionCapIn[QUEST_REWARD_REPUTATIONS_COUNT] = { };
-            int32 CurrencyID[QUEST_REWARD_CURRENCY_COUNT] = { };
-            int32 CurrencyQty[QUEST_REWARD_CURRENCY_COUNT] = { };
+            std::array<QuestChoiceItem, QUEST_REWARD_CHOICES_COUNT> ChoiceItems;
+            std::array<int32, QUEST_REWARD_ITEM_COUNT> ItemID = { };
+            std::array<int32, QUEST_REWARD_ITEM_COUNT> ItemQty = { };
+            std::array<int32, QUEST_REWARD_REPUTATIONS_COUNT> FactionID = { };
+            std::array<int32, QUEST_REWARD_REPUTATIONS_COUNT> FactionValue = { };
+            std::array<int32, QUEST_REWARD_REPUTATIONS_COUNT> FactionOverride = { };
+            std::array<int32, QUEST_REWARD_REPUTATIONS_COUNT> FactionCapIn = { };
+            std::array<int32, QUEST_REWARD_CURRENCY_COUNT> CurrencyID = { };
+            std::array<int32, QUEST_REWARD_CURRENCY_COUNT> CurrencyQty = { };
             bool IsBoostSpell = false;
         };
 
@@ -461,21 +463,6 @@ namespace WorldPackets
             uint8 Entry = 0;
         };
 
-        struct GossipText
-        {
-            GossipText(uint32 questID, uint32 questType, int32 questLevel, int32 questMaxScalingLevel, uint32 questFlags, uint32 questFlagsEx, bool repeatable, std::string questTitle) :
-                QuestID(questID), QuestType(questType), QuestLevel(questLevel), QuestMaxScalingLevel(questMaxScalingLevel), QuestFlags(questFlags),
-                QuestFlagsEx(questFlagsEx), Repeatable(repeatable), QuestTitle(std::move(questTitle)) { }
-            uint32 QuestID;
-            uint32 QuestType;
-            int32 QuestLevel;
-            int32 QuestMaxScalingLevel;
-            uint32 QuestFlags;
-            uint32 QuestFlagsEx;
-            bool Repeatable;
-            std::string QuestTitle;
-        };
-
         class QuestGiverQuestListMessage final : public ServerPacket
         {
         public:
@@ -486,7 +473,7 @@ namespace WorldPackets
             ObjectGuid QuestGiverGUID;
             uint32 GreetEmoteDelay      = 0;
             uint32 GreetEmoteType       = 0;
-            std::vector<GossipText> QuestDataText;
+            std::vector<NPC::ClientGossipText> QuestDataText;
             std::string Greeting;
         };
 
@@ -698,8 +685,5 @@ namespace WorldPackets
         };
     }
 }
-
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Quest::QuestRewards const& questRewards);
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Quest::QuestGiverOfferReward const& offer);
 
 #endif // QuestPackets_h__

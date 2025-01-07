@@ -66,13 +66,13 @@ WorldPacket const* WorldPackets::Party::PartyInvite::Write()
     _worldPacket.WriteBit(AllowMultipleRoles);
     _worldPacket.WriteBits(InviterName.length(), 6);
 
-    _worldPacket << InviterVirtualRealmAddress;
-    _worldPacket.WriteBit(IsLocal);
-    _worldPacket.WriteBit(Unk2);
-    _worldPacket.WriteBits(InviterRealmNameActual.size(), 8);
-    _worldPacket.WriteBits(InviterRealmNameNormalized.size(), 8);
-    _worldPacket.WriteString(InviterRealmNameActual);
-    _worldPacket.WriteString(InviterRealmNameNormalized);
+    _worldPacket << InviterRealm.RealmAddress;
+    _worldPacket.WriteBit(InviterRealm.RealmNameInfo.IsLocal);
+    _worldPacket.WriteBit(QuestSessionActive);
+    _worldPacket.WriteBits(InviterRealm.RealmNameInfo.RealmNameActual.size(), 8);
+    _worldPacket.WriteBits(InviterRealm.RealmNameInfo.RealmNameNormalized.size(), 8);
+    _worldPacket.WriteString(InviterRealm.RealmNameInfo.RealmNameActual);
+    _worldPacket.WriteString(InviterRealm.RealmNameInfo.RealmNameNormalized);
 
     _worldPacket << InviterGUID;
     _worldPacket << InviterBNetAccountId;
@@ -99,9 +99,7 @@ void WorldPackets::Party::PartyInvite::Initialize(Player* const inviter, int32 p
 
     ProposedRoles = proposedRoles;
 
-    InviterVirtualRealmAddress = realm.Id.GetAddress();
-    InviterRealmNameActual = realm.Name;
-    InviterRealmNameNormalized = realm.NormalizedName;
+    InviterRealm = Auth::VirtualRealmInfo(realm.Id.GetAddress(), true, false, realm.Name, realm.NormalizedName);
 }
 
 void WorldPackets::Party::PartyInviteResponse::Read()

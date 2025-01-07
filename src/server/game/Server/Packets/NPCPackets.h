@@ -66,6 +66,8 @@ namespace WorldPackets
             int32 QuestFlags[2] = { };
         };
 
+        ByteBuffer& operator<<(ByteBuffer& data, ClientGossipText const& gossipText);
+
         class GossipMessage final : public ServerPacket
         {
         public:

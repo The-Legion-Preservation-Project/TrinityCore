@@ -719,7 +719,7 @@ struct QuestPOIBlobPoint
     int32 Y;
 
     QuestPOIBlobPoint() : X(0), Y(0) { }
-    QuestPOIBlobPoint(int32 _X, int32 _Y) : X(_X), Y(_Y) { }
+    QuestPOIBlobPoint(int32 x, int32 y) : X(x), Y(y) { }
 };
 
 struct QuestPOIBlobData
@@ -736,23 +736,23 @@ struct QuestPOIBlobData
     int32 WorldEffectID;
     int32 PlayerConditionID;
     int32 SpawnTrackingID;
-    std::vector<QuestPOIBlobPoint> QuestPOIBlobPointStats;
+    std::vector<QuestPOIBlobPoint> Points;
     bool AlwaysAllowMergingBlobs;
 
     QuestPOIBlobData() : BlobIndex(0), ObjectiveIndex(0), QuestObjectiveID(0), QuestObjectID(0), MapID(0), WorldMapAreaID(0), Floor(0), Priority(0), Flags(0), WorldEffectID(0),
         PlayerConditionID(0), SpawnTrackingID(0), AlwaysAllowMergingBlobs(false) { }
     QuestPOIBlobData(int32 blobIndex, int32 objectiveIndex, int32 questObjectiveID, int32 questObjectID, int32 mapID, int32 worldMapAreaID, int32 floor, int32 priority,
-        int32 flags, int32 worldEffectID, int32 playerConditionID, int32 spawnTrackingID, std::vector<QuestPOIBlobPoint> questPOIBlobPointStats,
+        int32 flags, int32 worldEffectID, int32 playerConditionID, int32 spawnTrackingID, std::vector<QuestPOIBlobPoint> points,
         bool alwaysAllowMergingBlobs) : BlobIndex(blobIndex), ObjectiveIndex(objectiveIndex), QuestObjectiveID(questObjectiveID),
         QuestObjectID(questObjectID), MapID(mapID), WorldMapAreaID(worldMapAreaID), Floor(floor), Priority(priority), Flags(flags), WorldEffectID(worldEffectID),
-        PlayerConditionID(playerConditionID), SpawnTrackingID(spawnTrackingID), QuestPOIBlobPointStats(std::move(questPOIBlobPointStats)),
+        PlayerConditionID(playerConditionID), SpawnTrackingID(spawnTrackingID), Points(std::move(points)),
         AlwaysAllowMergingBlobs(alwaysAllowMergingBlobs) { }
 };
 
 struct QuestPOIData
 {
     int32 QuestID = 0;
-    std::vector<QuestPOIBlobData> QuestPOIBlobDataStats;
+    std::vector<QuestPOIBlobData> Blobs;
 
     void InitializeQueryData();
     ByteBuffer QueryDataBuffer;

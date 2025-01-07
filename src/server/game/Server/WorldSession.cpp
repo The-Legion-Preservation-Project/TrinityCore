@@ -1359,10 +1359,10 @@ uint32 WorldSession::DosProtection::GetMaxPacketCounterAllowed(uint16 opcode) co
         case CMSG_CALENDAR_UPDATE_EVENT:                // not profiled
         case CMSG_CALENDAR_REMOVE_EVENT:                // not profiled
         case CMSG_CALENDAR_COPY_EVENT:                  // not profiled
-        case CMSG_CALENDAR_EVENT_INVITE:                // not profiled
+        case CMSG_CALENDAR_INVITE:                      // not profiled
         case CMSG_CALENDAR_EVENT_SIGN_UP:               // not profiled
-        case CMSG_CALENDAR_EVENT_RSVP:                  // not profiled
-        case CMSG_CALENDAR_EVENT_MODERATOR_STATUS:      // not profiled
+        case CMSG_CALENDAR_RSVP:                        // not profiled
+        case CMSG_CALENDAR_MODERATOR_STATUS:            // not profiled
         case CMSG_CALENDAR_REMOVE_INVITE:               // not profiled
         case CMSG_SET_LOOT_METHOD:                      // not profiled
         case CMSG_GUILD_INVITE_BY_NAME:                 // not profiled

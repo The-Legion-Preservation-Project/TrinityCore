@@ -290,31 +290,31 @@ namespace WorldPackets
             std::unordered_set<uint32> const* BlueprintsKnown = nullptr;
         };
 
-        class GarrisonGetBuildingLandmarks final : public ClientPacket
+        class GarrisonGetMapData final : public ClientPacket
         {
         public:
-            GarrisonGetBuildingLandmarks(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_GET_BUILDING_LANDMARKS, std::move(packet)) { }
+            GarrisonGetMapData(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_GET_MAP_DATA, std::move(packet)) { }
 
             void Read() override { }
         };
 
-        struct GarrisonBuildingLandmark
+        struct GarrisonBuildingMapData
         {
-            GarrisonBuildingLandmark() : GarrBuildingPlotInstID(0), Pos() { }
-            GarrisonBuildingLandmark(uint32 buildingPlotInstId, Position const& pos) : GarrBuildingPlotInstID(buildingPlotInstId), Pos(pos) { }
+            GarrisonBuildingMapData() : GarrBuildingPlotInstID(0), Pos() { }
+            GarrisonBuildingMapData(uint32 buildingPlotInstId, Position const& pos) : GarrBuildingPlotInstID(buildingPlotInstId), Pos(pos) { }
 
             uint32 GarrBuildingPlotInstID;
             TaggedPosition<Position::XYZ> Pos;
         };
 
-        class GarrisonBuildingLandmarks final : public ServerPacket
+        class GarrisonMapDataResponse final : public ServerPacket
         {
         public:
-            GarrisonBuildingLandmarks() : ServerPacket(SMSG_GARRISON_BUILDING_LANDMARKS) { }
+            GarrisonMapDataResponse() : ServerPacket(SMSG_GARRISON_MAP_DATA_RESPONSE) { }
 
             WorldPacket const* Write() override;
 
-            std::vector<GarrisonBuildingLandmark> Landmarks;
+            std::vector<GarrisonBuildingMapData> Buildings;
         };
 
         class GarrisonPlotPlaced final : public ServerPacket

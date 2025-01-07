@@ -345,15 +345,15 @@ void WorldSession::SendLfgJoinResult(lfg::LfgJoinResultData const& joinData)
     for (lfg::LfgLockPartyMap::const_iterator it = joinData.lockmap.begin(); it != joinData.lockmap.end(); ++it)
     {
         lfgJoinResult.BlackList.emplace_back();
-        WorldPackets::LFG::LFGJoinBlackList& blackList = lfgJoinResult.BlackList.back();
-        blackList.Guid = it->first;
+        WorldPackets::LFG::LFGBlackList& blackList = lfgJoinResult.BlackList.back();
+        blackList.PlayerGuid = it->first;
 
         for (lfg::LfgLockMap::const_iterator itr = it->second.begin(); itr != it->second.end(); ++itr)
         {
             TC_LOG_TRACE("lfg", "SendLfgJoinResult:: %s DungeonID: %u Lock status: %u Required itemLevel: %u Current itemLevel: %f",
                 it->first.ToString().c_str(), (itr->first & 0x00FFFFFF), itr->second.lockStatus, itr->second.requiredItemLevel, itr->second.currentItemLevel);
 
-            blackList.Slots.emplace_back(itr->first, itr->second.lockStatus, itr->second.requiredItemLevel, itr->second.currentItemLevel);
+            blackList.Slot.emplace_back(itr->first, itr->second.lockStatus, itr->second.requiredItemLevel, itr->second.currentItemLevel);
         }
     }
 

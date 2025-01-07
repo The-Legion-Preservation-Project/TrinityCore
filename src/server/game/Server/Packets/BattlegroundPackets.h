@@ -399,10 +399,10 @@ namespace WorldPackets
             void Read() override { }
         };
 
-        class RequestRatedBattlefieldInfo final : public ClientPacket
+        class RequestRatedPvpInfo final : public ClientPacket
         {
         public:
-            RequestRatedBattlefieldInfo(WorldPacket&& packet) : ClientPacket(CMSG_REQUEST_RATED_BATTLEFIELD_INFO, std::move(packet)) { }
+            RequestRatedPvpInfo(WorldPacket&& packet) : ClientPacket(CMSG_REQUEST_RATED_PVP_INFO, std::move(packet)) { }
 
             void Read() override { }
         };

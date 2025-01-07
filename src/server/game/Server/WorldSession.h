@@ -142,7 +142,7 @@ namespace WorldPackets
         class RequestBattlefieldStatus;
         class ReportPvPPlayerAFK;
         class RequestPVPRewards;
-        class RequestRatedBattlefieldInfo;
+        class RequestRatedPvpInfo;
     }
 
     namespace Battlenet
@@ -174,15 +174,15 @@ namespace WorldPackets
     {
         class CalendarAddEvent;
         class CalendarCopyEvent;
-        class CalendarEventInvite;
-        class CalendarEventModeratorStatus;
-        class CalendarEventRSVP;
+        class CalendarInvite;
+        class CalendarModeratorStatusQuery;
+        class CalendarRSVP;
         class CalendarEventSignUp;
-        class CalendarEventStatus;
+        class CalendarStatus;
         class CalendarGetCalendar;
         class CalendarGetEvent;
         class CalendarGetNumPending;
-        class CalendarGuildFilter;
+        class CalendarCommunityInviteRequest;
         class CalendarRemoveEvent;
         class CalendarRemoveInvite;
         class CalendarUpdateEvent;
@@ -296,7 +296,7 @@ namespace WorldPackets
         class GarrisonPurchaseBuilding;
         class GarrisonCancelConstruction;
         class GarrisonRequestBlueprintAndSpecializationData;
-        class GarrisonGetBuildingLandmarks;
+        class GarrisonGetMapData;
     }
 
     namespace Guild
@@ -1526,7 +1526,7 @@ class TC_GAME_API WorldSession
         void HandleBattlefieldLeaveOpcode(WorldPackets::Battleground::BattlefieldLeave& battlefieldLeave);
         void HandleBattlemasterJoinArena(WorldPackets::Battleground::BattlemasterJoinArena& packet);
         void HandleReportPvPAFK(WorldPackets::Battleground::ReportPvPPlayerAFK& reportPvPPlayerAFK);
-        void HandleRequestRatedBattlefieldInfo(WorldPackets::Battleground::RequestRatedBattlefieldInfo& packet);
+        void HandleRequestRatedPvpInfo(WorldPackets::Battleground::RequestRatedPvpInfo& packet);
         void HandleGetPVPOptionsEnabled(WorldPackets::Battleground::GetPVPOptionsEnabled& getPvPOptionsEnabled);
         void HandleRequestPvpReward(WorldPackets::Battleground::RequestPVPRewards& packet);
         void HandleAreaSpiritHealerQueryOpcode(WorldPackets::Battleground::AreaSpiritHealerQuery& areaSpiritHealerQuery);
@@ -1619,16 +1619,16 @@ class TC_GAME_API WorldSession
         // Calendar
         void HandleCalendarGetCalendar(WorldPackets::Calendar::CalendarGetCalendar& calendarGetCalendar);
         void HandleCalendarGetEvent(WorldPackets::Calendar::CalendarGetEvent& calendarGetEvent);
-        void HandleCalendarGuildFilter(WorldPackets::Calendar::CalendarGuildFilter& calendarGuildFilter);
+        void HandleCalendarGuildFilter(WorldPackets::Calendar::CalendarCommunityInviteRequest& calendarGuildFilter);
         void HandleCalendarAddEvent(WorldPackets::Calendar::CalendarAddEvent& calendarAddEvent);
         void HandleCalendarUpdateEvent(WorldPackets::Calendar::CalendarUpdateEvent& calendarUpdateEvent);
         void HandleCalendarRemoveEvent(WorldPackets::Calendar::CalendarRemoveEvent& calendarRemoveEvent);
         void HandleCalendarCopyEvent(WorldPackets::Calendar::CalendarCopyEvent& calendarCopyEvent);
-        void HandleCalendarEventInvite(WorldPackets::Calendar::CalendarEventInvite& calendarEventInvite);
-        void HandleCalendarEventRsvp(WorldPackets::Calendar::CalendarEventRSVP& calendarEventRSVP);
+        void HandleCalendarInvite(WorldPackets::Calendar::CalendarInvite& calendarEventInvite);
+        void HandleCalendarRsvp(WorldPackets::Calendar::CalendarRSVP& calendarRSVP);
         void HandleCalendarEventRemoveInvite(WorldPackets::Calendar::CalendarRemoveInvite& calendarRemoveInvite);
-        void HandleCalendarEventStatus(WorldPackets::Calendar::CalendarEventStatus& calendarEventStatus);
-        void HandleCalendarEventModeratorStatus(WorldPackets::Calendar::CalendarEventModeratorStatus& calendarEventModeratorStatus);
+        void HandleCalendarStatus(WorldPackets::Calendar::CalendarStatus& calendarStatus);
+        void HandleCalendarModeratorStatus(WorldPackets::Calendar::CalendarModeratorStatusQuery& calendarModeratorStatus);
         void HandleCalendarComplain(WorldPackets::Calendar::CalendarComplain& calendarComplain);
         void HandleCalendarGetNumPending(WorldPackets::Calendar::CalendarGetNumPending& calendarGetNumPending);
         void HandleCalendarEventSignup(WorldPackets::Calendar::CalendarEventSignUp& calendarEventSignUp);
@@ -1690,7 +1690,7 @@ class TC_GAME_API WorldSession
         void HandleGarrisonPurchaseBuilding(WorldPackets::Garrison::GarrisonPurchaseBuilding& garrisonPurchaseBuilding);
         void HandleGarrisonCancelConstruction(WorldPackets::Garrison::GarrisonCancelConstruction& garrisonCancelConstruction);
         void HandleGarrisonRequestBlueprintAndSpecializationData(WorldPackets::Garrison::GarrisonRequestBlueprintAndSpecializationData& garrisonRequestBlueprintAndSpecializationData);
-        void HandleGarrisonGetBuildingLandmarks(WorldPackets::Garrison::GarrisonGetBuildingLandmarks& garrisonGetBuildingLandmarks);
+        void HandleGarrisonGetMapData(WorldPackets::Garrison::GarrisonGetMapData& garrisonGetBuildingLandmarks);
 
         // Battle Pets
         void HandleBattlePetRequestJournal(WorldPackets::BattlePet::BattlePetRequestJournal& battlePetRequestJournal);

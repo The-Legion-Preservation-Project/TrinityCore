@@ -80,7 +80,7 @@ void WorldPackets::Calendar::CalendarGetEvent::Read()
     _worldPacket >> EventID;
 }
 
-void WorldPackets::Calendar::CalendarGuildFilter::Read()
+void WorldPackets::Calendar::CalendarCommunityInviteRequest::Read()
 {
     _worldPacket >> MinLevel;
     _worldPacket >> MaxLevel;
@@ -159,14 +159,14 @@ void WorldPackets::Calendar::CalendarCopyEvent::Read()
     Date = _worldPacket.ReadPackedTime();
 }
 
-void WorldPackets::Calendar::CalendarEventRSVP::Read()
+void WorldPackets::Calendar::CalendarRSVP::Read()
 {
     _worldPacket >> EventID;
     _worldPacket >> InviteID;
     _worldPacket >> Status;
 }
 
-void WorldPackets::Calendar::CalendarEventInvite::Read()
+void WorldPackets::Calendar::CalendarInvite::Read()
 {
     _worldPacket >> EventID;
     _worldPacket >> ModeratorID;
@@ -192,7 +192,7 @@ void WorldPackets::Calendar::CalendarRemoveInvite::Read()
     _worldPacket >> EventID;
 }
 
-void WorldPackets::Calendar::CalendarEventStatus::Read()
+void WorldPackets::Calendar::CalendarStatus::Read()
 {
     _worldPacket >> Guid;
     _worldPacket >> EventID;
@@ -208,7 +208,7 @@ void WorldPackets::Calendar::SetSavedInstanceExtend::Read()
     Extend = _worldPacket.ReadBit();
 }
 
-void WorldPackets::Calendar::CalendarEventModeratorStatus::Read()
+void WorldPackets::Calendar::CalendarModeratorStatusQuery::Read()
 {
     _worldPacket >> Guid;
     _worldPacket >> EventID;

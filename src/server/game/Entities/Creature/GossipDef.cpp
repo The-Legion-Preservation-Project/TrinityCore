@@ -363,9 +363,6 @@ void PlayerMenu::SendQuestGiverQuestListMessage(Object* questgiver)
                 ObjectMgr::GetLocaleString(questGreetingLocale->Greeting, localeConstant, questList.Greeting);
     }
 
-    // Store this instead of checking the Singleton every loop iteration
-    bool questLevelInTitle = sWorld->getBoolConfig(CONFIG_UI_QUESTLEVELS_IN_DIALOGS);
-
     for (uint32 i = 0; i < _questMenu.GetMenuItemCount(); ++i)
     {
         QuestMenuItem const& questMenuItem = _questMenu.GetItem(i);
@@ -374,19 +371,21 @@ void PlayerMenu::SendQuestGiverQuestListMessage(Object* questgiver)
 
         if (Quest const* quest = sObjectMgr->GetQuestTemplate(questID))
         {
-            std::string title = quest->GetLogTitle();
+            questList.QuestDataText.emplace_back();
+            WorldPackets::NPC::ClientGossipText& text = questList.QuestDataText.back();
+            text.QuestID = questID;
+            text.QuestType = questMenuItem.QuestIcon;
+            text.QuestLevel = quest->GetQuestLevel();
+            text.QuestMaxScalingLevel = quest->GetQuestMaxScalingLevel();
+            text.QuestFlags[0] = quest->GetFlags();
+            text.QuestFlags[1] = quest->GetFlagsEx();
+            text.Repeatable = quest->IsRepeatable();
 
+            text.QuestTitle = quest->GetLogTitle();
+            LocaleConstant localeConstant = _session->GetSessionDbLocaleIndex();
             if (localeConstant != LOCALE_enUS)
-                if (QuestTemplateLocale const* questTemplateLocale = sObjectMgr->GetQuestLocale(questID))
-                    ObjectMgr::GetLocaleString(questTemplateLocale->LogTitle, localeConstant, title);
-
-            if (questLevelInTitle)
-                Quest::AddQuestLevelToTitle(title, quest->GetQuestLevel());
-
-            bool repeatable = false; // NYI
-
-            questList.QuestDataText.emplace_back(questID, questMenuItem.QuestIcon, quest->GetQuestLevel(), quest->GetQuestMaxScalingLevel(),
-                quest->GetFlags(), quest->GetFlagsEx(), repeatable, std::move(title));
+                if (QuestTemplateLocale const* localeData = sObjectMgr->GetQuestLocale(questID))
+                    ObjectMgr::GetLocaleString(localeData->LogTitle, localeConstant, text.QuestTitle);
         }
     }
 
