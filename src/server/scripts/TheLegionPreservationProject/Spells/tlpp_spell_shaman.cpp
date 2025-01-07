@@ -65,6 +65,7 @@ class tlpp_spell_sha_maelstrom_weapon : public AuraScript
 {
     PrepareAuraScript(tlpp_spell_sha_maelstrom_weapon);
 
+public:
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
         return ValidateSpellInfo({ SPELL_SHAMAN_MAELSTROM_WEAPON_POWER });
@@ -90,7 +91,11 @@ class tlpp_spell_sha_stormbringer : public AuraScript
 public:
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
-        return ValidateSpellInfo({ SPELL_SHAMAN_STORMBRINGER_PROC, SPELL_SHAMAN_STORMSTRIKE });
+        return ValidateSpellInfo(
+        {
+            SPELL_SHAMAN_STORMBRINGER_PROC,
+            SPELL_SHAMAN_STORMSTRIKE
+        });
     }
 
     bool CheckProc(ProcEventInfo& eventInfo)

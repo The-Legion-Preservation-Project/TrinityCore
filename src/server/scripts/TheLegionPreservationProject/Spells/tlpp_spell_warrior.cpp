@@ -15,17 +15,92 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Map.h"
+#include "PathGenerator.h"
 #include "Player.h"
 #include "ScriptMgr.h"
+#include "SpellInfo.h"
 #include "SpellScript.h"
 
 enum WarriorSpells
 {
+    SPELL_WARRIOR_BOUNDING_STRIDE                   = 202163,
+    SPELL_WARRIOR_BOUNDING_STRIDE_SPEED             = 202164,
+    SPELL_WARRIOR_HEROIC_LEAP_JUMP                  = 94954, // HACK
+    //SPELL_WARRIOR_HEROIC_LEAP_JUMP                  = 178368, // wait for a809932f5017c98092a02694e86e276add03f8b9
     SPELL_WARRIOR_IGNORE_PAIN                       = 190456,
     SPELL_WARRIOR_RENEWED_FURY                      = 202288,
     SPELL_WARRIOR_RENEWED_FURY_EFFECT               = 202289,
     SPELL_WARRIOR_VENGEANCE_AURA                    = 202572,
     SPELL_WARRIOR_VENGEANCE_FOCUSED_RAGE            = 202573,
+};
+
+// 6544 - Heroic leap
+class tlpp_spell_warr_heroic_leap : public SpellScript
+{
+    PrepareSpellScript(tlpp_spell_warr_heroic_leap);
+
+public:
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo(
+        {
+            SPELL_WARRIOR_HEROIC_LEAP_JUMP,
+            SPELL_WARRIOR_BOUNDING_STRIDE,
+            SPELL_WARRIOR_BOUNDING_STRIDE_SPEED
+        });
+    }
+
+    SpellCastResult CheckElevation()
+    {
+        if (WorldLocation const* dest = GetExplTargetDest())
+        {
+            if (GetCaster()->HasUnitMovementFlag(MOVEMENTFLAG_ROOT))
+                return SPELL_FAILED_ROOTED;
+
+            if (GetCaster()->GetMap()->Instanceable())
+            {
+                float range = GetSpellInfo()->GetMaxRange(true, GetCaster()) * 1.5f;
+
+                PathGenerator generatedPath(GetCaster());
+                generatedPath.SetPathLengthLimit(range);
+
+                bool result = generatedPath.CalculatePath(dest->GetPositionX(), dest->GetPositionY(), dest->GetPositionZ(), false, true);
+                if (generatedPath.GetPathType() & PATHFIND_SHORT)
+                    return SPELL_FAILED_OUT_OF_RANGE;
+                else if (!result || generatedPath.GetPathType() & PATHFIND_NOPATH)
+                {
+                    result = generatedPath.CalculatePath(dest->GetPositionX(), dest->GetPositionY(), dest->GetPositionZ(), false, false);
+                    if (generatedPath.GetPathType() & PATHFIND_SHORT)
+                        return SPELL_FAILED_OUT_OF_RANGE;
+                    else if (!result || generatedPath.GetPathType() & PATHFIND_NOPATH)
+                        return SPELL_FAILED_NOPATH;
+                }
+            }
+            else if (dest->GetPositionZ() > GetCaster()->GetPositionZ() + 4.0f)
+                return SPELL_FAILED_NOPATH;
+
+            return SPELL_CAST_OK;
+        }
+
+        return SPELL_FAILED_NO_VALID_TARGETS;
+    }
+
+    void HandleDummy(SpellEffIndex /*effIndex*/)
+    {
+        if (WorldLocation* dest = GetHitDest())
+            GetCaster()->CastSpell(dest->GetPositionX(), dest->GetPositionY(), dest->GetPositionZ(), SPELL_WARRIOR_HEROIC_LEAP_JUMP, true);
+
+        if (Unit* caster = GetCaster())
+            if (caster->HasAura(SPELL_WARRIOR_BOUNDING_STRIDE))
+                caster->CastSpell(caster, SPELL_WARRIOR_BOUNDING_STRIDE_SPEED, true);
+    }
+
+    void Register() override
+    {
+        OnCheckCast += SpellCheckCastFn(tlpp_spell_warr_heroic_leap::CheckElevation);
+        OnEffectHit += SpellEffectFn(tlpp_spell_warr_heroic_leap::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+    }
 };
 
 // 190456 - Ignore Pain
@@ -106,5 +181,6 @@ class tlpp_aura_warr_ignore_pain : public AuraScript
 
 void AddCustomWarriorSpellScripts()
 {
+    RegisterSpellScript(tlpp_spell_warr_heroic_leap);
     RegisterSpellAndAuraScriptPair(tlpp_spell_warr_ignore_pain, tlpp_aura_warr_ignore_pain);
 }
