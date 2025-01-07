@@ -174,32 +174,32 @@ enum QuestFlags : uint32
 // last checked in 19802
 enum QuestFlagsEx : uint32
 {
-    QUEST_FLAGS_EX_NONE                                                 = 0x0000000,
-    QUEST_FLAGS_EX_KEEP_ADDITIONAL_ITEMS                                = 0x0000001,
-    QUEST_FLAGS_EX_SUPPRESS_GOSSIP_COMPLETE                             = 0x0000002,
-    QUEST_FLAGS_EX_SUPPRESS_GOSSIP_ACCEPT                               = 0x0000004,
-    QUEST_FLAGS_EX_DISALLOW_PLAYER_AS_QUESTGIVER                        = 0x0000008,
-    QUEST_FLAGS_EX_DISPLAY_CLASS_CHOICE_REWARDS                         = 0x0000010,
-    QUEST_FLAGS_EX_DISPLAY_SPEC_CHOICE_REWARDS                          = 0x0000020,
-    QUEST_FLAGS_EX_REMOVE_FROM_LOG_ON_PERIDOIC_RESET                    = 0x0000040,
-    QUEST_FLAGS_EX_ACCOUNT_LEVEL_QUEST                                  = 0x0000080,
-    QUEST_FLAGS_EX_LEGENDARY_QUEST                                      = 0x0000100,
-    QUEST_FLAGS_EX_NO_GUILD_XP                                          = 0x0000200,
-    QUEST_FLAGS_EX_RESET_CACHE_ON_ACCEPT                                = 0x0000400,
-    QUEST_FLAGS_EX_NO_ABANDON_ONCE_ANY_OBJECTIVE_COMPLETE               = 0x0000800,
-    QUEST_FLAGS_EX_RECAST_ACCEPT_SPELL_ON_LOGIN                         = 0x0001000,
-    QUEST_FLAGS_EX_UPDATE_ZONE_AURAS                                    = 0x0002000,
-    QUEST_FLAGS_EX_NO_CREDIT_FOR_PROXY                                  = 0x0004000,
-    QUEST_FLAGS_EX_DISPLAY_AS_DAILY_QUEST                               = 0x0008000,
-    QUEST_FLAGS_EX_PART_OF_QUEST_LINE                                   = 0x0010000,
-    QUEST_FLAGS_EX_QUEST_FOR_INTERNAL_BUILDS_ONLY                       = 0x0020000,
-    QUEST_FLAGS_EX_SUPPRESS_SPELL_LEARN_TEXT_LINE                       = 0x0040000,
-    QUEST_FLAGS_EX_DISPLAY_HEADER_AS_OBJECTIVE_FOR_TASKS                = 0x0080000,
-    QUEST_FLAGS_EX_GARRISON_NON_OWNERS_ALLOWED                          = 0x0100000,
-    QUEST_FLAGS_EX_REMOVE_QUEST_ON_WEEKLY_RESET                         = 0x0200000,
-    QUEST_FLAGS_EX_SUPPRESS_FAREWELL_AUDIO_AFTER_QUEST_ACCEPT           = 0x0400000,
-    QUEST_FLAGS_EX_REWARDS_BYPASS_WEEKLY_CAPS_AND_SEASON_TOTAL          = 0x0800000,
-    QUEST_FLAGS_EX_CLEAR_PROGRESS_OF_CRITERIA_TREE_OBJECTIVES_ON_ACCEPT = 0x1000000
+    QUEST_FLAGS_EX_NONE                                                 = 0x00000000,
+    QUEST_FLAGS_EX_KEEP_ADDITIONAL_ITEMS                                = 0x00000001,
+    QUEST_FLAGS_EX_SUPPRESS_GOSSIP_COMPLETE                             = 0x00000002,
+    QUEST_FLAGS_EX_SUPPRESS_GOSSIP_ACCEPT                               = 0x00000004,
+    QUEST_FLAGS_EX_DISALLOW_PLAYER_AS_QUESTGIVER                        = 0x00000008,
+    QUEST_FLAGS_EX_DISPLAY_CLASS_CHOICE_REWARDS                         = 0x00000010,
+    QUEST_FLAGS_EX_DISPLAY_SPEC_CHOICE_REWARDS                          = 0x00000020,
+    QUEST_FLAGS_EX_REMOVE_FROM_LOG_ON_PERIDOIC_RESET                    = 0x00000040,
+    QUEST_FLAGS_EX_ACCOUNT_LEVEL_QUEST                                  = 0x00000080,
+    QUEST_FLAGS_EX_LEGENDARY_QUEST                                      = 0x00000100,
+    QUEST_FLAGS_EX_NO_GUILD_XP                                          = 0x00000200,
+    QUEST_FLAGS_EX_RESET_CACHE_ON_ACCEPT                                = 0x00000400,
+    QUEST_FLAGS_EX_NO_ABANDON_ONCE_ANY_OBJECTIVE_COMPLETE               = 0x00000800,
+    QUEST_FLAGS_EX_RECAST_ACCEPT_SPELL_ON_LOGIN                         = 0x00001000,
+    QUEST_FLAGS_EX_UPDATE_ZONE_AURAS                                    = 0x00002000,
+    QUEST_FLAGS_EX_NO_CREDIT_FOR_PROXY                                  = 0x00004000,
+    QUEST_FLAGS_EX_DISPLAY_AS_DAILY_QUEST                               = 0x00008000,
+    QUEST_FLAGS_EX_PART_OF_QUEST_LINE                                   = 0x00010000,
+    QUEST_FLAGS_EX_QUEST_FOR_INTERNAL_BUILDS_ONLY                       = 0x00020000,
+    QUEST_FLAGS_EX_SUPPRESS_SPELL_LEARN_TEXT_LINE                       = 0x00040000,
+    QUEST_FLAGS_EX_DISPLAY_HEADER_AS_OBJECTIVE_FOR_TASKS                = 0x00080000,
+    QUEST_FLAGS_EX_GARRISON_NON_OWNERS_ALLOWED                          = 0x00100000,
+    QUEST_FLAGS_EX_REMOVE_QUEST_ON_WEEKLY_RESET                         = 0x00200000,
+    QUEST_FLAGS_EX_SUPPRESS_FAREWELL_AUDIO_AFTER_QUEST_ACCEPT           = 0x00400000,
+    QUEST_FLAGS_EX_REWARDS_BYPASS_WEEKLY_CAPS_AND_SEASON_TOTAL          = 0x00800000,
+    QUEST_FLAGS_EX_IS_WORLD_QUEST                                       = 0x01000000,
 };
 
 enum QuestSpecialFlags
@@ -255,8 +255,8 @@ enum QuestObjectiveFlags
     QUEST_OBJECTIVE_FLAG_SEQUENCED                          = 0x02, // client will not see the objective displayed until all previous objectives are completed
     QUEST_OBJECTIVE_FLAG_OPTIONAL                           = 0x04, // not required to complete the quest
     QUEST_OBJECTIVE_FLAG_HIDDEN                             = 0x08, // never displayed in quest log
-    QUEST_OBJECTIVE_FLAG_HIDE_ITEM_GAINS                    = 0x10, // skip showing item objective progress
-    QUEST_OBJECTIVE_FLAG_PROGRESS_COUNTS_ITEMS_IN_INVENTORY = 0x20, // item objective progress counts items in inventory instead of reading it from updatefields
+    QUEST_OBJECTIVE_FLAG_HIDE_CREDIT_MSG                    = 0x10, // skip showing item objective progress
+    QUEST_OBJECTIVE_FLAG_PRESERVE_QUEST_ITEMS               = 0x20,
     QUEST_OBJECTIVE_FLAG_PART_OF_PROGRESS_BAR               = 0x40, // hidden objective used to calculate progress bar percent (quests are limited to a single progress bar objective)
 };
 
@@ -340,6 +340,7 @@ struct QuestRewardDisplaySpell
 {
     QuestRewardDisplaySpell() : SpellId(0), PlayerConditionId(0) { }
     QuestRewardDisplaySpell(uint32 spellId, uint32 playerConditionId) : SpellId(spellId), PlayerConditionId(playerConditionId) { }
+
     uint32 SpellId;
     uint32 PlayerConditionId;
 };
@@ -375,7 +376,6 @@ class TC_GAME_API Quest
         void SetSpecialFlag(uint32 flag) { _specialFlags |= flag; }
 
         int32  GetMinLevel() const { return _minLevel; }
-        uint32 GetMaxLevel() const { return _maxLevel; }
         int32  GetQuestLevel() const { return _level; }
         int32  GetQuestMaxScalingLevel() const { return _maxScalingLevel; }
 
@@ -384,6 +384,7 @@ class TC_GAME_API Quest
         uint32 GetQuestType() const { return _type; }
         uint32 GetQuestPackageID() const { return _packageID; }
         int32  GetZoneOrSort() const { return _questSortID; }
+        uint32 GetMaxLevel() const { return _maxLevel; }
         uint32 GetQuestInfoID() const { return _questInfoID; }
         uint32 GetAllowableClasses() const { return _allowableClasses; }
         Trinity::RaceMask<uint64> GetAllowableRaces() const { return _allowableRaces; }
