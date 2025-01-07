@@ -5510,22 +5510,6 @@ void Player::UpdateSkillsForLevel()
     }
 }
 
-void Player::InitializeSkillFields()
-{
-    uint32 i = 0;
-    for (SkillLineEntry const* skillLine : sSkillLineStore)
-    {
-        if (sDB2Manager.GetSkillRaceClassInfo(skillLine->ID, getRace(), getClass()))
-        {
-            SetSkillLineId(i, skillLine->ID);
-            //SetSkillStartingRank(i, 1);
-            mSkillStatus.insert(SkillStatusMap::value_type(skillLine->ID, SkillStatusData(i, SKILL_UNCHANGED)));
-            if (++i >= PLAYER_MAX_SKILLS)
-                break;
-        }
-    }
-}
-
 // This functions sets a skill line value (and adds if doesn't exist yet)
 // To "remove" a skill line, set it's values to zero
 void Player::SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal)
@@ -17883,7 +17867,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
     if (!_LoadHomeBind(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_HOME_BIND)))
         return false;
 
-    InitializeSkillFields();
+    //InitializeSkillFields();
     InitPrimaryProfessions();                               // to max set before any spell loaded
 
     // init saved position, and fix it later if problematic
