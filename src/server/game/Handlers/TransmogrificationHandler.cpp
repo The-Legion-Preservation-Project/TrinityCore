@@ -42,6 +42,44 @@ void WorldSession::HandleTransmogrifyItems(WorldPackets::Transmogrification::Tra
     std::vector<Item*> resetIllusionItems;
     std::vector<uint32> bindAppearances;
 
+    auto validateAndStoreTransmogItem = [&](Item* itemTransmogrified, uint32 itemModifiedAppearanceId)
+    {
+        ItemModifiedAppearanceEntry const* itemModifiedAppearance = sItemModifiedAppearanceStore.LookupEntry(itemModifiedAppearanceId);
+        if (!itemModifiedAppearance)
+        {
+            TC_LOG_DEBUG("network", "WORLD: HandleTransmogrifyItems - %s, Name: %s tried to transmogrify using invalid appearance (%d).", player->GetGUID().ToString().c_str(), player->GetName().c_str(), itemModifiedAppearanceId);
+            return false;
+        }
+
+        bool hasAppearance, isTemporary;
+        std::tie(hasAppearance, isTemporary) = GetCollectionMgr()->HasItemAppearance(itemModifiedAppearanceId);
+        if (!hasAppearance)
+        {
+            TC_LOG_DEBUG("network", "WORLD: HandleTransmogrifyItems - %s, Name: %s tried to transmogrify using appearance he has not collected (%d).", player->GetGUID().ToString().c_str(), player->GetName().c_str(), itemModifiedAppearanceId);
+            return false;
+        }
+        ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemModifiedAppearance->ItemID);
+        if (player->CanUseItem(itemTemplate) != EQUIP_ERR_OK)
+        {
+            TC_LOG_DEBUG("network", "WORLD: HandleTransmogrifyItems - %s, Name: %s tried to transmogrify using appearance he can never use (%d).", player->GetGUID().ToString().c_str(), player->GetName().c_str(), itemModifiedAppearanceId);
+            return false;
+        }
+
+        // validity of the transmogrification items
+        if (!Item::CanTransmogrifyItemWithItem(itemTransmogrified, itemModifiedAppearance))
+        {
+            TC_LOG_DEBUG("network", "WORLD: HandleTransmogrifyItems - %s, Name: %s failed CanTransmogrifyItemWithItem (%u with appearance %d).", player->GetGUID().ToString().c_str(), player->GetName().c_str(), itemTransmogrified->GetEntry(), itemModifiedAppearanceId);
+            return false;
+        }
+
+        transmogItems[itemTransmogrified] = itemModifiedAppearanceId;
+
+        if (isTemporary)
+            bindAppearances.push_back(itemModifiedAppearanceId);
+
+        return true;
+    };
+
     for (WorldPackets::Transmogrification::TransmogrifyItem const& transmogItem : transmogrifyItems.Items)
     {
         // slot of the transmogrified item
@@ -61,37 +99,8 @@ void WorldSession::HandleTransmogrifyItems(WorldPackets::Transmogrification::Tra
 
         if (transmogItem.ItemModifiedAppearanceID)
         {
-            ItemModifiedAppearanceEntry const* itemModifiedAppearance = sItemModifiedAppearanceStore.LookupEntry(transmogItem.ItemModifiedAppearanceID);
-            if (!itemModifiedAppearance)
-            {
-                TC_LOG_DEBUG("network", "WORLD: HandleTransmogrifyItems - %s, Name: %s tried to transmogrify using invalid appearance (%d).", player->GetGUID().ToString().c_str(), player->GetName().c_str(), transmogItem.ItemModifiedAppearanceID);
+            if (!validateAndStoreTransmogItem(itemTransmogrified, transmogItem.ItemModifiedAppearanceID))
                 return;
-            }
-
-            bool hasAppearance, isTemporary;
-            std::tie(hasAppearance, isTemporary) = GetCollectionMgr()->HasItemAppearance(transmogItem.ItemModifiedAppearanceID);
-            if (!hasAppearance)
-            {
-                TC_LOG_DEBUG("network", "WORLD: HandleTransmogrifyItems - %s, Name: %s tried to transmogrify using appearance he has not collected (%d).", player->GetGUID().ToString().c_str(), player->GetName().c_str(), transmogItem.ItemModifiedAppearanceID);
-                return;
-            }
-            ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemModifiedAppearance->ItemID);
-            if (player->CanUseItem(itemTemplate) != EQUIP_ERR_OK)
-            {
-                TC_LOG_DEBUG("network", "WORLD: HandleTransmogrifyItems - %s, Name: %s tried to transmogrify using appearance he can never use (%d).", player->GetGUID().ToString().c_str(), player->GetName().c_str(), transmogItem.ItemModifiedAppearanceID);
-                return;
-            }
-
-            // validity of the transmogrification items
-            if (!Item::CanTransmogrifyItemWithItem(itemTransmogrified, itemModifiedAppearance))
-            {
-                TC_LOG_DEBUG("network", "WORLD: HandleTransmogrifyItems - %s, Name: %s failed CanTransmogrifyItemWithItem (%u with appearance %d).", player->GetGUID().ToString().c_str(), player->GetName().c_str(), itemTransmogrified->GetEntry(), transmogItem.ItemModifiedAppearanceID);
-                return;
-            }
-
-            transmogItems[itemTransmogrified] = transmogItem.ItemModifiedAppearanceID;
-            if (isTemporary)
-                bindAppearances.push_back(transmogItem.ItemModifiedAppearanceID);
 
             // add cost
             cost += itemTransmogrified->GetSellPrice(_player);
@@ -262,6 +271,7 @@ void WorldSession::HandleTransmogrifyItems(WorldPackets::Transmogrification::Tra
                 item->SetModifier(ITEM_MODIFIER_ENCHANT_ILLUSION_SPEC_3, item->GetModifier(ITEM_MODIFIER_ENCHANT_ILLUSION_ALL_SPECS));
             if (!item->GetModifier(ITEM_MODIFIER_ENCHANT_ILLUSION_SPEC_4))
                 item->SetModifier(ITEM_MODIFIER_ENCHANT_ILLUSION_SPEC_4, item->GetModifier(ITEM_MODIFIER_ENCHANT_ILLUSION_ALL_SPECS));
+
             item->SetModifier(IllusionModifierSlotBySpec[player->GetActiveTalentGroup()], 0);
             item->SetModifier(ITEM_MODIFIER_TRANSMOG_APPEARANCE_ALL_SPECS, 0);
         }
