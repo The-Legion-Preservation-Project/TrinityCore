@@ -22,6 +22,7 @@
 #include "ObjectGuid.h"
 #include "SharedDefines.h"
 #include <string>
+#include <unordered_map>
 
 class AuctionBotSeller;
 class AuctionBotBuyer;
@@ -310,6 +311,8 @@ private:
 
     AuctionBotBuyer* _buyer;
     AuctionBotSeller* _seller;
+
+    std::unordered_map<ObjectGuid::LowType, uint64> _marketData;
 
     uint32 _operationSelector; // 0..2*MAX_AUCTION_HOUSE_TYPE-1
 };

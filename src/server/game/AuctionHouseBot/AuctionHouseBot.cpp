@@ -410,11 +410,33 @@ AuctionHouseBot::~AuctionHouseBot()
 
 void AuctionHouseBot::InitializeAgents()
 {
+    if (sAuctionBotConfig->GetConfig(CONFIG_AHBOT_SELLER_ENABLED) || sAuctionBotConfig->GetConfig(CONFIG_AHBOT_BUYER_ENABLED))
+    {
+        TC_LOG_DEBUG("auctionHouse", "Loading market data...");
+        QueryResult marketDataResult = CharacterDatabase.PQuery("SELECT `Id`, `MinBuyout` FROM `ahbot_market_data`");
+        if (marketDataResult)
+        {
+            do
+            {
+                Field* fields = marketDataResult->Fetch();
+
+                uint32 entry = fields[0].GetUInt32();
+                if (!entry)
+                    continue;
+
+                uint64 minBuyout = fields[1].GetUInt64();
+
+                _marketData.emplace(entry, minBuyout);
+            } while (marketDataResult->NextRow());
+        }
+        TC_LOG_DEBUG("auctionHouse", "Market data has %lu items...", _marketData.size());
+    }
+
     if (sAuctionBotConfig->GetConfig(CONFIG_AHBOT_SELLER_ENABLED))
     {
         delete _seller;
 
-        _seller = new AuctionBotSeller();
+        _seller = new AuctionBotSeller(_marketData);
         if (!_seller->Initialize())
         {
             delete _seller;
@@ -426,7 +448,7 @@ void AuctionHouseBot::InitializeAgents()
     {
         delete _buyer;
 
-        _buyer = new AuctionBotBuyer();
+        _buyer = new AuctionBotBuyer(_marketData);
         if (!_buyer->Initialize())
         {
             delete _buyer;

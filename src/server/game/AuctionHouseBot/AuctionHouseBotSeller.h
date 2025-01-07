@@ -121,7 +121,7 @@ class TC_GAME_API AuctionBotSeller : public AuctionBotAgent
 public:
     typedef std::vector<uint32> ItemPool;
 
-    AuctionBotSeller();
+    AuctionBotSeller(std::unordered_map<ObjectGuid::LowType, uint64> const& marketData);
     ~AuctionBotSeller();
 
     bool Initialize() override;
@@ -138,6 +138,8 @@ private:
     SellerConfiguration _houseConfig[MAX_AUCTION_HOUSE_TYPE];
 
     ItemPool _itemPool[MAX_AUCTION_QUALITY][MAX_ITEM_CLASS];
+
+    const std::unordered_map<ObjectGuid::LowType, uint64> _marketData;
 
     void LoadSellerValues(SellerConfiguration& config);
     uint32 SetStat(SellerConfiguration& config);

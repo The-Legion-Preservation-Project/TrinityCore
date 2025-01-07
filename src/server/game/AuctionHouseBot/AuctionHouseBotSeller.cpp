@@ -27,7 +27,7 @@
 #include "Random.h"
 #include <sstream>
 
-AuctionBotSeller::AuctionBotSeller()
+AuctionBotSeller::AuctionBotSeller(std::unordered_map<ObjectGuid::LowType, uint64> const& marketData) : _marketData(marketData)
 {
     // Define faction for our main data class.
     for (uint8 i = 0; i < MAX_AUCTION_HOUSE_TYPE; ++i)
@@ -193,15 +193,19 @@ bool AuctionBotSeller::Initialize()
         // Filter out items with no buy/sell price unless otherwise flagged in the config.
         if (!allowZero)
         {
-            if (sAuctionBotConfig->GetConfig(CONFIG_AHBOT_BUYPRICE_SELLER))
+            // Only check buy/sell price if we don't have market data
+            if (_marketData.count(itemId) == 0)
             {
-                if (prototype->GetSellPrice() == 0)
-                    continue;
-            }
-            else
-            {
-                if (prototype->GetBuyPrice() == 0)
-                    continue;
+                if (sAuctionBotConfig->GetConfig(CONFIG_AHBOT_BUYPRICE_SELLER))
+                {
+                    if (prototype->GetSellPrice() == 0)
+                        continue;
+                }
+                else
+                {
+                    if (prototype->GetBuyPrice() == 0)
+                        continue;
+                }
             }
         }
 
@@ -619,6 +623,11 @@ void AuctionBotSeller::SetPricesOfItem(ItemTemplate const* itemProto, SellerConf
 
     float basePriceFloat = buyPrice * stackCount / (itemProto->GetClass() == 6 ? 200.0f : static_cast<float>(itemProto->GetBuyCount()));
     basePriceFloat *= priceRatio;
+
+    // prefer market data when available
+    auto marketData = _marketData.find(itemProto->GetId());
+    if (marketData != _marketData.end())
+        basePriceFloat = marketData->second * stackCount;
 
     float range = basePriceFloat * 0.04f;
 

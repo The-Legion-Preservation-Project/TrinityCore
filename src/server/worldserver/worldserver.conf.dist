@@ -3717,7 +3717,7 @@ AuctionHouseBot.forceIncludeItems = ""
 #       Default:     ""
 #
 
-AuctionHouseBot.forceExcludeItems = "129139,143752"
+AuctionHouseBot.forceExcludeItems = "38307,129139,137627,143752"
 
 #
 #    AuctionHouseBot.Class.RandomStackRatio.*
