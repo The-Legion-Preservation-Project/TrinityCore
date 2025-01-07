@@ -140,11 +140,22 @@ void Quest::LoadRewardDisplaySpell(Field* fields)
 
     if (playerConditionId && !sPlayerConditionStore.LookupEntry(playerConditionId))
     {
-        TC_LOG_ERROR("sql.sql", "Table `quest_reward_display_spell` has non-existing PlayerCondition (%u) set for quest %u. Set to 0.", spellId, fields[0].GetUInt32());
+        TC_LOG_ERROR("sql.sql", "Table `quest_reward_display_spell` has non-existing PlayerCondition (%u) set for quest %u. Set to 0.", playerConditionId, fields[0].GetUInt32());
         playerConditionId = 0;
     }
 
-    RewardDisplaySpell.emplace_back(spellId, playerConditionId);
+    bool added = false;
+    for (uint8 i=0; i < QUEST_REWARD_DISPLAY_SPELL_COUNT; ++i)
+        if (!RewardDisplaySpell[i].SpellId)
+        {
+            RewardDisplaySpell[i].SpellId = spellId;
+            RewardDisplaySpell[i].PlayerConditionId = playerConditionId;
+            added = true;
+            break;
+        }
+
+    if (!added)
+        TC_LOG_ERROR("sql.sql", "Table `quest_reward_display_spell` has more than three records for quest %u; ignoring spell %u", fields[0].GetUInt32(), spellId);
 }
 
 // void Quest::LoadRewardChoiceItems(Field* fields)
@@ -321,16 +332,15 @@ void Quest::BuildQuestRewards(WorldPackets::Quest::QuestRewards& rewards, Player
     rewards.ArtifactCategoryID      = GetArtifactCategoryId();
     rewards.Title                   = GetRewTitle();
     rewards.FactionFlags            = GetRewardReputationMask();
-    auto displaySpellItr = rewards.SpellCompletionDisplayID.begin();
-    for (QuestRewardDisplaySpell displaySpell : RewardDisplaySpell)
+    for (uint32 i = 0; i < QUEST_REWARD_DISPLAY_SPELL_COUNT; ++i)
     {
+        QuestRewardDisplaySpell displaySpell = RewardDisplaySpell[i];
+
         if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(displaySpell.PlayerConditionId))
             if (!ConditionMgr::IsPlayerMeetingCondition(player, playerCondition))
                 continue;
 
-        *displaySpellItr = displaySpell.SpellId;
-        if (++displaySpellItr == rewards.SpellCompletionDisplayID.end())
-            break;
+        rewards.SpellCompletionDisplayID[i] = displaySpell.SpellId;
     }
 
     rewards.SpellCompletionID       = GetRewSpell();
@@ -502,15 +512,10 @@ WorldPacket Quest::BuildQueryData(LocaleConstant loc) const
     response.Info.RewardMoneyMultiplier = GetMoneyMultiplier();
     response.Info.RewardBonusMoney = GetRewMoneyMaxLevel();
 
-    uint8 i = 0;
-    for (QuestRewardDisplaySpell displaySpell : RewardDisplaySpell)
+    for (uint32 i = 0; i < QUEST_REWARD_DISPLAY_SPELL_COUNT; ++i)
     {
-        if (i >= QUEST_REWARD_DISPLAY_SPELL_COUNT)
-            break;
-
-        response.Info.RewardDisplaySpell[i].SpellID = displaySpell.SpellId;
-        response.Info.RewardDisplaySpell[i].PlayerConditionID = displaySpell.PlayerConditionId;
-        ++i;
+        response.Info.RewardDisplaySpell[i].SpellID = RewardDisplaySpell[i].SpellId;
+        //response.Info.RewardDisplaySpell[i].PlayerConditionID = RewardDisplaySpell[i].PlayerConditionId;
     }
 
     response.Info.RewardSpell = GetRewSpell();

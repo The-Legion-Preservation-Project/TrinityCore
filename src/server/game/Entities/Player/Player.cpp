@@ -15188,7 +15188,7 @@ void Player::AddQuestAndCheckCompletion(Quest const* quest, Object* questGiver)
     }
 }
 
-bool Player::CanRewardQuest(Quest const* quest, uint32 reward, bool msg) const
+bool Player::CanRewardQuest(Quest const* quest, LootItemType rewardType, uint32 rewardId, bool msg) const
 {
     // prevent receive reward with quest items in bank or for not completed quest
     if (!CanRewardQuest(quest, msg))
@@ -15197,19 +15197,30 @@ bool Player::CanRewardQuest(Quest const* quest, uint32 reward, bool msg) const
     ItemPosCountVec dest;
     if (quest->GetRewChoiceItemsCount() > 0)
     {
-        for (uint32 i = 0; i < quest->GetRewChoiceItemsCount(); ++i)
+        switch (rewardType)
         {
-            if (quest->RewardChoiceItemId[i] && quest->RewardChoiceItemId[i] == reward)
+            case LootItemType::Item:
             {
-                InventoryResult res = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, quest->RewardChoiceItemId[i], quest->RewardChoiceItemCount[i]);
-                if (res != EQUIP_ERR_OK)
+                for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
                 {
-                    if (msg)
-                        SendQuestFailed(quest->GetQuestId(), res);
+                    if (quest->RewardChoiceItemId[i] && quest->RewardChoiceItemType[i] == LootItemType::Item && quest->RewardChoiceItemId[i] == rewardId)
+                    {
+                        InventoryResult res = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, quest->RewardChoiceItemId[i], quest->RewardChoiceItemCount[i]);
+                        if (res != EQUIP_ERR_OK)
+                        {
+                            if (msg)
+                                SendQuestFailed(quest->GetQuestId(), res);
 
-                    return false;
+                            return false;
+                        }
+                    }
                 }
+                break;
             }
+            case LootItemType::Currency:
+                break;
+            default:
+                break;
         }
     }
 
@@ -15239,7 +15250,7 @@ bool Player::CanRewardQuest(Quest const* quest, uint32 reward, bool msg) const
         {
             for (QuestPackageItemEntry const* questPackageItem : *questPackageItems)
             {
-                if (questPackageItem->ItemID != int32(reward))
+                if (questPackageItem->ItemID != int32(rewardId))
                     continue;
 
                 if (CanSelectQuestPackageItem(questPackageItem))
@@ -15261,7 +15272,7 @@ bool Player::CanRewardQuest(Quest const* quest, uint32 reward, bool msg) const
             {
                 for (QuestPackageItemEntry const* questPackageItem : *questPackageItems)
                 {
-                    if (questPackageItem->ItemID != int32(reward))
+                    if (questPackageItem->ItemID != int32(rewardId))
                         continue;
 
                     InventoryResult res = CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, questPackageItem->ItemID, questPackageItem->ItemQuantity);
@@ -15392,7 +15403,7 @@ void Player::CompleteQuest(uint32 quest_id)
 
         if (Quest const* qInfo = sObjectMgr->GetQuestTemplate(quest_id))
             if (qInfo->HasFlag(QUEST_FLAGS_TRACKING))
-                RewardQuest(qInfo, 0, this, false);
+                RewardQuest(qInfo, LootItemType::Item, 0, this, false);
     }
 
     if (sWorld->getBoolConfig(CONFIG_QUEST_ENABLE_QUEST_TRACKER)) // check if Quest Tracker is enabled
@@ -15510,7 +15521,7 @@ void Player::RewardQuestPackage(uint32 questPackageId, uint32 onlyItemId /*= 0*/
     }
 }
 
-void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, bool announce)
+void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rewardId, Object* questGiver, bool announce)
 {
     //this THING should be here to protect code from quest, which cast on player far teleport as a reward
     //should work fine, cause far teleport will be executed in Player::Update()
@@ -15565,26 +15576,44 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, 
         }
     }
 
-    ItemTemplate const* rewardProto = sObjectMgr->GetItemTemplate(reward);
-    if (rewardProto && quest->GetRewChoiceItemsCount())
+    switch (rewardType)
     {
-        for (uint32 i = 0; i < quest->GetRewChoiceItemsCount(); ++i)
+        case LootItemType::Item:
         {
-            if (quest->RewardChoiceItemId[i] && quest->RewardChoiceItemId[i] == reward)
+            ItemTemplate const* rewardProto = sObjectMgr->GetItemTemplate(rewardId);
+            if (rewardProto && quest->GetRewChoiceItemsCount())
             {
-                ItemPosCountVec dest;
-                if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, reward, quest->RewardChoiceItemCount[i]) == EQUIP_ERR_OK)
+                for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
                 {
-                    Item* item = StoreNewItem(dest, reward, true, GenerateItemRandomPropertyId(reward));
-                    SendNewItem(item, quest->RewardChoiceItemCount[i], true, false);
+                    if (quest->RewardChoiceItemId[i] && quest->RewardChoiceItemType[i] == LootItemType::Item && quest->RewardChoiceItemId[i] == rewardId)
+                    {
+                        ItemPosCountVec dest;
+                        if (CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, rewardId, quest->RewardChoiceItemCount[i]) == EQUIP_ERR_OK)
+                        {
+                            Item* item = StoreNewItem(dest, rewardId, true, GenerateItemRandomPropertyId(rewardId));
+                            SendNewItem(item, quest->RewardChoiceItemCount[i], true, false);
+                        }
+                    }
                 }
             }
-        }
-    }
 
-    // QuestPackageItem.db2
-    if (rewardProto && quest->GetQuestPackageID())
-        RewardQuestPackage(quest->GetQuestPackageID(), reward);
+            // QuestPackageItem.db2
+            if (rewardProto && quest->GetQuestPackageID())
+                RewardQuestPackage(quest->GetQuestPackageID(), rewardId);
+            break;
+        }
+        case LootItemType::Currency:
+        {
+            if (sCurrencyTypesStore.HasRecord(rewardId) && quest->GetRewChoiceItemsCount())
+                for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
+                    if (quest->RewardChoiceItemId[i] && quest->RewardChoiceItemType[i] == LootItemType::Currency && quest->RewardChoiceItemId[i] == rewardId)
+                        ModifyCurrency(quest->RewardChoiceItemId[i], quest->RewardChoiceItemCount[i]);
+
+            break;
+        }
+        default:
+            break;
+    }
 
     for (uint8 i = 0; i < QUEST_REWARD_CURRENCY_COUNT; ++i)
         if (quest->RewardCurrencyId[i])
@@ -15675,18 +15704,19 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, 
     }
     else
     {
-        for (uint32 i = 0; i < QUEST_REWARD_DISPLAY_SPELL_COUNT; ++i)
+        for (QuestRewardDisplaySpell displaySpell : quest->RewardDisplaySpell)
         {
-            if (quest->RewardDisplaySpell[i] > 0)
-            {
-                SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(quest->RewardDisplaySpell[i], GetMap()->GetDifficultyID());
-                Unit* caster = this;
-                if (questGiver && questGiver->isType(TYPEMASK_UNIT) && !quest->HasFlag(QUEST_FLAGS_PLAYER_CAST_ON_COMPLETE) && !spellInfo->HasTargetType(TARGET_UNIT_CASTER))
-                    if (Unit * unit = questGiver->ToUnit())
-                        caster = unit;
+            if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(displaySpell.PlayerConditionId))
+                if (!ConditionMgr::IsPlayerMeetingCondition(this, playerCondition))
+                    continue;
 
-                caster->CastSpell(this, spellInfo, true);
-            }
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(displaySpell.SpellId, GetMap()->GetDifficultyID());
+            Unit* caster = this;
+            if (questGiver && questGiver->isType(TYPEMASK_UNIT) && !quest->HasFlag(QUEST_FLAGS_PLAYER_CAST_ON_COMPLETE) && !spellInfo->HasTargetType(TARGET_UNIT_CASTER))
+                if (Unit* unit = questGiver->ToUnit())
+                    caster = unit;
+
+            caster->CastSpell(this, spellInfo, true);
         }
     }
 

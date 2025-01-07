@@ -25,6 +25,8 @@
 #include "QuestDef.h"
 #include <array>
 
+enum class LootItemType : uint8;
+
 namespace WorldPackets
 {
     namespace Quest
@@ -109,7 +111,7 @@ namespace WorldPackets
         struct QuestCompleteDisplaySpell
         {
             int32 SpellID = 0;
-            int32 PlayerConditionID = 0;
+            //int32 PlayerConditionID = 0;
         };
 
         struct QuestInfo
@@ -313,6 +315,7 @@ namespace WorldPackets
             ObjectGuid QuestGiverGUID;
             int32 QuestID = 0;
             int32 ItemChoiceID = 0;
+            LootItemType ChoiceLootItemType = LootItemType(0);
         };
 
         class QuestGiverQuestComplete final : public ServerPacket
@@ -331,7 +334,7 @@ namespace WorldPackets
             bool LaunchGossip       = false;
             bool LaunchQuest        = false;
             bool HideChatMessage    = false;
-            WorldPackets::Item::ItemInstance ItemReward;
+            Item::ItemInstance ItemReward;
         };
 
         class QuestGiverCompleteQuest final : public ClientPacket

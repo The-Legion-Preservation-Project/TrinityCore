@@ -27,6 +27,7 @@
 #include <vector>
 
 class Player;
+enum class LootItemType : uint8;
 
 namespace WorldPackets
 {
@@ -464,11 +465,12 @@ class TC_GAME_API Quest
         bool   CanIncreaseRewardedQuestCounters() const;
 
         // multiple values
-        std::vector<QuestRewardDisplaySpell> RewardDisplaySpell;
+        std::array<QuestRewardDisplaySpell, QUEST_REWARD_DISPLAY_SPELL_COUNT> RewardDisplaySpell = { };
         std::array<uint32, QUEST_REWARD_ITEM_COUNT> RewardItemId = { };
         std::array<uint32, QUEST_REWARD_ITEM_COUNT> RewardItemCount = { };
         std::array<uint32, QUEST_ITEM_DROP_COUNT> ItemDrop = { };
         std::array<uint32, QUEST_ITEM_DROP_COUNT> ItemDropQuantity = { };
+        std::array<LootItemType, QUEST_REWARD_CHOICES_COUNT> RewardChoiceItemType = { };
         std::array<uint32, QUEST_REWARD_CHOICES_COUNT> RewardChoiceItemId = { };
         std::array<uint32, QUEST_REWARD_CHOICES_COUNT> RewardChoiceItemCount = { };
         std::array<uint32, QUEST_REWARD_CHOICES_COUNT> RewardChoiceItemDisplayId = { };
