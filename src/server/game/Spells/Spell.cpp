@@ -590,7 +590,7 @@ m_spellValue(new SpellValue(m_spellInfo)), _spellEvent(nullptr)
     focusObject = nullptr;
     m_castId = ObjectGuid::Create<HighGuid::Cast>(SPELL_CAST_SOURCE_NORMAL, m_caster->GetMapId(), m_spellInfo->Id, m_caster->GetMap()->GenerateLowGuid<HighGuid::Cast>());
     memset(m_misc.Raw.Data, 0, sizeof(m_misc.Raw.Data));
-    m_SpellVisual = caster->GetCastSpellXSpellVisualId(m_spellInfo);
+    m_SpellVisual.SpellXSpellVisualID = caster->GetCastSpellXSpellVisualId(m_spellInfo);
     m_triggeredByAuraSpell  = nullptr;
     m_spellAura = nullptr;
 
@@ -4067,7 +4067,7 @@ void Spell::SendCastResult(SpellCastResult result, uint32* param1 /*= nullptr*/,
         result = SPELL_FAILED_DONT_REPORT;
 
     WorldPackets::Spells::CastFailed castFailed;
-    castFailed.SpellXSpellVisualID = m_SpellVisual;
+    castFailed.SpellXSpellVisualID = m_SpellVisual.SpellXSpellVisualID;
     FillSpellCastFailedArgs(castFailed, m_castId, m_spellInfo, result, m_customError, param1, param2, m_caster->ToPlayer());
     m_caster->ToPlayer()->SendDirectMessage(castFailed.Write());
 }
@@ -4089,13 +4089,13 @@ void Spell::SendPetCastResult(SpellCastResult result, uint32* param1 /*= nullptr
     owner->ToPlayer()->SendDirectMessage(petCastFailed.Write());
 }
 
-void Spell::SendCastResult(Player* caster, SpellInfo const* spellInfo, uint32 spellVisual, ObjectGuid cast_count, SpellCastResult result, SpellCustomErrors customError /*= SPELL_CUSTOM_ERROR_NONE*/, uint32* param1 /*= nullptr*/, uint32* param2 /*= nullptr*/)
+void Spell::SendCastResult(Player* caster, SpellInfo const* spellInfo, SpellCastVisual spellVisual, ObjectGuid cast_count, SpellCastResult result, SpellCustomErrors customError /*= SPELL_CUSTOM_ERROR_NONE*/, uint32* param1 /*= nullptr*/, uint32* param2 /*= nullptr*/)
 {
     if (result == SPELL_CAST_OK)
         return;
 
     WorldPackets::Spells::CastFailed packet;
-    packet.SpellXSpellVisualID = spellVisual;
+    packet.SpellXSpellVisualID = spellVisual.SpellXSpellVisualID;
     FillSpellCastFailedArgs(packet, cast_count, spellInfo, result, customError, param1, param2, caster);
     caster->SendDirectMessage(packet.Write());
 }
@@ -4156,7 +4156,7 @@ void Spell::SendSpellStart()
     castData.CastID = m_castId;
     castData.OriginalCastID = m_originalCastId;
     castData.SpellID = m_spellInfo->Id;
-    castData.SpellXSpellVisualID = m_SpellVisual;
+    castData.SpellXSpellVisualID = m_SpellVisual.SpellXSpellVisualID;
     castData.CastFlags = castFlags;
     castData.CastFlagsEx = m_castFlagsEx;
     castData.CastTime = m_casttime;
@@ -4272,7 +4272,7 @@ void Spell::SendSpellGo()
     castData.CastID = m_castId;
     castData.OriginalCastID = m_originalCastId;
     castData.SpellID = m_spellInfo->Id;
-    castData.SpellXSpellVisualID = m_SpellVisual;
+    castData.SpellXSpellVisualID = m_SpellVisual.SpellXSpellVisualID;
     castData.CastFlags = castFlags;
     castData.CastFlagsEx = m_castFlagsEx;
     castData.CastTime = getMSTime();
@@ -4554,7 +4554,7 @@ void Spell::SendInterrupted(uint8 result)
     failurePacket.CasterUnit = m_caster->GetGUID();
     failurePacket.CastID = m_castId;
     failurePacket.SpellID = m_spellInfo->Id;
-    failurePacket.SpellXSpellVisualID = m_SpellVisual;
+    failurePacket.SpellXSpellVisualID = m_SpellVisual.SpellXSpellVisualID;
     failurePacket.Reason = result;
     m_caster->SendMessageToSet(failurePacket.Write(), true);
 
@@ -4562,6 +4562,7 @@ void Spell::SendInterrupted(uint8 result)
     failedPacket.CasterUnit = m_caster->GetGUID();
     failedPacket.CastID = m_castId;
     failedPacket.SpellID = m_spellInfo->Id;
+    failedPacket.SpellXSpellVisualID = m_SpellVisual.SpellXSpellVisualID;
     failedPacket.Reason = result;
     m_caster->SendMessageToSet(failedPacket.Write(), true);
 }
@@ -4572,7 +4573,7 @@ void Spell::SendChannelUpdate(uint32 time)
     {
         m_caster->ClearChannelObjects();
         m_caster->SetChannelSpellId(0);
-        m_caster->SetChannelSpellXSpellVisualId(0);
+        m_caster->SetChannelSpellXSpellVisualId({});
     }
 
     WorldPackets::Spells::SpellChannelUpdate spellChannelUpdate;
@@ -4586,7 +4587,7 @@ void Spell::SendChannelStart(uint32 duration)
     WorldPackets::Spells::SpellChannelStart spellChannelStart;
     spellChannelStart.CasterGUID = m_caster->GetGUID();
     spellChannelStart.SpellID = m_spellInfo->Id;
-    spellChannelStart.SpellXSpellVisualID = m_SpellVisual;
+    spellChannelStart.SpellXSpellVisualID = m_SpellVisual.SpellXSpellVisualID;
     spellChannelStart.ChannelDuration = duration;
     m_caster->SendMessageToSet(spellChannelStart.Write(), true);
 
@@ -7221,7 +7222,7 @@ bool Spell::IsAutoActionResetSpell() const
 
 bool Spell::IsNeedSendToClient() const
 {
-    return m_SpellVisual || m_spellInfo->IsChanneled() ||
+    return m_SpellVisual.SpellXSpellVisualID /*|| m_SpellVisual.ScriptVisualID*/ || m_spellInfo->IsChanneled() ||
         (m_spellInfo->HasAttribute(SPELL_ATTR8_AURA_SEND_AMOUNT)) || m_spellInfo->HasHitDelay() || (!m_triggeredByAuraSpell && !IsTriggered());
 }
 

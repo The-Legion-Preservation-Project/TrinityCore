@@ -164,7 +164,7 @@ class tlpp_aura_warr_ignore_pain : public AuraScript
     {
         if (Unit* caster = GetCaster())
         {
-            SpellNonMeleeDamage spell(caster, caster, GetSpellInfo(), 0, SPELL_SCHOOL_MASK_NORMAL);
+            SpellNonMeleeDamage spell(caster, caster, GetSpellInfo(), {}, SPELL_SCHOOL_MASK_NORMAL);
             spell.damage = dmgInfo.GetDamage() - dmgInfo.GetDamage() * 0.9f;
             spell.cleanDamage = spell.damage;
             caster->DealSpellDamage(&spell, false);
