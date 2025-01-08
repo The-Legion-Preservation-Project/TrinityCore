@@ -232,6 +232,7 @@ ByteBuffer& operator>>(ByteBuffer& data, ItemGemData& itemGemData)
 ByteBuffer& operator>>(ByteBuffer& data, InvUpdate& invUpdate)
 {
     invUpdate.Items.resize(data.ReadBits(2));
+    data.ResetBitPos();
     for (InvUpdate::InvItem& item : invUpdate.Items)
     {
         data >> item.ContainerSlot;
