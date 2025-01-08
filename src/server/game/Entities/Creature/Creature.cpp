@@ -586,7 +586,7 @@ bool Creature::UpdateEntry(uint32 entry, CreatureData const* data /*= nullptr*/,
 
     SetDynamicFlags(dynamicFlags);
 
-    SetUInt32Value(UNIT_FIELD_STATE_ANIM_ID, sAnimationDataStore.GetNumRows());
+    SetUInt32Value(UNIT_FIELD_STATE_ANIM_ID, sDB2Manager.GetEmptyAnimStateID());
 
     SetBaseAttackTime(BASE_ATTACK,   cInfo->BaseAttackTime);
     SetBaseAttackTime(OFF_ATTACK,    cInfo->BaseAttackTime);
@@ -1213,8 +1213,8 @@ bool Creature::isCanInteractWithBattleMaster(Player* player, bool msg) const
 
 bool Creature::CanResetTalents(Player* player) const
 {
-    return player->getLevel() >= 15
-        && player->getClass() == GetCreatureTemplate()->trainer_class;
+    return player->GetLevel() >= 15
+        && player->GetClass() == GetCreatureTemplate()->trainer_class;
 }
 
 Player* Creature::GetLootRecipient() const
@@ -1445,7 +1445,7 @@ void Creature::UpdateLevelDependantStats()
 {
     CreatureTemplate const* cInfo = GetCreatureTemplate();
     uint32 rank = IsPet() ? 0 : cInfo->rank;
-    CreatureBaseStats const* stats = sObjectMgr->GetCreatureBaseStats(getLevel(), cInfo->unit_class);
+    CreatureBaseStats const* stats = sObjectMgr->GetCreatureBaseStats(GetLevel(), cInfo->unit_class);
 
     // health
     float healthmod = _GetHealthMod(rank);
@@ -1462,7 +1462,7 @@ void Creature::UpdateLevelDependantStats()
     uint32 mana = stats->GenerateMana(cInfo);
     SetCreateMana(mana);
 
-    switch (getClass())
+    switch (GetClass())
     {
         case CLASS_PALADIN:
         case CLASS_MAGE:
@@ -2802,7 +2802,7 @@ float Creature::GetHealthMultiplierForTarget(WorldObject const* target) const
         return 1.0f;
 
     uint8 levelForTarget = GetLevelForTarget(target);
-    if (getLevel() < levelForTarget)
+    if (GetLevel() < levelForTarget)
         return 1.0f;
 
     return double(GetMaxHealthByLevel(levelForTarget)) / double(GetCreateHealth());
@@ -2822,7 +2822,7 @@ float Creature::GetDamageMultiplierForTarget(WorldObject const* target) const
 
     uint8 levelForTarget = GetLevelForTarget(target);
 
-    return GetBaseDamageForLevel(levelForTarget) / GetBaseDamageForLevel(getLevel());
+    return GetBaseDamageForLevel(levelForTarget) / GetBaseDamageForLevel(GetLevel());
 }
 
 float Creature::GetBaseArmorForLevel(uint8 level) const
@@ -2839,7 +2839,7 @@ float Creature::GetArmorMultiplierForTarget(WorldObject const* target) const
 
     uint8 levelForTarget = GetLevelForTarget(target);
 
-    return GetBaseArmorForLevel(levelForTarget) / GetBaseArmorForLevel(getLevel());
+    return GetBaseArmorForLevel(levelForTarget) / GetBaseArmorForLevel(GetLevel());
 }
 
 uint8 Creature::GetLevelForTarget(WorldObject const* target) const
@@ -2848,7 +2848,7 @@ uint8 Creature::GetLevelForTarget(WorldObject const* target) const
     {
         if (isWorldBoss())
         {
-            uint8 level = unitTarget->getLevel() + sWorld->getIntConfig(CONFIG_WORLD_BOSS_LEVEL_DIFF);
+            uint8 level = unitTarget->GetLevel() + sWorld->getIntConfig(CONFIG_WORLD_BOSS_LEVEL_DIFF);
             return RoundToInterval<uint8>(level, 1u, 255u);
         }
 
@@ -2861,7 +2861,7 @@ uint8 Creature::GetLevelForTarget(WorldObject const* target) const
             int32 scalingLevelDelta = GetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA);
             int32 targetLevel = GetInt32Value(UNIT_FIELD_EFFECTIVE_LEVEL);
             if (!targetLevel)
-                targetLevel = unitTarget->getLevel();
+                targetLevel = unitTarget->GetLevel();
 
             int32 targetLevelDelta = 0;
 

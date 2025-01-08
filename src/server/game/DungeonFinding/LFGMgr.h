@@ -113,7 +113,7 @@ enum LfgJoinResult
     LFG_JOIN_OK                                     = 0x00, // Joined (no client msg)
     LFG_JOIN_GROUP_FULL                             = 0x1F, // Your group is already full.
     LFG_JOIN_NO_LFG_OBJECT                          = 0x21, // Internal LFG Error.
-    LFG_JOIN_NO_SLOTS_PLAYER                        = 0x22, // You do not meet the requirements for the chosen dungeons.
+    LFG_JOIN_NO_SLOTS                               = 0x22, // You do not meet the requirements for the chosen dungeons.
     LFG_JOIN_MISMATCHED_SLOTS                       = 0x23, // You cannot mix dungeons, raids, and random when picking dungeons.
     LFG_JOIN_PARTY_PLAYERS_FROM_DIFFERENT_REALMS    = 0x24, // The dungeon you chose does not support players from multiple realms.
     LFG_JOIN_MEMBERS_NOT_PRESENT                    = 0x25, // One or more group members are pending invites or disconnected.

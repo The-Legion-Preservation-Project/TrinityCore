@@ -3405,31 +3405,22 @@ void ObjectMgr::PlayerCreateInfoAddItemHelper(uint32 race_, uint32 class_, uint3
         return;
 
     if (count > 0)
-        _playerInfo[race_][class_]->item.push_back(PlayerCreateInfoItem(itemId, count));
+        _playerInfo[race_][class_]->item.emplace_back(itemId, count);
     else
     {
         if (count < -1)
             TC_LOG_ERROR("sql.sql", "Invalid count %i specified on item %u be removed from original player create info (use -1)!", count, itemId);
 
-        for (uint32 gender = 0; gender < GENDER_NONE; ++gender)
-        {
-            if (CharStartOutfitEntry const* entry = sDB2Manager.GetCharStartOutfitEntry(race_, class_, gender))
-            {
-                bool found = false;
-                for (uint8 x = 0; x < MAX_OUTFIT_ITEMS; ++x)
-                {
-                    if (entry->ItemID[x] > 0 && uint32(entry->ItemID[x]) == itemId)
-                    {
-                        found = true;
-                        const_cast<CharStartOutfitEntry*>(entry)->ItemID[x] = 0;
-                        break;
-                    }
-                }
+        PlayerCreateInfoItems& items = _playerInfo[race_][class_]->item;
 
-                if (!found)
-                    TC_LOG_ERROR("sql.sql", "Item %u specified to be removed from original create info not found in dbc!", itemId);
-            }
+        auto erased = std::remove_if(items.begin(), items.end(), [itemId](PlayerCreateInfoItem const& item) { return item.item_id == itemId; });
+        if (erased == items.end())
+        {
+            TC_LOG_ERROR("sql.sql", "Item %u specified to be removed from original create info not found in db2!", itemId);
+            return;
         }
+
+        items.erase(erased, items.end());
     }
 }
 
@@ -3463,7 +3454,7 @@ void ObjectMgr::LoadPlayerInfo()
                 float  positionZ     = fields[6].GetFloat();
                 float  orientation   = fields[7].GetFloat();
 
-                if (current_race >= MAX_RACES)
+                if (!sChrRacesStore.LookupEntry(current_race))
                 {
                     TC_LOG_ERROR("sql.sql", "Wrong race %u in `playercreateinfo` table, ignoring.", current_race);
                     continue;
@@ -3522,6 +3513,60 @@ void ObjectMgr::LoadPlayerInfo()
 
     // Load playercreate items
     TC_LOG_INFO("server.loading", "Loading Player Create Items Data...");
+    {
+        std::unordered_map<uint32, std::vector<ItemTemplate const*>> itemsByCharacterLoadout;
+        for (CharacterLoadoutItemEntry const* characterLoadoutItem : sCharacterLoadoutItemStore)
+            if (ItemTemplate const* itemTemplate = GetItemTemplate(characterLoadoutItem->ItemID))
+                itemsByCharacterLoadout[characterLoadoutItem->CharacterLoadoutID].push_back(itemTemplate);
+
+        for (CharacterLoadoutEntry const* characterLoadout : sCharacterLoadoutStore)
+        {
+            if (!characterLoadout->IsForNewCharacter())
+                continue;
+
+            std::vector<ItemTemplate const*> const* items = Trinity::Containers::MapGetValuePtr(itemsByCharacterLoadout, characterLoadout->ID);
+            if (!items)
+                continue;
+
+            for (uint32 raceIndex = RACE_HUMAN; raceIndex < MAX_RACES; ++raceIndex)
+            {
+                if (!characterLoadout->RaceMask.HasRace(raceIndex))
+                    continue;
+
+                if (PlayerInfo* playerInfo = _playerInfo[raceIndex][characterLoadout->ChrClassID])
+                {
+                    for (ItemTemplate const* itemTemplate : *items)
+                    {
+                        // BuyCount by default
+                        uint32 count = itemTemplate->GetBuyCount();
+
+                        // special amount for food/drink
+                        if (itemTemplate->GetClass() == ITEM_CLASS_CONSUMABLE && itemTemplate->GetSubClass() == ITEM_SUBCLASS_FOOD_DRINK)
+                        {
+                            if (!itemTemplate->Effects.empty())
+                            {
+                                switch (itemTemplate->Effects[0]->SpellCategoryID)
+                                {
+                                    case SPELL_CATEGORY_FOOD:                                // food
+                                        count = characterLoadout->ChrClassID == CLASS_DEATH_KNIGHT ? 10 : 4;
+                                        break;
+                                    case SPELL_CATEGORY_DRINK:                                // drink
+                                        count = 2;
+                                        break;
+                                }
+                            }
+                            if (itemTemplate->GetMaxStackSize() < count)
+                                count = itemTemplate->GetMaxStackSize();
+                        }
+
+                        playerInfo->item.emplace_back(itemTemplate->GetId(), count);
+                    }
+                }
+            }
+        }
+    }
+
+    TC_LOG_INFO("server.loading", "Loading Player Create Items Override Data...");
     {
         uint32 oldMSTime = getMSTime();
         //                                                0     1      2       3

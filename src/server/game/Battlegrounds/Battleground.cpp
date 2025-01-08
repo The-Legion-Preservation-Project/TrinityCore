@@ -1280,7 +1280,7 @@ void Battleground::BuildPvPLogDataPacket(WorldPackets::Battleground::PVPMatchSta
             playerData.IsInWorld = true;
             playerData.PrimaryTalentTree = player->GetPrimarySpecialization();
             playerData.PrimaryTalentTreeNameIndex = 0;
-            playerData.Race = player->getRace();
+            playerData.Race = player->GetRace();
             playerData.Prestige = player->GetPrestigeLevel();
         }
 

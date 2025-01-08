@@ -26,6 +26,8 @@
 #include "Regex.h"
 #include "Timer.h"
 #include "Util.h"
+#include "World.h"
+#include "advstd.h"
 #include <boost/filesystem/operations.hpp>
 #include <array>
 #include <bitset>
@@ -72,6 +74,8 @@ DB2Storage<CharBaseSectionEntry>                sCharBaseSectionStore("CharBaseS
 DB2Storage<CharSectionsEntry>                   sCharSectionsStore("CharSections.db2", CharSectionsLoadInfo::Instance());
 DB2Storage<CharStartOutfitEntry>                sCharStartOutfitStore("CharStartOutfit.db2", CharStartOutfitLoadInfo::Instance());
 DB2Storage<CharTitlesEntry>                     sCharTitlesStore("CharTitles.db2", CharTitlesLoadInfo::Instance());
+DB2Storage<CharacterLoadoutEntry>               sCharacterLoadoutStore("CharacterLoadout.db2", CharacterLoadoutLoadInfo::Instance());
+DB2Storage<CharacterLoadoutItemEntry>           sCharacterLoadoutItemStore("CharacterLoadoutItem.db2", CharacterLoadoutItemLoadInfo::Instance());
 DB2Storage<ChatChannelsEntry>                   sChatChannelsStore("ChatChannels.db2", ChatChannelsLoadInfo::Instance());
 DB2Storage<ChrClassesEntry>                     sChrClassesStore("ChrClasses.db2", ChrClassesLoadInfo::Instance());
 DB2Storage<ChrClassesXPowerTypesEntry>          sChrClassesXPowerTypesStore("ChrClassesXPowerTypes.db2", ChrClassesXPowerTypesLoadInfo::Instance());
@@ -353,7 +357,7 @@ namespace
     std::set<std::tuple<uint8, uint8, uint32>> _characterFacialHairStyles;
     std::multimap<std::tuple<uint8, uint8, CharBaseSectionVariation>, CharSectionsEntry const*> _charSections;
     CharStartOutfitContainer _charStartOutfits;
-    uint32 _powersByClass[MAX_CLASSES][MAX_POWERS];
+    std::array<std::array<uint32, MAX_POWERS>, MAX_CLASSES> _powersByClass;
     ChrSpecializationByIndexContainer _chrSpecializationsByIndex;
     ChrSpecialzationByClassContainer _defaultChrSpecializationsByClass;
     CurvePointsContainer _curvePoints;
@@ -546,6 +550,8 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
     LOAD_DB2(sCharSectionsStore);
     LOAD_DB2(sCharStartOutfitStore);
     LOAD_DB2(sCharTitlesStore);
+    LOAD_DB2(sCharacterLoadoutStore);
+    LOAD_DB2(sCharacterLoadoutItemStore);
     LOAD_DB2(sChatChannelsStore);
     LOAD_DB2(sChrClassesStore);
     LOAD_DB2(sChrClassesXPowerTypesStore);
@@ -846,9 +852,8 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
         for (ChrClassesXPowerTypesEntry const* power : sChrClassesXPowerTypesStore)
             powers.insert(power);
 
-        for (uint32 i = 0; i < MAX_CLASSES; ++i)
-            for (uint32 j = 0; j < MAX_POWERS; ++j)
-                _powersByClass[i][j] = MAX_POWERS;
+        for (std::size_t i = 0; i < _powersByClass.size(); ++i)
+            _powersByClass[i].fill(MAX_POWERS);
 
         for (ChrClassesXPowerTypesEntry const* power : powers)
         {
@@ -1295,6 +1300,11 @@ std::vector<uint8> const* DB2Manager::GetHotfixBlobData(uint32 tableHash, int32 
     ASSERT(IsValidLocale(locale), "Locale %u is invalid locale", uint32(locale));
 
     return Trinity::Containers::MapGetValuePtr(_hotfixBlob[locale], std::make_pair(tableHash, recordId));
+}
+
+uint32 DB2Manager::GetEmptyAnimStateID() const
+{
+    return sAnimationDataStore.GetNumRows();
 }
 
 void DB2Manager::InsertNewHotfix(uint32 tableHash, uint32 recordId)

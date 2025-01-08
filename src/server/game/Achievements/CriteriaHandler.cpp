@@ -305,17 +305,17 @@ bool CriteriaData::Meets(uint32 criteriaId, Player const* source, Unit const* ta
         case CRITERIA_DATA_TYPE_T_PLAYER_CLASS_RACE:
             if (!target || target->GetTypeId() != TYPEID_PLAYER)
                 return false;
-            if (ClassRace.Class && ClassRace.Class != target->ToPlayer()->getClass())
+            if (ClassRace.Class && ClassRace.Class != target->ToPlayer()->GetClass())
                 return false;
-            if (ClassRace.Race && ClassRace.Race != target->ToPlayer()->getRace())
+            if (ClassRace.Race && ClassRace.Race != target->ToPlayer()->GetRace())
                 return false;
             return true;
         case CRITERIA_DATA_TYPE_S_PLAYER_CLASS_RACE:
             if (source->GetTypeId() != TYPEID_PLAYER)
                 return false;
-            if (ClassRace.Class && ClassRace.Class != source->ToPlayer()->getClass())
+            if (ClassRace.Class && ClassRace.Class != source->ToPlayer()->GetClass())
                 return false;
-            if (ClassRace.Race && ClassRace.Race != source->ToPlayer()->getRace())
+            if (ClassRace.Race && ClassRace.Race != source->ToPlayer()->GetRace())
                 return false;
             return true;
         case CRITERIA_DATA_TYPE_T_PLAYER_LESS_HEALTH:
@@ -335,7 +335,7 @@ bool CriteriaData::Meets(uint32 criteriaId, Player const* source, Unit const* ta
         case CRITERIA_DATA_TYPE_T_GENDER:
             if (!target)
                 return false;
-            return target->getGender() == Gender.Gender;
+            return target->GetGender() == Gender.Gender;
         case CRITERIA_DATA_TYPE_SCRIPT:
             return sScriptMgr->OnCriteriaCheck(ScriptId, const_cast<Player*>(source), const_cast<Unit*>(target));
         case CRITERIA_DATA_TYPE_MAP_PLAYER_COUNT:
@@ -558,7 +558,7 @@ void CriteriaHandler::UpdateCriteria(CriteriaTypes type, uint64 miscValue1 /*= 0
                 SetCriteriaProgress(criteria, miscValue1, referencePlayer, PROGRESS_HIGHEST);
                 break;
             case CRITERIA_TYPE_REACH_LEVEL:
-                SetCriteriaProgress(criteria, referencePlayer->getLevel(), referencePlayer);
+                SetCriteriaProgress(criteria, referencePlayer->GetLevel(), referencePlayer);
                 break;
             case CRITERIA_TYPE_REACH_SKILL_LEVEL:
                 if (uint32 skillvalue = referencePlayer->GetBaseSkillValue(criteria->Entry->Asset.SkillID))
@@ -1735,11 +1735,11 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
             break;
         }
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_LEVEL_ABOVE_TARGET: // 22
-            if (!unit || referencePlayer->getLevel() + reqValue < unit->getLevel())
+            if (!unit || referencePlayer->GetLevel() + reqValue < unit->GetLevel())
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_LEVEL_EQUAL_TARGET: // 23
-            if (!unit || referencePlayer->getLevel() != unit->getLevel())
+            if (!unit || referencePlayer->GetLevel() != unit->GetLevel())
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_ARENA_TYPE: // 24
@@ -1750,19 +1750,19 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
             break;
         }
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_RACE: // 25
-            if (referencePlayer->getRace() != reqValue)
+            if (referencePlayer->GetRace() != reqValue)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_CLASS: // 26
-            if (referencePlayer->getClass() != reqValue)
+            if (referencePlayer->GetClass() != reqValue)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_TARGET_RACE: // 27
-            if (!unit || unit->GetTypeId() != TYPEID_PLAYER || unit->getRace() != reqValue)
+            if (!unit || unit->GetTypeId() != TYPEID_PLAYER || unit->GetRace() != reqValue)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_TARGET_CLASS: // 28
-            if (!unit || unit->GetTypeId() != TYPEID_PLAYER || unit->getClass() != reqValue)
+            if (!unit || unit->GetTypeId() != TYPEID_PLAYER || unit->GetClass() != reqValue)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_MAX_GROUP_MEMBERS: // 29
@@ -1812,7 +1812,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_LEVEL: // 39
-            if (referencePlayer->getLevel() != reqValue)
+            if (referencePlayer->GetLevel() != reqValue)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_TARGET_LEVEL: // 40
@@ -1935,19 +1935,19 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
             break;
         }
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_LEVEL_GREATER: // 69
-            if (referencePlayer->getLevel() < reqValue)
+            if (referencePlayer->GetLevel() < reqValue)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_TARGET_LEVEL_GREATER: // 70
-            if (!unit || unit->getLevel() < reqValue)
+            if (!unit || unit->GetLevel() < reqValue)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_LEVEL_LOWER: // 71
-            if (referencePlayer->getLevel() > reqValue)
+            if (referencePlayer->GetLevel() > reqValue)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_TARGET_LEVEL_LOWER: // 72
-            if (!unit || unit->getLevel() > reqValue)
+            if (!unit || unit->GetLevel() > reqValue)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_MODIFIER_TREE: // 73
@@ -2006,7 +2006,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_SEX: // 97
-            if (referencePlayer->getGender() != uint8(reqValue))
+            if (referencePlayer->GetGender() != uint8(reqValue))
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_NATIVE_SEX: // 98
@@ -2070,7 +2070,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_PVP_FACTION_INDEX: // 116
         {
-            ChrRacesEntry const* race = sChrRacesStore.LookupEntry(referencePlayer->getRace());
+            ChrRacesEntry const* race = sChrRacesStore.LookupEntry(referencePlayer->GetRace());
             if (!race)
                 return false;
             FactionTemplateEntry const* faction = sFactionTemplateStore.LookupEntry(race->FactionID);
@@ -2665,7 +2665,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
             break;
         }
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_LEVEL_120: // 264
-            if (referencePlayer->getLevel() != 120)
+            if (referencePlayer->GetLevel() != 120)
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SELECTED_AZERITE_ESSENCE_RANK_LOWER: // 266

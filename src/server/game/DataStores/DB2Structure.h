@@ -431,6 +431,23 @@ struct CharTitlesEntry
     int8 Flags;
 };
 
+struct CharacterLoadoutEntry
+{
+    uint32 ID;
+    Trinity::RaceMask<int64> RaceMask;
+    int8 ChrClassID;
+    int8 Purpose;
+
+    bool IsForNewCharacter() const { return Purpose == 9; }
+};
+
+struct CharacterLoadoutItemEntry
+{
+    uint32 ID;
+    uint32 ItemID;
+    uint16 CharacterLoadoutID;
+};
+
 struct ChatChannelsEntry
 {
     uint32 ID;
@@ -2629,7 +2646,7 @@ struct SpellItemEnchantmentEntry
     uint8 MaxLevel;
     int8 ScalingClass;
     int8 ScalingClassRestricted;
-    uint32 TransmogPlayerConditionID;
+    uint32 TransmogUseConditionID;
 };
 
 struct SpellItemEnchantmentConditionEntry

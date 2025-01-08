@@ -1634,7 +1634,7 @@ struct CharacterLoadoutMeta
     {
         static DB2MetaField const fields[3] =
         {
-            { FT_LONG, 1, false },
+            { FT_LONG, 1, true },
             { FT_BYTE, 1, false },
             { FT_BYTE, 1, false },
         };
@@ -1650,7 +1650,7 @@ struct CharacterLoadoutItemMeta
     {
         static DB2MetaField const fields[2] =
         {
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
             { FT_SHORT, 1, false },
         };
 

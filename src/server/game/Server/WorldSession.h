@@ -29,6 +29,7 @@
 #include "LockedQueue.h"
 #include "ObjectGuid.h"
 #include "Packet.h"
+#include "RaceMask.h"
 #include "SharedDefines.h"
 #include <array>
 #include <unordered_map>
@@ -1107,9 +1108,8 @@ class TC_GAME_API WorldSession
         void Handle_EarlyProccess(WorldPackets::Null& null); // just mark packets processed in WorldSocket::OnRead
         void LogUnprocessedTail(WorldPacket const* packet);
 
-        void HandleCharEnum(PreparedQueryResult result);
+        void HandleCharEnum(CharacterDatabaseQueryHolder* holder);
         void HandleCharEnumOpcode(WorldPackets::Character::EnumCharacters& /*enumCharacters*/);
-        void HandleCharUndeleteEnum(PreparedQueryResult result);
         void HandleCharUndeleteEnumOpcode(WorldPackets::Character::EnumCharacters& /*enumCharacters*/);
         void HandleCharDeleteOpcode(WorldPackets::Character::CharDelete& charDelete);
         void HandleCharCreateOpcode(WorldPackets::Character::CreateCharacter& charCreate);
@@ -1134,6 +1134,7 @@ class TC_GAME_API WorldSession
         void HandleGetUndeleteCooldownStatus(WorldPackets::Character::GetUndeleteCharacterCooldownStatus& /*getCooldown*/);
         void HandleUndeleteCooldownStatusCallback(PreparedQueryResult result);
         void HandleCharUndeleteOpcode(WorldPackets::Character::UndeleteCharacter& undeleteInfo);
+        bool ValidateAppearance(Races race, Classes playerClass, Gender gender, uint8 hairID, uint8 hairColor, uint8 faceID, uint8 facialHair, uint8 skinColor, std::array<uint8, PLAYER_CUSTOM_DISPLAY_SIZE> const& customDisplay, bool create = false);
 
         void SendCharCreate(ResponseCodes result);
         void SendCharDelete(ResponseCodes result);
@@ -1755,6 +1756,7 @@ class TC_GAME_API WorldSession
         QueryResultHolderFuture _realmAccountLoginCallback;
         QueryResultHolderFuture _accountLoginCallback;
         QueryResultHolderFuture _charLoginCallback;
+        QueryResultHolderFuture _charEnumCallback;
 
         QueryCallbackProcessor _queryProcessor;
         AsyncCallbackProcessor<TransactionCallback> _transactionCallbacks;

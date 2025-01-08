@@ -66,7 +66,7 @@ void Totem::InitStats(uint32 duration)
         }
 
         // set display id depending on caster's race
-        if (uint32 totemDisplayId = sSpellMgr->GetModelForTotem(GetUInt32Value(UNIT_CREATED_BY_SPELL), owner->getRace()))
+        if (uint32 totemDisplayId = sSpellMgr->GetModelForTotem(GetUInt32Value(UNIT_CREATED_BY_SPELL), owner->GetRace()))
             SetDisplayId(totemDisplayId);
     }
 
@@ -74,12 +74,12 @@ void Totem::InitStats(uint32 duration)
 
     // Get spell cast by totem
     if (SpellInfo const* totemSpell = sSpellMgr->GetSpellInfo(GetSpell(), GetMap()->GetDifficultyID()))
-        if (totemSpell->CalcCastTime(getLevel()))   // If spell has cast time -> its an active totem
+        if (totemSpell->CalcCastTime(GetLevel()))   // If spell has cast time -> its an active totem
             m_type = TOTEM_ACTIVE;
 
     m_duration = duration;
 
-    SetLevel(GetOwner()->getLevel());
+    SetLevel(GetOwner()->GetLevel());
 }
 
 void Totem::InitSummon()

@@ -61,6 +61,8 @@ TC_GAME_API extern DB2Storage<BroadcastTextEntry>                   sBroadcastTe
 TC_GAME_API extern DB2Storage<Cfg_RegionsEntry>                     sCfgRegionsStore;
 TC_GAME_API extern DB2Storage<CharStartOutfitEntry>                 sCharStartOutfitStore;
 TC_GAME_API extern DB2Storage<CharTitlesEntry>                      sCharTitlesStore;
+TC_GAME_API extern DB2Storage<CharacterLoadoutEntry>                sCharacterLoadoutStore;
+TC_GAME_API extern DB2Storage<CharacterLoadoutItemEntry>            sCharacterLoadoutItemStore;
 TC_GAME_API extern DB2Storage<ChatChannelsEntry>                    sChatChannelsStore;
 TC_GAME_API extern DB2Storage<ChrClassesEntry>                      sChrClassesStore;
 TC_GAME_API extern DB2Storage<ChrRacesEntry>                        sChrRacesStore;
@@ -267,6 +269,7 @@ public:
     std::map<uint64, int32> const& GetHotfixData() const;
     std::vector<uint8> const* GetHotfixBlobData(uint32 tableHash, int32 recordId, LocaleConstant locale);
 
+    uint32 GetEmptyAnimStateID() const;
     std::vector<uint32> GetAreasForGroup(uint32 areaGroupId) const;
     static bool IsInArea(uint32 objectAreaId, uint32 areaId);
     std::vector<ArtifactPowerEntry const*> GetArtifactPowers(uint8 artifactId) const;

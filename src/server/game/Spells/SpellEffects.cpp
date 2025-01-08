@@ -472,7 +472,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     case 51963:
                     {
                         // about +4 base spell dmg per level
-                        damage = (m_caster->getLevel() - 60) * 4 + 60;
+                        damage = (m_caster->GetLevel() - 60) * 4 + 60;
                         break;
                     }
                 }
@@ -1497,11 +1497,11 @@ void Spell::EffectEnergize(SpellEffIndex /*effIndex*/)
     {
         case 24571:                                         // Blood Fury
             // Instantly increases your rage by ${(300-10*$max(0,$PL-60))/10}.
-            damage -= 10 * std::max(0, std::min(30, m_caster->getLevel() - 60));
+            damage -= 10 * std::max(0, std::min(30, m_caster->GetLevel() - 60));
             break;
         case 24532:                                         // Burst of Energy
             // Instantly increases your energy by ${60-4*$max(0,$min(15,$PL-60))}.
-            damage -= 4 * std::max(0, std::min(15, m_caster->getLevel() - 60));
+            damage -= 4 * std::max(0, std::min(15, m_caster->GetLevel() - 60));
             break;
         case 67490:                                         // Runic Mana Injector (mana gain increased by 25% for engineers - 3.2.0 patch change)
         {
@@ -2270,7 +2270,7 @@ void Spell::EffectLearnSkill(SpellEffIndex /*effIndex*/)
         return;
 
     uint32 skillid = effectInfo->MiscValue;
-    SkillRaceClassInfoEntry const* rcEntry = sDB2Manager.GetSkillRaceClassInfo(skillid, unitTarget->getRace(), unitTarget->getClass());
+    SkillRaceClassInfoEntry const* rcEntry = sDB2Manager.GetSkillRaceClassInfo(skillid, unitTarget->GetRace(), unitTarget->GetClass());
     if (!rcEntry)
         return;
 
@@ -2532,7 +2532,7 @@ void Spell::EffectTameCreature(SpellEffIndex /*effIndex*/)
     if (creatureTarget->IsPet())
         return;
 
-    if (m_caster->getClass() != CLASS_HUNTER)
+    if (m_caster->GetClass() != CLASS_HUNTER)
         return;
 
     // cast finish successfully
@@ -3533,7 +3533,7 @@ void Spell::EffectDuel(SpellEffIndex effIndex)
     PhasingHandler::InheritPhaseShift(go, m_caster);
 
     go->SetFaction(m_caster->GetFaction());
-    go->SetLevel(m_caster->getLevel()+1);
+    go->SetLevel(m_caster->GetLevel()+1);
     int32 duration = m_spellInfo->CalcDuration(m_caster);
     go->SetRespawnTime(duration > 0 ? duration/IN_MILLISECONDS : 0);
     go->SetSpellId(m_spellInfo->Id);
@@ -4937,7 +4937,7 @@ void Spell::EffectActivateRune(SpellEffIndex /*effIndex*/)
 
     Player* player = m_caster->ToPlayer();
 
-    if (player->getClass() != CLASS_DEATH_KNIGHT)
+    if (player->GetClass() != CLASS_DEATH_KNIGHT)
         return;
 
     // needed later
@@ -4970,7 +4970,7 @@ void Spell::EffectCreateTamedPet(SpellEffIndex /*effIndex*/)
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
         return;
 
-    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER || !unitTarget->GetPetGUID().IsEmpty() || unitTarget->getClass() != CLASS_HUNTER)
+    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER || !unitTarget->GetPetGUID().IsEmpty() || unitTarget->GetClass() != CLASS_HUNTER)
         return;
 
     uint32 creatureEntry = effectInfo->MiscValue;
@@ -5078,7 +5078,7 @@ void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* 
         caster = caster->ToTotem()->GetOwner();
 
     // in another case summon new
-    uint8 level = caster->getLevel();
+    uint8 level = caster->GetLevel();
 
     // level of pet summoned using engineering item based at engineering skill level
     if (m_CastItem && caster->GetTypeId() == TYPEID_PLAYER)

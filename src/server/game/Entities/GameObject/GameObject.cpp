@@ -345,7 +345,7 @@ bool GameObject::Create(uint32 entry, Map* map, Position const& pos, QuaternionD
     SetGoState(goState);
     SetGoArtKit(artKit);
 
-    SetUInt32Value(GAMEOBJECT_STATE_ANIM_ID, sAnimationDataStore.GetNumRows());
+    SetUInt32Value(GAMEOBJECT_STATE_ANIM_ID, sDB2Manager.GetEmptyAnimStateID());
 
     switch (goInfo->type)
     {
@@ -1895,10 +1895,10 @@ void GameObject::Use(Unit* user)
                 return;
 
             //required lvl checks!
-            uint8 level = player->getLevel();
+            uint8 level = player->GetLevel();
             if (level < info->meetingStone.minLevel)
                 return;
-            level = targetPlayer->getLevel();
+            level = targetPlayer->GetLevel();
             if (level < info->meetingStone.minLevel)
                 return;
 

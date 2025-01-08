@@ -470,9 +470,9 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster /*= nullptr*/, int32 const* 
     {
         uint32 level = _spellInfo->SpellLevel;
         if (target && _spellInfo->IsPositiveEffect(EffectIndex) && (Effect == SPELL_EFFECT_APPLY_AURA))
-            level = target->getLevel();
+            level = target->GetLevel();
         else if (caster)
-            level = caster->getLevel();
+            level = caster->GetLevel();
 
         if (_spellInfo->BaseLevel && !_spellInfo->HasAttribute(SPELL_ATTR11_SCALES_WITH_ITEM_LEVEL) && _spellInfo->HasAttribute(SPELL_ATTR10_USE_SPELL_BASE_LEVEL_FOR_SCALING))
             level = _spellInfo->BaseLevel;
@@ -530,7 +530,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster /*= nullptr*/, int32 const* 
     {
         if (caster && basePointsPerLevel != 0.0f)
         {
-            int32 level = int32(caster->getLevel());
+            int32 level = int32(caster->GetLevel());
             if (level > int32(_spellInfo->MaxLevel) && _spellInfo->MaxLevel > 0)
                 level = int32(_spellInfo->MaxLevel);
             else if (level < int32(_spellInfo->BaseLevel))
@@ -574,7 +574,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster /*= nullptr*/, int32 const* 
 
         // amount multiplication based on caster's level
         if (!caster->IsControlledByPlayer() &&
-            _spellInfo->SpellLevel && _spellInfo->SpellLevel != caster->getLevel() &&
+            _spellInfo->SpellLevel && _spellInfo->SpellLevel != caster->GetLevel() &&
             !basePointsPerLevel && (_spellInfo->HasAttribute(SPELL_ATTR0_LEVEL_DAMAGE_CALCULATION)))
         {
             bool canEffectScale = false;
@@ -618,7 +618,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster /*= nullptr*/, int32 const* 
             if (canEffectScale)
             {
                 GtNpcManaCostScalerEntry const* spellScaler = sNpcManaCostScalerGameTable.GetRow(_spellInfo->SpellLevel);
-                GtNpcManaCostScalerEntry const* casterScaler = sNpcManaCostScalerGameTable.GetRow(caster->getLevel());
+                GtNpcManaCostScalerEntry const* casterScaler = sNpcManaCostScalerGameTable.GetRow(caster->GetLevel());
                 if (spellScaler && casterScaler)
                     value *= casterScaler->Scaler / spellScaler->Scaler;
             }
@@ -679,7 +679,7 @@ float SpellEffectInfo::CalcRadius(Unit* caster, Spell* spell) const
 
     if (caster)
     {
-        radius += entry->RadiusPerLevel * caster->getLevel();
+        radius += entry->RadiusPerLevel * caster->GetLevel();
         radius = std::min(radius, entry->RadiusMax);
         if (Player* modOwner = caster->GetSpellModOwner())
             modOwner->ApplySpellMod(_spellInfo->Id, SPELLMOD_RADIUS, radius, spell);
@@ -3581,7 +3581,7 @@ uint32 SpellInfo::CalcCastTime(uint8 level, Spell* spell /*= nullptr*/) const
     int32 castTime = 0;
     if (CastTimeEntry)
     {
-        int32 calcLevel = spell ? spell->GetCaster()->getLevel() : 0;
+        int32 calcLevel = spell ? spell->GetCaster()->GetLevel() : 0;
         if (MaxLevel && uint32(calcLevel) > MaxLevel)
             calcLevel = MaxLevel;
 
@@ -3783,7 +3783,7 @@ std::vector<SpellPowerCost> SpellInfo::CalcPowerCost(Unit const* caster, SpellSc
             if (HasAttribute(SPELL_ATTR0_LEVEL_DAMAGE_CALCULATION))
             {
                 GtNpcManaCostScalerEntry const* spellScaler = sNpcManaCostScalerGameTable.GetRow(SpellLevel);
-                GtNpcManaCostScalerEntry const* casterScaler = sNpcManaCostScalerGameTable.GetRow(caster->getLevel());
+                GtNpcManaCostScalerEntry const* casterScaler = sNpcManaCostScalerGameTable.GetRow(caster->GetLevel());
                 if (spellScaler && casterScaler)
                     powerCost *= casterScaler->Scaler / spellScaler->Scaler;
             }
@@ -3925,7 +3925,7 @@ float SpellInfo::CalcProcPPM(Unit* caster, int32 itemLevel) const
             }
             case SPELL_PPM_MOD_CLASS:
             {
-                if (caster->getClassMask() & mod->Param)
+                if (caster->GetClassMask() & mod->Param)
                     ppm *= 1.0f + mod->Coeff;
                 break;
             }
@@ -3938,7 +3938,7 @@ float SpellInfo::CalcProcPPM(Unit* caster, int32 itemLevel) const
             }
             case SPELL_PPM_MOD_RACE:
             {
-                if (caster->getRaceMask() & mod->Param)
+                if (caster->GetRaceMask() & mod->Param)
                     ppm *= 1.0f + mod->Coeff;
                 break;
             }

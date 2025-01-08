@@ -30,7 +30,7 @@ namespace Spells
 void SpellCastLogData::Initialize(Unit const* unit)
 {
     Health = unit->GetHealth();
-    AttackPower = unit->GetTotalAttackPowerValue(unit->getClass() == CLASS_HUNTER ? RANGED_ATTACK : BASE_ATTACK);
+    AttackPower = unit->GetTotalAttackPowerValue(unit->GetClass() == CLASS_HUNTER ? RANGED_ATTACK : BASE_ATTACK);
     SpellPower = unit->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_SPELL);
     PowerData.emplace_back(int32(unit->GetPowerType()), unit->GetPower(unit->GetPowerType()), int32(0));
 }
@@ -38,7 +38,7 @@ void SpellCastLogData::Initialize(Unit const* unit)
 void SpellCastLogData::Initialize(Spell const* spell)
 {
     Health = spell->GetCaster()->GetHealth();
-    AttackPower = spell->GetCaster()->GetTotalAttackPowerValue(spell->GetCaster()->getClass() == CLASS_HUNTER ? RANGED_ATTACK : BASE_ATTACK);
+    AttackPower = spell->GetCaster()->GetTotalAttackPowerValue(spell->GetCaster()->GetClass() == CLASS_HUNTER ? RANGED_ATTACK : BASE_ATTACK);
     SpellPower = spell->GetCaster()->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_SPELL);
     Powers primaryPowerType = spell->GetCaster()->GetPowerType();
     bool primaryPowerAdded = false;
@@ -67,7 +67,7 @@ bool SandboxScalingData::GenerateDataForUnits<Creature, Player>(Creature* attack
     Type = TYPE_CREATURE_TO_PLAYER_DAMAGE;
     PlayerLevelDelta = target->GetInt32Value(PLAYER_FIELD_SCALING_PLAYER_LEVEL_DELTA);
     PlayerItemLevel = target->GetAverageItemLevel();
-    TargetLevel = target->getLevel();
+    TargetLevel = target->GetLevel();
     Expansion = creatureTemplate->RequiredExpansion;
     Class = creatureTemplate->unit_class;
     TargetMinScalingLevel = uint8(creatureTemplate->levelScaling->MinLevel);
@@ -84,7 +84,7 @@ bool SandboxScalingData::GenerateDataForUnits<Player, Creature>(Player* attacker
     Type = TYPE_PLAYER_TO_CREATURE_DAMAGE;
     PlayerLevelDelta = attacker->GetInt32Value(PLAYER_FIELD_SCALING_PLAYER_LEVEL_DELTA);
     PlayerItemLevel = attacker->GetAverageItemLevel();
-    TargetLevel = target->getLevel();
+    TargetLevel = target->GetLevel();
     Expansion = creatureTemplate->RequiredExpansion;
     Class = creatureTemplate->unit_class;
     TargetMinScalingLevel = uint8(creatureTemplate->levelScaling->MinLevel);
@@ -102,7 +102,7 @@ bool SandboxScalingData::GenerateDataForUnits<Creature, Creature>(Creature* atta
     Type = TYPE_CREATURE_TO_CREATURE_DAMAGE;
     PlayerLevelDelta = 0;
     PlayerItemLevel = 0;
-    TargetLevel = target->getLevel();
+    TargetLevel = target->GetLevel();
     Expansion = creatureTemplate->RequiredExpansion;
     Class = creatureTemplate->unit_class;
     TargetMinScalingLevel = uint8(creatureTemplate->levelScaling->MinLevel);

@@ -237,7 +237,7 @@ void Player::UpdateResistances(uint32 school)
 {
     if (school > SPELL_SCHOOL_NORMAL)
     {
-        float value  = GetTotalAuraModValue(UnitMods(UNIT_MOD_RESISTANCE_START + school));
+        float value = GetTotalAuraModValue(UnitMods(UNIT_MOD_RESISTANCE_START + school));
         SetResistance(SpellSchools(school), int32(value));
 
         Pet* pet = GetPet();
@@ -279,7 +279,7 @@ float Player::GetHealthBonusFromStamina()
 {
     // Taken from PaperDollFrame.lua - 6.0.3.19085
     float ratio = 10.0f;
-    if (GtHpPerStaEntry const* hpBase = sHpPerStaGameTable.GetRow(getLevel()))
+    if (GtHpPerStaEntry const* hpBase = sHpPerStaGameTable.GetRow(GetLevel()))
         ratio = hpBase->Health;
 
     float stamina = GetStat(STAT_STAMINA);
@@ -301,7 +301,7 @@ void Player::UpdateMaxHealth()
 
 uint32 Player::GetPowerIndex(Powers power) const
 {
-    return sDB2Manager.GetPowerIndexByClass(power, getClass());
+    return sDB2Manager.GetPowerIndexByClass(power, GetClass());
 }
 
 void Player::UpdateMaxPower(Powers power)
@@ -323,9 +323,9 @@ void Player::UpdateMaxPower(Powers power)
 void Player::UpdateAttackPowerAndDamage(bool ranged)
 {
     float val2 = 0.0f;
-    float level = float(getLevel());
+    float level = float(GetLevel());
 
-    ChrClassesEntry const* entry = sChrClassesStore.AssertEntry(getClass());
+    ChrClassesEntry const* entry = sChrClassesStore.AssertEntry(GetClass());
     UnitMods unitMod = ranged ? UNIT_MOD_ATTACK_POWER_RANGED : UNIT_MOD_ATTACK_POWER;
 
     if (!HasAuraType(SPELL_AURA_OVERRIDE_ATTACK_POWER_BY_SP_PCT))
@@ -577,7 +577,7 @@ void Player::UpdateVersatilityDamageDone()
     // No proof that CR_VERSATILITY_DAMAGE_DONE is allways = PLAYER_VERSATILITY
     SetUInt32Value(PLAYER_VERSATILITY, GetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + CR_VERSATILITY_DAMAGE_DONE));
 
-    if (getClass() == CLASS_HUNTER)
+    if (GetClass() == CLASS_HUNTER)
         UpdateDamagePhysical(RANGED_ATTACK);
     else
         UpdateDamagePhysical(BASE_ATTACK);
@@ -654,7 +654,7 @@ void Player::UpdateParryPercentage()
 {
     // No parry
     float value = 0.0f;
-    uint32 pclass = getClass() - 1;
+    uint32 pclass = GetClass() - 1;
     if (CanParry() && parry_cap[pclass] > 0.0f)
     {
         float nondiminishing  = 5.0f;
@@ -664,7 +664,7 @@ void Player::UpdateParryPercentage()
         nondiminishing += GetTotalAuraModifier(SPELL_AURA_MOD_PARRY_PERCENT);
 
         // apply diminishing formula to diminishing parry chance
-        value = CalculateDiminishingReturns(parry_cap, getClass(), nondiminishing, diminishing);
+        value = CalculateDiminishingReturns(parry_cap, GetClass(), nondiminishing, diminishing);
 
         if (sWorld->getBoolConfig(CONFIG_STATS_LIMITS_ENABLE))
              value = value > sWorld->getFloatConfig(CONFIG_STATS_LIMITS_PARRY) ? sWorld->getFloatConfig(CONFIG_STATS_LIMITS_PARRY) : value;
@@ -700,7 +700,7 @@ void Player::UpdateDodgePercentage()
     diminishing += GetRatingBonusValue(CR_DODGE);
 
     // apply diminishing formula to diminishing dodge chance
-    float value = CalculateDiminishingReturns(dodge_cap, getClass(), nondiminishing, diminishing);
+    float value = CalculateDiminishingReturns(dodge_cap, GetClass(), nondiminishing, diminishing);
 
     if (sWorld->getBoolConfig(CONFIG_STATS_LIMITS_ENABLE))
          value = value > sWorld->getFloatConfig(CONFIG_STATS_LIMITS_DODGE) ? sWorld->getFloatConfig(CONFIG_STATS_LIMITS_DODGE) : value;
@@ -795,7 +795,7 @@ void Player::UpdateManaRegen()
 
     // Get base of Mana Pool in sBaseMPGameTable
     uint32 basemana = 0;
-    sObjectMgr->GetPlayerClassLevelInfo(getClass(), getLevel(), basemana);
+    sObjectMgr->GetPlayerClassLevelInfo(GetClass(), GetLevel(), basemana);
     float base_regen = basemana / 100.f;
 
     base_regen += GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_POWER_REGEN, POWER_MANA);
@@ -812,7 +812,7 @@ void Player::UpdateManaRegen()
 
 void Player::UpdateAllRunesRegen()
 {
-    if (getClass() != CLASS_DEATH_KNIGHT)
+    if (GetClass() != CLASS_DEATH_KNIGHT)
         return;
 
     uint32 runeIndex = GetPowerIndex(POWER_RUNES);
@@ -1046,7 +1046,7 @@ bool Guardian::UpdateStats(Stats stat)
                                                             //warlock's and mage's pets gain 30% of owner's intellect
     else if (stat == STAT_INTELLECT)
     {
-        if (owner->getClass() == CLASS_WARLOCK || owner->getClass() == CLASS_MAGE)
+        if (owner->GetClass() == CLASS_WARLOCK || owner->GetClass() == CLASS_MAGE)
         {
             ownersBonus = CalculatePct(owner->GetStat(stat), 30);
             value += ownersBonus;

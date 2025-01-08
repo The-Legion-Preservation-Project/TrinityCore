@@ -144,7 +144,7 @@ void WorldSession::SendLfgPlayerLockInfo()
     TC_LOG_DEBUG("lfg", "SMSG_LFG_PLAYER_INFO %s", GetPlayerInfo().c_str());
 
     // Get Random dungeons that can be done at a certain level and expansion
-    uint8 level = GetPlayer()->getLevel();
+    uint8 level = GetPlayer()->GetLevel();
     lfg::LfgDungeonSet const& randomDungeons = sLFGMgr->GetRandomAndSeasonalDungeons(level, GetExpansion());
 
     WorldPackets::LFG::LfgPlayerInfo lfgPlayerInfo;

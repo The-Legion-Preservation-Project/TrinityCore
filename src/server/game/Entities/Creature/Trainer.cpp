@@ -136,7 +136,7 @@ namespace Trainer
                 return SpellState::Unavailable;
 
         // check level requirement
-        if (player->getLevel() < trainerSpell->ReqLevel)
+        if (player->GetLevel() < trainerSpell->ReqLevel)
             return SpellState::Unavailable;
 
         // check ranks

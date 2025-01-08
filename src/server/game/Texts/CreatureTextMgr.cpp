@@ -252,7 +252,7 @@ uint32 CreatureTextMgr::SendChat(Creature* source, uint8 textGroup, WorldObject 
     if (sound)
         finalSound = sound;
     else if (BroadcastTextEntry const* bct = sBroadcastTextStore.LookupEntry(iter->BroadcastTextId))
-        if (uint32 broadcastTextSoundId = bct->SoundEntriesID[source->getGender() == GENDER_FEMALE ? 1 : 0])
+        if (uint32 broadcastTextSoundId = bct->SoundEntriesID[source->GetGender() == GENDER_FEMALE ? 1 : 0])
             finalSound = broadcastTextSoundId;
 
     if (range == TEXT_RANGE_NORMAL)
@@ -270,12 +270,12 @@ uint32 CreatureTextMgr::SendChat(Creature* source, uint8 textGroup, WorldObject 
 
     if (srcPlr)
     {
-        PlayerTextBuilder builder(source, finalSource, finalSource->getGender(), finalType, iter->groupId, iter->id, finalLang, whisperTarget);
+        PlayerTextBuilder builder(source, finalSource, finalSource->GetGender(), finalType, iter->groupId, iter->id, finalLang, whisperTarget);
         SendChatPacket(finalSource, builder, finalType, whisperTarget, range, team, gmOnly);
     }
     else
     {
-        CreatureTextBuilder builder(finalSource, finalSource->getGender(), finalType, iter->groupId, iter->id, finalLang, whisperTarget);
+        CreatureTextBuilder builder(finalSource, finalSource->GetGender(), finalType, iter->groupId, iter->id, finalLang, whisperTarget);
         SendChatPacket(finalSource, builder, finalType, whisperTarget, range, team, gmOnly);
     }
 

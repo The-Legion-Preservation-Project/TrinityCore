@@ -4777,16 +4777,25 @@ time_t Map::GetLinkedRespawnTime(ObjectGuid guid) const
 
 void Map::LoadCorpseData()
 {
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CORPSES);
+    stmt->setUInt32(0, GetId());
+    stmt->setUInt32(1, GetInstanceId());
+
+    //        0     1     2     3            4      5          6          7       8       9      10        11    12          13          14
+    // SELECT posX, posY, posZ, orientation, mapId, displayId, itemCache, bytes1, bytes2, flags, dynFlags, time, corpseType, instanceId, guid FROM corpse WHERE mapId = ? AND instanceId = ?
+    PreparedQueryResult result = CharacterDatabase.Query(stmt);
+    if (!result)
+        return;
+
     std::unordered_map<ObjectGuid::LowType, std::unordered_set<uint32>> phases;
 
-    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CORPSE_PHASES);
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CORPSE_PHASES);
     stmt->setUInt32(0, GetId());
     stmt->setUInt32(1, GetInstanceId());
 
     //        0          1
     // SELECT OwnerGuid, PhaseId FROM corpse_phases cp LEFT JOIN corpse c ON cp.OwnerGuid = c.guid WHERE c.mapId = ? AND c.instanceId = ?
-    PreparedQueryResult phaseResult = CharacterDatabase.Query(stmt);
-    if (phaseResult)
+    if (PreparedQueryResult phaseResult = CharacterDatabase.Query(stmt))
     {
         do
         {
@@ -4798,16 +4807,6 @@ void Map::LoadCorpseData()
 
         } while (phaseResult->NextRow());
     }
-
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CORPSES);
-    stmt->setUInt32(0, GetId());
-    stmt->setUInt32(1, GetInstanceId());
-
-    //        0     1     2     3            4      5          6          7       8       9      10        11    12          13          14
-    // SELECT posX, posY, posZ, orientation, mapId, displayId, itemCache, bytes1, bytes2, flags, dynFlags, time, corpseType, instanceId, guid FROM corpse WHERE mapId = ? AND instanceId = ?
-    PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    if (!result)
-        return;
 
     do
     {

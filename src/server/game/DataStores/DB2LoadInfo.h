@@ -684,6 +684,37 @@ struct CharSectionsLoadInfo
     }
 };
 
+struct CharacterLoadoutLoadInfo
+{
+    static DB2LoadInfo const* Instance()
+    {
+        static DB2FieldMeta const fields[] =
+        {
+            { true, FT_INT, "ID" },
+            { true, FT_LONG, "RaceMask" },
+            { false, FT_BYTE, "ChrClassID" },
+            { false, FT_BYTE, "Purpose" },
+        };
+        static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, CharacterLoadoutMeta::Instance(), HOTFIX_SEL_CHARACTER_LOADOUT);
+        return &loadInfo;
+    }
+};
+
+struct CharacterLoadoutItemLoadInfo
+{
+    static DB2LoadInfo const* Instance()
+    {
+        static DB2FieldMeta const fields[] =
+        {
+            { true, FT_INT, "ID" },
+            { true, FT_INT, "ItemID" },
+            { false, FT_SHORT, "CharacterLoadoutID" },
+        };
+        static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, CharacterLoadoutItemMeta::Instance(), HOTFIX_SEL_CHARACTER_LOADOUT_ITEM);
+        return &loadInfo;
+    }
+};
+
 struct CharStartOutfitLoadInfo
 {
     static DB2LoadInfo const* Instance()

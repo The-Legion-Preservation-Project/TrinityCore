@@ -186,6 +186,14 @@ void HotfixDatabaseConnection::DoPrepareStatements()
         " FROM character_facial_hair_styles WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
     PREPARE_MAX_ID_STMT(HOTFIX_SEL_CHARACTER_FACIAL_HAIR_STYLES, "SELECT MAX(ID) + 1 FROM character_facial_hair_styles", CONNECTION_SYNCH);
 
+    // CharacterLoadout.db2
+    PrepareStatement(HOTFIX_SEL_CHARACTER_LOADOUT, "SELECT ID, RaceMask, ChrClassID, Purpose FROM character_loadout WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
+    PREPARE_MAX_ID_STMT(HOTFIX_SEL_CHARACTER_LOADOUT, "SELECT MAX(ID) + 1 FROM character_loadout", CONNECTION_SYNCH);
+
+    // CharacterLoadoutItem.db2
+    PrepareStatement(HOTFIX_SEL_CHARACTER_LOADOUT_ITEM, "SELECT ID, ItemID, CharacterLoadoutID FROM character_loadout_item WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
+    PREPARE_MAX_ID_STMT(HOTFIX_SEL_CHARACTER_LOADOUT_ITEM, "SELECT MAX(ID) + 1 FROM character_loadout_item", CONNECTION_SYNCH);
+
     // CharBaseSection.db2
     PrepareStatement(HOTFIX_SEL_CHAR_BASE_SECTION, "SELECT ID, VariationEnum, ResolutionVariationEnum, LayoutResType FROM char_base_section WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
     PREPARE_MAX_ID_STMT(HOTFIX_SEL_CHAR_BASE_SECTION, "SELECT MAX(ID) + 1 FROM char_base_section", CONNECTION_SYNCH);

@@ -249,7 +249,7 @@ void PlayerAchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, Pre
 
             // title achievement rewards are retroactive
             if (AchievementReward const* reward = sAchievementMgr->GetAchievementReward(achievement))
-                if (uint32 titleId = reward->TitleId[Player::TeamForRace(_owner->getRace()) == ALLIANCE ? 0 : 1])
+                if (uint32 titleId = reward->TitleId[Player::TeamForRace(_owner->GetRace()) == ALLIANCE ? 0 : 1])
                     if (CharTitlesEntry const* titleEntry = sCharTitlesStore.LookupEntry(titleId))
                         _owner->SetTitle(titleEntry);
 
@@ -632,7 +632,7 @@ void PlayerAchievementMgr::SendAchievementEarned(AchievementEntry const* achieve
     {
         if (Guild* guild = sGuildMgr->GetGuildById(_owner->GetGuildId()))
         {
-            Trinity::BroadcastTextBuilder _builder(_owner, CHAT_MSG_GUILD_ACHIEVEMENT, BROADCAST_TEXT_ACHIEVEMENT_EARNED, _owner->getGender(), _owner, achievement->ID);
+            Trinity::BroadcastTextBuilder _builder(_owner, CHAT_MSG_GUILD_ACHIEVEMENT, BROADCAST_TEXT_ACHIEVEMENT_EARNED, _owner->GetGender(), _owner, achievement->ID);
             Trinity::LocalizedPacketDo<Trinity::BroadcastTextBuilder> _localizer(_builder);
             guild->BroadcastWorker(_localizer, _owner);
         }
@@ -640,7 +640,7 @@ void PlayerAchievementMgr::SendAchievementEarned(AchievementEntry const* achieve
         if (achievement->Flags & (ACHIEVEMENT_FLAG_REALM_FIRST_KILL | ACHIEVEMENT_FLAG_REALM_FIRST_REACH))
         {
             // broadcast realm first reached
-            WorldPackets::Achievement::ServerFirstAchievement serverFirstAchievement;
+            WorldPackets::Achievement::BroadcastAchievement serverFirstAchievement;
             serverFirstAchievement.Name = _owner->GetName();
             serverFirstAchievement.PlayerGUID = _owner->GetGUID();
             serverFirstAchievement.AchievementID = achievement->ID;
@@ -649,7 +649,7 @@ void PlayerAchievementMgr::SendAchievementEarned(AchievementEntry const* achieve
         // if player is in world he can tell his friends about new achievement
         else if (_owner->IsInWorld())
         {
-            Trinity::BroadcastTextBuilder _builder(_owner, CHAT_MSG_ACHIEVEMENT, BROADCAST_TEXT_ACHIEVEMENT_EARNED, _owner->getGender(), _owner, achievement->ID);
+            Trinity::BroadcastTextBuilder _builder(_owner, CHAT_MSG_ACHIEVEMENT, BROADCAST_TEXT_ACHIEVEMENT_EARNED, _owner->GetGender(), _owner, achievement->ID);
             Trinity::LocalizedPacketDo<Trinity::BroadcastTextBuilder> _localizer(_builder);
             Trinity::PlayerDistWorker<Trinity::LocalizedPacketDo<Trinity::BroadcastTextBuilder>> _worker(_owner, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), _localizer);
             Cell::VisitWorldObjects(_owner, _worker, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
@@ -988,7 +988,7 @@ void GuildAchievementMgr::SendAchievementEarned(AchievementEntry const* achievem
     if (achievement->Flags & (ACHIEVEMENT_FLAG_REALM_FIRST_KILL | ACHIEVEMENT_FLAG_REALM_FIRST_REACH))
     {
         // broadcast realm first reached
-        WorldPackets::Achievement::ServerFirstAchievement serverFirstAchievement;
+        WorldPackets::Achievement::BroadcastAchievement serverFirstAchievement;
         serverFirstAchievement.Name = _owner->GetName();
         serverFirstAchievement.PlayerGUID = _owner->GetGUID();
         serverFirstAchievement.AchievementID = achievement->ID;

@@ -201,19 +201,19 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo) const
         case CONDITION_CLASS:
         {
             if (Unit* unit = object->ToUnit())
-                condMeets = (unit->getClassMask() & ConditionValue1) != 0;
+                condMeets = (unit->GetClassMask() & ConditionValue1) != 0;
             break;
         }
         case CONDITION_RACE:
         {
             if (Unit* unit = object->ToUnit())
-                condMeets = Trinity::RaceMask<uint32>{ ConditionValue1 }.HasRace(unit->getRace());
+                condMeets = Trinity::RaceMask<uint32>{ ConditionValue1 }.HasRace(unit->GetRace());
             break;
         }
         case CONDITION_GENDER:
         {
             if (Player* player = object->ToPlayer())
-                condMeets = player->getGender() == ConditionValue1;
+                condMeets = player->GetGender() == ConditionValue1;
             break;
         }
         case CONDITION_SKILL:
@@ -299,7 +299,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo) const
         case CONDITION_LEVEL:
         {
             if (Unit* unit = object->ToUnit())
-                condMeets = CompareValues(static_cast<ComparisionType>(ConditionValue2), static_cast<uint32>(unit->getLevel()), ConditionValue1);
+                condMeets = CompareValues(static_cast<ComparisionType>(ConditionValue2), static_cast<uint32>(unit->GetLevel()), ConditionValue1);
             break;
         }
         case CONDITION_DRUNKENSTATE:
@@ -2522,7 +2522,7 @@ uint32 ConditionMgr::GetPlayerConditionLfgValue(Player const* player, PlayerCond
             if (!selectedRandomDungeon)
                 return 0;
 
-            if (lfg::LfgReward const* reward = sLFGMgr->GetRandomDungeonReward(selectedRandomDungeon, player->getLevel()))
+            if (lfg::LfgReward const* reward = sLFGMgr->GetRandomDungeonReward(selectedRandomDungeon, player->GetLevel()))
                 if (Quest const* quest = sObjectMgr->GetQuestTemplate(reward->firstQuest))
                     if (player->CanRewardQuest(quest, false))
                         return 1;
@@ -2547,19 +2547,19 @@ uint32 ConditionMgr::GetPlayerConditionLfgValue(Player const* player, PlayerCond
 
 bool ConditionMgr::IsPlayerMeetingCondition(Player const* player, PlayerConditionEntry const* condition)
 {
-    if (condition->MinLevel && player->getLevel() < condition->MinLevel)
+    if (condition->MinLevel && player->GetLevel() < condition->MinLevel)
         return false;
 
-    if (condition->MaxLevel && player->getLevel() > condition->MaxLevel)
+    if (condition->MaxLevel && player->GetLevel() > condition->MaxLevel)
         return false;
 
-    if (condition->RaceMask && !condition->RaceMask.HasRace(player->getRace()))
+    if (condition->RaceMask && !condition->RaceMask.HasRace(player->GetRace()))
         return false;
 
-    if (condition->ClassMask && !(player->getClassMask() & condition->ClassMask))
+    if (condition->ClassMask && !(player->GetClassMask() & condition->ClassMask))
         return false;
 
-    if (condition->Gender >= 0 && player->getGender() != condition->Gender)
+    if (condition->Gender >= 0 && player->GetGender() != condition->Gender)
         return false;
 
     if (condition->NativeGender >= 0 && player->GetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_GENDER) != condition->NativeGender)
