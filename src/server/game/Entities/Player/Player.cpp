@@ -15668,6 +15668,10 @@ void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rew
     {
         for (QuestRewardDisplaySpell displaySpell : quest->RewardDisplaySpell)
         {
+            // TheLegionPreservationProject - quest->RewardDisplaySpell is an array, not a vector
+            if (!displaySpell.SpellId)
+                continue;
+
             if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(displaySpell.PlayerConditionId))
                 if (!ConditionMgr::IsPlayerMeetingCondition(this, playerCondition))
                     continue;
