@@ -2504,6 +2504,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SetHairStyleId(uint8 hairStyleId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_HAIR_STYLE_ID, hairStyleId); }
         void SetHairColorId(uint8 hairColorId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_HAIR_COLOR_ID, hairColorId); }
         void SetFacialHairStyleId(uint8 facialHairStyleId) { SetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_FACIAL_STYLE, facialHairStyleId); }
+        Gender GetNativeSex() const { return Gender(GetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_GENDER)); }
         void SetNativeSex(uint8 sex) { SetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_GENDER, sex); }
         void SetPvpTitle(uint8 pvpTitle) { SetByteValue(PLAYER_BYTES_4, PLAYER_BYTES_4_OFFSET_PVP_TITLE, pvpTitle); }
         void SetArenaFaction(uint8 arenaFaction) { SetByteValue(PLAYER_BYTES_4, PLAYER_BYTES_4_OFFSET_ARENA_FACTION, arenaFaction); }

@@ -2010,7 +2010,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SOURCE_NATIVE_SEX: // 98
-            if (referencePlayer->GetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_GENDER) != uint8(reqValue))
+            if (referencePlayer->GetNativeSex() != uint8(reqValue))
                 return false;
             break;
         case CRITERIA_ADDITIONAL_CONDITION_SKILL: // 99
