@@ -2234,6 +2234,15 @@ struct QuestFactionRewardEntry
     int16 Difficulty[10];
 };
 
+struct QuestInfoEntry
+{
+    int32 ID;
+    LocalizedString InfoName;
+    uint16 Profession;
+    uint8 Type;
+    uint8 Modifiers;
+};
+
 struct QuestMoneyRewardEntry
 {
     uint32 ID;

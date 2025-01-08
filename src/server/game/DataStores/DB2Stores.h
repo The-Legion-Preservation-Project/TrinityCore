@@ -155,6 +155,7 @@ TC_GAME_API extern DB2Storage<PowerDisplayEntry>                    sPowerDispla
 TC_GAME_API extern DB2Storage<PvpTalentEntry>                       sPvpTalentStore;
 TC_GAME_API extern DB2Storage<PvpTalentUnlockEntry>                 sPvpTalentUnlockStore;
 TC_GAME_API extern DB2Storage<QuestFactionRewardEntry>              sQuestFactionRewardStore;
+TC_GAME_API extern DB2Storage<QuestInfoEntry>                       sQuestInfoStore;
 TC_GAME_API extern DB2Storage<QuestMoneyRewardEntry>                sQuestMoneyRewardStore;
 TC_GAME_API extern DB2Storage<QuestSortEntry>                       sQuestSortStore;
 TC_GAME_API extern DB2Storage<QuestXPEntry>                         sQuestXPStore;

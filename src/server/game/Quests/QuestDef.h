@@ -21,6 +21,8 @@
 #include "Common.h"
 #include "DBCEnums.h"
 #include "DatabaseEnvFwd.h"
+#include "EnumFlag.h"
+#include "Optional.h"
 #include "RaceMask.h"
 #include "SharedDefines.h"
 #include "WorldPacket.h"
@@ -115,24 +117,27 @@ enum QuestStatus : uint8
     MAX_QUEST_STATUS
 };
 
-enum QuestGiverStatus
+enum class QuestGiverStatus : uint32
 {
-    DIALOG_STATUS_NONE                     = 0x000,
-    DIALOG_STATUS_UNK                      = 0x001,
-    DIALOG_STATUS_UNAVAILABLE              = 0x002,
-    DIALOG_STATUS_LOW_LEVEL_AVAILABLE      = 0x004,
-    DIALOG_STATUS_LOW_LEVEL_REWARD_REP     = 0x008,
-    DIALOG_STATUS_LOW_LEVEL_AVAILABLE_REP  = 0x010,
-    DIALOG_STATUS_INCOMPLETE               = 0x020,
-    DIALOG_STATUS_REWARD_REP               = 0x040,
-    DIALOG_STATUS_AVAILABLE_REP            = 0x080,
-    DIALOG_STATUS_AVAILABLE                = 0x100,
-    DIALOG_STATUS_REWARD2                  = 0x200,         // no yellow dot on minimap
-    DIALOG_STATUS_REWARD                   = 0x400,         // yellow dot on minimap
+    None                         = 0x0000,
+    Future                       = 0x0002,
+    Trivial                      = 0x0004,
+    TrivialRepeatableTurnin      = 0x0008,
+    TrivialDailyQuest            = 0x0010,
+    Reward                       = 0x0020,
+    RepeatableTurnin             = 0x0040,
+    DailyQuest                   = 0x0080,
+    Quest                        = 0x0100,
+    RewardCompleteNoPOI          = 0x0200,
+    RewardCompletePOI            = 0x0400,
+    LegendaryQuest               = 0x0800,
+    LegendaryRewardCompleteNoPOI = 0x1000,
+    LegendaryRewardCompletePOI   = 0x2000,
 
-    // Custom value meaning that script call did not return any valid quest status
-    DIALOG_STATUS_SCRIPTED_NO_STATUS       = 0x1000
+    ScriptedDefault              = 0x80000000
 };
+
+DEFINE_ENUM_FLAG(QuestGiverStatus)
 
 enum QuestFlags : uint32
 {
@@ -222,6 +227,26 @@ enum QuestSpecialFlags
     QUEST_SPECIAL_FLAGS_TIMED                = 0x400,   // Internal flag computed only
     QUEST_SPECIAL_FLAGS_PLAYER_KILL          = 0x800,   // Internal flag computed only
     QUEST_SPECIAL_FLAGS_COMPLETED_AT_START   = 0x1000   // Internal flag computed only
+};
+
+enum class QuestTagType
+{
+    Tag,
+    Profession,
+    Normal,
+    Pvp,
+    PetBattle,
+    Bounty,
+    Dungeon,
+    Invasion,
+    Raid,
+    Contribution,
+    RatedRreward,
+    InvasionWrapper,
+    FactionAssault,
+    Islands,
+    Threat,
+    CovenantCalling
 };
 
 enum QuestObjectiveType
@@ -334,7 +359,7 @@ struct QuestObjective
     }
 };
 
-typedef std::vector<QuestObjective> QuestObjectives;
+using QuestObjectives = std::vector<QuestObjective>;
 
 struct QuestRewardDisplaySpell
 {
@@ -368,6 +393,7 @@ class TC_GAME_API Quest
 
         uint32 XPValue(Player const* player) const;
         uint32 MoneyValue(Player const* player) const;
+        Optional<QuestTagType> GetQuestTag() const;
 
         bool HasFlag(QuestFlags flag) const { return (_flags & uint32(flag)) != 0; }
         bool HasFlagEx(QuestFlagsEx flag) const { return (_flagsEx & uint32(flag)) != 0; }
