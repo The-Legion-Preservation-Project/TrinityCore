@@ -6606,7 +6606,7 @@ struct MapDifficultyXConditionMeta
         {
             { FT_STRING, 1, false },
             { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
             { FT_INT, 1, false },
         };
 
