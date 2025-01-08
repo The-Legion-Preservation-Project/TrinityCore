@@ -1368,20 +1368,12 @@ std::vector<ArtifactPowerEntry const*> DB2Manager::GetArtifactPowers(uint8 artif
 
 std::unordered_set<uint32> const* DB2Manager::GetArtifactPowerLinks(uint32 artifactPowerId) const
 {
-    auto itr = _artifactPowerLinks.find(artifactPowerId);
-    if (itr != _artifactPowerLinks.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_artifactPowerLinks, artifactPowerId);
 }
 
 ArtifactPowerRankEntry const* DB2Manager::GetArtifactPowerRank(uint32 artifactPowerId, uint8 rank) const
 {
-    auto itr = _artifactPowerRanks.find({ artifactPowerId, rank });
-    if (itr != _artifactPowerRanks.end())
-        return itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_artifactPowerRanks, { artifactPowerId, rank });
 }
 
 char const* DB2Manager::GetBroadcastTextValue(BroadcastTextEntry const* broadcastText, LocaleConstant locale /*= DEFAULT_LOCALE*/, uint8 gender /*= GENDER_MALE*/, bool forceGender /*= false*/)
@@ -1642,60 +1634,38 @@ float DB2Manager::GetCurveValueAt(uint32 curveId, float x) const
 
 EmotesTextSoundEntry const* DB2Manager::GetTextSoundEmoteFor(uint32 emote, uint8 race, uint8 gender, uint8 class_) const
 {
-    auto itr = _emoteTextSounds.find(EmotesTextSoundContainer::key_type(emote, race, gender, class_));
-    if (itr != _emoteTextSounds.end())
-        return itr->second;
+    if (EmotesTextSoundEntry const* emotesTextSound = Trinity::Containers::MapGetValuePtr(_emoteTextSounds, { emote, race, gender, class_ }))
+        return emotesTextSound;
 
-    itr = _emoteTextSounds.find(EmotesTextSoundContainer::key_type(emote, race, gender, uint8(0)));
-    if (itr != _emoteTextSounds.end())
-        return itr->second;
+    if (EmotesTextSoundEntry const* emotesTextSound = Trinity::Containers::MapGetValuePtr(_emoteTextSounds, { emote, race, gender, uint8(0) }))
+        return emotesTextSound;
 
     return nullptr;
 }
 
 std::vector<uint32> const* DB2Manager::GetFactionTeamList(uint32 faction) const
 {
-    auto itr = _factionTeams.find(faction);
-    if (itr != _factionTeams.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_factionTeams, faction);
 }
 
 HeirloomEntry const* DB2Manager::GetHeirloomByItemId(uint32 itemId) const
 {
-    auto itr = _heirlooms.find(itemId);
-    if (itr != _heirlooms.end())
-        return itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_heirlooms, itemId);
 }
 
 std::vector<uint32> const* DB2Manager::GetGlyphBindableSpells(uint32 glyphPropertiesId) const
 {
-    auto itr = _glyphBindableSpells.find(glyphPropertiesId);
-    if (itr != _glyphBindableSpells.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_glyphBindableSpells, glyphPropertiesId);
 }
 
 std::vector<uint32> const* DB2Manager::GetGlyphRequiredSpecs(uint32 glyphPropertiesId) const
 {
-    auto itr = _glyphRequiredSpecs.find(glyphPropertiesId);
-    if (itr != _glyphRequiredSpecs.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_glyphRequiredSpecs, glyphPropertiesId);
 }
 
 DB2Manager::ItemBonusList const* DB2Manager::GetItemBonusList(uint32 bonusListId) const
 {
-    auto itr = _itemBonusLists.find(bonusListId);
-    if (itr != _itemBonusLists.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_itemBonusLists, bonusListId);
 }
 
 uint32 DB2Manager::GetItemBonusListForItemLevelDelta(int16 delta) const
@@ -1796,11 +1766,7 @@ std::set<uint32> DB2Manager::GetDefaultItemBonusTree(uint32 itemId, ItemContext 
 
 ItemChildEquipmentEntry const* DB2Manager::GetItemChildEquipment(uint32 itemId) const
 {
-    auto itr = _itemChildEquipment.find(itemId);
-    if (itr != _itemChildEquipment.end())
-        return itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_itemChildEquipment, itemId);
 }
 
 ItemClassEntry const* DB2Manager::GetItemClassByOldEnum(uint32 itemClass) const
@@ -1815,11 +1781,7 @@ bool DB2Manager::HasItemCurrencyCost(uint32 itemId) const
 
 std::vector<ItemLimitCategoryConditionEntry const*> const* DB2Manager::GetItemLimitCategoryConditions(uint32 categoryId) const
 {
-    auto itr = _itemCategoryConditions.find(categoryId);
-    if (itr != _itemCategoryConditions.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_itemCategoryConditions, categoryId);
 }
 
 uint32 DB2Manager::GetItemDisplayId(uint32 itemId, uint32 appearanceModId) const
@@ -1850,29 +1812,17 @@ ItemModifiedAppearanceEntry const* DB2Manager::GetItemModifiedAppearance(uint32 
 
 ItemModifiedAppearanceEntry const* DB2Manager::GetDefaultItemModifiedAppearance(uint32 itemId) const
 {
-    auto itr = _itemModifiedAppearancesByItem.find(itemId);
-    if (itr != _itemModifiedAppearancesByItem.end())
-        return itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_itemModifiedAppearancesByItem, itemId);
 }
 
 std::vector<ItemSetSpellEntry const*> const* DB2Manager::GetItemSetSpells(uint32 itemSetId) const
 {
-    auto itr = _itemSetSpells.find(itemSetId);
-    if (itr != _itemSetSpells.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_itemSetSpells, itemSetId);
 }
 
 std::vector<ItemSpecOverrideEntry const*> const* DB2Manager::GetItemSpecOverrides(uint32 itemId) const
 {
-    auto itr = _itemSpecOverrides.find(itemId);
-    if (itr != _itemSpecOverrides.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_itemSpecOverrides, itemId);
 }
 
 LFGDungeonsEntry const* DB2Manager::GetLfgDungeon(uint32 mapId, Difficulty difficulty)
@@ -1985,11 +1935,7 @@ DB2Manager::MapDifficultyConditionsContainer const* DB2Manager::GetMapDifficulty
 
 MountEntry const* DB2Manager::GetMount(uint32 spellId) const
 {
-    auto itr = _mountsBySpellId.find(spellId);
-    if (itr != _mountsBySpellId.end())
-        return itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_mountsBySpellId, spellId);
 }
 
 MountEntry const* DB2Manager::GetMountById(uint32 id) const
@@ -1999,11 +1945,7 @@ MountEntry const* DB2Manager::GetMountById(uint32 id) const
 
 DB2Manager::MountTypeXCapabilitySet const* DB2Manager::GetMountCapabilities(uint32 mountType) const
 {
-    auto itr = _mountCapabilitiesByType.find(mountType);
-    if (itr != _mountCapabilitiesByType.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_mountCapabilitiesByType, mountType);
 }
 
 DB2Manager::MountXDisplayContainer const* DB2Manager::GetMountDisplays(uint32 mountId) const
@@ -2130,11 +2072,7 @@ uint32 DB2Manager::GetQuestUniqueBitFlag(uint32 questId)
 
 std::vector<uint32> const* DB2Manager::GetPhasesForGroup(uint32 group) const
 {
-    auto itr = _phasesByGroup.find(group);
-    if (itr != _phasesByGroup.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_phasesByGroup, group);
 }
 
 PowerTypeEntry const* DB2Manager::GetPowerTypeEntry(Powers power) const
@@ -2171,20 +2109,12 @@ uint8 DB2Manager::GetPvpItemLevelBonus(uint32 itemId) const
 
 std::vector<RewardPackXCurrencyTypeEntry const*> const* DB2Manager::GetRewardPackCurrencyTypesByRewardID(uint32 rewardPackID) const
 {
-    auto itr = _rewardPackCurrencyTypes.find(rewardPackID);
-    if (itr != _rewardPackCurrencyTypes.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_rewardPackCurrencyTypes, rewardPackID);
 }
 
 std::vector<RewardPackXItemEntry const*> const* DB2Manager::GetRewardPackItemsByRewardID(uint32 rewardPackID) const
 {
-    auto itr = _rewardPackItems.find(rewardPackID);
-    if (itr != _rewardPackItems.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_rewardPackItems, rewardPackID);
 }
 
 uint32 DB2Manager::GetRulesetItemUpgrade(uint32 itemId) const
@@ -2214,11 +2144,7 @@ SkillRaceClassInfoEntry const* DB2Manager::GetSkillRaceClassInfo(uint32 skill, u
 
 std::vector<SpecializationSpellsEntry const*> const* DB2Manager::GetSpecializationSpells(uint32 specId) const
 {
-    auto itr = _specializationSpellsBySpec.find(specId);
-    if (itr != _specializationSpellsBySpec.end())
-        return &itr->second;
-
-    return nullptr;
+    return Trinity::Containers::MapGetValuePtr(_specializationSpellsBySpec, specId);
 }
 
 bool DB2Manager::IsValidSpellFamiliyName(SpellFamilyNames family)
