@@ -43,7 +43,7 @@ enum PlayerRestInfoOffsets : uint8
 enum PlayerRestState : uint8
 {
     REST_STATE_RESTED           = 0x01,
-    REST_STATE_NOT_RAF_LINKED   = 0x02,
+    REST_STATE_NORMAL           = 0x02,
     REST_STATE_RAF_LINKED       = 0x06
 };
 

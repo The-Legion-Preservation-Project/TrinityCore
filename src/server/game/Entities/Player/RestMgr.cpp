@@ -32,6 +32,7 @@ void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
 {
     int32 next_level_xp_field;
     bool affectedByRaF = false;
+    PlayerRestInfoOffsets restState = REST_STATE_XP;
 
     switch (restType)
     {
@@ -42,6 +43,7 @@ void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
 
             next_level_xp_field = PLAYER_NEXT_LEVEL_XP;
             affectedByRaF = true;
+            restState = REST_STATE_XP;
             break;
         case REST_TYPE_HONOR:
             // Reset restBonus (Honor only) for players with max honor level.
@@ -49,6 +51,7 @@ void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
                 restBonus = 0;
 
             next_level_xp_field = PLAYER_FIELD_HONOR_NEXT_LEVEL;
+            restState = REST_STATE_HONOR;
             break;
         default:
             return;
@@ -62,25 +65,25 @@ void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
     if (restBonus > rest_bonus_max)
         restBonus = rest_bonus_max;
 
+    // TheLegionPreservationProject: future fix ade34a7f484dfcc7e41eddfd1014e7728c8dc2c1
+    uint32 oldBonus = uint32(_restBonus[restType]);
     _restBonus[restType] = restBonus;
 
-    uint32 oldBonus = uint32(_restBonus[restType]);
-    if (oldBonus == uint32(restBonus))
-        return;
+    PlayerRestState oldRestState = static_cast<PlayerRestState>(_player->GetUInt32Value(PLAYER_FIELD_REST_INFO + restState));
+    PlayerRestState newRestState = REST_STATE_NORMAL;
 
     // update data for client
     if (affectedByRaF && _player->GetsRecruitAFriendBonus(true) && (_player->GetSession()->IsARecruiter() || _player->GetSession()->GetRecruiterId() != 0))
-        _player->SetRestState(restType, REST_STATE_RAF_LINKED);
-    else
-    {
-        if (_restBonus[restType] > 10)
-            _player->SetRestState(restType, REST_STATE_RESTED);
-        else if (_restBonus[restType] <= 1)
-            _player->SetRestState(restType, REST_STATE_NOT_RAF_LINKED);
-    }
+        newRestState = REST_STATE_RAF_LINKED;
+    else if (_restBonus[restType] >= 1)
+        newRestState = REST_STATE_RESTED;
 
-    // RestTickUpdate
+    if (oldBonus == uint32(restBonus) && oldRestState == newRestState)
+        return;
+
+    // update data for client
     _player->SetRestThreshold(restType, uint32(_restBonus[restType]));
+    _player->SetRestState(restType, newRestState);
 }
 
 void RestMgr::AddRestBonus(RestTypes restType, float restBonus)

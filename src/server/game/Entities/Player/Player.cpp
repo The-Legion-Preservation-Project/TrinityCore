@@ -488,8 +488,8 @@ bool Player::Create(ObjectGuid::LowType guidlow, WorldPackets::Character::Charac
     SetFacialHairStyleId(createInfo->FacialHairStyle);
     for (uint32 i = 0; i < PLAYER_CUSTOM_DISPLAY_SIZE; ++i)
         SetCustomDisplayOption(i, createInfo->CustomDisplay[i]);
-    SetRestState(REST_TYPE_XP, (GetSession()->IsARecruiter() || GetSession()->GetRecruiterId() != 0) ? REST_STATE_RAF_LINKED : REST_STATE_NOT_RAF_LINKED);
-    SetRestState(REST_TYPE_HONOR, REST_STATE_NOT_RAF_LINKED);
+    SetRestState(REST_TYPE_XP, (GetSession()->IsARecruiter() || GetSession()->GetRecruiterId() != 0) ? REST_STATE_RAF_LINKED : REST_STATE_NORMAL);
+    SetRestState(REST_TYPE_HONOR, REST_STATE_NORMAL);
     SetNativeSex(createInfo->Sex);
     SetArenaFaction(0);
     SetInventorySlotCount(INVENTORY_DEFAULT_SIZE);
