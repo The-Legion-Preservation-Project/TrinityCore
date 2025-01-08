@@ -333,7 +333,6 @@ public:
     uint32    Effect;
     uint32    ApplyAuraName;
     uint32    ApplyAuraPeriod;
-    int32     DieSides;
     float     RealPointsPerLevel;
     int32     BasePoints;
     float     PointsPerResource;
@@ -362,7 +361,7 @@ public:
         float ResourceCoefficient;
     } Scaling;
 
-    SpellEffectInfo() : _spellInfo(nullptr), EffectIndex(0), Effect(0), ApplyAuraName(0), ApplyAuraPeriod(0), DieSides(0),
+    SpellEffectInfo() : _spellInfo(nullptr), EffectIndex(0), Effect(0), ApplyAuraName(0), ApplyAuraPeriod(0),
                         RealPointsPerLevel(0), BasePoints(0), PointsPerResource(0), Amplitude(0), ChainAmplitude(0),
                         BonusCoefficient(0), MiscValue(0), MiscValueB(0), Mechanic(MECHANIC_NONE), PositionFacing(0),
                         RadiusEntry(nullptr), ChainTargets(0), ItemType(0), TriggerSpell(0), BonusCoefficientFromAP(0.0f), ImplicitTargetConditions(nullptr) { }
@@ -379,7 +378,7 @@ public:
     bool IsUnitOwnedAuraEffect() const;
 
     int32 CalcValue(Unit const* caster = nullptr, int32 const* basePoints = nullptr, Unit const* target = nullptr, float* variance = nullptr, uint32 castItemId = 0, int32 itemLevel = -1) const;
-    int32 CalcBaseValue(int32 value) const;
+    int32 CalcBaseValue(Unit const* caster, Unit const* target, uint32 itemId, int32 itemLevel) const;
     float CalcValueMultiplier(Unit* caster, Spell* spell = nullptr) const;
     float CalcDamageMultiplier(Unit* caster, Spell* spell = nullptr) const;
 
@@ -392,6 +391,7 @@ public:
 
     SpellEffectImplicitTargetTypes GetImplicitTargetType() const;
     SpellTargetObjectTypes GetUsedTargetObjectType() const;
+    ExpectedStatType GetScalingExpectedStat() const;
 
     ImmunityInfo const* GetImmunityInfo() const { return &_immunityInfo; }
 

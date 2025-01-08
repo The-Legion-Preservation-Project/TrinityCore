@@ -292,6 +292,7 @@ inline float GetSpellScalingColumnForClass(GtSpellScalingEntry const* row, int32
         case CLASS_DEMON_HUNTER:
             return row->DemonHunter;
         case -1:
+        case -7:
             return row->Item;
         case -2:
             return row->Consumable;

@@ -62,8 +62,6 @@ enum MageSpells
     SPELL_MAGE_ICE_LANCE_TRIGGER                 = 228598,
     SPELL_MAGE_THERMAL_VOID                      = 155149,
     SPELL_MAGE_ICY_VEINS                         = 12472,
-    SPELL_MAGE_CHAIN_REACTION_DUMMY              = 278309,
-    SPELL_MAGE_CHAIN_REACTION                    = 278310,
 };
 
 enum MiscSpells
@@ -346,8 +344,6 @@ class spell_mage_ice_lance : public SpellScript
             SPELL_MAGE_ICE_LANCE_TRIGGER,
             SPELL_MAGE_THERMAL_VOID,
             SPELL_MAGE_ICY_VEINS,
-            SPELL_MAGE_CHAIN_REACTION_DUMMY,
-            SPELL_MAGE_CHAIN_REACTION,
             SPELL_MAGE_FINGERS_OF_FROST
         });
     }
@@ -372,10 +368,6 @@ class spell_mage_ice_lance : public SpellScript
                 if (SpellEffectInfo const* thermalVoidEffect = thermalVoid->GetSpellInfo()->GetEffect(EFFECT_0))
                     if (Aura* icyVeins = caster->GetAura(SPELL_MAGE_ICY_VEINS))
                         icyVeins->SetDuration(icyVeins->GetDuration() + thermalVoidEffect->CalcValue(caster) * IN_MILLISECONDS);
-
-            // Chain Reaction
-            if (caster->HasAura(SPELL_MAGE_CHAIN_REACTION_DUMMY))
-                caster->CastSpell(caster, SPELL_MAGE_CHAIN_REACTION, true);
         }
 
         // put target index for chain value multiplier into EFFECT_1 base points, otherwise triggered spell doesn't know which damage multiplier to apply

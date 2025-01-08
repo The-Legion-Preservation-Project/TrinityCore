@@ -3801,7 +3801,7 @@ enum LockKeyType
 // LockType.dbc (6.0.2.18988)
 enum LockType
 {
-    LOCKTYPE_PICKLOCK              = 1,
+    LOCKTYPE_LOCKPICKING           = 1,
     LOCKTYPE_HERBALISM             = 2,
     LOCKTYPE_MINING                = 3,
     LOCKTYPE_DISARM_TRAP           = 4,
