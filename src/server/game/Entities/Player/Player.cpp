@@ -2521,6 +2521,8 @@ void Player::InitStatsForLevel(bool reapplyMods)
 
     SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL));
     SetUInt32Value(PLAYER_NEXT_LEVEL_XP, sObjectMgr->GetXPForLevel(GetLevel()));
+    if (GetUInt32Value(PLAYER_XP) >= GetUInt32Value(PLAYER_NEXT_LEVEL_XP))
+        SetUInt32Value(PLAYER_XP, GetUInt32Value(PLAYER_NEXT_LEVEL_XP) - 1);
 
     // reset before any aura state sources (health set/aura apply)
     SetUInt32Value(UNIT_FIELD_AURASTATE, 0);

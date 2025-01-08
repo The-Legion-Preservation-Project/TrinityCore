@@ -95,8 +95,8 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonMission const& mission)
     data << uint32(mission.TravelDuration);
     data << uint32(mission.MissionDuration);
     data << uint32(mission.MissionState);
-    data << uint32(mission.Unknown1);
-    data << uint32(mission.Unknown2);
+    data << uint32(mission.SuccessChance);
+    data << uint32(mission.Flags);
 
     return data;
 }
@@ -104,12 +104,12 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonMission const& mission)
 ByteBuffer& operator<<(ByteBuffer& data, GarrisonMissionReward const& missionRewardItem)
 {
     data << int32(missionRewardItem.ItemID);
-    data << uint32(missionRewardItem.Quantity);
+    data << uint32(missionRewardItem.ItemQuantity);
     data << int32(missionRewardItem.CurrencyID);
     data << uint32(missionRewardItem.CurrencyQuantity);
     data << uint32(missionRewardItem.FollowerXP);
-    data << uint32(missionRewardItem.BonusAbilityID);
-    data << int32(missionRewardItem.Unknown);
+    data << uint32(missionRewardItem.GarrMssnBonusAbilityID);
+    data << int32(missionRewardItem.ItemFileDataID);
 
     return data;
 }

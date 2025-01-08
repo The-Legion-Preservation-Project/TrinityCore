@@ -3760,7 +3760,7 @@ std::vector<SpellPowerCost> SpellInfo::CalcPowerCost(Unit const* caster, SpellSc
             else
             {
                 WeaponAttackType slot = BASE_ATTACK;
-                if (HasAttribute(SPELL_ATTR3_REQ_OFFHAND))
+                if (!HasAttribute(SPELL_ATTR3_MAIN_HAND) && HasAttribute(SPELL_ATTR3_REQ_OFFHAND))
                     slot = OFF_ATTACK;
 
                 speed = caster->GetBaseAttackTime(slot);
@@ -3772,13 +3772,20 @@ std::vector<SpellPowerCost> SpellInfo::CalcPowerCost(Unit const* caster, SpellSc
         // Apply cost mod by spell
         if (Player* modOwner = caster->GetSpellModOwner())
         {
-            if (power->OrderIndex == 0)
-                modOwner->ApplySpellMod(Id, SPELLMOD_COST, powerCost, spell);
-            else if (power->OrderIndex == 1)
-                modOwner->ApplySpellMod(Id, SPELLMOD_SPELL_COST2, powerCost, spell);
+            switch (power->OrderIndex)
+            {
+                case 0:
+                    modOwner->ApplySpellMod(Id, SPELLMOD_COST, powerCost, spell);
+                    break;
+                case 1:
+                    modOwner->ApplySpellMod(Id, SPELLMOD_SPELL_COST2, powerCost, spell);
+                    break;
+                default:
+                    break;
+            }
         }
 
-        if (!caster->IsControlledByPlayer() && G3D::fuzzyEq(power->PowerCostPct, 0.0f) && SpellLevel)
+        if (!caster->IsControlledByPlayer() && G3D::fuzzyEq(power->PowerCostPct, 0.0f) && SpellLevel && power->PowerType == POWER_MANA)
         {
             if (HasAttribute(SPELL_ATTR0_LEVEL_DAMAGE_CALCULATION))
             {
