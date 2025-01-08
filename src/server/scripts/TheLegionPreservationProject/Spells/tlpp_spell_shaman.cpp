@@ -62,7 +62,7 @@ public:
 // 29264 - Spirit Wolf
 struct tlpp_npc_feral_spirit : public ScriptedAI
 {
-    tlpp_npc_feral_spirit(Creature* p_Creature) : ScriptedAI(p_Creature) { }
+    tlpp_npc_feral_spirit(Creature* creature) : ScriptedAI(creature) { }
 
     void DamageDealt(Unit* /*victim*/, uint32& /*damage*/, DamageEffectType /*damageType*/) override
     {
