@@ -528,6 +528,8 @@ struct ChrRacesEntry
     int32 FemaleSkeletonFileDataID;
     uint32 AlteredFormStartVisualKitID[3];
     uint32 AlteredFormFinishVisualKitID[3];
+
+    EnumFlag<ChrRacesFlag> GetFlags() const { return static_cast<ChrRacesFlag>(Flags); }
 };
 
 #define MAX_MASTERY_SPELLS 2

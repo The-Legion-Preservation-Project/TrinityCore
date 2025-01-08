@@ -19,6 +19,7 @@
 #define DBCENUMS_H
 
 #include "Define.h"
+#include "EnumFlag.h"
 #include <array>
 
 #pragma pack(push, 1)
@@ -182,6 +183,13 @@ enum BattlemasterListFlags
     BATTLEMASTER_LIST_FLAG_BRAWL                = 0x20,
     BATTLEMASTER_LIST_FLAG_FACTIONAL            = 0x40
 };
+
+enum class ChrRacesFlag : int32
+{
+    AlliedRace  = 0x80000
+};
+
+DEFINE_ENUM_FLAG(ChrRacesFlag);
 
 enum ChrSpecializationFlag
 {

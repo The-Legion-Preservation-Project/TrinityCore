@@ -132,9 +132,7 @@ public:
         uint8 oldLevel = target->GetLevel();
 
         // set starting level
-        uint32 startLevel = target->GetClass() != CLASS_DEATH_KNIGHT
-            ? sWorld->getIntConfig(CONFIG_START_PLAYER_LEVEL)
-            : sWorld->getIntConfig(CONFIG_START_DEATH_KNIGHT_PLAYER_LEVEL);
+        uint8 startLevel = target->GetStartLevel(target->GetRace(), target->GetClass(), {});
 
         target->_ApplyAllLevelScaleItemMods(false);
         target->SetLevel(startLevel);
