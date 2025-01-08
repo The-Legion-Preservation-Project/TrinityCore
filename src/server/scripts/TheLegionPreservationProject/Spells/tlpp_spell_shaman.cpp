@@ -17,17 +17,59 @@
 
 #include "Player.h"
 #include "ScriptMgr.h"
+#include "ScriptedCreature.h"
 #include "SpellScript.h"
 #include "SpellHistory.h"
 #include "SpellInfo.h"
+#include "TemporarySummon.h"
 
 enum ShamanSpells
 {
-    SPELL_SHAMAN_STORMBRINGER           = 201845,
-    SPELL_SHAMAN_STORMBRINGER_PROC      = 201846,
-    SPELL_SHAMAN_STORMSTRIKE            = 17364,
-    SPELL_SHAMAN_MAELSTROM_WEAPON_POWER = 187890,
-    SPELL_SHAMAN_WINDFURY_ATTACK        = 25504
+    SPELL_SHAMAN_FERAL_SPIRIT                = 51533,
+    SPELL_SHAMAN_FERAL_SPIRIT_SUMMON         = 228562,
+    SPELL_SHAMAN_FERAL_SPIRIT_ENERGIZE       = 190185,
+    SPELL_SHAMAN_FERAL_SPIRIT_ENERGIZE_DUMMY = 231723,
+    SPELL_SHAMAN_STORMBRINGER                = 201845,
+    SPELL_SHAMAN_STORMBRINGER_PROC           = 201846,
+    SPELL_SHAMAN_STORMSTRIKE                 = 17364,
+    SPELL_SHAMAN_MAELSTROM_WEAPON_POWER      = 187890,
+    SPELL_SHAMAN_WINDFURY_ATTACK             = 25504
+};
+
+// 51533 - Feral Spirit
+class tlpp_spell_sha_feral_spirit : public SpellScript
+{
+    PrepareSpellScript(tlpp_spell_sha_feral_spirit);
+
+public:
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_SHAMAN_FERAL_SPIRIT_SUMMON });
+    }
+
+    void HandleDummy(SpellEffIndex /*effIndex*/)
+    {
+        if (Unit* caster = GetCaster())
+            caster->CastSpell(GetHitUnit(), SPELL_SHAMAN_FERAL_SPIRIT_SUMMON, true);
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(tlpp_spell_sha_feral_spirit::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+    }
+};
+
+// 29264 - Spirit Wolf
+struct tlpp_npc_feral_spirit : public ScriptedAI
+{
+    tlpp_npc_feral_spirit(Creature* p_Creature) : ScriptedAI(p_Creature) { }
+
+    void DamageDealt(Unit* /*victim*/, uint32& /*damage*/, DamageEffectType /*damageType*/) override
+    {
+        if (Unit* owner = me->GetOwner())
+            if (owner->HasAura(SPELL_SHAMAN_FERAL_SPIRIT_ENERGIZE_DUMMY))
+                me->CastSpell(owner, SPELL_SHAMAN_FERAL_SPIRIT_ENERGIZE, true);
+    }
 };
 
 // 188070 - Healing Surge
@@ -121,6 +163,8 @@ public:
 
 void AddCustomShamanSpellScripts()
 {
+    RegisterSpellScript(tlpp_spell_sha_feral_spirit);
+    RegisterCreatureAI(tlpp_npc_feral_spirit);
     RegisterSpellScript(tlpp_spell_sha_healing_surge);
     RegisterAuraScript(tlpp_spell_sha_maelstrom_weapon);
     RegisterAuraScript(tlpp_spell_sha_stormbringer);
