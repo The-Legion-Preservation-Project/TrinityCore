@@ -23,13 +23,13 @@
 
 enum AURA_FLAGS
 {
-    AFLAG_NONE                   = 0x00,
-    AFLAG_NOCASTER               = 0x01,
-    AFLAG_POSITIVE               = 0x02,
-    AFLAG_DURATION               = 0x04,
-    AFLAG_SCALABLE               = 0x08,
-    AFLAG_NEGATIVE               = 0x10,
-    AFLAG_UNK20                  = 0x20
+    AFLAG_NONE                   = 0x0000,
+    AFLAG_NOCASTER               = 0x0001,
+    AFLAG_POSITIVE               = 0x0002,
+    AFLAG_DURATION               = 0x0004,
+    AFLAG_SCALABLE               = 0x0008,
+    AFLAG_NEGATIVE               = 0x0010,
+    AFLAG_UNK20                  = 0x0020
 };
 
 // these are modes, in which aura effect handler may be called
