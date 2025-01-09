@@ -2616,6 +2616,8 @@ struct SpellEffectEntry
     uint32 EffectRadiusIndex[2];
     uint32 ImplicitTarget[2];
     int32 SpellID;
+
+    SpellEffectAttributes GetEffectAttributes() const { return static_cast<SpellEffectAttributes>(EffectAttributes); }
 };
 
 struct SpellEquippedItemsEntry
