@@ -205,6 +205,10 @@ enum QuestFlagsEx : uint32
     QUEST_FLAGS_EX_SUPPRESS_FAREWELL_AUDIO_AFTER_QUEST_ACCEPT           = 0x00400000,
     QUEST_FLAGS_EX_REWARDS_BYPASS_WEEKLY_CAPS_AND_SEASON_TOTAL          = 0x00800000,
     QUEST_FLAGS_EX_IS_WORLD_QUEST                                       = 0x01000000,
+    QUEST_FLAGS_EX_NOT_IGNORABLE                                        = 0x02000000,
+    QUEST_FLAGS_EX_AUTO_PUSH                                            = 0x04000000,
+    QUEST_FLAGS_EX_NO_SPELL_COMPLETE_EFFECTS                            = 0x08000000,
+    QUEST_FLAGS_EX_DO_NOT_TOAST_HONOR_REWARD                            = 0x10000000
 };
 
 enum QuestSpecialFlags
@@ -400,6 +404,12 @@ class TC_GAME_API Quest
 
         bool HasSpecialFlag(uint32 flag) const { return (_specialFlags & flag) != 0; }
         void SetSpecialFlag(uint32 flag) { _specialFlags |= flag; }
+
+        bool IsAutoPush() const { return HasFlagEx(QUEST_FLAGS_EX_AUTO_PUSH); }
+        bool IsWorldQuest() const { return HasFlagEx(QUEST_FLAGS_EX_IS_WORLD_QUEST); }
+
+        // Possibly deprecated flag
+        bool IsUnavailable() const { return HasFlag(QUEST_FLAGS_UNAVAILABLE); }
 
         int32  GetMinLevel() const { return _minLevel; }
         int32  GetQuestLevel() const { return _level; }
