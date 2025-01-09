@@ -52,8 +52,14 @@ class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigge
 
         AreaTriggerAI* AI() { return _ai.get(); }
 
+        bool IsServerSide() const { return _areaTriggerTemplate->IsServerSide; }
+
+        bool IsNeverVisibleFor(WorldObject const* /*seer*/) const override { return IsServerSide(); }
+
     private:
         bool Create(uint32 spellMiscId, Unit* caster, Unit* target, SpellInfo const* spell, Position const& pos, int32 duration, SpellCastVisual spellVisual, ObjectGuid const& castId, AuraEffect const* aurEff);
+        bool CreateServer(Map* map, AreaTriggerTemplate const* areaTriggerTemplate, AreaTriggerServerPosition const& position);
+
     public:
         static AreaTrigger* CreateAreaTrigger(uint32 spellMiscId, Unit* caster, Unit* target, SpellInfo const* spell, Position const& pos, int32 duration, SpellCastVisual spellVisual, ObjectGuid const& castId = ObjectGuid::Empty, AuraEffect const* aurEff = nullptr);
 
@@ -93,6 +99,8 @@ class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigge
         Optional<AreaTriggerOrbitInfo> const& GetCircularMovementInfo() const { return _orbitInfo; }
 
         void UpdateShape();
+
+        bool LoadFromDB(uint32 spawnId, Map* map, bool addToMap, bool allowDuplicate);
 
     protected:
         void _UpdateDuration(int32 newDuration);
@@ -143,6 +151,8 @@ class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigge
         GuidUnorderedSet _insideUnits;
 
         std::unique_ptr<AreaTriggerAI> _ai;
+
+        AreaTriggerTemplate const* _areaTriggerTemplate;
 };
 
 #endif
