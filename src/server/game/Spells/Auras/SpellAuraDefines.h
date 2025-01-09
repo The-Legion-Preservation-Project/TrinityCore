@@ -385,7 +385,7 @@ enum AuraType : uint32
     SPELL_AURA_313                                          = 313,  // Not used in 4.3.4 - related to mounts
     SPELL_AURA_PREVENT_RESURRECTION                         = 314,
     SPELL_AURA_UNDERWATER_WALKING                           = 315,
-    SPELL_AURA_PERIODIC_HASTE                               = 316,  // Not used in 4.3.4 (name from 3.3.5a)
+    SPELL_AURA_PERIODIC_HASTE                               = 316,  // Not used in 7.3.5 (name from 3.3.5a)
     SPELL_AURA_MOD_SPELL_POWER_PCT                          = 317,
     SPELL_AURA_MASTERY                                      = 318,
     SPELL_AURA_MOD_MELEE_HASTE_3                            = 319,
@@ -396,7 +396,7 @@ enum AuraType : uint32
     SPELL_AURA_324                                          = 324,  // spell critical chance (probably by school mask)
     SPELL_AURA_LEARN_PVP_TALENT                             = 325,  // NYI
     SPELL_AURA_PHASE_GROUP                                  = 326,  // Puts the player in all the phases that are in the group with id = miscB
-    SPELL_AURA_327                                          = 327,  // Not used in 4.3.4
+    SPELL_AURA_PHASE_ALWAYS_VISIBLE                         = 327,  // NYI - sets PhaseShiftFlags::AlwaysVisible
     SPELL_AURA_TRIGGER_SPELL_ON_POWER_PCT                   = 328,  // NYI Triggers spell when power goes above (MiscB = 0) or falls below (MiscB = 1) specified percent value (once, not every time condition has meet)
     SPELL_AURA_MOD_POWER_GAIN_PCT                           = 329,  // NYI
     SPELL_AURA_CAST_WHILE_WALKING                           = 330,
@@ -408,7 +408,7 @@ enum AuraType : uint32
     SPELL_AURA_MOUNT_RESTRICTIONS                           = 336,
     SPELL_AURA_MOD_VENDOR_ITEMS_PRICES                      = 337,
     SPELL_AURA_MOD_DURABILITY_LOSS                          = 338,
-    SPELL_AURA_INCREASE_SKILL_GAIN_CHANCE                   = 339,  // NYI
+    SPELL_AURA_INCREASE_SKILL_GAIN_CHANCE                   = 339,  // Not used in 7.3.5
     SPELL_AURA_MOD_RESURRECTED_HEALTH_BY_GUILD_MEMBER       = 340,  // Increases health gained when resurrected by a guild member by X
     SPELL_AURA_MOD_SPELL_CATEGORY_COOLDOWN                  = 341,  // Modifies cooldown of all spells using affected category
     SPELL_AURA_MOD_MELEE_RANGED_HASTE_2                     = 342,
@@ -428,7 +428,7 @@ enum AuraType : uint32
     SPELL_AURA_356                                          = 356,  // Arcane Mage mastery - mod damage based on current mana
     SPELL_AURA_ENABLE_BOSS1_UNIT_FRAME                      = 357,
     SPELL_AURA_WORGEN_ALTERED_FORM                          = 358,
-    SPELL_AURA_359                                          = 359,
+    SPELL_AURA_MOD_HEALING_DONE_VERSUS_AURASTATE            = 359,
     SPELL_AURA_PROC_TRIGGER_SPELL_COPY                      = 360,  // Procs the same spell that caused this proc (Dragonwrath, Tarecgosa's Rest)
     SPELL_AURA_OVERRIDE_AUTOATTACK_WITH_MELEE_SPELL         = 361,
     SPELL_AURA_362                                          = 362,  // Not used in 4.3.4
@@ -468,7 +468,7 @@ enum AuraType : uint32
     SPELL_AURA_TRIGGER_SPELL_ON_POWER_AMOUNT                = 396,  // NYI Triggers spell when health goes above (MiscA = 0) or falls below (MiscA = 1) specified percent value (once, not every time condition has meet)
     SPELL_AURA_397                                          = 397,
     SPELL_AURA_398                                          = 398,
-    SPELL_AURA_399                                          = 399,
+    SPELL_AURA_MOD_TIME_RATE                                = 399,
     SPELL_AURA_MOD_SKILL_2                                  = 400,
     SPELL_AURA_401                                          = 401,
     SPELL_AURA_MOD_OVERRIDE_POWER_DISPLAY                   = 402,
@@ -477,7 +477,7 @@ enum AuraType : uint32
     SPELL_AURA_MOD_RATING_PCT                               = 405,  // NYI
     SPELL_AURA_KEYBOUND_OVERRIDE                            = 406,  // NYI
     SPELL_AURA_MOD_FEAR_2                                   = 407,  // NYI
-    SPELL_AURA_408                                          = 408,
+    SPELL_AURA_SET_ACTION_BUTTON_SPELL_COUNT                = 408,
     SPELL_AURA_CAN_TURN_WHILE_FALLING                       = 409,
     SPELL_AURA_410                                          = 410,
     SPELL_AURA_MOD_MAX_CHARGES                              = 411,
@@ -498,7 +498,7 @@ enum AuraType : uint32
     SPELL_AURA_426                                          = 426,
     SPELL_AURA_SCALE_PLAYER_LEVEL                           = 427,  // NYI
     SPELL_AURA_LINKED_SUMMON                                = 428,
-    SPELL_AURA_429                                          = 429,
+    SPELL_AURA_MOD_SUMMON_DAMAGE                            = 429,  // NYI - increases damage done by all summons, not just controlled pets
     SPELL_AURA_PLAY_SCENE                                   = 430,
     SPELL_AURA_MOD_OVERRIDE_ZONE_PVP_TYPE                   = 431,  // NYI
     SPELL_AURA_432                                          = 432,
@@ -539,11 +539,11 @@ enum AuraType : uint32
     SPELL_AURA_MOD_STAT_BONUS_PCT                           = 467,  // Affects stat gain from all sources except base stats
     SPELL_AURA_TRIGGER_SPELL_ON_HEALTH_PCT                  = 468,  // Triggers spell when health goes above (MiscA = 0) or falls below (MiscA = 1) specified percent value (once, not every time condition has meet)
     SPELL_AURA_SHOW_CONFIRMATION_PROMPT_WITH_DIFFICULTY     = 469,
-    SPELL_AURA_470                                          = 470,
+    SPELL_AURA_MOD_AURA_TIME_RATE_BY_SPELL_LABEL            = 470,  // NYI
     SPELL_AURA_MOD_VERSATILITY                              = 471,
     SPELL_AURA_472                                          = 472,
     SPELL_AURA_PREVENT_DURABILITY_LOSS_FROM_COMBAT          = 473,  // Prevents durability loss from dealing/taking damage
-    SPELL_AURA_474                                          = 474,
+    SPELL_AURA_REPLACE_ITEM_BONUS_TREE                      = 474,  // NYI
     SPELL_AURA_ALLOW_USING_GAMEOBJECTS_WHILE_MOUNTED        = 475,
     SPELL_AURA_MOD_CURRENCY_GAIN_LOOTED                     = 476,
     SPELL_AURA_477                                          = 477,
