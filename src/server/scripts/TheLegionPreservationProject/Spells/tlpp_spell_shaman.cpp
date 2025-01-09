@@ -113,7 +113,7 @@ public:
         return ValidateSpellInfo({ SPELL_SHAMAN_MAELSTROM_WEAPON_POWER });
     }
 
-    void HandleEffectProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
+    void HandleEffectProc(AuraEffect* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
     {
         if (Unit* caster = GetCaster())
             caster->CastSpell(caster, SPELL_SHAMAN_MAELSTROM_WEAPON_POWER, true);
@@ -145,7 +145,7 @@ public:
         return eventInfo.GetDamageInfo()->GetAttackType() == BASE_ATTACK;
     }
 
-    void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
+    void HandleProc(AuraEffect* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
     {
         if (Unit* caster = GetCaster())
         {
