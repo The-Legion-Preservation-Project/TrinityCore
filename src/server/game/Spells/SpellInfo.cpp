@@ -2401,7 +2401,8 @@ void SpellInfo::_LoadAuraState()
 
         if (GetSchoolMask() & SPELL_SCHOOL_MASK_FROST)
             for (SpellEffectInfo const* effect : _effects)
-                if (effect && (effect->IsAura(SPELL_AURA_MOD_STUN) || effect->IsAura(SPELL_AURA_MOD_ROOT)))
+                // TheLegionPreservationProject: fix frost nova AURA_STATE_FROZEN, future fix 8a4e1119ac21e2d1112d1717337597fe073e495f
+                if (effect && (effect->IsAura(SPELL_AURA_MOD_STUN) || effect->IsAura(SPELL_AURA_MOD_ROOT) || effect->IsAura(SPELL_AURA_MOD_ROOT_2)))
                     return AURA_STATE_FROZEN;
 
         switch (Id)
