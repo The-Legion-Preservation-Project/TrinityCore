@@ -36,4 +36,4 @@ INSERT INTO `spell_proc` (`SpellId`,`SchoolMask`,`SpellFamilyName`,`SpellFamilyM
 (135286, 0, 7, 0x800, 0x0, 0x0, 0x0, 0x10, 1, 2, 0x403, 0x8, 0, 0, 0, 0, 0),            -- Tooth and Claw    (135286), proc on Maul
 (155578, 0, 7, 0x0, 0x40, 0x0, 0x0, 0x10, 1, 2, 0x403, 0, 0, 0, 0, 0, 0),               -- Guardian Of Elune (155578), proc on Mangle
 (203974, 0, 7, 0x0, 0x0, 0x08000000, 0x40000000, 0x10, 1, 1, 0x403, 0, 0, 0, 0, 0, 0),  -- Earthwarden       (203974), proc on Thrash
-(48484,  1, 7, 0x1000, 0, 0, 0, 0x10, 1, 1, 0x403, 0, 0, 0, 100, 0, 0),                 -- Infected Wounds   (48484) , proc on Rake
+(48484,  1, 7, 0x1000, 0, 0, 0, 0x10, 1, 1, 0x403, 0, 0, 0, 100, 0, 0);                 -- Infected Wounds   (48484) , proc on Rake

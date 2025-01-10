@@ -126,9 +126,9 @@ bool Conversation::Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry,
     SetUInt32Value(CONVERSATION_LAST_LINE_END_TIME, conversationTemplate->LastLineEndTime);
     _duration = conversationTemplate->LastLineEndTime;
 
-    for (ConversationActorTemplate const* actor : conversationTemplate->Actors)
+    for (uint16 actorIndex = 0; actorIndex < conversationTemplate->Actors.size(); ++actorIndex)
     {
-        if (actor)
+        if (ConversationActorTemplate const* actor = conversationTemplate->Actors[actorIndex])
         {
             ConversationDynamicFieldActor actorField;
             actorField.ActorTemplate.CreatureId = actor->CreatureId;
