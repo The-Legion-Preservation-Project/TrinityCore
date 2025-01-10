@@ -3755,6 +3755,7 @@ std::vector<SpellPowerCost> SpellInfo::CalcPowerCost(Unit const* caster, SpellSc
 
         // Base powerCost
         int32 powerCost = power->ManaCost;
+        bool initiallyNegative = powerCost < 0;
         // PCT cost from total amount
         if (power->PowerCostPct)
         {
@@ -3877,6 +3878,10 @@ std::vector<SpellPowerCost> SpellInfo::CalcPowerCost(Unit const* caster, SpellSc
             healthCost += powerCost;
             continue;
         }
+
+        // power cost cannot become negative if initially positive
+        if (initiallyNegative != (powerCost < 0))
+            powerCost = 0;
 
         bool found = false;
         for (SpellPowerCost& cost : costs)
