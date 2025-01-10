@@ -5091,13 +5091,6 @@ void Player::ApplyRatingMod(CombatRating combatRating, int32 value, bool apply)
 void Player::UpdateRating(CombatRating cr)
 {
     int32 amount = m_baseRatingValue[cr];
-    // Apply bonus from SPELL_AURA_MOD_RATING_FROM_STAT
-    // stat used stored in miscValueB for this aura
-    AuraEffectList const& modRatingFromStat = GetAuraEffectsByType(SPELL_AURA_MOD_RATING_FROM_STAT);
-    for (AuraEffect const* aurEff : modRatingFromStat)
-        if (aurEff->GetMiscValue() & (1 << cr))
-            amount += int32(CalculatePct(GetStat(Stats(aurEff->GetMiscValueB())), aurEff->GetAmount()));
-
     AuraEffectList const& modRatingPct = GetAuraEffectsByType(SPELL_AURA_MOD_RATING_PCT);
     for (AuraEffect const* aurEff : modRatingPct)
         if (aurEff->GetMiscValue() & (1 << cr))
@@ -23989,9 +23982,6 @@ void Player::AddComboPoints(int8 count, Spell* spell)
 
     int8 comboPoints = spell ? spell->m_comboPointGain : GetPower(POWER_COMBO_POINTS);
 
-    // without combo points lost (duration checked in aura)
-    RemoveAurasByType(SPELL_AURA_RETAIN_COMBO_POINTS);
-
     comboPoints += count;
 
     if (comboPoints > 5)
@@ -24021,9 +24011,6 @@ void Player::GainSpellComboPoints(int8 count)
 
 void Player::ClearComboPoints()
 {
-    // without combopoints lost (duration checked in aura)
-    RemoveAurasByType(SPELL_AURA_RETAIN_COMBO_POINTS);
-
     SetPower(POWER_COMBO_POINTS, 0);
 }
 

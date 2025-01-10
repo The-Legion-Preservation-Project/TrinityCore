@@ -1785,16 +1785,6 @@ void Unit::CalcAbsorbResist(DamageInfo& damageInfo)
 
     // Ignore Absorption Auras
     float auraAbsorbMod(GetMaxPositiveAuraModifierByMiscMask(SPELL_AURA_MOD_TARGET_ABSORB_SCHOOL, damageInfo.GetSchoolMask()));
-    auraAbsorbMod = std::max(auraAbsorbMod, static_cast<float>(GetMaxPositiveAuraModifier(SPELL_AURA_MOD_TARGET_ABILITY_ABSORB_SCHOOL, [&damageInfo](AuraEffect const* aurEff) -> bool
-    {
-        if (!(aurEff->GetMiscValue() & damageInfo.GetSchoolMask()))
-            return false;
-
-        if (!aurEff->IsAffectingSpell(damageInfo.GetSpellInfo()))
-            return false;
-
-        return true;
-    })));
 
     RoundToInterval(auraAbsorbMod, 0.0f, 100.0f);
 
@@ -2833,11 +2823,6 @@ float Unit::GetUnitCriticalChance(WeaponAttackType attackType, Unit const* victi
         chance += victim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_RANGED_CRIT_CHANCE);
     else
         chance += victim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_MELEE_CRIT_CHANCE);
-
-    chance += victim->GetTotalAuraModifier(SPELL_AURA_MOD_CRIT_CHANCE_FOR_CASTER, [this](AuraEffect const* aurEff) -> bool
-    {
-        return aurEff->GetCasterGUID() == GetGUID();
-    });
 
     chance += victim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_SPELL_AND_WEAPON_CRIT_CHANCE);
 
@@ -6976,9 +6961,6 @@ int32 Unit::SpellBaseDamageBonusDone(SpellSchoolMask schoolMask) const
             }
         }
 
-        // ... and attack power
-        DoneAdvertisedBenefit += static_cast<int32>(CalculatePct(GetTotalAttackPowerValue(BASE_ATTACK), GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_SPELL_DAMAGE_OF_ATTACK_POWER, schoolMask)));
-
     }
 
     return DoneAdvertisedBenefit;
@@ -7109,11 +7091,9 @@ float Unit::GetUnitSpellCriticalChance(Unit* victim, SpellInfo const* spellProto
     // for this types the bonus was already added in GetUnitCriticalChance, do not add twice
     if (spellProto->DmgClass != SPELL_DAMAGE_CLASS_MELEE && spellProto->DmgClass != SPELL_DAMAGE_CLASS_RANGED)
     {
-        crit_chance += victim->GetTotalAuraModifier(SPELL_AURA_MOD_CRIT_CHANCE_FOR_CASTER, [this, spellProto](AuraEffect const* aurEff) -> bool
+        crit_chance += victim->GetTotalAuraModifier(SPELL_AURA_MOD_CRIT_CHANCE_FOR_CASTER_WITH_ABILITIES, [this, spellProto](AuraEffect const* aurEff) -> bool
         {
-            if (aurEff->GetCasterGUID() == GetGUID() && aurEff->IsAffectingSpell(spellProto))
-                return true;
-            return false;
+            return aurEff->GetCasterGUID() == GetGUID() && aurEff->IsAffectingSpell(spellProto);
         });
     }
 
@@ -7392,12 +7372,6 @@ int32 Unit::SpellBaseHealingBonusDone(SpellSchoolMask schoolMask) const
             Stats usedStat = Stats((*i)->GetSpellEffectInfo()->MiscValue);
             advertisedBenefit += int32(CalculatePct(GetStat(usedStat), (*i)->GetAmount()));
         }
-
-        // ... and attack power
-        AuraEffectList const& mHealingDonebyAP = GetAuraEffectsByType(SPELL_AURA_MOD_SPELL_HEALING_OF_ATTACK_POWER);
-        for (AuraEffectList::const_iterator i = mHealingDonebyAP.begin(); i != mHealingDonebyAP.end(); ++i)
-            if ((*i)->GetMiscValue() & schoolMask)
-                advertisedBenefit += int32(CalculatePct(GetTotalAttackPowerValue(BASE_ATTACK), (*i)->GetAmount()));
     }
     return advertisedBenefit;
 }

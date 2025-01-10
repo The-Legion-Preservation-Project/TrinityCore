@@ -134,19 +134,6 @@ bool Player::UpdateStats(Stats stat)
 
     UpdateSpellDamageAndHealingBonus();
     UpdateManaRegen();
-
-    // Update ratings in exist SPELL_AURA_MOD_RATING_FROM_STAT and only depends from stat
-    uint32 mask = 0;
-    AuraEffectList const& modRatingFromStat = GetAuraEffectsByType(SPELL_AURA_MOD_RATING_FROM_STAT);
-    for (AuraEffectList::const_iterator i = modRatingFromStat.begin(); i != modRatingFromStat.end(); ++i)
-        if (Stats((*i)->GetMiscValueB()) == stat)
-            mask |= (*i)->GetMiscValue();
-    if (mask)
-    {
-        for (uint32 rating = 0; rating < MAX_COMBAT_RATING; ++rating)
-            if (mask & (1 << rating))
-                ApplyRatingMod(CombatRating(rating), 0, true);
-    }
     return true;
 }
 
@@ -255,15 +242,6 @@ void Player::UpdateArmor()
     float value = GetFlatModifierValue(unitMod, BASE_VALUE);    // base armor (from items)
     value *= GetPctModifierValue(unitMod, BASE_PCT);           // armor percent from items
     value += GetFlatModifierValue(unitMod, TOTAL_VALUE);
-
-    //add dynamic flat mods
-    AuraEffectList const& mResbyIntellect = GetAuraEffectsByType(SPELL_AURA_MOD_RESISTANCE_OF_STAT_PERCENT);
-    for (AuraEffectList::const_iterator i = mResbyIntellect.begin(); i != mResbyIntellect.end(); ++i)
-    {
-        if ((*i)->GetMiscValue() & SPELL_SCHOOL_MASK_NORMAL)
-            value += CalculatePct(GetStat(Stats((*i)->GetMiscValueB())), (*i)->GetAmount());
-    }
-
     value *= GetPctModifierValue(unitMod, TOTAL_PCT);
 
     SetArmor(int32(value));
@@ -360,15 +338,6 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
     float attPowerMod = GetFlatModifierValue(unitMod, TOTAL_VALUE);
     float attPowerMultiplier = GetPctModifierValue(unitMod, TOTAL_PCT) - 1.0f;
 
-    //add dynamic flat mods
-    if (!ranged)
-    {
-        AuraEffectList const& mAPbyArmor = GetAuraEffectsByType(SPELL_AURA_MOD_ATTACK_POWER_OF_ARMOR);
-        for (AuraEffectList::const_iterator iter = mAPbyArmor.begin(); iter != mAPbyArmor.end(); ++iter)
-            // always: ((*i)->GetModifier()->m_miscvalue == 1 == SPELL_SCHOOL_MASK_NORMAL)
-            attPowerMod += int32(GetArmor() / (*iter)->GetAmount());
-    }
-
     if (ranged)
     {
         SetRangedAttackPower(int32(base_attPower));
@@ -398,9 +367,7 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
             if (CanDualWield() || offhand->GetTemplate()->GetFlags3() & ITEM_FLAG3_ALWAYS_ALLOW_DUAL_WIELD)
                 UpdateDamagePhysical(OFF_ATTACK);
 
-        if (HasAuraType(SPELL_AURA_MOD_SPELL_DAMAGE_OF_ATTACK_POWER) ||
-            HasAuraType(SPELL_AURA_MOD_SPELL_HEALING_OF_ATTACK_POWER) ||
-            HasAuraType(SPELL_AURA_OVERRIDE_SPELL_POWER_BY_AP_PCT))
+        if (HasAuraType(SPELL_AURA_OVERRIDE_SPELL_POWER_BY_AP_PCT))
             UpdateSpellDamageAndHealingBonus();
 
         if (pet && pet->IsPetGhoul()) // At melee attack power change for DK pet
