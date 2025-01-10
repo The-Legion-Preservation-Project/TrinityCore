@@ -128,7 +128,7 @@ public:
     {
         for (std::size_t i = 0; i < _sortCount; ++i)
         {
-            int32 ordering = CompareColumns(_sorts[i].SortOrder, left, right);
+            int64 ordering = CompareColumns(_sorts[i].SortOrder, left, right);
             if (ordering != 0)
                 return (ordering < 0) == !_sorts[i].ReverseSort;
         }
@@ -168,7 +168,7 @@ private:
         return 1;
     }
 
-    int32 CompareColumns(AuctionHouseSortOrder column, AuctionPosting const* left, AuctionPosting const* right) const
+    int64 CompareColumns(AuctionHouseSortOrder column, AuctionPosting const* left, AuctionPosting const* right) const
     {
         switch (column)
         {
