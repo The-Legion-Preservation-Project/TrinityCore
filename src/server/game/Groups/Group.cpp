@@ -1556,7 +1556,7 @@ void Group::UpdatePlayerOutOfRange(Player* player)
 
     WorldPackets::Party::PartyMemberFullState packet;
     packet.Initialize(player);
-    packet.Write()
+    packet.Write();
 
     Player* member;
     for (GroupReference* itr = GetFirstMember(); itr != nullptr; itr = itr->next())
