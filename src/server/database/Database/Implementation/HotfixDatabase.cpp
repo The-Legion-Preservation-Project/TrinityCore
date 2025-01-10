@@ -42,6 +42,15 @@ void HotfixDatabaseConnection::DoPrepareStatements()
     PREPARE_MAX_ID_STMT(HOTFIX_SEL_ACHIEVEMENT, "SELECT MAX(ID) + 1 FROM achievement", CONNECTION_SYNCH);
     PREPARE_LOCALE_STMT(HOTFIX_SEL_ACHIEVEMENT, "SELECT ID, Title_lang, Description_lang, Reward_lang FROM achievement_locale WHERE (`VerifiedBuild` > 0) = ? AND locale = ?", CONNECTION_SYNCH);
 
+    // AdventureJournal.db2
+    PrepareStatement(HOTFIX_SEL_ADVENTURE_JOURNAL, "SELECT ID, Name, Description, ButtonText, RewardDescription, ContinueDescription, TextureFileDataId, "
+        "ItemId, LfgDungeonId, QuestId, BattleMasterListId, BonusPlayerConditionId1, BonusPlayerConditionId2, CurrencyType, WorldMapAreaId, Type, "
+        "Flags, ButtonActionType, PriorityMin, PriorityMax, BonusValue1, BonusValue2, CurrencyQuantity, PlayerConditionId, ItemQuantity "
+        " FROM adventure_journal WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
+    PREPARE_MAX_ID_STMT(HOTFIX_SEL_ADVENTURE_JOURNAL, "SELECT MAX(ID) + 1 FROM adventure_journal", CONNECTION_SYNCH);
+    PREPARE_LOCALE_STMT(HOTFIX_SEL_ADVENTURE_JOURNAL, "SELECT ID, Name_lang, Description_lang, ButtonText_lang, RewardDescription_lang, "
+        "ContinueDescription_lang FROM adventure_journal_locale WHERE (`VerifiedBuild` > 0) = ? AND locale = ?", CONNECTION_SYNCH);
+
     // AnimationData.db2
     PrepareStatement(HOTFIX_SEL_ANIMATION_DATA, "SELECT ID, Flags, Fallback, BehaviorID, BehaviorTier FROM animation_data WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
     PREPARE_MAX_ID_STMT(HOTFIX_SEL_ANIMATION_DATA, "SELECT MAX(ID) + 1 FROM animation_data", CONNECTION_SYNCH);

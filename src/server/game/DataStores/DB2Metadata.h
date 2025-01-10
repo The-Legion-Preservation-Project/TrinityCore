@@ -71,13 +71,13 @@ struct AdventureJournalMeta
     {
         static DB2MetaField const fields[22] =
         {
+            { FT_STRING, 1, true },
             { FT_STRING, 1, false },
             { FT_STRING, 1, false },
             { FT_STRING, 1, false },
             { FT_STRING, 1, false },
-            { FT_STRING, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
@@ -91,8 +91,8 @@ struct AdventureJournalMeta
             { FT_BYTE, 1, false },
             { FT_BYTE, 2, false },
             { FT_BYTE, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
         };
 
         static DB2Meta instance(1115949, -1, 22, 0xB2FFA8DD, fields, -1);
