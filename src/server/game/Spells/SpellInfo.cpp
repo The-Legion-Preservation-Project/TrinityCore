@@ -438,7 +438,8 @@ bool SpellEffectInfo::IsAreaAuraEffect() const
         Effect == SPELL_EFFECT_APPLY_AREA_AURA_FRIEND   ||
         Effect == SPELL_EFFECT_APPLY_AREA_AURA_ENEMY    ||
         Effect == SPELL_EFFECT_APPLY_AREA_AURA_PET      ||
-        Effect == SPELL_EFFECT_APPLY_AREA_AURA_OWNER)
+        Effect == SPELL_EFFECT_APPLY_AREA_AURA_OWNER    ||
+        Effect == SPELL_EFFECT_APPLY_AREA_AURA_SUMMONS)
         return true;
     return false;
 }
@@ -457,7 +458,7 @@ bool SpellEffectInfo::IsFarDestTargetEffect() const
 
 bool SpellEffectInfo::IsUnitOwnedAuraEffect() const
 {
-    return IsAreaAuraEffect() || Effect == SPELL_EFFECT_APPLY_AURA || Effect == SPELL_EFFECT_APPLY_AURA_ON_PET || Effect == SPELL_EFFECT_202;
+    return IsAreaAuraEffect() || Effect == SPELL_EFFECT_APPLY_AURA || Effect == SPELL_EFFECT_APPLY_AURA_ON_PET;
 }
 
 int32 SpellEffectInfo::CalcValue(Unit const* caster /*= nullptr*/, int32 const* bp /*= nullptr*/, Unit const* target /*= nullptr*/, float* variance /*= nullptr*/, uint32 castItemId /*= 0*/, int32 itemLevel /*= -1*/) const
@@ -724,7 +725,7 @@ ExpectedStatType SpellEffectInfo::GetScalingExpectedStat() const
         case SPELL_EFFECT_APPLY_AREA_AURA_ENEMY:
         case SPELL_EFFECT_APPLY_AREA_AURA_OWNER:
         case SPELL_EFFECT_APPLY_AURA_ON_PET:
-        case SPELL_EFFECT_202:
+        case SPELL_EFFECT_APPLY_AREA_AURA_SUMMONS:
             switch (ApplyAuraName)
             {
                 case SPELL_AURA_PERIODIC_DAMAGE:
