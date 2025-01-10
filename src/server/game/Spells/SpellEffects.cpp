@@ -2435,6 +2435,9 @@ void Spell::EffectEnchantItemTmp(SpellEffIndex effIndex)
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
         return;
 
+    if (!itemTarget)
+        return;
+
     Player* player = m_caster->ToPlayer();
     if (!player)
         return;
