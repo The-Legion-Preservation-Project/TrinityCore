@@ -609,7 +609,7 @@ bool Unit::IsWithinMeleeRange(Unit const* obj) const
     float dz = GetPositionZMinusOffset() - obj->GetPositionZMinusOffset();
     float distsq = dx*dx + dy*dy + dz*dz;
 
-    float maxdist = GetMeleeRange(obj);
+    float maxdist = GetMeleeRange(obj) + GetTotalAuraModifier(SPELL_AURA_MOD_AUTOATTACK_RANGE);
 
     return distsq <= maxdist * maxdist;
 }
