@@ -306,7 +306,10 @@ void AreaTrigger::_UpdateDuration(int32 newDuration)
     _duration = newDuration;
 
     // should be sent in object create packets only
-    m_uint32Values[AREATRIGGER_DURATION] = _duration;
+    DoWithSuppressingObjectUpdates([&]()
+    {
+        m_uint32Values[AREATRIGGER_DURATION] = _duration;
+    });
 }
 
 float AreaTrigger::GetProgress() const
@@ -697,7 +700,10 @@ void AreaTrigger::InitSplines(std::vector<G3D::Vector3> splinePoints, uint32 tim
     _spline->initLengths();
 
     // should be sent in object create packets only
-    m_uint32Values[AREATRIGGER_TIME_TO_TARGET] = timeToTarget;
+    DoWithSuppressingObjectUpdates([&]()
+    {
+        m_uint32Values[AREATRIGGER_TIME_TO_TARGET] = timeToTarget;
+    });
 
     if (IsInWorld())
     {
@@ -733,7 +739,10 @@ void AreaTrigger::InitOrbit(AreaTriggerOrbitInfo const& cmi, uint32 timeToTarget
     ASSERT(cmi.Center.is_initialized() || cmi.PathTarget.is_initialized());
 
     // should be sent in object create packets only
-    m_uint32Values[AREATRIGGER_TIME_TO_TARGET] = timeToTarget;
+    DoWithSuppressingObjectUpdates([&]()
+    {
+        m_uint32Values[AREATRIGGER_TIME_TO_TARGET] = timeToTarget;
+    });
 
     _orbitInfo = cmi;
 

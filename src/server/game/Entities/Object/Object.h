@@ -338,6 +338,18 @@ class TC_GAME_API Object
         uint32 GetUpdateFieldData(Player const* target, uint32*& flags) const;
         uint32 GetDynamicUpdateFieldData(Player const* target, uint32*& flags) const;
 
+        template<typename Action>
+        void DoWithSuppressingObjectUpdates(Action&& action)
+        {
+            bool wasUpdatedBeforeAction = m_objectUpdated;
+            action();
+            if (m_objectUpdated && !wasUpdatedBeforeAction)
+            {
+                RemoveFromObjectUpdate();
+                m_objectUpdated = false;
+            }
+        }
+
         void BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags) const;
         virtual void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const;
         virtual void BuildDynamicValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const;

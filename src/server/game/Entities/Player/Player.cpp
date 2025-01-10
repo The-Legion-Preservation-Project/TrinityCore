@@ -1911,7 +1911,13 @@ void Player::Regenerate(Powers power)
     if (m_regenTimerCount >= 2000)
         SetPower(power, curValue);
     else
-        UpdateUInt32Value(UNIT_FIELD_POWER + powerIndex, curValue);
+    {
+        // throttle packet sending
+        DoWithSuppressingObjectUpdates([&]()
+        {
+            UpdateUInt32Value(UNIT_FIELD_POWER + powerIndex, curValue);
+        });
+    }
 }
 
 void Player::RegenerateHealth()
