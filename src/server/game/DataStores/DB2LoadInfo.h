@@ -829,6 +829,22 @@ struct ChatChannelsLoadInfo
     }
 };
 
+struct ChrClassUiDisplayLoadInfo
+{
+    static DB2LoadInfo const* Instance()
+    {
+        static DB2FieldMeta const fields[] =
+        {
+            { true, FT_INT, "ID" },
+            { false, FT_BYTE, "ChrClassesID" },
+            { true, FT_INT, "AdvGuidePlayerConditionID" },
+            { true, FT_INT, "SplashPlayerConditionID" },
+        };
+        static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, ChrClassUIDisplayMeta::Instance(), HOTFIX_SEL_CHR_CLASS_UI_DISPLAY);
+        return &loadInfo;
+    }
+};
+
 struct ChrClassesLoadInfo
 {
     static DB2LoadInfo const* Instance()

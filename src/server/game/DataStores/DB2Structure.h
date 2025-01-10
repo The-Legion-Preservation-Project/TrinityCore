@@ -484,6 +484,14 @@ struct ChatChannelsEntry
     int8 FactionGroup;
 };
 
+struct ChrClassUIDisplayEntry
+{
+    int32 ID;
+    uint8 ChrClassesID;
+    int32 AdvGuidePlayerConditionID;
+    int32 SplashPlayerConditionID;
+};
+
 struct ChrClassesEntry
 {
     char const* PetNameToken;

@@ -24,6 +24,10 @@
 
 void WorldSession::HandleAdventureJournalOpenQuest(WorldPackets::AdventureJournal::AdventureJournalOpenQuest& openQuest)
 {
+    if (ChrClassUIDisplayEntry const* uiDisplay = sDB2Manager.GetUiDisplayForClass(Classes(_player->getClass())))
+        if (!_player->MeetPlayerCondition(uiDisplay->AdvGuidePlayerConditionID))
+            return;
+
     AdventureJournalEntry const* adventureJournal = sAdventureJournalStore.LookupEntry(openQuest.AdventureJournalID);
     if (!adventureJournal)
         return;

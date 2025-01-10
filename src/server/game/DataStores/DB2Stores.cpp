@@ -78,6 +78,7 @@ DB2Storage<CharTitlesEntry>                     sCharTitlesStore("CharTitles.db2
 DB2Storage<CharacterLoadoutEntry>               sCharacterLoadoutStore("CharacterLoadout.db2", CharacterLoadoutLoadInfo::Instance());
 DB2Storage<CharacterLoadoutItemEntry>           sCharacterLoadoutItemStore("CharacterLoadoutItem.db2", CharacterLoadoutItemLoadInfo::Instance());
 DB2Storage<ChatChannelsEntry>                   sChatChannelsStore("ChatChannels.db2", ChatChannelsLoadInfo::Instance());
+DB2Storage<ChrClassUIDisplayEntry>              sChrClassUIDisplayStore("ChrClassUIDisplay.db2", ChrClassUiDisplayLoadInfo::Instance());
 DB2Storage<ChrClassesEntry>                     sChrClassesStore("ChrClasses.db2", ChrClassesLoadInfo::Instance());
 DB2Storage<ChrClassesXPowerTypesEntry>          sChrClassesXPowerTypesStore("ChrClassesXPowerTypes.db2", ChrClassesXPowerTypesLoadInfo::Instance());
 DB2Storage<ChrRacesEntry>                       sChrRacesStore("ChrRaces.db2", ChrRacesLoadInfo::Instance());
@@ -357,6 +358,7 @@ namespace
     ArtifactPowersContainer _artifactPowers;
     ArtifactPowerLinksContainer _artifactPowerLinks;
     ArtifactPowerRanksContainer _artifactPowerRanks;
+    std::array<ChrClassUIDisplayEntry const*, MAX_CLASSES> _uiDisplayByClass;
     std::set<std::tuple<uint8, uint8, uint32>> _characterFacialHairStyles;
     std::multimap<std::tuple<uint8, uint8, CharBaseSectionVariation>, CharSectionsEntry const*> _charSections;
     CharStartOutfitContainer _charStartOutfits;
@@ -558,6 +560,7 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
     LOAD_DB2(sCharacterLoadoutStore);
     LOAD_DB2(sCharacterLoadoutItemStore);
     LOAD_DB2(sChatChannelsStore);
+    LOAD_DB2(sChrClassUIDisplayStore);
     LOAD_DB2(sChrClassesStore);
     LOAD_DB2(sChrClassesXPowerTypesStore);
     LOAD_DB2(sChrRacesStore);
@@ -821,6 +824,12 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
 
     ASSERT(BATTLE_PET_SPECIES_MAX_ID >= sBattlePetSpeciesStore.GetNumRows(),
         "BATTLE_PET_SPECIES_MAX_ID (%d) must be equal to or greater than %u", BATTLE_PET_SPECIES_MAX_ID, sBattlePetSpeciesStore.GetNumRows());
+
+    for (ChrClassUIDisplayEntry const* uiDisplay : sChrClassUIDisplayStore)
+    {
+        ASSERT(uiDisplay->ChrClassesID < MAX_CLASSES);
+        _uiDisplayByClass[uiDisplay->ChrClassesID] = uiDisplay;
+    }
 
     for (CharacterFacialHairStylesEntry const* characterFacialStyle : sCharacterFacialHairStylesStore)
         _characterFacialHairStyles.emplace(characterFacialStyle->RaceID, characterFacialStyle->SexID, characterFacialStyle->VariationID);
@@ -1392,6 +1401,12 @@ char const* DB2Manager::GetBroadcastTextValue(BroadcastTextEntry const* broadcas
         return broadcastText->Text[locale];
 
     return broadcastText->Text[DEFAULT_LOCALE];
+}
+
+ChrClassUIDisplayEntry const* DB2Manager::GetUiDisplayForClass(Classes unitClass) const
+{
+    ASSERT(unitClass < MAX_CLASSES);
+    return _uiDisplayByClass[unitClass];
 }
 
 bool DB2Manager::HasCharacterFacialHairStyle(uint8 race, uint8 gender, uint8 variationId) const
