@@ -36,9 +36,7 @@ Conversation::Conversation() : WorldObject(false), _duration(0)
     _dynamicValuesCount = CONVERSATION_DYNAMIC_END;
 }
 
-Conversation::~Conversation()
-{
-}
+Conversation::~Conversation() = default;
 
 void Conversation::AddToWorld()
 {
@@ -73,7 +71,10 @@ void Conversation::Update(uint32 diff)
     if (GetDuration() > int32(diff))
         _duration -= diff;
     else
+    {
         Remove(); // expired
+        return;
+    }
 
     WorldObject::Update(diff);
 }
@@ -114,6 +115,7 @@ bool Conversation::Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry,
 
     SetMap(map);
     Relocate(pos);
+    RelocateStationaryPosition(pos);
 
     Object::_Create(ObjectGuid::Create<HighGuid::Conversation>(GetMapId(), conversationEntry, lowGuid));
     PhasingHandler::InheritPhaseShift(this, creator);
@@ -124,13 +126,14 @@ bool Conversation::Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry,
     SetUInt32Value(CONVERSATION_LAST_LINE_END_TIME, conversationTemplate->LastLineEndTime);
     _duration = conversationTemplate->LastLineEndTime;
 
-    for (uint16 actorIndex = 0; actorIndex < conversationTemplate->Actors.size(); ++actorIndex)
+    for (ConversationActorTemplate const* actor : conversationTemplate->Actors)
     {
-        if (ConversationActorTemplate const* actor = conversationTemplate->Actors[actorIndex])
+        if (actor)
         {
             ConversationDynamicFieldActor actorField;
             actorField.ActorTemplate.CreatureId = actor->CreatureId;
             actorField.ActorTemplate.CreatureModelId = actor->CreatureModelId;
+            actorField.ActorTemplate.Id = actor->Id;
             actorField.Type = ConversationDynamicFieldActor::ActorType::CreatureActor;
             SetDynamicStructuredValue(CONVERSATION_DYNAMIC_FIELD_ACTORS, actorIndex, &actorField);
         }
@@ -138,7 +141,7 @@ bool Conversation::Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry,
 
     for (uint16 actorIndex = 0; actorIndex < conversationTemplate->ActorGuids.size(); ++actorIndex)
     {
-        ObjectGuid::LowType const& actorGuid = conversationTemplate->ActorGuids[actorIndex];
+        ObjectGuid::LowType actorGuid = conversationTemplate->ActorGuids[actorIndex];
         if (!actorGuid)
             continue;
 
