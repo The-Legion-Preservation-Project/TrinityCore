@@ -7382,7 +7382,7 @@ void Spell::DoAllEffectOnLaunchTarget(TargetInfo& targetInfo, float* multiplier)
         }
     }
 
-    targetInfo.crit = m_caster->IsSpellCrit(unit, m_spellInfo, m_spellSchoolMask, m_attackType);
+    targetInfo.crit = m_caster->IsSpellCrit(unit, this, nullptr, m_spellSchoolMask, m_attackType);
 }
 
 SpellCastResult Spell::CanOpenLock(uint32 effIndex, uint32 lockId, SkillType& skillId, int32& reqSkillValue, int32& skillValue)
@@ -7671,6 +7671,18 @@ void Spell::CallScriptAfterHitHandlers()
             (*hookItr).Call(*scritr);
 
         (*scritr)->_FinishScriptCall();
+    }
+}
+
+void Spell::CallScriptCalcCritChanceHandlers(Unit* victim, float& critChance)
+{
+    for (SpellScript* loadedScript : m_loadedScripts)
+    {
+        loadedScript->_PrepareScriptCall(SPELL_SCRIPT_HOOK_CALC_CRIT_CHANCE);
+        for (SpellScript::OnCalcCritChanceHandler const& hook : loadedScript->OnCalcCritChance)
+            hook.Call(loadedScript, victim, critChance);
+
+        loadedScript->_FinishScriptCall();
     }
 }
 
