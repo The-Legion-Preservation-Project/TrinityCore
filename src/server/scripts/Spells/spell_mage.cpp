@@ -74,6 +74,80 @@ enum MiscSpells
     SPELL_MAGE_CHILLED                           = 205708
 };
 
+// 44425 - Arcane Barrage
+class spell_mage_arcane_barrage : public SpellScript
+{
+    PrepareSpellScript(spell_mage_arcane_barrage);
+
+    // bool Validate(SpellInfo const* /*spellInfo*/) override
+    // {
+    //     return ValidateSpellInfo({ SPELL_MAGE_ARCANE_BARRAGE_R3 });
+    // }
+
+    void HandleEffectHitTarget(SpellEffIndex /*effIndex*/)
+    {
+        // Consume all arcane charges; for each charge add 60% additional damage
+        Unit* caster = GetCaster();
+        double charges = double(-caster->ConsumeAllPower(POWER_ARCANE_CHARGES));
+
+        double currDamage = double(GetHitDamage());
+        double extraDamage = (charges * 0.6) * currDamage;
+        SetHitDamage(int32(currDamage + extraDamage));
+
+        // if (Aura const* aura = caster->GetAura(SPELL_MAGE_ARCANE_BARRAGE_R3))
+        // {
+        //     if (AuraEffect const* auraEffect = aura->GetEffect(EFFECT_0))
+        //     {
+        //         double pct = charges * (double(auraEffect->GetAmount()) * 0.01);
+        //         int32 maxMana = caster->GetMaxPower(POWER_MANA);
+        //
+        //         int32 extraMana = CalculatePct(double(maxMana), pct);
+        //         caster->ModifyPower(POWER_MANA, extraMana);
+        //     }
+        // }
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_mage_arcane_barrage::HandleEffectHitTarget, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+    }
+};
+
+// 1449 - Arcane Explosion
+class spell_mage_arcane_explosion : public SpellScript
+{
+    PrepareSpellScript(spell_mage_arcane_explosion);
+
+    void PreventEnergize(SpellEffIndex effIndex)
+    {
+        PreventHitDefaultEffect(effIndex);
+    }
+
+    void HandleTargetHit(SpellEffIndex /*effIndex*/)
+    {
+        if (_once)
+        {
+            if (SpellEffectInfo const* effInfo = GetEffectInfo(EFFECT_0))
+            {
+                Unit* caster = GetCaster();
+                int32 value = effInfo->CalcValue(caster);
+                caster->ModifyPower(Powers(effInfo->MiscValue), value);
+            }
+            _once = false;
+        }
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_mage_arcane_explosion::PreventEnergize, EFFECT_0, SPELL_EFFECT_ENERGIZE);
+        OnEffectHitTarget += SpellEffectFn(spell_mage_arcane_explosion::PreventEnergize, EFFECT_2, SPELL_EFFECT_ENERGIZE);
+        OnEffectHitTarget += SpellEffectFn(spell_mage_arcane_explosion::HandleTargetHit, EFFECT_1, SPELL_EFFECT_SCHOOL_DAMAGE);
+    }
+
+private:
+    bool _once = true;
+};
+
 // 235313 - Blazing Barrier
 class spell_mage_blazing_barrier : public AuraScript
 {
@@ -860,6 +934,8 @@ class spell_mage_water_elemental_freeze : public SpellScript
 
 void AddSC_mage_spell_scripts()
 {
+    RegisterSpellScript(spell_mage_arcane_barrage);
+    RegisterSpellScript(spell_mage_arcane_explosion);
     RegisterAuraScript(spell_mage_blazing_barrier);
     RegisterAuraScript(spell_mage_burning_determination);
     RegisterSpellAndAuraScriptPair(spell_mage_cauterize, spell_mage_cauterize_AuraScript);
