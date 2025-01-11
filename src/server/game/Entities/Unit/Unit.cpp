@@ -14638,8 +14638,8 @@ bool Unit::IsHighestExclusiveAura(Aura const* aura, bool removeOtherAuraApplicat
 void Unit::Talk(std::string const& text, ChatMsg msgType, Language language, float textRange, WorldObject const* target)
 {
     Trinity::CustomChatTextBuilder builder(this, msgType, text, language, target);
-    Trinity::LocalizedPacketDo<Trinity::CustomChatTextBuilder> localizer(builder);
-    Trinity::PlayerDistWorker<Trinity::LocalizedPacketDo<Trinity::CustomChatTextBuilder> > worker(this, textRange, localizer);
+    Trinity::LocalizedDo<Trinity::CustomChatTextBuilder> localizer(builder);
+    Trinity::PlayerDistWorker<Trinity::LocalizedDo<Trinity::CustomChatTextBuilder> > worker(this, textRange, localizer);
     Cell::VisitWorldObjects(this, worker, textRange);
 }
 
@@ -14704,8 +14704,8 @@ void Unit::Talk(uint32 textId, ChatMsg msgType, float textRange, WorldObject con
     }
 
     Trinity::BroadcastTextBuilder builder(this, msgType, textId, GetGender(), target);
-    Trinity::LocalizedPacketDo<Trinity::BroadcastTextBuilder> localizer(builder);
-    Trinity::PlayerDistWorker<Trinity::LocalizedPacketDo<Trinity::BroadcastTextBuilder> > worker(this, textRange, localizer);
+    Trinity::LocalizedDo<Trinity::BroadcastTextBuilder> localizer(builder);
+    Trinity::PlayerDistWorker<Trinity::LocalizedDo<Trinity::BroadcastTextBuilder> > worker(this, textRange, localizer);
     Cell::VisitWorldObjects(this, worker, textRange);
 }
 
@@ -14794,19 +14794,19 @@ struct CombatLogSender
         msg->Write();
     }
 
-    WorldPacket const* operator()(Player* player) const
+    void operator()(Player const* player) const
     {
         if (player->IsAdvancedCombatLoggingEnabled())
-            return i_message->GetFullLogPacket();
+            player->SendDirectMessage(i_message->GetFullLogPacket());
         else
-            return i_message->GetBasicLogPacket();
+            player->SendDirectMessage(i_message->GetBasicLogPacket());
     }
 };
 
 void Unit::SendCombatLogMessage(WorldPackets::CombatLog::CombatLogServerPacket* combatLog) const
 {
     CombatLogSender combatLogCustomizer(combatLog);
-    Trinity::MessageDistDeliverer<CombatLogSender> notifier(this, std::move(combatLogCustomizer), GetVisibilityRange());
+    Trinity::MessageDistDeliverer<CombatLogSender> notifier(this, combatLogCustomizer, GetVisibilityRange());
     Cell::VisitWorldObjects(this, notifier, GetVisibilityRange());
 }
 

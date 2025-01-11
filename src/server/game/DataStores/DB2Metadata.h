@@ -6023,7 +6023,7 @@ struct LanguageWordsMeta
     {
         static DB2MetaField const fields[2] =
         {
-            { FT_STRING, 1, false },
+            { FT_STRING_NOT_LOCALIZED, 1, false },
             { FT_INT, 1, false },
         };
 

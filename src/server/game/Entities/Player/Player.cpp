@@ -5960,7 +5960,8 @@ void Player::SendMessageToSetInRange(WorldPacket const* data, float dist, bool s
     if (self)
         SendDirectMessage(data);
 
-    Trinity::MessageDistDeliverer<> notifier(this, data, dist);
+    Trinity::PacketSenderRef sender(data);
+    Trinity::MessageDistDeliverer<Trinity::PacketSenderRef> notifier(this, sender, dist);
     Cell::VisitWorldObjects(this, notifier, dist);
 }
 
@@ -5969,7 +5970,8 @@ void Player::SendMessageToSetInRange(WorldPacket const* data, float dist, bool s
     if (self)
         SendDirectMessage(data);
 
-    Trinity::MessageDistDeliverer<> notifier(this, data, dist, own_team_only);
+    Trinity::PacketSenderRef sender(data);
+    Trinity::MessageDistDeliverer<Trinity::PacketSenderRef> notifier(this, sender, dist, own_team_only);
     Cell::VisitWorldObjects(this, notifier, dist);
 }
 
@@ -5980,7 +5982,8 @@ void Player::SendMessageToSet(WorldPacket const* data, Player const* skipped_rcv
 
     // we use World::GetMaxVisibleDistance() because i cannot see why not use a distance
     // update: replaced by GetMap()->GetVisibilityDistance()
-    Trinity::MessageDistDeliverer<> notifier(this, data, GetVisibilityRange(), false, skipped_rcvr);
+    Trinity::PacketSenderRef sender(data);
+    Trinity::MessageDistDeliverer<Trinity::PacketSenderRef> notifier(this, sender, GetVisibilityRange(), false, skipped_rcvr);
     Cell::VisitWorldObjects(this, notifier, GetVisibilityRange());
 }
 
