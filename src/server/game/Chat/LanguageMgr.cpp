@@ -87,7 +87,6 @@ void LanguageMgr::LoadLanguages()
     // Add the languages used in code in case they don't exist
     _langsMap.emplace(LANG_UNIVERSAL, LanguageDesc());
     _langsMap.emplace(LANG_ADDON, LanguageDesc());
-    _langsMap.emplace(LANG_ADDON_LOGGED, LanguageDesc());
 
     // Log load time
     TC_LOG_INFO("server.loading", ">> Loaded %u languages in %u ms", uint32(_langsMap.size()), GetMSTimeDiffToNow(oldMSTime));
@@ -106,13 +105,17 @@ void LanguageMgr::LoadLanguagesSkills()
         if (!IsRelevantLanguageSkill(skillLineEntry))
             continue;
 
-        std::vector<SkillLineAbilityEntry const*> const* skills = sDB2Manager.GetSkillLineAbilitiesBySkill(skillLineEntry->ID);
+        // sDB2Manager.GetSkillLineAbilitiesBySkill(skillLineEntry->ID);
+        std::vector<SkillLineAbilityEntry const*> skills;
+        for (SkillLineAbilityEntry const* ability : sSkillLineAbilityStore)
+            if (ability->SkillLine == skillLineEntry->ID)
+                skills.push_back(ability);
 
         // We're expecting only 1 skill
-        if (skills->size() != 1)
-            TC_LOG_WARN("server.loading", "Found language skill line with %u spells. Expected 1. Will use 1st if available", uint32(skills->size()));
+        if (skills.size() != 1)
+            TC_LOG_WARN("server.loading", "Found language skill line with %u spells. Expected 1. Will use 1st if available", uint32(skills.size()));
 
-        if (SkillLineAbilityEntry const* ability = skills->empty() ? nullptr : skills->at(0))
+        if (SkillLineAbilityEntry const* ability = skills.empty() ? nullptr : skills.at(0))
         {
             if (uint32 languageId = GetSpellLanguage(ability->Spell))
             {
