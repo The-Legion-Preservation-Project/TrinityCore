@@ -819,7 +819,7 @@ void AuraEffect::CalculateSpellMod()
     GetBase()->CallScriptEffectCalcSpellModHandlers(this, m_spellmod);
 }
 
-void AuraEffect::ChangeAmount(int32 newAmount, bool mark, bool onStackOrReapply)
+void AuraEffect::ChangeAmount(int32 newAmount, bool mark, bool onStackOrReapply, AuraEffect const* triggeredBy /* = nullptr */)
 {
     // Reapply if amount change
     uint8 handleMask = 0;
@@ -837,7 +837,7 @@ void AuraEffect::ChangeAmount(int32 newAmount, bool mark, bool onStackOrReapply)
     for (AuraApplication* aurApp : effectApplications)
     {
         aurApp->GetTarget()->_RegisterAuraEffect(this, false);
-        HandleEffect(aurApp, handleMask, false);
+        HandleEffect(aurApp, handleMask, false, triggeredBy);
     }
 
     if (handleMask & AURA_EFFECT_HANDLE_CHANGE_AMOUNT)
@@ -855,14 +855,14 @@ void AuraEffect::ChangeAmount(int32 newAmount, bool mark, bool onStackOrReapply)
             continue;
 
         aurApp->GetTarget()->_RegisterAuraEffect(this, true);
-        HandleEffect(aurApp, handleMask, true);
+        HandleEffect(aurApp, handleMask, true, triggeredBy);
     }
 
     if (GetSpellInfo()->HasAttribute(SPELL_ATTR8_AURA_SEND_AMOUNT) || Aura::EffectTypeNeedsSendingAmount(GetAuraType()))
         GetBase()->SetNeedClientUpdateForTargets();
 }
 
-void AuraEffect::HandleEffect(AuraApplication * aurApp, uint8 mode, bool apply)
+void AuraEffect::HandleEffect(AuraApplication * aurApp, uint8 mode, bool apply, AuraEffect const* triggeredBy /*= nullptr*/)
 {
     // check if call is correct, we really don't want using bitmasks here (with 1 exception)
     ASSERT(mode == AURA_EFFECT_HANDLE_REAL
@@ -880,7 +880,7 @@ void AuraEffect::HandleEffect(AuraApplication * aurApp, uint8 mode, bool apply)
 
     // real aura apply/remove, handle modifier
     if (mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_MASK)
-        ApplySpellMod(aurApp->GetTarget(), apply);
+        ApplySpellMod(aurApp->GetTarget(), apply, triggeredBy);
 
     // call scripts helping/replacing effect handlers
     bool prevented = false;
@@ -908,14 +908,14 @@ void AuraEffect::HandleEffect(AuraApplication * aurApp, uint8 mode, bool apply)
         GetBase()->CallScriptAfterEffectRemoveHandlers(this, aurApp, (AuraEffectHandleModes)mode);
 }
 
-void AuraEffect::HandleEffect(Unit* target, uint8 mode, bool apply)
+void AuraEffect::HandleEffect(Unit* target, uint8 mode, bool apply, AuraEffect const* triggeredBy /*= nullptr*/)
 {
     AuraApplication* aurApp = GetBase()->GetApplicationOfTarget(target->GetGUID());
     ASSERT(aurApp);
-    HandleEffect(aurApp, mode, apply);
+    HandleEffect(aurApp, mode, apply, triggeredBy);
 }
 
-void AuraEffect::ApplySpellMod(Unit* target, bool apply)
+void AuraEffect::ApplySpellMod(Unit* target, bool apply, AuraEffect const* triggeredBy /*= nullptr*/)
 {
     if (!m_spellmod || target->GetTypeId() != TYPEID_PLAYER)
         return;
@@ -955,6 +955,9 @@ void AuraEffect::ApplySpellMod(Unit* target, bool apply)
 
     if (recalculateEffectMask.any())
     {
+        if (!triggeredBy)
+            triggeredBy = this;
+
         ObjectGuid guid = target->GetGUID();
         Unit::AuraApplicationMap& auras = target->GetAppliedAuras();
         for (auto iter = auras.begin(); iter != auras.end(); ++iter)
@@ -966,7 +969,8 @@ void AuraEffect::ApplySpellMod(Unit* target, bool apply)
                 for (size_t i = 0; i < recalculateEffectMask.size(); ++i)
                     if (recalculateEffectMask[i])
                         if (AuraEffect* aurEff = aura->GetEffect(i))
-                            aurEff->RecalculateAmount();
+                            if (aurEff != triggeredBy)
+                                aurEff->RecalculateAmount(triggeredBy);
         }
     }
 }
