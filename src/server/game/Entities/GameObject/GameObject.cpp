@@ -2070,10 +2070,10 @@ void GameObject::Use(Unit* user)
                 return;
             }
 
-            WorldPackets::Artifact::OpenArtifactForge artifactForgeOpened;
-            artifactForgeOpened.ArtifactGUID = item->GetGUID();
-            artifactForgeOpened.ForgeGUID = GetGUID();
-            player->SendDirectMessage(artifactForgeOpened.Write());
+            WorldPackets::Artifact::OpenArtifactForge openArtifactForge;
+            openArtifactForge.ArtifactGUID = item->GetGUID();
+            openArtifactForge.ForgeGUID = GetGUID();
+            player->SendDirectMessage(openArtifactForge.Write());
             return;
         }
         case GAMEOBJECT_TYPE_UI_LINK:

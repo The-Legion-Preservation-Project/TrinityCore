@@ -107,6 +107,9 @@ namespace WorldPackets
     }
 }
 
+TC_GAME_API uint32 GetBagSize(Bag const* bag);
+TC_GAME_API Item* GetItemInBag(Bag const* bag, uint8 slot);
+
 typedef std::deque<Mail*> PlayerMails;
 
 #define PLAYER_MAX_SKILLS                       128
@@ -716,15 +719,23 @@ struct ItemPosCount
 };
 typedef std::vector<ItemPosCount> ItemPosCountVec;
 
-enum ItemSearchLocation
+enum class ItemSearchLocation
 {
-    ITEM_SEARCH_IN_EQUIPMENT    = 0x01,
-    ITEM_SEARCH_IN_INVENTORY    = 0x02,
-    ITEM_SEARCH_IN_BANK         = 0x04,
-    ITEM_SEARCH_IN_REAGENT_BANK = 0x08,
+    Equipment       = 0x01,
+    Inventory       = 0x02,
+    Bank            = 0x04,
+    ReagentBank     = 0x08,
 
-    ITEM_SEARCH_DEFAULT     = ITEM_SEARCH_IN_EQUIPMENT | ITEM_SEARCH_IN_INVENTORY,
-    ITEM_SEARCH_EVERYWHERE  = ITEM_SEARCH_IN_EQUIPMENT | ITEM_SEARCH_IN_INVENTORY | ITEM_SEARCH_IN_BANK | ITEM_SEARCH_IN_REAGENT_BANK
+    Default         = Equipment | Inventory,
+    Everywhere      = Equipment | Inventory | Bank | ReagentBank
+};
+
+DEFINE_ENUM_FLAG(ItemSearchLocation);
+
+enum class ItemSearchCallbackResult
+{
+    Stop,
+    Continue
 };
 
 enum TransferAbortReason
@@ -1211,11 +1222,77 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         /***                    STORAGE SYSTEM                 ***/
         /*********************************************************/
 
+        /**
+         * @brief Iterate over each item in the player storage
+         * @tparam T ItemSearchCallbackResult ItemCallback(Item* item)
+         * @param location Locations of the items to iterate over
+         * @param callback Callback called on each item. Will continue as long as it returns ItemSearchCallbackResult::Continue
+         */
+        template <typename T>
+        bool ForEachItem(ItemSearchLocation location, T callback) const
+        {
+            EnumFlag<ItemSearchLocation> flag = location;
+
+            if (flag.HasFlag(ItemSearchLocation::Equipment))
+                for (uint8 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
+                    if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                        if (callback(pItem) == ItemSearchCallbackResult::Stop)
+                            return false;
+
+            if (flag.HasFlag(ItemSearchLocation::Inventory))
+            {
+                uint8 inventoryEnd = INVENTORY_SLOT_ITEM_START + GetInventorySlotCount();
+                for (uint8 i = INVENTORY_SLOT_BAG_START; i < inventoryEnd; ++i)
+                    if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                        if (callback(pItem) == ItemSearchCallbackResult::Stop)
+                            return false;
+
+                for (uint8 i = CHILD_EQUIPMENT_SLOT_START; i < CHILD_EQUIPMENT_SLOT_END; ++i)
+                    if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                        if (callback(pItem) == ItemSearchCallbackResult::Stop)
+                            return false;
+
+                for (uint8 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+                    if (Bag* pBag = GetBagByPos(i))
+                        for (uint32 j = 0; j < GetBagSize(pBag); ++j)
+                            if (Item* pItem = GetItemInBag(pBag, j))
+                                if (callback(pItem) == ItemSearchCallbackResult::Stop)
+                                    return false;
+            }
+
+            if (flag.HasFlag(ItemSearchLocation::Bank))
+            {
+                for (uint8 i = BANK_SLOT_ITEM_START; i < BANK_SLOT_BAG_END; ++i)
+                    if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                        if (callback(pItem) == ItemSearchCallbackResult::Stop)
+                            return false;
+
+                for (uint8 i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
+                    if (Bag* pBag = GetBagByPos(i))
+                        for (uint32 j = 0; j < GetBagSize(pBag); ++j)
+                            if (Item* pItem = GetItemInBag(pBag, j))
+                                if (callback(pItem) == ItemSearchCallbackResult::Stop)
+                                    return false;
+            }
+
+            if (flag.HasFlag(ItemSearchLocation::ReagentBank))
+                for (uint8 i = REAGENT_SLOT_START; i < REAGENT_SLOT_END; ++i)
+                    if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+                        if (callback(pItem) == ItemSearchCallbackResult::Stop)
+                            return false;
+
+            return true;
+        }
+
+    public:
+        void UpdateAverageItemLevelTotal();
+        void UpdateAverageItemLevelEquipped();
+
         uint8 FindEquipSlot(ItemTemplate const* proto, uint32 slot, bool swap) const;
         uint32 GetItemCount(uint32 item, bool inBankAlso = false, Item* skipItem = nullptr) const;
         uint32 GetItemCountWithLimitCategory(uint32 limitCategory, Item* skipItem = nullptr) const;
         Item* GetItemByGuid(ObjectGuid guid) const;
-        Item* GetItemByEntry(uint32 entry, ItemSearchLocation where = ITEM_SEARCH_DEFAULT) const;
+        Item* GetItemByEntry(uint32 entry, ItemSearchLocation where = ItemSearchLocation::Default) const;
         std::vector<Item*> GetItemListByEntry(uint32 entry, bool inBankAlso = false) const;
         Item* GetItemByPos(uint16 pos) const;
         Item* GetItemByPos(uint8 bag, uint8 slot) const;
@@ -2520,6 +2597,9 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void AddPlayerFlag(PlayerFlags flags) { SetFlag(PLAYER_FLAGS, flags); }
         void RemovePlayerFlag(PlayerFlags flags) { RemoveFlag(PLAYER_FLAGS, flags); }
         void SetPlayerFlags(PlayerFlags flags) { SetUInt32Value(PLAYER_FLAGS, flags); }
+
+        void SetAverageItemLevelTotal(float newItemLevel) { SetFloatValue(PLAYER_FIELD_AVG_ITEM_LEVEL + 0, newItemLevel); }
+        void SetAverageItemLevelEquipped(float newItemLevel) { SetFloatValue(PLAYER_FIELD_AVG_ITEM_LEVEL + 1, newItemLevel); }
 
         bool HasPlayerFlagEx(PlayerFlagsEx flags) const { return HasFlag(PLAYER_FLAGS_EX, flags); }
         void AddPlayerFlagEx(PlayerFlagsEx flags) { SetFlag(PLAYER_FLAGS_EX, flags); }
