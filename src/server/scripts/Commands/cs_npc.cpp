@@ -873,7 +873,7 @@ public:
             if (cInfo->flags_extra & flagsExtra[i].Value)
                 handler->PSendSysMessage("%s (0x%X)", flagsExtra[i].Name, flagsExtra[i].Value);
 
-        handler->PSendSysMessage(LANG_NPCINFO_NPC_FLAGS, target->m_unitData->NpcFlags[0]);
+        handler->PSendSysMessage(LANG_NPCINFO_NPC_FLAGS, npcflags);
         for (uint8 i = 0; i < NPC_FLAG_COUNT; i++)
             if (npcflags & npcFlagTexts[i].Value)
                 handler->PSendSysMessage(npcFlagTexts[i].Name, npcFlagTexts[i].Value);

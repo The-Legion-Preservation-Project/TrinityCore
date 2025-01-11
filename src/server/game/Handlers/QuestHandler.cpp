@@ -401,7 +401,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPackets::Quest::Quest
 
                 _player->PlayerTalkClass->ClearMenus();
                 if (Creature* creatureQGiver = object->ToCreature())
-                    creatureQGiver->AI()->QuestReward(_player, quest, packet.ItemChoiceID);
+                    creatureQGiver->AI()->QuestReward(_player, quest, LootItemType::Item, packet.ItemChoiceID);
                 break;
             }
             case TYPEID_GAMEOBJECT:
@@ -421,7 +421,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPackets::Quest::Quest
                 }
 
                 _player->PlayerTalkClass->ClearMenus();
-                questGiver->AI()->QuestReward(_player, quest, packet.ItemChoiceID);
+                questGiver->AI()->QuestReward(_player, quest, LootItemType::Item, packet.ItemChoiceID);
                 break;
             }
             default:
