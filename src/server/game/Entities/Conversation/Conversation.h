@@ -38,7 +38,7 @@ struct ConversationDynamicFieldActor
         return ActorGuid.IsEmpty(); // this one is good enough
     }
 
-    enum ActorType
+    enum class ActorType : uint32
     {
         WorldObjectActor = 0,
         CreatureActor = 1

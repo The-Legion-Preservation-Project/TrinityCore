@@ -126,17 +126,14 @@ bool Conversation::Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry,
     SetUInt32Value(CONVERSATION_LAST_LINE_END_TIME, conversationTemplate->LastLineEndTime);
     _duration = conversationTemplate->LastLineEndTime;
 
-    for (uint16 actorIndex = 0; actorIndex < conversationTemplate->Actors.size(); ++actorIndex)
+    for (ConversationActor const& actor : conversationTemplate->Actors)
     {
-        if (ConversationActorTemplate const* actor = conversationTemplate->Actors[actorIndex])
-        {
-            ConversationDynamicFieldActor actorField;
-            actorField.ActorTemplate.CreatureId = actor->CreatureId;
-            actorField.ActorTemplate.CreatureModelId = actor->CreatureModelId;
-            actorField.ActorTemplate.Id = actor->Id;
-            actorField.Type = ConversationDynamicFieldActor::ActorType::CreatureActor;
-            SetDynamicStructuredValue(CONVERSATION_DYNAMIC_FIELD_ACTORS, actorIndex, &actorField);
-        }
+        ConversationDynamicFieldActor actorField;
+        actorField.ActorTemplate.CreatureId = actor.CreatureId;
+        actorField.ActorTemplate.CreatureModelId = actor.CreatureDisplayInfoId;
+        actorField.ActorTemplate.Id = actor.ActorId;
+        actorField.Type = AsUnderlyingType(ConversationDynamicFieldActor::ActorType::CreatureActor);
+        AddDynamicStructuredValue(CONVERSATION_DYNAMIC_FIELD_ACTORS, &actorField);
     }
 
     for (uint16 actorIndex = 0; actorIndex < conversationTemplate->ActorGuids.size(); ++actorIndex)
@@ -182,7 +179,7 @@ void Conversation::AddActor(ObjectGuid const& actorGuid, uint16 actorIdx)
 {
     ConversationDynamicFieldActor actorField;
     actorField.ActorGuid = actorGuid;
-    actorField.Type = ConversationDynamicFieldActor::ActorType::WorldObjectActor;
+    actorField.Type = AsUnderlyingType(ConversationDynamicFieldActor::ActorType::WorldObjectActor);
     SetDynamicStructuredValue(CONVERSATION_DYNAMIC_FIELD_ACTORS, actorIdx, &actorField);
 }
 
