@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.1.6-MariaDB, for Win64 (AMD64)
+-- MySQL dump 10.13  Distrib 5.7.30, for Linux (x86_64)
 --
 -- Host: localhost    Database: characters
 -- ------------------------------------------------------
--- Server version	10.1.6-MariaDB
+-- Server version	5.7.30-0ubuntu0.18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -513,6 +513,34 @@ CREATE TABLE `character_aura_effect` (
 LOCK TABLES `character_aura_effect` WRITE;
 /*!40000 ALTER TABLE `character_aura_effect` DISABLE KEYS */;
 /*!40000 ALTER TABLE `character_aura_effect` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `character_aura_stored_location`
+--
+
+DROP TABLE IF EXISTS `character_aura_stored_location`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `character_aura_stored_location` (
+  `Guid` bigint(20) unsigned NOT NULL COMMENT 'Global Unique Identifier of Player',
+  `Spell` int(10) unsigned NOT NULL COMMENT 'Spell Identifier',
+  `MapId` int(10) unsigned NOT NULL COMMENT 'Map Id',
+  `PositionX` float NOT NULL COMMENT 'position x',
+  `PositionY` float NOT NULL COMMENT 'position y',
+  `PositionZ` float NOT NULL COMMENT 'position z',
+  `Orientation` float NOT NULL COMMENT 'Orientation',
+  PRIMARY KEY (`Guid`,`Spell`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `character_aura_stored_location`
+--
+
+LOCK TABLES `character_aura_stored_location` WRITE;
+/*!40000 ALTER TABLE `character_aura_stored_location` DISABLE KEYS */;
+/*!40000 ALTER TABLE `character_aura_stored_location` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -3566,7 +3594,7 @@ INSERT INTO `updates` VALUES
 ('2017_10_29_00_characters.sql','8CFC473E7E87E58C317A72016BF69E9050D3BC83','ARCHIVED','2017-04-19 00:07:40',25),
 ('2018_02_03_00_characters.sql','73E9BFD848D7A22F2A7DD89CF64E30E3A8689512','ARCHIVED','2018-02-03 23:52:42',0),
 ('2018_02_08_00_characters.sql','75FA162A9B85D678B26F972371265F1EC2C75187','ARCHIVED','2018-02-08 22:23:28',0),
-('2018_02_19_00_characters.sql','75A0FFAFD0633921708DB0F72F9CC9796ACB960B','RELEASED','2018-02-19 22:33:32',117),
+('2018_02_19_00_characters.sql','75A0FFAFD0633921708DB0F72F9CC9796ACB960B','RELEASED','2018-02-19 22:33:32',0),
 ('2018_03_04_00_characters.sql','2A4CD2EE2547E718490706FADC78BF36F0DED8D6','RELEASED','2018-03-04 18:15:24',0),
 ('2018_04_28_00_characters.sql','CBD0FDC0F32DE3F456F7CE3D9CAD6933CD6A50F5','RELEASED','2018-04-28 12:44:09',0),
 ('2018_07_28_00_characters.sql','31F66AE7831251A8915625EC7F10FA138AB8B654','RELEASED','2018-07-28 18:30:19',0),
@@ -3577,7 +3605,8 @@ INSERT INTO `updates` VALUES
 ('2020_04_25_00_characters_2017_04_03_00_characters.sql','00FA3EFADAF807AC96619A3FE47216E21C3FCB19','RELEASED','2020-04-25 00:00:00',0),
 ('2020_04_26_00_characters_2017_04_12_00_characters.sql','86AA94DA9B1EA283101100886C10F648C0CE6494','RELEASED','2020-04-26 00:00:00',0),
 ('2020_04_26_01_characters_2017_04_12_01_characters.sql','5A8A1215E3A2356722F52CD7A64BBE03D21FBEA3','RELEASED','2020-04-26 00:00:00',0),
-('2020_06_12_00_characters.sql','DF16C99EFACA4DFADDDF35644AAC63F9B4AA2BD6','RELEASED','2020-06-11 16:24:56',0);
+('2020_06_12_00_characters.sql','DF16C99EFACA4DFADDDF35644AAC63F9B4AA2BD6','RELEASED','2020-06-11 16:24:56',0),
+('2021_03_27_00_characters_aura_stored_location.sql','BF772ABC2DF186AF0A5DC56D5E824A2F4813BA69','RELEASED','2021-03-27 15:53:04',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
