@@ -33,6 +33,7 @@
 
 enum MageSpells
 {
+    SPELL_MAGE_ARCANE_MAGE                       = 137021,
     SPELL_MAGE_BLAZING_BARRIER_TRIGGER           = 235314,
     SPELL_MAGE_CAUTERIZE_DOT                     = 87023,
     SPELL_MAGE_CAUTERIZED                        = 87024,
@@ -118,9 +119,19 @@ class spell_mage_arcane_explosion : public SpellScript
 {
     PrepareSpellScript(spell_mage_arcane_explosion);
 
-    void PreventEnergize(SpellEffIndex effIndex)
+    bool Validate(SpellInfo const* spellInfo) override
     {
-        PreventHitDefaultEffect(effIndex);
+        if (!ValidateSpellInfo({ SPELL_MAGE_ARCANE_MAGE }))
+            return false;
+
+        SpellEffectInfo const* damageEffect = spellInfo->GetEffect(EFFECT_1);
+        return damageEffect && damageEffect->IsEffect(SPELL_EFFECT_SCHOOL_DAMAGE);
+    }
+
+    void CheckRequiredAuraForBaselineEnergize(SpellEffIndex effIndex)
+    {
+        if (!GetUnitTargetCountForEffect(EFFECT_1) || !GetCaster()->HasAura(SPELL_MAGE_ARCANE_MAGE))
+            PreventHitDefaultEffect(effIndex);
     }
 
     void HandleTargetHit(SpellEffIndex /*effIndex*/)
@@ -139,9 +150,8 @@ class spell_mage_arcane_explosion : public SpellScript
 
     void Register() override
     {
-        OnEffectHitTarget += SpellEffectFn(spell_mage_arcane_explosion::PreventEnergize, EFFECT_0, SPELL_EFFECT_ENERGIZE);
-        OnEffectHitTarget += SpellEffectFn(spell_mage_arcane_explosion::PreventEnergize, EFFECT_2, SPELL_EFFECT_ENERGIZE);
-        OnEffectHitTarget += SpellEffectFn(spell_mage_arcane_explosion::HandleTargetHit, EFFECT_1, SPELL_EFFECT_SCHOOL_DAMAGE);
+        OnEffectHitTarget += SpellEffectFn(spell_mage_arcane_explosion::CheckRequiredAuraForBaselineEnergize, EFFECT_0, SPELL_EFFECT_ENERGIZE);
+        OnEffectHitTarget += SpellEffectFn(spell_mage_arcane_explosion::HandleTargetHit, EFFECT_2, SPELL_EFFECT_ENERGIZE);
     }
 
 private:
