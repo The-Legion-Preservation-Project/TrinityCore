@@ -89,7 +89,7 @@ public:
     void HandleDummy(SpellEffIndex /*effIndex*/)
     {
         if (WorldLocation* dest = GetHitDest())
-            GetCaster()->CastSpell(dest->GetPositionX(), dest->GetPositionY(), dest->GetPositionZ(), SPELL_WARRIOR_HEROIC_LEAP_JUMP, true);
+            GetCaster()->CastSpell(dest->GetPosition(), SPELL_WARRIOR_HEROIC_LEAP_JUMP, true);
 
         if (Unit* caster = GetCaster())
             if (caster->HasAura(SPELL_WARRIOR_BOUNDING_STRIDE))

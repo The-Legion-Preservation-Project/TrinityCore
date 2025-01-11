@@ -632,7 +632,7 @@ class spell_pal_item_healing_discount : public AuraScript
     void HandleProc(AuraEffect* aurEff, ProcEventInfo& /*eventInfo*/)
     {
         PreventDefaultAction();
-        GetTarget()->CastSpell(GetTarget(), SPELL_PALADIN_ITEM_HEALING_TRANCE, true, nullptr, aurEff);
+        GetTarget()->CastSpell(GetTarget(), SPELL_PALADIN_ITEM_HEALING_TRANCE, aurEff);
     }
 
     void Register() override
@@ -681,7 +681,7 @@ class spell_pal_item_t6_trinket : public AuraScript
             return;
 
         if (roll_chance_i(chance))
-            eventInfo.GetActor()->CastSpell(eventInfo.GetProcTarget(), spellId, true, nullptr, aurEff);
+            eventInfo.GetActor()->CastSpell(eventInfo.GetProcTarget(), spellId, aurEff);
     }
 
     void Register() override
@@ -772,7 +772,11 @@ class spell_pal_light_s_beacon : public SpellScriptLoader
                         std::list<AuraApplication*> applications;
                         (*itr)->GetApplicationList(applications);
                         if (!applications.empty())
-                            eventInfo.GetActor()->CastCustomSpell(SPELL_PALADIN_BEACON_OF_LIGHT_HEAL, SPELLVALUE_BASE_POINT0, heal, applications.front()->GetTarget(), true);
+                        {
+                            CastSpellExtraArgs args(aurEff);
+                            args.SpellValueOverrides.AddBP0(heal);
+                            eventInfo.GetActor()->CastSpell(applications.front()->GetTarget(), SPELL_PALADIN_BEACON_OF_LIGHT_HEAL, args);
+                        }
                         return;
                     }
                 }
@@ -908,7 +912,7 @@ class spell_pal_t3_6p_bonus : public SpellScriptLoader
                         return;
                 }
 
-                caster->CastSpell(target, spellId, true, nullptr, aurEff);
+                caster->CastSpell(target, spellId, aurEff);
             }
 
             void Register() override
@@ -957,7 +961,9 @@ class spell_pal_t8_2p_bonus : public SpellScriptLoader
                 // Add remaining ticks to damage done
                 amount += target->GetRemainingPeriodicAmount(caster->GetGUID(), SPELL_PALADIN_HOLY_MENDING, SPELL_AURA_PERIODIC_HEAL);
 
-                caster->CastCustomSpell(SPELL_PALADIN_HOLY_MENDING, SPELLVALUE_BASE_POINT0, amount, target, true, nullptr, aurEff);
+                CastSpellExtraArgs args(aurEff);
+                args.SpellValueOverrides.AddBP0(amount);
+                caster->CastSpell(target, SPELL_PALADIN_HOLY_MENDING, args);
             }
 
             void Register() override

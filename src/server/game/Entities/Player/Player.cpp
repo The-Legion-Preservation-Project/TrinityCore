@@ -7732,7 +7732,7 @@ void Player::ApplyItemObtainSpells(Item* item, bool apply)
         if (apply)
         {
             if (!HasAura(spellId))
-                CastSpell(this, spellId, true, item);
+                CastSpell(this, spellId, item);
         }
         else
             RemoveAurasDueToSpell(spellId);
@@ -7864,7 +7864,7 @@ void Player::ApplyEquipSpell(SpellInfo const* spellInfo, Item* item, bool apply,
         TC_LOG_DEBUG("entities.player", "Player::ApplyEquipSpell: Player '%s' (%s) cast %s equip spell (ID: %i)",
             GetName().c_str(), GetGUID().ToString().c_str(), (item ? "item" : "itemset"), spellInfo->Id);
 
-        CastSpell(this, spellInfo, true, item);
+        CastSpell(this, spellInfo->Id, item);
     }
     else
     {
@@ -7973,13 +7973,15 @@ void Player::ApplyArtifactPowerRank(Item* artifact, ArtifactPowerRankEntry const
         }
         else if (apply)
         {
-            CustomSpellValues csv;
+            CastSpellExtraArgs args;
+            args.TriggerFlags = TRIGGERED_FULL_MASK;
+            args.CastItem = artifact;
             if (artifactPowerRank->AuraPointsOverride)
                 for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                     if (spellInfo->GetEffect(i))
-                        csv.AddSpellMod(SpellValueMod(SPELLVALUE_BASE_POINT0 + i), artifactPowerRank->AuraPointsOverride);
+                        args.AddSpellMod(SpellValueMod(SPELLVALUE_BASE_POINT0 + i), artifactPowerRank->AuraPointsOverride);
 
-            CastCustomSpell(artifactPowerRank->SpellID, csv, this, TRIGGERED_FULL_MASK, artifact);
+            CastSpell(this, artifactPowerRank->SpellID, args);
         }
     }
     else
@@ -8090,7 +8092,7 @@ void Player::CastItemCombatSpell(DamageInfo const& damageInfo, Item* item, ItemT
                 chance = GetWeaponProcChance();
 
             if (roll_chance_f(chance) && sScriptMgr->OnCastItemCombatSpell(this, damageInfo.GetVictim(), spellInfo, item))
-                CastSpell(damageInfo.GetVictim(), spellInfo->Id, true, item);
+                CastSpell(damageInfo.GetVictim(), spellInfo->Id, item);
         }
     }
 
@@ -8154,17 +8156,17 @@ void Player::CastItemCombatSpell(DamageInfo const& damageInfo, Item* item, ItemT
             if (roll_chance_f(chance))
             {
                 if (spellInfo->IsPositive())
-                    CastSpell(this, spellInfo, true, item);
+                    CastSpell(this, spellInfo->Id, item);
                 else
-                    CastSpell(damageInfo.GetVictim(), spellInfo, true, item);
+                    CastSpell(damageInfo.GetVictim(), spellInfo->Id, item);
             }
 
             if (roll_chance_f(chance))
             {
                 Unit* target = spellInfo->IsPositive() ? this : damageInfo.GetVictim();
 
+                CastSpellExtraArgs args(item);
                 // reduce effect values if enchant is limited
-                CustomSpellValues values;
                 if (entry &&  (entry->AttributesMask & ENCHANT_PROC_ATTR_LIMIT_60) && target->GetLevelForTarget(this) > 60)
                 {
                     int32 const lvlDifference = target->GetLevelForTarget(this) - 60;
@@ -8175,11 +8177,10 @@ void Player::CastItemCombatSpell(DamageInfo const& damageInfo, Item* item, ItemT
                     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                     {
                         if (spellInfo->GetEffect(i)->IsEffect())
-                            values.AddSpellMod(static_cast<SpellValueMod>(SPELLVALUE_BASE_POINT0 + i), CalculatePct(spellInfo->GetEffect(i)->CalcValue(this), effectPct));
+                            args.SpellValueOverrides.AddMod(static_cast<SpellValueMod>(SPELLVALUE_BASE_POINT0 + i), CalculatePct(spellInfo->GetEffect(i)->CalcValue(this), effectPct));
                     }
                 }
-
-                CastCustomSpell(spellInfo->Id, values, target, TRIGGERED_FULL_MASK, item);
+                CastSpell(target, spellInfo->Id, args);
             }
         }
     }
@@ -8213,7 +8214,7 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, Objec
             spell->m_fromClient = true;
             spell->m_CastItem = item;
             spell->SetSpellValue(SPELLVALUE_BASE_POINT0, learning_spell_id);
-            spell->prepare(&targets);
+            spell->prepare(targets);
             return;
         }
     }
@@ -8243,7 +8244,7 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, Objec
         spell->m_CastItem = item;
         spell->m_misc.Raw.Data[0] = misc[0];
         spell->m_misc.Raw.Data[1] = misc[1];
-        spell->prepare(&targets);
+        spell->prepare(targets);
         return;
     }
 
@@ -8277,7 +8278,7 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, Objec
             spell->m_CastItem = item;
             spell->m_misc.Raw.Data[0] = misc[0];
             spell->m_misc.Raw.Data[1] = misc[1];
-            spell->prepare(&targets);
+            spell->prepare(targets);
             return;
         }
     }
@@ -14065,10 +14066,15 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                                 }
                             }
                             // Cast custom spell vs all equal basepoints got from enchant_amount
+                            CastSpellExtraArgs args(item);
                             if (basepoints)
-                                CastCustomSpell(this, enchant_spell_id, &basepoints, &basepoints, &basepoints, true, item);
-                            else
-                                CastSpell(this, enchant_spell_id, true, item);
+                            {
+                                args.AddSpellMod(SPELLVALUE_BASE_POINT0, basepoints);
+                                args.AddSpellMod(SPELLVALUE_BASE_POINT1, basepoints);
+                                args.AddSpellMod(SPELLVALUE_BASE_POINT2, basepoints);
+                            }
+
+                            CastSpell(this, enchant_spell_id, args);
                         }
                         else
                             RemoveAurasDueToItemSpell(enchant_spell_id, item->GetGUID());
@@ -14717,7 +14723,7 @@ void Player::OnGossipSelect(WorldObject* source, uint32 optionIndex, uint32 menu
             break;
         case GOSSIP_OPTION_SPIRITHEALER:
             if (isDead())
-                source->ToCreature()->CastSpell(source->ToCreature(), 17251, true, nullptr, nullptr, GetGUID());
+                source->ToCreature()->CastSpell(source->ToCreature(), 17251, GetGUID());
             break;
         case GOSSIP_OPTION_QUESTGIVER:
             PrepareQuestMenu(guid);
@@ -15380,7 +15386,7 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
             if (Unit* unit = questGiver->ToUnit())
                 caster = unit;
 
-        caster->CastSpell(this, spellInfo, true);
+        caster->CastSpell(this, spellInfo->Id, CastSpellExtraArgs(TRIGGERED_FULL_MASK).SetCastDifficulty(spellInfo->Difficulty));
     }
 
     SetQuestSlot(log_slot, quest_id, qtime);
@@ -15717,7 +15723,7 @@ void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rew
             if (Unit* unit = questGiver->ToUnit())
                 caster = unit;
 
-        caster->CastSpell(this, spellInfo, true);
+        caster->CastSpell(this, spellInfo->Id, CastSpellExtraArgs(TRIGGERED_FULL_MASK).SetCastDifficulty(spellInfo->Difficulty));
     }
     else
     {
@@ -15737,7 +15743,7 @@ void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rew
                 if (Unit* unit = questGiver->ToUnit())
                     caster = unit;
 
-            caster->CastSpell(this, spellInfo, true);
+            caster->CastSpell(this, spellInfo->Id, CastSpellExtraArgs(TRIGGERED_FULL_MASK).SetCastDifficulty(spellInfo->Difficulty));
         }
     }
 
@@ -22180,7 +22186,7 @@ void Player::VehicleSpellInitialize()
         }
 
         if (spellInfo->IsPassive())
-            vehicle->CastSpell(vehicle, spellInfo, true);
+            vehicle->CastSpell(vehicle, spellInfo->Id, true);
 
         petSpells.ActionButtons[i] = MAKE_UNIT_ACTION_BUTTON(spellId, i + 8);
     }
@@ -25522,7 +25528,7 @@ bool Player::IsAtRecruitAFriendDistance(WorldObject const* pOther) const
 
 void Player::ResurrectUsingRequestData()
 {
-    /// Teleport before resurrecting by player, otherwise the player might get attacked from creatures near his corpse
+    // Teleport before resurrecting by player, otherwise the player might get attacked from creatures near his corpse
     TeleportTo(_resurrectionData->Location);
 
     if (IsBeingTeleported())
@@ -25553,7 +25559,7 @@ void Player::ResurrectUsingRequestDataImpl()
     SetPower(POWER_LUNAR_POWER, 0);
 
     if (uint32 aura = resurrectAura)
-        CastSpell(this, aura, true, nullptr, nullptr, resurrectGUID);
+        CastSpell(this, aura, resurrectGUID);
 
     SpawnCorpseBones();
 }
