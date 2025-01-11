@@ -2779,6 +2779,17 @@ void GameObject::SetAnimKitId(uint16 animKitId, bool oneshot)
     SendMessageToSet(activateAnimKit.Write(), true);
 }
 
+void GameObject::SetSpellVisualId(int32 spellVisualId, ObjectGuid activatorGuid)
+{
+    SetUInt32Value(GAMEOBJECT_STATE_SPELL_VISUAL_ID, spellVisualId);
+
+    WorldPackets::GameObject::GameObjectPlaySpellVisual packet;
+    packet.ObjectGUID = GetGUID();
+    packet.ActivatorGUID = activatorGuid;
+    packet.SpellVisualID = spellVisualId;
+    SendMessageToSet(packet.Write(), true);
+}
+
 class GameObjectModelOwnerImpl : public GameObjectModelOwnerBase
 {
 public:
