@@ -12437,7 +12437,7 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
         pItem->SetSlot(NULL_SLOT);
         pItem->SetState(ITEM_REMOVED, this);
 
-        if (pItem->GetTemplate()->GetInventoryType() != INVTYPE_NON_EQUIP)
+        if (pProto->GetInventoryType() != INVTYPE_NON_EQUIP)
             UpdateAverageItemLevelTotal();
         if (bag == INVENTORY_SLOT_BAG_0)
             UpdateAverageItemLevelEquipped();
@@ -15117,7 +15117,7 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
         }
     }
 
-    uint32 qtime = 0;
+    time_t endTime = 0;
     if (uint32 limittime = quest->GetLimitTime())
     {
         // shared timed quest
@@ -15126,7 +15126,7 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
 
         AddTimedQuest(quest_id);
         questStatusData.Timer = limittime * IN_MILLISECONDS;
-        qtime = static_cast<uint32>(GameTime::GetGameTime()) + limittime;
+        endTime = GameTime::GetGameTime() + limittime;
     }
     else
         questStatusData.Timer = 0;
@@ -15148,7 +15148,7 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
         caster->CastSpell(this, spellInfo->Id, CastSpellExtraArgs(TRIGGERED_FULL_MASK).SetCastDifficulty(spellInfo->Difficulty));
     }
 
-    SetQuestSlot(log_slot, quest_id, qtime);
+    SetQuestSlot(log_slot, quest_id, static_cast<uint32>(endTime));
 
     m_QuestStatusSave[quest_id] = QUEST_DEFAULT_SAVE_TYPE;
 
@@ -16388,7 +16388,7 @@ uint32 Player::GetQuestSlotTime(uint16 slot) const
 bool Player::GetQuestSlotObjectiveFlag(uint16 slot, int8 objectiveIndex) const
 {
     if (objectiveIndex < MAX_QUEST_COUNTS)
-        return (*m_playerData->QuestLog[slot].ObjectiveFlags) & (1 << objectiveIndex);
+        return GetQuestSlotState(slot) & (256 << objectiveIndex);
     return false;
 }
 
@@ -16444,6 +16444,16 @@ void Player::RemoveQuestSlotState(uint16 slot, uint32 state)
 void Player::SetQuestSlotTimer(uint16 slot, uint32 timer)
 {
     SetUInt32Value(PLAYER_QUEST_LOG + slot * MAX_QUEST_OFFSET + QUEST_TIME_OFFSET, timer);
+}
+
+void Player::SetQuestSlotObjectiveFlag(uint16 slot, int8 objectiveIndex)
+{
+    SetQuestSlotState(slot, 256 << objectiveIndex);
+}
+
+void Player::RemoveQuestSlotObjectiveFlag(uint16 slot, int8 objectiveIndex)
+{
+    RemoveQuestSlotState(slot, 256 << objectiveIndex);
 }
 
 void Player::SetQuestCompletedBit(uint32 questBit, bool completed)
@@ -16622,11 +16632,6 @@ void Player::UpdateQuestObjectiveProgress(QuestObjectiveType objectiveType, int3
             bool objectiveIsNowComplete = false;
             if (objective.IsStoringValue())
             {
-                if (objectiveType == QUEST_OBJECTIVE_PLAYERKILLS && objective.Flags & QUEST_OBJECTIVE_FLAG_KILL_PLAYERS_SAME_FACTION)
-                    if (Player const* victim = ObjectAccessor::GetPlayer(GetMap(), victimGuid))
-                        if (victim->GetTeam() != GetTeam())
-                            continue;
-
                 int32 currentProgress = GetQuestSlotObjectiveData(logSlot, objective);
                 if (addCount > 0 ? (currentProgress < objective.Amount) : (currentProgress > 0))
                 {
@@ -19098,25 +19103,25 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
 
                 questStatusData.Explored = (fields[2].GetUInt8() > 0);
 
-                time_t quest_time = fields[2].GetInt64();
+                time_t endTime = fields[2].GetInt64();
 
                 if (quest->GetLimitTime() && !GetQuestRewardStatus(quest_id))
                 {
                     AddTimedQuest(quest_id);
 
-                    if (quest_time <= GameTime::GetGameTime())
+                    if (endTime <= GameTime::GetGameTime())
                         questStatusData.Timer = 1;
                     else
-                        questStatusData.Timer = uint32((quest_time - GameTime::GetGameTime()) * IN_MILLISECONDS);
+                        questStatusData.Timer = uint32((endTime - GameTime::GetGameTime()) * IN_MILLISECONDS);
                 }
                 else
-                    quest_time = 0;
+                    endTime = 0;
 
                 // add to quest log
                 if (slot < MAX_QUEST_LOG_SIZE && questStatusData.Status != QUEST_STATUS_NONE)
                 {
                     questStatusData.Slot = slot;
-                    SetQuestSlot(slot, quest_id, uint32(quest_time)); // cast can't be helped
+                    SetQuestSlot(slot, quest_id, uint32(endTime)); // cast can't be helped
 
                     if (questStatusData.Status == QUEST_STATUS_COMPLETE)
                         SetQuestSlotState(slot, QUEST_STATE_COMPLETE);
@@ -20748,17 +20753,15 @@ void Player::_SaveQuestStatus(CharacterDatabaseTransaction& trans)
     if (!isTransaction)
         trans = CharacterDatabase.BeginTransaction();
 
-    QuestStatusSaveMap::iterator saveItr;
-    QuestStatusMap::iterator statusItr;
     CharacterDatabasePreparedStatement* stmt;
 
     bool keepAbandoned = !(sWorld->GetCleaningFlags() & CharacterDatabaseCleaner::CLEANING_FLAG_QUESTSTATUS);
 
-    for (saveItr = m_QuestStatusSave.begin(); saveItr != m_QuestStatusSave.end(); ++saveItr)
+    for (auto saveItr = m_QuestStatusSave.begin(); saveItr != m_QuestStatusSave.end(); ++saveItr)
     {
         if (saveItr->second == QUEST_DEFAULT_SAVE_TYPE)
         {
-            statusItr = m_QuestStatus.find(saveItr->first);
+            auto statusItr = m_QuestStatus.find(saveItr->first);
             if (statusItr != m_QuestStatus.end() && (keepAbandoned || statusItr->second.Status != QUEST_STATUS_NONE))
             {
                 QuestStatusData const& qData = statusItr->second;
@@ -20812,7 +20815,7 @@ void Player::_SaveQuestStatus(CharacterDatabaseTransaction& trans)
 
     m_QuestStatusSave.clear();
 
-    for (saveItr = m_RewardedQuestsSave.begin(); saveItr != m_RewardedQuestsSave.end(); ++saveItr)
+    for (auto saveItr = m_RewardedQuestsSave.begin(); saveItr != m_RewardedQuestsSave.end(); ++saveItr)
     {
         if (saveItr->second == QUEST_DEFAULT_SAVE_TYPE)
         {
