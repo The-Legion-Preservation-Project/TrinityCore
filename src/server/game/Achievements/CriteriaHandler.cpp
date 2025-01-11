@@ -2056,7 +2056,11 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
             QuestObjective const* objective = sObjectMgr->GetQuestObjective(reqValue);
             if (!objective)
                 return false;
-            if (referencePlayer->GetQuestRewardStatus(objective->QuestID) || !referencePlayer->IsQuestObjectiveComplete(*objective))
+            Quest const* quest = sObjectMgr->GetQuestTemplate(objective->QuestID);
+            if (!quest)
+                return false;
+            uint16 slot = referencePlayer->FindQuestSlot(objective->QuestID);
+            if (slot >= MAX_QUEST_LOG_SIZE || referencePlayer->GetQuestRewardStatus(objective->QuestID) || !referencePlayer->IsQuestObjectiveComplete(slot, quest, *objective))
                 return false;
             break;
         }
