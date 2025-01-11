@@ -22,6 +22,7 @@
 #include "ItemPacketsCommon.h"
 #include "Guild.h"
 #include "ObjectGuid.h"
+#include "PacketUtilities.h"
 
 namespace WorldPackets
 {
@@ -665,7 +666,7 @@ namespace WorldPackets
 
             void Read() override;
 
-            uint32 CurrentVersion = 0;
+            Timestamp<> CurrentVersion;
         };
 
         struct GuildRewardItem
@@ -687,7 +688,7 @@ namespace WorldPackets
             WorldPacket const* Write() override;
 
             std::vector<GuildRewardItem> RewardItems;
-            int32 Version = 0;
+            Timestamp<> Version;
         };
 
         class GuildBankActivate final : public ClientPacket

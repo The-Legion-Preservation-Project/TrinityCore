@@ -324,7 +324,7 @@ WorldPacket const* WorldPackets::Query::CorpseTransportQuery::Write()
 
 WorldPacket const* WorldPackets::Query::QueryTimeResponse::Write()
 {
-    _worldPacket << int32(CurrentTime);
+    _worldPacket << CurrentTime;
 
     return &_worldPacket;
 }

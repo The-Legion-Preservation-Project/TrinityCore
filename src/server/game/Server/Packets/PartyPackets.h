@@ -401,7 +401,7 @@ namespace WorldPackets
             int8 PartyIndex = 0;
             ObjectGuid PartyGUID;
             ObjectGuid InitiatorGUID;
-            uint32 Duration = 0u;
+            WorldPackets::Duration<Milliseconds> Duration;
         };
 
         class ReadyCheckResponseClient final : public ClientPacket

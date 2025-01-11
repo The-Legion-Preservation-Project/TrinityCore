@@ -272,7 +272,7 @@ Stats Player::GetPrimaryStat() const
         if (ChrSpecializationEntry const* specialization = sChrSpecializationStore.LookupEntry(GetPrimarySpecialization()))
             return specialization->PrimaryStatPriority;
 
-        return sChrClassesStore.AssertEntry(getClass())->PrimaryStatPriority;
+        return sChrClassesStore.AssertEntry(GetClass())->PrimaryStatPriority;
     }();
 
     if (primaryStatPriority >= 4)

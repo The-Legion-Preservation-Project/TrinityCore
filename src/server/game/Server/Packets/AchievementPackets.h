@@ -20,6 +20,7 @@
 
 #include "Packet.h"
 #include "ObjectGuid.h"
+#include "PacketUtilities.h"
 
 namespace WorldPackets
 {
@@ -41,8 +42,8 @@ namespace WorldPackets
             ObjectGuid Player;
             uint32 Flags = 0;
             time_t Date = time_t(0);
-            uint32 TimeFromStart = 0;
-            uint32 TimeFromCreate = 0;
+            Duration<Seconds> TimeFromStart;
+            Duration<Seconds> TimeFromCreate;
         };
 
         struct AllAchievements
@@ -94,8 +95,8 @@ namespace WorldPackets
             ObjectGuid PlayerGUID;
             uint32 Flags = 0;
             time_t CurrentTime = time_t(0);
-            uint32 ElapsedTime = 0;
-            uint32 CreationTime = 0;
+            Duration<Seconds> ElapsedTime;
+            Timestamp<> CreationTime;
         };
 
         class AccountCriteriaUpdate final : public ServerPacket
@@ -161,8 +162,8 @@ namespace WorldPackets
         struct GuildCriteriaProgress
         {
             int32 CriteriaID = 0;
-            uint32 DateCreated = 0;
-            uint32 DateStarted = 0;
+            Timestamp<> DateCreated;
+            Timestamp<> DateStarted;
             time_t DateUpdated = 0;
             uint64 Quantity = 0;
             ObjectGuid PlayerGUID;

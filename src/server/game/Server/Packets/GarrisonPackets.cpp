@@ -51,9 +51,9 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonBuildingInfo const& buildingInf
 {
     data << uint32(buildingInfo.GarrPlotInstanceID);
     data << uint32(buildingInfo.GarrBuildingID);
-    data << uint32(buildingInfo.TimeBuilt);
+    data << buildingInfo.TimeBuilt;
     data << uint32(buildingInfo.CurrentGarSpecID);
-    data << uint32(buildingInfo.TimeSpecCooldown);
+    data << buildingInfo.TimeSpecCooldown;
     data.WriteBit(buildingInfo.Active);
     data.FlushBits();
 
@@ -89,11 +89,11 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonMission const& mission)
 {
     data << uint64(mission.DbID);
     data << uint32(mission.MissionRecID);
-    data << uint32(mission.OfferTime);
-    data << uint32(mission.OfferDuration);
-    data << uint32(mission.StartTime);
-    data << uint32(mission.TravelDuration);
-    data << uint32(mission.MissionDuration);
+    data << mission.OfferTime;
+    data << mission.OfferDuration;
+    data << mission.StartTime;
+    data << mission.TravelDuration;
+    data << mission.MissionDuration;
     data << uint32(mission.MissionState);
     data << uint32(mission.SuccessChance);
     data << uint32(mission.Flags);
@@ -117,7 +117,7 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonMissionReward const& missionRew
 ByteBuffer& operator<<(ByteBuffer& data, GarrisonMissionBonusAbility const& areaBonus)
 {
     data << uint32(areaBonus.GarrMssnBonusAbilityID);
-    data << uint32(areaBonus.StartTime);
+    data << areaBonus.StartTime;
 
     return data;
 }
@@ -125,7 +125,7 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonMissionBonusAbility const& area
 ByteBuffer& operator<<(ByteBuffer& data, GarrisonTalent const& talent)
 {
     data << int32(talent.GarrTalentID);
-    data << int32(talent.ResearchStartTime);
+    data << talent.ResearchStartTime;
     data << int32(talent.Flags);
 
     return data;
