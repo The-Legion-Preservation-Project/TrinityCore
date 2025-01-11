@@ -421,8 +421,8 @@ void ObjectMgr::LoadCreatureTemplates()
     //                                       "spell1, spell2, spell3, spell4, spell5, spell6, spell7, spell8, VehicleId, mingold, maxgold, AIName, MovementType, "
     //                                        60           61           62              63                   64            65                 66             67              68
     //                                       "InhabitType, HoverHeight, HealthModifier, HealthModifierExtra, ManaModifier, ManaModifierExtra, ArmorModifier, DamageModifier, ExperienceModifier, "
-    //                                        69            70          71           72                    73           74
-    //                                       "RacialLeader, movementId, RegenHealth, mechanic_immune_mask, flags_extra, ScriptName FROM creature_template");
+    //                                        69            70          71           72                    73                        74           75
+    //                                       "RacialLeader, movementId, RegenHealth, mechanic_immune_mask, spell_school_immune_mask, flags_extra, ScriptName FROM creature_template");
 
     WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_CREATURE_TEMPLATE);
     stmt->setUInt32(0, 0);
@@ -527,8 +527,9 @@ void ObjectMgr::LoadCreatureTemplate(Field* fields)
     creatureTemplate.movementId             = fields[70].GetUInt32();
     creatureTemplate.RegenHealth            = fields[71].GetBool();
     creatureTemplate.MechanicImmuneMask     = fields[72].GetUInt32();
-    creatureTemplate.flags_extra            = fields[73].GetUInt32();
-    creatureTemplate.ScriptID               = GetScriptId(fields[74].GetString());
+    creatureTemplate.SpellSchoolImmuneMask  = fields[73].GetUInt8();
+    creatureTemplate.flags_extra            = fields[74].GetUInt32();
+    creatureTemplate.ScriptID               = GetScriptId(fields[75].GetString());
 }
 
 void ObjectMgr::LoadCreatureTemplateModels()
