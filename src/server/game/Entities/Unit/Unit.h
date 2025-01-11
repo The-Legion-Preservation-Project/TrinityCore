@@ -1636,6 +1636,17 @@ class TC_GAME_API Unit : public WorldObject
         DynamicFieldStructuredView<ObjectGuid> GetChannelObjects() const { return GetDynamicStructuredValues<ObjectGuid>(UNIT_DYNAMIC_FIELD_CHANNEL_OBJECTS); }
         void AddChannelObject(ObjectGuid guid) { AddDynamicStructuredValue(UNIT_DYNAMIC_FIELD_CHANNEL_OBJECTS, &guid); }
         void SetChannelObject(uint32 slot, ObjectGuid guid) { SetDynamicStructuredValue(UNIT_DYNAMIC_FIELD_CHANNEL_OBJECTS, slot, &guid); }
+        void RemoveChannelObject(ObjectGuid guid)
+        {
+            auto objects = GetChannelObjects();
+            if (std::find(objects.begin(), objects.end(), guid) != objects.end())
+            {
+                ClearChannelObjects();
+                for (auto object : objects)
+                    if (object != guid)
+                        AddChannelObject(object);
+            }
+        }
         void ClearChannelObjects() { ClearDynamicValue(UNIT_DYNAMIC_FIELD_CHANNEL_OBJECTS); }
 
         void SetCurrentCastSpell(Spell* pSpell);
