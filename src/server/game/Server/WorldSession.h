@@ -1689,7 +1689,7 @@ class TC_GAME_API WorldSession
         void HandleScenePlaybackCanceled(WorldPackets::Scenes::ScenePlaybackCanceled& scenePlaybackCanceled);
 
         // Token
-        void HandlerCommerceTokenGetLog(WorldPackets::Token::CommerceTokenGetLog& commerceTokenGetLog);
+        void HandleCommerceTokenGetLog(WorldPackets::Token::CommerceTokenGetLog& commerceTokenGetLog);
         void HandleCommerceTokenGetMarketPrice(WorldPackets::Token::CommerceTokenGetMarketPrice& commerceTokenGetMarketPrice);
 
         // Compact Unit Frames (4.x)

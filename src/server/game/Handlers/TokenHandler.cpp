@@ -18,7 +18,7 @@
 #include "TokenPackets.h"
 #include "WorldSession.h"
 
-void WorldSession::HandlerCommerceTokenGetLog(WorldPackets::Token::CommerceTokenGetLog& commerceTokenGetLog)
+void WorldSession::HandleCommerceTokenGetLog(WorldPackets::Token::CommerceTokenGetLog& commerceTokenGetLog)
 {
     WorldPackets::Token::CommerceTokenGetLogResponse response;
 
