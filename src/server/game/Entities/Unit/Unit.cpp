@@ -9831,7 +9831,14 @@ void Unit::UpdateResistances(uint32 school)
     if (school > SPELL_SCHOOL_NORMAL)
     {
         UnitMods unitMod = UnitMods(UNIT_MOD_RESISTANCE_START + school);
-        SetResistance(SpellSchools(school), int32(GetFlatModifierValue(unitMod, BASE_VALUE)));
+
+        float value = CalculatePct(GetFlatModifierValue(unitMod, BASE_VALUE), std::max(GetFlatModifierValue(unitMod, BASE_PCT_EXCLUDE_CREATE), -100.0f));
+        value *= GetPctModifierValue(unitMod, BASE_PCT);
+
+        value += GetFlatModifierValue(unitMod, TOTAL_VALUE);
+        value *= GetPctModifierValue(unitMod, TOTAL_PCT);
+
+        SetResistance(SpellSchools(school), int32(value));
     }
     else
         UpdateArmor();

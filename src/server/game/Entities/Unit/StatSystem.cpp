@@ -240,6 +240,7 @@ void Player::UpdateArmor()
 
     float value = GetFlatModifierValue(unitMod, BASE_VALUE);    // base armor (from items)
     value *= GetPctModifierValue(unitMod, BASE_PCT);           // armor percent from items
+
     value += GetFlatModifierValue(unitMod, TOTAL_VALUE);
     value *= GetPctModifierValue(unitMod, TOTAL_PCT);
 
