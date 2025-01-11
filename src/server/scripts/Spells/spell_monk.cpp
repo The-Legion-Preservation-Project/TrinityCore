@@ -220,16 +220,8 @@ class spell_monk_stagger : public AuraScript
         if (!effect)
             return;
 
-        Unit* target = GetTarget();
-        float agility = target->GetStat(STAT_AGILITY);
-        float base = CalculatePct(agility, float(effect->GetAmount()));
-        float K = sDB2Manager.EvaluateExpectedStat(ExpectedStatType::ArmorConstant, target->getLevel(), -2, 0, Classes(target->getClass()));
-
-        float newAmount = (base / (base + K));
-        newAmount *= multiplier;
-
         // Absorb X percentage of the damage
-        float absorbAmount = float(dmgInfo.GetDamage()) * newAmount;
+        float absorbAmount = float(dmgInfo.GetDamage()) * multiplier;
         if (absorbAmount > 0)
         {
             dmgInfo.AbsorbDamage(absorbAmount);
