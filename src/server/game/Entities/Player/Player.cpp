@@ -21828,6 +21828,9 @@ bool Player::CanUnderstandLanguage(Language language) const
         if (languageDesc.second.SkillId && HasSkill(languageDesc.second.SkillId))
             return true;
 
+    if (HasAuraTypeWithMiscvalue(SPELL_AURA_COMPREHEND_LANGUAGE, language))
+        return true;
+
     return false;
 }
 
