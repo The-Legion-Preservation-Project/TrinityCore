@@ -2556,7 +2556,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
     // spellHitTarget can be null if spell is missed in DoSpellHitOnUnit
     if (missInfo != SPELL_MISS_EVADE && spellHitTarget && !m_caster->IsFriendlyTo(unit) && (!IsPositive() || m_spellInfo->HasEffect(SPELL_EFFECT_DISPEL)))
     {
-        m_caster->CombatStart(unit, m_spellInfo->HasInitialAggro());
+        m_caster->AttackedTarget(unit, m_spellInfo->HasInitialAggro());
 
         if (!unit->IsStandState())
             unit->SetStandState(UNIT_STAND_STATE_STAND);
@@ -2651,7 +2651,8 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask)
             }
             if (unit->IsInCombat() && m_spellInfo->HasInitialAggro())
             {
-                m_caster->SetInCombatState(unit->GetCombatTimer() > 0, unit);
+                if (m_caster->HasUnitFlag(UNIT_FLAG_PVP_ATTACKABLE))               // only do explicit combat forwarding for PvP enabled units
+                    m_caster->GetCombatManager().InheritCombatStatesFrom(unit);    // for creature v creature combat, the threat forward does it for us
                 unit->GetThreatManager().ForwardThreatForAssistingMe(m_caster, 0.0f, nullptr, true);
             }
         }
@@ -7428,6 +7429,10 @@ void Spell::DoAllEffectOnLaunchTarget(TargetInfo& targetInfo, float* multiplier)
     if (!unit)
         return;
 
+    // This will only cause combat - the target will engage once the projectile hits (in DoAllEffectOnTarget)
+    if (targetInfo.missCondition != SPELL_MISS_EVADE && !m_caster->IsFriendlyTo(unit) && (!m_spellInfo->IsPositive() || m_spellInfo->HasEffect(SPELL_EFFECT_DISPEL)) && (m_spellInfo->HasInitialAggro() || unit->IsEngaged()))
+        m_caster->SetInCombatWith(unit);
+
     for (SpellEffectInfo const* effect : m_spellInfo->GetEffects())
     {
         if (effect && (targetInfo.effectMask & (1<<effect->EffectIndex)))
@@ -8024,7 +8029,7 @@ bool WorldObjectSpellTargetCheck::operator()(WorldObject* target)
                     return false;
                 break;
             case TARGET_CHECK_THREAT:
-                if (_referer->GetThreatManager().getThreat(unitTarget, true) <= 0.0f)
+                if (_referer->GetThreatManager().GetThreat(unitTarget, true) <= 0.0f)
                     return false;
                 break;
             case TARGET_CHECK_TAP:
