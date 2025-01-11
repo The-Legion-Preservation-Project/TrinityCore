@@ -1174,8 +1174,10 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
     if (SpellInterruptsEntry const* _interrupt = data.Interrupts)
     {
         InterruptFlags = _interrupt->InterruptFlags;
-        std::copy(std::begin(_interrupt->AuraInterruptFlags), std::end(_interrupt->AuraInterruptFlags), AuraInterruptFlags.begin());
-        std::copy(std::begin(_interrupt->ChannelInterruptFlags), std::end(_interrupt->ChannelInterruptFlags), ChannelInterruptFlags.begin());
+        AuraInterruptFlags = SpellAuraInterruptFlags(_interrupt->AuraInterruptFlags[0]);
+        AuraInterruptFlags2 = SpellAuraInterruptFlags2(_interrupt->AuraInterruptFlags[1]);
+        ChannelInterruptFlags = SpellAuraInterruptFlags(_interrupt->ChannelInterruptFlags[0]);
+        ChannelInterruptFlags2 = SpellAuraInterruptFlags2(_interrupt->ChannelInterruptFlags[1]);
     }
 
     // SpellLevelsEntry
@@ -1321,7 +1323,7 @@ bool SpellInfo::HasTargetType(::Targets target) const
 
 bool SpellInfo::HasAnyAuraInterruptFlag() const
 {
-    return std::find_if(AuraInterruptFlags.begin(), AuraInterruptFlags.end(), [](uint32 flag) { return flag != 0; }) != AuraInterruptFlags.end();
+    return AuraInterruptFlags != SpellAuraInterruptFlags::None || AuraInterruptFlags2 != SpellAuraInterruptFlags2::None;
 }
 
 bool SpellInfo::IsExplicitDiscovery() const
@@ -1594,7 +1596,7 @@ bool SpellInfo::IsChanneled() const
 
 bool SpellInfo::IsMoveAllowedChannel() const
 {
-    return IsChanneled() && (HasAttribute(SPELL_ATTR5_CAN_CHANNEL_WHEN_MOVING) || (!(ChannelInterruptFlags[0] & (AURA_INTERRUPT_FLAG_MOVE | AURA_INTERRUPT_FLAG_TURNING))));
+    return IsChanneled() && (HasAttribute(SPELL_ATTR5_CAN_CHANNEL_WHEN_MOVING) || !ChannelInterruptFlags.HasFlag(SpellAuraInterruptFlags::Moving | SpellAuraInterruptFlags::Turning));
 }
 
 bool SpellInfo::NeedsComboPoints() const
@@ -2473,7 +2475,7 @@ void SpellInfo::_LoadSpellSpecific()
             case SPELLFAMILY_GENERIC:
             {
                 // Food / Drinks (mostly)
-                if (HasAuraInterruptFlag(AURA_INTERRUPT_FLAG_NOT_SEATED))
+                if (HasAuraInterruptFlag(SpellAuraInterruptFlags::Standing))
                 {
                     bool food = false;
                     bool drink = false;
@@ -3446,6 +3448,9 @@ void SpellInfo::ApplyAllSpellImmunitiesTo(Unit* target, SpellEffectInfo const* e
                     auraSpellInfo->Id != Id);                                     // Don't remove self
             });
         }
+
+        if (apply && schoolImmunity & SPELL_SCHOOL_MASK_NORMAL)
+            target->RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags::InvulnerabilityBuff);
     }
 
     if (uint32 mechanicImmunity = immuneInfo->MechanicImmuneMask)
@@ -3476,7 +3481,12 @@ void SpellInfo::ApplyAllSpellImmunitiesTo(Unit* target, SpellEffectInfo const* e
     }
 
     if (uint32 damageImmunity = immuneInfo->DamageSchoolMask)
+    {
         target->ApplySpellImmune(Id, IMMUNITY_DAMAGE, damageImmunity, apply);
+
+        if (apply && damageImmunity & SPELL_SCHOOL_MASK_NORMAL)
+            target->RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags::InvulnerabilityBuff);
+    }
 
     for (AuraType auraType : immuneInfo->AuraTypeImmune)
     {
