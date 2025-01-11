@@ -922,12 +922,12 @@ class TC_GAME_API Unit : public WorldObject
         int32 GetMaxPower(Powers power) const;
         float GetPowerPct(Powers power) const { return GetMaxPower(power) ? 100.f * GetPower(power) / GetMaxPower(power) : 0.0f; }
         int32 CountPctFromMaxPower(Powers power, int32 pct) const { return CalculatePct(GetMaxPower(power), pct); }
-        void SetPower(Powers power, int32 val);
+        void SetPower(Powers power, int32 val, bool withPowerUpdate = true);
         void SetMaxPower(Powers power, int32 val);
         void TriggerOnPowerChangeAuras(Powers power, int32 oldVal, int32 newVal);
         inline void SetFullPower(Powers power) { SetPower(power, GetMaxPower(power)); }
         // returns the change in power
-        int32 ModifyPower(Powers power, int32 val);
+        int32 ModifyPower(Powers power, int32 val, bool withPowerUpdate = true);
 
         void ApplyModPowerCostModifier(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(UNIT_FIELD_POWER_COST_MODIFIER + school, mod, apply); }
         void ApplyModPowerCostMultiplier(SpellSchools school, float pct, bool apply) { ApplyModSignedFloatValue(UNIT_FIELD_POWER_COST_MULTIPLIER + school, pct, apply); }

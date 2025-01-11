@@ -6693,9 +6693,9 @@ void Unit::EnergizeBySpell(Unit* victim, uint32 spellId, int32 damage, Powers po
 
 void Unit::EnergizeBySpell(Unit* victim, SpellInfo const* spellInfo, int32 damage, Powers powerType)
 {
-    int32 gain = victim->ModifyPower(powerType, damage);
+    int32 gain = victim->ModifyPower(powerType, damage, false);
     int32 overEnergize = damage - gain;
-    victim->GetThreatManager().ForwardThreatForAssistingMe(this, float(damage)/2, spellInfo, true);
+    victim->GetThreatManager().ForwardThreatForAssistingMe(this, float(damage) / 2, spellInfo, true);
     SendEnergizeSpellLog(victim, spellInfo->Id, damage, overEnergize, powerType);
 }
 
@@ -8541,7 +8541,7 @@ int64 Unit::GetHealthGain(int64 dVal)
 }
 
 // returns negative amount on power reduction
-int32 Unit::ModifyPower(Powers power, int32 dVal)
+int32 Unit::ModifyPower(Powers power, int32 dVal, bool withPowerUpdate /*= true*/)
 {
     int32 gain = 0;
 
@@ -8556,7 +8556,7 @@ int32 Unit::ModifyPower(Powers power, int32 dVal)
     int32 val = dVal + curPower;
     if (val <= GetMinPower(power))
     {
-        SetPower(power, GetMinPower(power));
+        SetPower(power, GetMinPower(power), withPowerUpdate);
         return -curPower;
     }
 
@@ -8564,12 +8564,12 @@ int32 Unit::ModifyPower(Powers power, int32 dVal)
 
     if (val < maxPower)
     {
-        SetPower(power, val);
+        SetPower(power, val, withPowerUpdate);
         gain = val - curPower;
     }
     else if (curPower != maxPower)
     {
-        SetPower(power, maxPower);
+        SetPower(power, maxPower, withPowerUpdate);
         gain = maxPower - curPower;
     }
 
@@ -9971,7 +9971,7 @@ int32 Unit::GetMaxPower(Powers power) const
     return GetInt32Value(UNIT_FIELD_MAXPOWER + powerIndex);
 }
 
-void Unit::SetPower(Powers power, int32 val)
+void Unit::SetPower(Powers power, int32 val, bool withPowerUpdate /*= true*/)
 {
     uint32 powerIndex = GetPowerIndex(power);
     if (powerIndex == MAX_POWERS || powerIndex >= MAX_POWERS_PER_CLASS)
@@ -9984,7 +9984,7 @@ void Unit::SetPower(Powers power, int32 val)
     int32 oldPower = GetInt32Value(UNIT_FIELD_POWER + powerIndex);
     SetInt32Value(UNIT_FIELD_POWER + powerIndex, val);
 
-    if (IsInWorld())
+    if (IsInWorld() && withPowerUpdate)
     {
         WorldPackets::Combat::PowerUpdate packet;
         packet.Guid = GetGUID();
