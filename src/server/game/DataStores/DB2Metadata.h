@@ -1757,8 +1757,8 @@ struct ChrClassUIDisplayMeta
         static DB2MetaField const fields[3] =
         {
             { FT_BYTE, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
         };
 
         static DB2Meta instance(1316515, -1, 3, 0x59A95A73, fields, -1);
