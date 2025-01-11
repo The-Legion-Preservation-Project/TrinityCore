@@ -1218,7 +1218,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void Whisper(uint32 textId, Player* target, bool isBossWhisper = false) override;
         void WhisperAddon(std::string const& text, std::string const& prefix, Player* receiver);
 
-        bool CanUnderstandLanguageSkillId(uint32 langSkillId) const;
+        bool CanUnderstandLanguage(Language language) const;
 
         /*********************************************************/
         /***                    STORAGE SYSTEM                 ***/
