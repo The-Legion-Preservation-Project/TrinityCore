@@ -6024,7 +6024,7 @@ struct LanguageWordsMeta
         static DB2MetaField const fields[2] =
         {
             { FT_STRING, 1, false },
-            { FT_BYTE, 1, false },
+            { FT_INT, 1, false },
         };
 
         static DB2Meta instance(984702, -1, 2, 0xC15912BD, fields, -1);
