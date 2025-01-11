@@ -472,8 +472,8 @@ void AuctionHouseMgr::LoadAuctions()
             auction.BuyoutPrice = fields[8].GetUInt64();
             auction.Deposit = fields[9].GetUInt64();
             auction.BidAmount = fields[10].GetUInt64();
-            auction.StartTime = std::chrono::system_clock::from_time_t(fields[11].GetUInt32());
-            auction.EndTime = std::chrono::system_clock::from_time_t(fields[12].GetUInt32());
+            auction.StartTime = std::chrono::system_clock::from_time_t(fields[11].GetInt64());
+            auction.EndTime = std::chrono::system_clock::from_time_t(fields[12].GetInt64());
 
             auctionHouse->AddAuction(nullptr, std::move(auction));
 
@@ -739,8 +739,8 @@ void AuctionHouseObject::AddAuction(CharacterDatabaseTransaction trans, AuctionP
         stmt->setUInt64(6, auction.BuyoutPrice);
         stmt->setUInt64(7, auction.Deposit);
         stmt->setUInt64(8, auction.BidAmount);
-        stmt->setUInt32(9, uint32(std::chrono::system_clock::to_time_t(auction.StartTime)));
-        stmt->setUInt32(10, uint32(std::chrono::system_clock::to_time_t(auction.EndTime)));
+        stmt->setInt64(9, std::chrono::system_clock::to_time_t(auction.StartTime));
+        stmt->setInt64(10, std::chrono::system_clock::to_time_t(auction.EndTime));
         trans->Append(stmt);
     }
 

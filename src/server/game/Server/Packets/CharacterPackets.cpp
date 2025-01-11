@@ -111,7 +111,7 @@ EnumCharactersResult::CharacterInfo::CharacterInfo(Field* fields)
 
     Tokenizer equipment(fields[25].GetString(), ' ');
     ListPosition = fields[27].GetUInt8();
-    LastPlayedTime = fields[28].GetUInt32();
+    LastPlayedTime = fields[28].GetInt64();
     if (ChrSpecializationEntry const* spec = sDB2Manager.GetChrSpecializationByIndex(ClassID, fields[29].GetUInt8()))
         SpecID = spec->ID;
 
