@@ -397,7 +397,7 @@ void ObjectMgr::LoadCreatureTemplates()
         return;
     }
 
-    _creatureTemplateStore.rehash(result->GetRowCount());
+    _creatureTemplateStore.reserve(result->GetRowCount());
     do
     {
         Field* fields = result->Fetch();
@@ -1479,7 +1479,7 @@ void ObjectMgr::LoadCreatureModelInfo()
         return;
     }
 
-    _creatureModelStore.rehash(result->GetRowCount());
+    _creatureModelStore.reserve(result->GetRowCount());
     uint32 count = 0;
 
     // List of model FileDataIDs that the client treats as invisible stalker
@@ -5943,7 +5943,7 @@ void ObjectMgr::LoadNPCText()
         return;
     }
 
-    _npcTextStore.rehash(result->GetRowCount());
+    _npcTextStore.reserve(result->GetRowCount());
 
     do
     {
@@ -7210,7 +7210,7 @@ void ObjectMgr::LoadGameObjectTemplate()
         return;
     }
 
-    _gameObjectTemplateStore.rehash(result->GetRowCount());
+    _gameObjectTemplateStore.reserve(result->GetRowCount());
     uint32 count = 0;
     do
     {
