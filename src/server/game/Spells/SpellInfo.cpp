@@ -4481,7 +4481,6 @@ bool SpellInfo::_IsPositiveEffect(uint32 effIndex, bool deep) const
                     {
                         case SpellModOp::PowerCost0:                 // dependent from bas point sign (negative -> positive)
                         case SpellModOp::PowerCost1:
-                        case SpellModOp::PowerCost2:
                             if (effect->CalcValue() > 0)
                             {
                                 if (!deep)
