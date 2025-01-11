@@ -25,6 +25,7 @@
 #include "CellImpl.h"
 #include "CreatureAIImpl.h" // for RAND()
 #include "GridNotifiersImpl.h"
+#include "Item.h"
 #include "ObjectAccessor.h"
 #include "Player.h"
 #include "SpellAuraEffects.h"
@@ -54,12 +55,15 @@ enum ShamanSpells
     SPELL_SHAMAN_FLAMETONGUE_ATTACK             = 10444,
     SPELL_SHAMAN_GATHERING_STORMS               = 198299,
     SPELL_SHAMAN_GATHERING_STORMS_BUFF          = 198300,
+    SPELL_SHAMAN_HEALING_RAIN_VISUAL            = 147490,
+    SPELL_SHAMAN_HEALING_RAIN_HEAL              = 73921,
     SPELL_SHAMAN_ITEM_LIGHTNING_SHIELD          = 23552,
     SPELL_SHAMAN_ITEM_LIGHTNING_SHIELD_DAMAGE   = 27635,
     SPELL_SHAMAN_ITEM_MANA_SURGE                = 23571,
     SPELL_SHAMAN_LAVA_BURST                     = 51505,
     SPELL_SHAMAN_LAVA_BURST_BONUS_DAMAGE        = 71824,
     SPELL_SHAMAN_LAVA_SURGE                     = 77762,
+    SPELL_SHAMAN_LIQUID_MAGMA_HIT               = 192231,
     SPELL_SHAMAN_PATH_OF_FLAMES_SPREAD          = 210621,
     SPELL_SHAMAN_PATH_OF_FLAMES_TALENT          = 201909,
     SPELL_SHAMAN_POWER_SURGE                    = 40466,
@@ -69,7 +73,7 @@ enum ShamanSpells
     SPELL_SHAMAN_TOTEMIC_POWER_SPELL_POWER      = 28825,
     SPELL_SHAMAN_TOTEMIC_POWER_ATTACK_POWER     = 28826,
     SPELL_SHAMAN_TOTEMIC_POWER_ARMOR            = 28827,
-    SPELL_SHAMAN_WINDFURY_ATTACK                = 25504
+    SPELL_SHAMAN_WINDFURY_ATTACK                = 25504,
 };
 
 enum MiscSpells
@@ -77,6 +81,11 @@ enum MiscSpells
     SPELL_HUNTER_INSANITY                       = 95809,
     SPELL_MAGE_TEMPORAL_DISPLACEMENT            = 80354,
     SPELL_PET_NETHERWINDS_FATIGUED              = 160455
+};
+
+enum MiscNpcs
+{
+    NPC_HEALING_RAIN_INVISIBLE_STALKER          = 73400,
 };
 
 // 108281 - Ancestral Guidance
@@ -451,6 +460,73 @@ public:
     }
 };
 
+// 73920 - Healing Rain (Aura)
+class spell_sha_healing_rain_aura : public AuraScript
+{
+public:
+    static constexpr char const ScriptName[] = "spell_sha_healing_rain";
+
+    void SetVisualDummy(TempSummon* summon)
+    {
+        _visualDummy = summon->GetGUID();
+        summon->GetPosition(_x, _y, _z);
+    }
+
+private:
+    PrepareAuraScript(spell_sha_healing_rain_aura);
+
+    void HandleEffectPeriodic(AuraEffect const* aurEff)
+    {
+        GetTarget()->CastSpell(_x, _y, _z, SPELL_SHAMAN_HEALING_RAIN_HEAL, true, nullptr, aurEff);
+    }
+
+    void HandleEffecRemoved(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+    {
+        if (Creature* summon = ObjectAccessor::GetCreature(*GetTarget(), _visualDummy))
+            summon->DespawnOrUnsummon();
+    }
+
+    void Register() override
+    {
+        OnEffectRemove += AuraEffectRemoveFn(spell_sha_healing_rain_aura::HandleEffecRemoved, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY, AURA_EFFECT_HANDLE_REAL);
+        OnEffectPeriodic += AuraEffectPeriodicFn(spell_sha_healing_rain_aura::HandleEffectPeriodic, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
+    }
+
+    ObjectGuid _visualDummy;
+    float _x = 0.0f, _y = 0.0f, _z = 0.0f;
+};
+constexpr char const spell_sha_healing_rain_aura::ScriptName[];
+
+// 73920 - Healing Rain
+class spell_sha_healing_rain : public SpellScript
+{
+    PrepareSpellScript(spell_sha_healing_rain);
+
+    void InitializeVisualStalker()
+    {
+        if (Aura* aura = GetHitAura())
+        {
+            if (WorldLocation const* dest = GetExplTargetDest())
+            {
+                int32 duration = GetSpellInfo()->CalcDuration(GetOriginalCaster());
+                TempSummon* summon = GetCaster()->GetMap()->SummonCreature(NPC_HEALING_RAIN_INVISIBLE_STALKER, *dest, nullptr, duration, GetOriginalCaster());
+                if (!summon)
+                    return;
+
+                summon->CastSpell(summon, SPELL_SHAMAN_HEALING_RAIN_VISUAL, true);
+
+                if (spell_sha_healing_rain_aura* script = aura->GetScript<spell_sha_healing_rain_aura>(spell_sha_healing_rain_aura::ScriptName))
+                    script->SetVisualDummy(summon);
+            }
+        }
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_sha_healing_rain::InitializeVisualStalker);
+    }
+};
+
 // 52042 - Healing Stream Totem
 class spell_sha_healing_stream_totem_heal : public SpellScriptLoader
 {
@@ -474,7 +550,7 @@ class spell_sha_healing_stream_totem_heal : public SpellScriptLoader
                     targets.push_back(GetOriginalCaster());
             }
 
-            void Register()
+            void Register() override
             {
                 OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_healing_stream_totem_heal_SpellScript::SelectTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ALLY);
             }
@@ -879,6 +955,40 @@ class spell_sha_lava_surge_proc : public SpellScriptLoader
         {
             return new spell_sha_lava_surge_proc_SpellScript();
         }
+};
+
+// 192223 - Liquid Magma Totem (erupting hit spell)
+class spell_sha_liquid_magma_totem : public SpellScript
+{
+    PrepareSpellScript(spell_sha_liquid_magma_totem);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_SHAMAN_LIQUID_MAGMA_HIT });
+    }
+
+    void HandleEffectHitTarget(SpellEffIndex /*effIndex*/)
+    {
+        if (Unit* hitUnit = GetHitUnit())
+            GetCaster()->CastSpell(hitUnit, SPELL_SHAMAN_LIQUID_MAGMA_HIT, true);
+    }
+
+    void HandleTargetSelect(std::list<WorldObject*>& targets)
+    {
+        // choose one random target from targets
+        if (targets.size() > 1)
+        {
+            WorldObject* selected = Trinity::Containers::SelectRandomContainerElement(targets);
+            targets.clear();
+            targets.push_back(selected);
+        }
+    }
+
+    void Register() override
+    {
+        OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_liquid_magma_totem::HandleTargetSelect, EFFECT_0, TARGET_UNIT_DEST_AREA_ENEMY);
+        OnEffectHitTarget += SpellEffectFn(spell_sha_liquid_magma_totem::HandleEffectHitTarget, EFFECT_0, SPELL_EFFECT_DUMMY);
+    }
 };
 
 // 210621 - Path of Flames Spread
@@ -1293,7 +1403,7 @@ void AddSC_shaman_spell_scripts()
     new spell_sha_earthen_rage_passive();
     new spell_sha_earthen_rage_proc_aura();
     new spell_sha_elemental_blast();
-    new spell_sha_flametongue();
+    RegisterSpellAndAuraScriptPair(spell_sha_healing_rain, spell_sha_healing_rain_aura);
     new spell_sha_healing_stream_totem_heal();
     new spell_sha_heroism();
     new spell_sha_item_lightning_shield();
@@ -1305,6 +1415,7 @@ void AddSC_shaman_spell_scripts()
     new spell_sha_lava_burst();
     new spell_sha_lava_surge();
     new spell_sha_lava_surge_proc();
+    RegisterSpellScript(spell_sha_liquid_magma_totem);
     new spell_sha_path_of_flames_spread();
     new spell_sha_tidal_waves();
     new spell_sha_t3_6p_bonus();
