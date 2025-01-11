@@ -28,6 +28,7 @@
 #include "DB2Stores.h"
 #include "DisableMgr.h"
 #include "GameEventMgr.h"
+#include "GameTime.h"
 #include "Garrison.h"
 #include "Group.h"
 #include "InstanceScript.h"
@@ -967,7 +968,7 @@ void CriteriaHandler::SetCriteriaProgress(Criteria const* criteria, uint64 chang
     }
 
     progress->Changed = true;
-    progress->Date = time(nullptr); // set the date to the latest update.
+    progress->Date = GameTime::GetGameTime(); // set the date to the latest update.
     progress->PlayerGUID = referencePlayer ? referencePlayer->GetGUID() : ObjectGuid::Empty;
 
     Seconds timeElapsed = Seconds::zero();

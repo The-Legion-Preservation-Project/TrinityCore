@@ -3132,7 +3132,7 @@ bool Map::CheckRespawn(RespawnInfo* info)
         : ObjectGuid::Create<HighGuid::Creature>(GetId(), info->entry, info->spawnId);
     if (time_t linkedTime = GetLinkedRespawnTime(thisGUID))
     {
-        time_t now = time(nullptr);
+        time_t now = GameTime::GetGameTime();
         time_t respawnTime;
         if (linkedTime == std::numeric_limits<time_t>::max())
             respawnTime = linkedTime;
@@ -3163,7 +3163,7 @@ bool Map::CheckRespawn(RespawnInfo* info)
     {
         if (!sScriptMgr->CanSpawn(info->spawnId, info->entry, sObjectMgr->GetCreatureData(info->spawnId), this))
         { // if a script blocks our respawn, schedule next check in a little bit
-            info->respawnTime = time(nullptr) + urand(4, 7);
+            info->respawnTime = GameTime::GetGameTime() + urand(4, 7);
             return false;
         }
     }
@@ -3336,7 +3336,7 @@ void Map::RemoveRespawnTime(RespawnVector& respawnData, bool doRespawn, Characte
 
 void Map::ProcessRespawns()
 {
-    time_t now = time(nullptr);
+    time_t now = GameTime::GetGameTime();
     while (!_respawnTimes.empty())
     {
         RespawnInfo* next = _respawnTimes.top();
@@ -3433,7 +3433,7 @@ bool Map::SpawnGroupSpawn(uint32 groupId, bool ignoreRespawn, bool force, std::v
                     continue;
 
         time_t respawnTime = GetRespawnTime(data->type, data->spawnId);
-        if (respawnTime && respawnTime > time(nullptr))
+        if (respawnTime && respawnTime > GameTime::GetGameTime())
         {
             if (!force && !ignoreRespawn)
                 continue;
@@ -3896,7 +3896,7 @@ bool InstanceMap::AddPlayerToMap(Player* player, bool initPlayer /*= true*/)
 
             // increase current instances (hourly limit)
             if (!group || !group->isLFGGroup())
-                player->AddInstanceEnterTime(GetInstanceId(), time(nullptr));
+                player->AddInstanceEnterTime(GetInstanceId(), GameTime::GetGameTime());
 
             // get or create an instance save for the map
             InstanceSave* mapSave = sInstanceSaveMgr->GetInstanceSave(GetInstanceId());
@@ -4723,7 +4723,7 @@ Corpse* Map::ConvertCorpseToBones(ObjectGuid const& ownerGuid, bool insignia /*=
 
 void Map::RemoveOldCorpses()
 {
-    time_t now = time(nullptr);
+    time_t now = GameTime::GetGameTime();
 
     std::vector<ObjectGuid> corpses;
     corpses.reserve(_corpsesByPlayer.size());
