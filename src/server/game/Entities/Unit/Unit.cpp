@@ -8181,6 +8181,14 @@ void Unit::SetInCombatState(bool PvP, Unit* enemy)
         controlled->SetInCombatState(PvP, enemy);
     }
 
+    for (auto itr = m_appliedAuras.begin(); itr != m_appliedAuras.end();)
+    {
+        AuraApplication* aurApp = itr->second;
+        ++itr;
+
+        aurApp->GetBase()->CallScriptEnterLeaveCombatHandlers(aurApp, true);
+    }
+
     RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags::EnteringCombat);
     ProcSkillsAndAuras(enemy, PROC_FLAG_ENTER_COMBAT, PROC_FLAG_NONE, PROC_SPELL_TYPE_MASK_ALL, PROC_SPELL_PHASE_NONE, PROC_HIT_NONE, nullptr, nullptr, nullptr);
 }
@@ -8207,8 +8215,8 @@ void Unit::ClearInCombat()
         else if (!IsCharmed())
             return;
     }
-    else
-        ToPlayer()->OnCombatExit();
+
+    OnCombatExit();
 
     RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags::LeavingCombat);
 }
@@ -8218,6 +8226,17 @@ void Unit::ClearInPetCombat()
     RemoveUnitFlag(UNIT_FLAG_PET_IN_COMBAT);
     if (Unit* owner = GetOwner())
         owner->RemoveUnitFlag(UNIT_FLAG_PET_IN_COMBAT);
+}
+
+void Unit::OnCombatExit()
+{
+    for (auto itr = m_appliedAuras.begin(); itr != m_appliedAuras.end();)
+    {
+        AuraApplication* aurApp = itr->second;
+        ++itr;
+
+        aurApp->GetBase()->CallScriptEnterLeaveCombatHandlers(aurApp, false);
+    }
 }
 
 bool Unit::isTargetableForAttack(bool checkFakeDeath) const
