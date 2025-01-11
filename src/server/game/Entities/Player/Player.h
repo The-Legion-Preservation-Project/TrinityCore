@@ -24,6 +24,7 @@
 #include "DBCEnums.h"
 #include "EquipmentSet.h"
 #include "GroupReference.h"
+#include "Hash.h"
 #include "ItemDefines.h"
 #include "ItemEnchantmentMgr.h"
 #include "MapReference.h"
@@ -570,6 +571,15 @@ enum AtLoginFlags
 };
 
 typedef std::map<uint32, QuestStatusData> QuestStatusMap;
+
+struct QuestObjectiveStatusData
+{
+    QuestStatusMap::iterator QuestStatusItr;
+    QuestObjective const* Objective;
+};
+
+using QuestObjectiveStatusMap = std::unordered_multimap<std::pair<QuestObjectiveType, int32>, QuestObjectiveStatusData>;
+
 typedef std::set<uint32> RewardedQuestSet;
 
 enum QuestSaveType
@@ -1497,7 +1507,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool CanSeeStartQuest(Quest const* quest);
         bool CanTakeQuest(Quest const* quest, bool msg);
         bool CanAddQuest(Quest const* quest, bool msg) const;
-        bool CanCompleteQuest(uint32 quest_id);
+        bool CanCompleteQuest(uint32 quest_id, uint32 ignoredQuestObjectiveId = 0);
         bool CanCompleteRepeatableQuest(Quest const* quest);
         bool CanRewardQuest(Quest const* quest, bool msg) const;
         bool CanRewardQuest(Quest const* quest, LootItemType rewardType, uint32 rewardId, bool msg) const;
@@ -1578,6 +1588,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void MoneyChanged(uint64 value);
         void ReputationChanged(FactionEntry const* factionEntry, int32 change);
         void CurrencyChanged(uint32 currencyId, int32 change);
+        void UpdateQuestObjectiveProgress(QuestObjectiveType objectiveType, int32 objectId, int64 addCount, ObjectGuid victimGuid = ObjectGuid::Empty);
         bool HasQuestForItem(uint32 itemId) const;
         bool HasQuestForGO(int32 goId) const;
         void UpdateForQuestWorldObjects();
@@ -2840,6 +2851,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         uint32 m_ExtraFlags;
 
         QuestStatusMap m_QuestStatus;
+        QuestObjectiveStatusMap m_questObjectiveStatus;
         QuestStatusSaveMap m_QuestStatusSave;
 
         RewardedQuestSet m_RewardedQuests;
