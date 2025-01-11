@@ -990,7 +990,7 @@ enum CharacterSlot
     SLOT_EMPTY                         = 19
 };
 
-// Languages.dbc (7.3.5.26972)
+// Languages.db2 (7.3.5.26972)
 enum Language
 {
     LANG_UNIVERSAL         = 0,
@@ -1024,8 +1024,6 @@ enum Language
     LANG_THALASSIAN_2      = 182,
     LANG_ADDON             = 0xFFFFFFFF // used by addons, in 2.4.0 not exist, replaced by messagetype?
 };
-
-#define LANGUAGES_COUNT   30
 
 enum TeamId
 {

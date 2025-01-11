@@ -174,45 +174,6 @@ ExtendedPlayerName ExtractExtendedPlayerName(std::string const& name)
         return ExtendedPlayerName(name, "");
 }
 
-LanguageDesc lang_description[LANGUAGES_COUNT] =
-{
-    { LANG_ADDON,                  0, 0                               },
-    { LANG_UNIVERSAL,              0, 0                               },
-    { LANG_ORCISH,               669, SKILL_LANGUAGE_ORCISH           },
-    { LANG_DARNASSIAN,           671, SKILL_LANGUAGE_DARNASSIAN       },
-    { LANG_TAURAHE,              670, SKILL_LANGUAGE_TAURAHE          },
-    { LANG_DWARVISH,             672, SKILL_LANGUAGE_DWARVEN          },
-    { LANG_COMMON,               668, SKILL_LANGUAGE_COMMON           },
-    { LANG_DEMONIC,              815, SKILL_LANGUAGE_DEMON_TONGUE     },
-    { LANG_TITAN,                816, SKILL_LANGUAGE_TITAN            },
-    { LANG_THALASSIAN,           813, SKILL_LANGUAGE_THALASSIAN       },
-    { LANG_DRACONIC,             814, SKILL_LANGUAGE_DRACONIC         },
-    { LANG_KALIMAG,              817, SKILL_LANGUAGE_OLD_TONGUE       },
-    { LANG_GNOMISH,             7340, SKILL_LANGUAGE_GNOMISH          },
-    { LANG_TROLL,               7341, SKILL_LANGUAGE_TROLL            },
-    { LANG_GUTTERSPEAK,        17737, SKILL_LANGUAGE_FORSAKEN         },
-    { LANG_DRAENEI,            29932, SKILL_LANGUAGE_DRAENEI          },
-    { LANG_ZOMBIE,                 0, 0                               },
-    { LANG_GNOMISH_BINARY,         0, 0                               },
-    { LANG_GOBLIN_BINARY,          0, 0                               },
-    { LANG_WORGEN,             69270, SKILL_LANGUAGE_GILNEAN          },
-    { LANG_GOBLIN,             69269, SKILL_LANGUAGE_GOBLIN           },
-    { LANG_PANDAREN_NEUTRAL,  108127, SKILL_LANGUAGE_PANDAREN_NEUTRAL },
-    { LANG_PANDAREN_ALLIANCE, 108130, 0                               },
-    { LANG_PANDAREN_HORDE,    108131, 0                               },
-};
-
-LanguageDesc const* GetLanguageDescByID(uint32 lang)
-{
-    for (uint8 i = 0; i < LANGUAGES_COUNT; ++i)
-    {
-        if (uint32(lang_description[i].lang_id) == lang)
-            return &lang_description[i];
-    }
-
-    return nullptr;
-}
-
 bool SpellClickInfo::IsFitToRequirements(Unit const* clicker, Unit const* clickee) const
 {
     Player const* playerClicker = clicker->ToPlayer();
