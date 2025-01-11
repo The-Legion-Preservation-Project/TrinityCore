@@ -286,6 +286,7 @@ class TC_GAME_API Object
 
         virtual bool hasQuest(uint32 /* quest_id */) const { return false; }
         virtual bool hasInvolvedQuest(uint32 /* quest_id */) const { return false; }
+        void SetIsNewObject(bool enable) { m_isNewObject = enable; }
         virtual void BuildUpdate(UpdateDataMapType&) { }
         void BuildFieldsUpdate(Player*, UpdateDataMapType &) const;
 
@@ -388,6 +389,7 @@ class TC_GAME_API Object
     private:
         ObjectGuid m_guid;
         bool m_inWorld;
+        bool m_isNewObject;
 
         // for output helpful error messages from asserts
         bool PrintIndexError(uint32 index, bool set) const;
