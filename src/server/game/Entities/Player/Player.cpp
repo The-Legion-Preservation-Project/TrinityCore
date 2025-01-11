@@ -11747,7 +11747,8 @@ Item* Player::StoreNewItem(ItemPosCountVec const& pos, uint32 itemId, bool updat
             }
         }
 
-        UpdateAverageItemLevelTotal();
+        if (item->GetTemplate()->GetInventoryType() != INVTYPE_NON_EQUIP)
+            UpdateAverageItemLevelTotal();
     }
 
     return item;
@@ -12402,7 +12403,8 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
         pItem->SetSlot(NULL_SLOT);
         pItem->SetState(ITEM_REMOVED, this);
 
-        UpdateAverageItemLevelTotal();
+        if (pItem->GetTemplate()->GetInventoryType() != INVTYPE_NON_EQUIP)
+            UpdateAverageItemLevelTotal();
         if (bag == INVENTORY_SLOT_BAG_0)
             UpdateAverageItemLevelEquipped();
     }
