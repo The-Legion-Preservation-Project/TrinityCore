@@ -133,8 +133,6 @@ enum class QuestGiverStatus : uint32
     LegendaryQuest               = 0x0800,
     LegendaryRewardCompleteNoPOI = 0x1000,
     LegendaryRewardCompletePOI   = 0x2000,
-
-    ScriptedDefault              = 0x80000000
 };
 
 DEFINE_ENUM_FLAG(QuestGiverStatus);
