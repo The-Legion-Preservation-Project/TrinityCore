@@ -1173,7 +1173,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
     // SpellInterruptsEntry
     if (SpellInterruptsEntry const* _interrupt = data.Interrupts)
     {
-        InterruptFlags = _interrupt->InterruptFlags;
+        InterruptFlags = SpellInterruptFlags(_interrupt->InterruptFlags);
         AuraInterruptFlags = SpellAuraInterruptFlags(_interrupt->AuraInterruptFlags[0]);
         AuraInterruptFlags2 = SpellAuraInterruptFlags2(_interrupt->AuraInterruptFlags[1]);
         ChannelInterruptFlags = SpellAuraInterruptFlags(_interrupt->ChannelInterruptFlags[0]);
@@ -1319,6 +1319,18 @@ bool SpellInfo::HasTargetType(::Targets target) const
             return true;
 
     return false;
+}
+
+bool SpellInfo::CanBeInterrupted(Unit* interruptCaster, Unit* interruptTarget) const
+{
+    return HasAttribute(SPELL_ATTR7_CAN_ALWAYS_BE_INTERRUPTED)
+        || HasChannelInterruptFlag(SpellAuraInterruptFlags::Damage | SpellAuraInterruptFlags::EnteringCombat)
+        || (interruptTarget->IsPlayer() && InterruptFlags.HasFlag(SpellInterruptFlags::DamageCancelsPlayerOnly))
+        || InterruptFlags.HasFlag(SpellInterruptFlags::DamageCancels)
+        || interruptCaster->HasAuraTypeWithMiscvalue(SPELL_AURA_ALLOW_INTERRUPT_SPELL, Id)
+        || (!(interruptTarget->GetMechanicImmunityMask() & (1 << MECHANIC_INTERRUPT))
+            && !interruptTarget->HasAuraTypeWithAffectMask(SPELL_AURA_PREVENT_INTERRUPT, this)
+            && PreventionType & SPELL_PREVENTION_TYPE_SILENCE);
 }
 
 bool SpellInfo::HasAnyAuraInterruptFlag() const
