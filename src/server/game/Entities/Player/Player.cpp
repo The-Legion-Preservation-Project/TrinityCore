@@ -2447,6 +2447,7 @@ void Player::GiveLevel(uint8 level)
     }
 
     UpdateCriteria(CRITERIA_TYPE_REACH_LEVEL);
+    UpdateCriteria(CRITERIA_TYPE_ACTIVELY_REACH_LEVEL, level);
 
     // Refer-A-Friend
     if (GetSession()->GetRecruiterId())
@@ -11776,7 +11777,7 @@ Item* Player::StoreNewItem(ItemPosCountVec const& pos, uint32 itemId, bool updat
     if (item)
     {
         ItemAddedQuestCheck(itemId, count);
-        UpdateCriteria(CRITERIA_TYPE_RECEIVE_EPIC_ITEM, itemId, count);
+        UpdateCriteria(CRITERIA_TYPE_OBTAIN_ANY_ITEM, itemId, count);
         UpdateCriteria(CRITERIA_TYPE_OWN_ITEM, itemId, 1);
 
         item->AddItemFlag(ITEM_FIELD_FLAG_NEW_ITEM);
@@ -11970,7 +11971,7 @@ Item* Player::EquipNewItem(uint16 pos, uint32 item, ItemContext context, bool up
     if (Item* pItem = Item::CreateItem(item, 1, context, this))
     {
         ItemAddedQuestCheck(item, 1);
-        UpdateCriteria(CRITERIA_TYPE_RECEIVE_EPIC_ITEM, item, 1);
+        UpdateCriteria(CRITERIA_TYPE_OBTAIN_ANY_ITEM, item, 1);
         return EquipItem(pos, pItem, update);
     }
 
@@ -12083,7 +12084,7 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
 
     // only for full equip instead adding to stack
     UpdateCriteria(CRITERIA_TYPE_EQUIP_ITEM, pItem->GetEntry());
-    UpdateCriteria(CRITERIA_TYPE_EQUIP_EPIC_ITEM, slot, pItem->GetEntry());
+    UpdateCriteria(CRITERIA_TYPE_EQUIP_ITEM_IN_SLOT, slot, pItem->GetEntry());
 
     UpdateAverageItemLevelEquipped();
 
@@ -12209,7 +12210,7 @@ void Player::QuickEquipItem(uint16 pos, Item* pItem)
             CheckTitanGripPenalty();
 
         UpdateCriteria(CRITERIA_TYPE_EQUIP_ITEM, pItem->GetEntry());
-        UpdateCriteria(CRITERIA_TYPE_EQUIP_EPIC_ITEM, slot, pItem->GetEntry());
+        UpdateCriteria(CRITERIA_TYPE_EQUIP_ITEM_IN_SLOT, slot, pItem->GetEntry());
     }
 }
 
@@ -12373,7 +12374,7 @@ void Player::MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool 
 {
     // update quest counters
     ItemAddedQuestCheck(pItem->GetEntry(), pItem->GetCount());
-    UpdateCriteria(CRITERIA_TYPE_RECEIVE_EPIC_ITEM, pItem->GetEntry(), pItem->GetCount());
+    UpdateCriteria(CRITERIA_TYPE_OBTAIN_ANY_ITEM, pItem->GetEntry(), pItem->GetCount());
 
     // store item
     Item* pLastItem = StoreItem(dest, pItem, update);
@@ -26063,7 +26064,7 @@ void Player::StoreLootItem(uint8 lootSlot, Loot* loot, AELootResult* aeResult/* 
             SendNewItem(newitem, uint32(item->count), false, false, true);
             UpdateCriteria(CRITERIA_TYPE_LOOT_ITEM, item->itemid, item->count);
             UpdateCriteria(CRITERIA_TYPE_LOOT_TYPE, item->itemid, item->count, loot->loot_type);
-            UpdateCriteria(CRITERIA_TYPE_LOOT_EPIC_ITEM, item->itemid, item->count);
+            UpdateCriteria(CRITERIA_TYPE_LOOT_ANY_ITEM, item->itemid, item->count);
         }
         else
             aeResult->Add(newitem, item->count, loot->loot_type);
