@@ -814,29 +814,6 @@ namespace WorldPackets
             bool FullUpdate = false;
         };
 
-        class GuildBankSwapItems final : public ClientPacket
-        {
-        public:
-            GuildBankSwapItems(WorldPacket&& packet) : ClientPacket(CMSG_GUILD_BANK_SWAP_ITEMS, std::move(packet)) { }
-
-            void Read() override;
-
-            ObjectGuid Banker;
-            int32 StackCount = 0;
-            int32 BankItemCount = 0;
-            uint32 ItemID = 0;
-            uint32 ItemID1 = 0;
-            uint8 ToSlot = 0;
-            uint8 BankSlot = 0;
-            uint8 BankSlot1 = 0;
-            uint8 BankTab = 0;
-            uint8 BankTab1 = 0;
-            uint8 ContainerSlot = 0;
-            uint8 ContainerItemSlot = 0;
-            bool AutoStore = false;
-            bool BankOnly = false;
-        };
-
         class DepositGuildBankItem final : public ClientPacket
         {
         public:
