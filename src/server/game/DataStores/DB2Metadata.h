@@ -7164,8 +7164,8 @@ struct ParagonReputationMeta
     {
         static DB2MetaField const fields[3] =
         {
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
             { FT_INT, 1, false },
         };
 

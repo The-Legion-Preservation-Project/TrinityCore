@@ -2145,6 +2145,14 @@ struct OverrideSpellDataEntry
     uint8 Flags;
 };
 
+struct ParagonReputationEntry
+{
+    uint32 ID;
+    int32 LevelThreshold;
+    int32 QuestID;
+    uint32 FactionID;
+};
+
 struct PhaseEntry
 {
     uint32 ID;
