@@ -890,6 +890,8 @@ struct CriteriaTreeEntry
     uint32 CriteriaID;
     uint32 Parent;
     int32 OrderIndex;
+
+    EnumFlag<CriteriaTreeFlags> GetFlags() const { return static_cast<CriteriaTreeFlags>(Flags); }
 };
 
 struct CurrencyTypesEntry
