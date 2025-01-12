@@ -19,13 +19,15 @@
 void AddCustomLfgScripts();
 
 // spells
-void AddCustomWarriorSpellScripts();
+void AddCustomMageSpellScripts();
 void AddCustomShamanSpellScripts();
+void AddCustomWarriorSpellScripts();
 
 void AddTheLegionPreservationProjectScripts()
 {
     AddCustomLfgScripts();
 
-    AddCustomWarriorSpellScripts();
+    AddCustomMageSpellScripts();
     AddCustomShamanSpellScripts();
+    AddCustomWarriorSpellScripts();
 }
