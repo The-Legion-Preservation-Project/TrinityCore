@@ -3227,7 +3227,7 @@ struct FriendshipReputationMeta
         static DB2MetaField const fields[4] =
         {
             { FT_STRING, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
             { FT_SHORT, 1, false },
             { FT_INT, 1, false },
         };

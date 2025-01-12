@@ -1117,6 +1117,22 @@ struct FactionTemplateEntry
     bool IsContestedGuardFaction() const { return (Flags & FACTION_TEMPLATE_FLAG_CONTESTED_GUARD) != 0; }
 };
 
+struct FriendshipRepReactionEntry
+{
+    uint32 ID;
+    LocalizedString Reaction;
+    uint16 ReactionThreshold;
+    uint8 FriendshipRepID;
+};
+
+struct FriendshipReputationEntry
+{
+    LocalizedString Description;
+    int32 TextureFileID;
+    uint16 FactionID;
+    uint32 ID;
+};
+
 struct GameObjectDisplayInfoEntry
 {
     uint32 ID;
