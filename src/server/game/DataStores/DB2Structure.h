@@ -1670,8 +1670,8 @@ struct ItemModifiedAppearanceExtraEntry
     int32 IconFileDataID;
     int32 UnequippedIconFileDataID;
     uint8 SheatheType;
-    int8 DisplayWeaponSubclassID;
-    int8 DisplayInventoryType;
+    uint8 DisplayWeaponSubclassID;
+    uint8 DisplayInventoryType;
 };
 
 struct ItemNameDescriptionEntry
@@ -2362,6 +2362,14 @@ struct QuestInfoEntry
     uint16 Profession;
     uint8 Type;
     uint8 Modifiers;
+};
+
+struct QuestLineXQuestEntry
+{
+    uint32 ID;
+    uint16 QuestLineID;
+    uint16 QuestID;
+    uint8 OrderIndex;
 };
 
 struct QuestMoneyRewardEntry

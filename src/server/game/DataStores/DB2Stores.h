@@ -345,6 +345,7 @@ public:
     uint32 GetRewardPackIDForPvpRewardByHonorLevelAndPrestige(uint8 honorLevel, uint8 prestige) const;
     uint32 GetRequiredHonorLevelForPvpTalent(PvpTalentEntry const* talentInfo) const;
     std::vector<PvpTalentEntry const*> const& GetPvpTalentsByPosition(uint32 class_, uint32 tier, uint32 column) const;
+    std::unordered_set<QuestLineXQuestEntry const*> const* GetQuestsForQuestLine(uint32 questLineId) const;
     std::vector<QuestPackageItemEntry const*> const* GetQuestPackageItems(uint32 questPackageID) const;
     std::vector<QuestPackageItemEntry const*> const* GetQuestPackageItemsFallback(uint32 questPackageID) const;
     uint32 GetQuestUniqueBitFlag(uint32 questId);

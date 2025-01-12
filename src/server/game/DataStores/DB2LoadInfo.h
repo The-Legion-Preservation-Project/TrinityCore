@@ -2701,8 +2701,8 @@ struct ItemModifiedAppearanceExtraLoadInfo
             { true, FT_INT, "IconFileDataID" },
             { true, FT_INT, "UnequippedIconFileDataID" },
             { false, FT_BYTE, "SheatheType" },
-            { true, FT_BYTE, "DisplayWeaponSubclassID" },
-            { true, FT_BYTE, "DisplayInventoryType" },
+            { false, FT_BYTE, "DisplayWeaponSubclassID" },
+            { false, FT_BYTE, "DisplayInventoryType" },
         };
         static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, ItemModifiedAppearanceExtraMeta::Instance(), HOTFIX_SEL_ITEM_MODIFIED_APPEARANCE_EXTRA);
         return &loadInfo;
@@ -3975,6 +3975,22 @@ struct QuestInfoLoadInfo
             { false, FT_BYTE, "Modifiers" },
         };
         static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, QuestInfoMeta::Instance(), HOTFIX_SEL_QUEST_INFO);
+        return &loadInfo;
+    }
+};
+
+struct QuestLineXQuestLoadInfo
+{
+    static DB2LoadInfo const* Instance()
+    {
+        static DB2FieldMeta const fields[] =
+        {
+            { false, FT_INT, "ID" },
+            { false, FT_SHORT, "QuestLineID" },
+            { false, FT_SHORT, "QuestID" },
+            { false, FT_BYTE, "OrderIndex" },
+        };
+        static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, QuestLineXQuestMeta::Instance(), HOTFIX_SEL_QUEST_LINE_X_QUEST);
         return &loadInfo;
     }
 };

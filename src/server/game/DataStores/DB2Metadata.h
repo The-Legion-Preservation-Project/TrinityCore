@@ -5315,8 +5315,8 @@ struct ItemModifiedAppearanceExtraMeta
     {
         static DB2MetaField const fields[5] =
         {
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
             { FT_BYTE, 1, false },
             { FT_BYTE, 1, false },
             { FT_BYTE, 1, false },
