@@ -404,6 +404,8 @@ struct BattlemasterListEntry
     int8 MinPlayers;
     int8 MaxPlayers;
     int8 Flags;
+
+    EnumFlag<BattlemasterListFlags> GetFlags() const { return static_cast<BattlemasterListFlags>(Flags); }
 };
 
 #define MAX_BROADCAST_TEXT_EMOTES 3
