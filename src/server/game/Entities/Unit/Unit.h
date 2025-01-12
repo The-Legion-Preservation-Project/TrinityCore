@@ -1739,8 +1739,6 @@ class TC_GAME_API Unit : public WorldObject
         void SetExtraUnitMovementFlags(uint32 f) { m_movementInfo.SetExtraMovementFlags(f); }
         bool IsSplineEnabled() const;
 
-        float GetPositionZMinusOffset() const;
-
         void SetControlled(bool apply, UnitState state);
         void ApplyControlStatesIfNeeded();
 
@@ -1798,6 +1796,11 @@ class TC_GAME_API Unit : public WorldObject
         bool IsFlying() const   { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_FLYING | MOVEMENTFLAG_DISABLE_GRAVITY); }
         bool IsFalling() const;
         virtual bool CanSwim() const;
+
+        float GetHoverOffset() const
+        {
+            return HasUnitMovementFlag(MOVEMENTFLAG_HOVER) ? GetFloatValue(UNIT_FIELD_HOVERHEIGHT) : 0.0f;
+        }
 
         void RewardRage(uint32 baseRage, bool attacker);
 
