@@ -373,6 +373,7 @@ class TC_GAME_API Item : public Object
         void SetArtifactPower(ItemDynamicFieldArtifactPowers const* artifactPower, bool createIfMissing = false);
 
         void InitArtifactPowers(uint8 artifactId, uint8 artifactTier);
+        uint32 GetTotalUnlockedArtifactPowers() const;
         uint32 GetTotalPurchasedArtifactPowers() const;
         void ApplyArtifactPowerEnchantmentBonuses(EnchantmentSlot slot, uint32 enchantId, bool apply, Player* owner);
         void CopyArtifactDataFromParent(Item* parent);

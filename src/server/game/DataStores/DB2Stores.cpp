@@ -1819,6 +1819,17 @@ std::set<uint32> DB2Manager::GetDefaultItemBonusTree(uint32 itemId, ItemContext 
     return bonusListIDs;
 }
 
+std::set<uint32> DB2Manager::GetAllItemBonusTreeBonuses(uint32 itemBonusTreeId) const
+{
+    std::set<uint32> bonusListIDs;
+    VisitItemBonusTree(itemBonusTreeId, true, [&bonusListIDs](ItemBonusTreeNodeEntry const* bonusTreeNode)
+    {
+        if (bonusTreeNode->ChildItemBonusListID)
+            bonusListIDs.insert(bonusTreeNode->ChildItemBonusListID);
+    });
+    return bonusListIDs;
+}
+
 ItemChildEquipmentEntry const* DB2Manager::GetItemChildEquipment(uint32 itemId) const
 {
     return Trinity::Containers::MapGetValuePtr(_itemChildEquipment, itemId);
