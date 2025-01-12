@@ -615,42 +615,39 @@ public:
         for (auto const& questTemplatePair : questTemplates)
         {
             uint8 localeIndex = handler->GetSessionDbLocaleIndex();
-            if (localeIndex >= 0)
+            if (QuestTemplateLocale const* questLocale = sObjectMgr->GetQuestLocale(questTemplatePair.first))
             {
-                uint8 ulocaleIndex = uint8(localeIndex);
-                if (QuestTemplateLocale const* questLocale = sObjectMgr->GetQuestLocale(questTemplatePair.first))
+                if (questLocale->LogTitle.size() > localeIndex && !questLocale->LogTitle[localeIndex].empty())
                 {
-                    if (questLocale->LogTitle.size() > ulocaleIndex && !questLocale->LogTitle[ulocaleIndex].empty())
+                    std::string title = questLocale->LogTitle[localeIndex];
+
+                    if (Utf8FitTo(title, wNamePart))
                     {
-                        std::string title = questLocale->LogTitle[ulocaleIndex];
-
-                        if (Utf8FitTo(title, wNamePart))
+                        if (maxResults && count++ == maxResults)
                         {
-                            if (maxResults && count++ == maxResults)
-                            {
-                                handler->PSendSysMessage(LANG_COMMAND_LOOKUP_MAX_RESULTS, maxResults);
-                                return true;
-                            }
+                            handler->PSendSysMessage(LANG_COMMAND_LOOKUP_MAX_RESULTS, maxResults);
+                            return true;
+                        }
 
-                            char const* statusStr = "";
+                        char const* statusStr = "";
 
-                            if (target)
+                        if (target)
+                        {
+                            switch (target->GetQuestStatus(questTemplatePair.first))
                             {
-                                switch (target->GetQuestStatus(questTemplatePair.first))
-                                {
-                                    case QUEST_STATUS_COMPLETE:
-                                        statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_COMPLETE);
-                                        break;
-                                    case QUEST_STATUS_INCOMPLETE:
-                                        statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_ACTIVE);
-                                        break;
-                                    case QUEST_STATUS_REWARDED:
-                                        statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_REWARDED);
-                                        break;
-                                    default:
-                                        break;
-                                }
+                                case QUEST_STATUS_COMPLETE:
+                                    statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_COMPLETE);
+                                    break;
+                                case QUEST_STATUS_INCOMPLETE:
+                                    statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_ACTIVE);
+                                    break;
+                                case QUEST_STATUS_REWARDED:
+                                    statusStr = handler->GetTrinityString(LANG_COMMAND_QUEST_REWARDED);
+                                    break;
+                                default:
+                                    break;
                             }
+                        }
 
                             if (handler->GetSession())
                                 handler->PSendSysMessage(LANG_QUEST_LIST_CHAT, questTemplatePair.first, questTemplatePair.first,
@@ -661,11 +658,10 @@ public:
                             else
                                 handler->PSendSysMessage(LANG_QUEST_LIST_CONSOLE, questTemplatePair.first, title.c_str(), statusStr);
 
-                            if (!found)
-                                found = true;
+                        if (!found)
+                            found = true;
 
-                            continue;
-                        }
+                        continue;
                     }
                 }
             }

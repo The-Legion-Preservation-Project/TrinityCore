@@ -297,7 +297,7 @@ enum SpellSchools : uint16
     MAX_SPELL_SCHOOL                    = 7
 };
 
-enum SpellSchoolMask
+enum SpellSchoolMask : uint32
 {
     SPELL_SCHOOL_MASK_NONE    = 0x00,                       // not exist
     SPELL_SCHOOL_MASK_NORMAL  = (1 << SPELL_SCHOOL_NORMAL), // PHYSICAL (Armor)
@@ -2059,7 +2059,7 @@ enum AuraStateType
     (1<<(AURA_STATE_RAID_ENCOUNTER_2-1))|(1<<(AURA_STATE_ROGUE_POISONED-1)))
 
 // Spell mechanics
-enum Mechanics
+enum Mechanics : uint32
 {
     MECHANIC_NONE             = 0,
     MECHANIC_CHARM            = 1,
