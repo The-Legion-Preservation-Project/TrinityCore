@@ -2026,7 +2026,7 @@ void WorldObject::UpdateAllowedPositionZ(float x, float y, float &z) const
             else
             {
                 float ground_z = GetMapHeight(x, y, z);
-                if (z < ground_z)
+                if (std::fabs(z - ground_z) < GetCollisionHeight())
                     z = ground_z;
             }
             break;
@@ -2049,7 +2049,7 @@ void WorldObject::UpdateAllowedPositionZ(float x, float y, float &z) const
             else
             {
                 float ground_z = GetMapHeight(x, y, z);
-                if (z < ground_z)
+                if (std::fabs(z - ground_z) < GetCollisionHeight())
                     z = ground_z;
             }
             break;
