@@ -457,6 +457,7 @@ class TC_GAME_API SpellInfo
         int32 RequiredAreasID = -1;
         uint32 SchoolMask = 0;
         uint32 ChargeCategoryId = 0;
+        std::unordered_set<uint32> Labels;
 
         // SpellScalingEntry
         struct ScalingInfo
@@ -470,7 +471,8 @@ class TC_GAME_API SpellInfo
         uint32 ExplicitTargetMask = 0;
         SpellChainNode const* ChainEntry = nullptr;
 
-        SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, SpellInfoLoadHelper const& data, SpellVisualVector&& visuals);
+        SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, SpellInfoLoadHelper const& data,
+            std::vector<SpellLabelEntry const*> const& labels, SpellVisualVector&& visuals);
         SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, std::vector<SpellEffectEntry> const& effects);
         ~SpellInfo();
 
@@ -626,6 +628,8 @@ class TC_GAME_API SpellInfo
         bool SpellCancelsAuraEffect(AuraEffect const* aurEff) const;
 
         uint32 GetAllowedMechanicMask() const;
+
+        bool HasLabel(uint32 labelId) const;
 
     private:
         // loading helpers

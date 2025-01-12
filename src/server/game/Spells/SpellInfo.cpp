@@ -1043,7 +1043,8 @@ SpellEffectInfo::StaticData SpellEffectInfo::_data[TOTAL_SPELL_EFFECTS] =
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 255 SPELL_EFFECT_LEARN_TRANSMOG_SET
 };
 
-SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, SpellInfoLoadHelper const& data, SpellVisualVector&& visuals)
+SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, SpellInfoLoadHelper const& data,
+    std::vector<SpellLabelEntry const*> const& labels, SpellVisualVector&& visuals)
     : Id(spellEntry->ID), Difficulty(difficulty)
 {
     _effects.reserve(32);
@@ -1179,6 +1180,9 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
         ChannelInterruptFlags = SpellAuraInterruptFlags(_interrupt->ChannelInterruptFlags[0]);
         ChannelInterruptFlags2 = SpellAuraInterruptFlags2(_interrupt->ChannelInterruptFlags[1]);
     }
+
+    for (SpellLabelEntry const* label : labels)
+        Labels.insert(label->LabelID);
 
     // SpellLevelsEntry
     if (SpellLevelsEntry const* _levels = data.Levels)
@@ -4614,4 +4618,9 @@ void SpellInfo::_UnloadImplicitTargetConditionLists()
             delete cur;
         }
     }
+}
+
+bool SpellInfo::HasLabel(uint32 labelId) const
+{
+    return Labels.find(labelId) != Labels.end();
 }

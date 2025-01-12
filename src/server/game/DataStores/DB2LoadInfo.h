@@ -4748,6 +4748,21 @@ struct SpellItemEnchantmentConditionLoadInfo
     }
 };
 
+struct SpellLabelLoadInfo
+{
+    static DB2LoadInfo const* Instance()
+    {
+        static DB2FieldMeta const fields[] =
+        {
+            { false, FT_INT, "ID" },
+            { false, FT_INT, "LabelID" },
+            { true, FT_INT, "SpellID" },
+        };
+        static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, SpellLabelMeta::Instance(), HOTFIX_SEL_SPELL_LABEL);
+        return &loadInfo;
+    }
+};
+
 struct SpellLearnSpellLoadInfo
 {
     static DB2LoadInfo const* Instance()
