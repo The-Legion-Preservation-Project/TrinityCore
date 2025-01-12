@@ -1560,7 +1560,7 @@ bool CriteriaHandler::RequirementsSatisfied(Criteria const* criteria, uint64 mis
                 return false;
             break;
         case CRITERIA_TYPE_HONORABLE_KILL_AT_AREA:
-        case CRITERIA_TYPE_TRAVELLED_TO_AREA:
+        //case CRITERIA_TYPE_TRAVELLED_TO_AREA:
             if (!miscValue1 || miscValue1 != uint32(criteria->Entry->Asset.AreaID))
                 return false;
             break;
