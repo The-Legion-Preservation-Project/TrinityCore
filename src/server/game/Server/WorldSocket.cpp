@@ -77,6 +77,7 @@ WorldSocket::WorldSocket(tcp::socket&& socket) : Socket(std::move(socket)),
     _worldSession(nullptr), _authed(false), _sendBufferSize(4096), _compressionStream(nullptr)
 {
     Trinity::Crypto::GetRandomBytes(_serverChallenge);
+    _sessionKey.fill(0);
     _headerBuffer.Resize(SizeOfClientHeader);
 }
 
