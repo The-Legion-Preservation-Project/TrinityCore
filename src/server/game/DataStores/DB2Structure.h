@@ -44,6 +44,14 @@ struct AchievementEntry
     uint32 CriteriaTree;
 };
 
+struct Achievement_CategoryEntry
+{
+    LocalizedString Name;
+    int16 Parent;
+    uint8 UiOrder;
+    int32 ID;
+};
+
 struct AdventureJournalEntry
 {
     int32 ID;
