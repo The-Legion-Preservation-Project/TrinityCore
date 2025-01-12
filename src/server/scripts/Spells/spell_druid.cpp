@@ -763,7 +763,7 @@ public:
                 return;
 
             CastSpellExtraArgs args(aurEff);
-            args.SpellValueOverrides.AddBP0(CalculatePct(healInfo->GetHeal(), aurEff->GetAmount()));
+            args.AddSpellMod(SPELLVALUE_BASE_POINT0, CalculatePct(healInfo->GetHeal(), aurEff->GetAmount()));
             GetTarget()->CastSpell(eventInfo.GetProcTarget(), SPELL_DRUID_LIVING_SEED_PROC, args);
         }
 
@@ -798,7 +798,7 @@ public:
         {
             PreventDefaultAction();
             CastSpellExtraArgs args(aurEff);
-            args.SpellValueOverrides.AddBP0(aurEff->GetAmount());
+            args.AddSpellMod(SPELLVALUE_BASE_POINT0, aurEff->GetAmount());
             GetTarget()->CastSpell(GetTarget(), SPELL_DRUID_LIVING_SEED_HEAL, args);
         }
 
@@ -1322,7 +1322,7 @@ class spell_dru_t3_8p_bonus : public SpellScriptLoader
 
                 int32 amount = CalculatePct(m->Amount, aurEff->GetAmount());
                 CastSpellExtraArgs args(aurEff);
-                args.SpellValueOverrides.AddBP0(amount);
+                args.AddSpellBP0(amount);
                 caster->CastSpell(nullptr, SPELL_DRUID_EXHILARATE, args);
             }
 
@@ -1407,7 +1407,7 @@ public:
             amount += target->GetRemainingPeriodicAmount(caster->GetGUID(), SPELL_DRUID_LANGUISH, SPELL_AURA_PERIODIC_DAMAGE);
 
             CastSpellExtraArgs args(aurEff);
-            args.SpellValueOverrides.AddBP0(amount);
+            args.AddSpellMod(SPELLVALUE_BASE_POINT0, amount);
             caster->CastSpell(target, SPELL_DRUID_LANGUISH, args);
         }
 
@@ -1515,7 +1515,7 @@ public:
             PreventDefaultAction();
 
             CastSpellExtraArgs args(aurEff);
-            args.SpellValueOverrides.AddBP0(eventInfo.GetHealInfo()->GetHeal());
+            args.AddSpellMod(SPELLVALUE_BASE_POINT0, eventInfo.GetHealInfo()->GetHeal());
             eventInfo.GetActor()->CastSpell(nullptr, SPELL_DRUID_REJUVENATION_T10_PROC, args);
         }
 
