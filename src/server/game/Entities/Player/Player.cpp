@@ -19137,7 +19137,8 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
             if (quest)
             {
                 // find or create
-                QuestStatusData& questStatusData = m_QuestStatus[quest_id];
+                auto questStatusItr = m_QuestStatus.emplace(quest_id, QuestStatusData{}).first;
+                QuestStatusData& questStatusData = questStatusItr->second;
 
                 uint8 qstatus = fields[1].GetUInt8();
                 if (qstatus < MAX_QUEST_STATUS)
@@ -19169,7 +19170,12 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
                 if (slot < MAX_QUEST_LOG_SIZE && questStatusData.Status != QUEST_STATUS_NONE)
                 {
                     questStatusData.Slot = slot;
-                    SetQuestSlot(slot, quest_id, uint32(endTime)); // cast can't be helped
+
+                    for (QuestObjective const& obj : quest->GetObjectives())
+                        m_questObjectiveStatus.emplace(std::make_pair(QuestObjectiveType(obj.Type), obj.ObjectID), QuestObjectiveStatusData{ questStatusItr, &obj });
+
+                    SetQuestSlot(slot, quest_id);
+                    SetQuestSlotTimer(slot, uint32(endTime));
 
                     if (questStatusData.Status == QUEST_STATUS_COMPLETE)
                         SetQuestSlotState(slot, QUEST_STATE_COMPLETE);
