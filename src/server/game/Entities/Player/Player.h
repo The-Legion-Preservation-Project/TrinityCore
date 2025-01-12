@@ -459,6 +459,7 @@ enum PlayerLocalFlags
     PLAYER_LOCAL_FLAG_USING_PARTY_GARRISON          = 0x00000100,
     PLAYER_LOCAL_FLAG_CAN_USE_OBJECTS_MOUNTED       = 0x00000200,
     PLAYER_LOCAL_FLAG_CAN_VISIT_PARTY_GARRISON      = 0x00000400,
+    //PLAYER_LOCAL_FLAG_WAR_MODE                      = 0x00000800,
     PLAYER_LOCAL_FLAG_ACCOUNT_SECURED               = 0x00001000,   // Script_IsAccountSecured
 };
 
@@ -2696,6 +2697,9 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         void AddAuraVision(PlayerFieldByte2Flags flags) { SetByteFlag(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_AURA_VISION, flags); }
         void RemoveAuraVision(PlayerFieldByte2Flags flags) { RemoveByteFlag(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_AURA_VISION, flags); }
+
+        bool IsInFriendlyArea() const;
+        bool IsFriendlyArea(AreaTableEntry const* inArea) const;
 
     protected:
         // Gamemaster whisper whitelist

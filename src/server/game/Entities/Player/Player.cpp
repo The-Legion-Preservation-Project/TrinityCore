@@ -27860,6 +27860,27 @@ bool Player::MeetPlayerCondition(uint32 conditionId) const
     return true;
 }
 
+bool Player::IsInFriendlyArea() const
+{
+    if (AreaTableEntry const* areaEntry = sAreaTableStore.LookupEntry(GetAreaId()))
+        return IsFriendlyArea(areaEntry);
+    return false;
+}
+
+bool Player::IsFriendlyArea(AreaTableEntry const* areaEntry) const
+{
+    ASSERT(areaEntry != nullptr);
+
+    FactionTemplateEntry const* factionTemplate = GetFactionTemplateEntry();
+    if (!factionTemplate)
+        return false;
+
+    if (!(factionTemplate->FriendGroup & areaEntry->FactionGroupMask))
+        return false;
+
+    return true;
+}
+
 std::string Player::GetMapAreaAndZoneString() const
 {
     uint32 areaId = GetAreaId();
