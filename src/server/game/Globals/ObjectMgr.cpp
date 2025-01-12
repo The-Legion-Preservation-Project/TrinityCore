@@ -3847,10 +3847,10 @@ void ObjectMgr::LoadPlayerInfo()
     {
         struct RaceStats
         {
-            int16 StatModifier[MAX_STATS];
+            std::array<int16, MAX_STATS> StatModifier = { };
         };
 
-        std::array<RaceStats, MAX_RACES> raceStatModifiers;
+        std::array<RaceStats, MAX_RACES> raceStatModifiers = { };
 
         uint32 oldMSTime = getMSTime();
 
