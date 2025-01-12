@@ -194,7 +194,7 @@ class TC_GAME_API SpellScript : public _SpellScript
             typedef void(CLASSNAME::*SpellBeforeHitFnType)(SpellMissInfo missInfo); \
             typedef void(CLASSNAME::*SpellHitFnType)(); \
             typedef void(CLASSNAME::*SpellCastFnType)(); \
-            typedef void(CLASSNAME::*SpellOnCalcCritChanceFnType)(Unit* victim, float& chance); \
+            typedef void(CLASSNAME::*SpellOnCalcCritChanceFnType)(Unit const* victim, float& chance); \
             typedef void(CLASSNAME::*SpellObjectAreaTargetSelectFnType)(std::list<WorldObject*>&); \
             typedef void(CLASSNAME::*SpellObjectTargetSelectFnType)(WorldObject*&); \
             typedef void(CLASSNAME::*SpellDestinationTargetSelectFnType)(SpellDestination&); \
@@ -262,7 +262,7 @@ class TC_GAME_API SpellScript : public _SpellScript
         {
             public:
                 OnCalcCritChanceHandler(SpellOnCalcCritChanceFnType onCalcCritChanceHandlerScript);
-                void Call(SpellScript* spellScript, Unit* victim, float& critChance) const;
+                void Call(SpellScript* spellScript, Unit const* victim, float& critChance) const;
             private:
                 SpellOnCalcCritChanceFnType _onCalcCritChanceHandlerScript;
         };
@@ -580,7 +580,7 @@ class TC_GAME_API AuraScript : public _SpellScript
         typedef void(CLASSNAME::*AuraEffectCalcAmountFnType)(AuraEffect const*, int32 &, bool &); \
         typedef void(CLASSNAME::*AuraEffectCalcPeriodicFnType)(AuraEffect const*, bool &, int32 &); \
         typedef void(CLASSNAME::*AuraEffectCalcSpellModFnType)(AuraEffect const*, SpellModifier* &); \
-        typedef void(CLASSNAME::*AuraEffectCalcCritChanceFnType)(AuraEffect const*, Unit*, float&); \
+        typedef void(CLASSNAME::*AuraEffectCalcCritChanceFnType)(AuraEffect const*, Unit const*, float&); \
         typedef void(CLASSNAME::*AuraEffectAbsorbFnType)(AuraEffect*, DamageInfo &, uint32 &); \
         typedef void(CLASSNAME::*AuraEffectSplitFnType)(AuraEffect*, DamageInfo &, uint32 &); \
         typedef bool(CLASSNAME::*AuraCheckProcFnType)(ProcEventInfo&); \
@@ -658,7 +658,7 @@ class TC_GAME_API AuraScript : public _SpellScript
         {
             public:
                 EffectCalcCritChanceHandler(AuraEffectCalcCritChanceFnType effectHandlerScript, uint8 effIndex, uint16 effName);
-                void Call(AuraScript* auraScript, AuraEffect const* aurEff, Unit* victim, float& critChance) const;
+                void Call(AuraScript* auraScript, AuraEffect const* aurEff, Unit const* victim, float& critChance) const;
             private:
                 AuraEffectCalcCritChanceFnType _effectHandlerScript;
         };

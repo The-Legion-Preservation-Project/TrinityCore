@@ -301,7 +301,7 @@ class spell_monk_stagger_damage_aura : public AuraScript
             if (AuraEffect* auraEff = auraStagger->GetEffect(AuraStaggerEffectTotal))
             {
                 float total = float(auraEff->GetAmount());
-                float tickDamage = float(aurEff->GetDamage());
+                float tickDamage = float(aurEff->GetAmount());
                 auraEff->ChangeAmount(total - tickDamage);
             }
         }
@@ -374,7 +374,7 @@ private:
 
         if (auraDamage)
             if (AuraEffect* eff = auraDamage->GetEffect(AuraStaggerEffectTick))
-                eff->SetDamage(tickDamage);
+                eff->ChangeAmount(tickDamage);
     }
 };
 
