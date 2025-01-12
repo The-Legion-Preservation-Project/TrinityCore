@@ -58,9 +58,9 @@ struct AchievementCategoryLoadInfo
         static DB2FieldMeta const fields[] =
         {
             { false, FT_STRING, "Name" },
-            { false, FT_INT, "ID" },
             { true, FT_SHORT, "Parent" },
-            { true, FT_BYTE, "UiOrder" },
+            { false, FT_BYTE, "UiOrder" },
+            { false, FT_INT, "ID" },
         };
         static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, Achievement_CategoryMeta::Instance(), HOTFIX_SEL_ACHIEVEMENT_CATEGORY);
         return &loadInfo;

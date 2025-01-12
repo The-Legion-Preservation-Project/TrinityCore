@@ -57,7 +57,7 @@ struct Achievement_CategoryMeta
             { FT_STRING, 1, false },
             { FT_SHORT, 1, true },
             { FT_BYTE, 1, false },
-            { FT_INT, 1, true },
+            { FT_INT, 1, false },
         };
 
         static DB2Meta instance(1324299, 3, 4, 0xED226BC9, fields, 2);

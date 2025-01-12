@@ -49,7 +49,7 @@ struct Achievement_CategoryEntry
     LocalizedString Name;
     int16 Parent;
     uint8 UiOrder;
-    int32 ID;
+    uint32 ID;
 };
 
 struct AdventureJournalEntry

@@ -8,7 +8,7 @@ CREATE TABLE `achievement_category` (
   `Name` text,
   `Parent` smallint(6) NOT NULL DEFAULT '0',
   `UiOrder` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `ID` int(10) NOT NULL DEFAULT '0',
+  `ID` int(10) unsigned NOT NULL DEFAULT '0',
   `VerifiedBuild` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`,`VerifiedBuild`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
