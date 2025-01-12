@@ -2795,7 +2795,8 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask)
                 {
                     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                     {
-                        if ((effectMask & (1 << i)) && !m_spellInfo->IsPositiveEffect(i))
+                        // mod duration only for effects applying aura!
+                        if ((aura_effmask & (1 << i)) && !m_spellInfo->IsPositiveEffect(i))
                         {
                             positive = false;
                             break;
