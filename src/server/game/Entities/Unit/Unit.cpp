@@ -5404,7 +5404,7 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
     //if (GetTypeId() == TYPEID_UNIT)
     //    ToCreature()->SetCombatStartPosition(GetPositionX(), GetPositionY(), GetPositionZ());
 
-    if (creature && !IsPet())
+    if (creature && !IsControlledByPlayer())
     {
         EngageWithTarget(victim); // ensure that anything we're attacking has threat
 
