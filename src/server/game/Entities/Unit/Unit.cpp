@@ -1902,7 +1902,7 @@ void Unit::AttackerStateUpdate(Unit* victim, WeaponAttackType attType, bool extr
     if (attType != BASE_ATTACK && attType != OFF_ATTACK)
         return;                                             // ignore ranged case
 
-    if (GetTypeId() == TYPEID_UNIT && !HasUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED) && !HasUnitFlag2(UNIT_FLAG2_DISABLE_TURN))
+    if (GetTypeId() == TYPEID_UNIT && !HasUnitFlag(UNIT_FLAG_POSSESSED) && !HasUnitFlag2(UNIT_FLAG2_DISABLE_TURN))
         SetFacingToObject(victim, false); // update client side facing to face the target (prevents visual glitches when casting untargeted spells)
 
     // melee attack spell cast at main hand attack only - no normal melee dmg dealt
@@ -1986,7 +1986,7 @@ void Unit::FakeAttackerStateUpdate(Unit* victim, WeaponAttackType attType /*= BA
     if (attType != BASE_ATTACK && attType != OFF_ATTACK)
         return;                                             // ignore ranged case
 
-    if (GetTypeId() == TYPEID_UNIT && !HasUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED) && !HasUnitFlag2(UNIT_FLAG2_DISABLE_TURN))
+    if (GetTypeId() == TYPEID_UNIT && !HasUnitFlag(UNIT_FLAG_POSSESSED) && !HasUnitFlag2(UNIT_FLAG2_DISABLE_TURN))
         SetFacingToObject(victim, false); // update client side facing to face the target (prevents visual glitches when casting untargeted spells)
 
     CalcDamageInfo damageInfo;
@@ -5716,7 +5716,7 @@ void Unit::SetMinion(Minion *minion, bool apply)
         if (GetTypeId() == TYPEID_PLAYER)
         {
             minion->m_ControlledByPlayer = true;
-            minion->AddUnitFlag(UNIT_FLAG_PVP_ATTACKABLE);
+            minion->AddUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
         }
 
         // Can only have one pet. If a new one is summoned, dismiss the old one.
@@ -5886,7 +5886,7 @@ void Unit::SetCharm(Unit* charm, bool apply)
 
             charm->m_ControlledByPlayer = true;
             /// @todo maybe we can use this flag to check if controlled by player
-            charm->AddUnitFlag(UNIT_FLAG_PVP_ATTACKABLE);
+            charm->AddUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
         }
         else
             charm->m_ControlledByPlayer = false;
@@ -5925,19 +5925,19 @@ void Unit::SetCharm(Unit* charm, bool apply)
         if (charm->GetTypeId() == TYPEID_PLAYER)
         {
             charm->m_ControlledByPlayer = true;
-            charm->AddUnitFlag(UNIT_FLAG_PVP_ATTACKABLE);
+            charm->AddUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
             charm->ToPlayer()->UpdatePvPState();
         }
         else if (Player* player = charm->GetCharmerOrOwnerPlayerOrPlayerItself())
         {
             charm->m_ControlledByPlayer = true;
-            charm->AddUnitFlag(UNIT_FLAG_PVP_ATTACKABLE);
+            charm->AddUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
             charm->SetPvpFlags(player->GetPvpFlags());
         }
         else
         {
             charm->m_ControlledByPlayer = false;
-            charm->RemoveUnitFlag(UNIT_FLAG_PVP_ATTACKABLE);
+            charm->RemoveUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
             charm->SetPvpFlags(UNIT_BYTE2_FLAG_NONE);
         }
 
@@ -7622,10 +7622,10 @@ void Unit::SetImmuneToPC(bool apply, bool keepCombat)
         {
             std::list<CombatReference*> toEnd;
             for (auto const& pair : m_combatManager.GetPvECombatRefs())
-                if (pair.second->GetOther(this)->HasUnitFlag(UNIT_FLAG_PVP_ATTACKABLE))
+                if (pair.second->GetOther(this)->HasUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED))
                     toEnd.push_back(pair.second);
             for (auto const& pair : m_combatManager.GetPvPCombatRefs())
-                if (pair.second->GetOther(this)->HasUnitFlag(UNIT_FLAG_PVP_ATTACKABLE))
+                if (pair.second->GetOther(this)->HasUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED))
                     toEnd.push_back(pair.second);
             for (CombatReference* ref : toEnd)
                 ref->EndCombat();
@@ -7650,10 +7650,10 @@ void Unit::SetImmuneToNPC(bool apply, bool keepCombat)
         {
             std::list<CombatReference*> toEnd;
             for (auto const& pair : m_combatManager.GetPvECombatRefs())
-                if (!pair.second->GetOther(this)->HasUnitFlag(UNIT_FLAG_PVP_ATTACKABLE))
+                if (!pair.second->GetOther(this)->HasUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED))
                     toEnd.push_back(pair.second);
             for (auto const& pair : m_combatManager.GetPvPCombatRefs())
-                if (!pair.second->GetOther(this)->HasUnitFlag(UNIT_FLAG_PVP_ATTACKABLE))
+                if (!pair.second->GetOther(this)->HasUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED))
                     toEnd.push_back(pair.second);
             for (CombatReference* ref : toEnd)
                 ref->EndCombat();
@@ -10090,7 +10090,7 @@ bool Unit::InitTamedPet(Pet* pet, uint8 level, uint32 spell_id)
     pet->SetCreatedBySpell(spell_id);
 
     if (GetTypeId() == TYPEID_PLAYER)
-        pet->AddUnitFlag(UNIT_FLAG_PVP_ATTACKABLE);
+        pet->AddUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
 
     if (!pet->InitStatsForLevel(level))
     {
@@ -10810,12 +10810,12 @@ bool Unit::SetCharmedBy(Unit* charmer, CharmType type, AuraApplication const* au
         switch (type)
         {
             case CHARM_TYPE_VEHICLE:
-                AddUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
+                AddUnitFlag(UNIT_FLAG_POSSESSED);
                 playerCharmer->SetClientControl(this, true);
                 playerCharmer->VehicleSpellInitialize();
                 break;
             case CHARM_TYPE_POSSESS:
-                AddUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
+                AddUnitFlag(UNIT_FLAG_POSSESSED);
                 charmer->AddUnitFlag(UNIT_FLAG_REMOVE_CLIENT_CONTROL);
                 playerCharmer->SetClientControl(this, true);
                 playerCharmer->PossessSpellInitialize();
@@ -10915,14 +10915,14 @@ void Unit::RemoveCharmedBy(Unit* charmer)
             case CHARM_TYPE_VEHICLE:
                 playerCharmer->SetClientControl(this, false);
                 playerCharmer->SetClientControl(charmer, true);
-                RemoveUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
+                RemoveUnitFlag(UNIT_FLAG_POSSESSED);
                 break;
             case CHARM_TYPE_POSSESS:
                 ClearUnitState(UNIT_STATE_POSSESSED);
                 playerCharmer->SetClientControl(this, false);
                 playerCharmer->SetClientControl(charmer, true);
                 charmer->RemoveUnitFlag(UNIT_FLAG_REMOVE_CLIENT_CONTROL);
-                RemoveUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
+                RemoveUnitFlag(UNIT_FLAG_POSSESSED);
                 break;
             case CHARM_TYPE_CHARM:
                 if (GetTypeId() == TYPEID_UNIT && charmer->GetClass() == CLASS_WARLOCK)
@@ -12177,7 +12177,7 @@ bool Unit::CanSwim() const
     // Mirror client behavior, if this method returns false then client will not use swimming animation and for players will apply gravity as if there was no water
     if (HasUnitFlag(UNIT_FLAG_CANNOT_SWIM))
         return false;
-    if (HasUnitFlag(UNIT_FLAG_PVP_ATTACKABLE)) // is player
+    if (HasUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED)) // is player
         return true;
     if (HasUnitFlag2(UnitFlags2(0x1000000)))
         return false;
