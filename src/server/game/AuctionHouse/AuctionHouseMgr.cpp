@@ -1140,7 +1140,7 @@ void AuctionHouseObject::SendAuctionWon(AuctionPosting const* auction, Player* b
             bidder->SendDirectMessage(packet.Write());
 
             // FIXME: for offline player need also
-            bidder->UpdateCriteria(CRITERIA_TYPE_WON_AUCTIONS, 1);
+            bidder->UpdateCriteria(CriteriaType::AuctionsWon, 1);
         }
 
         mail.SendMailTo(trans, MailReceiver(bidder, auction->Bidder), this, MAIL_CHECK_MASK_COPIED);
@@ -1167,8 +1167,8 @@ void AuctionHouseObject::SendAuctionSold(AuctionPosting const* auction, Player* 
         //FIXME: what do if owner offline
         if (owner)
         {
-            owner->UpdateCriteria(CRITERIA_TYPE_GOLD_EARNED_BY_AUCTIONS, profit);
-            owner->UpdateCriteria(CRITERIA_TYPE_HIGHEST_AUCTION_SOLD, auction->BidAmount);
+            owner->UpdateCriteria(CriteriaType::MoneyEarnedFromAuctions, profit);
+            owner->UpdateCriteria(CriteriaType::HighestAuctionSale, auction->BidAmount);
             //send auction owner notification, bidder must be current!
             owner->GetSession()->SendAuctionClosedNotification(auction, (float)sWorld->getIntConfig(CONFIG_MAIL_DELIVERY_DELAY), true);
         }

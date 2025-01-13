@@ -908,7 +908,7 @@ void BattlegroundSA::TitanRelicActivated(Player* clicker)
                 {
                     if (Player* player = ObjectAccessor::FindPlayer(itr->first))
                         if (player->GetTeamId() == Attackers)
-                            player->UpdateCriteria(CRITERIA_TYPE_BE_SPELL_TARGET, 65246);
+                            player->UpdateCriteria(CriteriaType::BeSpellTarget, 65246);
                 }
 
                 Attackers = (Attackers == TEAM_ALLIANCE) ? TEAM_HORDE : TEAM_ALLIANCE;
@@ -938,7 +938,7 @@ void BattlegroundSA::TitanRelicActivated(Player* clicker)
                 {
                     if (Player* player = ObjectAccessor::FindPlayer(itr->first))
                         if (player->GetTeamId() == Attackers && RoundScores[1].winner == Attackers)
-                            player->UpdateCriteria(CRITERIA_TYPE_BE_SPELL_TARGET, 65246);
+                            player->UpdateCriteria(CriteriaType::BeSpellTarget, 65246);
                 }
 
                 if (RoundScores[0].time == RoundScores[1].time)

@@ -229,7 +229,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
         {
             if (success)
             {
-                GetPlayer()->UpdateCriteria(CRITERIA_TYPE_CREATE_AUCTION, 1);
+                GetPlayer()->UpdateCriteria(CriteriaType::ItemsPostedAtAuction, 1);
                 SendAuctionCommandResult(&auction, AuctionCommand::SellItem, AuctionResult::Ok);
             }
             else
@@ -342,7 +342,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPackets::AuctionHouse::AuctionPlac
         {
             if (success)
             {
-                GetPlayer()->UpdateCriteria(CRITERIA_TYPE_HIGHEST_AUCTION_BID, bidAmount);
+                GetPlayer()->UpdateCriteria(CriteriaType::HighestAuctionBid, bidAmount);
                 SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::Ok); //, throttle.DelayUntilNext);
             }
             else

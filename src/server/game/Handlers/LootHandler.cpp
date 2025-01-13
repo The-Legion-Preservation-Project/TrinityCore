@@ -135,9 +135,9 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPackets::Loot::LootItem& p
         for (AELootResult::ResultValue const& resultValue : aeResult)
         {
             player->SendNewItem(resultValue.item, resultValue.count, false, false, true);
-            player->UpdateCriteria(CRITERIA_TYPE_LOOT_ITEM, resultValue.item->GetEntry(), resultValue.count);
-            player->UpdateCriteria(CRITERIA_TYPE_LOOT_TYPE, resultValue.item->GetEntry(), resultValue.count, resultValue.lootType);
-            player->UpdateCriteria(CRITERIA_TYPE_LOOT_ANY_ITEM, resultValue.item->GetEntry(), resultValue.count);
+            player->UpdateCriteria(CriteriaType::LootItem, resultValue.item->GetEntry(), resultValue.count);
+            player->UpdateCriteria(CriteriaType::GetLootByType, resultValue.item->GetEntry(), resultValue.count, resultValue.lootType);
+            player->UpdateCriteria(CriteriaType::LootAnyItem, resultValue.item->GetEntry(), resultValue.count);
         }
     }
 }
@@ -227,7 +227,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPackets::Loot::LootMoney& /*packet
             for (std::vector<Player*>::const_iterator i = playersNear.begin(); i != playersNear.end(); ++i)
             {
                 (*i)->ModifyMoney(goldPerPlayer);
-                (*i)->UpdateCriteria(CRITERIA_TYPE_LOOT_MONEY, goldPerPlayer);
+                (*i)->UpdateCriteria(CriteriaType::MoneyLootedFromCreatures, goldPerPlayer);
 
                 WorldPackets::Loot::LootMoneyNotify packet;
                 packet.Money = goldPerPlayer;
@@ -238,7 +238,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPackets::Loot::LootMoney& /*packet
         else
         {
             player->ModifyMoney(loot->gold);
-            player->UpdateCriteria(CRITERIA_TYPE_LOOT_MONEY, loot->gold);
+            player->UpdateCriteria(CriteriaType::MoneyLootedFromCreatures, loot->gold);
 
             WorldPackets::Loot::LootMoneyNotify packet;
             packet.Money = loot->gold;
@@ -540,9 +540,9 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPackets::Loot::MasterLootItem
     for (AELootResult::ResultValue const& resultValue : aeResult)
     {
         target->SendNewItem(resultValue.item, resultValue.count, false, false, true);
-        target->UpdateCriteria(CRITERIA_TYPE_LOOT_ITEM, resultValue.item->GetEntry(), resultValue.count);
-        target->UpdateCriteria(CRITERIA_TYPE_LOOT_TYPE, resultValue.item->GetEntry(), resultValue.count, resultValue.lootType);
-        target->UpdateCriteria(CRITERIA_TYPE_LOOT_ANY_ITEM, resultValue.item->GetEntry(), resultValue.count);
+        target->UpdateCriteria(CriteriaType::LootItem, resultValue.item->GetEntry(), resultValue.count);
+        target->UpdateCriteria(CriteriaType::GetLootByType, resultValue.item->GetEntry(), resultValue.count, resultValue.lootType);
+        target->UpdateCriteria(CriteriaType::LootAnyItem, resultValue.item->GetEntry(), resultValue.count);
     }
 }
 
