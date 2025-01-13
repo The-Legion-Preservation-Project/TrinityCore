@@ -2007,7 +2007,7 @@ void WorldSession::HandleUseEquipmentSet(WorldPackets::EquipmentSet::UseEquipmen
             InventoryResult inventoryResult = _player->CanStoreItem(NULL_BAG, NULL_SLOT, itemPosCountVec, uItem, false);
             if (inventoryResult == EQUIP_ERR_OK)
             {
-                if (_player->CanEquipItem(NULL_SLOT, dstPos, uItem, false) != EQUIP_ERR_OK)
+                if (_player->CanUnequipItem(dstPos, true) != EQUIP_ERR_OK)
                     continue;
 
                 _player->RemoveItem(INVENTORY_SLOT_BAG_0, i, true);
@@ -2021,7 +2021,7 @@ void WorldSession::HandleUseEquipmentSet(WorldPackets::EquipmentSet::UseEquipmen
         if (item->GetPos() == dstPos)
             continue;
 
-        if (_player->CanUnequipItem(dstPos, true) != EQUIP_ERR_OK)
+        if (_player->CanEquipItem(NULL_SLOT, dstPos, item, false) != EQUIP_ERR_OK)
             continue;
 
         _player->SwapItem(item->GetPos(), dstPos);
