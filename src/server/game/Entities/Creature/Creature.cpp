@@ -178,12 +178,8 @@ int32 CreatureTemplate::GetHealthScalingExpansion() const
 
 void CreatureTemplate::InitializeQueryData()
 {
-    WorldPacket queryTemp;
     for (uint8 loc = LOCALE_enUS; loc < TOTAL_LOCALES; ++loc)
-    {
-        queryTemp = BuildQueryData(static_cast<LocaleConstant>(loc));
-        QueryData[loc] = queryTemp;
-    }
+        QueryData[loc] = BuildQueryData(static_cast<LocaleConstant>(loc));
 }
 
 WorldPacket CreatureTemplate::BuildQueryData(LocaleConstant loc) const
@@ -243,7 +239,8 @@ WorldPacket CreatureTemplate::BuildQueryData(LocaleConstant loc) const
             ObjectMgr::GetLocaleString(creatureLocale->TitleAlt, loc, stats.TitleAlt);
         }
 
-    return *queryTemp.Write();
+    queryTemp.Write();
+    return queryTemp.Move();
 }
 
 bool AssistDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)

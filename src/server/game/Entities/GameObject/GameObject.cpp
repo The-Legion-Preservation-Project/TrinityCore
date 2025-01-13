@@ -49,12 +49,8 @@
 
 void GameObjectTemplate::InitializeQueryData()
 {
-    WorldPacket queryTemp;
     for (uint8 loc = LOCALE_enUS; loc < TOTAL_LOCALES; ++loc)
-    {
-        queryTemp = BuildQueryData(static_cast<LocaleConstant>(loc));
-        QueryData[loc] = queryTemp;
-    }
+        QueryData[loc] = BuildQueryData(static_cast<LocaleConstant>(loc));
 }
 
 WorldPacket GameObjectTemplate::BuildQueryData(LocaleConstant loc) const
@@ -91,7 +87,8 @@ WorldPacket GameObjectTemplate::BuildQueryData(LocaleConstant loc) const
     memcpy(stats.Data, raw.data, MAX_GAMEOBJECT_DATA * sizeof(int32));
     stats.RequiredLevel = RequiredLevel;
 
-    return *queryTemp.Write();
+    queryTemp.Write();
+    return queryTemp.Move();
 }
 
 bool QuaternionData::isUnit() const
