@@ -80,7 +80,7 @@ class tlpp_spell_sha_healing_surge: public SpellScript
 public:
     void HandleCalcCastTime(int32& castTime)
     {
-        int32 requiredMaelstrom = GetEffectInfo(EFFECT_2)->BasePoints;
+        int32 requiredMaelstrom = GetEffectInfo(EFFECT_2).BasePoints;
         if (GetCaster()->GetPower(POWER_MAELSTROM) >= requiredMaelstrom)
         {
             castTime = 0;

@@ -62,9 +62,11 @@ class tlpp_spell_mage_ice_lance : public SpellScript
         {
             // Thermal Void
             if (Aura const* thermalVoid = caster->GetAura(SPELL_MAGE_THERMAL_VOID))
-                if (SpellEffectInfo const* thermalVoidEffect = thermalVoid->GetSpellInfo()->GetEffect(EFFECT_0))
-                    if (Aura* icyVeins = caster->GetAura(SPELL_MAGE_ICY_VEINS))
-                        icyVeins->SetDuration(icyVeins->GetDuration() + thermalVoidEffect->CalcValue(caster) * IN_MILLISECONDS);
+            {
+                SpellEffectInfo const& thermalVoidEffect = thermalVoid->GetSpellInfo()->GetEffect(EFFECT_0);
+                if (Aura* icyVeins = caster->GetAura(SPELL_MAGE_ICY_VEINS))
+                    icyVeins->SetDuration(icyVeins->GetDuration() + thermalVoidEffect.CalcValue(caster) * IN_MILLISECONDS);
+            }
         }
 
         // put target index for chain value multiplier into EFFECT_1 base points, otherwise triggered spell doesn't know which damage multiplier to apply
@@ -95,7 +97,7 @@ class tlpp_spell_mage_ice_lance_damage : public SpellScript
         {
             int32 originalDamage = GetHitDamage();
             float targetIndex = float(spellValue->EffectBasePoints[EFFECT_1]);
-            float multiplier = std::pow(GetEffectInfo()->CalcDamageMultiplier(GetCaster(), GetSpell()), targetIndex);
+            float multiplier = std::pow(GetEffectInfo().CalcDamageMultiplier(GetCaster(), GetSpell()), targetIndex);
             SetHitDamage(int32(originalDamage * multiplier));
         }
     }
