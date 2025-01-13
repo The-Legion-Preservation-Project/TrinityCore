@@ -269,6 +269,11 @@ enum ItemFlags3
     ITEM_FLAG3_CAN_STORE_ENCHANTS                           = 0x01000000
 };
 
+enum ItemFlags4
+{
+    ITEM_FLAG4_ALWAYS_SHOW_ITEM_LEVEL_IN_TOOLTIP            = 0x00000002,
+};
+
 enum ItemFlagsCustom
 {
     ITEM_FLAGS_CU_UNUSED                = 0x0001,
