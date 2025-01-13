@@ -83,9 +83,12 @@ class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigge
         AreaTriggerTemplate const* GetTemplate() const;
         uint32 GetScriptId() const;
 
+        ObjectGuid GetOwnerGUID() const override { return GetCasterGuid(); }
         ObjectGuid const& GetCasterGuid() const { return GetGuidValue(AREATRIGGER_CASTER); }
         Unit* GetCaster() const;
         Unit* GetTarget() const;
+
+        uint32 GetFaction() const override;
 
         Position const& GetRollPitchYaw() const { return _rollPitchYaw; }
         Position const& GetTargetRollPitchYaw() const { return _targetRollPitchYaw; }
