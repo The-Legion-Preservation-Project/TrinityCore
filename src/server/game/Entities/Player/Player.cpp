@@ -20049,14 +20049,16 @@ bool Player::_LoadHomeBind(PreparedQueryResult result)
     if (!ok)
     {
         WorldSafeLocsEntry const* loc = sObjectMgr->GetDefaultGraveyard(GetTeam());
-        if (!loc && getRace() == RACE_PANDAREN_NEUTRAL)
-            loc = sObjectMgr->GetWorldSafeLoc(3295); // The Wandering Isle, Starting Area GY
+        if (!loc && GetRace() == RACE_PANDAREN_NEUTRAL)
+            loc = sWorldSafeLocsStore.LookupEntry(3295); // The Wandering Isle, Starting Area GY
 
         ASSERT(loc, "Missing fallback graveyard location for faction %u", uint32(GetTeamId()));
 
-        m_homebindMapId = loc->Loc.GetMapId();
-        m_homebindAreaId = sMapMgr->GetAreaId(PhasingHandler::GetEmptyPhaseShift(), loc->Loc);
-        loc->Loc.GetPosition(m_homebindX, m_homebindY, m_homebindZ);
+        m_homebindMapId = loc->MapID;
+        m_homebindAreaId = sMapMgr->GetAreaId(PhasingHandler::GetEmptyPhaseShift(), loc->MapID, loc->Loc.X, loc->Loc.Y, loc->Loc.Z);
+        m_homebindX = loc->Loc.X;
+        m_homebindY = loc->Loc.Y;
+        m_homebindZ = loc->Loc.Z;
 
         saveHomebindToDb();
     }
