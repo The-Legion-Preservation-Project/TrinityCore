@@ -203,6 +203,7 @@ Player::Player(WorldSession* session) : Unit(true), m_sceneMgr(this)
 
     m_trade = nullptr;
 
+    m_createTime = 0;
     m_cinematic = 0;
 
     m_movie = 0;
@@ -452,6 +453,7 @@ bool Player::Create(ObjectGuid::LowType guidlow, WorldPackets::Character::Charac
     }
 
     SetMap(sMapMgr->CreateMap(info->mapId, this));
+    m_createTime = GameTime::GetGameTime();
     UpdatePositionData();
 
     uint8 powertype = cEntry->DisplayPower;
@@ -17472,7 +17474,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
     struct PlayerLoadData
     {
         //"SELECT guid, account, name, race, class, gender, level, xp, money, skin, face, hairStyle, hairColor, facialStyle, customDisplay1, customDisplay2, customDisplay3, inventorySlots, bankSlots, restState, playerFlags, playerFlagsEx, "
-        //"position_x, position_y, position_z, map, orientation, taximask, cinematic, totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, "
+        //"position_x, position_y, position_z, map, orientation, taximask, createTime, cinematic, totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, "
         //"resettalents_time, primarySpecialization, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, online, death_expire_time, taxi_path, dungeonDifficulty, "
         //"totalKills, todayKills, yesterdayKills, chosenTitle, watchedFaction, drunk, "
         //"health, power1, power2, power3, power4, power5, power6, instance_id, activeTalentGroup, lootSpecId, exploredZones, knownTitles, actionBars, grantableLevels, raidDifficulty, legacyRaidDifficulty, fishing_steps "
@@ -17507,6 +17509,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
         uint16 map;
         float orientation;
         std::string taximask;
+        time_t createTime;
         uint8 cinematic;
         uint32 totaltime;
         uint32 leveltime;
@@ -17584,6 +17587,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
             map = fields[i++].GetUInt16();
             orientation = fields[i++].GetFloat();
             taximask = fields[i++].GetString();
+            createTime = fields[i++].GetInt64();
             cinematic = fields[i++].GetUInt8();
             totaltime = fields[i++].GetUInt32();
             leveltime = fields[i++].GetUInt32();
@@ -18080,6 +18084,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
 
     SetDrunkValue(newDrunkValue);
 
+    m_createTime = fields.createTime;
     m_cinematic = fields.cinematic;
     m_Played_time[PLAYED_TIME_TOTAL] = fields.totaltime;
     m_Played_time[PLAYED_TIME_LEVEL] = fields.leveltime;
@@ -20130,6 +20135,7 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         std::ostringstream ss;
         ss << m_taxi;
         stmt->setString(index++, ss.str());
+        stmt->setInt64(index++, m_createTime);
         stmt->setUInt8(index++, m_cinematic);
         stmt->setUInt32(index++, m_Played_time[PLAYED_TIME_TOTAL]);
         stmt->setUInt32(index++, m_Played_time[PLAYED_TIME_LEVEL]);

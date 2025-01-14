@@ -2913,6 +2913,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         JoinedChannelsList m_channels;
 
+        time_t m_createTime;
         uint8 m_cinematic;
 
         uint32 m_movie;
