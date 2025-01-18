@@ -204,34 +204,34 @@ INSERT INTO `gameobject_addon` (`guid`, `parent_rotation0`, `parent_rotation1`, 
 (@OGUID+25, 0, 0, 0.220700010657310485, 0.975341737270355224, 0, 0); -- Anvil
 
 -- scaling
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` IN (132210,126390,125843,132325,125524,126075,132358,130986,126389,126022,130560,132225,126030,132214,132328,132266,132224,132334,123395,132323,132262,132215,130993));
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(132210, 0, 0, 0, 293, 40120),
-(126390, 0, 0, 0, 337, 40120),
-(125843, 0, 0, 0, 337, 40120),
-(132325, 0, 0, 0, 293, 40120),
-(125524, 0, 0, 0, 337, 40120),
-(126075, 0, 0, 0, 337, 40120),
-(132358, 0, 0, 0, 293, 40120),
-(130986, 0, 0, 0, 293, 40120),
-(126389, 0, 0, 0, 337, 40120),
-(126022, 0, 0, 0, 337, 40120),
-(130560, 0, 0, 0, 293, 40120),
-(132225, 0, 0, 0, 293, 40120),
-(126030, 0, 0, 0, 337, 40120),
-(132214, 0, 0, 0, 293, 40120),
-(132328, 0, 0, 0, 293, 40120),
-(132266, 0, 0, 0, 293, 40120),
-(132224, 0, 0, 0, 293, 40120),
-(132334, 0, 0, 0, 293, 40120),
-(123395, 0, 0, 0, 337, 40120),
-(132323, 0, 0, 0, 293, 40120),
-(132262, 0, 0, 0, 293, 40120),
-(132215, 0, 0, 0, 293, 40120),
-(130993, 0, 0, 0, 293, 40120);
+DELETE FROM `creature_template_scaling` WHERE (`Entry` IN (132210,126390,125843,132325,125524,126075,132358,130986,126389,126022,130560,132225,126030,132214,132328,132266,132224,132334,123395,132323,132262,132215,130993));
+INSERT INTO `creature_template_scaling` (`Entry`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `VerifiedBuild`) VALUES
+(132210, 0, 0, 40120),
+(126390, 0, 0, 40120),
+(125843, 0, 0, 40120),
+(132325, 0, 0, 40120),
+(125524, 0, 0, 40120),
+(126075, 0, 0, 40120),
+(132358, 0, 0, 40120),
+(130986, 0, 0, 40120),
+(126389, 0, 0, 40120),
+(126022, 0, 0, 40120),
+(130560, 0, 0, 40120),
+(132225, 0, 0, 40120),
+(126030, 0, 0, 40120),
+(132214, 0, 0, 40120),
+(132328, 0, 0, 40120),
+(132266, 0, 0, 40120),
+(132224, 0, 0, 40120),
+(132334, 0, 0, 40120),
+(123395, 0, 0, 40120),
+(132323, 0, 0, 40120),
+(132262, 0, 0, 40120),
+(132215, 0, 0, 40120),
+(130993, 0, 0, 40120);
 
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=40120 WHERE (`Entry`=96507 AND `DifficultyID`=0);
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=40120 WHERE (`Entry`=114590 AND `DifficultyID`=0);
+UPDATE `creature_template_scaling` SET `VerifiedBuild`=40120 WHERE (`Entry`=96507);
+UPDATE `creature_template_scaling` SET `VerifiedBuild`=40120 WHERE (`Entry`=114590);
 
 -- Creature Model
 DELETE FROM `creature_model_info` WHERE `DisplayID` IN (79624, 83125, 82309, 82303, 82297, 82323, 82308, 82300, 82301, 82321, 82299, 82324, 82307, 82322, 82302);
@@ -424,12 +424,12 @@ UPDATE `creature_template` SET `gossip_menu_id`=22019, `minlevel`=60, `maxlevel`
 
 -- Update GameObject_Template Data
 DELETE FROM `gameobject_template` WHERE `entry` IN (278729 /*Vindicaar Matrix Core*/, 278730 /*Netherlight Crucible*/, 278732 /*Portal to Stormwind*/, 278728 /*Crown Pedestal*/, 246170 /*Chair Low*/);
-INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `size`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `Data6`, `Data7`, `Data8`, `Data9`, `Data10`, `Data11`, `Data12`, `Data13`, `Data14`, `Data15`, `Data16`, `Data17`, `Data18`, `Data19`, `Data20`, `Data21`, `Data22`, `Data23`, `Data24`, `Data25`, `Data26`, `Data27`, `Data28`, `Data29`, `Data30`, `Data31`, `Data32`, `Data33`, `ContentTuningId`, `VerifiedBuild`) VALUES
-(278729, 5, 43982, 'Vindicaar Matrix Core', '', '', '', 1.551480054855346679, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 40120), -- Vindicaar Matrix Core
-(278730, 5, 44671, 'Netherlight Crucible', '', '', '', 1.149999976158142089, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 40120), -- Netherlight Crucible
-(278732, 22, 47526, 'Portal to Stormwind', '', '', '', 1.5, 258310, -1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 863, 40120), -- Portal to Stormwind
-(278728, 5, 43983, 'Crown Pedestal', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 40120), -- Crown Pedestal
-(246170, 5, 30889, 'Chair Low', '', '', '', 1.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 339, 40120); -- Chair Low
+INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `size`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `Data6`, `Data7`, `Data8`, `Data9`, `Data10`, `Data11`, `Data12`, `Data13`, `Data14`, `Data15`, `Data16`, `Data17`, `Data18`, `Data19`, `Data20`, `Data21`, `Data22`, `Data23`, `Data24`, `Data25`, `Data26`, `Data27`, `Data28`, `Data29`, `Data30`, `Data31`, `Data32`, `Data33`, `VerifiedBuild`) VALUES
+(278729, 5, 43982, 'Vindicaar Matrix Core', '', '', '', 1.551480054855346679, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40120), -- Vindicaar Matrix Core
+(278730, 5, 44671, 'Netherlight Crucible', '', '', '', 1.149999976158142089, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40120), -- Netherlight Crucible
+(278732, 22, 47526, 'Portal to Stormwind', '', '', '', 1.5, 258310, -1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40120), -- Portal to Stormwind
+(278728, 5, 43983, 'Crown Pedestal', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40120), -- Crown Pedestal
+(246170, 5, 30889, 'Chair Low', '', '', '', 1.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40120); -- Chair Low
 
 -- NPC Text
 DELETE FROM `npc_text` WHERE `ID` IN (33495 /*33495*/, 33727 /*33727*/, 33709 /*33709*/, 33725 /*33725*/, 33728 /*33728*/, 33721);
@@ -442,7 +442,7 @@ INSERT INTO `npc_text` (`ID`, `Probability0`, `Probability1`, `Probability2`, `P
 (33721, 1, 0, 0, 0, 0, 0, 0, 0, 144864, 0, 0, 0, 0, 0, 0, 0, 40120); -- 33721
 
 -- SET SAI in Template
-UPDATE `creature_template` SET `AIName`="SmartAI" WHERE `entry` IN (132262, 132266);
+UPDATE `creature_template` SET `AIName`='SmartAI' WHERE `entry` IN (132262, 132266);
 
 -- SAI script for 132262 lightforged-protector
 DELETE FROM `smart_scripts` WHERE `entryorguid` = 132262 AND `source_type` = 0;
