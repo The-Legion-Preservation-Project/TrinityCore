@@ -3487,8 +3487,8 @@ void ObjectMgr::LoadPlayerInfo()
     // Load playercreate
     {
         uint32 oldMSTime = getMSTime();
-        //                                                0     1      2    3             4          5           6
-        QueryResult result = WorldDatabase.Query("SELECT race, class, map, position_x, position_y, position_z, orientation FROM playercreateinfo");
+        //                                                   0     1      2    3           4           5           6            7               8
+        QueryResult result = WorldDatabase.Query("SELECT race, class, map, position_x, position_y, position_z, orientation, intro_movie_id, intro_scene_id FROM playercreateinfo");
 
         if (!result)
         {
@@ -3554,6 +3554,26 @@ void ObjectMgr::LoadPlayerInfo()
                 info->displayId_m = rEntry->MaleDisplayId;
                 info->displayId_f = rEntry->FemaleDisplayId;
                 _playerInfo[current_race][current_class] = std::move(info);
+
+                if (!fields[7].IsNull())
+                {
+                    uint32 introMovieId = fields[7].GetUInt32();
+                    if (sMovieStore.LookupEntry(introMovieId))
+                        info->introMovieId = introMovieId;
+                    else
+                        TC_LOG_ERROR("sql.sql", "Invalid intro movie id %u for class %u race %u pair in `playercreateinfo` table, ignoring.",
+                            introMovieId, current_class, current_race);
+                }
+
+                if (!fields[8].IsNull())
+                {
+                    uint32 introSceneId = fields[8].GetUInt32();
+                    if (GetSceneTemplate(introSceneId))
+                        info->introSceneId = introSceneId;
+                    else
+                        TC_LOG_ERROR("sql.sql", "Invalid intro scene id %u for class %u race %u pair in `playercreateinfo` table, ignoring.",
+                            introSceneId, current_class, current_race);
+                }
 
                 ++count;
             }
