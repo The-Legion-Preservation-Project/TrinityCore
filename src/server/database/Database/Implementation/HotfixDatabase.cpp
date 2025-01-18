@@ -1215,6 +1215,11 @@ void HotfixDatabaseConnection::DoPrepareStatements()
         "ReagentCount1, ReagentCount2, ReagentCount3, ReagentCount4, ReagentCount5, ReagentCount6, ReagentCount7, ReagentCount8 FROM spell_reagents WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
     PREPARE_MAX_ID_STMT(HOTFIX_SEL_SPELL_REAGENTS, "SELECT MAX(ID) + 1 FROM spell_reagents", CONNECTION_SYNCH);
 
+    // SpellReagentsCurrency.db2
+    PrepareStatement(HOTFIX_SEL_SPELL_REAGENTS_CURRENCY, "SELECT ID, SpellID, CurrencyTypesID, CurrencyCount FROM spell_reagents_currency"
+        " WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
+    PREPARE_MAX_ID_STMT(HOTFIX_SEL_SPELL_REAGENTS_CURRENCY, "SELECT MAX(ID) + 1 FROM spell_reagents_currency", CONNECTION_SYNCH);
+
     // SpellScaling.db2
     PrepareStatement(HOTFIX_SEL_SPELL_SCALING, "SELECT ID, SpellID, ScalesFromItemLevel, Class, MinScalingLevel, MaxScalingLevel FROM spell_scaling WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
     PREPARE_MAX_ID_STMT(HOTFIX_SEL_SPELL_SCALING, "SELECT MAX(ID) + 1 FROM spell_scaling", CONNECTION_SYNCH);

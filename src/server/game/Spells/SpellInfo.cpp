@@ -1195,6 +1195,8 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
         std::copy(std::begin(_reagents->ReagentCount), std::end(_reagents->ReagentCount), ReagentCount.begin());
     }
 
+    ReagentsCurrency = data.ReagentsCurrency;
+
     // SpellShapeshiftEntry
     if (SpellShapeshiftEntry const* _shapeshift = data.Shapeshift)
     {

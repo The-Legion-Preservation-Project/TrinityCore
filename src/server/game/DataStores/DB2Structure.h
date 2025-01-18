@@ -2986,6 +2986,14 @@ struct SpellReagentsEntry
     int16 ReagentCount[MAX_SPELL_REAGENTS];
 };
 
+struct SpellReagentsCurrencyEntry
+{
+    uint32 ID;
+    int32 SpellID;
+    uint16 CurrencyTypesID;
+    uint16 CurrencyCount;
+};
+
 struct SpellScalingEntry
 {
     uint32 ID;
