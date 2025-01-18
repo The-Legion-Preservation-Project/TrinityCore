@@ -3487,8 +3487,8 @@ void ObjectMgr::LoadPlayerInfo()
     // Load playercreate
     {
         uint32 oldMSTime = getMSTime();
-        //                                                0     1      2    3        4          5           6
-        QueryResult result = WorldDatabase.Query("SELECT race, class, map, zone, position_x, position_y, position_z, orientation FROM playercreateinfo");
+        //                                                0     1      2    3             4          5           6
+        QueryResult result = WorldDatabase.Query("SELECT race, class, map, position_x, position_y, position_z, orientation FROM playercreateinfo");
 
         if (!result)
         {
@@ -3506,11 +3506,10 @@ void ObjectMgr::LoadPlayerInfo()
                 uint32 current_race  = fields[0].GetUInt8();
                 uint32 current_class = fields[1].GetUInt8();
                 uint32 mapId         = fields[2].GetUInt16();
-                uint32 areaId        = fields[3].GetUInt32(); // zone
-                float  positionX     = fields[4].GetFloat();
-                float  positionY     = fields[5].GetFloat();
-                float  positionZ     = fields[6].GetFloat();
-                float  orientation   = fields[7].GetFloat();
+                float  positionX     = fields[3].GetFloat();
+                float  positionY     = fields[4].GetFloat();
+                float  positionZ     = fields[5].GetFloat();
+                float  orientation   = fields[6].GetFloat();
 
                 if (!sChrRacesStore.LookupEntry(current_race))
                 {
@@ -3551,12 +3550,7 @@ void ObjectMgr::LoadPlayerInfo()
                 }
 
                 std::unique_ptr<PlayerInfo> info = std::make_unique<PlayerInfo>();
-                info->mapId = mapId;
-                info->areaId = areaId;
-                info->positionX = positionX;
-                info->positionY = positionY;
-                info->positionZ = positionZ;
-                info->orientation = orientation;
+                info->createPosition.Loc.WorldRelocate(mapId, positionX, positionY, positionZ, orientation);
                 info->displayId_m = rEntry->MaleDisplayId;
                 info->displayId_f = rEntry->FemaleDisplayId;
                 _playerInfo[current_race][current_class] = std::move(info);

@@ -435,8 +435,6 @@ bool Player::Create(ObjectGuid::LowType guidlow, WorldPackets::Character::Charac
     for (uint8 i = 0; i < PLAYER_SLOTS_COUNT; i++)
         m_items[i] = nullptr;
 
-    Relocate(info->positionX, info->positionY, info->positionZ, info->orientation);
-
     ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(createInfo->Class);
     if (!cEntry)
     {
@@ -452,8 +450,13 @@ bool Player::Create(ObjectGuid::LowType guidlow, WorldPackets::Character::Charac
         return false;
     }
 
-    SetMap(sMapMgr->CreateMap(info->mapId, this));
+    PlayerInfo::CreatePosition const& position = info->createPosition;
     m_createTime = GameTime::GetGameTime();
+
+    Relocate(position.Loc);
+
+    SetMap(sMapMgr->CreateMap(position.Loc.GetMapId(), this));
+
     UpdatePositionData();
 
     // set initial homebind position
@@ -20039,11 +20042,12 @@ bool Player::_LoadHomeBind(PreparedQueryResult result)
 
     if (!ok && HasAtLoginFlag(AT_LOGIN_FIRST))
     {
-        m_homebindMapId = info->mapId;
-        m_homebindAreaId = info->areaId;
-        m_homebindX = info->positionX;
-        m_homebindY = info->positionY;
-        m_homebindZ = info->positionZ;
+        PlayerInfo::CreatePosition const& createPosition = info->createPosition;
+
+        m_homebindMapId = createPosition.Loc.GetMapId();
+        createPosition.Loc.GetPosition(m_homebindX, m_homebindY, m_homebindZ);
+
+        m_homebindAreaId = sMapMgr->GetAreaId(PhasingHandler::GetEmptyPhaseShift(), m_homebindMapId, m_homebindX, m_homebindY, m_homebindZ);
 
         saveHomebindToDb();
         ok = true;
