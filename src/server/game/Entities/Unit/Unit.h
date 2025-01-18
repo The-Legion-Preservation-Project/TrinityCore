@@ -1279,8 +1279,8 @@ class TC_GAME_API Unit : public WorldObject
         Pet* CreateTamedPetFrom(uint32 creatureEntry, uint32 spell_id = 0);
         bool InitTamedPet(Pet* pet, uint8 level, uint32 spell_id);
 
-        void SetWildBattlePetLevel(uint32 wildBattlePetLevel) { SetUpdateFieldValue(m_values.ModifyValue(&Unit::m_unitData).ModifyValue(&UF::UnitData::WildBattlePetLevel), wildBattlePetLevel); }
-        uint32 GetWildBattlePetLevel() const { return m_unitData->WildBattlePetLevel; }
+        void SetWildBattlePetLevel(uint32 wildBattlePetLevel) { SetUInt32Value(UNIT_FIELD_WILD_BATTLEPET_LEVEL, wildBattlePetLevel); }
+        uint32 GetWildBattlePetLevel() const { return GetUInt32Value(UNIT_FIELD_WILD_BATTLEPET_LEVEL); }
 
         // aura apply/remove helpers - you should better not use these
         Aura* _TryStackingOrRefreshingExistingAura(AuraCreateInfo& createInfo);
