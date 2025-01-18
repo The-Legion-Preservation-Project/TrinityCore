@@ -496,6 +496,7 @@ namespace WorldPackets
         class MountSetFavorite;
         class PvpPrestigeRankUp;
         class CloseInteraction;
+        class ConversationLineStarted;
     }
 
     namespace Movement
@@ -1695,6 +1696,7 @@ class TC_GAME_API WorldSession
         void HandleObjectUpdateRescuedOpcode(WorldPackets::Misc::ObjectUpdateRescued& objectUpdateRescued);
         void HandleRequestCategoryCooldowns(WorldPackets::Spells::RequestCategoryCooldowns& requestCategoryCooldowns);
         void HandleCloseInteraction(WorldPackets::Misc::CloseInteraction& closeInteraction);
+        void HandleConversationLineStarted(WorldPackets::Misc::ConversationLineStarted& conversationLineStarted);
 
         // Adventure Journal
         void HandleAdventureJournalOpenQuest(WorldPackets::AdventureJournal::AdventureJournalOpenQuest& openQuest);

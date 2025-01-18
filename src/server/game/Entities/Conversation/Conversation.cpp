@@ -117,7 +117,7 @@ bool Conversation::Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry,
     SetObjectScale(1.0f);
 
     SetUInt32Value(CONVERSATION_LAST_LINE_END_TIME, conversationTemplate->LastLineEndTime);
-    _duration = conversationTemplate->LastLineEndTime;
+    _duration = conversationTemplate->LastLineEndTime + 10 * IN_MILLISECONDS;
 
     for (ConversationActor const& actor : conversationTemplate->Actors)
     {

@@ -926,6 +926,17 @@ namespace WorldPackets
             Duration<Seconds> TimeLeft;
             Duration<Seconds> TotalTime;
         };
+
+        class ConversationLineStarted final : public ClientPacket
+        {
+        public:
+            ConversationLineStarted(WorldPacket&& packet) : ClientPacket(CMSG_CONVERSATION_LINE_STARTED, std::move(packet)) { }
+
+            void Read() override;
+
+            ObjectGuid ConversationGUID;
+            uint32 LineID = 0;
+        };
     }
 }
 
