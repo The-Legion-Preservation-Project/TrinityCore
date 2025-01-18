@@ -5478,7 +5478,7 @@ void Spell::EffectCreateConversation()
     if (!unitCaster || !m_targets.HasDst())
         return;
 
-    Conversation::CreateConversation(effectInfo->MiscValue, unitCaster, destTarget->GetPosition(), { GetCaster()->GetGUID() }, GetSpellInfo());
+    Conversation::CreateConversation(effectInfo->MiscValue, unitCaster, destTarget->GetPosition(), ObjectGuid::Empty, GetSpellInfo());
 }
 
 void Spell::EffectAddGarrisonFollower()

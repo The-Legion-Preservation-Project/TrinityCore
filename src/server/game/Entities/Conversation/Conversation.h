@@ -19,8 +19,6 @@
 #define TRINITYCORE_CONVERSATION_H
 
 #include "Object.h"
-#include "ConversationDataStore.h"
-#include <cstring>
 
 class Unit;
 class SpellInfo;
@@ -74,16 +72,13 @@ class TC_GAME_API Conversation : public WorldObject, public GridObject<Conversat
         void AddToWorld() override;
         void RemoveFromWorld() override;
 
-        bool IsNeverVisibleFor(WorldObject const* seer) const override;
-
         void Update(uint32 diff) override;
         void Remove();
         int32 GetDuration() const { return _duration; }
 
-        static Conversation* CreateConversation(uint32 conversationEntry, Unit* creator, Position const& pos, GuidUnorderedSet&& participants, SpellInfo const* spellInfo = nullptr);
-        bool Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry, Map* map, Unit* creator, Position const& pos, GuidUnorderedSet&& participants, SpellInfo const* spellInfo = nullptr);
+        static Conversation* CreateConversation(uint32 conversationEntry, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr);
+        bool Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry, Map* map, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr);
         void AddActor(ObjectGuid const& actorGuid, uint16 actorIdx);
-        void AddParticipant(ObjectGuid const& participantGuid);
 
         ObjectGuid const& GetCreatorGuid() const { return _creatorGuid; }
         ObjectGuid GetOwnerGUID() const override { return GetCreatorGuid(); }
@@ -101,7 +96,7 @@ class TC_GAME_API Conversation : public WorldObject, public GridObject<Conversat
         Position _stationaryPosition;
         ObjectGuid _creatorGuid;
         uint32 _duration;
-        GuidUnorderedSet _participants;
+        uint32 _textureKitId;
 };
 
 #endif // TRINITYCORE_CONVERSATION_H
