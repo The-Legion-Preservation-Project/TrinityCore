@@ -735,6 +735,18 @@ namespace WorldPackets
             uint32 Duration = 0;
         };
 
+        class SpellVisualLoadScreen final : public ServerPacket
+        {
+        public:
+            SpellVisualLoadScreen(int32 spellVisualKitId, int32 delay) : ServerPacket(SMSG_SPELL_VISUAL_LOAD_SCREEN, 4 + 4),
+                SpellVisualKitID(spellVisualKitId), Delay(delay) { }
+
+            WorldPacket const* Write() override;
+
+            int32 SpellVisualKitID = 0;
+            int32 Delay = 0;
+        };
+
         class CancelCast final : public ClientPacket
         {
         public:

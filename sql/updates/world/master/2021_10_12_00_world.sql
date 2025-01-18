@@ -9,8 +9,8 @@ INSERT INTO `conversation_line_template` (`Id`, `StartTime`, `UiCameraID`, `Acto
 (32926, 55409, 0, 1, 1, 40120);
 
 DELETE FROM `conversation_template` WHERE `Id`=13254;
-INSERT INTO `conversation_template` (`Id`, `FirstLineID`, `LastLineEndTime`, `TextureKitId`, `ScriptName`, `VerifiedBuild`) VALUES
-(13254, 32915, 55409, 0, 'conversation_allied_race_dk_defender_of_azeroth', 40120);
+INSERT INTO `conversation_template` (`Id`, `FirstLineID`, `LastLineEndTime`, `ScriptName`, `VerifiedBuild`) VALUES
+(13254, 32915, 55409, 'conversation_allied_race_dk_defender_of_azeroth', 40120);
 
 DELETE FROM `conversation_actors` WHERE (`ConversationId`=13254 AND `Idx`=0);
 INSERT INTO `conversation_actors` (`ConversationId`, `ConversationActorId`, `ConversationActorGuid`,  `Idx`, `VerifiedBuild`) VALUES
