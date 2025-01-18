@@ -5605,7 +5605,7 @@ void Spell::EffectUncageBattlePet()
         return;
     }
 
-    battlePetMgr->AddPet(speciesId, creatureId, breed, quality, level);
+    battlePetMgr->AddPet(speciesId, creatureId, breed, BattlePetBreedQuality(quality), level);
 
     if (!plr->HasSpell(speciesEntry->SummonSpellID))
         plr->LearnSpell(speciesEntry->SummonSpellID, false);

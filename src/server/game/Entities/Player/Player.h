@@ -2650,6 +2650,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void ApplyModFakeInebriation(int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FAKE_INEBRIATION, mod, apply); }
         void SetVirtualPlayerRealm(uint32 virtualRealmAddress) { SetUInt32Value(PLAYER_FIELD_VIRTUAL_PLAYER_REALM, virtualRealmAddress); }
         void SetCustomDisplayOption(uint32 slot, uint8 customDisplayOption) { SetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_CUSTOM_DISPLAY_OPTION + slot, customDisplayOption); }
+        void SetCurrentBattlePetBreedQuality(uint8 battlePetBreedQuality) { SetUInt32Value(PLAYER_FIELD_CURRENT_BATTLE_PET_BREED_QUALITY, battlePetBreedQuality);  }
 
         void AddHeirloom(int32 itemId, uint32 flags)
         {
