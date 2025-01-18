@@ -662,9 +662,12 @@ void AreaTrigger::DoActions(Unit* unit)
                 switch (action.ActionType)
                 {
                     case AREATRIGGER_ACTION_CAST:
+                    {
+                        ObjectGuid creatingEffectGuid = GetGuidValue(AREATRIGGER_CREATING_EFFECT_GUID);
                         caster->CastSpell(unit, action.Param, CastSpellExtraArgs(TRIGGERED_FULL_MASK)
-                            .SetOriginalCastId(m_areaTriggerData->CreatingEffectGUID->IsCast() ? *m_areaTriggerData->CreatingEffectGUID : ObjectGuid::Empty));
+                            .SetOriginalCastId(creatingEffectGuid.IsCast() ? creatingEffectGuid : ObjectGuid::Empty));
                         break;
+                    }
                     case AREATRIGGER_ACTION_ADDAURA:
                         caster->AddAura(action.Param, unit);
                         break;
