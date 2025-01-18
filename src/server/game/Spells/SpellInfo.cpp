@@ -1041,8 +1041,7 @@ SpellEffectInfo::StaticData SpellEffectInfo::_data[TOTAL_SPELL_EFFECTS] =
     {EFFECT_IMPLICIT_TARGET_EXPLICIT, TARGET_OBJECT_TYPE_UNIT}, // 255 SPELL_EFFECT_LEARN_TRANSMOG_SET
 };
 
-SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, SpellInfoLoadHelper const& data,
-    std::vector<SpellLabelEntry const*> const& labels, SpellVisualVector&& visuals)
+SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, SpellInfoLoadHelper const& data)
     : Id(spellEntry->ID), Difficulty(difficulty)
 {
     _effects.reserve(32);
@@ -1084,8 +1083,6 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
         IconFileDataId = _misc->SpellIconFileDataID;
         ActiveIconFileDataId = _misc->ActiveIconFileDataID;
     }
-
-    _visuals = std::move(visuals);
 
     // SpellScalingEntry
     if (SpellScalingEntry const* _scaling = data.Scaling)
@@ -1177,7 +1174,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
         ChannelInterruptFlags2 = SpellAuraInterruptFlags2(_interrupt->ChannelInterruptFlags[1]);
     }
 
-    for (SpellLabelEntry const* label : labels)
+    for (SpellLabelEntry const* label : data.Labels)
         Labels.insert(label->LabelID);
 
     // SpellLevelsEntry
@@ -1222,6 +1219,8 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
         std::copy(std::begin(_totem->RequiredTotemCategoryID), std::end(_totem->RequiredTotemCategoryID), TotemCategory.begin());
         std::copy(std::begin(_totem->Totem), std::end(_totem->Totem), Totem.begin());
     }
+
+    _visuals = data.Visuals;
 }
 
 SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, std::vector<SpellEffectEntry> const& effects)

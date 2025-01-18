@@ -434,8 +434,7 @@ class TC_GAME_API SpellInfo
         uint32 ExplicitTargetMask = 0;
         SpellChainNode const* ChainEntry = nullptr;
 
-        SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, SpellInfoLoadHelper const& data,
-            std::vector<SpellLabelEntry const*> const& labels, SpellVisualVector&& visuals);
+        SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, SpellInfoLoadHelper const& data);
         SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, std::vector<SpellEffectEntry> const& effects);
         ~SpellInfo();
 
