@@ -3553,13 +3553,14 @@ void ObjectMgr::LoadPlayerInfo()
                 info->createPosition.Loc.WorldRelocate(mapId, positionX, positionY, positionZ, orientation);
                 info->displayId_m = rEntry->MaleDisplayId;
                 info->displayId_f = rEntry->FemaleDisplayId;
-                _playerInfo[current_race][current_class] = std::move(info);
 
                 if (!fields[7].IsNull())
                 {
                     uint32 introMovieId = fields[7].GetUInt32();
                     if (sMovieStore.LookupEntry(introMovieId))
+                    {
                         info->introMovieId = introMovieId;
+                    }
                     else
                         TC_LOG_ERROR("sql.sql", "Invalid intro movie id %u for class %u race %u pair in `playercreateinfo` table, ignoring.",
                             introMovieId, current_class, current_race);
@@ -3569,11 +3570,15 @@ void ObjectMgr::LoadPlayerInfo()
                 {
                     uint32 introSceneId = fields[8].GetUInt32();
                     if (GetSceneTemplate(introSceneId))
+                    {
                         info->introSceneId = introSceneId;
+                    }
                     else
                         TC_LOG_ERROR("sql.sql", "Invalid intro scene id %u for class %u race %u pair in `playercreateinfo` table, ignoring.",
                             introSceneId, current_class, current_race);
                 }
+
+                _playerInfo[current_race][current_class] = std::move(info);
 
                 ++count;
             }
