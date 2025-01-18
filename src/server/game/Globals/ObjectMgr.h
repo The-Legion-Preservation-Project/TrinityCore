@@ -32,6 +32,7 @@
 #include "Position.h"
 #include "QuestDef.h"
 #include "RaceMask.h"
+#include "SceneDefines.h"
 #include "SharedDefines.h"
 #include "Trainer.h"
 #include "VehicleDefines.h"
@@ -785,7 +786,7 @@ typedef std::unordered_map<uint32, std::string> RealmNameContainer;
 struct SceneTemplate
 {
     uint32 SceneId;
-    uint32 PlaybackFlags;
+    EnumFlag<SceneFlag> PlaybackFlags = SceneFlag::None;
     uint32 ScenePackageId;
     uint32 ScriptId;
 };

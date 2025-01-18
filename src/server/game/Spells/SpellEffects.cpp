@@ -5702,7 +5702,7 @@ void Spell::EffectPlaySceneScriptPackage()
     if (m_caster->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    m_caster->ToPlayer()->GetSceneMgr().PlaySceneByPackageId(effectInfo->MiscValue, SCENEFLAG_UNK1, destTarget);
+    m_caster->ToPlayer()->GetSceneMgr().PlaySceneByPackageId(effectInfo->MiscValue, SceneFlag::PlayerNonInteractablePhased, destTarget);
 }
 
 void Spell::EffectPlayScene()

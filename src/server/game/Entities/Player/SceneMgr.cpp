@@ -55,11 +55,11 @@ uint32 SceneMgr::PlaySceneByTemplate(SceneTemplate const* sceneTemplate, Positio
     uint32 sceneInstanceID = GetNewStandaloneSceneInstanceID();
 
     if (_isDebuggingScenes)
-        ChatHandler(GetPlayer()->GetSession()).PSendSysMessage(LANG_COMMAND_SCENE_DEBUG_PLAY, sceneInstanceID, sceneTemplate->ScenePackageId, sceneTemplate->PlaybackFlags);
+        ChatHandler(GetPlayer()->GetSession()).PSendSysMessage(LANG_COMMAND_SCENE_DEBUG_PLAY, sceneInstanceID, sceneTemplate->ScenePackageId, sceneTemplate->PlaybackFlags.AsUnderlyingType());
 
     WorldPackets::Scenes::PlayScene playScene;
     playScene.SceneID              = sceneTemplate->SceneId;
-    playScene.PlaybackFlags        = sceneTemplate->PlaybackFlags;
+    playScene.PlaybackFlags        = sceneTemplate->PlaybackFlags.AsUnderlyingType();
     playScene.SceneInstanceID      = sceneInstanceID;
     playScene.SceneScriptPackageID = sceneTemplate->ScenePackageId;
     playScene.Location             = *position;
@@ -78,7 +78,7 @@ uint32 SceneMgr::PlaySceneByTemplate(SceneTemplate const* sceneTemplate, Positio
     return sceneInstanceID;
 }
 
-uint32 SceneMgr::PlaySceneByPackageId(uint32 sceneScriptPackageId, uint32 playbackflags /*= SCENEFLAG_UNK16*/, Position const* position /*= nullptr*/)
+uint32 SceneMgr::PlaySceneByPackageId(uint32 sceneScriptPackageId, EnumFlag<SceneFlag> playbackflags /*= SCENEFLAG_UNK16*/, Position const* position /*= nullptr*/)
 {
     SceneTemplate sceneTemplate;
     sceneTemplate.SceneId           = 0;
@@ -120,6 +120,8 @@ void SceneMgr::OnSceneCancel(uint32 sceneInstanceID)
         ChatHandler(GetPlayer()->GetSession()).PSendSysMessage(LANG_COMMAND_SCENE_DEBUG_CANCEL, sceneInstanceID);
 
     SceneTemplate const* sceneTemplate = GetSceneTemplateFromInstanceId(sceneInstanceID);
+    if (sceneTemplate->PlaybackFlags.HasFlag(SceneFlag::NotCancelable))
+        return;
 
     // Must be done before removing aura
     RemoveSceneInstanceId(sceneInstanceID);
@@ -129,7 +131,7 @@ void SceneMgr::OnSceneCancel(uint32 sceneInstanceID)
 
     sScriptMgr->OnSceneCancel(GetPlayer(), sceneInstanceID, sceneTemplate);
 
-    if (sceneTemplate->PlaybackFlags & SCENEFLAG_CANCEL_AT_END)
+    if (sceneTemplate->PlaybackFlags.HasFlag(SceneFlag::FadeToBlackscreenOnCancel))
         CancelScene(sceneInstanceID, false);
 }
 
@@ -151,7 +153,7 @@ void SceneMgr::OnSceneComplete(uint32 sceneInstanceID)
 
     sScriptMgr->OnSceneComplete(GetPlayer(), sceneInstanceID, sceneTemplate);
 
-    if (sceneTemplate->PlaybackFlags & SCENEFLAG_CANCEL_AT_END)
+    if (sceneTemplate->PlaybackFlags.HasFlag(SceneFlag::FadeToBlackscreenOnComplete))
         CancelScene(sceneInstanceID, false);
 }
 
