@@ -3197,6 +3197,8 @@ struct SummonPropertiesEntry
     int32 Faction;
     int32 Title;
     int32 Slot;
+
+    EnumFlag<SummonPropertiesFlags> GetFlags() const { return static_cast<SummonPropertiesFlags>(Flags); }
 };
 
 #define TACTKEY_SIZE 16
