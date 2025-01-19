@@ -66,8 +66,8 @@ INSERT INTO `conversation_line_template` (`Id`, `UiCameraID`, `ActorIdx`, `Flags
 (15495, 82, 0, 0, 40593); -- Void Elf
 
 DELETE FROM `conversation_template` WHERE `Id`=6793;
-INSERT INTO `conversation_template` (`Id`, `FirstLineID`, `TextureKitId`, `VerifiedBuild`) VALUES
-(6793, 15489, 5124, 40593);
+INSERT INTO `conversation_template` (`Id`, `FirstLineID`, `LastLineEndTime`) VALUES
+(6793, 15489, 65615);
 
 DELETE FROM `conditions` WHERE (`SourceTypeOrReferenceId`=26 AND `SourceGroup`=10275 AND `SourceEntry`=0) OR (`SourceTypeOrReferenceId`=29 AND `SourceEntry` IN(15490,15491,15494,15495));
 INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `SourceId`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionTarget`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `NegativeCondition`, `Comment`) VALUES
