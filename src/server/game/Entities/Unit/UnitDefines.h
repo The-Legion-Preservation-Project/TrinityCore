@@ -397,7 +397,7 @@ enum ReactStates
     REACT_ASSIST     = 3
 };
 
-static char const* DescribeReactState(ReactStates state)
+inline char const* DescribeReactState(ReactStates state)
 {
     switch (state)
     {
