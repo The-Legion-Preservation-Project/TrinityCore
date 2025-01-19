@@ -1339,6 +1339,39 @@ struct GarrFollowerXAbilityEntry
     uint16 GarrFollowerID;
 };
 
+struct GarrMissionEntry
+{
+    LocalizedString Name;
+    LocalizedString Description;
+    LocalizedString Location;
+    int32 MissionDuration;
+    uint32 OfferDuration;
+    DBCPosition2D MapPos;
+    DBCPosition2D WorldPos;
+    uint16 TargetItemLevel;
+    uint16 UiTextureKitID;
+    uint16 MissionCostCurrencyTypesID;
+    int8 TargetLevel;
+    uint8 EnvGarrMechanicTypeID;
+    uint8 MaxFollowers;
+    uint8 OfferedGarrMissionTextureID;
+    uint8 GarrMissionTypeID;
+    uint8 GarrFollowerTypeID;
+    uint8 BaseCompletionChance;
+    uint8 FollowerDeathChance;
+    uint8 GarrTypeID;
+    uint32 ID;
+    int32 TravelDuration;
+    uint32 PlayerConditionID;
+    uint32 MissionCost;
+    uint32 Flags;
+    uint32 BaseFollowerXP;
+    uint32 AreaID;
+    uint32 OvermaxRewardPackID;
+    uint32 EnvGarrMechanicID;
+    uint32 GarrMissionSetID;
+};
+
 struct GarrPlotEntry
 {
     uint32 ID;
@@ -1922,12 +1955,77 @@ struct ItemXBonusTreeEntry
     int32 ItemID;
 };
 
+struct JournalEncounterEntry
+{
+    uint32 ID;
+    LocalizedString Name;
+    LocalizedString Description;
+    DBCPosition2D Map;
+    uint16 DungeonMapID;
+    uint16 WorldMapAreaID;
+    uint16 FirstSectionID;
+    uint16 JournalInstanceID;
+    int8 DifficultyMask;
+    uint8 Flags;
+    uint32 OrderIndex;
+    uint32 MapDisplayConditionID;
+};
+
+struct JournalEncounterSectionEntry
+{
+    uint32 ID;
+    LocalizedString Title;
+    LocalizedString BodyText;
+    uint32 IconCreatureDisplayInfoID;
+    int32 UiModelSceneID;
+    int32 SpellID;
+    int32 IconFileDataID;
+    uint16 JournalEncounterID;
+    uint16 NextSiblingSectionID;
+    uint16 FirstChildSectionID;
+    uint16 ParentSectionID;
+    uint16 Flags;
+    uint16 IconFlags;
+    uint8 OrderIndex;
+    uint8 Type;
+    int8 DifficultyMask;
+};
+
+struct JournalInstanceEntry
+{
+    LocalizedString Name;
+    LocalizedString Description;
+    int32 ButtonFileDataID;
+    int32 ButtonSmallFileDataID;
+    int32 BackgroundFileDataID;
+    int32 LoreFileDataID;
+    uint16 MapID;
+    uint16 AreaID;
+    uint8 OrderIndex;
+    uint8 Flags;
+    uint32 ID;
+};
+
+struct JournalTierEntry
+{
+    uint32 ID;
+    LocalizedString Name;
+};
+
 #define KEYCHAIN_SIZE   32
 
 struct KeychainEntry
 {
     uint32 ID;
     uint8 Key[KEYCHAIN_SIZE];
+};
+
+struct KeystoneAffixEntry
+{
+    uint32 ID;
+    LocalizedString Name;
+    LocalizedString Description;
+    int32 FiledataID;
 };
 
 struct LanguageWordsEntry
@@ -2090,6 +2188,15 @@ struct MapEntry
 
     bool IsDynamicDifficultyMap() const { return (Flags[0] & MAP_FLAG_CAN_TOGGLE_DIFFICULTY) != 0; }
     bool IsGarrison() const { return (Flags[0] & MAP_FLAG_GARRISON) != 0; }
+};
+
+struct MapChallengeModeEntry
+{
+    LocalizedString Name;
+    uint32 ID;
+    uint16 MapID;
+    int16 CriteriaCount[3];
+    uint8 Flags;
 };
 
 struct MapDifficultyEntry

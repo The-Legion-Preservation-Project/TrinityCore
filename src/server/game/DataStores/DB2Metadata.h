@@ -3931,14 +3931,14 @@ struct GarrMissionMeta
             { FT_STRING, 1, false },
             { FT_STRING, 1, false },
             { FT_STRING, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
             { FT_INT, 1, false },
             { FT_FLOAT, 2, false },
             { FT_FLOAT, 2, false },
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
-            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, true },
             { FT_BYTE, 1, false },
             { FT_BYTE, 1, false },
             { FT_BYTE, 1, false },
@@ -3948,7 +3948,7 @@ struct GarrMissionMeta
             { FT_BYTE, 1, false },
             { FT_BYTE, 1, false },
             { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
             { FT_INT, 1, false },
             { FT_INT, 1, false },
             { FT_INT, 1, false },
@@ -5692,7 +5692,7 @@ struct JournalEncounterMeta
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
-            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, true },
             { FT_BYTE, 1, false },
             { FT_INT, 1, false },
             { FT_INT, 1, false },
@@ -5752,9 +5752,9 @@ struct JournalEncounterSectionMeta
             { FT_STRING, 1, false },
             { FT_STRING, 1, false },
             { FT_INT, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
@@ -5763,7 +5763,7 @@ struct JournalEncounterSectionMeta
             { FT_SHORT, 1, false },
             { FT_BYTE, 1, false },
             { FT_BYTE, 1, false },
-            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, true },
         };
 
         static DB2Meta instance(1134413, -1, 15, 0x13E56B12, fields, -1);
@@ -5813,10 +5813,10 @@ struct JournalInstanceMeta
         {
             { FT_STRING, 1, false },
             { FT_STRING, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
             { FT_BYTE, 1, false },
@@ -5910,7 +5910,7 @@ struct KeystoneAffixMeta
         {
             { FT_STRING, 1, false },
             { FT_STRING, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
         };
 
         static DB2Meta instance(1344761, -1, 3, 0x1BCB46AA, fields, -1);
@@ -6567,7 +6567,7 @@ struct MapChallengeModeMeta
             { FT_STRING, 1, false },
             { FT_INT, 1, false },
             { FT_SHORT, 1, false },
-            { FT_SHORT, 3, false },
+            { FT_SHORT, 3, true },
             { FT_BYTE, 1, false },
         };
 
