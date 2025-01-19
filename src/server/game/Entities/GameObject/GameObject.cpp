@@ -88,6 +88,7 @@ WorldPacket GameObjectTemplate::BuildQueryData(LocaleConstant loc) const
     stats.RequiredLevel = RequiredLevel;
 
     queryTemp.Write();
+    queryTemp.ShrinkToFit();
     return queryTemp.Move();
 }
 
