@@ -200,6 +200,35 @@ LOCK TABLES `autobroadcast` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `battle_pet_declinedname`
+--
+
+DROP TABLE IF EXISTS `battle_pet_declinedname`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `battle_pet_declinedname` (
+  `guid` bigint NOT NULL,
+  `genitive` varchar(12) NOT NULL DEFAULT '',
+  `dative` varchar(12) NOT NULL DEFAULT '',
+  `accusative` varchar(12) NOT NULL DEFAULT '',
+  `instrumental` varchar(12) NOT NULL DEFAULT '',
+  `prepositional` varchar(12) NOT NULL DEFAULT '',
+  PRIMARY KEY (`guid`),
+  CONSTRAINT `fk_battle_pet__battle_pet_declinedname` FOREIGN KEY (`guid`) REFERENCES `battle_pets` (`guid`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `battle_pet_declinedname`
+--
+
+LOCK TABLES `battle_pet_declinedname` WRITE;
+/*!40000 ALTER TABLE `battle_pet_declinedname` DISABLE KEYS */;
+/*!40000 ALTER TABLE `battle_pet_declinedname` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+--
 -- Table structure for table `battle_pet_slots`
 --
 
@@ -2365,7 +2394,8 @@ INSERT INTO `updates` VALUES
 ('2020_08_02_00_auth.sql','B0290F6558C59262D9DDD8071060A8803DD56930','ARCHIVED','2020-08-02 00:00:00',0),
 ('2020_08_03_00_auth.sql','492CA77C0FAEEEF3E0492121B3A92689373ECFA3','RELEASED','2020-08-03 09:24:47',0),
 ('2020_08_03_01_auth.sql','EC1063396CA20A2303D83238470D41EF4439EC72','RELEASED','2020-08-03 00:00:01',0),
-('2020_12_31_00_auth.sql','05C9C105D55C6588CDA0D75AE3B135B7E6B54C06','RELEASED','2020-12-31 12:58:21',0);
+('2020_12_31_00_auth.sql','05C9C105D55C6588CDA0D75AE3B135B7E6B54C06','RELEASED','2020-12-31 12:58:21',0),
+('2021_10_15_01_auth.sql','72A0437F0ADEC59FF9D6839DF845C473F693CA5B','RELEASED','2021-10-16 00:15:25',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
