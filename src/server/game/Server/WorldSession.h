@@ -819,6 +819,7 @@ enum AccountDataType
 
 #define NUM_ACCOUNT_DATA_TYPES        8
 
+#define ALL_ACCOUNT_DATA_CACHE_MASK 0xFF
 #define GLOBAL_CACHE_MASK           0x15
 #define PER_CHARACTER_CACHE_MASK    0xEA
 
@@ -1036,6 +1037,7 @@ class TC_GAME_API WorldSession
         // Account Data
         AccountData const* GetAccountData(AccountDataType type) const { return &_accountData[type]; }
         void SetAccountData(AccountDataType type, time_t time, std::string const& data);
+        void SendAccountDataTimes(ObjectGuid playerGuid, uint32 mask);
         void LoadAccountData(PreparedQueryResult result, uint32 mask);
 
         void LoadTutorialsData(PreparedQueryResult result);
