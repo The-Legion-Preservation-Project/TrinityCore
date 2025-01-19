@@ -1381,7 +1381,7 @@ class TC_GAME_API WorldSession
 
         void HandleCanDuel(WorldPackets::Duel::CanDuel& packet);
         void HandleDuelResponseOpcode(WorldPackets::Duel::DuelResponse& duelResponse);
-        void HandleDuelAccepted();
+        void HandleDuelAccepted(ObjectGuid arbiterGuid);
         void HandleDuelCancelled();
 
         void HandleAcceptTradeOpcode(WorldPackets::Trade::AcceptTrade& acceptTrade);
