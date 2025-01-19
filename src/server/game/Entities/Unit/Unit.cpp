@@ -305,7 +305,7 @@ Unit::Unit(bool isWorldObject) :
     m_charmer(nullptr), m_charmed(nullptr),
     i_motionMaster(new MotionMaster(this)), m_regenTimer(0), m_vehicle(nullptr),
     m_vehicleKit(nullptr), m_unitTypeMask(UNIT_MASK_NONE), m_Diminishing(), m_combatManager(this),
-    m_threatManager(this), _aiAnimKitId(0), _movementAnimKitId(0), _meleeAnimKitId(0),
+    m_threatManager(this), m_aiLocked(false), _aiAnimKitId(0), _movementAnimKitId(0), _meleeAnimKitId(0),
     _spellHistory(new SpellHistory(this))
 {
     m_objectType |= TYPEMASK_UNIT;
@@ -8940,24 +8940,25 @@ int32 Unit::GetCreatePowers(Powers power) const
     return 0;
 }
 
-void Unit::AIUpdateTick(uint32 diff, bool /*force*/)
+void Unit::AIUpdateTick(uint32 diff)
 {
-    if (!diff) // some places call with diff = 0, which does nothing (for now), see PR #22296
-        return;
     if (UnitAI* ai = GetAI())
+    {
+        m_aiLocked = true;
         ai->UpdateAI(diff);
+        m_aiLocked = false;
+    }
 }
 
 void Unit::SetAI(UnitAI* newAI)
 {
-    if (i_AI)
-        AIUpdateTick(0, true); // old AI gets a final tick if enabled
+    ASSERT(!m_aiLocked, "Attempt to replace AI during AI update tick");
     i_AI.reset(newAI);
-    AIUpdateTick(0, true); // new AI gets its initial tick
 }
 
 void Unit::ScheduleAIChange()
 {
+    ASSERT(!m_aiLocked, "Attempt to schedule AI change during AI update tick");
     bool const charmed = IsCharmed();
     // if charm is applied, we can't have disabled AI already, and vice versa
     if (charmed)
@@ -8973,9 +8974,9 @@ void Unit::ScheduleAIChange()
 
 void Unit::RestoreDisabledAI()
 {
+    ASSERT(!m_aiLocked, "Attempt to restore AI during UpdateAI tick");
     ASSERT((GetTypeId() == TYPEID_PLAYER) || i_disabledAI, "Attempt to restore disabled AI on creature without disabled AI");
     i_AI = std::move(i_disabledAI);
-    AIUpdateTick(0, true);
 }
 
 void Unit::AddToWorld()
@@ -9098,7 +9099,6 @@ void Unit::UpdateCharmAI()
         ASSERT(newAI);
         i_AI.reset(newAI);
         newAI->OnCharmed(true);
-        AIUpdateTick(0, true);
     }
     else
     {
