@@ -52,7 +52,7 @@ INSERT INTO `creature_text`(`CreatureID`, `GroupID`, `ID`, `Text`, `Type`, `Lang
 (130986, 5, 0, 'I am afraid I cannot allow that.', 12, 0, 100, 0, 0, 96050, 146017, 0, 'Vigilant Quoram to Player');
 
 -- SET SAI in Template
-UPDATE `creature_template` SET `AIName`="SmartAI" WHERE `entry` IN (126030, 132266, 125524, 125843, 132214, 132215, 132225, 132328, 130986, 130993);
+UPDATE `creature_template` SET `AIName`='SmartAI' WHERE `entry` IN (126030, 132266, 125524, 125843, 132214, 132215, 132225, 132328, 130986, 130993);
 
 -- Conversation Stuff for Fareeya (GUID: 650070)
 DELETE FROM `conversation_actors` WHERE (`ConversationId`=6481 AND `Idx`=0);
@@ -68,8 +68,8 @@ INSERT INTO `conversation_line_template` (`Id`, `StartTime`, `UiCameraID`, `Acto
 (14658, 0, 0, 0, 0, 40593);
 
 DELETE FROM `conversation_template` WHERE `Id`=6481;
-INSERT INTO `conversation_template` (`Id`, `FirstLineID`, `LastLineEndTime`, `TextureKitId`, `VerifiedBuild`) VALUES
-(6481, 14658, 51922, 0, 40593);
+INSERT INTO `conversation_template` (`Id`, `FirstLineID`, `LastLineEndTime`, `VerifiedBuild`) VALUES
+(6481, 14658, 51922, 40593);
 
 -- SAI Conversation Script for Fareeya GUID: 650070
 DELETE FROM `smart_scripts` WHERE `entryorguid` = -650070 AND `source_type` = 0;

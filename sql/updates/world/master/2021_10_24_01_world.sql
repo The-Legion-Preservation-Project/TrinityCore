@@ -7,19 +7,19 @@ INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `Emote2`, `Emote3`, `Emote4`, 
 (49772, 1, 0, 0, 0, 0, 0, 0, 0, 'What have we here? One of the famed Lightforged draenei! Welcome, welcome.\n\nThank you for your service against the Legion, $n. Truly an inspiration!', 40593); -- -Unknown-
 
 DELETE FROM `quest_poi` WHERE (`QuestID`=50313 AND `BlobIndex`=0 AND `Idx1`=2) OR (`QuestID`=50313 AND `BlobIndex`=0 AND `Idx1`=1) OR (`QuestID`=50313 AND `BlobIndex`=0 AND `Idx1`=0);
-INSERT INTO `quest_poi` (`QuestID`, `BlobIndex`, `Idx1`, `ObjectiveIndex`, `QuestObjectiveID`, `QuestObjectID`, `MapID`, `UiMapID`, `Priority`, `Flags`, `WorldEffectID`, `PlayerConditionID`, `NavigationPlayerConditionID`, `SpawnTrackingID`, `AlwaysAllowMergingBlobs`, `VerifiedBuild`) VALUES
-(50313, 0, 2, 32, 0, 0, 0, 84, 0, 0, 0, 0, 0, 1456603, 0, 40593), -- -Unknown-
-(50313, 0, 1, 0, 312152, 65238, 0, 84, 0, 2, 0, 0, 0, 0, 0, 40593), -- -Unknown-
-(50313, 0, 0, -1, 0, 0, 0, 84, 0, 0, 0, 0, 0, 1430411, 0, 40593); -- -Unknown-
+INSERT INTO `quest_poi` (`QuestID`, `BlobIndex`, `Idx1`, `ObjectiveIndex`, `QuestObjectiveID`, `QuestObjectID`, `MapID`, `WorldMapAreaId`, `Priority`, `Flags`, `WorldEffectID`, `PlayerConditionID`, `SpawnTrackingID`, `AlwaysAllowMergingBlobs`, `VerifiedBuild`) VALUES
+(50313, 0, 2, 32, 0, 0, 0, 301, 0, 0, 0, 0, 1456603, 0, 40593), -- -Unknown-
+(50313, 0, 1, 0, 312152, 65238, 0, 301, 0, 2, 0, 0, 0, 0, 40593), -- -Unknown-
+(50313, 0, 0, -1, 0, 0, 0, 301, 0, 0, 0, 0, 1430411, 0, 40593); -- -Unknown-
 
 UPDATE `quest_poi` SET `VerifiedBuild`=40593 WHERE (`QuestID`=49772 AND `BlobIndex`=0 AND `Idx1`=1); -- -Unknown-
 UPDATE `quest_poi` SET `VerifiedBuild`=40593 WHERE (`QuestID`=49772 AND `BlobIndex`=0 AND `Idx1`=0); -- -Unknown-
 
 DELETE FROM `quest_poi_points` WHERE (`QuestID`=50313 AND `Idx1`=2 AND `Idx2`=0) OR (`QuestID`=50313 AND `Idx1`=1 AND `Idx2`=0) OR (`QuestID`=50313 AND `Idx1`=0 AND `Idx2`=0);
-INSERT INTO `quest_poi_points` (`QuestID`, `Idx1`, `Idx2`, `X`, `Y`, `Z`, `VerifiedBuild`) VALUES
-(50313, 2, 0, -8173, 801, 74, 40593), -- -Unknown-
-(50313, 1, 0, -8348, 634, 0, 40593), -- -Unknown-
-(50313, 0, 0, -8340, 637, 95, 40593); -- -Unknown-
+INSERT INTO `quest_poi_points` (`QuestID`, `Idx1`, `Idx2`, `X`, `Y`, `VerifiedBuild`) VALUES
+(50313, 2, 0, -8173, 801, 40593), -- -Unknown-
+(50313, 1, 0, -8348, 634, 40593), -- -Unknown-
+(50313, 0, 0, -8340, 637, 40593); -- -Unknown-
 
 UPDATE `quest_poi_points` SET `VerifiedBuild`=40593 WHERE (`QuestID`=49772 AND `Idx1`=1 AND `Idx2`=0); -- -Unknown-
 UPDATE `quest_poi_points` SET `VerifiedBuild`=40593 WHERE (`QuestID`=49772 AND `Idx1`=0 AND `Idx2`=0); -- -Unknown-

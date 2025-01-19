@@ -22211,29 +22211,21 @@ void Player::AddSpellMod(SpellModifier* mod, bool apply)
         case SPELLMOD_LABEL_FLAT:
             if (apply)
             {
-                AddDynamicUpdateFieldValue(m_values.ModifyValue(&Player::m_activePlayerData)
-                    .ModifyValue(&UF::ActivePlayerData::SpellFlatModByLabel)) = static_cast<SpellFlatModifierByLabel const*>(mod)->value;
+                //AddDynamicValue(PLAYER_DYNAMIC_FIELD_SPELL_FLAT_MOD_BY_LABEL, static_cast<SpellFlatModifierByLabel const*>(mod)->value);
             }
             else
             {
-                int32 firstIndex = m_activePlayerData->SpellFlatModByLabel.FindIndex(static_cast<SpellFlatModifierByLabel const*>(mod)->value);
-                if (firstIndex >= 0)
-                    RemoveDynamicUpdateFieldValue(m_values.ModifyValue(&Player::m_activePlayerData)
-                        .ModifyValue(&UF::ActivePlayerData::SpellFlatModByLabel), firstIndex);
+                //RemoveDynamicValue(PLAYER_DYNAMIC_FIELD_SPELL_FLAT_MOD_BY_LABEL, static_cast<SpellFlatModifierByLabel const*>(mod)->value);
             }
             break;
         case SPELLMOD_LABEL_PCT:
             if (apply)
             {
-                AddDynamicUpdateFieldValue(m_values.ModifyValue(&Player::m_activePlayerData)
-                    .ModifyValue(&UF::ActivePlayerData::SpellPctModByLabel)) = static_cast<SpellPctModifierByLabel const*>(mod)->value;
+                //AddDynamicValue(PLAYER_DYNAMIC_FIELD_SPELL_PCT_MOD_BY_LABEL, static_cast<SpellFlatModifierByLabel const*>(mod)->value.ModifierValue);
             }
             else
             {
-                int32 firstIndex = m_activePlayerData->SpellPctModByLabel.FindIndex(static_cast<SpellPctModifierByLabel const*>(mod)->value);
-                if (firstIndex >= 0)
-                    RemoveDynamicUpdateFieldValue(m_values.ModifyValue(&Player::m_activePlayerData)
-                        .ModifyValue(&UF::ActivePlayerData::SpellPctModByLabel), firstIndex);
+                //RemoveDynamicValue(PLAYER_DYNAMIC_FIELD_SPELL_PCT_MOD_BY_LABEL, static_cast<SpellFlatModifierByLabel const*>(mod)->value.ModifierValue);
             }
             break;
         default:

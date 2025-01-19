@@ -1524,7 +1524,7 @@ class spell_ethereal_pet_aura : public AuraScript
 
     bool CheckProc(ProcEventInfo& eventInfo)
     {
-        uint32 levelDiff = std::abs(GetTarget()->getLevel() - eventInfo.GetProcTarget()->getLevel());
+        uint32 levelDiff = std::abs(GetTarget()->GetLevel() - eventInfo.GetProcTarget()->GetLevel());
         return levelDiff <= 9;
     }
 

@@ -252,16 +252,26 @@ struct SpellModifierByClassMask : SpellModifier
     flag128 mask;
 };
 
-template<typename T>
-struct SpellModifierByLabel : SpellModifier
+struct SpellModifierByLabelData
 {
-    SpellModifierByLabel(Aura* _ownerAura) : SpellModifier(_ownerAura) { }
-
-    T value;
+    float ModifierValue;
+    int32 ModIndex;
+    int32 LabelID;
 };
 
-using SpellFlatModifierByLabel = SpellModifierByLabel<UF::SpellFlatModByLabel>;
-using SpellPctModifierByLabel = SpellModifierByLabel<UF::SpellPctModByLabel>;
+struct SpellFlatModifierByLabel : SpellModifier
+{
+    SpellFlatModifierByLabel(Aura* _ownerAura) : SpellModifier(_ownerAura) { }
+
+    SpellModifierByLabelData value;
+};
+
+struct SpellPctModifierByLabel : SpellModifier
+{
+    SpellPctModifierByLabel(Aura* _ownerAura) : SpellModifier(_ownerAura) { }
+
+    SpellModifierByLabelData value;
+};
 
 enum PlayerCurrencyState
 {

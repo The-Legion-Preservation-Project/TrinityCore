@@ -13,11 +13,11 @@ INSERT INTO `conversation_line_template` (`Id`, `StartTime`, `UiCameraID`, `Acto
 (15505, 0, 0, 0, 0, 40593);
 
 DELETE FROM `conversation_template` WHERE `Id`=6798;
-INSERT INTO `conversation_template` (`Id`, `FirstLineID`, `LastLineEndTime`, `TextureKitId`, `VerifiedBuild`) VALUES
-(6798, 15505, 43909, 0, 40593);
+INSERT INTO `conversation_template` (`Id`, `FirstLineID`, `LastLineEndTime`, `VerifiedBuild`) VALUES
+(6798, 15505, 43909, 40593);
 
 -- Update SAI in Template
-UPDATE `creature_template` SET `AIName`="SmartAI" WHERE `entry` = 131345;
+UPDATE `creature_template` SET `AIName`='SmartAI' WHERE `entry` = 131345;
 
 -- SAI Conversation Script for Alleria GUID: 650011
 DELETE FROM `smart_scripts` WHERE `entryorguid` = -650011 AND `source_type` = 0;

@@ -649,7 +649,7 @@ struct npc_xt_void_zone : public PassiveAI
     void Reset() override
     {
         int32 bp = 0;
-        if (SpellInfo const* createdBySpell = sSpellMgr->GetSpellInfo(me->m_unitData->CreatedBySpell, me->GetMap()->GetDifficultyID()))
+        if (SpellInfo const* createdBySpell = sSpellMgr->GetSpellInfo(me->GetUInt32Value(UNIT_CREATED_BY_SPELL), me->GetMap()->GetDifficultyID()))
             if (createdBySpell->GetEffects().size() > EFFECT_1)
                 bp = createdBySpell->GetEffect(EFFECT_1).CalcValue();
 
