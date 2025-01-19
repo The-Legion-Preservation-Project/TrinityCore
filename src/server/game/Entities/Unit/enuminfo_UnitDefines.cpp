@@ -244,12 +244,20 @@ TC_API_EXPORT EnumText EnumUtils<NPCFlags>::ToString(NPCFlags value)
         case UNIT_NPC_FLAG_VAULTKEEPER: return { "UNIT_NPC_FLAG_VAULTKEEPER", "is void storage", "" };
         case UNIT_NPC_FLAG_WILD_BATTLE_PET: return { "UNIT_NPC_FLAG_WILD_BATTLE_PET", "is wild battle pet", "Pet that player can fight (Battle Pet)" };
         case UNIT_NPC_FLAG_BLACK_MARKET: return { "UNIT_NPC_FLAG_BLACK_MARKET", "is black market", "" };
+        case UNIT_NPC_FLAG_ITEM_UPGRADE_MASTER: return { "UNIT_NPC_FLAG_ITEM_UPGRADE_MASTER", "is item upgrade", "" };
+        case UNIT_NPC_FLAG_GARRISON_ARCHITECT: return { "UNIT_NPC_FLAG_GARRISON_ARCHITECT", "is garrison architect", "garrison building placement UI" };
+        case UNIT_NPC_FLAG_STEERING: return { "UNIT_NPC_FLAG_STEERING", "is avoiding obstacles", "clientside pathfinding" };
+        case UNIT_NPC_FLAG_SHIPMENT_CRAFTER: return { "UNIT_NPC_FLAG_SHIPMENT_CRAFTER", "is shipment crafter", "garrison work orders" };
+        case UNIT_NPC_FLAG_GARRISON_MISSION_NPC: return { "UNIT_NPC_FLAG_GARRISON_MISSION_NPC", "is garrison mission", "" };
+        case UNIT_NPC_FLAG_TRADESKILL_NPC: return { "UNIT_NPC_FLAG_TRADESKILL_NPC", "is tradeskill", "crafting at npc" };
+        case UNIT_NPC_FLAG_BLACK_MARKET_VIEW: return { "UNIT_NPC_FLAG_BLACK_MARKET_VIEW", "is black market view", "only allows viewing black market auctions, no bidding" };
+        case UNIT_NPC_FLAG_CONTRIBUTION_COLLECTOR: return { "UNIT_NPC_FLAG_CONTRIBUTION_COLLECTOR", "is contribution collector", "" };
         default: throw std::out_of_range("value");
     }
 }
 
 template <>
-TC_API_EXPORT size_t EnumUtils<NPCFlags>::Count() { return 33; }
+TC_API_EXPORT size_t EnumUtils<NPCFlags>::Count() { return 41; }
 
 template <>
 TC_API_EXPORT NPCFlags EnumUtils<NPCFlags>::FromIndex(size_t index)
@@ -289,54 +297,14 @@ TC_API_EXPORT NPCFlags EnumUtils<NPCFlags>::FromIndex(size_t index)
         case 30: return UNIT_NPC_FLAG_VAULTKEEPER;
         case 31: return UNIT_NPC_FLAG_WILD_BATTLE_PET;
         case 32: return UNIT_NPC_FLAG_BLACK_MARKET;
-        default: throw std::out_of_range("index");
-    }
-}
-
-/***************************************************************\
-|* data for enum 'NPCFlags2' in 'UnitDefines.h' auto-generated *|
-\***************************************************************/
-template <>
-TC_API_EXPORT EnumText EnumUtils<NPCFlags2>::ToString(NPCFlags2 value)
-{
-    switch (value)
-    {
-        case UNIT_NPC_FLAG_2_NONE: return { "UNIT_NPC_FLAG_2_NONE", "UNIT_NPC_FLAG_2_NONE", "" };
-        case UNIT_NPC_FLAG_2_ITEM_UPGRADE_MASTER: return { "UNIT_NPC_FLAG_2_ITEM_UPGRADE_MASTER", "is item upgrade", "" };
-        case UNIT_NPC_FLAG_2_GARRISON_ARCHITECT: return { "UNIT_NPC_FLAG_2_GARRISON_ARCHITECT", "is garrison architect", "garrison building placement UI" };
-        case UNIT_NPC_FLAG_2_STEERING: return { "UNIT_NPC_FLAG_2_STEERING", "is avoiding obstacles", "clientside pathfinding" };
-        case UNIT_NPC_FLAG_2_SHIPMENT_CRAFTER: return { "UNIT_NPC_FLAG_2_SHIPMENT_CRAFTER", "is shipment crafter", "garrison work orders" };
-        case UNIT_NPC_FLAG_2_GARRISON_MISSION_NPC: return { "UNIT_NPC_FLAG_2_GARRISON_MISSION_NPC", "is garrison mission", "" };
-        case UNIT_NPC_FLAG_2_TRADESKILL_NPC: return { "UNIT_NPC_FLAG_2_TRADESKILL_NPC", "is tradeskill", "crafting at npc" };
-        case UNIT_NPC_FLAG_2_BLACK_MARKET_VIEW: return { "UNIT_NPC_FLAG_2_BLACK_MARKET_VIEW", "is black market view", "only allows viewing black market auctions, no bidding" };
-        case UNIT_NPC_FLAG_2_GARRISON_TALENT_NPC: return { "UNIT_NPC_FLAG_2_GARRISON_TALENT_NPC", "is garrrison talent", "" };
-        case UNIT_NPC_FLAG_2_CONTRIBUTION_COLLECTOR: return { "UNIT_NPC_FLAG_2_CONTRIBUTION_COLLECTOR", "is contribution collector", "" };
-        case UNIT_NPC_FLAG_2_AZERITE_RESPEC: return { "UNIT_NPC_FLAG_2_AZERITE_RESPEC", "is azerite respec", "" };
-        case UNIT_NPC_FLAG_2_ISLANDS_QUEUE: return { "UNIT_NPC_FLAG_2_ISLANDS_QUEUE", "is islands queue", "" };
-        default: throw std::out_of_range("value");
-    }
-}
-
-template <>
-TC_API_EXPORT size_t EnumUtils<NPCFlags2>::Count() { return 12; }
-
-template <>
-TC_API_EXPORT NPCFlags2 EnumUtils<NPCFlags2>::FromIndex(size_t index)
-{
-    switch (index)
-    {
-        case 0: return UNIT_NPC_FLAG_2_NONE;
-        case 1: return UNIT_NPC_FLAG_2_ITEM_UPGRADE_MASTER;
-        case 2: return UNIT_NPC_FLAG_2_GARRISON_ARCHITECT;
-        case 3: return UNIT_NPC_FLAG_2_STEERING;
-        case 4: return UNIT_NPC_FLAG_2_SHIPMENT_CRAFTER;
-        case 5: return UNIT_NPC_FLAG_2_GARRISON_MISSION_NPC;
-        case 6: return UNIT_NPC_FLAG_2_TRADESKILL_NPC;
-        case 7: return UNIT_NPC_FLAG_2_BLACK_MARKET_VIEW;
-        case 8: return UNIT_NPC_FLAG_2_GARRISON_TALENT_NPC;
-        case 9: return UNIT_NPC_FLAG_2_CONTRIBUTION_COLLECTOR;
-        case 10: return UNIT_NPC_FLAG_2_AZERITE_RESPEC;
-        case 11: return UNIT_NPC_FLAG_2_ISLANDS_QUEUE;
+        case 33: return UNIT_NPC_FLAG_ITEM_UPGRADE_MASTER;
+        case 34: return UNIT_NPC_FLAG_GARRISON_ARCHITECT;
+        case 35: return UNIT_NPC_FLAG_STEERING;
+        case 36: return UNIT_NPC_FLAG_SHIPMENT_CRAFTER;
+        case 37: return UNIT_NPC_FLAG_GARRISON_MISSION_NPC;
+        case 38: return UNIT_NPC_FLAG_TRADESKILL_NPC;
+        case 39: return UNIT_NPC_FLAG_BLACK_MARKET_VIEW;
+        case 40: return UNIT_NPC_FLAG_CONTRIBUTION_COLLECTOR;
         default: throw std::out_of_range("index");
     }
 }
