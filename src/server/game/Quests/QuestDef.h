@@ -69,22 +69,22 @@ enum QuestFailedReason
     QUEST_ERR_HAS_IN_PROGRESS                   = 30        // "Progress Bar objective not completed"
 };
 
-enum QuestPushReason : uint8
+enum class QuestPushReason : uint8
 {
-    QUEST_PUSH_SUCCESS                  = 0,    // "Sharing quest with %s..."
-    QUEST_PUSH_INVALID                  = 1,    // "%s is not eligible for that quest"
-    QUEST_PUSH_ACCEPTED                 = 2,    // "%s has accepted your quest"
-    QUEST_PUSH_DECLINED                 = 3,    // "%s has declined your quest"
-    QUEST_PUSH_BUSY                     = 4,    // "%s is busy"
-    QUEST_PUSH_DEAD                     = 5,    // "%s is dead."
-    QUEST_PUSH_LOG_FULL                 = 6,    // "%s's quest log is full"
-    QUEST_PUSH_ONQUEST                  = 7,    // "%s is already on that quest"
-    QUEST_PUSH_ALREADY_DONE             = 8,    // "%s has completed that quest"
-    QUEST_PUSH_NOT_DAILY                = 9,    // "That quest cannot be shared today"
-    QUEST_PUSH_TIMER_EXPIRED            = 10,   // "Quest sharing timer has expired"
-    QUEST_PUSH_NOT_IN_PARTY             = 11,   // "You are not in a party"
-    QUEST_PUSH_DIFFERENT_SERVER_DAILY   = 12,   // "%s is not eligible for that quest today"
-    QUEST_PUSH_NOT_ALLOWED              = 13    // "That quest cannot be shared"
+    Success                         = 0,    // "Sharing quest with %s..."
+    Invalid                         = 1,    // "%s is not eligible for that quest"
+    Accepted                        = 2,    // "%s has accepted your quest"
+    Declined                        = 3,    // "%s has declined your quest"
+    Busy                            = 4,    // "%s is busy"
+    Dead                            = 5,    // "%s is dead."
+    LogFull                         = 6,    // "%s's quest log is full"
+    OnQuest                         = 7,    // "%s is already on that quest"
+    AlreadyDone                     = 8,    // "%s has completed that quest"
+    NotDaily                        = 9,    // "That quest cannot be shared today"
+    TimerExpired                    = 10,   // "Quest sharing timer has expired"
+    NotInParty                      = 11,   // "You are not in a party"
+    DifferentServerDaily            = 12,   // "%s is not eligible for that quest today"
+    NotAllowed                      = 13    // "That quest cannot be shared"
 };
 
 enum QuestTradeSkill

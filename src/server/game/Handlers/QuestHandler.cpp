@@ -30,6 +30,7 @@
 #include "ObjectAccessor.h"
 #include "ObjectMgr.h"
 #include "Player.h"
+#include "PoolMgr.h"
 #include "QuestDef.h"
 #include "QuestPackets.h"
 #include "ReputationMgr.h"
@@ -165,7 +166,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPackets::Quest::QuestG
             Player* player = ObjectAccessor::FindPlayer(_player->GetPlayerSharingQuest());
             if (player)
             {
-                player->SendPushToPartyResponse(_player, QUEST_PUSH_ACCEPTED);
+                player->SendPushToPartyResponse(_player, QuestPushReason::Accepted);
                 _player->ClearQuestSharingInfo();
             }
         }
@@ -623,19 +624,29 @@ void WorldSession::HandleQuestgiverCloseQuest(WorldPackets::Quest::QuestGiverClo
 
 void WorldSession::HandlePushQuestToParty(WorldPackets::Quest::PushQuestToParty& packet)
 {
-    if (!_player->CanShareQuest(packet.QuestID))
-        return;
-
     Quest const* quest = sObjectMgr->GetQuestTemplate(packet.QuestID);
     if (!quest)
         return;
 
-    Player * const sender = GetPlayer();
+    Player* const sender = GetPlayer();
+
+    if (!_player->CanShareQuest(packet.QuestID))
+    {
+        sender->SendPushToPartyResponse(sender, QuestPushReason::NotAllowed);
+        return;
+    }
+
+    // in pool and not currently available (wintergrasp weekly, dalaran weekly) - can't share
+    if (sPoolMgr->IsPartOfAPool<Quest>(packet.QuestID) && !sPoolMgr->IsSpawnedObject<Quest>(packet.QuestID))
+    {
+        sender->SendPushToPartyResponse(sender, QuestPushReason::NotDaily);
+        return;
+    }
 
     Group* group = sender->GetGroup();
     if (!group)
     {
-        sender->SendPushToPartyResponse(sender, QUEST_PUSH_NOT_IN_PARTY);
+        sender->SendPushToPartyResponse(sender, QuestPushReason::NotInParty);
         return;
     }
 
@@ -646,43 +657,54 @@ void WorldSession::HandlePushQuestToParty(WorldPackets::Quest::PushQuestToParty&
         if (!receiver || receiver == sender)
             continue;
 
-        if (!receiver->SatisfyQuestStatus(quest, false))
+        if (!receiver->GetPlayerSharingQuest().IsEmpty())
         {
-            sender->SendPushToPartyResponse(receiver, QUEST_PUSH_ONQUEST);
+            sender->SendPushToPartyResponse(receiver, QuestPushReason::Busy);
             continue;
         }
 
-        if (receiver->GetQuestStatus(packet.QuestID) == QUEST_STATUS_COMPLETE)
+        if (!receiver->IsAlive())
         {
-            sender->SendPushToPartyResponse(receiver, QUEST_PUSH_ALREADY_DONE);
+            sender->SendPushToPartyResponse(receiver, QuestPushReason::Dead);
+            continue;
+        }
+
+        switch (receiver->GetQuestStatus(packet.QuestID))
+        {
+            case QUEST_STATUS_REWARDED:
+            {
+                sender->SendPushToPartyResponse(receiver, QuestPushReason::AlreadyDone);
+                continue;
+            }
+            case QUEST_STATUS_INCOMPLETE:
+            case QUEST_STATUS_COMPLETE:
+            {
+                sender->SendPushToPartyResponse(receiver, QuestPushReason::OnQuest);
+                continue;
+            }
+            default:
+                break;
+        }
+
+        if (!receiver->SatisfyQuestLog(false))
+        {
+            sender->SendPushToPartyResponse(receiver, QuestPushReason::LogFull);
             continue;
         }
 
         if (!receiver->SatisfyQuestDay(quest, false))
         {
-            sender->SendPushToPartyResponse(receiver, QUEST_PUSH_DIFFERENT_SERVER_DAILY);
+            sender->SendPushToPartyResponse(receiver, QuestPushReason::AlreadyDone);
             continue;
         }
 
         if (!receiver->CanTakeQuest(quest, false))
         {
-            sender->SendPushToPartyResponse(receiver, QUEST_PUSH_INVALID);
+            sender->SendPushToPartyResponse(receiver, QuestPushReason::Invalid);
             continue;
         }
 
-        if (!receiver->SatisfyQuestLog(false))
-        {
-            sender->SendPushToPartyResponse(receiver, QUEST_PUSH_LOG_FULL);
-            continue;
-        }
-
-        if (!receiver->GetPlayerSharingQuest().IsEmpty())
-        {
-            sender->SendPushToPartyResponse(receiver, QUEST_PUSH_BUSY);
-            continue;
-        }
-
-        sender->SendPushToPartyResponse(receiver, QUEST_PUSH_SUCCESS);
+        sender->SendPushToPartyResponse(receiver, QuestPushReason::Success);
 
         if (quest->IsAutoAccept() && receiver->CanAddQuest(quest, true) && receiver->CanTakeQuest(quest, true))
             receiver->AddQuestAndCheckCompletion(quest, sender);
