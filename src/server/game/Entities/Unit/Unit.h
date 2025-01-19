@@ -1229,7 +1229,8 @@ class TC_GAME_API Unit : public WorldObject
         void SetDemonCreatorGUID(ObjectGuid guid) { SetGuidValue(UNIT_FIELD_DEMON_CREATOR, guid); }
 
         bool IsControlledByPlayer() const { return m_ControlledByPlayer; }
-        ObjectGuid GetCharmerOrOwnerGUID() const override;
+        Player* GetControllingPlayer() const;
+        ObjectGuid GetCharmerOrOwnerGUID() const override { return IsCharmed() ? GetCharmerGUID() : GetOwnerGUID(); }
         bool IsCharmedOwnedByPlayerOrPlayer() const { return GetCharmerOrOwnerOrOwnGUID().IsPlayer(); }
 
         Guardian* GetGuardianPet() const;
