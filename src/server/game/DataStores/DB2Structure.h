@@ -423,7 +423,7 @@ struct BroadcastTextEntry
     uint8 LanguageID;
     uint8 Flags;
     int32 ConditionID;
-    uint32 SoundEntriesID[2];
+    uint32 SoundKitID[2];
 };
 
 struct Cfg_RegionsEntry

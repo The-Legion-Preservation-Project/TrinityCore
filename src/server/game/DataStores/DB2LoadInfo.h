@@ -679,8 +679,8 @@ struct BroadcastTextLoadInfo
             { false, FT_BYTE, "LanguageID" },
             { false, FT_BYTE, "Flags" },
             { true, FT_INT, "ConditionID" },
-            { false, FT_INT, "SoundEntriesID1" },
-            { false, FT_INT, "SoundEntriesID2" },
+            { false, FT_INT, "SoundKitID1" },
+            { false, FT_INT, "SoundKitID2" },
         };
         static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, BroadcastTextMeta::Instance(), HOTFIX_SEL_BROADCAST_TEXT);
         return &loadInfo;
