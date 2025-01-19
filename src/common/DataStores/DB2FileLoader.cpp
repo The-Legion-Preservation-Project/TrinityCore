@@ -171,6 +171,7 @@ public:
     virtual uint32 GetMaxId() const = 0;
     virtual DB2FileLoadInfo const* GetLoadInfo() const = 0;
     virtual bool IsSignedField(uint32 field) const = 0;
+    virtual char const* GetExpectedSignMismatchReason(uint32 field) const = 0;
 
 private:
     friend class DB2Record;
@@ -209,6 +210,7 @@ public:
     uint32 GetMaxId() const override;
     DB2FileLoadInfo const* GetLoadInfo() const override;
     bool IsSignedField(uint32 field) const override;
+    char const* GetExpectedSignMismatchReason(uint32 field) const override;
 
 private:
     void FillParentLookup(char* dataTable);
@@ -264,6 +266,7 @@ public:
     uint32 GetMaxId() const override;
     DB2FileLoadInfo const* GetLoadInfo() const override;
     bool IsSignedField(uint32 field) const override;
+    char const* GetExpectedSignMismatchReason(uint32 field) const override;
 
 private:
     uint8 const* GetRawRecordData(uint32 recordNumber) const override;
@@ -846,6 +849,36 @@ bool DB2FileLoaderRegularImpl::IsSignedField(uint32 field) const
     return false;
 }
 
+char const* DB2FileLoaderRegularImpl::GetExpectedSignMismatchReason(uint32 field) const
+{
+    if (field >= _header->TotalFieldCount)
+    {
+        ASSERT(field == _header->TotalFieldCount);
+        ASSERT(int32(field) == _loadInfo->Meta->ParentIndexField);
+        return " (ParentIndexField must always be unsigned)";
+    }
+
+    DB2ColumnCompression compressionType = _columnMeta ? _columnMeta[field].CompressionType : DB2ColumnCompression::None;
+    switch (compressionType)
+    {
+        case DB2ColumnCompression::None:
+        case DB2ColumnCompression::CommonData:
+        case DB2ColumnCompression::Pallet:
+        case DB2ColumnCompression::PalletArray:
+            if (int32(field) == _loadInfo->Meta->IndexField)
+                return " (IndexField must always be unsigned)";
+            if (int32(field) == _loadInfo->Meta->ParentIndexField)
+                return " (ParentIndexField must always be unsigned)";
+            return "";
+        case DB2ColumnCompression::Immediate:
+            return " (CompressionType is Immediate)";
+        default:
+            ASSERT(false, "Unhandled compression type %u in %s", uint32(_columnMeta[field].CompressionType), _fileName);
+            break;
+    }
+
+    return "";
+}
 
 DB2FileLoaderSparseImpl::DB2FileLoaderSparseImpl(char const* fileName, DB2FileLoadInfo const* loadInfo, DB2Header const* header) :
     _fileName(fileName),
@@ -1272,6 +1305,16 @@ bool DB2FileLoaderSparseImpl::IsSignedField(uint32 field) const
     return _loadInfo->Meta->IsSignedField(field);
 }
 
+char const* DB2FileLoaderSparseImpl::GetExpectedSignMismatchReason(uint32 field) const
+{
+    ASSERT(field < _header->FieldCount);
+    if (int32(field) == _loadInfo->Meta->IndexField)
+        return " (IndexField must always be unsigned)";
+    if (int32(field) == _loadInfo->Meta->ParentIndexField)
+        return " (ParentIndexField must always be unsigned)";
+    return "";
+}
+
 DB2Record::DB2Record(DB2FileLoaderImpl const& db2, uint32 recordIndex, std::size_t* fieldOffsets)
     : _db2(db2), _recordIndex(recordIndex), _recordData(db2.GetRawRecordData(recordIndex)), _fieldOffsets(fieldOffsets)
 {
@@ -1581,14 +1624,14 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
     uint32 fieldIndex = 0;
     if (!loadInfo->Meta->HasIndexFieldInData())
     {
-        //ASSERT(!loadInfo->Fields[0].IsSigned, "ID must be unsigned");
+        //ASSERT(!loadInfo->Fields[0].IsSigned, "ID must be unsigned in %s", source->GetFileName());
         ++fieldIndex;
     }
-
     for (uint32 f = 0; f < loadInfo->Meta->FieldCount; ++f)
     {
         ASSERT(loadInfo->Fields[fieldIndex].IsSigned == _impl->IsSignedField(f),
-            "Field %s in %s must be %s", loadInfo->Fields[fieldIndex].Name, source->GetFileName(), loadInfo->Fields[fieldIndex].IsSigned ? "signed" : "unsigned");
+            "Field %s in %s must be %s%s", loadInfo->Fields[fieldIndex].Name, source->GetFileName(), loadInfo->Fields[fieldIndex].IsSigned ? "signed" : "unsigned",
+            _impl->GetExpectedSignMismatchReason(f));
         // using loadInfo->Fields[fieldIndex].IsSigned ? "signed" : "unsigned"
         // because db2metadata.h was manually generated, not dumped
         fieldIndex += loadInfo->Meta->Fields[f].ArraySize;
