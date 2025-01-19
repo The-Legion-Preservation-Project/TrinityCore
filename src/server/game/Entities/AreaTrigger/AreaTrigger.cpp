@@ -21,6 +21,7 @@
 #include "AreaTriggerPackets.h"
 #include "CellImpl.h"
 #include "Chat.h"
+#include "CreatureAISelector.h"
 #include "DB2Stores.h"
 #include "GridNotifiersImpl.h"
 #include "Language.h"
@@ -951,11 +952,7 @@ void AreaTrigger::DebugVisualizePosition()
 void AreaTrigger::AI_Initialize()
 {
     AI_Destroy();
-    AreaTriggerAI* ai = sScriptMgr->GetAreaTriggerAI(this);
-    if (!ai)
-        ai = new NullAreaTriggerAI(this);
-
-    _ai.reset(ai);
+    _ai.reset(FactorySelector::SelectAreaTriggerAI(this));
     _ai->OnInitialize();
 }
 
