@@ -8233,37 +8233,6 @@ void Player::CastItemCombatSpell(DamageInfo const& damageInfo, Item* item, ItemT
 
 void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, ObjectGuid castCount, int32* misc)
 {
-    // special learning case
-    if (item->GetBonus()->EffectCount >= 2)
-    {
-        if (item->GetEffect(0)->SpellID == 483 || item->GetEffect(0)->SpellID == 55884)
-        {
-            uint32 learn_spell_id = item->GetEffect(0)->SpellID;
-            uint32 learning_spell_id = item->GetEffect(1)->SpellID;
-
-            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(learn_spell_id, DIFFICULTY_NONE);
-            if (!spellInfo)
-            {
-                TC_LOG_ERROR("entities.player", "Player::CastItemUseSpell: Item (Entry: %u) has wrong spell id %u, ignoring", item->GetEntry(), learn_spell_id);
-                SendEquipError(EQUIP_ERR_INTERNAL_BAG_ERROR, item, nullptr);
-                return;
-            }
-
-            Spell* spell = new Spell(this, spellInfo, TRIGGERED_NONE);
-
-            WorldPackets::Spells::SpellPrepare spellPrepare;
-            spellPrepare.ClientCastID = castCount;
-            spellPrepare.ServerCastID = spell->m_castId;
-            SendDirectMessage(spellPrepare.Write());
-
-            spell->m_fromClient = true;
-            spell->m_CastItem = item;
-            spell->SetSpellValue(SPELLVALUE_BASE_POINT0, learning_spell_id);
-            spell->prepare(targets);
-            return;
-        }
-    }
-
     // item spells cast at use
     for (ItemEffectEntry const* effectData : item->GetEffects())
     {
