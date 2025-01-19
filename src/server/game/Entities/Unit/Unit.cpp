@@ -2958,7 +2958,7 @@ void Unit::SetInWater(bool inWater)
 
 void Unit::ProcessTerrainStatusUpdate(ZLiquidStatus status, Optional<LiquidData> const& liquidData)
 {
-    if (IsFlying() || (!IsControlledByPlayer()))
+    if (!IsControlledByPlayer())
         return;
 
     SetInWater(status & MAP_LIQUID_STATUS_SWIMMING);
@@ -2975,6 +2975,9 @@ void Unit::ProcessTerrainStatusUpdate(ZLiquidStatus status, Optional<LiquidData>
         if (curLiquid && curLiquid->SpellID && (!player || !player->IsGameMaster()))
             CastSpell(this, curLiquid->SpellID, true);
         _lastLiquid = curLiquid;
+
+        // mount capability depends on liquid state change
+        UpdateMountCapability();
     }
 }
 
@@ -7525,7 +7528,8 @@ MountCapabilityEntry const* Unit::GetMountCapability(uint32 mountType) const
                 if (!(mountCapability->Flags & MOUNT_CAPABILITY_FLAG_GROUND))
                     continue;
             }
-            else if (!(mountCapability->Flags & MOUNT_CAPABILITY_FLAG_UNDERWATER))
+            // player is on water surface
+            else if (!(mountCapability->Flags & MOUNT_CAPABILITY_FLAG_FLOAT))
                 continue;
         }
         else if (isInWater)
@@ -7555,6 +7559,20 @@ MountCapabilityEntry const* Unit::GetMountCapability(uint32 mountType) const
     }
 
     return nullptr;
+}
+
+void Unit::UpdateMountCapability()
+{
+    AuraEffectList mounts = GetAuraEffectsByType(SPELL_AURA_MOUNTED);
+    for (AuraEffect* aurEff : mounts)
+    {
+        aurEff->RecalculateAmount();
+        if (!aurEff->GetAmount())
+            aurEff->GetBase()->Remove();
+        else if (MountCapabilityEntry const* capability = sMountCapabilityStore.LookupEntry(aurEff->GetAmount())) // aura may get removed by interrupt flag, reapply
+            if (!HasAura(capability->ModSpellAuraID))
+                CastSpell(this, capability->ModSpellAuraID, aurEff);
+    }
 }
 
 bool Unit::IsServiceProvider() const
