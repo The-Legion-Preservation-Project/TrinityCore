@@ -382,6 +382,8 @@ class TC_GAME_API Item : public Object
         void SetPetitionId(uint32 petitionId) { SetUInt32Value(ITEM_FIELD_ENCHANTMENT, petitionId); }
         void SetPetitionNumSignatures(uint32 signatures) { SetUInt32Value(ITEM_FIELD_ENCHANTMENT + 1, signatures); }
 
+        std::string GetDebugInfo() const override;
+
     protected:
         BonusData _bonusData;
 

@@ -28629,3 +28629,10 @@ void Player::UpdateAverageItemLevelEquipped()
     totalItemLevel /= 16.0;
     SetAverageItemLevelEquipped(totalItemLevel);
 }
+
+std::string Player::GetDebugInfo() const
+{
+    std::stringstream sstr;
+    sstr << Unit::GetDebugInfo();
+    return sstr.str();
+}

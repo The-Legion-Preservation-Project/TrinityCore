@@ -1802,6 +1802,8 @@ class TC_GAME_API Unit : public WorldObject
         uint16 GetVirtualItemAppearanceMod(uint32 slot) const;
         void SetVirtualItem(uint32 slot, uint32 itemId, uint16 appearanceModId = 0, uint16 itemVisual = 0);
 
+        std::string GetDebugInfo() const override;
+
     protected:
         explicit Unit (bool isWorldObject);
 

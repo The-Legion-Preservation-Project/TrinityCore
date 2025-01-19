@@ -2742,6 +2742,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool IsInFriendlyArea() const;
         bool IsFriendlyArea(AreaTableEntry const* inArea) const;
 
+        std::string GetDebugInfo() const override;
+
     protected:
         // Gamemaster whisper whitelist
         GuidList WhisperList;
