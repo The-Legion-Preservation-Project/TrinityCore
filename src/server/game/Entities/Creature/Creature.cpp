@@ -312,7 +312,7 @@ void Creature::AddToWorld()
         AIM_Initialize();
         if (IsVehicle())
             GetVehicleKit()->Install();
-          
+
         if (GetZoneScript())
             GetZoneScript()->OnCreatureCreate(this);
     }
