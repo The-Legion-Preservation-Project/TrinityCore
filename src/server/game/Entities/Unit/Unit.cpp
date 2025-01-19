@@ -11248,11 +11248,12 @@ void Unit::SendCancelSpellVisual(uint32 id)
     SendMessageToSet(cancelSpellVisual.Write(), true);
 }
 
-void Unit::SendPlaySpellVisual(ObjectGuid const& targetGuid, uint32 spellVisualId, uint16 missReason, uint16 reflectStatus, float travelSpeed, bool speedAsTime /*= false*/)
+void Unit::SendPlaySpellVisual(Unit* target, uint32 spellVisualId, uint16 missReason, uint16 reflectStatus, float travelSpeed, bool speedAsTime /*= false*/)
 {
     WorldPackets::Spells::PlaySpellVisual playSpellVisual;
     playSpellVisual.Source = GetGUID();
-    playSpellVisual.Target = targetGuid; // exclusive with TargetPosition
+    playSpellVisual.Target = target->GetGUID();
+    playSpellVisual.TargetPosition = target->GetPosition();
     playSpellVisual.SpellVisualID = spellVisualId;
     playSpellVisual.TravelSpeed = travelSpeed;
     playSpellVisual.MissReason = missReason;
@@ -11265,7 +11266,7 @@ void Unit::SendPlaySpellVisual(Position const& targetPosition, float o, uint32 s
 {
     WorldPackets::Spells::PlaySpellVisual playSpellVisual;
     playSpellVisual.Source = GetGUID();
-    playSpellVisual.TargetPosition = targetPosition; // exclusive with Target
+    playSpellVisual.TargetPosition = targetPosition;
     playSpellVisual.Orientation = o;
     playSpellVisual.SpellVisualID = spellVisualId;
     playSpellVisual.TravelSpeed = travelSpeed;

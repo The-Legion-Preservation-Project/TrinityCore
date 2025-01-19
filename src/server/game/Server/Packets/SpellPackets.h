@@ -712,13 +712,13 @@ namespace WorldPackets
             WorldPacket const* Write() override;
 
             ObjectGuid Source;
-            ObjectGuid Target; // Exclusive with TargetPosition
+            ObjectGuid Target;
+            TaggedPosition<Position::XYZ> TargetPosition; // Exclusive with Target
             uint16 MissReason = 0;
             uint32 SpellVisualID = 0;
             bool SpeedAsTime = false;
             uint16 ReflectStatus = 0;
             float TravelSpeed = 0.0f;
-            TaggedPosition<Position::XYZ> TargetPosition; // Exclusive with Target
             float Orientation = 0.0f;
         };
 
