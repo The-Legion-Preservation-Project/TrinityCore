@@ -16,6 +16,7 @@
  */
 
 #include "Conversation.h"
+#include "ConditionMgr.h"
 #include "ConversationDataStore.h"
 #include "Creature.h"
 #include "IteratorPair.h"
@@ -145,6 +146,9 @@ bool Conversation::Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry,
     std::set<uint16> actorIndices;
     for (ConversationLineTemplate const* line : conversationTemplate->Lines)
     {
+        if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_CONVERSATION_LINE, line->Id, creator))
+            continue;
+
         actorIndices.insert(line->ActorIdx);
         AddDynamicStructuredValue(CONVERSATION_DYNAMIC_FIELD_LINES, line);
     }
