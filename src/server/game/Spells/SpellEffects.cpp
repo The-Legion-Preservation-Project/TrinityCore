@@ -2010,8 +2010,6 @@ void Spell::EffectSummonType()
                     summon->SelectLevel();       // some summoned creaters have different from 1 DB data for level/hp
                     summon->SetNpcFlags(NPCFlags(summon->GetCreatureTemplate()->npcflag));
                     summon->SetImmuneToAll(true);
-
-                    summon->AI()->EnterEvadeMode();
                     break;
                 }
                 default:
@@ -4872,8 +4870,6 @@ void Spell::SummonGuardian(SpellEffectInfo const* effect, uint32 entry, SummonPr
             else
                 summon->SetDisplayId(1126); // modelid1
         }
-
-        summon->AI()->EnterEvadeMode();
 
         ExecuteLogEffectSummonObject(SpellEffectName(effect->Effect), summon);
     }
