@@ -139,6 +139,8 @@ class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigge
 
         void DebugVisualizePosition(); // Debug purpose only
 
+        ObjectGuid::LowType _spawnId;
+
         ObjectGuid _targetGuid;
 
         AuraEffect const* _aurEff;
