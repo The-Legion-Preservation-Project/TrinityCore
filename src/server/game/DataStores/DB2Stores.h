@@ -217,6 +217,8 @@ TC_GAME_API extern DB2Storage<SpellShapeshiftEntry>                 sSpellShapes
 TC_GAME_API extern DB2Storage<SpellShapeshiftFormEntry>             sSpellShapeshiftFormStore;
 TC_GAME_API extern DB2Storage<SpellTargetRestrictionsEntry>         sSpellTargetRestrictionsStore;
 TC_GAME_API extern DB2Storage<SpellTotemsEntry>                     sSpellTotemsStore;
+TC_GAME_API extern DB2Storage<SpellVisualEntry>                     sSpellVisualStore;
+TC_GAME_API extern DB2Storage<SpellVisualEffectNameEntry>           sSpellVisualEffectNameStore;
 TC_GAME_API extern DB2Storage<SpellVisualKitEntry>                  sSpellVisualKitStore;
 TC_GAME_API extern DB2Storage<SpellXSpellVisualEntry>               sSpellXSpellVisualStore;
 TC_GAME_API extern DB2Storage<SummonPropertiesEntry>                sSummonPropertiesStore;
@@ -365,6 +367,7 @@ public:
     std::vector<SpecializationSpellsEntry const*> const* GetSpecializationSpells(uint32 specId) const;
     static bool IsValidSpellFamiliyName(SpellFamilyNames family);
     std::vector<SpellProcsPerMinuteModEntry const*> GetSpellProcsPerMinuteMods(uint32 spellprocsPerMinuteId) const;
+    std::vector<SpellVisualMissileEntry const*> const* GetSpellVisualMissiles(int32 spellVisualMissileSetId) const;
     std::vector<TalentEntry const*> const& GetTalentsByPosition(uint32 class_, uint32 tier, uint32 column) const;
     static bool IsTotemCategoryCompatibleWith(uint32 itemTotemCategoryId, uint32 requiredTotemCategoryId);
     bool IsToyItem(uint32 toy) const;

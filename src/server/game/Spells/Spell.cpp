@@ -4279,7 +4279,7 @@ void Spell::SendSpellStart()
     if (((IsTriggered() && !m_spellInfo->IsAutoRepeatRangedSpell()) || m_triggeredByAuraSpell) && !m_fromClient)
         castFlags |= CAST_FLAG_PENDING;
 
-    if (m_spellInfo->HasAttribute(SPELL_ATTR0_REQ_AMMO) || m_spellInfo->HasAttribute(SPELL_ATTR0_CU_NEEDS_AMMO_DATA))
+    if (m_spellInfo->HasAttribute(SPELL_ATTR0_REQ_AMMO) || m_spellInfo->HasAttribute(SPELL_ATTR10_USES_RANGED_SLOT_COSMETIC_ONLY) || m_spellInfo->HasAttribute(SPELL_ATTR0_CU_NEEDS_AMMO_DATA))
         castFlags |= CAST_FLAG_PROJECTILE;
 
     if ((m_caster->GetTypeId() == TYPEID_PLAYER ||
@@ -4380,7 +4380,7 @@ void Spell::SendSpellGo()
     if (((IsTriggered() && !m_spellInfo->IsAutoRepeatRangedSpell()) || m_triggeredByAuraSpell) && !m_fromClient)
         castFlags |= CAST_FLAG_PENDING;
 
-    if (m_spellInfo->HasAttribute(SPELL_ATTR0_REQ_AMMO) || m_spellInfo->HasAttribute(SPELL_ATTR0_CU_NEEDS_AMMO_DATA))
+    if (m_spellInfo->HasAttribute(SPELL_ATTR0_REQ_AMMO) || m_spellInfo->HasAttribute(SPELL_ATTR10_USES_RANGED_SLOT_COSMETIC_ONLY) || m_spellInfo->HasAttribute(SPELL_ATTR0_CU_NEEDS_AMMO_DATA))
         castFlags |= CAST_FLAG_PROJECTILE;                        // arrows/bullets visual
 
     if ((m_caster->GetTypeId() == TYPEID_PLAYER ||
@@ -4520,6 +4520,8 @@ void Spell::UpdateSpellCastDataAmmo(WorldPackets::Spells::SpellAmmo& ammo)
     }
     else if (Unit const* unitCaster = m_caster->ToUnit())
     {
+        uint32 nonRangedAmmoDisplayID = 0;
+        uint32 nonRangedAmmoInventoryType = 0;
         for (uint8 i = BASE_ATTACK; i < MAX_ATTACK; ++i)
         {
             if (uint32 item_id = unitCaster->GetVirtualItemId(i))
@@ -4543,6 +4545,10 @@ void Spell::UpdateSpellCastDataAmmo(WorldPackets::Spells::SpellAmmo& ammo)
                                 ammoDisplayID = 5998;       // is this need fixing?
                                 ammoInventoryType = INVTYPE_AMMO;
                                 break;
+                            default:
+                                nonRangedAmmoDisplayID = sDB2Manager.GetItemDisplayId(item_id, unitCaster->GetVirtualItemAppearanceMod(i));
+                                nonRangedAmmoInventoryType = itemEntry->InventoryType;
+                                break;
                         }
 
                         if (ammoDisplayID)
@@ -4550,6 +4556,12 @@ void Spell::UpdateSpellCastDataAmmo(WorldPackets::Spells::SpellAmmo& ammo)
                     }
                 }
             }
+        }
+
+        if (!ammoDisplayID && !ammoInventoryType)
+        {
+            ammoDisplayID = nonRangedAmmoDisplayID;
+            ammoInventoryType = nonRangedAmmoInventoryType;
         }
     }
 

@@ -5318,6 +5318,95 @@ struct SpellTotemsLoadInfo
     }
 };
 
+struct SpellVisualLoadInfo
+{
+    static DB2LoadInfo const* Instance()
+    {
+        static DB2FieldMeta const fields[] =
+        {
+            { false, FT_INT, "ID" },
+            { false, FT_FLOAT, "MissileCastOffset1" },
+            { false, FT_FLOAT, "MissileCastOffset2" },
+            { false, FT_FLOAT, "MissileCastOffset3" },
+            { false, FT_FLOAT, "MissileImpactOffset1" },
+            { false, FT_FLOAT, "MissileImpactOffset2" },
+            { false, FT_FLOAT, "MissileImpactOffset3" },
+            { true, FT_INT, "Flags" },
+            { false, FT_SHORT, "SpellVisualMissileSetID" },
+            { true, FT_BYTE, "MissileDestinationAttachment" },
+            { true, FT_BYTE, "MissileAttachment" },
+            { false, FT_INT, "MissileCastPositionerID" },
+            { false, FT_INT, "MissileImpactPositionerID" },
+            { true, FT_INT, "MissileTargetingKit" },
+            { false, FT_INT, "AnimEventSoundID" },
+            { false, FT_SHORT, "DamageNumberDelay" },
+            { false, FT_INT, "HostileSpellVisualID" },
+            { false, FT_INT, "CasterSpellVisualID" },
+            { false, FT_INT, "LowViolenceSpellVisualID" },
+        };
+        static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, SpellVisualMeta::Instance(), HOTFIX_SEL_SPELL_VISUAL);
+        return &loadInfo;
+    }
+};
+
+struct SpellVisualEffectNameLoadInfo
+{
+    static DB2LoadInfo const* Instance()
+    {
+        static DB2FieldMeta const fields[] =
+        {
+            { false, FT_INT, "ID" },
+            { false, FT_FLOAT, "EffectRadius" },
+            { false, FT_FLOAT, "BaseMissileSpeed" },
+            { false, FT_FLOAT, "Scale" },
+            { false, FT_FLOAT, "MinAllowedScale" },
+            { false, FT_FLOAT, "MaxAllowedScale" },
+            { false, FT_FLOAT, "Alpha" },
+            { false, FT_INT, "Flags" },
+            { true, FT_INT, "GenericID" },
+            { true, FT_INT, "TextureFileDataID" },
+            { false, FT_BYTE, "Type" },
+            { true, FT_INT, "ModelFileDataID" },
+            { false, FT_INT, "RibbonQualityID" },
+            { true, FT_INT, "DissolveEffectID" },
+        };
+        static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, SpellVisualEffectNameMeta::Instance(), HOTFIX_SEL_SPELL_VISUAL_EFFECT_NAME);
+        return &loadInfo;
+    }
+};
+
+struct SpellVisualMissileLoadInfo
+{
+    static DB2LoadInfo const* Instance()
+    {
+        static DB2FieldMeta const fields[] =
+        {
+            { true, FT_INT, "FollowGroundHeight" },
+            { false, FT_INT, "FollowGroundDropSpeed" },
+            { false, FT_INT, "Flags" },
+            { false, FT_FLOAT, "CastOffset1" },
+            { false, FT_FLOAT, "CastOffset2" },
+            { false, FT_FLOAT, "CastOffset3" },
+            { false, FT_FLOAT, "ImpactOffset1" },
+            { false, FT_FLOAT, "ImpactOffset2" },
+            { false, FT_FLOAT, "ImpactOffset3" },
+            { false, FT_SHORT, "SpellVisualEffectNameID" },
+            { false, FT_SHORT, "CastPositionerID" },
+            { false, FT_SHORT, "ImpactPositionerID" },
+            { false, FT_SHORT, "FollowGroundApproach" },
+            { false, FT_SHORT, "SpellMissileMotionID" },
+            { true, FT_BYTE, "Attachment" },
+            { true, FT_BYTE, "DestinationAttachment" },
+            { false, FT_INT, "ID" },
+            { false, FT_INT, "SoundEntriesID" },
+            { false, FT_INT, "AnimKitID" },
+            { false, FT_SHORT, "SpellVisualMissileSetID" },
+        };
+        static DB2LoadInfo const loadInfo(&fields[0], std::extent<decltype(fields)>::value, SpellVisualMissileMeta::Instance(), HOTFIX_SEL_SPELL_VISUAL_MISSILE);
+        return &loadInfo;
+    }
+};
+
 struct SpellVisualKitLoadInfo
 {
     static DB2LoadInfo const* Instance()

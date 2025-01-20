@@ -3162,6 +3162,63 @@ struct SpellTotemsEntry
     uint16 RequiredTotemCategoryID[MAX_SPELL_TOTEMS];
 };
 
+struct SpellVisualEntry
+{
+    uint32 ID;
+    float MissileCastOffset[3];
+    float MissileImpactOffset[3];
+    int32 Flags;
+    uint16 SpellVisualMissileSetID;
+    int8 MissileDestinationAttachment;
+    int8 MissileAttachment;
+    uint32 MissileCastPositionerID;
+    uint32 MissileImpactPositionerID;
+    int32 MissileTargetingKit;
+    uint32 AnimEventSoundID;
+    uint16 DamageNumberDelay;
+    uint32 HostileSpellVisualID;
+    uint32 CasterSpellVisualID;
+    uint32 LowViolenceSpellVisualID;
+};
+
+struct SpellVisualEffectNameEntry
+{
+    uint32 ID;
+    float EffectRadius;
+    float BaseMissileSpeed;
+    float Scale;
+    float MinAllowedScale;
+    float MaxAllowedScale;
+    float Alpha;
+    uint32 Flags;
+    int32 GenericID;
+    int32 TextureFileDataID;
+    uint8 Type;
+    int32 ModelFileDataID;
+    uint32 RibbonQualityID;
+    int32 DissolveEffectID;
+};
+
+struct SpellVisualMissileEntry
+{
+    int32 FollowGroundHeight;
+    uint32 FollowGroundDropSpeed;
+    uint32 Flags;
+    float CastOffset[3];
+    float ImpactOffset[3];
+    uint16 SpellVisualEffectNameID;
+    uint16 CastPositionerID;
+    uint16 ImpactPositionerID;
+    uint16 FollowGroundApproach;
+    uint16 SpellMissileMotionID;
+    int8 Attachment;
+    int8 DestinationAttachment;
+    uint32 ID;
+    uint32 SoundEntriesID;
+    uint32 AnimKitID;
+    uint16 SpellVisualMissileSetID;
+};
+
 struct SpellVisualKitEntry
 {
     uint32 ID;

@@ -1295,6 +1295,27 @@ void HotfixDatabaseConnection::DoPrepareStatements()
         " FROM spell_totems WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
     PREPARE_MAX_ID_STMT(HOTFIX_SEL_SPELL_TOTEMS, "SELECT MAX(ID) + 1 FROM spell_totems", CONNECTION_SYNCH);
 
+    // SpellVisual.db2
+    PrepareStatement(HOTFIX_SEL_SPELL_VISUAL, "SELECT ID, MissileCastOffset1, MissileCastOffset2, MissileCastOffset3, MissileImpactOffset1, "
+        "MissileImpactOffset2, MissileImpactOffset3, Flags, SpellVisualMissileSetID, MissileDestinationAttachment, MissileAttachment, "
+        "MissileCastPositionerID, MissileImpactPositionerID, MissileTargetingKit, AnimEventSoundID, DamageNumberDelay, HostileSpellVisualID, CasterSpellVisualID, "
+        "LowViolenceSpellVisualID FROM spell_visual"
+        " WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
+    PREPARE_MAX_ID_STMT(HOTFIX_SEL_SPELL_VISUAL, "SELECT MAX(ID) + 1 FROM spell_visual", CONNECTION_SYNCH);
+
+    // SpellVisualEffectName.db2
+    PrepareStatement(HOTFIX_SEL_SPELL_VISUAL_EFFECT_NAME, "SELECT ID, EffectRadius, BaseMissileSpeed, Scale, MinAllowedScale, MaxAllowedScale, "
+        "Alpha, Flags, GenericID, TextureFileDataID, Type, ModelFileDataID, RibbonQualityID, DissolveEffectID"
+        " FROM spell_visual_effect_name WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
+    PREPARE_MAX_ID_STMT(HOTFIX_SEL_SPELL_VISUAL_EFFECT_NAME, "SELECT MAX(ID) + 1 FROM spell_visual_effect_name", CONNECTION_SYNCH);
+
+    // SpellVisualMissile.db2
+    PrepareStatement(HOTFIX_SEL_SPELL_VISUAL_MISSILE, "SELECT FollowGroundHeight, FollowGroundDropSpeed, Flags, CastOffset1, CastOffset2, CastOffset3, ImpactOffset1, ImpactOffset2, ImpactOffset3, "
+        "SpellVisualEffectNameID, CastPositionerID, ImpactPositionerID, FollowGroundApproach, SpellMissileMotionID, Attachment, DestinationAttachment, ID, "
+        "SoundEntriesID, AnimKitID, SpellVisualMissileSetID"
+        " FROM spell_visual_missile WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
+    PREPARE_MAX_ID_STMT(HOTFIX_SEL_SPELL_VISUAL_MISSILE, "SELECT MAX(ID) + 1 FROM spell_visual_missile", CONNECTION_SYNCH);
+
     // SpellVisualKit.db2
     PrepareStatement(HOTFIX_SEL_SPELL_VISUAL_KIT, "SELECT ID, Flags, FallbackPriority, FallbackSpellVisualKitId, DelayMin, DelayMax"
         " FROM spell_visual_kit WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);

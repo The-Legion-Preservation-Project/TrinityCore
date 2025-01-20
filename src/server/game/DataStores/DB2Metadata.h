@@ -9908,13 +9908,13 @@ struct SpellVisualMeta
         {
             { FT_FLOAT, 3, false },
             { FT_FLOAT, 3, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
             { FT_SHORT, 1, false },
-            { FT_BYTE, 1, false },
-            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, true },
+            { FT_BYTE, 1, true },
             { FT_INT, 1, false },
             { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
             { FT_INT, 1, false },
             { FT_SHORT, 1, false },
             { FT_INT, 1, false },
@@ -9980,12 +9980,12 @@ struct SpellVisualEffectNameMeta
             { FT_FLOAT, 1, false },
             { FT_FLOAT, 1, false },
             { FT_INT, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
             { FT_BYTE, 1, false },
+            { FT_INT, 1, true },
             { FT_INT, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
         };
 
         static DB2Meta instance(897948, -1, 13, 0xB930A934, fields, -1);
@@ -10109,7 +10109,7 @@ struct SpellVisualMissileMeta
     {
         static DB2MetaField const fields[16] =
         {
-            { FT_INT, 1, false },
+            { FT_INT, 1, true },
             { FT_INT, 1, false },
             { FT_INT, 1, false },
             { FT_FLOAT, 3, false },
@@ -10119,8 +10119,8 @@ struct SpellVisualMissileMeta
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
             { FT_SHORT, 1, false },
-            { FT_BYTE, 1, false },
-            { FT_BYTE, 1, false },
+            { FT_BYTE, 1, true },
+            { FT_BYTE, 1, true },
             { FT_INT, 1, false },
             { FT_INT, 1, false },
             { FT_INT, 1, false },
