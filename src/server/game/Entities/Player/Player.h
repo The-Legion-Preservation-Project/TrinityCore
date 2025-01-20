@@ -19,7 +19,6 @@
 #define _PLAYER_H
 
 #include "Unit.h"
-#include "BattlePetMgr.h"
 #include "CUFProfile.h"
 #include "DatabaseEnvFwd.h"
 #include "DBCEnums.h"
@@ -94,6 +93,11 @@ enum InventoryType : uint8;
 enum ItemClass : uint8;
 enum LootError : uint8;
 enum LootType : uint8;
+
+namespace BattlePets
+{
+    struct BattlePet;
+}
 
 namespace WorldPackets
 {
@@ -1268,7 +1272,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void RemovePetAura(PetAura const* petSpell);
 
         Creature* GetSummonedBattlePet();
-        void SetBattlePetData(BattlePetMgr::BattlePet const* pet = nullptr);
+        void SetBattlePetData(BattlePets::BattlePet const* pet = nullptr);
 
         /// Handles said message in regular chat based on declared language and in config pre-defined Range.
         void Say(std::string const& text, Language language, WorldObject const* = nullptr) override;
