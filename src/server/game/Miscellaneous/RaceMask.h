@@ -21,20 +21,21 @@
 #include "Define.h"
 #include <type_traits>
 
+// EnumUtils: DESCRIBE THIS
 enum Races
 {
-    RACE_NONE                   = 0,
-    RACE_HUMAN                  = 1,
-    RACE_ORC                    = 2,
-    RACE_DWARF                  = 3,
-    RACE_NIGHTELF               = 4,
-    RACE_UNDEAD_PLAYER          = 5,
-    RACE_TAUREN                 = 6,
-    RACE_GNOME                  = 7,
-    RACE_TROLL                  = 8,
-    RACE_GOBLIN                 = 9,
-    RACE_BLOODELF               = 10,
-    RACE_DRAENEI                = 11,
+    RACE_NONE                   = 0,  // SKIP
+    RACE_HUMAN                  = 1,  // TITLE Human
+    RACE_ORC                    = 2,  // TITLE Orc
+    RACE_DWARF                  = 3,  // TITLE Dwarf
+    RACE_NIGHTELF               = 4,  // TITLE Night Elf
+    RACE_UNDEAD_PLAYER          = 5,  // TITLE Undead
+    RACE_TAUREN                 = 6,  // TITLE Tauren
+    RACE_GNOME                  = 7,  // TITLE Gnome
+    RACE_TROLL                  = 8,  // TITLE Troll
+    RACE_GOBLIN                 = 9,  // TITLE Goblin
+    RACE_BLOODELF               = 10, // TITLE Blood Elf
+    RACE_DRAENEI                = 11, // TITLE Draenei
     //RACE_FEL_ORC              = 12,
     //RACE_NAGA                 = 13,
     //RACE_BROKEN               = 14,
@@ -45,15 +46,15 @@ enum Races
     //RACE_TAUNKA               = 19,
     //RACE_NORTHREND_SKELETON   = 20,
     //RACE_ICE_TROLL            = 21,
-    RACE_WORGEN                 = 22,
+    RACE_WORGEN                 = 22, // TITLE Worgen
     //RACE_GILNEAN              = 23,
-    RACE_PANDAREN_NEUTRAL       = 24,
-    RACE_PANDAREN_ALLIANCE      = 25,
-    RACE_PANDAREN_HORDE         = 26,
-    RACE_NIGHTBORNE             = 27,
-    RACE_HIGHMOUNTAIN_TAUREN    = 28,
-    RACE_VOID_ELF               = 29,
-    RACE_LIGHTFORGED_DRAENEI    = 30
+    RACE_PANDAREN_NEUTRAL       = 24, // TITLE Pandaren DESCRIPTION Pandaren (Neutral)
+    RACE_PANDAREN_ALLIANCE      = 25, // TITLE Pandaren DESCRIPTION Pandaren (Alliance)
+    RACE_PANDAREN_HORDE         = 26, // TITLE Pandaren DESCRIPTION Pandaren (Horde)
+    RACE_NIGHTBORNE             = 27, // TITLE Nightborne
+    RACE_HIGHMOUNTAIN_TAUREN    = 28, // TITLE Highmountain Tauren
+    RACE_VOID_ELF               = 29, // TITLE Void Elf
+    RACE_LIGHTFORGED_DRAENEI    = 30, // TITLE Lightforged Draenei
 };
 
 // max+1 for player race
