@@ -10878,7 +10878,7 @@ void ObjectMgr::LoadJumpChargeParams()
             if (sCurveStore.LookupEntry(fields[5].GetInt32()))
                 progressCurveId = fields[5].GetInt32();
             else
-                TC_LOG_ERROR("sql.sql", "Table `jump_charge_params` references non-existing progress Curve: %d for id, ignored.",
+                TC_LOG_ERROR("sql.sql", "Table `jump_charge_params` references non-existing progress Curve: %d for id %d, ignored.",
                     fields[4].GetInt32(), id);
         }
 
@@ -10887,7 +10887,7 @@ void ObjectMgr::LoadJumpChargeParams()
             if (sCurveStore.LookupEntry(fields[6].GetInt32()))
                 parabolicCurveId = fields[6].GetInt32();
             else
-                TC_LOG_ERROR("sql.sql", "Table `jump_charge_params` references non-existing parabolic Curve: %d for id, ignored.",
+                TC_LOG_ERROR("sql.sql", "Table `jump_charge_params` references non-existing parabolic Curve: %d for id %d, ignored.",
                     fields[6].GetInt32(), id);
         }
 
