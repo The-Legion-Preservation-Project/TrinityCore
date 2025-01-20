@@ -245,7 +245,7 @@ void PlayerMenu::SendGossipMenu(uint32 titleTextId, ObjectGuid objectGUID)
             text.QuestMaxScalingLevel = quest->GetQuestMaxScalingLevel();
             text.QuestFlags[0] = quest->GetFlags();
             text.QuestFlags[1] = quest->GetFlagsEx();
-            text.Repeatable = quest->IsRepeatable();
+            text.Repeatable = quest->IsRepeatable() && !quest->IsDailyOrWeekly() && !quest->IsMonthly();
 
             text.QuestTitle = quest->GetLogTitle();
             LocaleConstant localeConstant = _session->GetSessionDbLocaleIndex();
@@ -374,7 +374,7 @@ void PlayerMenu::SendQuestGiverQuestListMessage(Object* questgiver)
             text.QuestMaxScalingLevel = quest->GetQuestMaxScalingLevel();
             text.QuestFlags[0] = quest->GetFlags();
             text.QuestFlags[1] = quest->GetFlagsEx();
-            text.Repeatable = quest->IsRepeatable();
+            text.Repeatable = quest->IsRepeatable() && !quest->IsDailyOrWeekly() && !quest->IsMonthly();
 
             text.QuestTitle = quest->GetLogTitle();
             LocaleConstant localeConstant = _session->GetSessionDbLocaleIndex();
