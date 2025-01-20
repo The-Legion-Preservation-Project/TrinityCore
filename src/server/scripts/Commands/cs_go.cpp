@@ -529,7 +529,7 @@ public:
             return true;
         }
 
-        handler->PSendSysMessage(LANG_COMMAND_GO_INSTANCE_FAILED, mapid, scriptname.c_str(), exit->target_mapId);
+        handler->PSendSysMessage(LANG_COMMAND_GO_INSTANCE_FAILED, mapid, scriptname.c_str(), exit ? exit->target_mapId : uint32(-1));
         handler->SetSentErrorMessage(true);
         return false;
     }
