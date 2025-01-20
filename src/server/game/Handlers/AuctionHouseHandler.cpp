@@ -40,7 +40,7 @@ void WorldSession::HandleAuctionHelloOpcode(WorldPackets::AuctionHouse::AuctionH
     Creature* unit = GetPlayer()->GetNPCIfCanInteractWith(packet.Guid, UNIT_NPC_FLAG_AUCTIONEER);
     if (!unit)
     {
-        TC_LOG_DEBUG("network", "WORLD: HandleAuctionHelloOpcode - Unit (%s) not found or you can't interact with him.", packet.Guid.ToString().c_str());
+        TC_LOG_DEBUG("network", "WORLD: HandleAuctionHelloOpcode - Unit %s not found or you can't interact with him.", packet.Guid.ToString().c_str());
         return;
     }
 
@@ -480,7 +480,7 @@ void WorldSession::HandleAuctionListItems(WorldPackets::AuctionHouse::AuctionLis
     Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(listItems.Auctioneer, UNIT_NPC_FLAG_AUCTIONEER);
     if (!creature)
     {
-        TC_LOG_DEBUG("network", "WORLD: HandleAuctionListItems - %s not found or you can't interact with him.", listItems.Auctioneer.ToString().c_str());
+        TC_LOG_DEBUG("network", "WORLD: HandleAuctionListItems - Unit %s not found or you can't interact with him.", listItems.Auctioneer.ToString().c_str());
         return;
     }
 

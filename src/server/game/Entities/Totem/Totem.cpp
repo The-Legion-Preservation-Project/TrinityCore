@@ -70,8 +70,8 @@ void Totem::InitStats(uint32 duration)
         if (uint32 totemDisplayId = sSpellMgr->GetModelForTotem(GetUInt32Value(UNIT_CREATED_BY_SPELL), owner->GetRace()))
             SetDisplayId(totemDisplayId);
         else
-            TC_LOG_DEBUG("misc", "Totem with entry %u, does not have a specialized model for spell %u and race %s. Set to default.",
-                         GetEntry(), GetUInt32Value(UNIT_CREATED_BY_SPELL), EnumUtils::ToTitle(Races(owner->GetRace())));
+            TC_LOG_DEBUG("misc", "Totem with entry %u, owned by player %s, does not have a specialized model for spell %u and race %s. Set to default.",
+                         GetEntry(), owner->GetGUID().ToString().c_str(), GetUInt32Value(UNIT_CREATED_BY_SPELL), EnumUtils::ToTitle(Races(owner->GetRace())));
     }
 
     Minion::InitStats(duration);
