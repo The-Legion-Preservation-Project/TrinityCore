@@ -31,6 +31,7 @@
 #include "Map.h"
 #include "ObjectMgr.h"
 #include "Player.h"
+#include "Random.h"
 #include "ScriptedCreature.h"
 #include "SkillDiscovery.h"
 #include "Spell.h"
@@ -1726,6 +1727,21 @@ class spell_item_ultrasafe_transporter : public SpellScript
 {
     PrepareSpellScript(spell_item_ultrasafe_transporter);
 
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo(
+            {
+                SPELL_TRANSPORTER_MALFUNCTION_SMALLER,
+                SPELL_TRANSPORTER_MALFUNCTION_BIGGER,
+                SPELL_SOUL_SPLIT_EVIL,
+                SPELL_SOUL_SPLIT_GOOD,
+                SPELL_TRANSFORM_HORDE,
+                SPELL_TRANSFORM_ALLIANCE,
+                SPELL_TRANSPORTER_MALFUNCTION_CHICKEN,
+                SPELL_EVIL_TWIN,
+            });
+    }
+
     bool Load() override
     {
         return GetCaster()->GetTypeId() == TYPEID_PLAYER;
@@ -1765,6 +1781,8 @@ class spell_item_ultrasafe_transporter : public SpellScript
             case 6:
                 spellId = SPELL_EVIL_TWIN;
                 break;
+            default:
+                break;
         }
 
         caster->CastSpell(caster, spellId, true);
@@ -1780,6 +1798,18 @@ class spell_item_ultrasafe_transporter : public SpellScript
 class spell_item_dimensional_ripper_area52 : public SpellScript
 {
     PrepareSpellScript(spell_item_dimensional_ripper_area52);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo(
+            {
+                SPELL_TRANSPORTER_MALFUNCTION_BIGGER,
+                SPELL_SOUL_SPLIT_EVIL,
+                SPELL_SOUL_SPLIT_GOOD,
+                SPELL_TRANSFORM_HORDE,
+                SPELL_TRANSFORM_ALLIANCE
+            });
+    }
 
     bool Load() override
     {
@@ -1810,6 +1840,8 @@ class spell_item_dimensional_ripper_area52 : public SpellScript
                     spellId = SPELL_TRANSFORM_HORDE;
                 else
                     spellId = SPELL_TRANSFORM_ALLIANCE;
+                break;
+            default:
                 break;
         }
 
