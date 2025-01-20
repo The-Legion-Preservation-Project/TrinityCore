@@ -348,7 +348,7 @@ bool CriteriaData::Meets(uint32 criteriaId, Player const* source, WorldObject co
             Unit const* unitTarget = target->ToUnit();
             if (!unitTarget)
                 return false;
-            return unitTarget->GetGender() == Gender.Gender;
+            return unitTarget->GetGender() == static_cast<::Gender>(Gender.Gender);
         }
         case CRITERIA_DATA_TYPE_SCRIPT:
         {
@@ -2169,7 +2169,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
                 return false;
             break;
         case ModifierTreeType::PlayerNativeGender: // 98
-            if (referencePlayer->GetNativeSex() != uint8(reqValue))
+            if (referencePlayer->GetNativeGender() != uint8(reqValue))
                 return false;
             break;
         case ModifierTreeType::PlayerSkillEqualOrGreaterThan: // 99

@@ -949,7 +949,7 @@ public:
 
         // Set gender
         target->SetGender(gender);
-        target->SetNativeSex(gender);
+        target->SetNativeGender(gender);
 
         // Change display ID
         target->InitDisplayIds();

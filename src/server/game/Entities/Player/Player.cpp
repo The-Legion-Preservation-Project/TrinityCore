@@ -468,7 +468,7 @@ bool Player::Create(ObjectGuid::LowType guidlow, WorldPackets::Character::Charac
 
     SetRace(createInfo->Race);
     SetClass(createInfo->Class);
-    SetGender(createInfo->Sex);
+    SetGender(Gender(createInfo->Sex));
     SetPowerType(Powers(powertype));
     InitDisplayIds();
     UpdatePositionData();
@@ -492,7 +492,7 @@ bool Player::Create(ObjectGuid::LowType guidlow, WorldPackets::Character::Charac
         SetCustomDisplayOption(i, createInfo->CustomDisplay[i]);
     SetRestState(REST_TYPE_XP, (GetSession()->IsARecruiter() || GetSession()->GetRecruiterId() != 0) ? REST_STATE_RAF_LINKED : REST_STATE_NORMAL);
     SetRestState(REST_TYPE_HONOR, REST_STATE_NORMAL);
-    SetNativeSex(createInfo->Sex);
+    SetNativeGender(Gender(createInfo->Sex));
     SetArenaFaction(0);
     SetInventorySlotCount(INVENTORY_DEFAULT_SIZE);
 
@@ -17749,7 +17749,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
         SetCustomDisplayOption(i, customDisplay[i]);
     SetInventorySlotCount(fields.inventorySlots);
     SetBankBagSlotCount(fields.bankSlots);
-    SetNativeSex(fields.gender);
+    SetNativeGender(fields.gender);
     SetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_INEBRIATION, fields.drunk);
     SetPlayerFlags(fields.playerFlags);
     SetPlayerFlagsEx(fields.playerFlagsEx);
@@ -20155,7 +20155,7 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         stmt->setString(index++, GetName());
         stmt->setUInt8(index++, GetRace());
         stmt->setUInt8(index++, GetClass());
-        stmt->setUInt8(index++, GetNativeSex());   // save gender from PLAYER_BYTES_3, UNIT_BYTES_0 changes with every transform effect
+        stmt->setUInt8(index++, GetNativeGender());   // save gender from PLAYER_BYTES_3, UNIT_BYTES_0 changes with every transform effect
         stmt->setUInt8(index++, GetLevel());
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_XP));
         stmt->setUInt64(index++, GetMoney());
@@ -20282,7 +20282,7 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         stmt->setString(index++, GetName());
         stmt->setUInt8(index++, GetRace());
         stmt->setUInt8(index++, GetClass());
-        stmt->setUInt8(index++, GetNativeSex());   // save gender from PLAYER_BYTES_3, UNIT_BYTES_0 changes with every transform effect
+        stmt->setUInt8(index++, GetNativeGender());   // save gender from PLAYER_BYTES_3, UNIT_BYTES_0 changes with every transform effect
         stmt->setUInt8(index++, GetLevel());
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_XP));
         stmt->setUInt64(index++, GetMoney());
@@ -22740,7 +22740,7 @@ void Player::InitDisplayIds()
         return;
     }
 
-    Gender gender = GetNativeSex();
+    Gender gender = GetNativeGender();
     switch (gender)
     {
         case GENDER_FEMALE:

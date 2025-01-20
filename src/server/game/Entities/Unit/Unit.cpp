@@ -9729,7 +9729,7 @@ void Unit::SetDisplayId(uint32 modelId, bool setNative /*= false*/)
 
     // Set Gender by modelId
     if (CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelInfo(modelId))
-        SetGender(minfo->gender);
+        SetGender(Gender(minfo->gender));
 
     if (setNative)
         SetUInt32Value(UNIT_FIELD_NATIVEDISPLAYID, modelId);
@@ -11474,7 +11474,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
                         skinColor = urand(0, 20);
 
                     // Male
-                    if (GetGender() == GENDER_MALE)
+                    if (GetNativeGender() == GENDER_MALE)
                     {
                         switch (skinColor)
                         {
@@ -11587,7 +11587,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
                         skinColor = urand(0, 8);
 
                     // Male
-                    if (GetGender() == GENDER_MALE)
+                    if (GetNativeGender() == GENDER_MALE)
                     {
                         switch (skinColor)
                         {
