@@ -153,7 +153,7 @@ namespace WorldPackets
 
             void Read() override;
 
-            std::string MotdText;
+            String<255, Strings::NoHyperlinks> MotdText;
         };
 
         class GuildCommandResult final : public ServerPacket
@@ -436,9 +436,9 @@ namespace WorldPackets
             uint32 WithdrawGoldLimit = 0;
             uint32 Flags = 0;
             uint32 OldFlags = 0;
-            uint32 TabFlags[GUILD_BANK_MAX_TABS];
-            uint32 TabWithdrawItemLimit[GUILD_BANK_MAX_TABS];
-            std::string RankName;
+            uint32 TabFlags[GUILD_BANK_MAX_TABS] = { };
+            uint32 TabWithdrawItemLimit[GUILD_BANK_MAX_TABS] = { };
+            String<15, Strings::NoHyperlinks> RankName;
         };
 
         class GuildAddRank final : public ClientPacket
@@ -448,7 +448,7 @@ namespace WorldPackets
 
             void Read() override;
 
-            std::string Name;
+            String<15, Strings::NoHyperlinks> Name;
             int32 RankOrder = 0;
         };
 
@@ -535,7 +535,7 @@ namespace WorldPackets
 
             void Read() override;
 
-            std::string InfoText;
+            String<500, Strings::NoHyperlinks> InfoText;
         };
 
         class GuildSetMemberNote final : public ClientPacket
@@ -547,7 +547,7 @@ namespace WorldPackets
 
             ObjectGuid NoteeGUID;
             bool IsPublic = false;          ///< 0 == Officer, 1 == Public
-            std::string Note;
+            String<31, Strings::NoHyperlinks> Note;
         };
 
         class GuildMemberUpdateNote final : public ServerPacket
@@ -722,8 +722,8 @@ namespace WorldPackets
 
             ObjectGuid Banker;
             uint8 BankTab = 0;
-            std::string Name;
-            std::string Icon;
+            String<15, Strings::NoHyperlinks> Name;
+            String<127> Icon;
         };
 
         class GuildBankDepositMoney final : public ClientPacket
@@ -1046,7 +1046,7 @@ namespace WorldPackets
             void Read() override;
 
             int32 Tab = 0;
-            std::string TabText;
+            String<500, Strings::NoHyperlinks> TabText;
         };
 
         class GuildQueryNews final : public ClientPacket
@@ -1126,10 +1126,10 @@ namespace WorldPackets
 
             WorldPacket const* Write() override;
 
-            int32 CurrentCount[GUILD_CHALLENGES_TYPES];
-            int32 MaxCount[GUILD_CHALLENGES_TYPES];
-            int32 Gold[GUILD_CHALLENGES_TYPES];
-            int32 MaxLevelGold[GUILD_CHALLENGES_TYPES];
+            int32 CurrentCount[GUILD_CHALLENGES_TYPES] = { };
+            int32 MaxCount[GUILD_CHALLENGES_TYPES] = { };
+            int32 Gold[GUILD_CHALLENGES_TYPES] = { };
+            int32 MaxLevelGold[GUILD_CHALLENGES_TYPES] = { };
         };
 
         class SaveGuildEmblem final : public ClientPacket
