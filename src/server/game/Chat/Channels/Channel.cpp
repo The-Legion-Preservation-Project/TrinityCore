@@ -347,7 +347,7 @@ void Channel::KickOrBan(Player const* player, std::string const& badname, bool b
 
     Player* bad = ObjectAccessor::FindConnectedPlayerByName(badname);
     ObjectGuid const& victim = bad ? bad->GetGUID() : ObjectGuid::Empty;
-    if (!victim || !IsOn(victim))
+    if (!bad || !victim || !IsOn(victim))
     {
         PlayerNotFoundAppend appender(badname);
         ChannelNameBuilder<PlayerNotFoundAppend> builder(this, appender);
@@ -492,7 +492,7 @@ void Channel::SetMode(Player const* player, std::string const& p2n, bool mod, bo
     Player* newp = ObjectAccessor::FindConnectedPlayerByName(p2n);
     ObjectGuid victim = newp ? newp->GetGUID() : ObjectGuid::Empty;
 
-    if (victim.IsEmpty() || !IsOn(victim) ||
+    if (!newp || victim.IsEmpty() || !IsOn(victim) ||
         (player->GetTeam() != newp->GetTeam() &&
         (!player->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL) ||
         !newp->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL))))
@@ -553,7 +553,7 @@ void Channel::SetOwner(Player const* player, std::string const& newname)
     Player* newp = ObjectAccessor::FindConnectedPlayerByName(newname);
     ObjectGuid victim = newp ? newp->GetGUID() : ObjectGuid::Empty;
 
-    if (!victim || !IsOn(victim) ||
+    if (!newp || !victim || !IsOn(victim) ||
         (player->GetTeam() != newp->GetTeam() &&
         (!player->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL) ||
         !newp->GetSession()->HasPermission(rbac::RBAC_PERM_TWO_SIDE_INTERACTION_CHANNEL))))
