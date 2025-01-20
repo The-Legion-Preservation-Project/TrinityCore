@@ -8029,7 +8029,6 @@ void Unit::setDeathState(DeathState s)
     if (s != ALIVE && s != JUST_RESPAWNED)
     {
         CombatStop();
-        GetThreatManager().ClearAllThreat();
 
         if (IsNonMeleeSpellCast(false))
             InterruptNonMeleeSpells(false);
