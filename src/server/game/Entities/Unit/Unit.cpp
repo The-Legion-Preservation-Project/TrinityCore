@@ -1454,11 +1454,11 @@ void Unit::DealMeleeDamage(CalcDamageInfo* damageInfo, bool durabilityLoss)
     }
 }
 
-void Unit::HandleEmoteCommand(uint32 anim_id, Player* target /*=nullptr*/)
+void Unit::HandleEmoteCommand(uint32 emoteId, Player* target /*=nullptr*/)
 {
     WorldPackets::Chat::Emote packet;
     packet.Guid = GetGUID();
-    packet.EmoteID = anim_id;
+    packet.EmoteID = emoteId;
 
     if (target)
         target->SendDirectMessage(packet.Write());
