@@ -1922,6 +1922,9 @@ void Unit::AttackerStateUpdate(Unit* victim, WeaponAttackType attType, bool extr
     if (HasUnitState(UNIT_STATE_CANNOT_AUTOATTACK) || HasUnitFlag(UNIT_FLAG_PACIFIED))
         return;
 
+    if (HasAuraType(SPELL_AURA_DISABLE_ATTACKING_EXCEPT_ABILITIES))
+        return;
+
     if (!victim->IsAlive())
         return;
 
@@ -5340,12 +5343,6 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
     Creature* creature = ToCreature();
     // creatures cannot attack while evading
     if (creature && creature->IsInEvadeMode())
-        return false;
-
-    if (HasUnitFlag(UNIT_FLAG_PACIFIED))
-        return false;
-
-    if (HasAuraType(SPELL_AURA_DISABLE_ATTACKING_EXCEPT_ABILITIES))
         return false;
 
     // nobody can attack GM in GM-mode
