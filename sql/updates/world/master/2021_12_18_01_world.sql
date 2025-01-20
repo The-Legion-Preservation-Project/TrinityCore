@@ -2,7 +2,6 @@ SET @CGUID := 395092;
 
 -- Narzak
 UPDATE `creature_template` SET `gossip_menu_id`=14991, `VerifiedBuild`=41079 WHERE `entry`=63061;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63061 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63061 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=3746;
 
@@ -33,7 +32,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Shifty
 UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=41079 WHERE `entry`=63063;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63063 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63063 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=1206;
 
@@ -47,7 +45,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Naleen
 UPDATE `creature_template` SET `VerifiedBuild`=41079 WHERE `entry`=63067;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63067 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63067 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=3867;
 
@@ -78,7 +75,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Miles
 UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=41079 WHERE `entry`=63068;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63068 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63068 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=45900;
 
@@ -92,7 +88,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Ansel Fincap
 UPDATE `creature_template` SET `VerifiedBuild`=41079 WHERE `entry`=63073;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63073 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63073 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=35626;
 
@@ -123,7 +118,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
  -- Fester
 UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=41079 WHERE `entry`=63069;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63069 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63069 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=2177;
 
@@ -135,7 +129,6 @@ UPDATE `creature` SET `zoneId`=85, `areaId`=159, `position_x`=2201.244873046875,
 
 -- Jarson Everlong
 UPDATE `creature_template` SET `minlevel`=30, `maxlevel`=30, `VerifiedBuild`=41079 WHERE `entry`=63080;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63080 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63080 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=16918;
 
@@ -145,7 +138,6 @@ UPDATE `creature` SET `zoneId`=3430, `areaId`=3665, `position_x`=9486.8564453125
 
 -- Flaps
 UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=41079 WHERE `entry`=63079;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63079 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63079 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=20027;
 
@@ -157,7 +149,6 @@ UPDATE `creature` SET `zoneId`=3430, `areaId`=3665, `position_x`=9488.302734375,
 
 -- Matty
 UPDATE `creature_template` SET `gossip_menu_id`=14991, `minlevel`=60, `VerifiedBuild`=41079 WHERE `entry`=63086;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63086 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63086 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=29968;
 
@@ -182,7 +173,6 @@ UPDATE `creature` SET `zoneId`=1637, `areaId`=5332, `position_x`=1592.0572509765
 
 -- Snappy
 UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=41079 WHERE `entry`=63085;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63085 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63085 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=32790;
 
@@ -190,7 +180,6 @@ UPDATE `creature` SET `zoneId`=1637, `areaId`=5332, `position_x`=1592.4774169921
 
 -- Varzok
 UPDATE `creature_template` SET `gossip_menu_id`=14991, `minlevel`=60, `VerifiedBuild`=41079 WHERE `entry`=63626;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63626 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63626 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=5705;
 
@@ -242,7 +231,6 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 
 -- Spider
 UPDATE `creature_template` SET `unit_flags`=32768, `VerifiedBuild`=41079 WHERE `entry`=14881;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=14881 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=14881 AND `Idx` IN (0,1));
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID` IN (20923,44816);
 
@@ -253,7 +241,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Scorpid
 UPDATE `creature_template` SET `VerifiedBuild`=41079 WHERE `entry`=15476;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=15476 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=15476 AND `Idx` IN (0,1,2,3));
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID` IN (15470,15471);
 

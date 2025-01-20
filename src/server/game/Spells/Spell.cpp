@@ -6001,7 +6001,7 @@ SpellCastResult Spell::CheckCast(bool strict, int32* param1 /*= nullptr*/, int32
                 break;
             }
             case SPELL_EFFECT_CHANGE_BATTLEPET_QUALITY:
-            case SPELL_EFFECT_GRANT_BATTLEPET_EXPERIENCE:
+            //case SPELL_EFFECT_GRANT_BATTLEPET_EXPERIENCE:
             {
                 Player* playerCaster = m_caster->ToPlayer();
                 if (!playerCaster || !m_targets.GetUnitTarget() || !m_targets.GetUnitTarget()->IsCreature())
@@ -6047,9 +6047,9 @@ SpellCastResult Spell::CheckCast(bool strict, int32* param1 /*= nullptr*/, int32
                                     return SPELL_FAILED_CANT_UPGRADE_BATTLE_PET;
                             }
 
-                            if (spellEffectInfo.Effect == SPELL_EFFECT_GRANT_BATTLEPET_EXPERIENCE)
-                                if (battlePet->PacketInfo.Level >= BattlePets::MAX_BATTLE_PET_LEVEL)
-                                    return GRANT_PET_LEVEL_FAIL;
+                            // if (spellEffectInfo.Effect == SPELL_EFFECT_GRANT_BATTLEPET_EXPERIENCE)
+                            //     if (battlePet->PacketInfo.Level >= BattlePets::MAX_BATTLE_PET_LEVEL)
+                            //         return GRANT_PET_LEVEL_FAIL;
 
                             if (battlePetSpecies->GetFlags().HasFlag(BattlePetSpeciesFlags::CantBattle))
                                 return SPELL_FAILED_BAD_TARGETS;

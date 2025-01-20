@@ -167,7 +167,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
     }
 
     if (sAuctionMgr->GetAItem(item->GetGUID()) || !item->CanBeTraded() || item->IsNotEmptyBag() ||
-        item->GetTemplate()->GetFlags() & ITEM_FLAG_CONJURED || item->GetExpiration() ||
+        item->GetTemplate()->HasFlag(ITEM_FLAG_CONJURED) || item->GetExpiration() ||
         item->GetCount() != 1)
     {
         SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::DatabaseError); //, throttle.DelayUntilNext);

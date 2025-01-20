@@ -3270,7 +3270,7 @@ void Creature::ReacquireSpellFocusTarget()
         return;
     }
 
-    SetUpdateFieldValue(m_values.ModifyValue(&Unit::m_unitData).ModifyValue(&UF::UnitData::Target), _spellFocusInfo.Target);
+    SetGuidValue(UNIT_FIELD_TARGET, _spellFocusInfo.Target);
 
     if (!HasUnitFlag2(UNIT_FLAG2_DISABLE_TURN))
     {

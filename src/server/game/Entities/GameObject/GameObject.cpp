@@ -1444,9 +1444,8 @@ uint8 GameObject::GetLevelForTarget(WorldObject const* target) const
 
     if (GetGoType() == GAMEOBJECT_TYPE_TRAP)
     {
-        if (Player const* player = target->ToPlayer())
-            if (Optional<ContentTuningLevels> userLevels = sDB2Manager.GetContentTuningData(GetGOInfo()->ContentTuningId, player->m_playerData->CtrOptions->ContentTuningConditionMask))
-                return uint8(std::clamp<int16>(player->GetLevel(), userLevels->MinLevel, userLevels->MaxLevel));
+        if (GetGOInfo()->trap.level != 0)
+            return GetGOInfo()->trap.level;
 
         if (Unit const* targetUnit = target->ToUnit())
             return targetUnit->GetLevel();

@@ -2,7 +2,6 @@ SET @CGUID := 395101;
 
 -- Marcus Jensen
 UPDATE `creature_template` SET `gossip_menu_id`=14400, `VerifiedBuild`=41079 WHERE `entry`=63014;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63014 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63014 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=13091;
 
@@ -63,7 +62,6 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 
 -- Tabbi
 UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=41079 WHERE `entry`=63015;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63015 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63015 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=5554;
 
@@ -77,7 +75,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Grady Bannson
 UPDATE `creature_template` SET `gossip_menu_id`=14991, `minlevel`=30, `maxlevel`=30, `VerifiedBuild`=41079 WHERE `entry`=63075;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63075 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63075 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=30586;
 
@@ -108,7 +105,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Fluffy
 UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=41079 WHERE `entry`=63074;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63074 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63074 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=328;
 
@@ -122,7 +118,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Valeena
 UPDATE `creature_template` SET `VerifiedBuild`=41079 WHERE `entry`=63070;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63070 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63070 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=2055;
 
@@ -151,7 +146,6 @@ UPDATE `creature` SET `zoneId`=141, `areaId`=186, `position_x`=9837.0849609375, 
 
 -- Hoo
 UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=41079 WHERE `entry`=65097;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=65097 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=65097 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=36640;
 
@@ -165,10 +159,6 @@ UPDATE `creature` SET `zoneId`=141, `areaId`=186, `position_x`=9838.046875, `pos
 UPDATE `creature_template` SET `gossip_menu_id`=14991, `minlevel`=30, `maxlevel`=30, `VerifiedBuild`=41079 WHERE `entry`=63077;
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63077 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=17327;
-
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry`=63077);
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(63077, 0, 0, 0, 76, 41079);
 
 DELETE FROM `creature_template_addon` WHERE `entry`=63077;
 INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `aiAnimKit`, `movementAnimKit`, `meleeAnimKit`, `auras`) VALUES
@@ -189,9 +179,9 @@ UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=410
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63078 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=36640;
 
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry`=63078);
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(63078, 0, 4, 4, 373, 41079);
+DELETE FROM `creature_template_scaling` WHERE (`Entry`=63078);
+INSERT INTO `creature_template_scaling` (`Entry`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `VerifiedBuild`) VALUES
+(63078, 4, 4, 0);
 
 DELETE FROM `creature_template_addon` WHERE `entry`=63078;
 INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `aiAnimKit`, `movementAnimKit`, `meleeAnimKit`, `auras`) VALUES
@@ -207,7 +197,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Will Larsons
 UPDATE `creature_template` SET `gossip_menu_id`=14991, `minlevel`=30, `maxlevel`=30, `VerifiedBuild`=41079 WHERE `entry`=63083;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63083 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63083 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=33673;
 
@@ -227,7 +216,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Poe
 UPDATE `creature_template` SET `minlevel`=64, `maxlevel`=64, `VerifiedBuild`=41079 WHERE `entry`=63084;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63084 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63084 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=42863;
 
@@ -245,7 +233,6 @@ INSERT INTO `creature` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficult
 
 -- Audrey Burnhep
 UPDATE `creature_template` SET `gossip_menu_id`=14991, `minlevel`=60, `maxlevel`=60, `flags_extra` = (`flags_extra` | 0x1000), `VerifiedBuild`=41079 WHERE `entry`=63596;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63596 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63596 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=4558;
 
@@ -286,7 +273,6 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 
 -- Rabbit
 UPDATE `creature_template` SET `VerifiedBuild`=41079 WHERE `entry`=721;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=721 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=721 AND `Idx` IN (0,1));
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=4626;
 
@@ -298,7 +284,6 @@ UPDATE `creature` SET `zoneId`=1519, `areaId`=1519, `position_x`=-8285.966796875
 
 -- Squirrel
 UPDATE `creature_template` SET `VerifiedBuild`=41079 WHERE `entry`=63607;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=63607 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=63607 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=36620;
 
@@ -307,7 +292,6 @@ UPDATE `creature` SET `zoneId`=1519, `areaId`=1519, `position_x`=-8289.283203125
 
 -- Prairie Dog
 UPDATE `creature_template` SET `VerifiedBuild`=41079 WHERE `entry`=2620;
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=41079 WHERE (`Entry`=2620 AND `DifficultyID`=0);
 UPDATE `creature_template_model` SET `VerifiedBuild`=41079 WHERE (`CreatureID`=2620 AND `Idx`=0);
 UPDATE `creature_model_info` SET `VerifiedBuild`=41079 WHERE `DisplayID`=1072;
 

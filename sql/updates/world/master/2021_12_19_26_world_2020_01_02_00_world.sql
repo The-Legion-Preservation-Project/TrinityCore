@@ -6,7 +6,3 @@ INSERT INTO `gossip_menu_option` (`MenuId`, `OptionIndex`, `OptionIcon`, `Option
 DELETE FROM `creature_template_addon` WHERE `entry`=13436;
 INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `aiAnimKit`, `movementAnimKit`, `meleeAnimKit`, `auras`) VALUES
 (13436, 0, 0, 0, 257, 0, 0, 0, 0, ''); -- 13436 (Guchie Jinglepocket)
-
-DELETE FROM `creature_template_scaling` WHERE `DifficultyID`=0 AND `Entry`=13436;
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(13436, 0, 0, 0, 417, 41488);
