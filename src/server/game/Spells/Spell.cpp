@@ -7756,6 +7756,11 @@ SpellCastResult Spell::CanOpenLock(SpellEffectInfo const& effect, uint32 lockId,
 
                 return SPELL_CAST_OK;
             }
+            case LOCK_KEY_SPELL:
+                if (m_spellInfo->Id == uint32(lockInfo->Index[j]))
+                    return SPELL_CAST_OK;
+                reqKey = true;
+                break;
         }
     }
 
