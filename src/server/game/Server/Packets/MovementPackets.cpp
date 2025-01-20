@@ -21,6 +21,7 @@
 #include "MovementTypedefs.h"
 #include "PacketUtilities.h"
 #include "Unit.h"
+#include "Util.h"
 
 ByteBuffer& operator<<(ByteBuffer& data, MovementInfo const& movementInfo)
 {
@@ -370,7 +371,7 @@ void WorldPackets::Movement::CommonMovement::WriteMovementForceWithDirection(Mov
 {
     data << movementForce.ID;
     data << movementForce.Origin;
-    if (movementForce.Type == 1 && objectPosition) // gravity
+    if (movementForce.Type == MovementForceType::Gravity && objectPosition)
     {
         TaggedPosition<Position::XYZ> direction;
         if (movementForce.Magnitude != 0.0f)
@@ -400,7 +401,7 @@ void WorldPackets::Movement::CommonMovement::WriteMovementForceWithDirection(Mov
 
     data << uint32(movementForce.TransportID);
     data << float(movementForce.Magnitude);
-    data.WriteBits(movementForce.Type, 2);
+    data.WriteBits(AsUnderlyingType(movementForce.Type), 2);
     data.FlushBits();
 }
 
@@ -611,7 +612,7 @@ ByteBuffer& operator>>(ByteBuffer& data, MovementForce& movementForce)
     data >> movementForce.Direction;
     data >> movementForce.TransportID;
     data >> movementForce.Magnitude;
-    movementForce.Type = data.ReadBits(2);
+    movementForce.Type = MovementForceType(data.ReadBits(2));
 
     return data;
 }
