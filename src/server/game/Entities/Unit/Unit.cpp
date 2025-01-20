@@ -5141,12 +5141,15 @@ void Unit::SendAttackStateUpdate(uint32 HitInfo, Unit* target, uint8 /*SwingType
     SendAttackStateUpdate(&dmgInfo);
 }
 
-void Unit::SetPowerType(Powers new_powertype)
+void Unit::SetPowerType(Powers new_powertype, bool sendUpdate/* = true*/)
 {
     if (GetPowerType() == new_powertype)
         return;
 
     SetUInt32Value(UNIT_FIELD_DISPLAY_POWER, new_powertype);
+
+    if (!sendUpdate)
+        return;
 
     if (Player* thisPlayer = ToPlayer())
     {
@@ -8695,9 +8698,12 @@ bool Unit::CanFreeMove() const
         UNIT_STATE_ROOT | UNIT_STATE_STUNNED | UNIT_STATE_DISTRACTED) && GetOwnerGUID().IsEmpty();
 }
 
-void Unit::SetLevel(uint8 lvl)
+void Unit::SetLevel(uint8 lvl, bool sendUpdate/* = true*/)
 {
     SetUInt32Value(UNIT_FIELD_LEVEL, lvl);
+
+    if (!sendUpdate)
+        return;
 
     if (Player* player = ToPlayer())
     {
@@ -10941,7 +10947,7 @@ void Unit::RemoveCharmedBy(Unit* charmer)
 void Unit::RestoreFaction()
 {
     if (GetTypeId() == TYPEID_PLAYER)
-        ToPlayer()->setFactionForRace(GetRace());
+        ToPlayer()->SetFactionForRace(GetRace());
     else
     {
         if (HasUnitTypeMask(UNIT_MASK_MINION))
@@ -11359,10 +11365,10 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
         break;
     }
 
-    if (GetTypeId() == TYPEID_PLAYER)
+    if (Player const* player = ToPlayer())
     {
         if (Aura* artifactAura = GetAura(ARTIFACTS_ALL_WEAPONS_GENERAL_WEAPON_EQUIPPED_PASSIVE))
-            if (Item* artifact = ToPlayer()->GetItemByGuid(artifactAura->GetCastItemGUID()))
+            if (Item* artifact = player->GetItemByGuid(artifactAura->GetCastItemGUID()))
                 if (ArtifactAppearanceEntry const* artifactAppearance = sArtifactAppearanceStore.LookupEntry(artifact->GetModifier(ITEM_MODIFIER_ARTIFACT_APPEARANCE_ID)))
                     if (ShapeshiftForm(artifactAppearance->OverrideShapeshiftFormID) == form)
                         return artifactAppearance->OverrideShapeshiftDisplayID;
