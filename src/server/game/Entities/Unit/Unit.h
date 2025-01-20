@@ -1284,8 +1284,10 @@ class TC_GAME_API Unit : public WorldObject
 
         uint32 GetBattlePetCompanionNameTimestamp() const { return GetUInt32Value(UNIT_FIELD_BATTLEPET_COMPANION_NAME_TIMESTAMP); }
         void SetBattlePetCompanionNameTimestamp(uint32 timestamp) { SetUInt32Value(UNIT_FIELD_BATTLEPET_COMPANION_NAME_TIMESTAMP, timestamp); }
-        void SetWildBattlePetLevel(uint32 wildBattlePetLevel) { SetUInt32Value(UNIT_FIELD_WILD_BATTLEPET_LEVEL, wildBattlePetLevel); }
+        //uint32 GetBattlePetCompanionExperience() const { return m_unitData->BattlePetCompanionExperience; }
+        //void SetBattlePetCompanionExperience(uint32 experience) { SetUpdateFieldValue(m_values.ModifyValue(&Unit::m_unitData).ModifyValue(&UF::UnitData::BattlePetCompanionExperience), experience); }
         uint32 GetWildBattlePetLevel() const { return GetUInt32Value(UNIT_FIELD_WILD_BATTLEPET_LEVEL); }
+        void SetWildBattlePetLevel(uint32 wildBattlePetLevel) { SetUInt32Value(UNIT_FIELD_WILD_BATTLEPET_LEVEL, wildBattlePetLevel); }
 
         // aura apply/remove helpers - you should better not use these
         Aura* _TryStackingOrRefreshingExistingAura(AuraCreateInfo& createInfo);
