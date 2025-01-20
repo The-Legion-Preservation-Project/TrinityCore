@@ -451,7 +451,6 @@ bool Player::Create(ObjectGuid::LowType guidlow, WorldPackets::Character::Charac
 
     SetMap(sMapMgr->CreateMap(position.Loc.GetMapId(), this));
 
-    UpdatePositionData();
 
     // set initial homebind position
     SetHomebind(*this, GetAreaId());
@@ -474,6 +473,7 @@ bool Player::Create(ObjectGuid::LowType guidlow, WorldPackets::Character::Charac
     SetGender(createInfo->Sex);
     SetPowerType(Powers(powertype));
     InitDisplayIds();
+    UpdatePositionData();
     if (sWorld->getIntConfig(CONFIG_GAME_TYPE) == REALM_TYPE_PVP || sWorld->getIntConfig(CONFIG_GAME_TYPE) == REALM_TYPE_RPPVP)
     {
         AddPvpFlag(UNIT_BYTE2_FLAG_PVP);
