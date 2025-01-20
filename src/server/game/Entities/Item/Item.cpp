@@ -489,7 +489,7 @@ void Item::SaveToDB(CharacterDatabaseTransaction& trans)
 
             trans->Append(stmt);
 
-            if ((uState == ITEM_CHANGED) && HasItemFlag(ITEM_FIELD_FLAG_WRAPPED))
+            if ((uState == ITEM_CHANGED) && IsWrapped())
             {
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_GIFT_OWNER);
                 stmt->setUInt64(0, GetOwnerGUID().GetCounter());
@@ -649,7 +649,7 @@ void Item::SaveToDB(CharacterDatabaseTransaction& trans)
             stmt->setUInt64(0, GetGUID().GetCounter());
             trans->Append(stmt);
 
-            if (HasItemFlag(ITEM_FIELD_FLAG_WRAPPED))
+            if (IsWrapped())
             {
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GIFT);
                 stmt->setUInt64(0, GetGUID().GetCounter());
@@ -739,7 +739,7 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
     SetUInt32Value(ITEM_FIELD_MAXDURABILITY, proto->MaxDurability);
 
     // do not overwrite durability for wrapped items
-    if (durability > proto->MaxDurability && !HasItemFlag(ITEM_FIELD_FLAG_WRAPPED))
+    if (durability > proto->MaxDurability && !IsWrapped())
     {
         SetDurability(proto->MaxDurability);
         need_save = true;
@@ -1152,7 +1152,7 @@ bool Item::CanBeTraded(bool mail, bool trade) const
     if (m_lootGenerated)
         return false;
 
-    if ((!mail || !IsBoundAccountWide()) && (IsSoulBound() && (!HasItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE) || !trade)))
+    if ((!mail || !IsBoundAccountWide()) && (IsSoulBound() && (!IsBOPTradeable() || !trade)))
         return false;
 
     if (IsBag() && (Player::IsBagPos(GetPos()) || !ToBag()->IsEmpty()))
@@ -1254,7 +1254,7 @@ bool Item::IsFitToSpellRequirements(SpellInfo const* spellInfo) const
     bool isEnchantSpell = spellInfo->HasEffect(SPELL_EFFECT_ENCHANT_ITEM) || spellInfo->HasEffect(SPELL_EFFECT_ENCHANT_ITEM_TEMPORARY) || spellInfo->HasEffect(SPELL_EFFECT_ENCHANT_ITEM_PRISMATIC);
     if (spellInfo->EquippedItemClass != -1)                 // -1 == any item class
     {
-        if (isEnchantSpell && proto->GetFlags3() & ITEM_FLAG3_CAN_STORE_ENCHANTS)
+        if (isEnchantSpell && proto->HasFlag(ITEM_FLAG3_CAN_STORE_ENCHANTS))
             return true;
 
         if (spellInfo->EquippedItemClass != int32(proto->GetClass()))
@@ -1527,7 +1527,7 @@ bool Item::IsBindedNotWith(Player const* player) const
     if (GetOwnerGUID() == player->GetGUID())
         return false;
 
-    if (HasItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE))
+    if (IsBOPTradeable())
         if (allowedGUIDs.find(player->GetGUID()) != allowedGUIDs.end())
             return false;
 
@@ -1660,7 +1660,7 @@ void Item::DeleteRefundDataFromDB(CharacterDatabaseTransaction* trans)
 
 void Item::SetNotRefundable(Player* owner, bool changestate /*= true*/, CharacterDatabaseTransaction* trans /*= nullptr*/, bool addToCollection /*= true*/)
 {
-    if (!HasItemFlag(ITEM_FIELD_FLAG_REFUNDABLE))
+    if (!IsRefundable())
         return;
 
     WorldPackets::Item::ItemExpirePurchaseRefund itemExpirePurchaseRefund;
@@ -1767,7 +1767,7 @@ bool Item::IsValidTransmogrificationTarget() const
     if (proto->GetClass() == ITEM_CLASS_WEAPON && proto->GetSubClass() == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
         return false;
 
-    if (proto->GetFlags2() & ITEM_FLAG2_NO_ALTER_ITEM_VISUAL)
+    if (proto->HasFlag(ITEM_FLAG2_NO_ALTER_ITEM_VISUAL))
         return false;
 
     if (!HasStats())
@@ -1936,7 +1936,7 @@ uint32 Item::GetBuyPrice(ItemTemplate const* proto, uint32 quality, uint32 itemL
 {
     standardPrice = false;
 
-    if (proto->GetFlags2() & ITEM_FLAG2_OVERRIDE_GOLD_COST)
+    if (proto->HasFlag(ITEM_FLAG2_OVERRIDE_GOLD_COST))
         return proto->GetBuyPrice();
 
     ImportPriceQualityEntry const* qualityPrice = sImportPriceQualityStore.LookupEntry(quality + 1);
@@ -2067,7 +2067,7 @@ uint32 Item::GetSellPrice(Player const* owner) const
 
 uint32 Item::GetSellPrice(ItemTemplate const* proto, uint32 quality, uint32 itemLevel)
 {
-    if (proto->GetFlags2() & ITEM_FLAG2_OVERRIDE_GOLD_COST)
+    if (proto->HasFlag(ITEM_FLAG2_OVERRIDE_GOLD_COST))
         return proto->GetSellPrice();
     else
     {
@@ -2096,7 +2096,7 @@ uint32 Item::GetItemLevel(Player const* owner) const
     ItemTemplate const* itemTemplate = GetTemplate();
     uint32 minItemLevel = owner->GetUInt32Value(UNIT_FIELD_MIN_ITEM_LEVEL);
     uint32 minItemLevelCutoff = owner->GetUInt32Value(UNIT_FIELD_MIN_ITEM_LEVEL_CUTOFF);
-    uint32 maxItemLevel = itemTemplate->GetFlags3() & ITEM_FLAG3_IGNORE_ITEM_LEVEL_CAP_IN_PVP ? 0 : owner->GetUInt32Value(UNIT_FIELD_MAXITEMLEVEL);
+    uint32 maxItemLevel = itemTemplate->HasFlag(ITEM_FLAG3_IGNORE_ITEM_LEVEL_CAP_IN_PVP) ? 0 : owner->GetUInt32Value(UNIT_FIELD_MAXITEMLEVEL);
     bool pvpBonus = owner->IsUsingPvpItemLevels();
     return Item::GetItemLevel(itemTemplate, _bonusData, owner->GetLevel(), GetModifier(ITEM_MODIFIER_SCALING_STAT_DISTRIBUTION_FIXED_LEVEL), GetModifier(ITEM_MODIFIER_UPGRADE_ID),
         minItemLevel, minItemLevelCutoff, maxItemLevel, pvpBonus);
@@ -2171,7 +2171,7 @@ ItemDisenchantLootEntry const* Item::GetDisenchantLoot(Player const* owner) cons
 
 ItemDisenchantLootEntry const* Item::GetDisenchantLoot(ItemTemplate const* itemTemplate, uint32 quality, uint32 itemLevel)
 {
-    if (itemTemplate->GetFlags() & (ITEM_FLAG_CONJURED | ITEM_FLAG_NO_DISENCHANT) || itemTemplate->GetBonding() == BIND_QUEST)
+    if (itemTemplate->HasFlag(ITEM_FLAG_CONJURED) || itemTemplate->HasFlag(ITEM_FLAG_NO_DISENCHANT) || itemTemplate->GetBonding() == BIND_QUEST)
         return nullptr;
 
     if (itemTemplate->GetArea() || itemTemplate->GetMap() || itemTemplate->GetMaxStackSize() > 1)

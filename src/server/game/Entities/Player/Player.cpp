@@ -11300,7 +11300,7 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
                 }
                 else if (type == INVTYPE_WEAPONOFFHAND)
                 {
-                    if (!CanDualWield() && !(pProto->GetFlags3() & ITEM_FLAG3_ALWAYS_ALLOW_DUAL_WIELD))
+                    if (!CanDualWield() && !pProto->HasFlag(ITEM_FLAG3_ALWAYS_ALLOW_DUAL_WIELD))
                         return EQUIP_ERR_2HSKILLNOTFOUND;
                 }
                 else if (type == INVTYPE_2HWEAPON)
@@ -11681,13 +11681,13 @@ InventoryResult Player::CanUseItem(ItemTemplate const* proto, bool skipRequiredL
     if (!proto)
         return EQUIP_ERR_ITEM_NOT_FOUND;
 
-    if (proto->GetFlags2() & ITEM_FLAG2_INTERNAL_ITEM)
+    if (proto->HasFlag(ITEM_FLAG2_INTERNAL_ITEM))
         return EQUIP_ERR_CANT_EQUIP_EVER;
 
-    if ((proto->GetFlags2() & ITEM_FLAG2_FACTION_HORDE) && GetTeam() != HORDE)
+    if (proto->HasFlag(ITEM_FLAG2_FACTION_HORDE) && GetTeam() != HORDE)
         return EQUIP_ERR_CANT_EQUIP_EVER;
 
-    if ((proto->GetFlags2() & ITEM_FLAG2_FACTION_ALLIANCE) && GetTeam() != ALLIANCE)
+    if (proto->HasFlag(ITEM_FLAG2_FACTION_ALLIANCE) && GetTeam() != ALLIANCE)
         return EQUIP_ERR_CANT_EQUIP_EVER;
 
     if ((proto->GetAllowableClass() & GetClassMask()) == 0 || !proto->GetAllowableRace().HasRace(GetRace()))
@@ -12419,7 +12419,7 @@ void Player::MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool 
         // in case trade we already have item in other player inventory
         pLastItem->SetState(in_characterInventoryDB ? ITEM_CHANGED : ITEM_NEW, this);
 
-        if (pLastItem->HasItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE))
+        if (pLastItem->IsBOPTradeable())
             AddTradeableItem(pLastItem);
     }
 }
@@ -12437,7 +12437,7 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
             for (uint8 i = 0; i < MAX_BAG_SIZE; ++i)
                 DestroyItem(slot, i, update);
 
-        if (pItem->HasItemFlag(ITEM_FIELD_FLAG_WRAPPED))
+        if (pItem->IsWrapped())
         {
             CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GIFT);
 
@@ -12501,7 +12501,7 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
 
         // Delete rolled money / loot from db.
         // MUST be done before RemoveFromWorld() or GetTemplate() fails
-        if (pProto->GetFlags() & ITEM_FLAG_HAS_LOOT)
+        if (pProto->HasFlag(ITEM_FLAG_HAS_LOOT))
             sLootItemStorage->RemoveStoredLootForContainer(pItem->GetGUID().GetCounter());
 
         if (IsInWorld() && update)
@@ -13468,7 +13468,7 @@ void Player::RemoveItemFromBuyBackSlot(uint32 slot, bool del)
             if (del)
             {
                 if (ItemTemplate const* itemTemplate = pItem->GetTemplate())
-                    if (itemTemplate->GetFlags() & ITEM_FLAG_HAS_LOOT)
+                    if (itemTemplate->HasFlag(ITEM_FLAG_HAS_LOOT))
                         sLootItemStorage->RemoveStoredLootForContainer(pItem->GetGUID().GetCounter());
 
                 pItem->SetState(ITEM_REMOVED, this);
@@ -13666,7 +13666,7 @@ void Player::UpdateItemDuration(uint32 time, bool realtimeonly)
         Item* item = *itr;
         ++itr;                                              // current element can be erased in UpdateDuration
 
-        if (!realtimeonly || item->GetTemplate()->GetFlags() & ITEM_FLAG_REAL_DURATION)
+        if (!realtimeonly || item->GetTemplate()->HasFlag(ITEM_FLAG_REAL_DURATION))
             item->UpdateDuration(this, time);
     }
 }
@@ -15318,8 +15318,8 @@ bool Player::CanSelectQuestPackageItem(QuestPackageItemEntry const* questPackage
     if (!rewardProto)
         return false;
 
-    if ((rewardProto->GetFlags2() & ITEM_FLAG2_FACTION_ALLIANCE && GetTeam() != ALLIANCE) ||
-        (rewardProto->GetFlags2() & ITEM_FLAG2_FACTION_HORDE && GetTeam() != HORDE))
+    if ((rewardProto->HasFlag(ITEM_FLAG2_FACTION_ALLIANCE) && GetTeam() != ALLIANCE) ||
+        (rewardProto->HasFlag(ITEM_FLAG2_FACTION_HORDE) && GetTeam() != HORDE))
         return false;
 
     switch (questPackageItem->DisplayType)
@@ -18975,13 +18975,13 @@ Item* Player::_LoadItem(CharacterDatabaseTransaction& trans, uint32 zoneId, uint
                 remove = true;
             }
             // "Conjured items disappear if you are logged out for more than 15 minutes"
-            else if (timeDiff > 15 * MINUTE && proto->GetFlags() & ITEM_FLAG_CONJURED)
+            else if (timeDiff > 15 * MINUTE && proto->HasFlag(ITEM_FLAG_CONJURED))
             {
                 TC_LOG_DEBUG("entities.player.loading", "Player::_LoadInventory: player (%s, name: '%s', diff: %u) has conjured item (%s, entry: %u) with expired lifetime (15 minutes). Deleting item.",
                     GetGUID().ToString().c_str(), GetName().c_str(), timeDiff, item->GetGUID().ToString().c_str(), item->GetEntry());
                 remove = true;
             }
-            else if (item->HasItemFlag(ITEM_FIELD_FLAG_REFUNDABLE))
+            else if (item->IsRefundable())
             {
                 if (item->GetPlayedTime() > (2 * HOUR))
                 {
@@ -19014,7 +19014,7 @@ Item* Player::_LoadItem(CharacterDatabaseTransaction& trans, uint32 zoneId, uint
                     }
                 }
             }
-            else if (item->HasItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE))
+            else if (item->IsBOPTradeable())
             {
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ITEM_BOP_TRADE);
                 stmt->setUInt64(0, item->GetGUID().GetCounter());
@@ -20673,7 +20673,7 @@ void Player::_SaveInventory(CharacterDatabaseTransaction& trans)
         if (item->GetState() == ITEM_NEW)
         {
             if (ItemTemplate const* itemTemplate = item->GetTemplate())
-                if (itemTemplate->GetFlags() & ITEM_FLAG_HAS_LOOT)
+                if (itemTemplate->HasFlag(ITEM_FLAG_HAS_LOOT))
                     sLootItemStorage->RemoveStoredLootForContainer(item->GetGUID().GetCounter());
 
             continue;
@@ -20684,7 +20684,7 @@ void Player::_SaveInventory(CharacterDatabaseTransaction& trans)
         m_items[i]->FSetState(ITEM_NEW);
 
         if (ItemTemplate const* itemTemplate = item->GetTemplate())
-            if (itemTemplate->GetFlags() & ITEM_FLAG_HAS_LOOT)
+            if (itemTemplate->HasFlag(ITEM_FLAG_HAS_LOOT))
                 sLootItemStorage->RemoveStoredLootForContainer(item->GetGUID().GetCounter());
     }
 
@@ -22881,7 +22881,7 @@ inline bool Player::_StoreOrEquipNewItem(uint32 vendorslot, uint32 item, uint8 c
         if (!bStore)
             AutoUnequipOffhandIfNeed();
 
-        if (pProto->GetFlags() & ITEM_FLAG_ITEM_PURCHASE_RECORD && crItem->ExtendedCost && pProto->GetMaxStackSize() == 1)
+        if (pProto->HasFlag(ITEM_FLAG_ITEM_PURCHASE_RECORD) && crItem->ExtendedCost && pProto->GetMaxStackSize() == 1)
         {
             it->AddItemFlag(ITEM_FIELD_FLAG_REFUNDABLE);
             it->SetRefundRecipient(GetGUID());
@@ -23076,7 +23076,7 @@ bool Player::BuyItemFromVendorSlot(ObjectGuid vendorguid, uint32 vendorslot, uin
         return false;
     }
 
-    if (!IsGameMaster() && ((pProto->GetFlags2() & ITEM_FLAG2_FACTION_HORDE && GetTeam() == ALLIANCE) || (pProto->GetFlags2() & ITEM_FLAG2_FACTION_ALLIANCE && GetTeam() == HORDE)))
+    if (!IsGameMaster() && ((pProto->HasFlag(ITEM_FLAG2_FACTION_HORDE) && GetTeam() == ALLIANCE) || (pProto->HasFlag(ITEM_FLAG2_FACTION_ALLIANCE) && GetTeam() == HORDE)))
         return false;
 
     Creature* creature = GetNPCIfCanInteractWith(vendorguid, UNIT_NPC_FLAG_VENDOR);
@@ -24368,7 +24368,7 @@ void Player::SendInstanceResetWarning(uint32 mapid, Difficulty difficulty, uint3
 
 void Player::ApplyEquipCooldown(Item* pItem)
 {
-    if (pItem->GetTemplate()->GetFlags() & ITEM_FLAG_NO_EQUIP_COOLDOWN)
+    if (pItem->GetTemplate()->HasFlag(ITEM_FLAG_NO_EQUIP_COOLDOWN))
         return;
 
     std::chrono::steady_clock::time_point now = GameTime::GetGameTimeSteadyPoint();
@@ -25165,7 +25165,7 @@ void Player::AutoUnequipOffhandIfNeed(bool force /*= false*/)
 
      // unequip offhand weapon if player doesn't have dual wield anymore
     if (!CanDualWield()
-        && ((offItem->GetTemplate()->GetInventoryType() == INVTYPE_WEAPONOFFHAND && !(offItem->GetTemplate()->GetFlags3() & ITEM_FLAG3_ALWAYS_ALLOW_DUAL_WIELD))
+        && ((offItem->GetTemplate()->GetInventoryType() == INVTYPE_WEAPONOFFHAND && !offItem->GetTemplate()->HasFlag(ITEM_FLAG3_ALWAYS_ALLOW_DUAL_WIELD))
             || offItem->GetTemplate()->GetInventoryType() == INVTYPE_WEAPON))
         force = true;
 
@@ -26425,7 +26425,7 @@ InventoryResult Player::CanEquipUniqueItem(Item* pItem, uint8 eslot, uint32 limi
 InventoryResult Player::CanEquipUniqueItem(ItemTemplate const* itemProto, uint8 except_slot, uint32 limit_count) const
 {
     // check unique-equipped on item
-    if (itemProto->GetFlags() & ITEM_FLAG_UNIQUE_EQUIPPABLE)
+    if (itemProto->HasFlag(ITEM_FLAG_UNIQUE_EQUIPPABLE))
     {
         // there is an equip limit on this item
         if (HasItemOrGemWithIdEquipped(itemProto->GetId(), 1, except_slot))
@@ -27631,7 +27631,7 @@ void Player::SendRefundInfo(Item* item)
     // This function call unsets ITEM_FIELD_FLAG_REFUNDABLE if played time is over 2 hours.
     item->UpdatePlayedTime(this);
 
-    if (!item->HasItemFlag(ITEM_FIELD_FLAG_REFUNDABLE))
+    if (!item->IsRefundable())
     {
         TC_LOG_DEBUG("entities.player.items", "Item refund: item not refundable!");
         return;
@@ -27727,7 +27727,7 @@ void Player::SendItemRefundResult(Item* item, ItemExtendedCostEntry const* iece,
 
 void Player::RefundItem(Item* item)
 {
-    if (!item->HasItemFlag(ITEM_FIELD_FLAG_REFUNDABLE))
+    if (!item->IsRefundable())
     {
         TC_LOG_DEBUG("entities.player.items", "Item refund: item not refundable!");
         return;
