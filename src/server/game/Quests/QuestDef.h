@@ -448,6 +448,9 @@ class TC_GAME_API Quest
         // Possibly deprecated flag
         bool IsUnavailable() const { return HasFlag(QUEST_FLAGS_UNAVAILABLE); }
 
+        // whether the quest is globally enabled (spawned by pool, game event active etc.)
+        static bool IsTakingQuestEnabled(uint32 questId);
+
         int32  GetMinLevel() const { return _minLevel; }
         int32  GetQuestLevel() const { return _level; }
         int32  GetQuestMaxScalingLevel() const { return _maxScalingLevel; }
