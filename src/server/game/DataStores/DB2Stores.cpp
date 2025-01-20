@@ -27,7 +27,6 @@
 #include "Timer.h"
 #include "Util.h"
 #include "World.h"
-#include "advstd.h"
 #include <boost/filesystem/operations.hpp>
 #include <array>
 #include <bitset>
