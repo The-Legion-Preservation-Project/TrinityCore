@@ -51,7 +51,7 @@ void WorldSession::HandleInspectOpcode(WorldPackets::Inspect::Inspect& inspect)
     }
 
     inspectResult.ClassID = player->GetClass();
-    inspectResult.GenderID = player->GetNativeSex();
+    inspectResult.GenderID = player->GetNativeGender();
 
     if (GetPlayer()->CanBeGameMaster() || sWorld->getIntConfig(CONFIG_TALENTS_INSPECTING) + (GetPlayer()->GetTeamId() == player->GetTeamId()) > 1)
     {

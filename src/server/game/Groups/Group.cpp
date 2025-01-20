@@ -2170,8 +2170,8 @@ void Group::ResetInstances(uint8 method, bool isRaid, bool isLegacy, Player* Sen
                         WorldSafeLocsEntry const* graveyardLocation = sObjectMgr->GetClosestGraveyard(
                             WorldLocation(instanceEntrance->target_mapId, instanceEntrance->target_X, instanceEntrance->target_Y, instanceEntrance->target_Z),
                             SendMsgTo->GetTeam(), nullptr);
-                        uint32 const zoneId = sMapMgr->GetZoneId(PhasingHandler::GetEmptyPhaseShift(), graveyardLocation->Loc.GetMapId(),
-                            graveyardLocation->Loc.GetPositionX(), graveyardLocation->Loc.GetPositionY(), graveyardLocation->Loc.GetPositionZ());
+                        uint32 const zoneId = sMapMgr->GetZoneId(PhasingHandler::GetEmptyPhaseShift(), graveyardLocation->MapID,
+                            graveyardLocation->Loc.X, graveyardLocation->Loc.Y, graveyardLocation->Loc.Z);
 
                         for (MemberSlot const& member : GetMemberSlots())
                         {
@@ -2179,11 +2179,11 @@ void Group::ResetInstances(uint8 method, bool isRaid, bool isLegacy, Player* Sen
                             {
                                 CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHARACTER_POSITION_BY_MAPID);
 
-                                stmt->setFloat(0, graveyardLocation->Loc.GetPositionX());
-                                stmt->setFloat(1, graveyardLocation->Loc.GetPositionY());
-                                stmt->setFloat(2, graveyardLocation->Loc.GetPositionZ());
+                                stmt->setFloat(0, graveyardLocation->Loc.X);
+                                stmt->setFloat(1, graveyardLocation->Loc.Y);
+                                stmt->setFloat(2, graveyardLocation->Loc.Z);
                                 stmt->setFloat(3, instanceEntrance->target_Orientation);
-                                stmt->setUInt32(4, graveyardLocation->Loc.GetMapId());
+                                stmt->setUInt32(4, graveyardLocation->MapID);
                                 stmt->setUInt32(5, zoneId);
                                 stmt->setUInt64(6, member.guid.GetCounter());
                                 stmt->setUInt32(7, map->GetId());
