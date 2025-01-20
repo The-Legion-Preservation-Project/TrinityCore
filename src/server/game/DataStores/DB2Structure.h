@@ -2347,6 +2347,8 @@ struct PhaseEntry
 {
     uint32 ID;
     uint16 Flags;
+
+    EnumFlag<PhaseEntryFlags> GetFlags() const { return static_cast<PhaseEntryFlags>(Flags); }
 };
 
 struct PhaseXPhaseGroupEntry
