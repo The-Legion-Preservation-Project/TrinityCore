@@ -10357,8 +10357,6 @@ void Unit::SetMeleeAnimKitId(uint16 animKitId)
 
         if (!creature->IsPet())
         {
-            creature->GetThreatManager().ClearAllThreat();
-
             // must be after setDeathState which resets dynamic flags
             if (!creature->loot.isLooted())
                 creature->AddDynamicFlag(UNIT_DYNFLAG_LOOTABLE);
