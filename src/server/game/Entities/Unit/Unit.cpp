@@ -1512,7 +1512,7 @@ void Unit::HandleEmoteCommand(uint32 anim_id, Player* target /*=nullptr*/)
         return damage;
 
     float mitigation = std::min(armor / (armor + ambl->Mitigation), 0.85f);
-    return std::max<uint32>(damage * (1.0f - mitigation), 0);
+    return uint32(std::max(damage * (1.0f - mitigation), 0.0f));
 }
 
 /*static*/ uint32 Unit::CalcSpellResistedDamage(Unit const* attacker, Unit* victim, uint32 damage, SpellSchoolMask schoolMask, SpellInfo const* spellInfo)
