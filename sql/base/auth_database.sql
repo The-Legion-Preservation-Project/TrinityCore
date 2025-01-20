@@ -32,7 +32,7 @@ CREATE TABLE `account` (
   `sha_pass_hash` varchar(40) NOT NULL DEFAULT '',
   `v` varchar(64) NOT NULL DEFAULT 'dummy value, use `verifier` instead',
   `s` varchar(64) NOT NULL DEFAULT 'dummy value, use `salt` instead',
-  `token_key` varchar(100) NOT NULL DEFAULT '',
+  `totp_secret` varbinary(128) DEFAULT NULL,
   `email` varchar(255) NOT NULL DEFAULT '',
   `reg_mail` varchar(255) NOT NULL DEFAULT '',
   `joindate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1433,6 +1433,9 @@ INSERT INTO `rbac_linked_permissions` VALUES
 (199,223),
 (199,225),
 (199,263),
+(199,378),
+(199,379),
+(199,380),
 (199,496),
 (199,507),
 (199,525),
@@ -1696,6 +1699,10 @@ INSERT INTO `rbac_permissions` VALUES
 (375,'Command: gm list'),
 (376,'Command: gm visible'),
 (377,'Command: go'),
+(378,'Command: account 2fa'),
+(379,'Command: account 2fa setup'),
+(380,'Command: account 2fa remove'),
+(381,'Command: account set 2fa'),
 (387,'Command: gobject'),
 (388,'Command: gobject activate'),
 (389,'Command: gobject add'),
@@ -2225,6 +2232,29 @@ INSERT INTO `realmlist` VALUES
 UNLOCK TABLES;
 
 --
+-- Table structure for table `secret_digest`
+--
+
+DROP TABLE IF EXISTS `secret_digest`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `secret_digest` (
+  `id` int(10) unsigned not null,
+  `digest` varchar(100) not null,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `secret_digest`
+--
+
+LOCK TABLES `secret_digest` WRITE;
+/*!40000 ALTER TABLE `secret_digest` DISABLE KEYS */;
+/*!40000 ALTER TABLE `secret_digest` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `updates`
 --
 
@@ -2393,6 +2423,8 @@ INSERT INTO `updates` VALUES
 ('2019_06_21_00_auth.sql','C519239830204B68E710F698BC0C9E89B6D5FD24','ARCHIVED','2019-06-20 19:43:50',0),
 ('2019_07_16_00_auth.sql','36CB53A9EBD64BFDCF7030083E36E534F1753773','ARCHIVED','2019-07-16 00:00:00',0),
 ('2019_07_17_00_auth.sql','4F983F039904894ACC483BE885676C5F0A18F06B','ARCHIVED','2019-07-17 00:00:00',0),
+('2019_08_10_00_auth.sql','E936802893474BB9B459D01BB5F181F54EDF0653','ARCHIVED','2019-08-10 00:00:00',0),
+('2019_08_10_01_auth.sql','C58357260F0C70DA226A71F7E05DE2C49AAEFD74','ARCHIVED','2019-08-10 00:00:00',0),
 ('2019_12_07_00_auth.sql','F354DA31D5B300609C6AE8A25667CA4DE0A7349F','RELEASED','2019-12-07 12:57:23',0),
 ('2020_05_19_00_auth.sql','12D9F26538F63546B74793499E8A71BD885E8E5F','RELEASED','2020-05-19 12:00:00',0),
 ('2020_06_20_00_auth.sql','85345FAF20B91DA7B157AE1E17DF5B6446C2E109','ARCHIVED','2020-06-11 10:48:00',0),
