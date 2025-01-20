@@ -779,7 +779,7 @@ void Creature::Update(uint32 diff)
 
             GetThreatManager().Update(diff);
 
-            if (m_shouldReacquireTarget && !IsFocusing(nullptr, true))
+            if (m_shouldReacquireTarget && !HandleSpellFocus(nullptr, true))
             {
                 SetTarget(m_suppressedTarget);
 
@@ -1198,7 +1198,7 @@ Unit* Creature::SelectVictim()
 
     if (target && _IsTargetAcceptable(target) && CanCreatureAttack(target))
     {
-        if (!IsFocusing(nullptr, true))
+        if (!HandleSpellFocus(nullptr, true))
             SetInFront(target);
         return target;
     }
@@ -3156,7 +3156,7 @@ void Creature::SetDisplayFromModel(uint32 modelIdx)
 
 void Creature::SetTarget(ObjectGuid const& guid)
 {
-    if (IsFocusing(nullptr, true))
+    if (HandleSpellFocus(nullptr, true))
         m_suppressedTarget = guid;
     else
         SetGuidValue(UNIT_FIELD_TARGET, guid);
@@ -3190,7 +3190,7 @@ void Creature::FocusTarget(Spell const* focusSpell, WorldObject const* target)
         return;
 
     // store pre-cast values for target and orientation (used to later restore)
-    if (!IsFocusing(nullptr, true))
+    if (!HandleSpellFocus(nullptr, true))
     { // only overwrite these fields if we aren't transitioning from one spell focus to another
         m_suppressedTarget = GetTarget();
         m_suppressedOrientation = GetOrientation();
@@ -3240,7 +3240,7 @@ void Creature::FocusTarget(Spell const* focusSpell, WorldObject const* target)
         AddUnitState(UNIT_STATE_FOCUSING);
 }
 
-bool Creature::IsFocusing(Spell const* focusSpell, bool withDelay)
+bool Creature::HandleSpellFocus(Spell const* focusSpell, bool withDelay)
 {
     if (!IsAlive()) // dead creatures cannot focus
     {
@@ -3307,7 +3307,7 @@ bool Creature::IsMovementPreventedByCasting() const
                 return false;
     }
 
-    if (const_cast<Creature*>(this)->IsFocusing(nullptr, true))
+    if (const_cast<Creature*>(this)->HandleSpellFocus(nullptr, true))
         return true;
 
     if (HasUnitState(UNIT_STATE_CASTING))
