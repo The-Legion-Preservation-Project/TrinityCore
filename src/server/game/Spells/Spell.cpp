@@ -7312,7 +7312,7 @@ void Spell::DelayedChannel()
 
 bool Spell::HasPowerTypeCost(Powers power) const
 {
-    return GetPowerTypeCostAmount(power).has_value();
+    return GetPowerTypeCostAmount(power).is_initialized();
 }
 
 Optional<int32> Spell::GetPowerTypeCostAmount(Powers power) const
