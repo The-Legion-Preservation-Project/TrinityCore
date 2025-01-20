@@ -5678,8 +5678,6 @@ void Player::SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal)
                 SetSkillMaxRank(i, maxVal);
 
                 UpdateSkillEnchantments(id, currVal, newVal);
-                UpdateCriteria(CriteriaType::SkillRaised, id);
-                UpdateCriteria(CriteriaType::AchieveSkillStep, id);
 
                 // insert new entry or update if not deleted old entry yet
                 if (itr != mSkillStatus.end())
@@ -5710,6 +5708,8 @@ void Player::SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal)
 
                 // Learn all spells for skill
                 LearnSkillRewardedSpells(id, newVal);
+                UpdateCriteria(CriteriaType::SkillRaised, id);
+                UpdateCriteria(CriteriaType::AchieveSkillStep, id);
                 return;
             }
         }
