@@ -1282,6 +1282,8 @@ class TC_GAME_API Unit : public WorldObject
         Pet* CreateTamedPetFrom(uint32 creatureEntry, uint32 spell_id = 0);
         bool InitTamedPet(Pet* pet, uint8 level, uint32 spell_id);
 
+        uint32 GetBattlePetCompanionNameTimestamp() const { return GetUInt32Value(UNIT_FIELD_BATTLEPET_COMPANION_NAME_TIMESTAMP); }
+        void SetBattlePetCompanionNameTimestamp(uint32 timestamp) { SetUInt32Value(UNIT_FIELD_BATTLEPET_COMPANION_NAME_TIMESTAMP, timestamp); }
         void SetWildBattlePetLevel(uint32 wildBattlePetLevel) { SetUInt32Value(UNIT_FIELD_WILD_BATTLEPET_LEVEL, wildBattlePetLevel); }
         uint32 GetWildBattlePetLevel() const { return GetUInt32Value(UNIT_FIELD_WILD_BATTLEPET_LEVEL); }
 

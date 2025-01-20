@@ -2717,6 +2717,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void RemoveSelfResSpell(int32 spellId) { RemoveDynamicValue(PLAYER_DYNAMIC_FIELD_SELF_RES_SPELLS, spellId); }
         void ClearSelfResSpell() { ClearDynamicValue(PLAYER_DYNAMIC_FIELD_SELF_RES_SPELLS); }
 
+        ObjectGuid GetSummonedBattlePetGUID() const { return GetGuidValue(PLAYER_FIELD_SUMMONED_BATTLE_PET_ID); }
         void SetSummonedBattlePetGUID(ObjectGuid guid) { SetGuidValue(PLAYER_FIELD_SUMMONED_BATTLE_PET_ID, guid);  }
 
         void AddTrackCreatureFlag(uint32 flags) { SetFlag(PLAYER_TRACK_CREATURES, flags); }
@@ -2736,7 +2737,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void RemovePlayerLocalFlag(PlayerLocalFlags flags) { RemoveFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
         void SetPlayerLocalFlags(PlayerLocalFlags flags) { SetUInt32Value(PLAYER_FIELD_LOCAL_FLAGS, flags); }
 
-        void SetWatchedFactionIndex(int32 index) { SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, index);  }
+        void SetWatchedFactionIndex(int32 index) { SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, index); }
 
         void AddAuraVision(PlayerFieldByte2Flags flags) { SetByteFlag(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_AURA_VISION, flags); }
         void RemoveAuraVision(PlayerFieldByte2Flags flags) { RemoveByteFlag(PLAYER_FIELD_BYTES2, PLAYER_FIELD_BYTES_2_OFFSET_AURA_VISION, flags); }
