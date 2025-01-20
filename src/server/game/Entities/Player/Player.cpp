@@ -24906,6 +24906,11 @@ void Player::UpdateForQuestWorldObjects()
         {
             if (GameObject* obj = ObjectAccessor::GetGameObject(*this, *itr))
             {
+                bool buildUpdate = false;
+
+                if (m_questObjectiveStatus.find({ QUEST_OBJECTIVE_GAMEOBJECT, int32(obj->GetEntry()) }) != m_questObjectiveStatus.end())
+                    buildUpdate = true;
+
                 switch (obj->GetGoType())
                 {
                     case GAMEOBJECT_TYPE_QUESTGIVER:
@@ -24913,11 +24918,14 @@ void Player::UpdateForQuestWorldObjects()
                     case GAMEOBJECT_TYPE_GOOBER:
                     case GAMEOBJECT_TYPE_GENERIC:
                         if (sObjectMgr->IsGameObjectForQuests(obj->GetEntry()))
-                            obj->BuildValuesUpdateBlockForPlayer(&udata, this);
+                            buildUpdate = true;
                         break;
                     default:
                         break;
                 }
+
+                if (buildUpdate)
+                    obj->BuildValuesUpdateBlockForPlayer(&udata, this);
             }
         }
         else if (itr->IsCreatureOrVehicle())
