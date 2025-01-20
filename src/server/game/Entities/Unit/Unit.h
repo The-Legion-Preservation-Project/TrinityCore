@@ -1180,7 +1180,7 @@ class TC_GAME_API Unit : public WorldObject
         void MonsterMoveWithSpeed(float x, float y, float z, float speed, bool generatePath = false, bool forceDestination = false);
 
         bool IsPlayingHoverAnim() const { return _playHoverAnim; }
-        void SendSetPlayHoverAnim(bool enable);
+        void SetPlayHoverAnim(bool enable);
         void SetHoverHeight(float hoverHeight) { SetFloatValue(UNIT_FIELD_HOVERHEIGHT, hoverHeight); }
 
         bool IsLevitating() const { return m_movementInfo.HasMovementFlag(MOVEMENTFLAG_DISABLE_GRAVITY); }
