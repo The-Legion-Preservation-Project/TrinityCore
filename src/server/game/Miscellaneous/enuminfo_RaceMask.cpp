@@ -52,12 +52,6 @@ TC_API_EXPORT EnumText EnumUtils<Races>::ToString(Races value)
         case RACE_HIGHMOUNTAIN_TAUREN: return { "RACE_HIGHMOUNTAIN_TAUREN", "Highmountain Tauren", "" };
         case RACE_VOID_ELF: return { "RACE_VOID_ELF", "Void Elf", "" };
         case RACE_LIGHTFORGED_DRAENEI: return { "RACE_LIGHTFORGED_DRAENEI", "Lightforged Draenei", "" };
-        case RACE_ZANDALARI_TROLL: return { "RACE_ZANDALARI_TROLL", "Zandalari Troll", "" };
-        case RACE_KUL_TIRAN: return { "RACE_KUL_TIRAN", "Kul Tiran", "" };
-        case RACE_DARK_IRON_DWARF: return { "RACE_DARK_IRON_DWARF", "Dark Iron Dwarf", "Dark Iron Dwarf (RaceMask bit 11)" };
-        case RACE_VULPERA: return { "RACE_VULPERA", "Vulpera", "Vulpera (RaceMask bit 12)" };
-        case RACE_MAGHAR_ORC: return { "RACE_MAGHAR_ORC", "Mag'har Orc", "Mag'har Orc (RaceMask bit 13)" };
-        case RACE_MECHAGNOME: return { "RACE_MECHAGNOME", "Mechagnome", "Mechagnome (RaceMask bit 14)" };
         default: throw std::out_of_range("value");
     }
 }
@@ -89,12 +83,6 @@ TC_API_EXPORT Races EnumUtils<Races>::FromIndex(size_t index)
         case 16: return RACE_HIGHMOUNTAIN_TAUREN;
         case 17: return RACE_VOID_ELF;
         case 18: return RACE_LIGHTFORGED_DRAENEI;
-        case 19: return RACE_ZANDALARI_TROLL;
-        case 20: return RACE_KUL_TIRAN;
-        case 21: return RACE_DARK_IRON_DWARF;
-        case 22: return RACE_VULPERA;
-        case 23: return RACE_MAGHAR_ORC;
-        case 24: return RACE_MECHAGNOME;
         default: throw std::out_of_range("index");
     }
 }

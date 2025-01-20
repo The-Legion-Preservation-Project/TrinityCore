@@ -71,7 +71,7 @@ void Totem::InitStats(uint32 duration)
             SetDisplayId(totemDisplayId);
         else
             TC_LOG_ERROR("misc", "Totem with entry %u, does not have a specialized model for spell %u and race %s. Set to default.",
-                         GetEntry(), *m_unitData->CreatedBySpell, EnumUtils::ToTitle(Races(owner->GetRace())));
+                         GetEntry(), GetUInt32Value(UNIT_CREATED_BY_SPELL), EnumUtils::ToTitle(Races(owner->GetRace())));
     }
 
     Minion::InitStats(duration);

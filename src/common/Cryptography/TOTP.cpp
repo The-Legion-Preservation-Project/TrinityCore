@@ -20,6 +20,7 @@
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 
+constexpr std::size_t Trinity::Crypto::TOTP::RECOMMENDED_SECRET_LENGTH;
 static constexpr uint32 TOTP_INTERVAL = 30;
 static constexpr uint32 HMAC_RESULT_SIZE = 20;
 /*static*/ uint32 Trinity::Crypto::TOTP::GenerateToken(TOTP::Secret const& secret, time_t timestamp)
