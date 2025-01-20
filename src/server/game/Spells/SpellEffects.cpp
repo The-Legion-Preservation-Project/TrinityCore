@@ -3042,11 +3042,6 @@ void Spell::EffectScriptEffect()
                         unitCaster->CastSpell(unitTarget, urand(0, 1) ? damage : 52505, CastSpellExtraArgs(TRIGGERED_FULL_MASK)
                             .SetOriginalCastId(m_castId));
                     return;
-                case 53110: // Devour Humanoid
-                    if (unitTarget)
-                        unitTarget->CastSpell(m_caster, damage, CastSpellExtraArgs(TRIGGERED_FULL_MASK)
-                            .SetOriginalCastId(m_castId));
-                    return;
                 case 57347: // Retrieving (Wintergrasp RP-GG pickup spell)
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT || m_caster->GetTypeId() != TYPEID_PLAYER)
