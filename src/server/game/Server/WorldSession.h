@@ -165,6 +165,7 @@ namespace WorldPackets
     namespace BattlePet
     {
         class BattlePetRequestJournal;
+        class BattlePetRequestJournalLock;
         class BattlePetSetBattleSlot;
         class BattlePetModifyName;
         class BattlePetDeletePet;
@@ -1737,6 +1738,7 @@ class TC_GAME_API WorldSession
 
         // Battle Pets
         void HandleBattlePetRequestJournal(WorldPackets::BattlePet::BattlePetRequestJournal& battlePetRequestJournal);
+        void HandleBattlePetRequestJournalLock(WorldPackets::BattlePet::BattlePetRequestJournalLock& battlePetRequestJournalLock);
         void HandleBattlePetSetBattleSlot(WorldPackets::BattlePet::BattlePetSetBattleSlot& battlePetSetBattleSlot);
         void HandleBattlePetModifyName(WorldPackets::BattlePet::BattlePetModifyName& battlePetModifyName);
         void HandleBattlePetDeletePet(WorldPackets::BattlePet::BattlePetDeletePet& battlePetDeletePet);
