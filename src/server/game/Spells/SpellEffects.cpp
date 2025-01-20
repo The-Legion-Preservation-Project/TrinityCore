@@ -2111,8 +2111,6 @@ void Spell::EffectDispel()
         WorldPackets::CombatLog::SpellDispellData dispellData;
         dispellData.SpellID = dispelableAura.GetAura()->GetId();
         dispellData.Harmful = false;      // TODO: use me
-        dispellData.Rolled = boost::none; // TODO: use me
-        dispellData.Needed = boost::none; // TODO: use me
 
         unitTarget->RemoveAurasDueToSpellByDispel(dispelableAura.GetAura()->GetId(), m_spellInfo->Id, dispelableAura.GetAura()->GetCasterGUID(), m_caster, dispelableAura.GetDispelCharges());
 
@@ -4502,8 +4500,6 @@ void Spell::EffectStealBeneficialBuff()
         WorldPackets::CombatLog::SpellDispellData dispellData;
         dispellData.SpellID = dispell.first;
         dispellData.Harmful = false;      // TODO: use me
-        dispellData.Rolled = boost::none; // TODO: use me
-        dispellData.Needed = boost::none; // TODO: use me
 
         unitTarget->RemoveAurasDueToSpellBySteal(dispell.first, dispell.second, m_caster);
 
