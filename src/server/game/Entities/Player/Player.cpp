@@ -1412,8 +1412,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     SetUnitMovementFlags(GetUnitMovementFlags() & MOVEMENTFLAG_MASK_HAS_PLAYER_STATUS_OPCODE);
     m_movementInfo.ResetJump();
     DisableSpline();
-    if (!IsInFlight())
-        GetMotionMaster()->Clear();
+    GetMotionMaster()->Remove(EFFECT_MOTION_TYPE);
 
     if (Transport* transport = GetTransport())
     {
