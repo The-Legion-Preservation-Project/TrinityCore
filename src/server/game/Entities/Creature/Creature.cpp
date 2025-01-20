@@ -968,7 +968,6 @@ void Creature::DoFleeToGetAssistance()
         Cell::VisitGridObjects(this, searcher, radius);
 
         SetNoSearchAssistance(true);
-        UpdateSpeed(MOVE_RUN);
 
         if (!creature)
             /// @todo use 31365
@@ -2078,11 +2077,7 @@ void Creature::setDeathState(DeathState s)
 
         setActive(false);
 
-        if (HasSearchedAssistance())
-        {
-            SetNoSearchAssistance(false);
-            UpdateSpeed(MOVE_RUN);
-        }
+        SetNoSearchAssistance(false);
 
         //Dismiss group if is leader
         if (m_formation && m_formation->GetLeader() == this)
