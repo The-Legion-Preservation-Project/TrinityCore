@@ -1880,7 +1880,7 @@ bool Creature::hasInvolvedQuest(uint32 quest_id) const
                 toUnload.push_back(pair.second);
             for (Creature* creature : toUnload)
                 map->AddObjectToRemoveList(creature);
-            map->RemoveRespawnTime(SPAWN_TYPE_CREATURE, spawnId, false, charTrans);
+            map->RemoveRespawnTime(SPAWN_TYPE_CREATURE, spawnId, charTrans);
         }
     );
 
@@ -2175,9 +2175,6 @@ void Creature::Respawn(bool force)
 
         if (getDeathState() == DEAD)
         {
-            if (m_spawnId)
-                GetMap()->RemoveRespawnTime(SPAWN_TYPE_CREATURE, m_spawnId);
-
             TC_LOG_DEBUG("entities.unit", "Respawning creature %s (%s)", GetName().c_str(), GetGUID().ToString().c_str());
             m_respawnTime = 0;
             ResetPickPocketRefillTimer();
@@ -2213,7 +2210,7 @@ void Creature::Respawn(bool force)
     else
     {
         if (m_spawnId)
-            GetMap()->RemoveRespawnTime(SPAWN_TYPE_CREATURE, m_spawnId, true);
+            GetMap()->Respawn(SPAWN_TYPE_CREATURE, m_spawnId);
     }
 
     TC_LOG_DEBUG("entities.unit", "Respawning creature %s (%s)",
@@ -2544,7 +2541,11 @@ void Creature::SaveRespawnTime(uint32 forceDelay)
 
     if (m_respawnCompatibilityMode)
     {
-        GetMap()->SaveRespawnTimeDB(SPAWN_TYPE_CREATURE, m_spawnId, m_respawnTime);
+        RespawnInfo ri;
+        ri.type = SPAWN_TYPE_CREATURE;
+        ri.spawnId = m_spawnId;
+        ri.respawnTime = m_respawnTime;
+        GetMap()->SaveRespawnInfoDB(ri);
         return;
     }
 
