@@ -53,8 +53,8 @@ ByteBuffer& operator<<(ByteBuffer& data, MovementInfo const& movementInfo)
     data.WriteBit(hasFallData);
     data.WriteBit(hasSpline);
 
-    data.WriteBit(0); // HeightChangeFailed
-    data.WriteBit(0); // RemoteTimeValid
+    data.WriteBit(false); // HeightChangeFailed
+    data.WriteBit(false); // RemoteTimeValid
 
     data.FlushBits();
 
@@ -425,7 +425,7 @@ void WorldPackets::Movement::MonsterMove::InitializeSplineData(::Movement::MoveS
 
     movementSpline.MoveTime = moveSpline.Duration();
 
-    if (splineFlags.parabolic)
+    if (splineFlags.parabolic && (!moveSpline.spell_effect_extra || moveSpline.effect_start_time))
     {
         movementSpline.JumpGravity = moveSpline.vertical_acceleration;
         movementSpline.SpecialTime = moveSpline.effect_start_time;
