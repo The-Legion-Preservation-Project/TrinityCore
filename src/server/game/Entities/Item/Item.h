@@ -339,7 +339,7 @@ class TC_GAME_API Item : public Object
 
         void BuildUpdate(UpdateDataMapType&) override;
         void BuildDynamicValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const override;
-        void AddToObjectUpdate() override;
+        bool AddToObjectUpdate() override;
         void RemoveFromObjectUpdate() override;
 
         uint32 GetScriptId() const { return GetTemplate()->ScriptId; }

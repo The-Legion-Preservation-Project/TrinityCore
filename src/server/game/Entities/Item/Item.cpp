@@ -1617,10 +1617,15 @@ void Item::BuildDynamicValuesUpdate(uint8 updateType, ByteBuffer* data, Player c
     }
 }
 
-void Item::AddToObjectUpdate()
+bool Item::AddToObjectUpdate()
 {
     if (Player* owner = GetOwner())
+    {
         owner->GetMap()->AddUpdateObject(this);
+        return true;
+    }
+
+    return false;
 }
 
 void Item::RemoveFromObjectUpdate()
