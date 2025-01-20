@@ -391,6 +391,7 @@ class TC_GAME_API Spell
         void EffectCreatePrivateSceneObject();
         void EffectPlayScene();
         void EffectGiveHonor();
+        void EffectJumpCharge();
         void EffectLearnTransmogSet();
 
         typedef std::unordered_set<Aura*> UsedSpellMods;
