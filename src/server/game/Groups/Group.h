@@ -24,6 +24,7 @@
 #include "Loot.h"
 #include "Object.h"
 #include "SharedDefines.h"
+#include "Timer.h"
 #include <map>
 
 class Battlefield;
@@ -244,6 +245,8 @@ class TC_GAME_API Group
         Group();
         ~Group();
 
+        void Update(uint32 diff);
+
         // group manipulation methods
         bool   Create(Player* leader);
         void   LoadGroupFromDB(Field* field);
@@ -267,7 +270,6 @@ class TC_GAME_API Group
         void   SetEveryoneIsAssistant(bool apply);
 
         // Update
-        void   Update(uint32 diff);
         void   UpdateReadyCheck(uint32 diff);
 
         // Ready check
@@ -415,6 +417,10 @@ class TC_GAME_API Group
         BoundInstancesMap::iterator GetBoundInstances(Difficulty difficulty);
         BoundInstancesMap::iterator GetBoundInstanceEnd();
 
+        void StartLeaderOfflineTimer();
+        void StopLeaderOfflineTimer();
+        void SelectNewPartyOrRaidLeader();
+
         // FG: evil hacks
         void BroadcastGroupUpdate(void);
 
@@ -452,6 +458,8 @@ class TC_GAME_API Group
         ObjectGuid          m_guid;
         uint32              m_maxEnchantingLevel;
         uint32              m_dbStoreId;                    // Represents the ID used in database (Can be reused by other groups if group was disbanded)
+        bool                m_isLeaderOffline;
+        TimeTrackerSmall    m_leaderOfflineTimer;
 
         // Ready Check
         bool                m_readyCheckStarted;
