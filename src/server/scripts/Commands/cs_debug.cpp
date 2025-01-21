@@ -1096,7 +1096,7 @@ public:
             phaseShift.AddVisibleMapId(*visibleMapId, nullptr);
 
         if (uiMapAreaIdSwap)
-            phaseShift.AddUiWorldMapAreaIdSwap(um);
+            phaseShift.AddUiWorldMapAreaIdSwap(*uiMapAreaIdSwap);
 
         PhasingHandler::SendToPlayer(handler->GetSession()->GetPlayer(), phaseShift);
         return true;
