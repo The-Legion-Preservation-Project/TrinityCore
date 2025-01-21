@@ -196,6 +196,7 @@ class TC_GAME_API Object
         void BuildOutOfRangeUpdateBlock(UpdateData* data) const;
 
         virtual void DestroyForPlayer(Player* target) const;
+        void SendOutOfRangeForPlayer(Player* target) const;
 
         int32 GetInt32Value(uint16 index) const;
         uint32 GetUInt32Value(uint16 index) const;
@@ -306,6 +307,8 @@ class TC_GAME_API Object
         virtual bool hasQuest(uint32 /* quest_id */) const { return false; }
         virtual bool hasInvolvedQuest(uint32 /* quest_id */) const { return false; }
         void SetIsNewObject(bool enable) { m_isNewObject = enable; }
+        bool IsDestroyedObject() const { return m_isDestroyedObject; }
+        void SetDestroyedObject(bool destroyed) { m_isDestroyedObject = destroyed; }
         virtual void BuildUpdate(UpdateDataMapType&) { }
         void BuildFieldsUpdate(Player*, UpdateDataMapType &) const;
 
@@ -433,6 +436,7 @@ class TC_GAME_API Object
         ObjectGuid m_guid;
         bool m_inWorld;
         bool m_isNewObject;
+        bool m_isDestroyedObject;
 
         // for output helpful error messages from asserts
         bool PrintIndexError(uint32 index, bool set) const;
@@ -789,7 +793,7 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
         void SetLocationMapId(uint32 _mapId) { m_mapId = _mapId; }
         void SetLocationInstanceId(uint32 _instanceId) { m_InstanceId = _instanceId; }
 
-        virtual bool IsNeverVisibleFor(WorldObject const* /*seer*/) const { return !IsInWorld(); }
+        virtual bool IsNeverVisibleFor(WorldObject const* /*seer*/) const { return !IsInWorld() || IsDestroyedObject(); }
         virtual bool IsAlwaysVisibleFor(WorldObject const* /*seer*/) const { return false; }
         virtual bool IsInvisibleDueToDespawn() const { return false; }
         //difference from IsAlwaysVisibleFor: 1. after distance check; 2. use owner or charmer as seer
