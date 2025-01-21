@@ -739,6 +739,8 @@ struct CreatureModelDataEntry
     uint32 DeathThudCameraEffectID;
     uint32 SoundID;
     uint32 CreatureGeosetDataID;
+
+    EnumFlag<CreatureModelDataFlags> GetFlags() const { return static_cast<CreatureModelDataFlags>(Flags); }
 };
 
 struct CreatureTypeEntry
