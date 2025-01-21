@@ -8602,6 +8602,7 @@ bool WorldObjectSpellTargetCheck::operator()(WorldObject* target) const
             case TARGET_OBJECT_TYPE_CORPSE_ENEMY:
                 if (unitTarget->IsAlive())
                     return false;
+                break;
             default:
                 break;
         }

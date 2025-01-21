@@ -4434,7 +4434,8 @@ bool _isPositiveEffectImpl(SpellInfo const* spellInfo, SpellEffectInfo const& ef
                 if (otherEffect.EffectIndex != effect.EffectIndex && // for spells like 38044: instakill effect is negative but auras on target must count as buff
                     otherEffect.TargetA.GetTarget() == effect.TargetA.GetTarget() &&
                     otherEffect.TargetB.GetTarget() == effect.TargetB.GetTarget())
-                return false;
+                    return false;
+                break;
             default:
                 break;
         }
