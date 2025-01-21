@@ -166,6 +166,6 @@ void AddCustomShamanSpellScripts()
     RegisterSpellScript(tlpp_spell_sha_feral_spirit);
     RegisterCreatureAI(tlpp_npc_feral_spirit);
     RegisterSpellScript(tlpp_spell_sha_healing_surge);
-    RegisterAuraScript(tlpp_spell_sha_maelstrom_weapon);
-    RegisterAuraScript(tlpp_spell_sha_stormbringer);
+    RegisterSpellScript(tlpp_spell_sha_maelstrom_weapon);
+    RegisterSpellScript(tlpp_spell_sha_stormbringer);
 }
