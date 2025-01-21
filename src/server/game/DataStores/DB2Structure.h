@@ -1111,7 +1111,7 @@ struct EmotesTextSoundEntry
 
 struct FactionEntry
 {
-    Trinity::RaceMask<int64> ReputationRaceMask[4];
+    std::array<Trinity::RaceMask<int64>, 4> ReputationRaceMask;
     LocalizedString Name;
     LocalizedString Description;
     uint32 ID;
@@ -2105,7 +2105,7 @@ struct LiquidTypeEntry
 {
     uint32 ID;
     char const* Name;
-    char const* Texture[6];
+    std::array<char const*, 6> Texture;
     uint32 SpellID;
     float MaxDarkenDepth;
     float FogDarkenIntensity;
