@@ -207,6 +207,9 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
 
         if (worldObject->GetAIAnimKitId() || worldObject->GetMovementAnimKitId() || worldObject->GetMeleeAnimKitId())
             flags.AnimKit = true;
+
+        if (worldObject->IsReplacingObjectFor(target))
+            flags.SmoothPhasing = true;
     }
 
     if (Unit const* unit = ToUnit())
@@ -222,7 +225,7 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
     buf << GetGUID();
     buf << uint8(m_objectTypeId);
 
-    BuildMovementUpdate(&buf, flags);
+    BuildMovementUpdate(&buf, flags, target);
     BuildValuesUpdate(updateType, &buf, target);
     BuildDynamicValuesUpdate(updateType, &buf, target);
     data->AddUpdateBlock(buf);
@@ -331,7 +334,7 @@ ObjectGuid const& Object::GetGuidValue(uint16 index) const
     return *((ObjectGuid*)&(m_uint32Values[index]));
 }
 
-void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags) const
+void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Player* target) const
 {
     std::vector<uint32> const* PauseTimes = nullptr;
     uint32 PauseTimesCount = 0;
@@ -644,14 +647,17 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags) const
             *data << uint32(Int1);
     }
 
-    //if (flags.SmoothPhasing)
-    //{
-    //    data->WriteBit(ReplaceActive);
-    //    data->WriteBit(HasReplaceObject);
-    //    data->FlushBits();
-    //    if (HasReplaceObject)
-    //        *data << ObjectGuid(ReplaceObject);
-    //}
+    if (flags.SmoothPhasing)
+    {
+        ReplaceObjectInfo const* replacedObjectInfo = static_cast<WorldObject const*>(this)->GetReplacedObjectFor(target);
+        ASSERT(replacedObjectInfo);
+
+        data->WriteBit(true); // ReplaceActive
+        data->WriteBit(replacedObjectInfo->StopAnimKits);
+        data->WriteBit(true);
+        data->FlushBits();
+        *data << ObjectGuid(replacedObjectInfo->ReplaceObject);
+    }
 
     if (flags.SceneObject)
     {
@@ -1642,6 +1648,8 @@ void WorldObject::RemoveFromWorld()
     if (!IsInWorld())
         return;
 
+    RestoreReplacedObject();
+
     UpdateObjectVisibilityOnDestroy();
 
     Object::RemoveFromWorld();
@@ -2122,6 +2130,73 @@ bool WorldObject::CheckPrivateObjectOwnerVisibility(WorldObject const* seer) con
     return false;
 }
 
+void WorldObject::SetReplacedObject(ObjectGuid const& seer, ObjectGuid const& replacedObject, bool stopAnimKits)
+{
+    ReplaceObjectInfo replaceObjectInfo;
+    replaceObjectInfo.ReplaceObject = replacedObject;
+    replaceObjectInfo.StopAnimKits = stopAnimKits;
+    _replacedObjects[seer] = replaceObjectInfo;
+}
+
+void WorldObject::ReplaceWith(WorldObject const* seer, WorldObject* replaceWithObject, bool stopAnimKits)
+{
+    _objectsWhichReplaceMeForSeer[seer->GetGUID()] = replaceWithObject->GetGUID();
+    replaceWithObject->SetReplacedObject(seer->GetGUID(), GetGUID(), stopAnimKits);
+}
+
+void WorldObject::ReplaceWith(ObjectGuid const& seerGuid, ObjectGuid const& replaceWithObjectGuid, bool stopAnimKits /*=true*/)
+{
+    WorldObject* replaceWithObject = ObjectAccessor::GetWorldObject(*this, replaceWithObjectGuid);
+    if (!replaceWithObject)
+        return;
+
+    _objectsWhichReplaceMeForSeer[seerGuid] = replaceWithObjectGuid;
+    replaceWithObject->SetReplacedObject(seerGuid, GetGUID(), stopAnimKits);
+}
+
+void WorldObject::RestoreReplacedObject()
+{
+    if (_replacedObjects.empty() || !IsPrivateObject())
+        return;
+
+    std::unordered_map<ObjectGuid, ReplaceObjectInfo>::iterator itr = _replacedObjects.begin();
+    WorldObject* replacedObject = ObjectAccessor::GetWorldObject(*this, itr->second.ReplaceObject);
+    if (!replacedObject)
+        return;
+
+    ReplaceWith(itr->first, itr->second.ReplaceObject, itr->second.StopAnimKits);
+    replacedObject->RemoveObjectWhichReplacesMe(itr->first);
+    _replacedObjects.erase(itr->first);
+
+    Player* player = ObjectAccessor::FindPlayer(itr->first);
+    if (!player)
+        return;
+
+    WorldObject* targets[] = { replacedObject, this };
+    player->UpdateVisibilityOf({ std::begin(targets), std::end(targets) });
+}
+
+ReplaceObjectInfo const* WorldObject::GetReplacedObjectFor(WorldObject const* seer) const
+{
+    auto itr = _replacedObjects.find(seer->GetGUID());
+    if (itr != _replacedObjects.end())
+        return &itr->second;
+
+    return nullptr;
+}
+
+bool WorldObject::CheckReplacedObjectVisibility(WorldObject const* seer) const
+{
+    if (Creature const* creature = ToCreature())
+    {
+        Player const* player = seer->ToPlayer();
+        if (player && IsBeingReplacedFor(player))
+            return false;
+    }
+
+    return true;
+}
+
 bool WorldObject::CanSeeOrDetect(WorldObject const* obj, bool ignoreStealth, bool distanceCheck, bool checkAlert) const
 {
     if (this == obj)
@@ -2134,6 +2209,9 @@ bool WorldObject::CanSeeOrDetect(WorldObject const* obj, bool ignoreStealth, boo
         return true;
 
     if (!obj->CheckPrivateObjectOwnerVisibility(this))
+        return false;
+
+    if (!obj->CheckReplacedObjectVisibility(this))
         return false;
 
     if (!sConditionMgr->IsObjectMeetingVisibilityByObjectIdConditions(obj->GetTypeId(), obj->GetEntry(), const_cast<WorldObject*>(this)))
@@ -2440,7 +2518,7 @@ void WorldObject::AddObjectToRemoveList()
     map->AddObjectToRemoveList(this);
 }
 
-TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropertiesEntry const* properties /*= nullptr*/, uint32 duration /*= 0*/, WorldObject* summoner /*= nullptr*/, uint32 spellId /*= 0*/, uint32 vehId /*= 0*/, ObjectGuid privateObjectOwner /*= ObjectGuid::Empty*/)
+TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropertiesEntry const* properties /*= nullptr*/, uint32 duration /*= 0*/, WorldObject* summoner /*= nullptr*/, uint32 spellId /*= 0*/, uint32 vehId /*= 0*/, ObjectGuid privateObjectOwner /*= ObjectGuid::Empty*/, ObjectGuid replaceObject /* = ObjectGuid::Empty */)
 {
     uint32 mask = UNIT_MASK_SUMMON;
     if (properties)
@@ -2490,6 +2568,9 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
         }
     }
 
+    if (WorldObject* objectOwner = ObjectAccessor::GetWorldObject(*summoner, privateObjectOwner))
+        summoner = objectOwner;
+
     Unit* summonerUnit = summoner ? summoner->ToUnit() : nullptr;
 
     TempSummon* summon = nullptr;
@@ -2529,7 +2610,15 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
 
     summon->SetPrivateObjectOwner(privateObjectOwner);
 
-    AddToMap(summon->ToCreature());
+    if (summoner && !replaceObject.IsEmpty())
+        PhasingHandler::ReplaceObject(summoner, summon, replaceObject);
+
+    if (!AddToMap(summon->ToCreature()))
+    {
+        delete summon;
+        return nullptr;
+    }
+
     summon->InitSummon();
 
     // call MoveInLineOfSight for nearby creatures
@@ -2610,7 +2699,7 @@ TempSummon* WorldObject::SummonPersonalClone(Position const& pos, TempSummonType
 {
     if (Map* map = FindMap())
     {
-        if (TempSummon* summon = map->SummonCreature(GetEntry(), pos, nullptr, despawnTime.count(), this, spellId, vehId, privateObjectOwner))
+        if (TempSummon* summon = map->SummonCreature(GetEntry(), pos, nullptr, despawnTime.count(), this, spellId, vehId, privateObjectOwner, GetGUID()))
         {
             summon->SetTempSummonType(despawnType);
             return summon;
