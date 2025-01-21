@@ -23,15 +23,12 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
-  `username` varchar(32) NOT NULL DEFAULT '',
-  `salt` binary(32) DEFAULT NULL,
-  `verifier` binary(32) DEFAULT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
+  `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `salt` binary(32) NOT NULL,
+  `verifier` binary(32) NOT NULL,
   `session_key_auth` binary(40) DEFAULT NULL,
   `session_key_bnet` varbinary(64) DEFAULT NULL,
-  `sha_pass_hash` varchar(40) NOT NULL DEFAULT '',
-  `v` varchar(64) NOT NULL DEFAULT 'dummy value, use `verifier` instead',
-  `s` varchar(64) NOT NULL DEFAULT 'dummy value, use `salt` instead',
   `totp_secret` varbinary(128) DEFAULT NULL,
   `email` varchar(255) NOT NULL DEFAULT '',
   `reg_mail` varchar(255) NOT NULL DEFAULT '',
@@ -2461,6 +2458,7 @@ INSERT INTO `updates` VALUES
 ('2020_08_03_00_auth.sql','492CA77C0FAEEEF3E0492121B3A92689373ECFA3','RELEASED','2020-08-03 09:24:47',0),
 ('2020_08_03_01_auth.sql','EC1063396CA20A2303D83238470D41EF4439EC72','RELEASED','2020-08-03 00:00:01',0),
 ('2020_08_11_00_auth.sql','14C99177E43003D83A4D6F2227722F15FC15A1D0','ARCHIVED','2020-08-11 00:00:00',0),
+('2020_09_06_00_auth.sql','DC4B5D4C65EB138D5609F137799C3289B9CC2493','ARCHIVED','2020-09-06 00:00:00',0),
 ('2020_12_31_00_auth.sql','05C9C105D55C6588CDA0D75AE3B135B7E6B54C06','RELEASED','2020-12-31 12:58:21',0),
 ('2021_10_15_01_auth.sql','72A0437F0ADEC59FF9D6839DF845C473F693CA5B','RELEASED','2021-10-16 00:15:25',0),
 ('2021_10_16_00_auth.sql','FDC45C7BEFBAFC9BCE6C77377B026A59AE52EE21','RELEASED','2021-10-16 11:24:39',0),
