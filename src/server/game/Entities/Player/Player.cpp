@@ -2315,7 +2315,7 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate)
     sScriptMgr->OnGivePlayerXP(this, xp, victim);
 
     // XP to money conversion processed in Player::RewardQuest
-    if (level >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+    if (IsMaxLevel())
         return;
 
     uint32 bonus_xp;
@@ -2339,11 +2339,11 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate)
     uint32 nextLvlXP = GetXPForNextLevel();
     uint32 newXP = GetXP() + xp + bonus_xp;
 
-    while (newXP >= nextLvlXP && level < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+    while (newXP >= nextLvlXP && !IsMaxLevel())
     {
         newXP -= nextLvlXP;
 
-        if (level < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+        if (!IsMaxLevel())
             GiveLevel(level + 1);
 
         level = GetLevel();
@@ -2465,6 +2465,11 @@ void Player::GiveLevel(uint8 level)
     sScriptMgr->OnPlayerLevelChanged(this, oldLevel);
 }
 
+bool Player::IsMaxLevel() const
+{
+    return GetLevel() >= GetUInt32Value(PLAYER_FIELD_MAX_LEVEL);
+}
+
 void Player::InitTalentForLevel()
 {
     uint8 level = GetLevel();
@@ -2504,7 +2509,12 @@ void Player::InitStatsForLevel(bool reapplyMods)
     PlayerLevelInfo info;
     sObjectMgr->GetPlayerLevelInfo(GetRace(), GetClass(), GetLevel(), &info);
 
-    SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL));
+    uint8 exp_max_lvl = GetMaxLevelForExpansion(GetSession()->GetExpansion());
+    uint8 conf_max_lvl = sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL);
+    if (exp_max_lvl == DEFAULT_MAX_LEVEL || exp_max_lvl >= conf_max_lvl)
+        SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, conf_max_lvl);
+    else
+        SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, exp_max_lvl);
     SetUInt32Value(PLAYER_NEXT_LEVEL_XP, sObjectMgr->GetXPForLevel(GetLevel()));
     if (GetUInt32Value(PLAYER_XP) >= GetUInt32Value(PLAYER_NEXT_LEVEL_XP))
         SetUInt32Value(PLAYER_XP, GetUInt32Value(PLAYER_NEXT_LEVEL_XP) - 1);
@@ -6067,7 +6077,7 @@ void Player::CheckAreaExploreAndOutdoor()
 
         if (areaEntry->ExplorationLevel > 0)
         {
-            if (GetLevel() >= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+            if (IsMaxLevel())
             {
                 SendExplorationExperience(areaId, 0);
             }
@@ -15469,7 +15479,7 @@ void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rew
     uint32 XP = GetQuestXPReward(quest);
 
     int32 moneyRew = 0;
-    if (GetLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+    if (!IsMaxLevel())
         GiveXP(XP, nullptr);
     else
         moneyRew = int32(quest->GetRewMoneyMaxLevel() * sWorld->getRate(RATE_DROP_MONEY));
@@ -17105,7 +17115,7 @@ void Player::SendQuestReward(Quest const* quest, Creature const* questGiver, uin
 
     uint32 moneyReward;
 
-    if (GetLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+    if (!IsMaxLevel())
     {
         moneyReward = GetQuestMoneyReward(quest);
     }
