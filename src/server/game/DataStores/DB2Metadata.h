@@ -3341,8 +3341,8 @@ struct GameObjectArtKitMeta
     {
         static DB2MetaField const fields[2] =
         {
-            { FT_INT, 1, false },
-            { FT_INT, 3, false },
+            { FT_INT, 1, true },
+            { FT_INT, 3, true },
         };
 
         static DB2Meta instance(1266737, -1, 2, 0x6F65BC41, fields, -1);
