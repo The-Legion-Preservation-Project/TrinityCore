@@ -23,7 +23,6 @@
 #include "ObjectGuid.h"
 #include "Optional.h"
 #include "Position.h"
-#include "SharedDefines.h"
 #include <array>
 
 namespace WorldPackets
@@ -858,7 +857,8 @@ namespace WorldPackets
         class MirrorImageComponentedData final : public ServerPacket
         {
         public:
-            MirrorImageComponentedData() : ServerPacket(SMSG_MIRROR_IMAGE_COMPONENTED_DATA, 8 + 4 + 8 * 1 + 8 + 11 * 4) { }
+            MirrorImageComponentedData();
+            ~MirrorImageComponentedData();
 
             WorldPacket const* Write() override;
 
