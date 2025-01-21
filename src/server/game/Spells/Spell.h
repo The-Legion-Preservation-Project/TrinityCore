@@ -798,6 +798,7 @@ class TC_GAME_API Spell
 
         // Scripting system
         void LoadScripts();
+        void CallScriptOnPrecastHandler();
         void CallScriptBeforeCastHandlers();
         void CallScriptOnCastHandlers();
         void CallScriptAfterCastHandlers();
