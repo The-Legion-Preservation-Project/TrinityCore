@@ -93,6 +93,7 @@ enum InventoryType : uint8;
 enum ItemClass : uint8;
 enum LootError : uint8;
 enum LootType : uint8;
+enum class PlayerCreateMode : int8;
 
 namespace BattlePets
 {
@@ -1931,6 +1932,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool IsResurrectRequested() const { return _resurrectionData.get() != nullptr; }
         void ResurrectUsingRequestData();
         void ResurrectUsingRequestDataImpl();
+
+        PlayerCreateMode GetCreateMode() const { return PlayerCreateMode(0);  }
 
         uint8 getCinematic() const { return m_cinematic; }
         void setCinematic(uint8 cine) { m_cinematic = cine; }
