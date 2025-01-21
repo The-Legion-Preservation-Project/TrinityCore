@@ -4806,6 +4806,7 @@ enum CorpseDynFlags
 
 #define PLAYER_CORPSE_LOOT_ENTRY 1
 
+// EnumUtils: DESCRIBE THIS
 enum WeatherType
 {
     WEATHER_TYPE_FINE       = 0,

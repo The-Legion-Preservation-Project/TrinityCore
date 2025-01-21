@@ -5549,7 +5549,7 @@ void Player::UpdateSkillsForLevel()
 
 // This functions sets a skill line value (and adds if doesn't exist yet)
 // To "remove" a skill line, set it's values to zero
-void Player::SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal)
+void Player::SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal)
 {
     if (!id)
         return;
@@ -5622,9 +5622,9 @@ void Player::SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal)
                         RemoveSpell(sSpellMgr->GetFirstSpellInChain(pAbility->Spell));
 
             // Clear profession lines
-            if (GetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1) == id)
+            if (GetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1) == int32(id))
                 SetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1, 0);
-            else if (GetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1 + 1) == id)
+            else if (GetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1 + 1) == int32(id))
                 SetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1 + 1, 0);
         }
     }
@@ -5707,7 +5707,7 @@ bool Player::HasSkill(uint32 skill) const
     return (itr != mSkillStatus.end() && itr->second.uState != SKILL_DELETED);
 }
 
-uint16 Player::GetSkillStep(uint16 skill) const
+uint16 Player::GetSkillStep(uint32 skill) const
 {
     if (!skill)
         return 0;
