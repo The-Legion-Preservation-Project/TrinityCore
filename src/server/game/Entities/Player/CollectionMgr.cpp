@@ -263,7 +263,7 @@ void CollectionMgr::UpgradeHeirloom(uint32 itemId, int32 castItem)
 
     // Get heirloom offset to update only one part of dynamic field
     std::vector<uint32> const& fields = player->GetDynamicValues(PLAYER_DYNAMIC_FIELD_HEIRLOOMS);
-    uint16 offset = uint16(std::find(fields.begin(), fields.end(), itemId) - fields.begin());
+    uint16 offset = uint16(std::find(fields.begin(), fields.end(), int32(itemId)) - fields.begin());
 
     player->SetHeirloomFlags(offset, flags);
     itr->second.flags = flags;
@@ -303,7 +303,7 @@ void CollectionMgr::CheckHeirloomUpgrades(Item* item)
         if (newItemId)
         {
             std::vector<uint32> const& fields = player->GetDynamicValues(PLAYER_DYNAMIC_FIELD_HEIRLOOMS);
-            uint16 offset = uint16(std::find(fields.begin(), fields.end(), itr->first) - fields.begin());
+            uint16 offset = uint16(std::find(fields.begin(), fields.end(), int32(itr->first)) - fields.begin());
 
             player->SetHeirloom(offset, newItemId);
             player->SetHeirloomFlags(offset, 0);
@@ -320,7 +320,7 @@ void CollectionMgr::CheckHeirloomUpgrades(Item* item)
             if (bonusId != itr->second.bonusId)
                 item->ClearDynamicValue(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS);
 
-        if (std::find(fields.begin(), fields.end(), itr->second.bonusId) == fields.end())
+        if (std::find(fields.begin(), fields.end(), int32(itr->second.bonusId)) == fields.end())
             item->AddBonuses(itr->second.bonusId);
     }
 }
@@ -445,8 +445,14 @@ void CollectionMgr::SendSingleMountUpdate(std::pair<uint32, MountStatusFlags> mo
     player->SendDirectMessage(mountUpdate.Write());
 }
 
-struct DynamicBitsetBlockOutputIterator : public std::iterator<std::output_iterator_tag, void, void, void, void>
+struct DynamicBitsetBlockOutputIterator
 {
+    using iterator_category = std::output_iterator_tag;
+    using value_type = void;
+    using difference_type = void;
+    using pointer = void;
+    using reference = void;
+
     explicit DynamicBitsetBlockOutputIterator(std::function<void(uint32)>&& action) : _action(std::forward<std::function<void(uint32)>>(action)) { }
 
     DynamicBitsetBlockOutputIterator& operator=(uint32 value)
