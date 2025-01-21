@@ -1100,7 +1100,7 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
     // SpellAuraOptionsEntry
     if (SpellAuraOptionsEntry const* _options = data.AuraOptions)
     {
-        ProcFlags = _options->ProcTypeMask;
+        ProcFlags = { _options->ProcTypeMask, 0 };
         ProcChance = _options->ProcChance;
         ProcCharges = _options->ProcCharges;
         ProcCooldown = _options->ProcCategoryRecovery;
