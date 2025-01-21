@@ -65,12 +65,12 @@ public:
                 PathGenerator generatedPath(GetCaster());
                 generatedPath.SetPathLengthLimit(range);
 
-                bool result = generatedPath.CalculatePath(dest->GetPositionX(), dest->GetPositionY(), dest->GetPositionZ(), false, true);
+                bool result = generatedPath.CalculatePath(dest->GetPositionX(), dest->GetPositionY(), dest->GetPositionZ(), false);
                 if (generatedPath.GetPathType() & PATHFIND_SHORT)
                     return SPELL_FAILED_OUT_OF_RANGE;
                 else if (!result || generatedPath.GetPathType() & PATHFIND_NOPATH)
                 {
-                    result = generatedPath.CalculatePath(dest->GetPositionX(), dest->GetPositionY(), dest->GetPositionZ(), false, false);
+                    result = generatedPath.CalculatePath(dest->GetPositionX(), dest->GetPositionY(), dest->GetPositionZ(), false);
                     if (generatedPath.GetPathType() & PATHFIND_SHORT)
                         return SPELL_FAILED_OUT_OF_RANGE;
                     else if (!result || generatedPath.GetPathType() & PATHFIND_NOPATH)
