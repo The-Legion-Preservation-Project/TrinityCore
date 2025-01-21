@@ -27,44 +27,50 @@ static constexpr char HYPERLINK_DATA_DELIMITER = ':';
 class HyperlinkDataTokenizer
 {
     public:
-    HyperlinkDataTokenizer(char const* pos, size_t len, bool allowEmptyTokens = false) : _pos(pos), _len(len), _allowEmptyTokens(allowEmptyTokens), _empty(false) {}
+        HyperlinkDataTokenizer(std::string_view str, bool allowEmptyTokens = false) : _str(str), _allowEmptyTokens(allowEmptyTokens) {}
 
-    template <typename T>
-    bool TryConsumeTo(T& val)
-    {
-        if (_empty)
-            return false;
-
-        char const* firstPos = _pos;
-        size_t thisLen = 0;
-        // find next delimiter
-        for (; _len && *_pos != HYPERLINK_DATA_DELIMITER; --_len, ++_pos, ++thisLen);
-        if (_len)
-            --_len, ++_pos; // skip the delimiter
-        else
-            _empty = true;
-
-        if (_allowEmptyTokens && !thisLen)
+        template <typename T>
+        bool TryConsumeTo(T& val)
         {
-            val = T();
+            if (IsEmpty())
+            {
+                if (_allowEmptyTokens)
+                {
+                    val = T();
+                    return true;
+                }
+                return false;
+            }
+
+            if (size_t off = _str.find(HYPERLINK_DATA_DELIMITER); off != std::string_view::npos)
+            {
+                if (!Trinity::Hyperlinks::LinkTags::base_tag::StoreTo(val, _str.substr(0, off)))
+                {
+                    if (off != 0 || !_allowEmptyTokens)
+                        return false;
+                    val = T();
+                }
+                _str = _str.substr(off+1);
+            }
+            else
+            {
+                if (!Trinity::Hyperlinks::LinkTags::base_tag::StoreTo(val, _str))
+                    return false;
+                _str = std::string_view();
+            }
             return true;
         }
 
-        return Trinity::Hyperlinks::LinkTags::base_tag::StoreTo(val, firstPos, thisLen);
-    }
-
-    bool IsEmpty() { return _empty; }
+        bool IsEmpty() const { return _str.empty(); }
 
     private:
-    char const* _pos;
-    size_t _len;
-    bool _allowEmptyTokens;
-    bool _empty;
+        std::string_view _str;
+        bool _allowEmptyTokens;
 };
 
-bool Trinity::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 achievementId;
     if (!t.TryConsumeTo(achievementId))
         return false;
@@ -74,9 +80,9 @@ bool Trinity::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& va
         t.TryConsumeTo(val.Criteria[1]) && t.TryConsumeTo(val.Criteria[2]) && t.TryConsumeTo(val.Criteria[3]) && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::apower::StoreTo(ArtifactPowerLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::apower::StoreTo(ArtifactPowerLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 artifactPowerId;
     if (!(t.TryConsumeTo(artifactPowerId) && t.TryConsumeTo(val.PurchasedRank) && t.TryConsumeTo(val.CurrentRankWithBonus) && t.IsEmpty()))
         return false;
@@ -88,21 +94,22 @@ bool Trinity::Hyperlinks::LinkTags::apower::StoreTo(ArtifactPowerLinkData& val, 
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::battlepet::StoreTo(BattlePetLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::battlepet::StoreTo(BattlePetLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 battlePetSpeciesId;
     if (!t.TryConsumeTo(battlePetSpeciesId))
         return false;
     return (val.Species = sBattlePetSpeciesStore.LookupEntry(battlePetSpeciesId)) && t.TryConsumeTo(val.Level)
         && t.TryConsumeTo(val.Quality) && val.Quality < MAX_ITEM_QUALITY
         && t.TryConsumeTo(val.MaxHealth) && t.TryConsumeTo(val.Power) && t.TryConsumeTo(val.Speed)
-        && t.TryConsumeTo(val.PetGuid) && val.PetGuid.GetHigh() == HighGuid::BattlePet && t.TryConsumeTo(val.DisplayId);
+        && t.TryConsumeTo(val.PetGuid) && val.PetGuid.GetHigh() == HighGuid::BattlePet && t.TryConsumeTo(val.DisplayId)
+        && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::currency::StoreTo(CurrencyLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::currency::StoreTo(CurrencyLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 currencyId;
     if (!t.TryConsumeTo(currencyId))
         return false;
@@ -112,18 +119,18 @@ bool Trinity::Hyperlinks::LinkTags::currency::StoreTo(CurrencyLinkData& val, cha
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::enchant::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::enchant::StoreTo(SpellInfo const*& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 spellId;
     if (!(t.TryConsumeTo(spellId) && t.IsEmpty()))
         return false;
     return !!(val = sSpellMgr->GetSpellInfo(spellId, DIFFICULTY_NONE)) && val->HasAttribute(SPELL_ATTR0_TRADESPELL);
 }
 
-bool Trinity::Hyperlinks::LinkTags::garrfollower::StoreTo(GarrisonFollowerLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::garrfollower::StoreTo(GarrisonFollowerLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 garrFollowerId;
     if (!t.TryConsumeTo(garrFollowerId))
         return false;
@@ -132,7 +139,7 @@ bool Trinity::Hyperlinks::LinkTags::garrfollower::StoreTo(GarrisonFollowerLinkDa
     if (!val.Follower || !t.TryConsumeTo(val.Quality) || val.Quality >= MAX_ITEM_QUALITY || !t.TryConsumeTo(val.Level) || !t.TryConsumeTo(val.ItemLevel)
         || !t.TryConsumeTo(val.Abilities[0]) || !t.TryConsumeTo(val.Abilities[1]) || !t.TryConsumeTo(val.Abilities[2]) || !t.TryConsumeTo(val.Abilities[3])
         || !t.TryConsumeTo(val.Traits[0]) || !t.TryConsumeTo(val.Traits[1]) || !t.TryConsumeTo(val.Traits[2]) || !t.TryConsumeTo(val.Traits[3])
-        || !t.TryConsumeTo(val.Specialization))
+        || !t.TryConsumeTo(val.Specialization) || !t.IsEmpty())
         return false;
 
     for (uint32 ability : val.Abilities)
@@ -149,27 +156,27 @@ bool Trinity::Hyperlinks::LinkTags::garrfollower::StoreTo(GarrisonFollowerLinkDa
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::garrfollowerability::StoreTo(GarrAbilityEntry const*& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::garrfollowerability::StoreTo(GarrAbilityEntry const*& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 garrAbilityId;
     if (!t.TryConsumeTo(garrAbilityId))
         return false;
     return !!(val = sGarrAbilityStore.LookupEntry(garrAbilityId)) && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::garrmission::StoreTo(GarrisonMissionLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::garrmission::StoreTo(GarrisonMissionLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 garrMissionId;
     if (!t.TryConsumeTo(garrMissionId))
         return false;
     return !!(val.Mission = sGarrMissionStore.LookupEntry(garrMissionId)) && t.TryConsumeTo(val.DbID) && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::instancelock::StoreTo(InstanceLockLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::instancelock::StoreTo(InstanceLockLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     if (!t.TryConsumeTo(val.Owner))
         return false;
     uint32 mapId;
@@ -180,9 +187,9 @@ bool Trinity::Hyperlinks::LinkTags::instancelock::StoreTo(InstanceLockLinkData& 
         && t.TryConsumeTo(val.CompletedEncountersMask) && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len, true);
+    HyperlinkDataTokenizer t(text, true);
     uint32 itemId, dummy, numBonusListIDs;
     int32 modifiersMask;
     if (!t.TryConsumeTo(itemId))
@@ -244,9 +251,9 @@ bool Trinity::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, char const*
     return t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::journal::StoreTo(JournalLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::journal::StoreTo(JournalLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 id;
     if (!t.TryConsumeTo(val.Type) || !t.TryConsumeTo(id) || !t.TryConsumeTo(val.Difficulty) || !t.IsEmpty())
         return false;
@@ -290,9 +297,9 @@ bool Trinity::Hyperlinks::LinkTags::journal::StoreTo(JournalLinkData& val, char 
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::keystone::StoreTo(KeystoneLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::keystone::StoreTo(KeystoneLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 mapChallengeModeId;
     if (!t.TryConsumeTo(val.ItemId) || !t.TryConsumeTo(mapChallengeModeId) || !t.TryConsumeTo(val.Level)
         || !t.TryConsumeTo(val.Affix[0]) || !t.TryConsumeTo(val.Affix[1]) || !t.TryConsumeTo(val.Affix[2]) || !t.TryConsumeTo(val.Affix[3])
@@ -310,9 +317,9 @@ bool Trinity::Hyperlinks::LinkTags::keystone::StoreTo(KeystoneLinkData& val, cha
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::pvptal::StoreTo(PvpTalentEntry const*& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::pvptal::StoreTo(PvpTalentEntry const*& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 pvpTalentId;
     if (!(t.TryConsumeTo(pvpTalentId) && t.IsEmpty()))
         return false;
@@ -321,18 +328,18 @@ bool Trinity::Hyperlinks::LinkTags::pvptal::StoreTo(PvpTalentEntry const*& val, 
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::quest::StoreTo(QuestLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::quest::StoreTo(QuestLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 questId;
     if (!t.TryConsumeTo(questId))
         return false;
     return (val.Quest = sObjectMgr->GetQuestTemplate(questId)) && t.TryConsumeTo(val.ContentTuningId) && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::spell::StoreTo(SpellLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::spell::StoreTo(SpellLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 spellId, glyphPropertiesId;
     if (!(t.TryConsumeTo(spellId) && t.TryConsumeTo(glyphPropertiesId) && t.IsEmpty()))
         return false;
@@ -340,9 +347,9 @@ bool Trinity::Hyperlinks::LinkTags::spell::StoreTo(SpellLinkData& val, char cons
         && (!glyphPropertiesId || !!(val.Glyph = sGlyphPropertiesStore.LookupEntry(glyphPropertiesId)));
 }
 
-bool Trinity::Hyperlinks::LinkTags::talent::StoreTo(TalentEntry const*& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::talent::StoreTo(TalentEntry const*& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 talentId;
     if (!(t.TryConsumeTo(talentId) && t.IsEmpty()))
         return false;
@@ -351,9 +358,9 @@ bool Trinity::Hyperlinks::LinkTags::talent::StoreTo(TalentEntry const*& val, cha
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::trade::StoreTo(TradeskillLinkData& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::trade::StoreTo(TradeskillLinkData& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 spellId, skillId;
     if (!t.TryConsumeTo(val.Owner) || !t.TryConsumeTo(spellId) || !t.TryConsumeTo(skillId) || !t.IsEmpty())
         return false;
@@ -364,27 +371,27 @@ bool Trinity::Hyperlinks::LinkTags::trade::StoreTo(TradeskillLinkData& val, char
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::transmogappearance::StoreTo(ItemModifiedAppearanceEntry const*& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::transmogappearance::StoreTo(ItemModifiedAppearanceEntry const*& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 itemModifiedAppearanceId;
     if (!t.TryConsumeTo(itemModifiedAppearanceId))
         return false;
     return !!(val = sItemModifiedAppearanceStore.LookupEntry(itemModifiedAppearanceId)) && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::transmogillusion::StoreTo(SpellItemEnchantmentEntry const*& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::transmogillusion::StoreTo(SpellItemEnchantmentEntry const*& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 spellItemEnchantmentId;
     if (!t.TryConsumeTo(spellItemEnchantmentId))
         return false;
     return !!(val = sSpellItemEnchantmentStore.LookupEntry(spellItemEnchantmentId)) && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::transmogset::StoreTo(TransmogSetEntry const*& val, char const* pos, size_t len)
+bool Trinity::Hyperlinks::LinkTags::transmogset::StoreTo(TransmogSetEntry const*& val, std::string_view text)
 {
-    HyperlinkDataTokenizer t(pos, len);
+    HyperlinkDataTokenizer t(text);
     uint32 transmogSetId;
     if (!t.TryConsumeTo(transmogSetId))
         return false;
