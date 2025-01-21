@@ -5579,6 +5579,7 @@ SpellCastResult Spell::CheckCast(bool strict, int32* param1 /*= nullptr*/, int32
         return castResult;
 
     uint32 approximateAuraEffectMask = 0;
+    uint32 nonAuraEffectMask = 0;
     for (SpellEffectInfo const& spellEffectInfo : m_spellInfo->GetEffects())
     {
         // for effects of spells that have only one target
@@ -6139,6 +6140,8 @@ SpellCastResult Spell::CheckCast(bool strict, int32* param1 /*= nullptr*/, int32
 
         if (spellEffectInfo.IsAura())
             approximateAuraEffectMask |= 1 << spellEffectInfo.EffectIndex;
+        else if (spellEffectInfo.IsEffect())
+            nonAuraEffectMask |= 1 << spellEffectInfo.EffectIndex;
     }
 
     for (SpellEffectInfo const& spellEffectInfo : m_spellInfo->GetEffects())
@@ -6260,7 +6263,7 @@ SpellCastResult Spell::CheckCast(bool strict, int32* param1 /*= nullptr*/, int32
         }
 
         // check if target already has the same type, but more powerful aura
-        if (!m_spellInfo->IsTargetingArea())
+        if (!nonAuraEffectMask && (approximateAuraEffectMask & (1 << spellEffectInfo.EffectIndex)) && !m_spellInfo->IsTargetingArea())
             if (Unit* target = m_targets.GetUnitTarget())
                 if (!target->IsHighestExclusiveAuraEffect(m_spellInfo, spellEffectInfo.ApplyAuraName,
                     spellEffectInfo.CalcValue(m_caster, &m_spellValue->EffectBasePoints[spellEffectInfo.EffectIndex], nullptr, nullptr, m_castItemEntry, m_castItemLevel),
