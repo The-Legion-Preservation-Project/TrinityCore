@@ -16,6 +16,7 @@
  */
 
 #include "WorldSession.h"
+#include "AchievementMgr.h"
 #include "Guild.h"
 #include "GuildMgr.h"
 #include "InspectPackets.h"
