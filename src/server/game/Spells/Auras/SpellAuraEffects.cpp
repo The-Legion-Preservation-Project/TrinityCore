@@ -5365,8 +5365,8 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
     Unit::DealDamageMods(caster, target, damage, &absorb);
 
     // Set trigger flag
-    uint32 procAttacker = PROC_FLAG_DONE_PERIODIC;
-    uint32 procVictim   = PROC_FLAG_TAKEN_PERIODIC;
+    ProcFlagsInit procAttacker = PROC_FLAG_DONE_PERIODIC;
+    ProcFlagsInit procVictim   = PROC_FLAG_TAKEN_PERIODIC;
     uint32 hitMask = damageInfo.GetHitMask();
     if (damage)
     {
@@ -5460,8 +5460,8 @@ void AuraEffect::HandlePeriodicHealthLeechAuraTick(Unit* target, Unit* caster) c
         log.HitInfo |= SPELL_HIT_TYPE_CRIT;
 
     // Set trigger flag
-    uint32 procAttacker = PROC_FLAG_DONE_PERIODIC;
-    uint32 procVictim   = PROC_FLAG_TAKEN_PERIODIC;
+    ProcFlagsInit procAttacker = PROC_FLAG_DONE_PERIODIC;
+    ProcFlagsInit procVictim   = PROC_FLAG_TAKEN_PERIODIC;
     uint32 hitMask = damageInfo.GetHitMask();
     if (damage)
     {
@@ -5574,8 +5574,8 @@ void AuraEffect::HandlePeriodicHealAurasTick(Unit* target, Unit* caster) const
     if (GetAuraType() == SPELL_AURA_OBS_MOD_HEALTH)
         return;
 
-    uint32 procAttacker = PROC_FLAG_DONE_PERIODIC;
-    uint32 procVictim   = PROC_FLAG_TAKEN_PERIODIC;
+    ProcFlagsInit procAttacker = PROC_FLAG_DONE_PERIODIC;
+    ProcFlagsInit procVictim   = PROC_FLAG_TAKEN_PERIODIC;
     uint32 hitMask = crit ? PROC_HIT_CRITICAL : PROC_HIT_NORMAL;
     // ignore item heals
     if (GetBase()->GetCastItemGUID().IsEmpty())
@@ -5736,8 +5736,8 @@ void AuraEffect::HandlePeriodicPowerBurnAuraTick(Unit* target, Unit* caster) con
     Unit::DealDamageMods(damageInfo.attacker, damageInfo.target, damageInfo.damage, &damageInfo.absorb);
 
     // Set trigger flag
-    uint32 procAttacker = PROC_FLAG_DONE_PERIODIC;
-    uint32 procVictim   = PROC_FLAG_TAKEN_PERIODIC;
+    ProcFlagsInit procAttacker = PROC_FLAG_DONE_PERIODIC;
+    ProcFlagsInit procVictim   = PROC_FLAG_TAKEN_PERIODIC;
     uint32 hitMask      = createProcHitMask(&damageInfo, SPELL_MISS_NONE);
     uint32 spellTypeMask = PROC_SPELL_TYPE_NO_DMG_HEAL;
     if (damageInfo.damage)
