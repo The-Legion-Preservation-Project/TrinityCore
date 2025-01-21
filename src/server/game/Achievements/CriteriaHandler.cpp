@@ -16,7 +16,6 @@
  */
 
 #include "CriteriaHandler.h"
-#include "AchievementMgr.h"
 #include "ArenaTeamMgr.h"
 #include "BattlefieldMgr.h"
 #include "Battleground.h"

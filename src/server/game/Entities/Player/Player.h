@@ -33,7 +33,6 @@
 #include "QuestDef.h"
 #include "RestMgr.h"
 #include "SceneMgr.h"
-#include <queue>
 
 struct AccessRequirement;
 struct AchievementEntry;

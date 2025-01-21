@@ -25,7 +25,6 @@
 #include "ObjectGuid.h"
 #include "Optional.h"
 #include <map>
-#include <set>
 #include <unordered_map>
 
 class Item;
