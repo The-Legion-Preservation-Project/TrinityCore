@@ -546,8 +546,8 @@ bool Creature::InitEntry(uint32 entry, CreatureData const* data /*= nullptr*/)
     SetSpeedRate(MOVE_SWIM,   1.0f); // using 1.0 rate
     SetSpeedRate(MOVE_FLIGHT, 1.0f); // using 1.0 rate
 
-    // Will set UNIT_FIELD_BOUNDINGRADIUS and UNIT_FIELD_COMBATREACH
-    SetObjectScale(cinfo->scale);
+    // Will set UNIT_FIELD_BOUNDINGRADIUS, UNIT_FIELD_COMBATREACH and UNIT_FIELD_DISPLAYSCALE
+    SetObjectScale(GetNativeObjectScale());
 
     SetHoverHeight(cinfo->HoverHeight);
 
@@ -3104,6 +3104,11 @@ Unit* Creature::SelectNearestHostileUnitInAggroRange(bool useLOS, bool ignoreCiv
     Cell::VisitGridObjects(this, searcher, MAX_AGGRO_RADIUS);
 
     return target;
+}
+
+float Creature::GetNativeObjectScale() const
+{
+    return GetCreatureTemplate()->scale;
 }
 
 void Creature::SetObjectScale(float scale)
