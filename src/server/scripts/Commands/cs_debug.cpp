@@ -146,19 +146,9 @@ public:
         return commandTable;
     }
 
-    static bool HandleDebugPlayCinematicCommand(ChatHandler* handler, char const* args)
+    // cinematicId - ID from CinematicSequences.dbc
+    static bool HandleDebugPlayCinematicCommand(ChatHandler* handler, uint32 cinematicId)
     {
-        // USAGE: .debug play cinematic #cinematicId
-        // #cinematicId - ID decimal number from CinemaicSequences.dbc (1st column)
-        if (!*args)
-        {
-            handler->SendSysMessage(LANG_BAD_VALUE);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
-        uint32 cinematicId = atoul(args);
-
         CinematicSequencesEntry const* cineSeq = sCinematicSequencesStore.LookupEntry(cinematicId);
         if (!cineSeq)
         {
@@ -166,7 +156,6 @@ public:
             handler->SetSentErrorMessage(true);
             return false;
         }
-
 
         // Dump camera locations
         if (std::vector<FlyByCamera> const* flyByCameras = GetFlyByCameras(cineSeq->Camera[0]))
@@ -185,18 +174,9 @@ public:
         return true;
     }
 
-    static bool HandleDebugPlayMovieCommand(ChatHandler* handler, char const* args)
+    // movieId - ID from Movie.dbc
+    static bool HandleDebugPlayMovieCommand(ChatHandler* handler, uint32 movieId)
     {
-        // USAGE: .debug play movie #movieId
-        // #movieId - ID decimal number from Movie.dbc (1st column)
-        if (!*args)
-        {
-            handler->SendSysMessage(LANG_BAD_VALUE);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
-        uint32 movieId = atoul(args);
 
         if (!sMovieStore.LookupEntry(movieId))
         {
@@ -209,20 +189,9 @@ public:
         return true;
     }
 
-    //Play sound
-    static bool HandleDebugPlaySoundCommand(ChatHandler* handler, char const* args)
+    // soundId - ID from SoundKit.db2
+    static bool HandleDebugPlaySoundCommand(ChatHandler* handler, uint32 soundId)
     {
-        // USAGE: .debug playsound #soundId
-        // #soundId - ID decimal number from SoundEntries.dbc (1st column)
-        if (!*args)
-        {
-            handler->SendSysMessage(LANG_BAD_VALUE);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
-        uint32 soundId = atoul(args);
-
         if (!sSoundKitStore.LookupEntry(soundId))
         {
             handler->PSendSysMessage(LANG_SOUND_NOT_EXIST, soundId);
@@ -249,18 +218,9 @@ public:
         return true;
     }
 
-    static bool HandleDebugPlayMusicCommand(ChatHandler* handler, char const* args)
+    // musicId - ID from SoundEntries.dbc
+    static bool HandleDebugPlayMusicCommand(ChatHandler* handler, uint32 musicId)
     {
-        // USAGE: .debug play music #musicId
-        // #musicId - ID decimal number from SoundEntries.dbc (1st column)
-        if (!*args)
-        {
-            handler->SendSysMessage(LANG_BAD_VALUE);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
-        uint32 musicId = atoul(args);
         if (!sSoundKitStore.LookupEntry(musicId))
         {
             handler->PSendSysMessage(LANG_SOUND_NOT_EXIST, musicId);
@@ -347,7 +307,7 @@ public:
         return true;
     }
 
-    static bool HandleDebugSendOpcodeCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleDebugSendOpcodeCommand(ChatHandler* handler)
     {
         Unit* unit = handler->getSelectedUnit();
         Player* player = nullptr;
@@ -498,21 +458,13 @@ public:
         return true;
     }
 
-    static bool HandleDebugUpdateWorldStateCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugUpdateWorldStateCommand(ChatHandler* handler, uint32 variable, uint32 value)
     {
-        char* w = strtok((char*)args, " ");
-        char* s = strtok(nullptr, " ");
-
-        if (!w || !s)
-            return false;
-
-        uint32 world = atoul(w);
-        uint32 state = atoul(s);
-        handler->GetSession()->GetPlayer()->SendUpdateWorldState(world, state);
+        handler->GetSession()->GetPlayer()->SendUpdateWorldState(variable, value);
         return true;
     }
 
-    static bool HandleDebugAreaTriggersCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleDebugAreaTriggersCommand(ChatHandler* handler)
     {
         Player* player = handler->GetSession()->GetPlayer();
         if (!player->isDebugAreaTriggers)
@@ -528,7 +480,6 @@ public:
         return true;
     }
 
-    //Send notification in channel
     static bool HandleDebugSendChannelNotifyCommand(ChatHandler* handler, char const* args)
     {
         if (!*args)
@@ -544,7 +495,6 @@ public:
         return true;
     }
 
-    //Send notification in chat
     static bool HandleDebugSendChatMsgCommand(ChatHandler* handler, char const* args)
     {
         if (!*args)
@@ -565,7 +515,7 @@ public:
         return true;
     }
 
-    static bool HandleDebugGetLootRecipientCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleDebugGetLootRecipientCommand(ChatHandler* handler)
     {
         Creature* target = handler->getSelectedCreature();
         if (!target)
@@ -584,13 +534,8 @@ public:
         return true;
     }
 
-    static bool HandleDebugGetItemStateCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugGetItemStateCommand(ChatHandler* handler, std::string itemState)
     {
-        if (!*args)
-            return false;
-
-        std::string itemState = args;
-
         ItemUpdateState state = ITEM_UNCHANGED;
         bool listQueue = false;
         bool checkAll = false;
@@ -855,19 +800,19 @@ public:
         return true;
     }
 
-    static bool HandleDebugBattlegroundCommand(ChatHandler* /*handler*/, char const* /*args*/)
+    static bool HandleDebugBattlegroundCommand(ChatHandler* /*handler*/)
     {
         sBattlegroundMgr->ToggleTesting();
         return true;
     }
 
-    static bool HandleDebugArenaCommand(ChatHandler* /*handler*/, char const* /*args*/)
+    static bool HandleDebugArenaCommand(ChatHandler* /*handler*/)
     {
         sBattlegroundMgr->ToggleArenaTesting();
         return true;
     }
 
-    static bool HandleDebugThreatListCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleDebugThreatListCommand(ChatHandler* handler)
     {
         Unit* target = handler->getSelectedUnit();
         if (!target)
@@ -952,7 +897,7 @@ public:
         return true;
     }
 
-    static bool HandleDebugThreatInfoCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleDebugThreatInfoCommand(ChatHandler* handler)
     {
         Unit* target = handler->getSelectedUnit();
         if (!target)
@@ -1027,7 +972,7 @@ public:
         return true;
     }
 
-    static bool HandleDebugCombatListCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleDebugCombatListCommand(ChatHandler* handler)
     {
         Unit* target = handler->getSelectedUnit();
         if (!target)
@@ -1066,26 +1011,17 @@ public:
         return true;
     }
 
-    static bool HandleDebugEnterVehicleCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugEnterVehicleCommand(ChatHandler* handler, uint32 entry, Optional<int8> seatId)
     {
         Unit* target = handler->getSelectedUnit();
         if (!target || !target->IsVehicle())
             return false;
 
-        if (!args)
-            return false;
-
-        char* i = strtok((char*)args, " ");
-        if (!i)
-            return false;
-
-        char* j = strtok(nullptr, " ");
-
-        uint32 entry = atoul(i);
-        int8 seatId = j ? (int8)atoi(j) : -1;
+        if (!seatId)
+            seatId = -1;
 
         if (!entry)
-            handler->GetSession()->GetPlayer()->EnterVehicle(target, seatId);
+            handler->GetSession()->GetPlayer()->EnterVehicle(target, *seatId);
         else
         {
             Creature* passenger = nullptr;
@@ -1094,40 +1030,27 @@ public:
             Cell::VisitAllObjects(handler->GetSession()->GetPlayer(), searcher, 30.0f);
             if (!passenger || passenger == target)
                 return false;
-            passenger->EnterVehicle(target, seatId);
+            passenger->EnterVehicle(target, *seatId);
         }
 
-        handler->PSendSysMessage("Unit %u entered vehicle %d", entry, (int32)seatId);
+        handler->PSendSysMessage("Unit %u entered vehicle %hhd", entry, *seatId);
         return true;
     }
 
-    static bool HandleDebugSpawnVehicleCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugSpawnVehicleCommand(ChatHandler* handler, uint32 entry, Optional<uint32> id)
     {
-        if (!*args)
-            return false;
-
-        char* e = strtok((char*)args, " ");
-        char* i = strtok(nullptr, " ");
-
-        if (!e)
-            return false;
-
-        uint32 entry = atoul(e);
-
         float x, y, z, o = handler->GetSession()->GetPlayer()->GetOrientation();
         handler->GetSession()->GetPlayer()->GetClosePoint(x, y, z, handler->GetSession()->GetPlayer()->GetCombatReach());
 
-        if (!i)
+        if (!id)
             return handler->GetSession()->GetPlayer()->SummonCreature(entry, x, y, z, o) != nullptr;
-
-        uint32 id = atoul(i);
 
         CreatureTemplate const* ci = sObjectMgr->GetCreatureTemplate(entry);
 
         if (!ci)
             return false;
 
-        VehicleEntry const* ve = sVehicleStore.LookupEntry(id);
+        VehicleEntry const* ve = sVehicleStore.LookupEntry(*id);
 
         if (!ve)
             return false;
@@ -1135,7 +1058,7 @@ public:
         Map* map = handler->GetSession()->GetPlayer()->GetMap();
         Position pos = { x, y, z, o };
 
-        Creature* v = Creature::CreateCreature(entry, map, pos, id);
+        Creature* v = Creature::CreateCreature(entry, map, pos, *id);
         if (!v)
             return false;
 
@@ -1146,7 +1069,7 @@ public:
         return true;
     }
 
-    static bool HandleDebugSendLargePacketCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleDebugSendLargePacketCommand(ChatHandler* handler)
     {
         char const* stuffingString = "This is a dummy string to push the packet's size beyond 128000 bytes. ";
         std::ostringstream ss;
@@ -1156,30 +1079,18 @@ public:
         return true;
     }
 
-    static bool HandleDebugSendSetPhaseShiftCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugSendSetPhaseShiftCommand(ChatHandler* handler, Optional<uint32> phaseId, Optional<uint32> visibleMapId, Optional<uint32> uiMapAreaIdSwap)
     {
-        if (!*args)
-            return false;
-
-        char* t = strtok((char*)args, " ");
-        char* p = strtok(nullptr, " ");
-        char* m = strtok(nullptr, " ");
-
-        if (!t)
-            return false;
-
         PhaseShift phaseShift;
 
-        if (uint32 ut = (uint32)atoi(t))
-            phaseShift.AddVisibleMapId(ut, nullptr);
+        if (phaseId)
+            phaseShift.AddPhase(*phaseId, PhaseFlags::None, nullptr);
 
-        if (p)
-            if (uint32 up = (uint32)atoi(p))
-                phaseShift.AddPhase(up, PhaseFlags::None, nullptr);
+        if (visibleMapId)
+            phaseShift.AddVisibleMapId(*visibleMapId, nullptr);
 
-        if (m)
-            if (uint32 um = (uint32)atoi(m))
-                phaseShift.AddUiWorldMapAreaIdSwap(um);
+        if (uiMapAreaIdSwap)
+            phaseShift.AddUiWorldMapAreaIdSwap(um);
 
         PhasingHandler::SendToPlayer(handler->GetSession()->GetPlayer(), phaseShift);
         return true;
@@ -1243,17 +1154,8 @@ public:
         return true;
     }
 
-    static bool HandleDebugItemExpireCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugItemExpireCommand(ChatHandler* handler, ObjectGuid::LowType guid)
     {
-        if (!*args)
-            return false;
-
-        char* e = strtok((char*)args, " ");
-        if (!e)
-            return false;
-
-        ObjectGuid::LowType guid = strtoull(e, nullptr, 10);
-
         Item* i = handler->GetSession()->GetPlayer()->GetItemByGuid(ObjectGuid::Create<HighGuid::Item>(guid));
 
         if (!i)
@@ -1282,7 +1184,7 @@ public:
         return true;
     }
 
-    static bool HandleDebugLoSCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleDebugLoSCommand(ChatHandler* handler)
     {
         if (Unit* unit = handler->getSelectedUnit())
         {
@@ -1576,7 +1478,7 @@ public:
         return true;
     }
 
-    static bool HandleWPGPSCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleWPGPSCommand(ChatHandler* handler)
     {
         Player* player = handler->GetSession()->GetPlayer();
 
@@ -1586,16 +1488,16 @@ public:
         return true;
     }
 
-    static bool HandleDebugTransportCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugTransportCommand(ChatHandler* handler, std::string operation)
     {
         Transport* transport = handler->GetSession()->GetPlayer()->GetTransport();
         if (!transport)
             return false;
 
         bool start = false;
-        if (!stricmp(args, "stop"))
+        if (StringEqualI(operation, "stop"))
             transport->EnableMovement(false);
-        else if (!stricmp(args, "start"))
+        else if (StringEqualI(operation, "start"))
         {
             transport->EnableMovement(true);
             start = true;
@@ -1612,19 +1514,16 @@ public:
         return true;
     }
 
-    static bool HandleDebugLoadCellsCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugLoadCellsCommand(ChatHandler* handler, Optional<uint32> mapId)
     {
         Player* player = handler->GetSession()->GetPlayer();
         if (!player)
             return false;
 
         Map* map = nullptr;
+        if (mapId)
+            map = sMapMgr->FindBaseNonInstanceMap(*mapId);
 
-        if (*args)
-        {
-            int32 mapId = atoi(args);
-            map = sMapMgr->FindBaseNonInstanceMap(mapId);
-        }
         if (!map)
             map = player->GetMap();
 
@@ -1633,7 +1532,7 @@ public:
         return true;
     }
 
-    static bool HandleDebugBoundaryCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugBoundaryCommand(ChatHandler* handler, Optional<ExactSequence<'f', 'i', 'l','l'>> fill, Optional<uint32> durationArg)
     {
         Player* player = handler->GetSession()->GetPlayer();
         if (!player)
@@ -1642,23 +1541,18 @@ public:
         if (!target || !target->IsAIEnabled())
             return false;
 
-        char* fill_str = args ? strtok((char*)args, " ") : nullptr;
-        char* duration_str = args ? strtok(nullptr, " ") : nullptr;
-
-        Seconds duration = duration_str ? Seconds(atoi(duration_str)) : 0s;
-        if (duration <= 0s || duration >= 30min) // arbitary upper limit
+        Seconds duration = durationArg ? Seconds(*durationArg) : 0s;
+        if (duration <= 0s || duration >= 30min) // arbitrary upper limit
             duration = 3min;
 
-        bool doFill = fill_str ? (stricmp(fill_str, "FILL") == 0) : false;
-
-        int32 errMsg = target->AI()->VisualizeBoundary(duration, player, doFill);
+        int32 errMsg = target->AI()->VisualizeBoundary(duration, player, fill.has_value());
         if (errMsg > 0)
             handler->PSendSysMessage(errMsg);
 
         return true;
     }
 
-    static bool HandleDebugPhaseCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleDebugPhaseCommand(ChatHandler* handler)
     {
         Unit* target = handler->getSelectedUnit();
 
@@ -1678,55 +1572,50 @@ public:
         return true;
     }
 
-    static bool HandleDebugRaidResetCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugRaidResetCommand(ChatHandler* handler, uint32 mapId, Optional<uint32> difficulty)
     {
-        char* map_str = args ? strtok((char*)args, " ") : nullptr;
-        char* difficulty_str = args ? strtok(nullptr, " ") : nullptr;
-
-        int32 map = map_str ? atoi(map_str) : -1;
-        MapEntry const* mEntry = (map >= 0) ? sMapStore.LookupEntry(map) : nullptr;
+        MapEntry const* mEntry = sMapStore.LookupEntry(mapId);
         if (!mEntry)
         {
             handler->PSendSysMessage("Invalid map specified.");
-            return false;
+            return true;
         }
         if (!mEntry->IsDungeon())
         {
             handler->PSendSysMessage("'%s' is not a dungeon map.", mEntry->MapName[handler->GetSessionDbcLocale()]);
             return true;
         }
-        int32 difficulty = difficulty_str ? atoi(difficulty_str) : -1;
-        if (!sDifficultyStore.HasRecord(difficulty) || difficulty < -1)
+        if (difficulty && !sDifficultyStore.HasRecord(*difficulty))
         {
-            handler->PSendSysMessage("Invalid difficulty %d.", difficulty);
+            handler->PSendSysMessage("Invalid difficulty %d.", *difficulty);
             return false;
         }
-        if (difficulty >= 0 && !sDB2Manager.GetMapDifficultyData(mEntry->ID, Difficulty(difficulty)))
+        if (difficulty && !sDB2Manager.GetMapDifficultyData(mEntry->ID, Difficulty(*difficulty)))
         {
-            handler->PSendSysMessage("Difficulty %d is not valid for '%s'.", difficulty, mEntry->MapName[handler->GetSessionDbcLocale()]);
+            handler->PSendSysMessage("Difficulty %d is not valid for '%s'.", *difficulty, mEntry->MapName[handler->GetSessionDbcLocale()]);
             return true;
         }
 
-        if (difficulty == -1)
+        if (!difficulty)
         {
             handler->PSendSysMessage("Resetting all difficulties for '%s'.", mEntry->MapName[handler->GetSessionDbcLocale()]);
             for (DifficultyEntry const* diff : sDifficultyStore)
             {
-                if (sDB2Manager.GetMapDifficultyData(map, Difficulty(diff->ID)))
+                if (sDB2Manager.GetMapDifficultyData(mapId, Difficulty(diff->ID)))
                 {
                     handler->PSendSysMessage("Resetting difficulty %d for '%s'.", diff->ID, mEntry->MapName[handler->GetSessionDbcLocale()]);
-                    sInstanceSaveMgr->ForceGlobalReset(map, Difficulty(diff->ID));
+                    sInstanceSaveMgr->ForceGlobalReset(mapId, Difficulty(diff->ID));
                 }
             }
         }
-        else if (mEntry->IsNonRaidDungeon() && difficulty == DIFFICULTY_NORMAL)
+        else if (mEntry->IsNonRaidDungeon() && *difficulty == DIFFICULTY_NORMAL)
         {
-            handler->PSendSysMessage("'%s' does not have any permanent saves for difficulty %d.", mEntry->MapName[handler->GetSessionDbcLocale()], difficulty);
+            handler->PSendSysMessage("'%s' does not have any permanent saves for difficulty %d.", mEntry->MapName[handler->GetSessionDbcLocale()], *difficulty);
         }
         else
         {
-            handler->PSendSysMessage("Resetting difficulty %d for '%s'.", difficulty, mEntry->MapName[handler->GetSessionDbcLocale()]);
-            sInstanceSaveMgr->ForceGlobalReset(map, Difficulty(difficulty));
+            handler->PSendSysMessage("Resetting difficulty %d for '%s'.", *difficulty, mEntry->MapName[handler->GetSessionDbcLocale()]);
+            sInstanceSaveMgr->ForceGlobalReset(mapId, Difficulty(*difficulty));
         }
         return true;
     }
@@ -1767,12 +1656,12 @@ public:
         return true;
     }
 
-    static bool HandleDebugNearGraveyard(ChatHandler* handler, char const* args)
+    static bool HandleDebugNearGraveyard(ChatHandler* handler, Optional<ExactSequence<'l', 'i', 'n', 'k', 'e', 'd'>> linked)
     {
         Player* player = handler->GetSession()->GetPlayer();
         WorldSafeLocsEntry const* nearestLoc = nullptr;
 
-        if (stricmp(args, "linked"))
+        if (linked)
         {
             if (Battleground* bg = player->GetBattleground())
                 nearestLoc = bg->GetClosestGraveyard(player);
@@ -2032,9 +1921,8 @@ public:
         return true;
     }
 
-    static bool HandleDebugGuidLimitsCommand(ChatHandler* handler, CommandArgs* args)
+    static bool HandleDebugGuidLimitsCommand(ChatHandler* handler, Optional<uint32> mapId)
     {
-        auto mapId = args->TryConsume<uint32>();
         if (mapId)
         {
             sMapMgr->DoForAllMapsWithMapId(mapId.value(),
@@ -2065,9 +1953,8 @@ public:
             map->GetId(), map->GetMapName(), map->GetInstanceId(), uint64(map->GenerateLowGuid<HighGuid::Creature>()), uint64(map->GetMaxLowGuid<HighGuid::GameObject>()));
     }
 
-    static bool HandleDebugObjectCountCommand(ChatHandler* handler, CommandArgs* args)
+    static bool HandleDebugObjectCountCommand(ChatHandler* handler, Optional<uint32> mapId)
     {
-        auto mapId = args->TryConsume<uint32>();
         if (mapId)
         {
             sMapMgr->DoForAllMapsWithMapId(mapId.value(),
