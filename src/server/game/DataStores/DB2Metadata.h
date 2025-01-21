@@ -10967,10 +10967,10 @@ struct UnitConditionMeta
     {
         static DB2MetaField const fields[4] =
         {
-            { FT_INT, 8, false },
+            { FT_INT, 8, true },
             { FT_BYTE, 1, false },
             { FT_BYTE, 8, false },
-            { FT_BYTE, 8, false },
+            { FT_BYTE, 8, true },
         };
 
         static DB2Meta instance(1120959, -1, 4, 0x62802D9C, fields, -1);

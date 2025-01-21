@@ -1395,6 +1395,12 @@ void HotfixDatabaseConnection::DoPrepareStatements()
     PrepareStatement(HOTFIX_SEL_TRANSPORT_ROTATION, "SELECT ID, TimeIndex, Rot1, Rot2, Rot3, Rot4, GameObjectsID FROM transport_rotation WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
     PREPARE_MAX_ID_STMT(HOTFIX_SEL_TRANSPORT_ROTATION, "SELECT MAX(ID) + 1 FROM transport_rotation", CONNECTION_SYNCH);
 
+    // UnitCondition.db2
+    PrepareStatement(HOTFIX_SEL_UNIT_CONDITION, "SELECT ID, Value1, Value2, Value3, Value4, Value5, Value6, Value7, Value8, Flags, "
+        "Variable1, Variable2, Variable3, Variable4, Variable5, Variable6, Variable7, Variable8, Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8 FROM unit_condition"
+        " WHERE (`VerifiedBuild` > 0) = ?", CONNECTION_SYNCH);
+    PREPARE_MAX_ID_STMT(HOTFIX_SEL_UNIT_CONDITION, "SELECT MAX(ID) + 1 FROM unit_condition", CONNECTION_SYNCH);
+
     // UnitPowerBar.db2
     PrepareStatement(HOTFIX_SEL_UNIT_POWER_BAR, "SELECT ID, Name, Cost, OutOfError, ToolTip, RegenerationPeace, RegenerationCombat, FileDataID1, "
         "FileDataID2, FileDataID3, FileDataID4, FileDataID5, FileDataID6, Color1, Color2, Color3, Color4, Color5, Color6, StartInset, EndInset, "

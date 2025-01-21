@@ -3392,6 +3392,15 @@ struct TransportRotationEntry
     int32 GameObjectsID;
 };
 
+struct UnitConditionEntry
+{
+    uint32 ID;
+    int32 Value[8];
+    uint8 Flags;
+    uint8 Variable[8];
+    int8 Op[8];
+};
+
 struct UnitPowerBarEntry
 {
     uint32 ID;
