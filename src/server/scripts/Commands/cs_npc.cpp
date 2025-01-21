@@ -549,13 +549,8 @@ public:
     }
 
     //set npcflag of creature
-    static bool HandleNpcSetFlagCommand(ChatHandler* handler, char const* args)
+    static bool HandleNpcSetFlagCommand(ChatHandler* handler, NPCFlags npcFlags)
     {
-        if (!*args)
-            return false;
-
-        uint64 npcFlags = atoull(args);
-
         Creature* creature = handler->getSelectedCreature();
 
         if (!creature)
@@ -565,7 +560,7 @@ public:
             return false;
         }
 
-        creature->SetUInt64Value(UNIT_NPC_FLAGS, npcFlags);
+        creature->SetNpcFlags(npcFlags);
 
         WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_UPD_CREATURE_NPCFLAG);
 
