@@ -73,7 +73,7 @@ void ItemInstance::Initialize(::ItemDynamicFieldGems const* gem)
 
 void ItemInstance::Initialize(::LootItem const& lootItem)
 {
-    ItemID               = lootItem.itemid;
+    ItemID = lootItem.itemid;
     RandomPropertiesSeed = lootItem.randomSuffix;
     if (lootItem.randomPropertyId.Type != ItemRandomEnchantmentType::BonusList)
         RandomPropertiesID = lootItem.randomPropertyId.Id;
