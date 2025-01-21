@@ -1940,7 +1940,7 @@ public:
             return false;
 
         Player* player = handler->GetSession()->GetPlayer();
-        selection->SummonPersonalClone(player->GetPosition(), TEMPSUMMON_MANUAL_DESPAWN, 0s, 0, 0, player->GetGUID());
+        selection->SummonPersonalClone(player->GetPosition(), TEMPSUMMON_MANUAL_DESPAWN, 0s, 0, 0, player);
         return true;
     }
 
