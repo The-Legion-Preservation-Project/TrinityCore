@@ -98,77 +98,77 @@ TC_API_EXPORT size_t EnumUtils<QuestFailedReason>::ToIndex(QuestFailedReason val
     }
 }
 
-/********************************************************\
-|* data for enum 'class' in 'QuestDef.h' auto-generated *|
-\********************************************************/
+/******************************************************************\
+|* data for enum 'QuestPushReason' in 'QuestDef.h' auto-generated *|
+\******************************************************************/
 template <>
-TC_API_EXPORT EnumText EnumUtils<class>::ToString(class value)
+TC_API_EXPORT EnumText EnumUtils<QuestPushReason>::ToString(QuestPushReason value)
 {
     switch (value)
     {
-        case Success: return { "Success", "Success", "\042Sharing quest with %s...\042" };
-        case Invalid: return { "Invalid", "Invalid", "\042%s is not eligible for that quest\042" };
-        case Accepted: return { "Accepted", "Accepted", "\042%s has accepted your quest\042" };
-        case Declined: return { "Declined", "Declined", "\042%s has declined your quest\042" };
-        case Busy: return { "Busy", "Busy", "\042%s is busy\042" };
-        case Dead: return { "Dead", "Dead", "\042%s is dead.\042" };
-        case LogFull: return { "LogFull", "LogFull", "\042%s's quest log is full\042" };
-        case OnQuest: return { "OnQuest", "OnQuest", "\042%s is already on that quest\042" };
-        case AlreadyDone: return { "AlreadyDone", "AlreadyDone", "\042%s has completed that quest\042" };
-        case NotDaily: return { "NotDaily", "NotDaily", "\042That quest cannot be shared today\042" };
-        case TimerExpired: return { "TimerExpired", "TimerExpired", "\042Quest sharing timer has expired\042" };
-        case NotInParty: return { "NotInParty", "NotInParty", "\042You are not in a party\042" };
-        case DifferentServerDaily: return { "DifferentServerDaily", "DifferentServerDaily", "\042%s is not eligible for that quest today\042" };
-        case NotAllowed: return { "NotAllowed", "NotAllowed", "\042That quest cannot be shared\042" };
+        case QuestPushReason::Success: return { "Success", "Success", "\042Sharing quest with %s...\042" };
+        case QuestPushReason::Invalid: return { "Invalid", "Invalid", "\042%s is not eligible for that quest\042" };
+        case QuestPushReason::Accepted: return { "Accepted", "Accepted", "\042%s has accepted your quest\042" };
+        case QuestPushReason::Declined: return { "Declined", "Declined", "\042%s has declined your quest\042" };
+        case QuestPushReason::Busy: return { "Busy", "Busy", "\042%s is busy\042" };
+        case QuestPushReason::Dead: return { "Dead", "Dead", "\042%s is dead.\042" };
+        case QuestPushReason::LogFull: return { "LogFull", "LogFull", "\042%s's quest log is full\042" };
+        case QuestPushReason::OnQuest: return { "OnQuest", "OnQuest", "\042%s is already on that quest\042" };
+        case QuestPushReason::AlreadyDone: return { "AlreadyDone", "AlreadyDone", "\042%s has completed that quest\042" };
+        case QuestPushReason::NotDaily: return { "NotDaily", "NotDaily", "\042That quest cannot be shared today\042" };
+        case QuestPushReason::TimerExpired: return { "TimerExpired", "TimerExpired", "\042Quest sharing timer has expired\042" };
+        case QuestPushReason::NotInParty: return { "NotInParty", "NotInParty", "\042You are not in a party\042" };
+        case QuestPushReason::DifferentServerDaily: return { "DifferentServerDaily", "DifferentServerDaily", "\042%s is not eligible for that quest today\042" };
+        case QuestPushReason::NotAllowed: return { "NotAllowed", "NotAllowed", "\042That quest cannot be shared\042" };
         default: throw std::out_of_range("value");
     }
 }
 
 template <>
-TC_API_EXPORT size_t EnumUtils<class>::Count() { return 14; }
+TC_API_EXPORT size_t EnumUtils<QuestPushReason>::Count() { return 14; }
 
 template <>
-TC_API_EXPORT class EnumUtils<class>::FromIndex(size_t index)
+TC_API_EXPORT QuestPushReason EnumUtils<QuestPushReason>::FromIndex(size_t index)
 {
     switch (index)
     {
-        case 0: return Success;
-        case 1: return Invalid;
-        case 2: return Accepted;
-        case 3: return Declined;
-        case 4: return Busy;
-        case 5: return Dead;
-        case 6: return LogFull;
-        case 7: return OnQuest;
-        case 8: return AlreadyDone;
-        case 9: return NotDaily;
-        case 10: return TimerExpired;
-        case 11: return NotInParty;
-        case 12: return DifferentServerDaily;
-        case 13: return NotAllowed;
+        case 0: return QuestPushReason::Success;
+        case 1: return QuestPushReason::Invalid;
+        case 2: return QuestPushReason::Accepted;
+        case 3: return QuestPushReason::Declined;
+        case 4: return QuestPushReason::Busy;
+        case 5: return QuestPushReason::Dead;
+        case 6: return QuestPushReason::LogFull;
+        case 7: return QuestPushReason::OnQuest;
+        case 8: return QuestPushReason::AlreadyDone;
+        case 9: return QuestPushReason::NotDaily;
+        case 10: return QuestPushReason::TimerExpired;
+        case 11: return QuestPushReason::NotInParty;
+        case 12: return QuestPushReason::DifferentServerDaily;
+        case 13: return QuestPushReason::NotAllowed;
         default: throw std::out_of_range("index");
     }
 }
 
 template <>
-TC_API_EXPORT size_t EnumUtils<class>::ToIndex(class value)
+TC_API_EXPORT size_t EnumUtils<QuestPushReason>::ToIndex(QuestPushReason value)
 {
     switch (value)
     {
-        case Success: return 0;
-        case Invalid: return 1;
-        case Accepted: return 2;
-        case Declined: return 3;
-        case Busy: return 4;
-        case Dead: return 5;
-        case LogFull: return 6;
-        case OnQuest: return 7;
-        case AlreadyDone: return 8;
-        case NotDaily: return 9;
-        case TimerExpired: return 10;
-        case NotInParty: return 11;
-        case DifferentServerDaily: return 12;
-        case NotAllowed: return 13;
+        case QuestPushReason::Success: return 0;
+        case QuestPushReason::Invalid: return 1;
+        case QuestPushReason::Accepted: return 2;
+        case QuestPushReason::Declined: return 3;
+        case QuestPushReason::Busy: return 4;
+        case QuestPushReason::Dead: return 5;
+        case QuestPushReason::LogFull: return 6;
+        case QuestPushReason::OnQuest: return 7;
+        case QuestPushReason::AlreadyDone: return 8;
+        case QuestPushReason::NotDaily: return 9;
+        case QuestPushReason::TimerExpired: return 10;
+        case QuestPushReason::NotInParty: return 11;
+        case QuestPushReason::DifferentServerDaily: return 12;
+        case QuestPushReason::NotAllowed: return 13;
         default: throw std::out_of_range("value");
     }
 }
