@@ -4599,6 +4599,23 @@ class spell_summon_battle_pet : public SpellScript
     }
 };
 
+// 45313 - Anchor Here
+class spell_gen_anchor_here : public SpellScript
+{
+    PrepareSpellScript(spell_gen_anchor_here);
+
+    void HandleScript(SpellEffIndex /*effIndex*/)
+    {
+        if (Creature* creature = GetHitCreature())
+            creature->SetHomePosition(creature->GetPositionX(), creature->GetPositionY(), creature->GetPositionZ(), creature->GetOrientation());
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_gen_anchor_here::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+    }
+};
+
 void AddSC_generic_spell_scripts()
 {
     RegisterAuraScript(spell_gen_absorb0_hitlimit1);
@@ -4737,4 +4754,5 @@ void AddSC_generic_spell_scripts()
     RegisterAuraScript(spell_gen_face_rage);
     RegisterAuraScript(spell_gen_impatient_mind);
     RegisterSpellScript(spell_summon_battle_pet);
+    RegisterSpellScript(spell_gen_anchor_here);
 }
