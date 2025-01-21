@@ -900,8 +900,9 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOAD_INVENTORY,
     PLAYER_LOGIN_QUERY_LOAD_ARTIFACTS,
     PLAYER_LOGIN_QUERY_LOAD_ACTIONS,
-    PLAYER_LOGIN_QUERY_LOAD_MAIL_COUNT,
-    PLAYER_LOGIN_QUERY_LOAD_MAIL_DATE,
+    PLAYER_LOGIN_QUERY_LOAD_MAILS,
+    PLAYER_LOGIN_QUERY_LOAD_MAIL_ITEMS,
+    PLAYER_LOGIN_QUERY_LOAD_MAIL_ITEMS_ARTIFACT,
     PLAYER_LOGIN_QUERY_LOAD_SOCIAL_LIST,
     PLAYER_LOGIN_QUERY_LOAD_HOME_BIND,
     PLAYER_LOGIN_QUERY_LOAD_SPELL_COOLDOWNS,
@@ -1741,7 +1742,6 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         static void DeleteOldCharacters();
         static void DeleteOldCharacters(uint32 keepDays);
 
-        bool m_mailsLoaded;
         bool m_mailsUpdated;
 
         void SetBindPoint(ObjectGuid guid) const;
@@ -1774,7 +1774,6 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SendNewMail() const;
         void UpdateNextMailTimeAndUnreads();
         void AddNewMailDeliverTime(time_t deliver_time);
-        bool IsMailsLoaded() const { return m_mailsLoaded; }
 
         void RemoveMail(uint32 id);
 
@@ -2826,8 +2825,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void _LoadBoundInstances(PreparedQueryResult result);
         void _LoadInventory(PreparedQueryResult result, PreparedQueryResult artifactsResult, uint32 timeDiff);
         void _LoadVoidStorage(PreparedQueryResult result);
-        void _LoadMailInit(PreparedQueryResult resultUnread, PreparedQueryResult resultDelivery);
-        void _LoadMail();
+        void _LoadMail(PreparedQueryResult mailsResult, PreparedQueryResult mailItemsResult, PreparedQueryResult artifactResult);
         static Item* _LoadMailedItem(ObjectGuid const& playerGuid, Player* player, uint32 mailId, Mail* mail, Field* fields, ItemAdditionalLoadInfo* addionalData);
         void _LoadQuestStatus(PreparedQueryResult result);
         void _LoadQuestStatusObjectives(PreparedQueryResult result);
