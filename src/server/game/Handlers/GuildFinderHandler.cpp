@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "AchievementMgr.h"
 #include "CharacterCache.h"
 #include "WorldSession.h"
 #include "GameTime.h"

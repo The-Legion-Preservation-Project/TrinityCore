@@ -21,6 +21,7 @@
 #include "BattlegroundPackets.h"
 #include "CellImpl.h"
 #include "CreatureTextMgr.h"
+#include "DB2Stores.h"
 #include "GameTime.h"
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"

@@ -17,6 +17,7 @@
 
 #include "BattlegroundWS.h"
 #include "BattlegroundMgr.h"
+#include "DB2Stores.h"
 #include "GameObject.h"
 #include "Log.h"
 #include "Map.h"

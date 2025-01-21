@@ -20,6 +20,7 @@
 
 #include "Common.h"
 #include "DBCEnums.h"
+#include "Optional.h"
 #include "SharedDefines.h"
 #include "SpawnData.h"
 #include "UnitDefines.h"
