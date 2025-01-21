@@ -437,7 +437,7 @@ public:
         return DoTeleport(handler, loc);
     }
 
-    static bool HandleGoInstanceCommand(ChatHandler* handler, std::vector<std::string> const& labels)
+    static bool HandleGoInstanceCommand(ChatHandler* handler, std::vector<std::string_view> labels)
     {
         if (labels.empty())
             return false;
@@ -449,7 +449,7 @@ public:
             uint32 count = 0;
             std::string const& scriptName = sObjectMgr->GetScriptName(pair.second.ScriptId);
             char const* mapName = ASSERT_NOTNULL(sMapStore.LookupEntry(pair.first))->MapName[handler->GetSessionDbcLocale()];
-            for (auto const& label : labels)
+            for (std::string_view label : labels)
                 if (StringContainsStringI(scriptName, label))
                     ++count;
 
@@ -522,7 +522,7 @@ public:
         return false;
     }
 
-    static bool HandleGoBossCommand(ChatHandler* handler, std::vector<std::string> const& needles)
+    static bool HandleGoBossCommand(ChatHandler* handler, std::vector<std::string_view> needles)
     {
         if (needles.empty())
             return false;
@@ -539,7 +539,7 @@ public:
 
             uint32 count = 0;
             std::string const& scriptName = sObjectMgr->GetScriptName(data.ScriptID);
-            for (auto const& label : needles)
+            for (std::string_view label : needles)
                 if (StringContainsStringI(scriptName, label) || StringContainsStringI(data.Name, label))
                     ++count;
 
