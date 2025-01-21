@@ -1090,13 +1090,13 @@ CREATE TABLE `character_pet` (
   `level` smallint(5) unsigned NOT NULL DEFAULT '1',
   `exp` int(10) unsigned NOT NULL DEFAULT '0',
   `Reactstate` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `name` varchar(21) NOT NULL DEFAULT 'Pet',
+  `name` varchar(21) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pet',
   `renamed` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `slot` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `slot` smallint NOT NULL DEFAULT '0',
   `curhealth` int(10) unsigned NOT NULL DEFAULT '1',
   `curmana` int(10) unsigned NOT NULL DEFAULT '0',
   `savetime` int(10) unsigned NOT NULL DEFAULT '0',
-  `abdata` text,
+  `abdata` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `specialization` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`),
@@ -3373,7 +3373,9 @@ INSERT INTO `updates` VALUES ('2014_10_20_00_characters.sql','A5882DA0979CF4DAE3
 ('2021_12_31_00_characters.sql','7ECEEB66056C46F89E581ACBB5EC222CB2D8A365','RELEASED','2021-12-31 13:53:23',0),
 ('2021_12_31_01_characters.sql','336E62A8850A3E78A1D0BD3E81FFD5769184BDF8','RELEASED','2021-12-31 15:58:32',0),
 ('2022_01_09_00_characters.sql','3AC51F589821C17027CBA861EF762A709430CDB3','RELEASED','2022-01-09 21:29:45',0),
-('2022_01_31_00_characters.sql','19551474AA6079F0616B565F254914C5DD9ED1A1','RELEASED','2022-01-31 14:32:49',0);
+('2022_01_31_00_characters.sql','19551474AA6079F0616B565F254914C5DD9ED1A1','RELEASED','2022-01-31 14:32:49',0),
+('2022_01_31_01_characters.sql','E0A1FA670F4621AEB594D7ACBA4921CB298F54FF','RELEASED','2022-01-31 20:47:59',0),
+('2022_01_31_02_characters.sql','6E3A3F02276287DD540BC4C17E246DFB850260D8','RELEASED','2022-01-31 21:43:38',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
