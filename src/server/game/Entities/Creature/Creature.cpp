@@ -2190,9 +2190,9 @@ void Creature::Respawn(bool force)
 
             setDeathState(JUST_RESPAWNED);
 
-        CreatureModel display(GetNativeDisplayId(), 0, 1.0f);
-        if (sObjectMgr->GetCreatureModelRandomGender(&display, GetCreatureTemplate()))
-            SetDisplayId(display.CreatureDisplayID, true);
+            CreatureModel display(GetNativeDisplayId(), 0, 1.0f);
+            if (sObjectMgr->GetCreatureModelRandomGender(&display, GetCreatureTemplate()))
+                SetDisplayId(display.CreatureDisplayID, true);
 
             GetMotionMaster()->InitializeDefault();
 

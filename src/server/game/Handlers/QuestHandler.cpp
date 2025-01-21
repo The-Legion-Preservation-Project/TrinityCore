@@ -277,7 +277,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPackets::Quest::Quest
                 bool itemValid = false;
                 for (uint32 i = 0; i < quest->GetRewChoiceItemsCount(); ++i)
                 {
-                    if (quest->RewardChoiceItemId[i] && quest->RewardChoiceItemType[i] == LootItemType::Item && quest->RewardChoiceItemId[i] == packet.ItemChoiceID)
+                    if (quest->RewardChoiceItemId[i] && quest->RewardChoiceItemType[i] == LootItemType::Item && quest->RewardChoiceItemId[i] == uint32(packet.ItemChoiceID))
                     {
                         itemValid = true;
                         break;
@@ -337,7 +337,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPackets::Quest::Quest
                 bool currencyValid = false;
                 for (uint32 i = 0; i < quest->GetRewChoiceItemsCount(); ++i)
                 {
-                    if (quest->RewardChoiceItemId[i] && quest->RewardChoiceItemType[i] == LootItemType::Currency && quest->RewardChoiceItemId[i] == packet.ItemChoiceID)
+                    if (quest->RewardChoiceItemId[i] && quest->RewardChoiceItemType[i] == LootItemType::Currency && quest->RewardChoiceItemId[i] == uint32(packet.ItemChoiceID))
                     {
                         currencyValid = true;
                         break;

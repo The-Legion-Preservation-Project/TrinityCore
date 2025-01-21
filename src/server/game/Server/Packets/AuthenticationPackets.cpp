@@ -282,9 +282,9 @@ WorldPacket const* WorldPackets::Auth::ConnectTo::Write()
 {
     Trinity::Crypto::HMAC_SHA1 hmacHash(WherePacketHmac, 64);
     hmacHash.UpdateData(Payload.Where.data(), 16);
-    hmacHash.UpdateData((uint8* const)&Payload.Type, 1);
-    hmacHash.UpdateData((uint8* const)&Payload.Port, 2);
-    hmacHash.UpdateData((uint8* const)Haiku.c_str(), 71);
+    hmacHash.UpdateData(reinterpret_cast<uint8 const*>(&Payload.Type), 1);
+    hmacHash.UpdateData(reinterpret_cast<uint8 const*>(&Payload.Port), 2);
+    hmacHash.UpdateData(reinterpret_cast<uint8 const*>(Haiku.c_str()), 71);
     hmacHash.UpdateData(Payload.PanamaKey, 32);
     hmacHash.UpdateData(PiDigits, 108);
     hmacHash.UpdateData(&Payload.XorMagic, 1);

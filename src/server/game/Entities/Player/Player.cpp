@@ -5612,13 +5612,13 @@ void Player::SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal)
             // remove all spells that related to this skill
             for (uint32 j = 0; j < sSkillLineAbilityStore.GetNumRows(); ++j)
                 if (SkillLineAbilityEntry const* pAbility = sSkillLineAbilityStore.LookupEntry(j))
-                    if (pAbility->SkillLine == id)
+                    if (pAbility->SkillLine == int32(id))
                         RemoveSpell(sSpellMgr->GetFirstSpellInChain(pAbility->Spell));
 
             // Clear profession lines
-            if (GetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1) == int32(id))
+            if (GetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1) == id)
                 SetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1, 0);
-            else if (GetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1 + 1) == int32(id))
+            else if (GetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1 + 1) == id)
                 SetUInt32Value(PLAYER_PROFESSION_SKILL_LINE_1 + 1, 0);
         }
     }
@@ -17196,7 +17196,7 @@ void Player::SendQuestConfirmAccept(Quest const* quest, Player* receiver) const
     receiver->SendDirectMessage(packet.Write());
 }
 
-void Player::SendPushToPartyResponse(Player const* player, QuestPushReason reason, Quest const* quest /*= nullptr*/) const
+void Player::SendPushToPartyResponse(Player const* player, QuestPushReason reason, Quest const* /*quest*/ /*= nullptr*/) const
 {
     if (player)
     {
@@ -26334,7 +26334,6 @@ void Player::_LoadSkills(PreparedQueryResult result)
     //                                                           0      1      2
     // SetPQuery(PLAYER_LOGIN_QUERY_LOADSKILLS,          "SELECT skill, value, max FROM character_skills WHERE guid = '%u'", GUID_LOPART(m_guid));
 
-    uint32 count = 0;
     uint8 professionCount = 0;
     std::unordered_map<uint32, uint32> loadedSkillValues;
     if (result)

@@ -2571,7 +2571,7 @@ public:
         return true;
     }
 
-    static bool HandlePlayAllCommand(ChatHandler* handler, uint32 soundId, Optional<int32> broadcastTextId)
+    static bool HandlePlayAllCommand(ChatHandler* handler, uint32 soundId)
     {
         if (!sSoundKitStore.LookupEntry(soundId))
         {

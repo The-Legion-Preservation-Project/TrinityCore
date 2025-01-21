@@ -49,8 +49,7 @@ enum eAuctionHouse
     AH_MINIMUM_DEPOSIT = 100
 };
 
-void AuctionPosting::BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* auctionItem,
-    bool alwaysSendItem, bool sendKey, bool censorServerInfo, bool censorBidInfo) const
+void AuctionPosting::BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* auctionItem, bool censorServerInfo, bool censorBidInfo) const
 {
     // SMSG_AUCTION_LIST_BIDDED_ITEMS_RESULT, SMSG_AUCTION_LIST_ITEMS_RESULT (if not commodity), SMSG_AUCTION_LIST_OWNER_ITEMS_RESULT, SMSG_AUCTION_REPLICATE_RESPONSE (if not commodity)
     //auctionItem->Item - here to unify comment
@@ -859,7 +858,7 @@ void AuctionHouseObject::BuildListBiddedItems(WorldPackets::AuctionHouse::Auctio
     {
         listBiddedItemsResult.Items.emplace_back();
         WorldPackets::AuctionHouse::AuctionItem& auctionItem = listBiddedItemsResult.Items.back();
-        resultAuction->BuildAuctionItem(&auctionItem, true, true, true, false);
+        resultAuction->BuildAuctionItem(&auctionItem, true, false);
     }
 
     //listBiddedItemsResult.HasMoreResults = false;
@@ -880,7 +879,7 @@ void AuctionHouseObject::BuildListOwnedItems(WorldPackets::AuctionHouse::Auction
     {
         listOwnedItemsResult.Items.emplace_back();
         WorldPackets::AuctionHouse::AuctionItem& auctionItem = listOwnedItemsResult.Items.back();
-        resultAuction->BuildAuctionItem(&auctionItem, true, true, false, false);
+        resultAuction->BuildAuctionItem(&auctionItem, false, false);
     }
 
     //listOwnerItemsResult.HasMoreResults = false;
@@ -999,7 +998,7 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPackets::AuctionHouse::Aucti
     {
         listItemsResult.Items.emplace_back();
         WorldPackets::AuctionHouse::AuctionItem& auctionItem = listItemsResult.Items.back();
-        resultAuction->BuildAuctionItem(&auctionItem, false, true, resultAuction->OwnerAccount != player->GetSession()->GetAccountGUID(),
+        resultAuction->BuildAuctionItem(&auctionItem, resultAuction->OwnerAccount != player->GetSession()->GetAccountGUID(),
             resultAuction->Bidder.IsEmpty());
     }
 
@@ -1037,7 +1036,7 @@ void AuctionHouseObject::BuildReplicate(WorldPackets::AuctionHouse::AuctionRepli
 
         replicateResponse.Items.emplace_back();
         WorldPackets::AuctionHouse::AuctionItem& auctionItem = replicateResponse.Items.back();
-        auction.BuildAuctionItem(&auctionItem, false, true, true, auction.Bidder.IsEmpty());
+        auction.BuildAuctionItem(&auctionItem, true, auction.Bidder.IsEmpty());
         if (!--count)
             break;
     }

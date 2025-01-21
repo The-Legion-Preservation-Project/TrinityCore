@@ -139,7 +139,7 @@ struct AuctionPosting
     SystemTimePoint StartTime = SystemTimePoint::min();
     SystemTimePoint EndTime = SystemTimePoint::min();
 
-    void BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* auctionItem, bool alwaysSendItem, bool sendKey, bool censorServerInfo, bool censorBidInfo) const;
+    void BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* auctionItem, bool censorServerInfo, bool censorBidInfo) const;
     static uint64 CalculateMinIncrement(uint64 currentBid);
     uint64 CalculateMinIncrement() const { return CalculateMinIncrement(BidAmount); }
 

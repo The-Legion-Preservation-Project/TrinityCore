@@ -3284,7 +3284,7 @@ static int32(* const WorldStateExpressionFunctions[WSE_FUNCTION_MAX])(Player con
     },
 
     // WSE_FUNCTION_WAR_MODE_ACTIVE
-    [](Player const* player, uint32 /*arg1*/, uint32 /*arg2*/) -> int32
+    [](Player const* /*player*/, uint32 /*arg1*/, uint32 /*arg2*/) -> int32
     {
         //return player->HasPlayerFlag(PLAYER_FLAGS_WAR_MODE_ACTIVE);
         return 0;
