@@ -317,7 +317,7 @@ void WorldSession::HandleTogglePvP(WorldPackets::Misc::TogglePvP& /*packet*/)
         GetPlayer()->RemovePlayerFlag(PLAYER_FLAGS_IN_PVP);
         GetPlayer()->AddPlayerFlag(PLAYER_FLAGS_PVP_TIMER);
         if (!GetPlayer()->pvpInfo.IsHostile && GetPlayer()->IsPvP())
-            GetPlayer()->pvpInfo.EndTimer = GameTime::GetGameTime() + 300; // start toggle-off
+            GetPlayer()->pvpInfo.EndTimer = GameTime::GetGameTime();     // start toggle-off
     }
     else
     {
@@ -335,7 +335,7 @@ void WorldSession::HandleSetPvP(WorldPackets::Misc::SetPvP& packet)
         GetPlayer()->RemovePlayerFlag(PLAYER_FLAGS_IN_PVP);
         GetPlayer()->AddPlayerFlag(PLAYER_FLAGS_PVP_TIMER);
         if (!GetPlayer()->pvpInfo.IsHostile && GetPlayer()->IsPvP())
-            GetPlayer()->pvpInfo.EndTimer = GameTime::GetGameTime() + 300; // start toggle-off
+            GetPlayer()->pvpInfo.EndTimer = GameTime::GetGameTime();     // start toggle-off
     }
     else
     {
