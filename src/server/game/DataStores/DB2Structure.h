@@ -65,7 +65,7 @@ struct AdventureJournalEntry
     uint16 LfgDungeonID;
     uint16 QuestID;
     uint16 BattleMasterListID;
-    uint16 BonusPlayerConditionID[2];
+    std::array<uint16, 2> BonusPlayerConditionID;
     uint16 CurrencyType;
     uint16 WorldMapAreaID;
     uint8 Type;
@@ -73,7 +73,7 @@ struct AdventureJournalEntry
     uint8 ButtonActionType;
     uint8 PriorityMin;
     uint8 PriorityMax;
-    uint8 BonusValue[2];
+    std::array<uint8, 2> BonusValue;
     uint8 CurrencyQuantity;
     int32 PlayerConditionID;
     int32 ItemQuantity;
@@ -126,7 +126,7 @@ struct AreaTableEntry
     uint32 ID;
     char const* ZoneName;
     LocalizedString AreaName;
-    int32 Flags[2];
+    std::array<int32, 2> Flags;
     float AmbientMultiplier;
     uint16 ContinentID;
     uint16 ParentAreaID;
@@ -134,7 +134,7 @@ struct AreaTableEntry
     uint16 AmbienceID;
     uint16 ZoneMusic;
     uint16 IntroSound;
-    uint16 LiquidTypeID[4];
+    std::array<uint16, 4> LiquidTypeID;
     uint16 UwZoneMusic;
     uint16 UwAmbience;
     int16 PvpCombatWorldStateID;
@@ -288,7 +288,7 @@ struct ArtifactPowerRankEntry
 struct ArtifactQuestXPEntry
 {
     uint32 ID;
-    uint32 Difficulty[10];
+    std::array<uint32, 10> Difficulty;
 };
 
 struct ArtifactTierEntry
@@ -394,7 +394,7 @@ struct BattlemasterListEntry
     LocalizedString ShortDescription;
     LocalizedString LongDescription;
     int32 IconFileDataID;
-    int16 MapID[16];
+    std::array<int16, 16> MapID;
     int16 HolidayWorldState;
     int16 RequiredPlayerConditionID;
     int8 InstanceType;
@@ -417,13 +417,13 @@ struct BroadcastTextEntry
     uint32 ID;
     LocalizedString Text;
     LocalizedString Text1;
-    uint16 EmoteID[MAX_BROADCAST_TEXT_EMOTES];
-    uint16 EmoteDelay[MAX_BROADCAST_TEXT_EMOTES];
+    std::array<uint16, MAX_BROADCAST_TEXT_EMOTES> EmoteID;
+    std::array<uint16, MAX_BROADCAST_TEXT_EMOTES> EmoteDelay;
     uint16 EmotesID;
     uint8 LanguageID;
     uint8 Flags;
     int32 ConditionID;
-    uint32 SoundKitID[2];
+    std::array<uint32, 2> SoundKitID;
 };
 
 struct Cfg_RegionsEntry
@@ -439,7 +439,7 @@ struct Cfg_RegionsEntry
 struct CharacterFacialHairStylesEntry
 {
     uint32 ID;
-    int32 Geoset[5];
+    std::array<int32, 5> Geoset;
     uint8 RaceID;
     uint8 SexID;
     uint8 VariationID;
@@ -456,7 +456,7 @@ struct CharBaseSectionEntry
 struct CharSectionsEntry
 {
     uint32 ID;
-    int32 MaterialResourcesID[3];
+    std::array<int32, 3> MaterialResourcesID;
     int16 Flags;
     int8 RaceID;
     int8 SexID;
@@ -470,7 +470,7 @@ struct CharSectionsEntry
 struct CharStartOutfitEntry
 {
     uint32 ID;
-    int32 ItemID[MAX_OUTFIT_ITEMS];
+    std::array<int32, MAX_OUTFIT_ITEMS> ItemID;
     uint32 PetDisplayID;                                            // Pet Model ID for starting pet
     uint8 ClassID;
     uint8 SexID;
@@ -566,8 +566,8 @@ struct ChrRacesEntry
     uint32 FemaleDisplayId;
     int32 CreateScreenFileDataID;
     int32 SelectScreenFileDataID;
-    float MaleCustomizeOffset[3];
-    float FemaleCustomizeOffset[3];
+    std::array<float, 3> MaleCustomizeOffset;
+    std::array<float, 3> FemaleCustomizeOffset;
     int32 LowResScreenFileDataID;
     int32 StartingLevel;
     int32 UiDisplayOrder;
@@ -591,8 +591,8 @@ struct ChrRacesEntry
     int32 HeritageArmorAchievementID;
     int32 MaleSkeletonFileDataID;
     int32 FemaleSkeletonFileDataID;
-    uint32 AlteredFormStartVisualKitID[3];
-    uint32 AlteredFormFinishVisualKitID[3];
+    std::array<uint32, 3> AlteredFormStartVisualKitID;
+    std::array<uint32, 3> AlteredFormFinishVisualKitID;
 
     EnumFlag<ChrRacesFlag> GetFlags() const { return static_cast<ChrRacesFlag>(Flags); }
 };
@@ -604,7 +604,7 @@ struct ChrSpecializationEntry
     LocalizedString Name;
     LocalizedString FemaleName;
     LocalizedString Description;
-    int32 MasterySpellID[MAX_MASTERY_SPELLS];
+    std::array<int32, MAX_MASTERY_SPELLS> MasterySpellID;
     int8 ClassID;
     int8 OrderIndex;
     int8 PetTalentType;
@@ -634,7 +634,7 @@ struct CinematicSequencesEntry
 {
     uint32 ID;
     uint32 SoundID;
-    uint16 Camera[8];
+    std::array<uint16, 8> Camera;
 };
 
 struct ConversationLineEntry
@@ -674,7 +674,7 @@ struct CreatureDisplayInfoEntry
     int32 StateSpellVisualKitID;
     float PetInstanceScale;                                         // scale of not own player pets inside dungeons/raids/scenarios
     int32 MountPoofSpellVisualKitID;
-    int32 TextureVariationFileDataID[3];
+    std::array<int32, 3> TextureVariationFileDataID;
 };
 
 struct CreatureDisplayInfoExtraEntry
@@ -690,7 +690,7 @@ struct CreatureDisplayInfoExtraEntry
     int8 HairStyleID;
     int8 HairColorID;
     int8 FacialHairID;
-    uint8 CustomDisplayOption[3];
+    std::array<uint8, 3> CustomDisplayOption;
     int8 Flags;
 };
 
@@ -701,7 +701,7 @@ struct CreatureFamilyEntry
     float MinScale;
     float MaxScale;
     int32 IconFileID;
-    int16 SkillLine[2];
+    std::array<int16, 2> SkillLine;
     int16 PetFoodMask;
     int8 MinScaleLevel;
     int8 MaxScaleLevel;
@@ -718,7 +718,7 @@ struct CreatureModelDataEntry
     float CollisionWidth;
     float CollisionHeight;
     float MountHeight;
-    float GeoBox[6];
+    std::array<float, 6> GeoBox;
     float WorldEffectScale;
     float AttachedEffectScale;
     float MissileCollisionRadius;
@@ -1068,8 +1068,8 @@ struct DungeonEncounterEntry
 struct DurabilityCostsEntry
 {
     uint32 ID;
-    uint16 WeaponSubClassCost[21];
-    uint16 ArmorSubClassCost[8];
+    std::array<uint16, 21> WeaponSubClassCost;
+    std::array<uint16, 8> ArmorSubClassCost;
 };
 
 struct DurabilityQualityEntry
@@ -1115,15 +1115,15 @@ struct FactionEntry
     LocalizedString Name;
     LocalizedString Description;
     uint32 ID;
-    int32 ReputationBase[4];
-    float ParentFactionMod[2];                        // Faction outputs rep * ParentFactionModOut as spillover reputation
-    int32 ReputationMax[4];
+    std::array<int32, 4> ReputationBase;
+    std::array<float, 2> ParentFactionMod;                        // Faction outputs rep * ParentFactionModOut as spillover reputation
+    std::array<int32, 4> ReputationMax;
     int16 ReputationIndex;
-    int16 ReputationClassMask[4];
-    uint16 ReputationFlags[4];
+    std::array<int16, 4> ReputationClassMask;
+    std::array<uint16, 4> ReputationFlags;
     uint16 ParentFactionID;
     uint16 ParagonFactionID;
-    uint8 ParentFactionCap[2];                        // The highest rank the faction will profit from incoming spillover
+    std::array<uint8, 2> ParentFactionCap;                        // The highest rank the faction will profit from incoming spillover
     uint8 Expansion;
     uint8 Flags;
     uint8 FriendshipRepID;
@@ -1142,8 +1142,8 @@ struct FactionTemplateEntry
     uint32 ID;
     uint16 Faction;
     uint16 Flags;
-    uint16 Enemies[MAX_FACTION_RELATIONS];
-    uint16 Friend[MAX_FACTION_RELATIONS];
+    std::array<uint16, MAX_FACTION_RELATIONS> Enemies;
+    std::array<uint16, MAX_FACTION_RELATIONS> Friend;
     uint8 FactionGroup;
     uint8 FriendGroup;
     uint8 EnemyGroup;
@@ -1212,7 +1212,7 @@ struct GameObjectArtKitEntry
 {
     uint32 ID;
     int32 AttachModelFileID;
-    int32 TextureVariationFileID[3];
+    std::array<int32, 3> TextureVariationFileID;
 };
 
 struct GameObjectDisplayInfoEntry
@@ -1230,9 +1230,9 @@ struct GameObjectsEntry
 {
     LocalizedString Name;
     DBCPosition3D Pos;
-    float Rot[4];
+    std::array<float, 4> Rot;
     float Scale;
-    int32 PropValue[8];
+    std::array<int32, 8> PropValue;
     uint16 OwnerID;
     uint16 DisplayID;
     uint16 PhaseID;
@@ -1390,7 +1390,7 @@ struct GarrPlotEntry
     uint8 UiCategoryID;
     uint8 PlotType;
     uint8 Flags;
-    uint32 UpgradeRequirement[2];
+    std::array<uint32, 2> UpgradeRequirement;
 };
 
 struct GarrPlotBuildingEntry
@@ -1498,8 +1498,8 @@ struct HeirloomEntry
     int32 LegacyItemID;
     int32 LegacyUpgradedItemID;
     int32 StaticUpgradedItemID;
-    int32 UpgradeItemID[3];
-    uint16 UpgradeItemBonusListID[3];
+    std::array<int32, 3> UpgradeItemID;
+    std::array<uint16, 3> UpgradeItemBonusListID;
     uint8 Flags;
     int8 SourceTypeEnum;
     uint32 ID;
@@ -1512,17 +1512,17 @@ struct HeirloomEntry
 struct HolidaysEntry
 {
     uint32 ID;
-    uint32 Date[MAX_HOLIDAY_DATES];                                 // dates in unix time starting at January, 1, 2000
-    uint16 Duration[MAX_HOLIDAY_DURATIONS];
+    std::array<uint32, MAX_HOLIDAY_DATES> Date;                                 // dates in unix time starting at January, 1, 2000
+    std::array<uint16, MAX_HOLIDAY_DURATIONS> Duration;
     uint16 Region;
     uint8 Looping;
-    uint8 CalendarFlags[MAX_HOLIDAY_FLAGS];
+    std::array<uint8, MAX_HOLIDAY_FLAGS> CalendarFlags;
     uint8 Priority;
     int8 CalendarFilterType;
     uint8 Flags;
     uint32 HolidayNameID;
     uint32 HolidayDescriptionID;
-    int32 TextureFileDataID[3];
+    std::array<int32, 3> TextureFileDataID;
 };
 
 struct ImportPriceArmorEntry
@@ -1577,14 +1577,14 @@ struct ItemAppearanceEntry
 struct ItemArmorQualityEntry
 {
     uint32 ID;
-    float Qualitymod[7];
+    std::array<float, 7> Qualitymod;
     int16 ItemLevel;
 };
 
 struct ItemArmorShieldEntry
 {
     uint32 ID;
-    float Quality[7];
+    std::array<float, 7> Quality;
     uint16 ItemLevel;
 };
 
@@ -1607,7 +1607,7 @@ struct ItemBagFamilyEntry
 struct ItemBonusEntry
 {
     uint32 ID;
-    int32 Value[3];
+    std::array<int32, 3> Value;
     uint16 ParentItemBonusListID;
     uint8 Type;
     uint8 OrderIndex;
@@ -1655,35 +1655,35 @@ struct ItemCurrencyCostEntry
 struct ItemDamageAmmoEntry
 {
     uint32 ID;
-    float Quality[7];
+    std::array<float, 7> Quality;
     uint16 ItemLevel;
 };
 
 struct ItemDamageOneHandEntry
 {
     uint32 ID;
-    float Quality[7];
+    std::array<float, 7> Quality;
     uint16 ItemLevel;
 };
 
 struct ItemDamageOneHandCasterEntry
 {
     uint32 ID;
-    float Quality[7];
+    std::array<float, 7> Quality;
     uint16 ItemLevel;
 };
 
 struct ItemDamageTwoHandEntry
 {
     uint32 ID;
-    float Quality[7];
+    std::array<float, 7> Quality;
     uint16 ItemLevel;
 };
 
 struct ItemDamageTwoHandCasterEntry
 {
     uint32 ID;
-    float Quality[7];
+    std::array<float, 7> Quality;
     uint16 ItemLevel;
 };
 
@@ -1719,11 +1719,11 @@ struct ItemEffectEntry
 struct ItemExtendedCostEntry
 {
     uint32 ID;
-    int32 ItemID[MAX_ITEM_EXT_COST_ITEMS];                          // required item id
-    uint32 CurrencyCount[MAX_ITEM_EXT_COST_CURRENCIES];             // required curency count
-    uint16 ItemCount[MAX_ITEM_EXT_COST_ITEMS];                      // required count of 1st item
+    std::array<int32, MAX_ITEM_EXT_COST_ITEMS> ItemID;                          // required item id
+    std::array<uint32, MAX_ITEM_EXT_COST_CURRENCIES> CurrencyCount;             // required curency count
+    std::array<uint16, MAX_ITEM_EXT_COST_ITEMS> ItemCount;                      // required count of 1st item
     uint16 RequiredArenaRating;                                     // required personal arena rating
-    uint16 CurrencyID[MAX_ITEM_EXT_COST_CURRENCIES];                // required curency id
+    std::array<uint16, MAX_ITEM_EXT_COST_CURRENCIES> CurrencyID;                // required curency id
     uint8 ArenaBracket;                                             // arena slot restrictions (min slot value)
     uint8 MinFactionID;
     uint8 MinReputation;
@@ -1810,15 +1810,15 @@ struct ItemRandomPropertiesEntry
 {
     uint32 ID;
     LocalizedString Name;
-    uint16 Enchantment[MAX_ITEM_RANDOM_PROPERTIES];
+    std::array<uint16, MAX_ITEM_RANDOM_PROPERTIES> Enchantment;
 };
 
 struct ItemRandomSuffixEntry
 {
     uint32 ID;
     LocalizedString Name;
-    uint16 Enchantment[MAX_ITEM_RANDOM_PROPERTIES];
-    uint16 AllocationPct[MAX_ITEM_RANDOM_PROPERTIES];
+    std::array<uint16, MAX_ITEM_RANDOM_PROPERTIES> Enchantment;
+    std::array<uint16, MAX_ITEM_RANDOM_PROPERTIES> AllocationPct;
 };
 
 struct ItemSearchNameEntry
@@ -1826,7 +1826,7 @@ struct ItemSearchNameEntry
     Trinity::RaceMask<int64> AllowableRace;
     LocalizedString Display;
     uint32 ID;
-    int32 Flags[3];
+    std::array<int32, 3> Flags;
     uint16 ItemLevel;
     uint8 OverallQualityID;
     uint8 ExpansionID;
@@ -1845,7 +1845,7 @@ struct ItemSetEntry
 {
     uint32 ID;
     LocalizedString Name;
-    uint32 ItemID[MAX_ITEM_SET_ITEMS];
+    std::array<uint32, MAX_ITEM_SET_ITEMS> ItemID;
     uint16 RequiredSkillRank;
     uint32 RequiredSkill;
     uint32 SetFlags;
@@ -1869,7 +1869,7 @@ struct ItemSparseEntry
     LocalizedString Display2;
     LocalizedString Display3;
     LocalizedString Description;
-    int32 Flags[MAX_ITEM_PROTO_FLAGS];
+    std::array<int32, MAX_ITEM_PROTO_FLAGS> Flags;
     float PriceRandomValue;
     float PriceVariance;
     uint32 VendorStackCount;
@@ -1878,8 +1878,8 @@ struct ItemSparseEntry
     uint32 RequiredAbility;
     int32 MaxCount;
     int32 Stackable;
-    int32 StatPercentEditor[MAX_ITEM_PROTO_STATS];
-    float StatPercentageOfSocket[MAX_ITEM_PROTO_STATS];
+    std::array<int32, MAX_ITEM_PROTO_STATS> StatPercentEditor;
+    std::array<float, MAX_ITEM_PROTO_STATS> StatPercentageOfSocket;
     float ItemRange;
     uint32 BagFamily;
     float QualityModifier;
@@ -1890,7 +1890,7 @@ struct ItemSparseEntry
     uint16 RequiredSkill;
     uint16 RequiredSkillRank;
     uint16 MinFactionID;
-    int16 ItemStatValue[MAX_ITEM_PROTO_STATS];
+    std::array<int16, MAX_ITEM_PROTO_STATS> ItemStatValue;
     uint16 ScalingStatDistributionID;
     uint16 ItemDelay;
     uint16 PageID;
@@ -1915,14 +1915,14 @@ struct ItemSparseEntry
     uint8 RequiredPVPMedal;
     uint8 MinReputation;
     uint8 ContainerSlots;
-    int8 StatModifierBonusStat[MAX_ITEM_PROTO_STATS];
+    std::array<int8, MAX_ITEM_PROTO_STATS> StatModifierBonusStat;
     uint8 DamageDamageType;
     uint8 Bonding;
     uint8 LanguageID;
     uint8 PageMaterialID;
     uint8 Material;
     uint8 SheatheType;
-    uint8 SocketType[MAX_ITEM_PROTO_SOCKETS];
+    std::array<uint8, MAX_ITEM_PROTO_SOCKETS> SocketType;
     uint8 SpellWeightCategory;
     uint8 SpellWeight;
     uint8 ArtifactID;
@@ -2026,7 +2026,7 @@ struct JournalTierEntry
 struct KeychainEntry
 {
     uint32 ID;
-    uint8 Key[KEYCHAIN_SIZE];
+    std::array<uint8, KEYCHAIN_SIZE> Key;
 };
 
 struct KeystoneAffixEntry
@@ -2098,7 +2098,7 @@ struct LightEntry
     float GameFalloffStart;
     float GameFalloffEnd;
     int16 ContinentID;
-    uint16 LightParamsID[8];
+    std::array<uint16, 8> LightParamsID;
 };
 
 struct LiquidTypeEntry
@@ -2112,16 +2112,16 @@ struct LiquidTypeEntry
     float AmbDarkenIntensity;
     float DirDarkenIntensity;
     float ParticleScale;
-    int32 Color[2];
-    float Float[18];
-    uint32 Int[4];
+    std::array<int32, 2> Color;
+    std::array<float, 18> Float;
+    std::array<uint32, 4> Int;
     uint16 Flags;
     uint16 LightID;
     uint8 SoundBank;                                                // used to be "type", maybe needs fixing (works well for now)
     uint8 ParticleMovement;
     uint8 ParticleTexSlots;
     uint8 MaterialID;
-    uint8 FrameCountTexture[6];
+    std::array<uint8, 6> FrameCountTexture;
     uint32 SoundID;
 };
 
@@ -2130,10 +2130,10 @@ struct LiquidTypeEntry
 struct LockEntry
 {
     uint32 ID;
-    int32 Index[MAX_LOCK_CASE];
-    uint16 Skill[MAX_LOCK_CASE];
-    uint8 Type[MAX_LOCK_CASE];
-    uint8 Action[MAX_LOCK_CASE];
+    std::array<int32, MAX_LOCK_CASE> Index;
+    std::array<uint16, MAX_LOCK_CASE> Skill;
+    std::array<uint8, MAX_LOCK_CASE> Type;
+    std::array<uint8, MAX_LOCK_CASE> Action;
 };
 
 struct MailTemplateEntry
@@ -2151,7 +2151,7 @@ struct MapEntry
     LocalizedString MapDescription1;                               // Alliance
     LocalizedString PvpShortDescription;
     LocalizedString PvpLongDescription;
-    int32 Flags[2];
+    std::array<int32, 2> Flags;
     float MinimapIconScale;
     DBCPosition2D Corpse;                                           // entrance coordinates in ghost mode  (in most cases = normal entrance)
     uint16 AreaTableID;
@@ -2204,7 +2204,7 @@ struct MapChallengeModeEntry
     LocalizedString Name;
     uint32 ID;
     uint16 MapID;
-    int16 CriteriaCount[3];
+    std::array<int16, 3> CriteriaCount;
     uint8 Flags;
 };
 
@@ -2339,7 +2339,7 @@ struct NamesReservedLocaleEntry
 struct OverrideSpellDataEntry
 {
     uint32 ID;
-    int32 Spells[MAX_OVERRIDE_SPELL];
+    std::array<int32, MAX_OVERRIDE_SPELL> Spells;
     int32 PlayerActionBarFileDataID;
     uint8 Flags;
 };
@@ -2426,30 +2426,30 @@ struct PlayerConditionEntry
     uint8 PowerTypeValue;
     uint32 ModifierTreeID;
     int32 WeaponSubclassMask;
-    uint16 SkillID[4];
-    uint16 MinSkill[4];
-    uint16 MaxSkill[4];
-    uint32 MinFactionID[3];
-    uint8 MinReputation[3];
-    uint16 PrevQuestID[4];
-    uint16 CurrQuestID[4];
-    uint16 CurrentCompletedQuestID[4];
-    int32 SpellID[4];
-    int32 ItemID[4];
-    uint32 ItemCount[4];
-    uint16 Explored[2];
-    uint32 Time[2];
-    int32 AuraSpellID[4];
-    uint8 AuraStacks[4];
-    uint16 Achievement[4];
-    uint8 LfgStatus[4];
-    uint8 LfgCompare[4];
-    uint32 LfgValue[4];
-    uint16 AreaID[4];
-    uint32 CurrencyID[4];
-    uint32 CurrencyCount[4];
-    uint32 QuestKillMonster[6];
-    int32 MovementFlags[2];
+    std::array<uint16, 4> SkillID;
+    std::array<uint16, 4> MinSkill;
+    std::array<uint16, 4> MaxSkill;
+    std::array<uint32, 3> MinFactionID;
+    std::array<uint8, 3> MinReputation;
+    std::array<uint16, 4> PrevQuestID;
+    std::array<uint16, 4> CurrQuestID;
+    std::array<uint16, 4> CurrentCompletedQuestID;
+    std::array<int32, 4> SpellID;
+    std::array<int32, 4> ItemID;
+    std::array<uint32, 4> ItemCount;
+    std::array<uint16, 2> Explored;
+    std::array<uint32, 2> Time;
+    std::array<int32, 4> AuraSpellID;
+    std::array<uint8, 4> AuraStacks;
+    std::array<uint16, 4> Achievement;
+    std::array<uint8, 4> LfgStatus;
+    std::array<uint8, 4> LfgCompare;
+    std::array<uint32, 4> LfgValue;
+    std::array<uint16, 4> AreaID;
+    std::array<uint32, 4> CurrencyID;
+    std::array<uint32, 4> CurrencyCount;
+    std::array<uint32, 6> QuestKillMonster;
+    std::array<int32, 2> MovementFlags;
 };
 
 struct PowerDisplayEntry
@@ -2543,7 +2543,7 @@ struct PvpTalentUnlockEntry
 struct QuestFactionRewardEntry
 {
     uint32 ID;
-    int16 Difficulty[10];
+    std::array<int16, 10> Difficulty;
 };
 
 struct QuestInfoEntry
@@ -2566,7 +2566,7 @@ struct QuestLineXQuestEntry
 struct QuestMoneyRewardEntry
 {
     uint32 ID;
-    uint32 Difficulty[10];
+    std::array<uint32, 10> Difficulty;
 };
 
 struct QuestPackageItemEntry
@@ -2594,15 +2594,15 @@ struct QuestV2Entry
 struct QuestXPEntry
 {
     uint32 ID;
-    uint16 Difficulty[10];
+    std::array<uint16, 10> Difficulty;
 };
 
 struct RandPropPointsEntry
 {
     uint32 ID;
-    uint32 Epic[5];
-    uint32 Superior[5];
-    uint32 Good[5];
+    std::array<uint32, 5> Epic;
+    std::array<uint32, 5> Superior;
+    std::array<uint32, 5> Good;
 };
 
 struct RewardPackEntry
@@ -2921,9 +2921,9 @@ struct SpellEffectEntry
     float ResourceCoefficient;
     float GroupSizeBasePointsCoefficient;
     flag128 EffectSpellClassMask;
-    int32 EffectMiscValue[2];
-    uint32 EffectRadiusIndex[2];
-    uint32 ImplicitTarget[2];
+    std::array<int32, 2> EffectMiscValue;
+    std::array<uint32, 2> EffectRadiusIndex;
+    std::array<uint32, 2> ImplicitTarget;
     int32 SpellID;
 
     SpellEffectAttributes GetEffectAttributes() const { return static_cast<SpellEffectAttributes>(EffectAttributes); }
@@ -2949,8 +2949,8 @@ struct SpellInterruptsEntry
     uint32 ID;
     uint8 DifficultyID;
     int16 InterruptFlags;
-    int32 AuraInterruptFlags[MAX_SPELL_AURA_INTERRUPT_FLAGS];
-    int32 ChannelInterruptFlags[MAX_SPELL_AURA_INTERRUPT_FLAGS];
+    std::array<int32, MAX_SPELL_AURA_INTERRUPT_FLAGS> AuraInterruptFlags;
+    std::array<int32, MAX_SPELL_AURA_INTERRUPT_FLAGS> ChannelInterruptFlags;
     int32 SpellID;
 };
 
@@ -2960,18 +2960,18 @@ struct SpellItemEnchantmentEntry
 {
     uint32 ID;
     LocalizedString Name;
-    uint32 EffectArg[MAX_ITEM_ENCHANTMENT_EFFECTS];
-    float EffectScalingPoints[MAX_ITEM_ENCHANTMENT_EFFECTS];
+    std::array<uint32, MAX_ITEM_ENCHANTMENT_EFFECTS> EffectArg;
+    std::array<float, MAX_ITEM_ENCHANTMENT_EFFECTS> EffectScalingPoints;
     uint32 TransmogCost;
     uint32 IconFileDataID;
-    int16 EffectPointsMin[MAX_ITEM_ENCHANTMENT_EFFECTS];
+    std::array<int16, MAX_ITEM_ENCHANTMENT_EFFECTS> EffectPointsMin;
     uint16 ItemVisual;
     uint16 Flags;
     uint16 RequiredSkillID;
     uint16 RequiredSkillRank;
     uint16 ItemLevel;
     uint8 Charges;
-    uint8 Effect[MAX_ITEM_ENCHANTMENT_EFFECTS];
+    std::array<uint8, MAX_ITEM_ENCHANTMENT_EFFECTS> Effect;
     uint8 ConditionID;
     uint8 MinLevel;
     uint8 MaxLevel;
@@ -2985,12 +2985,12 @@ struct SpellItemEnchantmentEntry
 struct SpellItemEnchantmentConditionEntry
 {
     uint32 ID;
-    uint32 LtOperand[5];
-    uint8 LtOperandType[5];
-    uint8 Operator[5];
-    uint8 RtOperandType[5];
-    uint8 RtOperand[5];
-    uint8 Logic[5];
+    std::array<uint32, 5> LtOperand;
+    std::array<uint8, 5> LtOperandType;
+    std::array<uint8, 5> Operator;
+    std::array<uint8, 5> RtOperandType;
+    std::array<uint8, 5> RtOperand;
+    std::array<uint8, 5> Logic;
 };
 
 struct SpellLabelEntry
@@ -3031,7 +3031,7 @@ struct SpellMiscEntry
     int32 ActiveIconFileDataID;
     float LaunchDelay;
     uint8 DifficultyID;
-    int32 Attributes[14];
+    std::array<int32, 14> Attributes;
     int32 SpellID;
 };
 
@@ -3091,8 +3091,8 @@ struct SpellRangeEntry
     uint32 ID;
     LocalizedString DisplayName;
     LocalizedString DisplayNameShort;
-    float RangeMin[2];
-    float RangeMax[2];
+    std::array<float, 2> RangeMin;
+    std::array<float, 2> RangeMax;
     uint8 Flags;
 };
 
@@ -3102,8 +3102,8 @@ struct SpellReagentsEntry
 {
     uint32 ID;
     int32 SpellID;
-    int32 Reagent[MAX_SPELL_REAGENTS];
-    int16 ReagentCount[MAX_SPELL_REAGENTS];
+    std::array<int32, MAX_SPELL_REAGENTS> Reagent;
+    std::array<int16, MAX_SPELL_REAGENTS> ReagentCount;
 };
 
 struct SpellReagentsCurrencyEntry
@@ -3128,8 +3128,8 @@ struct SpellShapeshiftEntry
 {
     uint32 ID;
     int32 SpellID;
-    int32 ShapeshiftExclude[2];
-    int32 ShapeshiftMask[2];
+    std::array<int32, 2> ShapeshiftExclude;
+    std::array<int32, 2> ShapeshiftMask;
     int8 StanceBarOrder;
 };
 
@@ -3146,8 +3146,8 @@ struct SpellShapeshiftFormEntry
     int8 CreatureType;
     int8 BonusActionBar;
     int32 AttackIconFileID;
-    uint32 CreatureDisplayID[4];
-    uint32 PresetSpellID[MAX_SHAPESHIFT_SPELLS];
+    std::array<uint32, 4> CreatureDisplayID;
+    std::array<uint32, MAX_SHAPESHIFT_SPELLS> PresetSpellID;
 
     EnumFlag<SpellShapeshiftFormFlags> GetFlags() const { return static_cast<SpellShapeshiftFormFlags>(Flags); }
 };
@@ -3171,15 +3171,15 @@ struct SpellTotemsEntry
 {
     uint32 ID;
     int32 SpellID;
-    int32 Totem[MAX_SPELL_TOTEMS];
-    uint16 RequiredTotemCategoryID[MAX_SPELL_TOTEMS];
+    std::array<int32, MAX_SPELL_TOTEMS> Totem;
+    std::array<uint16, MAX_SPELL_TOTEMS> RequiredTotemCategoryID;
 };
 
 struct SpellVisualEntry
 {
     uint32 ID;
-    float MissileCastOffset[3];
-    float MissileImpactOffset[3];
+    std::array<float, 3> MissileCastOffset;
+    std::array<float, 3> MissileImpactOffset;
     int32 Flags;
     uint16 SpellVisualMissileSetID;
     int8 MissileDestinationAttachment;
@@ -3217,8 +3217,8 @@ struct SpellVisualMissileEntry
     int32 FollowGroundHeight;
     uint32 FollowGroundDropSpeed;
     uint32 Flags;
-    float CastOffset[3];
-    float ImpactOffset[3];
+    std::array<float, 3> CastOffset;
+    std::array<float, 3> ImpactOffset;
     uint16 SpellVisualEffectNameID;
     uint16 CastPositionerID;
     uint16 ImpactPositionerID;
@@ -3276,7 +3276,7 @@ struct SummonPropertiesEntry
 struct TactKeyEntry
 {
     uint32 ID;
-    uint8 Key[TACTKEY_SIZE];
+    std::array<uint8, TACTKEY_SIZE> Key;
 };
 
 struct TalentEntry
@@ -3289,7 +3289,7 @@ struct TalentEntry
     uint8 TierID;
     uint8 ColumnIndex;
     uint8 Flags;
-    uint8 CategoryMask[2];
+    std::array<uint8, 2> CategoryMask;
     uint8 ClassID;
 };
 
@@ -3298,7 +3298,7 @@ struct TaxiNodesEntry
     uint32 ID;
     LocalizedString Name;
     DBCPosition3D Pos;
-    int32 MountCreatureID[2];
+    std::array<int32, 2> MountCreatureID;
     DBCPosition2D MapOffset;
     float Facing;
     DBCPosition2D FlightMapOffset;
@@ -3395,7 +3395,7 @@ struct TransportRotationEntry
 {
     uint32 ID;
     uint32 TimeIndex;
-    float Rot[4];
+    std::array<float, 4> Rot;
     int32 GameObjectsID;
 };
 
@@ -3404,10 +3404,10 @@ struct TransportRotationEntry
 struct UnitConditionEntry
 {
     uint32 ID;
-    int32 Value[MAX_UNIT_CONDITION_VALUES];
+    std::array<int32, MAX_UNIT_CONDITION_VALUES> Value;
     uint8 Flags;
-    uint8 Variable[MAX_UNIT_CONDITION_VALUES];
-    int8 Op[MAX_UNIT_CONDITION_VALUES];
+    std::array<uint8, MAX_UNIT_CONDITION_VALUES> Variable;
+    std::array<int8, MAX_UNIT_CONDITION_VALUES> Op;
 
     EnumFlag<UnitConditionFlags> GetFlags() const { return static_cast<UnitConditionFlags>(Flags); }
 };
@@ -3421,8 +3421,8 @@ struct UnitPowerBarEntry
     LocalizedString ToolTip;
     float RegenerationPeace;
     float RegenerationCombat;
-    int32 FileDataID[6];
-    int32 Color[6];
+    std::array<int32, 6> FileDataID;
+    std::array<int32, 6> Color;
     float StartInset;
     float EndInset;
     uint16 StartPower;
@@ -3450,9 +3450,9 @@ struct VehicleEntry
     float FacingLimitRight;
     float FacingLimitLeft;
     float CameraYawOffset;
-    uint16 SeatID[MAX_VEHICLE_SEATS];
+    std::array<uint16, MAX_VEHICLE_SEATS> SeatID;
     uint16 VehicleUIIndicatorID;
-    uint16 PowerDisplayID[3];
+    std::array<uint16, 3> PowerDisplayID;
     uint8 FlagsB;
     uint8 UiLocomotionType;
     int32 MissileTargetingID;
@@ -3604,7 +3604,7 @@ struct WorldMapOverlayEntry
     int32 HitRectRight;
     uint32 PlayerConditionID;
     uint32 Flags;
-    uint32 AreaID[MAX_WORLD_MAP_OVERLAY_AREA_IDX];
+    std::array<uint32, MAX_WORLD_MAP_OVERLAY_AREA_IDX> AreaID;
 };
 
 struct WorldMapTransformsEntry

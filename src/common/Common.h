@@ -116,7 +116,7 @@ struct LocalizedString
         return Str[locale];
     }
 
-    char const* Str[TOTAL_LOCALES];
+    std::array<char const*, TOTAL_LOCALES> Str;
 };
 
 #pragma pack(pop)

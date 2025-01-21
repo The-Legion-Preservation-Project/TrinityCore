@@ -2630,7 +2630,7 @@ void BonusData::AddBonusList(uint32 bonusListId)
             AddBonus(bonus->Type, bonus->Value);
 }
 
-void BonusData::AddBonus(uint32 type, int32 const (&values)[3])
+void BonusData::AddBonus(uint32 type, std::array<int32, 3> const& values)
 {
     switch (type)
     {
