@@ -3392,13 +3392,17 @@ struct TransportRotationEntry
     int32 GameObjectsID;
 };
 
+#define MAX_UNIT_CONDITION_VALUES 8
+
 struct UnitConditionEntry
 {
     uint32 ID;
-    int32 Value[8];
+    int32 Value[MAX_UNIT_CONDITION_VALUES];
     uint8 Flags;
-    uint8 Variable[8];
-    int8 Op[8];
+    uint8 Variable[MAX_UNIT_CONDITION_VALUES];
+    int8 Op[MAX_UNIT_CONDITION_VALUES];
+
+    EnumFlag<UnitConditionFlags> GetFlags() const { return static_cast<UnitConditionFlags>(Flags); }
 };
 
 struct UnitPowerBarEntry
