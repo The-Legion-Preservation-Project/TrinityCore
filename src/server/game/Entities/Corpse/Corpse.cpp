@@ -26,6 +26,7 @@
 #include "ObjectAccessor.h"
 #include "PhasingHandler.h"
 #include "Player.h"
+#include "StringConvert.h"
 #include "UpdateData.h"
 #include "World.h"
 #include <sstream>

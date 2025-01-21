@@ -23,6 +23,7 @@
 #include "LootMgr.h"
 #include "ObjectMgr.h"
 #include "Player.h"
+#include "StringConvert.h"
 #include <sstream>
 #include <unordered_map>
 
@@ -88,11 +89,9 @@ void LootItemStorage::LoadStorageFromDB()
             lootItem.randomPropertyId = { ItemRandomEnchantmentType(fields[9].GetUInt8()), fields[10].GetUInt32() };
             lootItem.randomSuffix = fields[11].GetUInt32();
             lootItem.context = ItemContext(fields[12].GetUInt8());
-            Tokenizer bonusLists(fields[13].GetString(), ' ');
-            std::transform(bonusLists.begin(), bonusLists.end(), std::back_inserter(lootItem.BonusListIDs), [](char const* token)
-                {
-                    return int32(strtol(token, nullptr, 10));
-                });
+            for (std::string_view bonusList : Trinity::Tokenize(fields[13].GetStringView(), ' ', false))
+                if (Optional<int32> bonusListID = Trinity::StringTo<int32>(bonusList))
+                    lootItem.BonusListIDs.push_back(*bonusListID);
 
             storedContainer.AddLootItem(lootItem, trans);
 

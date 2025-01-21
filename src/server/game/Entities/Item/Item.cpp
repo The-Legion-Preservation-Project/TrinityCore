@@ -38,6 +38,7 @@
 #include "ScriptMgr.h"
 #include "SpellInfo.h"
 #include "SpellMgr.h"
+#include "StringConvert.h"
 #include "TradeData.h"
 #include "UpdateData.h"
 #include "World.h"
@@ -709,7 +710,10 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
 
     ItemTemplate const* proto = GetTemplate();
     if (!proto)
+    {
+        TC_LOG_ERROR("entities.item", "Invalid entry %u for item %s. Refusing to load.", GetEntry(), GetGUID().ToString().c_str());
         return false;
+    }
 
     _bonusData.Initialize(proto);
 
@@ -779,18 +783,18 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
 
     SetContext(ItemContext(fields[19].GetUInt8()));
 
-    Tokenizer bonusListIDs(fields[20].GetString(), ' ');
-    for (char const* token : bonusListIDs)
-    {
-        uint32 bonusListID = atoul(token);
-        AddBonuses(bonusListID);
-    }
+    std::vector<std::string_view> bonusListString = Trinity::Tokenize(fields[20].GetStringView(), ' ', false);
+    std::vector<int32> bonusListIDs;
+    bonusListIDs.reserve(bonusListString.size());
+    for (std::string_view token : bonusListString)
+        if (Optional<int32> bonusListID = Trinity::StringTo<int32>(token))
+            AddBonuses(*bonusListID);
 
     // load charges after bonuses, they can add more item effects
-    Tokenizer tokens(fields[6].GetString(), ' ', proto->Effects.size());
+    std::vector<std::string_view> tokens = Trinity::Tokenize(fields[6].GetStringView(), ' ', false);
     if (tokens.size() == proto->Effects.size())
         for (uint8 i = 0; i < proto->Effects.size(); ++i)
-            SetSpellCharges(i, atoi(tokens[i]));
+            SetSpellCharges(i, Trinity::StringTo<int32>(tokens[i]).value_or(0));
 
     SetModifier(ITEM_MODIFIER_TRANSMOG_APPEARANCE_ALL_SPECS, fields[21].GetUInt32());
     SetModifier(ITEM_MODIFIER_TRANSMOG_APPEARANCE_SPEC_1, fields[22].GetUInt32());
@@ -810,11 +814,11 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
     for (uint32 i = 0; i < MAX_GEM_SOCKETS; ++i)
     {
         gemData[i].ItemId = fields[31 + i * gemFields].GetUInt32();
-        Tokenizer gemBonusListIDs(fields[32 + i * gemFields].GetString(), ' ');
+        std::vector<std::string_view> gemBonusListIDs = Trinity::Tokenize(fields[32 + i * gemFields].GetStringView(), ' ', false);
         uint32 b = 0;
-        for (char const* token : gemBonusListIDs)
-            if (uint32 bonusListID = atoul(token))
-                gemData[i].BonusListIDs[b++] = bonusListID;
+        for (std::string_view token : gemBonusListIDs)
+            if (Optional<uint16> bonusListID = Trinity::StringTo<uint16>(token))
+                gemData[i].BonusListIDs[b++] = *bonusListID;
 
         gemData[i].Context = fields[33 + i * gemFields].GetUInt8();
         if (gemData[i].ItemId)

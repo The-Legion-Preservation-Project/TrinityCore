@@ -20,6 +20,7 @@
 #include "Field.h"
 #include "ObjectMgr.h"
 #include "Player.h"
+#include "StringConvert.h"
 #include "World.h"
 
 namespace WorldPackets
@@ -109,10 +110,10 @@ EnumCharactersResult::CharacterInfo::CharacterInfo(Field* fields)
     ProfessionIds[0] = 0;
     ProfessionIds[1] = 0;
 
-    Tokenizer equipment(fields[25].GetString(), ' ');
+    std::vector<std::string_view> equipment = Trinity::Tokenize(fields[25].GetStringView(), ' ', false);
     ListPosition = fields[27].GetUInt8();
     LastPlayedTime = fields[28].GetInt64();
-    if (ChrSpecializationEntry const* spec = sDB2Manager.GetChrSpecializationByIndex(ClassID, fields[29].GetUInt8()))
+    if (ChrSpecializationEntry const* spec = sDB2Manager.GetChrSpecializationByIndex(ClassID, fields[21].GetUInt8()))
         SpecID = spec->ID;
 
     LastLoginVersion = fields[30].GetUInt32();
@@ -120,9 +121,9 @@ EnumCharactersResult::CharacterInfo::CharacterInfo(Field* fields)
     for (uint8 slot = 0; slot < INVENTORY_SLOT_BAG_END; ++slot)
     {
         uint32 visualBase = slot * 3;
-        VisualItems[slot].InvType = Player::GetUInt32ValueFromArray(equipment, visualBase);
-        VisualItems[slot].DisplayID = Player::GetUInt32ValueFromArray(equipment, visualBase + 1);
-        VisualItems[slot].DisplayEnchantID = Player::GetUInt32ValueFromArray(equipment, visualBase + 2);
+        VisualItems[slot].InvType = Trinity::StringTo<uint8>(equipment[visualBase + 0]).value_or(0);
+        VisualItems[slot].DisplayID = Trinity::StringTo<uint32>(equipment[visualBase + 1]).value_or(0);
+        VisualItems[slot].DisplayEnchantID = Trinity::StringTo<uint32>(equipment[visualBase + 2]).value_or(0);
     }
 }
 
