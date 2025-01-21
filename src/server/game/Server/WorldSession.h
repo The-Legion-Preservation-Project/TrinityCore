@@ -1400,8 +1400,6 @@ class TC_GAME_API WorldSession
         void HandleRequestStabledPets(WorldPackets::NPC::RequestStabledPets& packet);
         void HandleStablePet(WorldPacket& recvPacket);
         void HandleUnstablePet(WorldPacket& recvPacket);
-        void HandleBuyStableSlot(WorldPacket& recvPacket);
-        void HandleStableRevivePet(WorldPacket& recvPacket);
         void HandleStableSwapPet(WorldPacket& recvPacket);
 
         void HandleCanDuel(WorldPackets::Duel::CanDuel& packet);
