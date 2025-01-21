@@ -55,9 +55,12 @@ enum PaladinSpells
     SPELL_PALADIN_CONSECRATION_PROTECTION_AURA   = 188370,
     SPELL_PALADIN_DIVINE_PURPOSE_PROC            = 90174,
     SPELL_PALADIN_DIVINE_STEED_HUMAN             = 221883,
+    SPELL_PALADIN_DIVINE_STEED_DWARF             = 276111,
     SPELL_PALADIN_DIVINE_STEED_DRAENEI           = 221887,
+    SPELL_PALADIN_DIVINE_STEED_DARK_IRON_DWARF   = 276112,
     SPELL_PALADIN_DIVINE_STEED_BLOODELF          = 221886,
     SPELL_PALADIN_DIVINE_STEED_TAUREN            = 221885,
+    SPELL_PALADIN_DIVINE_STEED_ZANDALARI_TROLL   = 294133,
     SPELL_PALADIN_DIVINE_STORM_DAMAGE            = 224239,
     SPELL_PALADIN_ENDURING_LIGHT                 = 40471,
     SPELL_PALADIN_ENDURING_JUDGEMENT             = 40472,
@@ -65,7 +68,7 @@ enum PaladinSpells
     SPELL_PALADIN_FINAL_STAND                    = 204077,
     SPELL_PALADIN_FINAL_STAND_EFFECT             = 204079,
     SPELL_PALADIN_FORBEARANCE                    = 25771,
-    SPELL_PALADIN_LIGHT_OF_THE_PROTECTOR         = 184092,
+    SPELL_PALADIN_GUARDIAN_OF_ANCIENT_KINGS      = 86659,
     SPELL_PALADIN_HAMMER_OF_JUSTICE              = 853,
     SPELL_PALADIN_HAMMER_OF_THE_RIGHTEOUS_AOE    = 88263,
     SPELL_PALADIN_HAND_OF_SACRIFICE              = 6940,
@@ -83,12 +86,15 @@ enum PaladinSpells
     SPELL_PALADIN_HOLY_SHOCK_R1_HEALING          = 25914,
     SPELL_PALADIN_IMMUNE_SHIELD_MARKER           = 61988,
     SPELL_PALADIN_ITEM_HEALING_TRANCE            = 37706,
-    SPELL_PALADIN_JUDGEMENT_GAIN_HOLY_POWER      = 220637,
-    SPELL_PALADIN_LIGHT_OF_DAWN                  = 85222,
+    SPELL_PALADIN_JUDGMENT_GAIN_HOLY_POWER       = 220637,
+    SPELL_PALADIN_JUDGMENT_HOLY_R3               = 231644,
+    SPELL_PALADIN_JUDGMENT_HOLY_R3_DEBUFF        = 214222,
+    SPELL_PALADIN_JUDGMENT_PROT_RET_R3           = 315867,
     SPELL_PALADIN_RIGHTEOUS_DEFENSE_TAUNT        = 31790,
+    SPELL_PALADIN_RIGHTEOUS_VERDICT_AURA         = 267611,
     SPELL_PALADIN_SEAL_OF_RIGHTEOUSNESS          = 25742,
-    SPELL_PALADIN_SHIELD_OF_THE_RIGHTEOUS        = 37185,
-    SPELL_PALADIN_TEMPLAR_VERDICT_DAMAGE         = 224266
+    SPELL_PALADIN_TEMPLAR_VERDICT_DAMAGE         = 224266,
+    SPELL_PALADIN_ZEAL_AURA                      = 269571,
 };
 
 enum PaladinSpellVisualKit
@@ -355,13 +361,12 @@ class spell_pal_crusader_might : public AuraScript
 
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
-        return ValidateSpellInfo({ SPELL_PALADIN_HOLY_SHOCK_R1, SPELL_PALADIN_LIGHT_OF_DAWN });
+        return ValidateSpellInfo({ SPELL_PALADIN_HOLY_SHOCK_R1 });
     }
 
     void HandleEffectProc(AuraEffect* aurEff, ProcEventInfo& /*eventInfo*/)
     {
         GetTarget()->GetSpellHistory()->ModifyCooldown(SPELL_PALADIN_HOLY_SHOCK_R1, Seconds(aurEff->GetAmount()));
-        GetTarget()->GetSpellHistory()->ModifyCooldown(SPELL_PALADIN_LIGHT_OF_DAWN, Seconds(aurEff->GetAmount()));
     }
 
     void Register() override
@@ -426,9 +431,12 @@ class spell_pal_divine_steed : public SpellScript
         return ValidateSpellInfo(
         {
             SPELL_PALADIN_DIVINE_STEED_HUMAN,
+            SPELL_PALADIN_DIVINE_STEED_DWARF,
             SPELL_PALADIN_DIVINE_STEED_DRAENEI,
+            SPELL_PALADIN_DIVINE_STEED_DARK_IRON_DWARF,
             SPELL_PALADIN_DIVINE_STEED_BLOODELF,
-            SPELL_PALADIN_DIVINE_STEED_TAUREN
+            SPELL_PALADIN_DIVINE_STEED_TAUREN,
+            SPELL_PALADIN_DIVINE_STEED_ZANDALARI_TROLL
         });
     }
 
@@ -440,18 +448,27 @@ class spell_pal_divine_steed : public SpellScript
         switch (caster->GetRace())
         {
             case RACE_HUMAN:
-            case RACE_DWARF:
                 spellId = SPELL_PALADIN_DIVINE_STEED_HUMAN;
                 break;
+            case RACE_DWARF:
+                spellId = SPELL_PALADIN_DIVINE_STEED_DWARF;
+                break;
             case RACE_DRAENEI:
+            case RACE_LIGHTFORGED_DRAENEI:
                 spellId = SPELL_PALADIN_DIVINE_STEED_DRAENEI;
                 break;
+            // case RACE_DARK_IRON_DWARF:
+            //     spellId = SPELL_PALADIN_DIVINE_STEED_DARK_IRON_DWARF;
+            //     break;
             case RACE_BLOODELF:
                 spellId = SPELL_PALADIN_DIVINE_STEED_BLOODELF;
                 break;
             case RACE_TAUREN:
                 spellId = SPELL_PALADIN_DIVINE_STEED_TAUREN;
                 break;
+            // case RACE_ZANDALARI_TROLL:
+            //     spellId = SPELL_PALADIN_DIVINE_STEED_ZANDALARI_TROLL;
+            //     break;
             default:
                 break;
         }
@@ -674,6 +691,60 @@ class spell_pal_hand_of_sacrifice : public SpellScriptLoader
         {
             return new spell_pal_hand_of_sacrifice_AuraScript();
         }
+};
+
+// 327193 - Moment of Glory
+class spell_pal_moment_of_glory : public SpellScript
+{
+    PrepareSpellScript(spell_pal_moment_of_glory);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_PALADIN_AVENGERS_SHIELD });
+    }
+
+    void HandleOnHit()
+    {
+        GetCaster()->GetSpellHistory()->ResetCooldown(SPELL_PALADIN_AVENGERS_SHIELD);
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_pal_moment_of_glory::HandleOnHit);
+    }
+};
+
+// 20271/275779/275773 - Judgement (Retribution/Protection/Holy)
+class spell_pal_judgment : public SpellScript
+{
+    PrepareSpellScript(spell_pal_judgment);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo
+        ({
+            SPELL_PALADIN_JUDGMENT_PROT_RET_R3,
+            SPELL_PALADIN_JUDGMENT_GAIN_HOLY_POWER,
+            SPELL_PALADIN_JUDGMENT_HOLY_R3,
+            SPELL_PALADIN_JUDGMENT_HOLY_R3_DEBUFF
+        });
+    }
+
+    void HandleOnHit()
+    {
+        Unit* caster = GetCaster();
+
+        if (caster->HasSpell(SPELL_PALADIN_JUDGMENT_PROT_RET_R3))
+            caster->CastSpell(caster, SPELL_PALADIN_JUDGMENT_GAIN_HOLY_POWER, GetSpell());
+
+        if (caster->HasSpell(SPELL_PALADIN_JUDGMENT_HOLY_R3))
+            caster->CastSpell(GetHitUnit(), SPELL_PALADIN_JUDGMENT_HOLY_R3_DEBUFF, GetSpell());
+    }
+
+    void Register() override
+    {
+        OnHit += SpellHitFn(spell_pal_judgment::HandleOnHit);
+    }
 };
 
 // 114165 - Holy Prism
@@ -1003,27 +1074,60 @@ class spell_pal_light_s_beacon : public SpellScriptLoader
 };
 
 // 204074 - Righteous Protector
-// TODO TheLegionPreservationProject: this doesn't proc correctly
 class spell_pal_righteous_protector : public AuraScript
 {
     PrepareAuraScript(spell_pal_righteous_protector);
 
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
-        return ValidateSpellInfo({ SPELL_PALADIN_AVENGING_WRATH, SPELL_PALADIN_LIGHT_OF_THE_PROTECTOR });
+        return ValidateSpellInfo({ SPELL_PALADIN_AVENGING_WRATH, SPELL_PALADIN_GUARDIAN_OF_ANCIENT_KINGS });
+    }
+
+    bool CheckEffectProc(AuraEffect const* /*aurEff*/, ProcEventInfo& eventInfo)
+    {
+        if (SpellInfo const* procSpell = eventInfo.GetSpellInfo())
+            _baseHolyPowerCost = procSpell->CalcPowerCost(POWER_HOLY_POWER, false, eventInfo.GetActor(), eventInfo.GetSchoolMask());
+        else
+            _baseHolyPowerCost.reset();
+
+        return _baseHolyPowerCost.has_value();
     }
 
     void HandleEffectProc(AuraEffect* aurEff, ProcEventInfo& /*eventInfo*/)
     {
-        int32 value = aurEff->GetAmount() * 1000;
+        int32 value = aurEff->GetAmount() * 100 * _baseHolyPowerCost->Amount;
 
         GetTarget()->GetSpellHistory()->ModifyCooldown(SPELL_PALADIN_AVENGING_WRATH, Seconds(-value));
-        GetTarget()->GetSpellHistory()->ModifyCooldown(SPELL_PALADIN_LIGHT_OF_THE_PROTECTOR, Seconds(-value));
+        GetTarget()->GetSpellHistory()->ModifyCooldown(SPELL_PALADIN_GUARDIAN_OF_ANCIENT_KINGS, Seconds(-value));
     }
 
     void Register() override
     {
+        DoCheckEffectProc += AuraCheckEffectProcFn(spell_pal_righteous_protector::CheckEffectProc, EFFECT_0, SPELL_AURA_DUMMY);
         OnEffectProc += AuraEffectProcFn(spell_pal_righteous_protector::HandleEffectProc, EFFECT_0, SPELL_AURA_DUMMY);
+    }
+
+    Optional<SpellPowerCost> _baseHolyPowerCost;
+};
+
+// 267610 - Righteous Verdict
+class spell_pal_righteous_verdict : public AuraScript
+{
+    PrepareAuraScript(spell_pal_righteous_verdict);
+
+    bool Validate(SpellInfo const* /*spellEntry*/) override
+    {
+        return ValidateSpellInfo({ SPELL_PALADIN_RIGHTEOUS_VERDICT_AURA });
+    }
+
+    void HandleEffectProc(AuraEffect* /*aurEff*/, ProcEventInfo& procInfo)
+    {
+        procInfo.GetActor()->CastSpell(procInfo.GetActor(), SPELL_PALADIN_RIGHTEOUS_VERDICT_AURA, true);
+    }
+
+    void Register() override
+    {
+        OnEffectProc += AuraEffectProcFn(spell_pal_righteous_verdict::HandleEffectProc, EFFECT_0, SPELL_AURA_DUMMY);
     }
 };
 
@@ -1183,6 +1287,30 @@ class spell_pal_t8_2p_bonus : public SpellScriptLoader
         }
 };
 
+// 269569 - Zeal
+class spell_pal_zeal : public AuraScript
+{
+    PrepareAuraScript(spell_pal_zeal);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_PALADIN_ZEAL_AURA });
+    }
+
+    void HandleEffectProc(AuraEffect* aurEff, ProcEventInfo& /*procInfo*/)
+    {
+        Unit* target = GetTarget();
+        target->CastSpell(target, SPELL_PALADIN_ZEAL_AURA, CastSpellExtraArgs(TRIGGERED_FULL_MASK).AddSpellMod(SPELLVALUE_AURA_STACK, aurEff->GetAmount()));
+
+        PreventDefaultAction();
+    }
+
+    void Register() override
+    {
+        OnEffectProc += AuraEffectProcFn(spell_pal_zeal::HandleEffectProc, EFFECT_0, SPELL_AURA_PROC_TRIGGER_SPELL);
+    }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     //new spell_pal_ardent_defender();
@@ -1201,6 +1329,8 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_grand_crusader();
     new spell_pal_hand_of_sacrifice();
     RegisterSpellScript(spell_pal_hammer_of_the_righteous);
+    RegisterSpellScript(spell_pal_moment_of_glory);
+    RegisterSpellScript(spell_pal_judgment);
     RegisterSpellScript(spell_pal_holy_prism);
     RegisterSpellScript(spell_pal_holy_prism_selector);
     RegisterSpellScript(spell_pal_holy_shock);
@@ -1209,8 +1339,10 @@ void AddSC_paladin_spell_scripts()
     RegisterSpellScript(spell_pal_lay_on_hands);
     new spell_pal_light_s_beacon();
     RegisterAuraScript(spell_pal_righteous_protector);
+    RegisterAuraScript(spell_pal_righteous_verdict);
     RegisterAuraScript(spell_pal_selfless_healer);
     RegisterSpellScript(spell_pal_templar_s_verdict);
     new spell_pal_t3_6p_bonus();
     new spell_pal_t8_2p_bonus();
+    RegisterAuraScript(spell_pal_zeal);
 }
