@@ -55,7 +55,7 @@ TC_API_EXPORT EnumText EnumUtils<Races>::ToString(Races value)
 }
 
 template <>
-TC_API_EXPORT size_t EnumUtils<Races>::Count() { return 25; }
+TC_API_EXPORT size_t EnumUtils<Races>::Count() { return 19; }
 
 template <>
 TC_API_EXPORT Races EnumUtils<Races>::FromIndex(size_t index)
@@ -109,12 +109,6 @@ TC_API_EXPORT size_t EnumUtils<Races>::ToIndex(Races value)
         case RACE_HIGHMOUNTAIN_TAUREN: return 16;
         case RACE_VOID_ELF: return 17;
         case RACE_LIGHTFORGED_DRAENEI: return 18;
-        case RACE_ZANDALARI_TROLL: return 19;
-        case RACE_KUL_TIRAN: return 20;
-        case RACE_DARK_IRON_DWARF: return 21;
-        case RACE_VULPERA: return 22;
-        case RACE_MAGHAR_ORC: return 23;
-        case RACE_MECHAGNOME: return 24;
         default: throw std::out_of_range("value");
     }
 }
