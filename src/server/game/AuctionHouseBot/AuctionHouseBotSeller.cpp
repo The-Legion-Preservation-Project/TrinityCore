@@ -908,7 +908,7 @@ void AuctionBotSeller::AddNewAuctions(SellerConfiguration& config)
         auction.Owner = sAuctionBotConfig->GetRandChar();
         auction.MinBid = bidPrice;
         auction.BuyoutPrice = buyoutPrice;
-        auction.StartTime = GameTime::GetGameTimeSystemPoint();
+        auction.StartTime = GameTime::GetSystemTime();
         auction.EndTime = auction.StartTime + Hours(urand(config.GetMinTime(), config.GetMaxTime()));
 
         item->SaveToDB(trans);

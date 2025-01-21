@@ -95,7 +95,7 @@ void AuctionPosting::BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* a
         auctionItem->BuyoutPrice = BuyoutPrice;
 
     // all (not optional<>)
-    auctionItem->DurationLeft = uint32(std::max(std::chrono::duration_cast<Milliseconds>(EndTime - GameTime::GetGameTimeSystemPoint()).count(), Milliseconds::zero().count()));
+    auctionItem->DurationLeft = uint32(std::max(std::chrono::duration_cast<Milliseconds>(EndTime - GameTime::GetSystemTime()).count(), Milliseconds::zero().count()));
     auctionItem->DeleteReason = 0;
 
     // SMSG_AUCTION_LIST_ITEMS_RESULT (only if owned)
@@ -190,8 +190,8 @@ private:
             }
             case AuctionHouseSortOrder::Duration:
             {
-                int32 leftDuration = int32(std::max(std::chrono::duration_cast<Milliseconds>(left->EndTime - GameTime::GetGameTimeSystemPoint()).count(), Milliseconds::zero().count()));
-                int32 rightDuration = int32(std::max(std::chrono::duration_cast<Milliseconds>(right->EndTime - GameTime::GetGameTimeSystemPoint()).count(), Milliseconds::zero().count()));
+                int32 leftDuration = int32(std::max(std::chrono::duration_cast<Milliseconds>(left->EndTime - GameTime::GetSystemTime()).count(), Milliseconds::zero().count()));
+                int32 rightDuration = int32(std::max(std::chrono::duration_cast<Milliseconds>(right->EndTime - GameTime::GetSystemTime()).count(), Milliseconds::zero().count()));
                 return leftDuration - rightDuration;
             }
             case AuctionHouseSortOrder::Seller:
@@ -271,7 +271,7 @@ private:
 
 AuctionHouseMgr::AuctionHouseMgr() : mHordeAuctions(6), mAllianceAuctions(2), mNeutralAuctions(1), mGoblinAuctions(7), _replicateIdGenerator(0)
 {
-    _playerThrottleObjectsCleanupTime = GameTime::GetGameTimeSteadyPoint() + Hours(1);
+    _playerThrottleObjectsCleanupTime = GameTime::Now() + Hours(1);
 }
 
 AuctionHouseMgr::~AuctionHouseMgr()
@@ -567,7 +567,7 @@ void AuctionHouseMgr::PendingAuctionProcess(Player* player)
         {
             PendingAuctionInfo const& pendingAuction = *itrAH;
             if (AuctionPosting* auction = GetAuctionsById(pendingAuction.AuctionHouseId)->GetAuction(pendingAuction.AuctionId))
-                auction->EndTime = GameTime::GetGameTimeSystemPoint();
+                auction->EndTime = GameTime::GetSystemTime();
 
             CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_AUCTION_EXPIRATION);
             stmt->setUInt32(0, uint32(GameTime::GetGameTime()));
@@ -610,7 +610,7 @@ void AuctionHouseMgr::UpdatePendingAuctions()
             for (PendingAuctionInfo const& pendingAuction : itr->second.Auctions)
             {
                 if (AuctionPosting* auction = GetAuctionsById(pendingAuction.AuctionHouseId)->GetAuction(pendingAuction.AuctionId))
-                    auction->EndTime = GameTime::GetGameTimeSystemPoint();
+                    auction->EndTime = GameTime::GetSystemTime();
 
                 CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_AUCTION_EXPIRATION);
                 stmt->setUInt32(0, uint32(GameTime::GetGameTime()));
@@ -630,7 +630,7 @@ void AuctionHouseMgr::Update()
     mNeutralAuctions.Update();
     mGoblinAuctions.Update();
 
-    std::chrono::steady_clock::time_point now = GameTime::GetGameTimeSteadyPoint();
+    TimePoint now = GameTime::Now();
     if (now >= _playerThrottleObjectsCleanupTime)
     {
         for (auto itr = _playerThrottleObjects.begin(); itr != _playerThrottleObjects.end();)
@@ -652,7 +652,7 @@ uint32 AuctionHouseMgr::GenerateReplicationId()
 
 AuctionThrottleResult AuctionHouseMgr::CheckThrottle(Player* player, AuctionCommand command /*= AuctionCommand::SellItem*/)
 {
-    std::chrono::steady_clock::time_point now = GameTime::GetGameTimeSteadyPoint();
+    TimePoint now = GameTime::Now();
     auto itr = _playerThrottleObjects.emplace(std::piecewise_construct, std::forward_as_tuple(player->GetGUID()), std::forward_as_tuple());
     if (itr.second || now > itr.first->second.PeriodEnd)
     {
@@ -791,8 +791,8 @@ void AuctionHouseObject::SetAuctionBidder(AuctionPosting* auction, ObjectGuid bi
 
 void AuctionHouseObject::Update()
 {
-    std::chrono::system_clock::time_point curTime = GameTime::GetGameTimeSystemPoint();
-    std::chrono::steady_clock::time_point curTimeSteady = GameTime::GetGameTimeSteadyPoint();
+    SystemTimePoint curTime = GameTime::GetSystemTime();
+    TimePoint curTimeSteady = GameTime::Now();
     ///- Handle expired auctions
 
     // Clear expired throttled players
@@ -895,7 +895,7 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPackets::AuctionHouse::Aucti
 
     AuctionsResultBuilder<AuctionPosting> builder(offset, player->GetSession()->GetSessionDbcLocale(), sorts, sortCount, AuctionHouseResultLimits::Items);
 
-    std::chrono::system_clock::time_point curTime = GameTime::GetGameTimeSystemPoint();
+    std::chrono::system_clock::time_point curTime = GameTime::GetSystemTime();
 
     for (AuctionPosting const* auction : _auctions)
     {
@@ -1009,7 +1009,7 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPackets::AuctionHouse::Aucti
 void AuctionHouseObject::BuildReplicate(WorldPackets::AuctionHouse::AuctionReplicateResponse& replicateResponse, Player* player,
     uint32 global, uint32 cursor, uint32 tombstone, uint32 count)
 {
-    std::chrono::steady_clock::time_point curTime = GameTime::GetGameTimeSteadyPoint();
+    TimePoint curTime = GameTime::Now();
 
     auto throttleItr = _replicateThrottleMap.find(player->GetGUID());
     if (throttleItr != _replicateThrottleMap.end())

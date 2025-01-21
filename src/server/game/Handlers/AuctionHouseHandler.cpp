@@ -193,7 +193,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
     auction.MinBid = sellItem.MinBid;
     auction.BuyoutPrice = sellItem.BuyoutPrice;
     auction.Deposit = deposit;
-    auction.StartTime = GameTime::GetGameTimeSystemPoint();
+    auction.StartTime = GameTime::GetSystemTime();
     auction.EndTime = auction.StartTime + auctionTime;
 
     if (HasPermission(rbac::RBAC_PERM_LOG_GM_TRADE))
