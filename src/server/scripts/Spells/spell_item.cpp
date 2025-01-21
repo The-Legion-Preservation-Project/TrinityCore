@@ -23,6 +23,8 @@
 
 #include "ScriptMgr.h"
 #include "Battleground.h"
+#include "Containers.h"
+#include "Creature.h"
 #include "CreatureAIImpl.h"
 #include "DB2Stores.h"
 #include "Item.h"
@@ -32,7 +34,6 @@
 #include "ObjectMgr.h"
 #include "Player.h"
 #include "Random.h"
-#include "ScriptedCreature.h"
 #include "SkillDiscovery.h"
 #include "Spell.h"
 #include "SpellAuraEffects.h"
