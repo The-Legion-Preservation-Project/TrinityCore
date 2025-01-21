@@ -583,6 +583,22 @@ class spell_sha_healing_rain : public SpellScript
     }
 };
 
+// 73921 - Healing Rain
+class spell_sha_healing_rain_target_limit : public SpellScript
+{
+    PrepareSpellScript(spell_sha_healing_rain_target_limit);
+
+    void SelectTargets(std::list<WorldObject*>& targets)
+    {
+        Trinity::SelectRandomInjuredTargets(targets, 6, true);
+    }
+
+    void Register() override
+    {
+        OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_healing_rain_target_limit::SelectTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ALLY);
+    }
+};
+
 // 52042 - Healing Stream Totem
 class spell_sha_healing_stream_totem_heal : public SpellScript
 {
@@ -1362,6 +1378,7 @@ void AddSC_shaman_spell_scripts()
     RegisterAuraScript(spell_sha_earthen_rage_proc_aura);
     RegisterSpellScript(spell_sha_elemental_blast);
     RegisterSpellAndAuraScriptPair(spell_sha_healing_rain, spell_sha_healing_rain_aura);
+    RegisterSpellScript(spell_sha_healing_rain_target_limit);
     RegisterSpellScript(spell_sha_healing_stream_totem_heal);
     RegisterSpellScript(spell_sha_heroism);
     RegisterAuraScript(spell_sha_item_lightning_shield);
