@@ -501,12 +501,16 @@ void WorldSession::HandleTotemDestroyed(WorldPackets::Totem::TotemDestroyed& tot
 
 void WorldSession::HandleSelfResOpcode(WorldPackets::Spells::SelfRes& selfRes)
 {
-    if (_player->HasAuraType(SPELL_AURA_PREVENT_RESURRECTION))
-        return; // silent return, client should display error by itself and not send this opcode
-
     std::vector<uint32> const& selfResSpells = _player->GetDynamicValues(PLAYER_DYNAMIC_FIELD_SELF_RES_SPELLS);
     if (std::find(selfResSpells.begin(), selfResSpells.end(), selfRes.SpellID) == selfResSpells.end())
         return;
+
+    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(selfRes.SpellID, _player->GetMap()->GetDifficultyID());
+    if (!spellInfo)
+        return;
+
+    if (_player->HasAuraType(SPELL_AURA_PREVENT_RESURRECTION) && !spellInfo->HasAttribute(SPELL_ATTR7_BYPASS_NO_RESURRECT_AURA))
+        return; // silent return, client should display error by itself and not send this opcode
 
     _player->CastSpell(_player, selfRes.SpellID, _player->GetMap()->GetDifficultyID());
     _player->RemoveSelfResSpell(selfRes.SpellID);
