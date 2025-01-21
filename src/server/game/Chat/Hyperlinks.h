@@ -20,6 +20,7 @@
 
 #include "ObjectGuid.h"
 #include "StringConvert.h"
+#include <array>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -56,10 +57,10 @@ namespace Trinity::Hyperlinks
         AchievementEntry const* Achievement;
         ObjectGuid CharacterId;
         bool IsFinished;
-        uint16 Year;
+        uint8 Year;
         uint8 Month;
         uint8 Day;
-        uint32 Criteria[4];
+        std::array<uint32, 4> Criteria;
     };
 
     struct ArtifactPowerLinkData
@@ -116,7 +117,7 @@ namespace Trinity::Hyperlinks
     {
         ItemTemplate const* Item;
         uint32 EnchantId;
-        uint32 GemItemId[3];
+        std::array<uint32, 3> GemItemId;
         uint32 RandomPropertyId;
         uint32 RandomPropertySeed;
         uint8 RenderLevel;
