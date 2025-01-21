@@ -4014,6 +4014,9 @@ void Spell::EffectKnockBack()
         origin = m_caster->GetPosition();
 
     unitTarget->KnockbackFrom(origin, speedxy, speedz);
+
+    Unit::ProcSkillsAndAuras(GetUnitCasterForEffectHandlers(), unitTarget, PROC_FLAG_NONE, { PROC_FLAG_NONE, PROC_FLAG_2_KNOCKBACK },
+        PROC_SPELL_TYPE_MASK_ALL, PROC_SPELL_PHASE_HIT, PROC_HIT_NONE, nullptr, nullptr, nullptr);
 }
 
 void Spell::EffectLeapBack()
