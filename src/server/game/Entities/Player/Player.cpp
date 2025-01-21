@@ -11808,10 +11808,6 @@ Item* Player::StoreNewItem(ItemPosCountVec const& pos, uint32 itemId, bool updat
     Item* item = Item::CreateItem(itemId, count, context, this);
     if (item)
     {
-        ItemAddedQuestCheck(itemId, count);
-        UpdateCriteria(CriteriaType::ObtainAnyItem, itemId, count);
-        UpdateCriteria(CriteriaType::AcquireItem, itemId, count);
-
         item->AddItemFlag(ITEM_FIELD_FLAG_NEW_ITEM);
 
         if (uint32 upgradeID = sDB2Manager.GetRulesetItemUpgrade(itemId))
@@ -11821,6 +11817,10 @@ Item* Player::StoreNewItem(ItemPosCountVec const& pos, uint32 itemId, bool updat
             item->AddBonuses(bonusListID);
 
         item = StoreItem(pos, item, update);
+
+        ItemAddedQuestCheck(itemId, count);
+        UpdateCriteria(CriteriaType::ObtainAnyItem, itemId, count);
+        UpdateCriteria(CriteriaType::AcquireItem, itemId, count);
 
         item->SetFixedLevel(GetLevel());
         item->SetItemRandomProperties(randomPropertyId);
@@ -12002,9 +12002,10 @@ Item* Player::EquipNewItem(uint16 pos, uint32 item, ItemContext context, bool up
 {
     if (Item* pItem = Item::CreateItem(item, 1, context, this))
     {
-        ItemAddedQuestCheck(item, 1);
         UpdateCriteria(CriteriaType::ObtainAnyItem, item, 1);
-        return EquipItem(pos, pItem, update);
+        Item* equippedItem = EquipItem(pos, pItem, update);
+        ItemAddedQuestCheck(item, 1);
+        return equippedItem;
     }
 
     return nullptr;
@@ -12387,8 +12388,8 @@ void Player::MoveItemFromInventory(uint8 bag, uint8 slot, bool update)
 {
     if (Item* it = GetItemByPos(bag, slot))
     {
-        ItemRemovedQuestCheck(it->GetEntry(), it->GetCount());
         RemoveItem(bag, slot, update);
+        ItemRemovedQuestCheck(it->GetEntry(), it->GetCount());
         it->SetNotRefundable(this, false, nullptr, false);
         RemoveItemFromUpdateQueueOf(it, this);
         GetSession()->GetCollectionMgr()->RemoveTemporaryAppearance(it);
@@ -12403,9 +12404,8 @@ void Player::MoveItemFromInventory(uint8 bag, uint8 slot, bool update)
 // Common operation need to add item from inventory without delete in trade, guild bank, mail....
 void Player::MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB)
 {
-    // update quest counters
-    ItemAddedQuestCheck(pItem->GetEntry(), pItem->GetCount());
-    UpdateCriteria(CriteriaType::ObtainAnyItem, pItem->GetEntry(), pItem->GetCount());
+    uint32 itemId = pItem->GetEntry();
+    uint32 count = pItem->GetCount();
 
     // store item
     Item* pLastItem = StoreItem(dest, pItem, update);
@@ -12424,6 +12424,10 @@ void Player::MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool 
         if (pLastItem->IsBOPTradeable())
             AddTradeableItem(pLastItem);
     }
+
+    // update quest counters
+    ItemAddedQuestCheck(itemId, count);
+    UpdateCriteria(CriteriaType::ObtainAnyItem, itemId, count);
 }
 
 void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
@@ -12457,7 +12461,6 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
 
         ApplyItemObtainSpells(pItem, false);
 
-        ItemRemovedQuestCheck(pItem->GetEntry(), pItem->GetCount());
         sScriptMgr->OnItemRemove(this, pItem);
 
         ItemTemplate const* pProto = pItem->GetTemplate();
@@ -12506,6 +12509,8 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
         if (pProto->HasFlag(ITEM_FLAG_HAS_LOOT))
             sLootItemStorage->RemoveStoredLootForContainer(pItem->GetGUID().GetCounter());
 
+        ItemRemovedQuestCheck(pItem->GetEntry(), pItem->GetCount());
+
         if (IsInWorld() && update)
         {
             pItem->RemoveFromWorld();
@@ -12549,8 +12554,8 @@ uint32 Player::DestroyItemCount(uint32 itemEntry, uint32 count, bool update, boo
                 }
                 else
                 {
-                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     item->SetCount(item->GetCount() - count + remcount);
+                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     if (IsInWorld() && update)
                         item->SendUpdateToPlayer(this);
                     item->SetState(ITEM_CHANGED, this);
@@ -12582,8 +12587,8 @@ uint32 Player::DestroyItemCount(uint32 itemEntry, uint32 count, bool update, boo
                         }
                         else
                         {
-                            ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                             item->SetCount(item->GetCount() - count + remcount);
+                            ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                             if (IsInWorld() && update)
                                 item->SendUpdateToPlayer(this);
                             item->SetState(ITEM_CHANGED, this);
@@ -12615,8 +12620,8 @@ uint32 Player::DestroyItemCount(uint32 itemEntry, uint32 count, bool update, boo
                 }
                 else
                 {
-                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     item->SetCount(item->GetCount() - count + remcount);
+                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     if (IsInWorld() && update)
                         item->SendUpdateToPlayer(this);
                     item->SetState(ITEM_CHANGED, this);
@@ -12642,8 +12647,8 @@ uint32 Player::DestroyItemCount(uint32 itemEntry, uint32 count, bool update, boo
                 }
                 else
                 {
-                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     item->SetCount(item->GetCount() - count + remcount);
+                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     if (IsInWorld() && update)
                         item->SendUpdateToPlayer(this);
                     item->SetState(ITEM_CHANGED, this);
@@ -12675,8 +12680,8 @@ uint32 Player::DestroyItemCount(uint32 itemEntry, uint32 count, bool update, boo
                         }
                         else
                         {
-                            ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                             item->SetCount(item->GetCount() - count + remcount);
+                            ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                             if (IsInWorld() && update)
                                 item->SendUpdateToPlayer(this);
                             item->SetState(ITEM_CHANGED, this);
@@ -12707,8 +12712,8 @@ uint32 Player::DestroyItemCount(uint32 itemEntry, uint32 count, bool update, boo
                 }
                 else
                 {
-                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     item->SetCount(item->GetCount() - count + remcount);
+                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     if (IsInWorld() && update)
                         item->SendUpdateToPlayer(this);
                     item->SetState(ITEM_CHANGED, this);
@@ -12735,8 +12740,8 @@ uint32 Player::DestroyItemCount(uint32 itemEntry, uint32 count, bool update, boo
                 }
                 else
                 {
-                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     item->SetCount(item->GetCount() - count + remcount);
+                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     if (IsInWorld() && update)
                         item->SendUpdateToPlayer(this);
                     item->SetState(ITEM_CHANGED, this);
@@ -12763,8 +12768,8 @@ uint32 Player::DestroyItemCount(uint32 itemEntry, uint32 count, bool update, boo
                 }
                 else
                 {
-                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     item->SetCount(item->GetCount() - count + remcount);
+                    ItemRemovedQuestCheck(item->GetEntry(), count - remcount);
                     if (IsInWorld() && update)
                         item->SendUpdateToPlayer(this);
                     item->SetState(ITEM_CHANGED, this);
@@ -12881,8 +12886,8 @@ void Player::DestroyItemCount(Item* pItem, uint32 &count, bool update)
     }
     else
     {
-        ItemRemovedQuestCheck(pItem->GetEntry(), count);
         pItem->SetCount(pItem->GetCount() - count);
+        ItemRemovedQuestCheck(pItem->GetEntry(), count);
         count = 0;
         if (IsInWorld() && update)
             pItem->SendUpdateToPlayer(this);
