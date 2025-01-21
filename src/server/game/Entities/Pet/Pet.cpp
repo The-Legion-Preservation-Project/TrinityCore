@@ -554,7 +554,7 @@ void Pet::FillPetInfo(PetStable::PetInfo* petInfo) const
     petInfo->CreatureId = GetEntry();
     petInfo->DisplayId = GetNativeDisplayId();
     petInfo->Level = GetLevel();
-    petInfo->Experience = m_unitData->PetExperience;
+    petInfo->Experience = GetUInt32Value(UNIT_FIELD_PETEXPERIENCE);
     petInfo->ReactState = GetReactState();
     petInfo->Name = GetName();
     petInfo->WasRenamed = !HasPetFlag(UNIT_PET_FLAG_CAN_BE_RENAMED);
@@ -562,7 +562,7 @@ void Pet::FillPetInfo(PetStable::PetInfo* petInfo) const
     petInfo->Mana = GetPower(POWER_MANA);
     petInfo->ActionBar = GenerateActionBarData();
     petInfo->LastSaveTime = GameTime::GetGameTime();
-    petInfo->CreatedBySpellId = m_unitData->CreatedBySpell;
+    petInfo->CreatedBySpellId = GetUInt32Value(UNIT_CREATED_BY_SPELL);
     petInfo->Type = getPetType();
     petInfo->SpecializationId = GetSpecialization();
 }
