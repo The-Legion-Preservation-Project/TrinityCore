@@ -289,7 +289,7 @@ namespace Trinity::Hyperlinks
 
         struct TC_GAME_API garrfollowerability
         {
-            using value_type = GarrAbilityEntry const*&;
+            using value_type = GarrAbilityEntry const*;
             static constexpr char const* tag() { return "garrfollowerability"; }
             static bool StoreTo(GarrAbilityEntry const*& val, char const* pos, size_t len);
         };
@@ -331,7 +331,7 @@ namespace Trinity::Hyperlinks
 
         struct TC_GAME_API pvptal
         {
-            using value_type = PvpTalentEntry const*&;
+            using value_type = PvpTalentEntry const*;
             static constexpr char const* tag() { return "pvptal"; }
             static bool StoreTo(PvpTalentEntry const*& val, char const* pos, size_t len);
         };
@@ -352,7 +352,7 @@ namespace Trinity::Hyperlinks
 
         struct TC_GAME_API talent
         {
-            using value_type = TalentEntry const*&;
+            using value_type = TalentEntry const*;
             static constexpr char const* tag() { return "talent"; }
             static bool StoreTo(TalentEntry const*& val, char const* pos, size_t len);
         };
@@ -366,21 +366,21 @@ namespace Trinity::Hyperlinks
 
         struct TC_GAME_API transmogappearance
         {
-            using value_type = ItemModifiedAppearanceEntry const*&;
+            using value_type = ItemModifiedAppearanceEntry const*;
             static constexpr char const* tag() { return "transmogappearance"; }
             static bool StoreTo(ItemModifiedAppearanceEntry const*& val, char const* pos, size_t len);
         };
 
         struct TC_GAME_API transmogillusion
         {
-            using value_type = SpellItemEnchantmentEntry const*&;
+            using value_type = SpellItemEnchantmentEntry const*;
             static constexpr char const* tag() { return "transmogillusion"; }
             static bool StoreTo(SpellItemEnchantmentEntry const*& val, char const* pos, size_t len);
         };
 
         struct TC_GAME_API transmogset
         {
-            using value_type = TransmogSetEntry const*&;
+            using value_type = TransmogSetEntry const*;
             static constexpr char const* tag() { return "transmogset"; }
             static bool StoreTo(TransmogSetEntry const*& val, char const* pos, size_t len);
         };
