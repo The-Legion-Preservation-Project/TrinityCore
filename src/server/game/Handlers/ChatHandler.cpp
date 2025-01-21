@@ -679,9 +679,9 @@ void WorldSession::HandleTextEmoteOpcode(WorldPackets::Chat::CTextEmote& packet)
     if (!em)
         return;
 
-    uint32 emoteAnim = em->EmoteID;
+    Emote emote = static_cast<Emote>(em->EmoteID);
 
-    switch (emoteAnim)
+    switch (emote)
     {
         case EMOTE_STATE_SLEEP:
         case EMOTE_STATE_SIT:
@@ -690,13 +690,13 @@ void WorldSession::HandleTextEmoteOpcode(WorldPackets::Chat::CTextEmote& packet)
             break;
         case EMOTE_STATE_DANCE:
         case EMOTE_STATE_READ:
-            _player->SetEmoteState(Emote(emoteAnim));
+            _player->SetEmoteState(emote);
             break;
         default:
             // Only allow text-emotes for "dead" entities (feign death included)
             if (_player->HasUnitState(UNIT_STATE_DIED))
                 break;
-            _player->HandleEmoteCommand(emoteAnim);
+            _player->HandleEmoteCommand(emote);
             break;
     }
 
@@ -717,7 +717,7 @@ void WorldSession::HandleTextEmoteOpcode(WorldPackets::Chat::CTextEmote& packet)
         if (Creature* creature = unit->ToCreature())
             creature->AI()->ReceiveEmote(_player, packet.EmoteID);
 
-    if (emoteAnim != EMOTE_ONESHOT_NONE)
+    if (emote != EMOTE_ONESHOT_NONE)
         _player->RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags::Anim);
 }
 
