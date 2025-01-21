@@ -449,6 +449,7 @@ struct TC_GAME_API CastSpellExtraArgs
     ObjectGuid OriginalCaster = ObjectGuid::Empty;
     Difficulty CastDifficulty = Difficulty(0);
     ObjectGuid OriginalCastId = ObjectGuid::Empty;
+    Optional<int32> OriginalCastItemLevel;
     struct
     {
         friend struct CastSpellExtraArgs;
