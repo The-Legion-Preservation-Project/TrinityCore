@@ -2608,7 +2608,7 @@ TempSummon* WorldObject::SummonPersonalClone(Position const& pos, TempSummonType
     return nullptr;
 }
 
-GameObject* WorldObject::SummonGameObject(uint32 entry, Position const& pos, QuaternionData const& rot, uint32 respawnTime, GOSummonType summonType)
+GameObject* WorldObject::SummonGameObject(uint32 entry, Position const& pos, QuaternionData const& rot, Seconds respawnTime, GOSummonType summonType)
 {
     if (!IsInWorld())
         return nullptr;
@@ -2627,7 +2627,7 @@ GameObject* WorldObject::SummonGameObject(uint32 entry, Position const& pos, Qua
 
     PhasingHandler::InheritPhaseShift(go, this);
 
-    go->SetRespawnTime(respawnTime);
+    go->SetRespawnTime(respawnTime.count());
     if (GetTypeId() == TYPEID_PLAYER || (GetTypeId() == TYPEID_UNIT && summonType == GO_SUMMON_TIMED_OR_CORPSE_DESPAWN)) //not sure how to handle this
         ToUnit()->AddGameObject(go);
     else
@@ -2637,7 +2637,7 @@ GameObject* WorldObject::SummonGameObject(uint32 entry, Position const& pos, Qua
     return go;
 }
 
-GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float z, float ang, QuaternionData const& rot, uint32 respawnTime, GOSummonType summonType)
+GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float z, float ang, QuaternionData const& rot, Seconds respawnTime, GOSummonType summonType)
 {
     if (!x && !y && !z)
     {
