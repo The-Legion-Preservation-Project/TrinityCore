@@ -1403,7 +1403,7 @@ public:
             if (mapInfo->IsContinent())
                 ss << handler->GetTrinityString(LANG_CONTINENT);
 
-            switch (mapInfo->MapType)
+            switch (mapInfo->InstanceType)
             {
                 case MAP_INSTANCE:
                     ss << handler->GetTrinityString(LANG_INSTANCE);
