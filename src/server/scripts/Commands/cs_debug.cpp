@@ -2027,7 +2027,7 @@ public:
         auto mapId = args->TryConsume<uint32>();
         if (mapId)
         {
-            sMapMgr->DoForAllMapsWithMapId(mapId.get(),
+            sMapMgr->DoForAllMapsWithMapId(mapId.value(),
                 [handler](Map* map) -> void
                 {
                     HandleDebugGuidLimitsMap(handler, map);
@@ -2060,7 +2060,7 @@ public:
         auto mapId = args->TryConsume<uint32>();
         if (mapId)
         {
-            sMapMgr->DoForAllMapsWithMapId(mapId.get(),
+            sMapMgr->DoForAllMapsWithMapId(mapId.value(),
                 [handler](Map* map) -> void
                 {
                     HandleDebugObjectCountMap(handler, map);
