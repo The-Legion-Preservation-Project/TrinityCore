@@ -4140,6 +4140,8 @@ CriteriaList const& CriteriaMgr::GetPlayerCriteriaByType(CriteriaType type, uint
     return _criteriasByType[size_t(type)];
 }
 
+CriteriaMgr::CriteriaMgr() = default;
+
 //==========================================================
 CriteriaMgr::~CriteriaMgr()
 {

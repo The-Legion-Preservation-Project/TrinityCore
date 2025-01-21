@@ -442,7 +442,9 @@ class TC_GAME_API Object
         // for output helpful error messages from asserts
         bool PrintIndexError(uint32 index, bool set) const;
         Object(Object const& right) = delete;
+        Object(Object&& right) = delete;
         Object& operator=(Object const& right) = delete;
+        Object& operator=(Object&& right) = delete;
 };
 
 template<class T>
