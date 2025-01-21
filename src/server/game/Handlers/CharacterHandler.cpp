@@ -1414,7 +1414,7 @@ void WorldSession::SendFeatureSystemStatus()
     WorldPackets::System::FeatureSystemStatus features;
 
     /// START OF DUMMY VALUES
-    features.ComplaintStatus = 2;
+    features.ComplaintStatus = COMPLAINT_ENABLED_WITH_AUTO_IGNORE;
     features.ScrollOfResurrectionRequestsRemaining = 1;
     features.ScrollOfResurrectionMaxRequestsPerDay = 1;
     features.TwitterPostThrottleLimit = 60;
@@ -1431,7 +1431,6 @@ void WorldSession::SendFeatureSystemStatus()
     features.EuropaTicketSystemStatus->ThrottleState.PerMilliseconds = 60000;
     features.EuropaTicketSystemStatus->ThrottleState.TryCount = 1;
     features.EuropaTicketSystemStatus->ThrottleState.LastResetTimeBeforeNow = 111111;
-    features.ComplaintStatus = 0;
     features.TutorialsEnabled = true;
     features.NPETutorialsEnabled = true;
     /// END OF DUMMY VALUES
