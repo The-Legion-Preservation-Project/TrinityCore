@@ -17531,7 +17531,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
     {
         //"SELECT guid, account, name, race, class, gender, level, xp, money, skin, face, hairStyle, hairColor, facialStyle, customDisplay1, customDisplay2, customDisplay3, inventorySlots, bankSlots, restState, playerFlags, playerFlagsEx, "
         //"position_x, position_y, position_z, map, orientation, taximask, createTime, cinematic, totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, "
-        //"resettalents_time, primarySpecialization, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, at_login, zone, online, death_expire_time, taxi_path, dungeonDifficulty, "
+        //"resettalents_time, primarySpecialization, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, summonedPetNumber, at_login, zone, online, death_expire_time, taxi_path, dungeonDifficulty, "
         //"totalKills, todayKills, yesterdayKills, chosenTitle, watchedFaction, drunk, "
         //"health, power1, power2, power3, power4, power5, power6, instance_id, activeTalentGroup, lootSpecId, exploredZones, knownTitles, actionBars, grantableLevels, raidDifficulty, legacyRaidDifficulty, fishing_steps "
         //"honor, honorLevel, prestigeLevel, honor_rest_state, honor_rest_bonus "
@@ -17581,6 +17581,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
         float trans_o;
         ObjectGuid::LowType transguid;
         uint16 extra_flags;
+        uint32 summonedPetNumber;
         uint16 at_login;
         uint16 zone;
         uint8 online;
@@ -17658,6 +17659,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
             trans_o = fields[i++].GetFloat();
             transguid = fields[i++].GetUInt64();
             extra_flags = fields[i++].GetUInt16();
+            summonedPetNumber = fields[i++].GetUInt32();
             at_login = fields[i++].GetUInt16();
             zone = fields[i++].GetUInt16();
             online = fields[i++].GetUInt8();
@@ -18152,6 +18154,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder* holder)
     uint32 extraflags = fields.extra_flags;
 
     _LoadPetStable(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_PET_SLOTS));
+    m_temporaryUnsummonedPetNumber = fields.summonedPetNumber;
 
     if (HasAtLoginFlag(AT_LOGIN_RENAME))
     {
@@ -19182,18 +19185,6 @@ void Player::_LoadMail(PreparedQueryResult mailsResult, PreparedQueryResult mail
     UpdateNextMailTimeAndUnreads();
 }
 
-void Player::LoadPet()
-{
-    //fixme: the pet should still be loaded if the player is not in world
-    // just not added to the map
-    if (m_petStable && IsInWorld())
-    {
-        Pet* pet = new Pet(this);
-        if (!pet->LoadPetFromDB(this, 0, 0, true))
-            delete pet;
-    }
-}
-
 void Player::_LoadQuestStatus(PreparedQueryResult result)
 {
     uint16 slot = 0;
@@ -20199,6 +20190,7 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         stmt->setInt64(index++, GetTalentResetTime());
         stmt->setUInt32(index++, GetPrimarySpecialization());
         stmt->setUInt16(index++, (uint16)m_ExtraFlags);
+        stmt->setUInt32(index++, 0); // summonedPetNumber
         stmt->setUInt16(index++, (uint16)m_atLoginFlags);
         stmt->setInt64(index++, m_deathExpireTime);
 
@@ -20341,6 +20333,10 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         stmt->setInt64(index++, GetTalentResetTime());
         stmt->setUInt32(index++, GetPrimarySpecialization());
         stmt->setUInt16(index++, (uint16)m_ExtraFlags);
+        if (PetStable const* petStable = GetPetStable())
+            stmt->setUInt32(index++, petStable->CurrentPet && petStable->CurrentPet->Health > 0 ? petStable->CurrentPet->PetNumber : 0); // summonedPetNumber
+        else
+            stmt->setUInt32(index++, 0); // summonedPetNumber
         stmt->setUInt16(index++, (uint16)m_atLoginFlags);
         stmt->setUInt16(index++, GetZoneId());
         stmt->setInt64(index++, m_deathExpireTime);

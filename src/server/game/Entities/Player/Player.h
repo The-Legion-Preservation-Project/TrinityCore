@@ -1549,7 +1549,6 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void RemoveItemDurations(Item* item);
         void SendItemDurations();
         void LoadCorpse(PreparedQueryResult result);
-        void LoadPet();
 
         bool AddItem(uint32 itemId, uint32 count);
 
