@@ -646,7 +646,7 @@ ByteBuffer& operator<<(ByteBuffer& data, PlayerChoiceResponse const& playerChoic
     data.WriteBits(playerChoiceResponse.Header.length(), 9);
     data.WriteBits(playerChoiceResponse.Description.length(), 11);
     data.WriteBits(playerChoiceResponse.Confirmation.length(), 7);
-    data.WriteBit(playerChoiceResponse.Reward.is_initialized());
+    data.WriteBit(playerChoiceResponse.Reward.has_value());
     data.FlushBits();
 
     if (playerChoiceResponse.Reward)

@@ -5172,7 +5172,7 @@ void Unit::SendAttackStateUpdate(CalcDamageInfo* damageInfo)
     int32 overkill = damageInfo->Damage - damageInfo->Target->GetHealth();
     packet.OverDamage = (overkill < 0 ? -1 : overkill);
 
-    packet.SubDmg = boost::in_place();
+    packet.SubDmg.emplace();
     packet.SubDmg->SchoolMask = damageInfo->DamageSchoolMask;   // School of sub damage
     packet.SubDmg->FDamage = damageInfo->Damage;                // sub damage
     packet.SubDmg->Damage = damageInfo->Damage;                 // Sub Damage
@@ -12482,7 +12482,7 @@ void Unit::SendClearTarget()
 
 uint32 Unit::GetResistance(SpellSchoolMask mask) const
 {
-    Optional<int32> resist = boost::make_optional(false, 0);
+    Optional<int32> resist;
     for (int32 i = SPELL_SCHOOL_NORMAL; i < MAX_SPELL_SCHOOL; ++i)
     {
         int32 schoolResistance = GetResistance(SpellSchools(i));
@@ -12490,7 +12490,7 @@ uint32 Unit::GetResistance(SpellSchoolMask mask) const
             resist = schoolResistance;
     }
 
-    return resist ? uint32(*resist) : 0;
+    return resist.value_or(0);
 }
 
 void CharmInfo::SetIsCommandAttack(bool val)

@@ -76,17 +76,17 @@ void WorldPackets::Ticket::SupportTicketSubmitSuggestion::Read()
     Note = _worldPacket.ReadString(_worldPacket.ReadBits(10));
 }
 
-WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketChatLine::SupportTicketChatLine(ByteBuffer& data)
+WorldPackets::Ticket::SupportTicketChatLine::SupportTicketChatLine(ByteBuffer& data)
 {
     data >> Timestamp;
     Text = data.ReadString(data.ReadBits(12));
 }
 
-WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketChatLine::SupportTicketChatLine(time_t timestamp, std::string const& text) :
+WorldPackets::Ticket::SupportTicketChatLine::SupportTicketChatLine(time_t timestamp, std::string const& text) :
     Timestamp(timestamp), Text(text)
 { }
 
-ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketChatLine& line)
+ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Ticket::SupportTicketChatLine& line)
 {
     data >> line.Timestamp;
     line.Text = data.ReadString(data.ReadBits(12));
@@ -94,7 +94,7 @@ ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Ticket::SupportTicketSubm
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketChatLog& chatlog)
+ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Ticket::SupportTicketChatLog& chatlog)
 {
     uint32 linesCount = data.read<uint32>();
     bool hasReportLineIndex = data.ReadBit();
@@ -109,9 +109,9 @@ ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Ticket::SupportTicketSubm
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketMailInfo>& mail)
+ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketMailInfo>& mail)
 {
-    mail = boost::in_place();
+    mail.emplace();
 
     data >> mail->MailID;
     uint32 bodyLength = data.ReadBits(13);
@@ -122,9 +122,9 @@ ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportT
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketCalendarEventInfo>& event)
+ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketCalendarEventInfo>& event)
 {
-    event = boost::in_place();
+    event.emplace();
 
     data >> event->EventID;
     data >> event->InviteID;
@@ -133,9 +133,9 @@ ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportT
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketPetInfo>& pet)
+ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketPetInfo>& pet)
 {
-    pet = boost::in_place();
+    pet.emplace();
 
     data >> pet->PetID;
     pet->PetName = data.ReadString(data.ReadBits(8));
@@ -143,9 +143,9 @@ ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportT
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketGuildInfo>& guild)
+ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketGuildInfo>& guild)
 {
-    guild = boost::in_place();
+    guild.emplace();
 
     uint32 nameLength = data.ReadBits(7);
     data >> guild->GuildID;
@@ -154,9 +154,9 @@ ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportT
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketLFGListSearchResult>& lfgListSearchResult)
+ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketLFGListSearchResult>& lfgListSearchResult)
 {
-    lfgListSearchResult = boost::in_place();
+    lfgListSearchResult.emplace();
 
     data >> lfgListSearchResult->RideTicket;
     data >> lfgListSearchResult->GroupFinderActivityID;
@@ -177,9 +177,9 @@ ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportT
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketSubmitComplaint::SupportTicketLFGListApplicant>& lfgListApplicant)
+ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketLFGListApplicant>& lfgListApplicant)
 {
-    lfgListApplicant = boost::in_place();
+    lfgListApplicant.emplace();
 
     data >> lfgListApplicant->RideTicket;
     lfgListApplicant->Comment = data.ReadString(data.ReadBits(9));

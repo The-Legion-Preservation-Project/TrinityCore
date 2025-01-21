@@ -1556,7 +1556,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
                 transferPending.OldMapPosition = GetPosition();
                 if (Transport* transport = GetTransport())
                 {
-                    transferPending.Ship = boost::in_place();
+                    transferPending.Ship.emplace();
                     transferPending.Ship->ID = transport->GetEntry();
                     transferPending.Ship->OriginMapID = GetMapId();
                 }
@@ -27697,7 +27697,7 @@ void Player::SendItemRefundResult(Item* item, ItemExtendedCostEntry const* iece,
     itemPurchaseRefundResult.Result = error;
     if (!error)
     {
-        itemPurchaseRefundResult.Contents = boost::in_place();
+        itemPurchaseRefundResult.Contents.emplace();
         itemPurchaseRefundResult.Contents->Money = item->GetPaidMoney();
         for (uint8 i = 0; i < MAX_ITEM_EXT_COST_ITEMS; ++i)                             // item cost data
         {
@@ -28081,7 +28081,7 @@ void Player::SendPlayerChoice(ObjectGuid sender, int32 choiceId)
 
         if (playerChoiceResponseTemplate.Reward)
         {
-            playerChoiceResponse.Reward = boost::in_place();
+            playerChoiceResponse.Reward.emplace();
             playerChoiceResponse.Reward->TitleID = playerChoiceResponseTemplate.Reward->TitleId;
             playerChoiceResponse.Reward->PackageID = playerChoiceResponseTemplate.Reward->PackageId;
             playerChoiceResponse.Reward->SkillLineID = playerChoiceResponseTemplate.Reward->SkillLineId;
@@ -28098,7 +28098,7 @@ void Player::SendPlayerChoice(ObjectGuid sender, int32 choiceId)
                 rewardEntry.Quantity = item.Quantity;
                 if (!item.BonusListIDs.empty())
                 {
-                    rewardEntry.Item.ItemBonus = boost::in_place();
+                    rewardEntry.Item.ItemBonus.emplace();
                     rewardEntry.Item.ItemBonus->BonusListIDs = item.BonusListIDs;
                 }
             }

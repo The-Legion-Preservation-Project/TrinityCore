@@ -284,7 +284,7 @@ void ItemAdditionalLoadInfo::Init(std::unordered_map<ObjectGuid::LowType, ItemAd
             Field* fields = artifactResult->Fetch();
             ItemAdditionalLoadInfo& info = (*loadInfo)[fields[0].GetUInt64()];
             if (!info.Artifact)
-                info.Artifact = boost::in_place();
+                info.Artifact.emplace();
             info.Artifact->Xp = fields[1].GetUInt64();
             info.Artifact->ArtifactAppearanceId = fields[2].GetUInt32();
             info.Artifact->ArtifactTierId = fields[3].GetUInt32();

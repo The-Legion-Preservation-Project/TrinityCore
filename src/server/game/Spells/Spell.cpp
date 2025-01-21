@@ -3048,7 +3048,7 @@ void Spell::DoSpellEffectHit(Unit* unit, SpellEffectInfo const& spellEffectInfo,
                         }
                     }
                     else
-                        hitInfo.AuraDuration = m_spellValue->Duration.get();
+                        hitInfo.AuraDuration = *m_spellValue->Duration;
 
                     if (hitInfo.AuraDuration != hitInfo.HitAura->GetMaxDuration())
                     {
@@ -3753,7 +3753,7 @@ void Spell::handle_immediate()
                 m_caster->ModSpellDurationTime(m_spellInfo, duration, this);
             }
             else
-                duration = m_spellValue->Duration.get();
+                duration = *m_spellValue->Duration;
 
             m_channeledDuration = duration;
             SendChannelStart(duration);
@@ -4908,7 +4908,7 @@ void Spell::SendChannelStart(uint32 duration)
 
     if (schoolImmunityMask || mechanicImmunityMask)
     {
-        spellChannelStart.InterruptImmunities = boost::in_place();
+        spellChannelStart.InterruptImmunities.emplace();
         spellChannelStart.InterruptImmunities->SchoolImmunities = schoolImmunityMask;
         spellChannelStart.InterruptImmunities->Immunities = mechanicImmunityMask;
     }
@@ -7490,7 +7490,7 @@ void Spell::DelayedChannel()
 
 bool Spell::HasPowerTypeCost(Powers power) const
 {
-    return GetPowerTypeCostAmount(power).is_initialized();
+    return GetPowerTypeCostAmount(power).has_value();
 }
 
 Optional<int32> Spell::GetPowerTypeCostAmount(Powers power) const

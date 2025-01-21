@@ -61,14 +61,14 @@ WorldPacket const* FeatureSystemStatus::Write()
     _worldPacket << uint32(BpayStoreProductDeliveryDelay);
 
     _worldPacket.WriteBit(VoiceEnabled);
-    _worldPacket.WriteBit(EuropaTicketSystemStatus.is_initialized());
+    _worldPacket.WriteBit(EuropaTicketSystemStatus.has_value());
     _worldPacket.WriteBit(ScrollOfResurrectionEnabled);
     _worldPacket.WriteBit(BpayStoreEnabled);
     _worldPacket.WriteBit(BpayStoreAvailable);
     _worldPacket.WriteBit(BpayStoreDisabledByParentalControls);
     _worldPacket.WriteBit(ItemRestorationButtonEnabled);
     _worldPacket.WriteBit(BrowserEnabled);
-    _worldPacket.WriteBit(SessionAlert.is_initialized());
+    _worldPacket.WriteBit(SessionAlert.has_value());
     _worldPacket.WriteBit(RecruitAFriendSendingEnabled);
     _worldPacket.WriteBit(CharUndeleteEnabled);
     _worldPacket.WriteBit(RestrictedAccount);
@@ -80,7 +80,7 @@ WorldPacket const* FeatureSystemStatus::Write()
     _worldPacket.WriteBit(WillKickFromWorld);
     _worldPacket.WriteBit(KioskModeEnabled);
     _worldPacket.WriteBit(CompetitiveModeEnabled);
-    _worldPacket.WriteBit(RaceClassExpansionLevels.is_initialized());
+    _worldPacket.WriteBit(RaceClassExpansionLevels.has_value());
     _worldPacket.WriteBit(TokenBalanceEnabled);
 
     _worldPacket.FlushBits();

@@ -48,13 +48,6 @@ namespace WorldPackets
 
         struct CreatureStats
         {
-            CreatureStats()
-            {
-                Flags.fill(0);
-                ProxyCreatureID.fill(0);
-                CreatureDisplayID.fill(0);
-            }
-
             std::string Title;
             std::string TitleAlt;
             std::string CursorName;
@@ -69,11 +62,11 @@ namespace WorldPackets
             int32 HealthScalingExpansion = 0;
             uint32 RequiredExpansion = 0;
             uint32 VignetteID = 0;
-            std::array<uint32, 2> Flags;
-            std::array<uint32, 2> ProxyCreatureID;
-            std::array<uint32, 4> CreatureDisplayID;
-            std::array<std::string, 4> Name;
-            std::array<std::string, 4> NameAlt;
+            std::array<uint32, 2> Flags = { };
+            std::array<uint32, 2> ProxyCreatureID = { };
+            std::array<uint32, 4> CreatureDisplayID = { };
+            std::array<std::string, 4> Name = { };
+            std::array<std::string, 4> NameAlt = { };
         };
 
         class QueryCreatureResponse final : public ServerPacket

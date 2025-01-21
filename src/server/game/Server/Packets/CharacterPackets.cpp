@@ -202,7 +202,7 @@ WorldPacket const* EnumCharactersResult::Write()
     _worldPacket.WriteBit(IsTestDemonHunterCreationAllowed);
     _worldPacket.WriteBit(HasDemonHunterOnRealm);
     _worldPacket.WriteBit(IsDemonHunterCreationAllowed);
-    _worldPacket.WriteBit(DisabledClassesMask.is_initialized());
+    _worldPacket.WriteBit(DisabledClassesMask.has_value());
     _worldPacket.WriteBit(IsAlliedRacesCreationAllowed);
     _worldPacket << uint32(Characters.size());
     _worldPacket << int32(MaxCharacterLevel);
@@ -268,7 +268,7 @@ void CharacterRenameRequest::Read()
 WorldPacket const* CharacterRenameResult::Write()
 {
     _worldPacket << uint8(Result);
-    _worldPacket.WriteBit(Guid.is_initialized());
+    _worldPacket.WriteBit(Guid.has_value());
     _worldPacket.WriteBits(Name.length(), 6);
     _worldPacket.FlushBits();
 
@@ -318,7 +318,7 @@ WorldPacket const* CharFactionChangeResult::Write()
 {
     _worldPacket << uint8(Result);
     _worldPacket << Guid;
-    _worldPacket.WriteBit(Display.is_initialized());
+    _worldPacket.WriteBit(Display.has_value());
     _worldPacket.FlushBits();
 
     if (Display)

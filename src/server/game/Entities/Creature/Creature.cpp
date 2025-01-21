@@ -2831,7 +2831,7 @@ void Creature::AllLootRemovedFromCorpse()
 bool Creature::HasScalableLevels() const
 {
     CreatureTemplate const* cinfo = GetCreatureTemplate();
-    return cinfo->levelScaling.is_initialized();
+    return cinfo->levelScaling.has_value();
 }
 
 uint64 Creature::GetMaxHealthByLevel(uint8 level) const

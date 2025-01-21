@@ -320,6 +320,8 @@ namespace WorldPackets
         public:
             struct CharFactionChangeDisplayInfo
             {
+                CharFactionChangeDisplayInfo() { } // work around clang bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101227
+
                 std::string Name;
                 uint8 SexID             = 0;
                 uint8 SkinID            = 0;
