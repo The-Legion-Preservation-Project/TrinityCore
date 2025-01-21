@@ -1479,7 +1479,7 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
 
     if (!(_header.Flags & 0x1))
     {
-        std::size_t expectedFileSize =
+        int64 expectedFileSize =
             sizeof(DB2Header) +
             sizeof(DB2FieldEntry) * _header.FieldCount +
             _header.RecordCount * _header.RecordSize +
