@@ -1876,7 +1876,7 @@ TC_API_EXPORT EnumText EnumUtils<Emote>::ToString(Emote value)
 }
 
 template <>
-TC_API_EXPORT size_t EnumUtils<Emote>::Count() { return 404; }
+TC_API_EXPORT size_t EnumUtils<Emote>::Count() { return 302; }
 
 template <>
 TC_API_EXPORT Emote EnumUtils<Emote>::FromIndex(size_t index)
@@ -2184,7 +2184,7 @@ TC_API_EXPORT Emote EnumUtils<Emote>::FromIndex(size_t index)
         case 298: return EMOTE_STATE_MONKHEAL_CHANNELOMNI;
         case 299: return EMOTE_STATE_MONKDEFENSE_READYUNARMED;
         case 300: return EMOTE_ONESHOT_STAND;
-        case 304: return EMOTE_STATE_MONK2HLIDLE;
+        case 301: return EMOTE_STATE_MONK2HLIDLE;
         default: throw std::out_of_range("index");
     }
 }
