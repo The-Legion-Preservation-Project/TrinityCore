@@ -64,6 +64,9 @@ enum ShamanSpells
     SPELL_SHAMAN_EXHAUSTION                     = 57723,
     SPELL_SHAMAN_FLAME_SHOCK                    = 188389,
     SPELL_SHAMAN_FLAMETONGUE_ATTACK             = 10444,
+    SPELL_SHAMAN_FLAMETONGUE_WEAPON_ENCHANT     = 334294,
+    SPELL_SHAMAN_FLAMETONGUE_WEAPON_AURA        = 319778,
+    SPELL_SHAMAN_FROST_SHOCK_ENERGIZE           = 289439,
     SPELL_SHAMAN_GATHERING_STORMS               = 198299,
     SPELL_SHAMAN_GATHERING_STORMS_BUFF          = 198300,
     SPELL_SHAMAN_GHOST_WOLF                     = 2645,
@@ -106,7 +109,7 @@ enum ShamanSpells
     SPELL_SHAMAN_UNLIMITED_POWER_BUFF           = 272737,
     SPELL_SHAMAN_WINDFURY_ATTACK                = 25504,
     SPELL_SHAMAN_WINDFURY_ENCHANTMENT           = 334302,
-    SPELL_SHAMAN_WIND_RUSH                      = 192082,
+    SPELL_SHAMAN_WIND_RUSH                      = 192082
 };
 
 enum MiscSpells
@@ -583,41 +586,64 @@ class spell_sha_elemental_blast : public SpellScript
     }
 };
 
-// 194084 - Flametongue
-class spell_sha_flametongue : public SpellScriptLoader
+// 318038 - Flametongue Weapon
+class spell_sha_flametongue_weapon : public SpellScript
 {
-public:
-    spell_sha_flametongue() : SpellScriptLoader("spell_sha_flametongue") { }
+    PrepareSpellScript(spell_sha_flametongue_weapon);
 
-    class spell_sha_flametongue_AuraScript : public AuraScript
+    bool Validate(SpellInfo const* /*spellInfo*/) override
     {
-        PrepareAuraScript(spell_sha_flametongue_AuraScript);
+        return ValidateSpellInfo({ SPELL_SHAMAN_FLAMETONGUE_WEAPON_ENCHANT });
+    }
 
-        bool Validate(SpellInfo const* /*spellInfo*/) override
-        {
-            return ValidateSpellInfo({ SPELL_SHAMAN_FLAMETONGUE_ATTACK });
-        }
-
-        void HandleEffectProc(AuraEffect* aurEff, ProcEventInfo& eventInfo)
-        {
-            PreventDefaultAction();
-
-            Unit* attacker = eventInfo.GetActor();
-            CastSpellExtraArgs args(aurEff);
-            int32 damage = int32(attacker->GetTotalAttackPowerValue(BASE_ATTACK) * 0.125f / 2600 * attacker->GetBaseAttackTime(BASE_ATTACK));
-            args.AddSpellMod(SPELLVALUE_BASE_POINT0, damage);
-            attacker->CastSpell(eventInfo.GetActionTarget(), SPELL_SHAMAN_FLAMETONGUE_ATTACK, args);
-        }
-
-        void Register() override
-        {
-            OnEffectProc += AuraEffectProcFn(spell_sha_flametongue_AuraScript::HandleEffectProc, EFFECT_0, SPELL_AURA_DUMMY);
-        }
-    };
-
-    AuraScript* GetAuraScript() const override
+    bool Load() override
     {
-        return new spell_sha_flametongue_AuraScript();
+        return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+    }
+
+    void HandleEffectHitTarget(SpellEffIndex /*effIndex*/)
+    {
+        Player* player = GetCaster()->ToPlayer();
+        uint8 slot = EQUIPMENT_SLOT_MAINHAND;
+        if (player->GetPrimarySpecialization() == TALENT_SPEC_SHAMAN_ENHANCEMENT)
+            slot = EQUIPMENT_SLOT_OFFHAND;
+
+        Item* targetItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+        if (!targetItem || !targetItem->GetTemplate()->IsWeapon())
+            return;
+
+        player->CastSpell(targetItem, SPELL_SHAMAN_FLAMETONGUE_WEAPON_ENCHANT, true);
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_sha_flametongue_weapon::HandleEffectHitTarget, EFFECT_0, SPELL_EFFECT_DUMMY);
+    }
+};
+
+// 319778  - Flametongue - SPELL_SHAMAN_FLAMETONGUE_WEAPON_AURA
+class spell_sha_flametongue_weapon_aura : public AuraScript
+{
+    PrepareAuraScript(spell_sha_flametongue_weapon_aura);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_SHAMAN_FLAMETONGUE_ATTACK });
+    }
+
+    void HandleEffectProc(AuraEffect* aurEff, ProcEventInfo& eventInfo)
+    {
+        PreventDefaultAction();
+
+        Unit* attacker = eventInfo.GetActor();
+        CastSpellExtraArgs args(aurEff);
+        args.AddSpellMod(SPELLVALUE_BASE_POINT0, std::max(1, int32(attacker->GetTotalAttackPowerValue(BASE_ATTACK) * 0.0264f)));
+        attacker->CastSpell(eventInfo.GetActionTarget(), SPELL_SHAMAN_FLAMETONGUE_ATTACK, args);
+    }
+
+    void Register() override
+    {
+        OnEffectProc += AuraEffectProcFn(spell_sha_flametongue_weapon_aura::HandleEffectProc, EFFECT_0, SPELL_AURA_DUMMY);
     }
 };
 
@@ -745,6 +771,28 @@ class spell_sha_heroism : public SpellScript
         OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_heroism::RemoveInvalidTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_RAID);
         OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sha_heroism::RemoveInvalidTargets, EFFECT_1, TARGET_UNIT_CASTER_AREA_RAID);
         AfterHit += SpellHitFn(spell_sha_heroism::ApplyDebuff);
+    }
+};
+
+// 210714 - Icefury
+class spell_sha_icefury : public AuraScript
+{
+    PrepareAuraScript(spell_sha_icefury);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_SHAMAN_FROST_SHOCK_ENERGIZE });
+    }
+
+    void HandleEffectProc(AuraEffect* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
+    {
+        if (Unit* caster = GetCaster())
+            caster->CastSpell(caster, SPELL_SHAMAN_FROST_SHOCK_ENERGIZE, TRIGGERED_IGNORE_CAST_IN_PROGRESS);
+    }
+
+    void Register() override
+    {
+        OnEffectProc += AuraEffectProcFn(spell_sha_icefury::HandleEffectProc, EFFECT_1, SPELL_AURA_ADD_PCT_MODIFIER);
     }
 };
 
@@ -1752,10 +1800,13 @@ void AddSC_shaman_spell_scripts()
     RegisterAreaTriggerAI(areatrigger_sha_earthquake);
     RegisterSpellScript(spell_sha_earthquake_tick);
     RegisterSpellScript(spell_sha_elemental_blast);
+    RegisterSpellScript(spell_sha_flametongue_weapon);
+    RegisterSpellScript(spell_sha_flametongue_weapon_aura);
     RegisterSpellAndAuraScriptPair(spell_sha_healing_rain, spell_sha_healing_rain_aura);
     RegisterSpellScript(spell_sha_healing_rain_target_limit);
     RegisterSpellScript(spell_sha_healing_stream_totem_heal);
     RegisterSpellScript(spell_sha_heroism);
+    RegisterSpellScript(spell_sha_icefury);
     RegisterSpellScript(spell_sha_item_lightning_shield);
     RegisterSpellScript(spell_sha_item_lightning_shield_trigger);
     RegisterSpellScript(spell_sha_item_mana_surge);
