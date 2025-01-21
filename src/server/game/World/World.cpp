@@ -1771,7 +1771,7 @@ void World::SetInitialWorldSettings()
     LoadGameTables(m_dataPath);
 
     //Load weighted graph on taxi nodes path
-    sTaxiPathGraph.Initialize();
+    TaxiPathGraph::Initialize();
     // Load IP Location Database
     sIPLocation->Load();
 
