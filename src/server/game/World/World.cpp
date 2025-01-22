@@ -38,6 +38,7 @@
 #include "CharacterDatabaseCleaner.h"
 #include "CharacterTemplateDataStore.h"
 #include "Chat.h"
+#include "ChatCommand.h"
 #include "ChatPackets.h"
 #include "Config.h"
 #include "ConversationDataStore.h"
@@ -2321,7 +2322,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr->InitializeQueriesData(QUERY_DATA_ALL);
 
     TC_LOG_INFO("server.loading", "Initialize commands...");
-    ChatHandler::InitializeCommandTable();
+    Trinity::ChatCommands::LoadCommandMap();
 
     ///- Initialize game time and timers
     TC_LOG_INFO("server.loading", "Initialize game time and timers");
