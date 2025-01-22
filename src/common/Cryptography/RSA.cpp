@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <memory>
 #include <vector>
+#include <cstring>
 
 #define CHECK_AND_DECLARE_FUNCTION_TYPE(name, publicKey, privateKey)                                        \
     static_assert(std::is_same<decltype(&publicKey), decltype(&privateKey)>::value,                         \
