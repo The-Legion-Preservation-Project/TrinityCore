@@ -482,7 +482,8 @@ void BattlegroundSA::AddPlayer(Player* player)
 
     SendTransportInit(player);
 
-    TeleportToEntrancePosition(player);
+    if (!isInBattleground)
+        TeleportToEntrancePosition(player);
 }
 
 void BattlegroundSA::RemovePlayer(Player* /*player*/, ObjectGuid /*guid*/, uint32 /*team*/) { }
