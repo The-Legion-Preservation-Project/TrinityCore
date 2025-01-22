@@ -24,6 +24,7 @@
 
 class Unit;
 class SpellInfo;
+enum class ConversationActorType : uint32;
 
 #pragma pack(push, 1)
 struct ConversationDynamicFieldActor
@@ -80,7 +81,8 @@ class TC_GAME_API Conversation : public WorldObject, public GridObject<Conversat
 
         static Conversation* CreateConversation(uint32 conversationEntry, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr);
         bool Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry, Map* map, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr);
-        void AddActor(ObjectGuid const& actorGuid, uint16 actorIdx);
+        void AddActor(int32 actorId, uint32 actorIdx, ObjectGuid const& actorGuid);
+        void AddActor(int32 actorId, uint32 actorIdx, ConversationActorType type, uint32 creatureId, uint32 creatureDisplayInfoId);
 
         ObjectGuid const& GetCreatorGuid() const { return _creatorGuid; }
         ObjectGuid GetOwnerGUID() const override { return GetCreatorGuid(); }
