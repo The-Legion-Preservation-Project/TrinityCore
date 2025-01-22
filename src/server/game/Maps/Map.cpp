@@ -4840,10 +4840,10 @@ Corpse* Map::ConvertCorpseToBones(ObjectGuid const& ownerGuid, bool insignia /*=
 
         PhasingHandler::InheritPhaseShift(bones, corpse);
 
+        AddCorpse(bones);
+
         bones->UpdatePositionData();
         bones->SetZoneScript();
-
-        AddCorpse(bones);
 
         // add bones in grid store if grid loaded where corpse placed
         AddToMap(bones);

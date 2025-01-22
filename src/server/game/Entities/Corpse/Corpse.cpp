@@ -92,9 +92,6 @@ bool Corpse::Create(ObjectGuid::LowType guidlow, Player* owner)
 
     PhasingHandler::InheritPhaseShift(this, owner);
 
-    UpdatePositionData();
-    SetZoneScript();
-
     return true;
 }
 
