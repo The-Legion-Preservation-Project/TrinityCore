@@ -1556,7 +1556,7 @@ bool SpellInfo::IsRequiringDeadTarget() const
 
 bool SpellInfo::IsAllowingDeadTarget() const
 {
-    if (HasAttribute(SPELL_ATTR2_CAN_TARGET_DEAD) || Targets & (TARGET_FLAG_CORPSE_ALLY | TARGET_FLAG_CORPSE_ENEMY | TARGET_FLAG_UNIT_DEAD))
+    if (HasAttribute(SPELL_ATTR2_ALLOW_DEAD_TARGET) || Targets & (TARGET_FLAG_CORPSE_ALLY | TARGET_FLAG_CORPSE_ENEMY | TARGET_FLAG_UNIT_DEAD))
         return true;
 
     for (SpellEffectInfo const& effect : GetEffects())
@@ -1624,11 +1624,6 @@ bool SpellInfo::IsNextMeleeSwingSpell() const
     return HasAttribute(SpellAttr0(SPELL_ATTR0_ON_NEXT_SWING_NO_DAMAGE | SPELL_ATTR0_ON_NEXT_SWING));
 }
 
-bool SpellInfo::IsBreakingStealth() const
-{
-    return !HasAttribute(SPELL_ATTR1_ALLOW_WHILE_STEALTHED);
-}
-
 bool SpellInfo::IsRangedWeaponSpell() const
 {
     return (SpellFamilyName == SPELLFAMILY_HUNTER && !(SpellFamilyFlags[1] & 0x10000000)) // for 53352, cannot find better way
@@ -1638,12 +1633,12 @@ bool SpellInfo::IsRangedWeaponSpell() const
 
 bool SpellInfo::IsAutoRepeatRangedSpell() const
 {
-    return HasAttribute(SPELL_ATTR2_AUTOREPEAT_FLAG);
+    return HasAttribute(SPELL_ATTR2_AUTO_REPEAT);
 }
 
 bool SpellInfo::HasInitialAggro() const
 {
-    return !(HasAttribute(SPELL_ATTR1_NO_THREAT) || HasAttribute(SPELL_ATTR3_NO_INITIAL_AGGRO));
+    return !(HasAttribute(SPELL_ATTR1_NO_THREAT) || HasAttribute(SPELL_ATTR2_NO_INITIAL_THREAT));
 }
 
 bool SpellInfo::HasHitDelay() const
@@ -1747,7 +1742,7 @@ bool SpellInfo::CanPierceImmuneAura(SpellInfo const* auraSpellInfo) const
         return true;
 
     // these spells (Cyclone for example) can pierce all...
-    if (HasAttribute(SPELL_ATTR1_IMMUNITY_TO_HOSTILE_AND_FRIENDLY_EFFECTS) || HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
+    if (HasAttribute(SPELL_ATTR1_IMMUNITY_TO_HOSTILE_AND_FRIENDLY_EFFECTS) || HasAttribute(SPELL_ATTR2_NO_SCHOOL_IMMUNITIES))
     {
         // ...but not these (Divine shield, Ice block, Cyclone and Banish for example)
         if (auraSpellInfo->Mechanic != MECHANIC_IMMUNE_SHIELD &&
@@ -1775,7 +1770,7 @@ bool SpellInfo::CanDispelAura(SpellInfo const* auraSpellInfo) const
 
     // These auras (Cyclone for example) are not dispelable
     if ((auraSpellInfo->HasAttribute(SPELL_ATTR1_IMMUNITY_TO_HOSTILE_AND_FRIENDLY_EFFECTS) && auraSpellInfo->Mechanic != MECHANIC_NONE)
-        || auraSpellInfo->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
+        || auraSpellInfo->HasAttribute(SPELL_ATTR2_NO_SCHOOL_IMMUNITIES))
         return false;
 
     return true;
@@ -1892,7 +1887,7 @@ SpellCastResult SpellInfo::CheckShapeshift(uint32 form) const
     else
     {
         // needs shapeshift
-        if (!HasAttribute(SPELL_ATTR2_NOT_NEED_SHAPESHIFT) && Stances != 0)
+        if (!HasAttribute(SPELL_ATTR2_ALLOW_WHILE_NOT_SHAPESHIFTED_CASTER_FORM) && Stances != 0)
             return SPELL_FAILED_ONLY_SHAPESHIFT;
     }
 
@@ -2099,7 +2094,7 @@ SpellCastResult SpellInfo::CheckTarget(WorldObject const* caster, WorldObject co
             if (caster->GetTypeId() == TYPEID_PLAYER)
             {
                 // Do not allow these spells to target creatures not tapped by us (Banish, Polymorph, many quest spells)
-                if (HasAttribute(SPELL_ATTR2_CANT_TARGET_TAPPED))
+                if (HasAttribute(SPELL_ATTR2_CANNOT_CAST_ON_TAPPED))
                     if (Creature const* targetCreature = unitTarget->ToCreature())
                         if (targetCreature->hasLootRecipient() && !targetCreature->isTappedBy(caster->ToPlayer()))
                             return SPELL_FAILED_CANT_CAST_ON_TAPPED;
@@ -3561,7 +3556,7 @@ bool SpellInfo::CanSpellProvideImmunityAgainstAura(SpellInfo const* auraSpellInf
 
         ImmunityInfo const& immuneInfo = effectInfo.GetImmunityInfo();
 
-        if (!auraSpellInfo->HasAttribute(SPELL_ATTR1_IMMUNITY_TO_HOSTILE_AND_FRIENDLY_EFFECTS) && !auraSpellInfo->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
+        if (!auraSpellInfo->HasAttribute(SPELL_ATTR1_IMMUNITY_TO_HOSTILE_AND_FRIENDLY_EFFECTS) && !auraSpellInfo->HasAttribute(SPELL_ATTR2_NO_SCHOOL_IMMUNITIES))
         {
             if (uint32 schoolImmunity = immuneInfo.SchoolImmuneMask)
                 if ((auraSpellInfo->SchoolMask & schoolImmunity) != 0)
@@ -3607,7 +3602,7 @@ bool SpellInfo::CanSpellProvideImmunityAgainstAura(SpellInfo const* auraSpellInf
                     if (auraImmuneItr != immuneInfo.AuraTypeImmune.cend())
                         isImmuneToAuraEffectApply = true;
 
-                    if (!isImmuneToAuraEffectApply && !auraSpellInfo->IsPositiveEffect(auraSpellEffectInfo.EffectIndex) && !auraSpellInfo->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
+                    if (!isImmuneToAuraEffectApply && !auraSpellInfo->IsPositiveEffect(auraSpellEffectInfo.EffectIndex) && !auraSpellInfo->HasAttribute(SPELL_ATTR2_NO_SCHOOL_IMMUNITIES))
                     {
                         if (uint32 applyHarmfulAuraImmunityMask = immuneInfo.ApplyHarmfulAuraImmuneMask)
                             if ((auraSpellInfo->GetSchoolMask() & applyHarmfulAuraImmunityMask) != 0)
@@ -3653,7 +3648,7 @@ bool SpellInfo::SpellCancelsAuraEffect(AuraEffect const* aurEff) const
                 break;
             case SPELL_AURA_SCHOOL_IMMUNITY:
             case SPELL_AURA_MOD_IMMUNE_AURA_APPLY_SCHOOL:
-                if (aurEff->GetSpellInfo()->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE) || !(aurEff->GetSpellInfo()->SchoolMask & miscValue))
+                if (aurEff->GetSpellInfo()->HasAttribute(SPELL_ATTR2_NO_SCHOOL_IMMUNITIES) || !(aurEff->GetSpellInfo()->SchoolMask & miscValue))
                     continue;
                 break;
             case SPELL_AURA_DISPEL_IMMUNITY:
@@ -4245,7 +4240,7 @@ SpellInfo const* SpellInfo::GetAuraRankForLevel(uint8 level) const
         return this;
 
     // Client ignores spell with these attributes (sub_53D9D0)
-    if (HasAttribute(SPELL_ATTR0_AURA_IS_DEBUFF) || HasAttribute(SPELL_ATTR2_UNK3) || HasAttribute(SPELL_ATTR3_DRAIN_SOUL))
+    if (HasAttribute(SPELL_ATTR0_AURA_IS_DEBUFF) || HasAttribute(SPELL_ATTR2_ALLOW_LOW_LEVEL_BUFF) || HasAttribute(SPELL_ATTR3_DRAIN_SOUL))
         return this;
 
     bool needRankSelection = false;
