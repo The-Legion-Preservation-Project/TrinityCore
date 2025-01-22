@@ -2722,6 +2722,8 @@ struct SkillLineEntry
     int8 CanLink;
     int32 SpellIconFileID;
     uint32 ParentSkillLineID;
+
+    EnumFlag<SkillLineFlags> GetFlags() const { return static_cast<SkillLineFlags>(Flags); }
 };
 
 struct SkillLineAbilityEntry
