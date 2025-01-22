@@ -1567,6 +1567,11 @@ void Spell::EffectOpenLock()
                 return;
             }
         }
+        else if (goInfo->type == GAMEOBJECT_TYPE_CAPTURE_POINT)
+        {
+            gameObjTarget->AssaultCapturePoint(player);
+            return;
+        }
         else if (goInfo->type == GAMEOBJECT_TYPE_FLAGSTAND)
         {
             //CanUseBattlegroundObject() already called in CheckCast()
