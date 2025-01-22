@@ -1504,17 +1504,7 @@ void Creature::SelectLevel()
     uint8 level = minlevel == maxlevel ? minlevel : urand(minlevel, maxlevel);
     SetLevel(level);
 
-    if (HasScalableLevels())
-    {
-        SetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MIN, cInfo->levelScaling->MinLevel);
-        SetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MAX, cInfo->levelScaling->MaxLevel);
-
-        int8 mindelta = std::min(cInfo->levelScaling->DeltaLevelMax, cInfo->levelScaling->DeltaLevelMin);
-        int8 maxdelta = std::max(cInfo->levelScaling->DeltaLevelMax, cInfo->levelScaling->DeltaLevelMin);
-        int8 delta = mindelta == maxdelta ? mindelta : irand(mindelta, maxdelta);
-
-        SetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA, delta);
-    }
+    ApplyLevelScaling();
 
     UpdateLevelDependantStats();
 }
@@ -2853,6 +2843,23 @@ bool Creature::HasScalableLevels() const
 {
     CreatureTemplate const* cinfo = GetCreatureTemplate();
     return cinfo->levelScaling.has_value();
+}
+
+void Creature::ApplyLevelScaling()
+{
+    if (HasScalableLevels())
+    {
+        CreatureTemplate const* cInfo = GetCreatureTemplate();
+
+        SetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MIN, cInfo->levelScaling->MinLevel);
+        SetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MAX, cInfo->levelScaling->MaxLevel);
+
+        int8 mindelta = std::min(cInfo->levelScaling->DeltaLevelMax, cInfo->levelScaling->DeltaLevelMin);
+        int8 maxdelta = std::max(cInfo->levelScaling->DeltaLevelMax, cInfo->levelScaling->DeltaLevelMin);
+        int8 delta = mindelta == maxdelta ? mindelta : irand(mindelta, maxdelta);
+
+        SetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA, delta);
+    }
 }
 
 uint64 Creature::GetMaxHealthByLevel(uint8 level) const
