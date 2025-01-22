@@ -90,7 +90,7 @@ bool LootItem::AllowedForPlayer(Player const* player, bool isGivenByMasterLooter
 
         for (ItemEffectEntry const* itemEffect : pProto->Effects)
         {
-            if (itemEffect->TriggerType != ITEM_SPELLTRIGGER_LEARN_SPELL_ID)
+            if (itemEffect->TriggerType != ITEM_SPELLTRIGGER_ON_LEARN)
                 continue;
 
             if (player->HasSpell(itemEffect->SpellID))
@@ -103,7 +103,7 @@ bool LootItem::AllowedForPlayer(Player const* player, bool isGivenByMasterLooter
     {
         for (ItemEffectEntry const* itemEffect : pProto->Effects)
         {
-            if (itemEffect->TriggerType != ITEM_SPELLTRIGGER_LEARN_SPELL_ID)
+            if (itemEffect->TriggerType != ITEM_SPELLTRIGGER_ON_LEARN)
                 continue;
 
             if (player->HasSpell(itemEffect->SpellID))
