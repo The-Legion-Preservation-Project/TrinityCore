@@ -338,8 +338,7 @@ enum class CreatureRandomMovementType : uint8
 
 struct TC_GAME_API CreatureMovementData
 {
-    CreatureMovementData() : Ground(CreatureGroundMovementType::Run), Flight(CreatureFlightMovementType::None), Swim(true), Rooted(false), Chase(CreatureChaseMovementType::Run),
-        Random(CreatureRandomMovementType::Walk) { }
+    CreatureMovementData();
 
     CreatureGroundMovementType Ground;
     CreatureFlightMovementType Flight;
@@ -347,6 +346,7 @@ struct TC_GAME_API CreatureMovementData
     bool Rooted;
     CreatureChaseMovementType Chase;
     CreatureRandomMovementType Random;
+    uint32 InteractionPauseTimer;
 
     bool IsGroundAllowed() const { return Ground != CreatureGroundMovementType::None; }
     bool IsSwimAllowed() const { return Swim; }
@@ -355,6 +355,8 @@ struct TC_GAME_API CreatureMovementData
 
     CreatureChaseMovementType GetChase() const { return Chase; }
     CreatureRandomMovementType GetRandom() const { return Random; }
+
+    uint32 GetInteractionPauseTimer() const { return InteractionPauseTimer; }
 
     std::string ToString() const;
 };
