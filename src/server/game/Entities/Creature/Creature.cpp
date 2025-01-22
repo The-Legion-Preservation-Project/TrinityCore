@@ -1779,9 +1779,12 @@ bool Creature::LoadFromDB(ObjectGuid::LowType spawnId, Map* map, bool addToMap, 
                 return false;
             }
         }
+        else
+        {
+            // compatibility mode creatures will be respawned in ::Update()
+            m_deathState = DEAD;
+        }
 
-        // compatibility mode creatures will be respawned in ::Update()
-        m_deathState = DEAD;
         if (CanFly())
         {
             float tz = map->GetHeight(GetPhaseShift(), data->spawnPoint, true, MAX_FALL_DISTANCE);
