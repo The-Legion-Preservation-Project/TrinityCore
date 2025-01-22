@@ -482,11 +482,15 @@ enum PlayerFlags
     PLAYER_FLAGS_COMMENTATOR_CAMERA     = 0x80000000
 };
 
+DEFINE_ENUM_FLAG(PlayerFlags);
+
 enum PlayerFlagsEx
 {
     PLAYER_FLAGS_EX_REAGENT_BANK_UNLOCKED   = 0x0001,
     PLAYER_FLAGS_EX_MERCENARY_MODE          = 0x0002
 };
+
+DEFINE_ENUM_FLAG(PlayerFlagsEx);
 
 enum PlayerLocalFlags
 {
@@ -558,6 +562,8 @@ static_assert((PLAYER_FIELD_BYTES_3_OFFSET_OVERRIDE_SPELLS_ID & 1) == 0, "PLAYER
 
 #define KNOWN_TITLES_SIZE   6
 #define MAX_TITLE_INDEX     (KNOWN_TITLES_SIZE * 64)        // 4 uint64 fields
+
+DEFINE_ENUM_FLAG(PlayerLocalFlags);
 
 // used in PLAYER_FIELD_BYTES2 values
 enum PlayerFieldByte2Flags
@@ -1248,7 +1254,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void ContinueTaxiFlight() const;
 
         bool IsDeveloper() const { return HasPlayerFlag(PLAYER_FLAGS_DEVELOPER); }
-        void SetDeveloper(bool on) { if (on) AddPlayerFlag(PLAYER_FLAGS_DEVELOPER); else RemovePlayerFlag(PLAYER_FLAGS_DEVELOPER); }
+        void SetDeveloper(bool on) { if (on) SetPlayerFlag(PLAYER_FLAGS_DEVELOPER); else RemovePlayerFlag(PLAYER_FLAGS_DEVELOPER); }
         bool isAcceptWhispers() const { return (m_ExtraFlags & PLAYER_EXTRA_ACCEPT_WHISPERS) != 0; }
         void SetAcceptWhispers(bool on) { if (on) m_ExtraFlags |= PLAYER_EXTRA_ACCEPT_WHISPERS; else m_ExtraFlags &= ~PLAYER_EXTRA_ACCEPT_WHISPERS; }
         bool IsGameMaster() const { return (m_ExtraFlags & PLAYER_EXTRA_GM_ON) != 0; }
@@ -2664,7 +2670,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         // Void Storage
         bool IsVoidStorageUnlocked() const { return HasPlayerFlag(PLAYER_FLAGS_VOID_UNLOCKED); }
-        void UnlockVoidStorage() { AddPlayerFlag(PLAYER_FLAGS_VOID_UNLOCKED); }
+        void UnlockVoidStorage() { SetPlayerFlag(PLAYER_FLAGS_VOID_UNLOCKED); }
         void LockVoidStorage() { RemovePlayerFlag(PLAYER_FLAGS_VOID_UNLOCKED); }
         uint8 GetNextVoidStorageFreeSlot() const;
         uint8 GetNumOfVoidStorageFreeSlots() const;
@@ -2676,7 +2682,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         // Reagent Bank
         bool IsReagentBankUnlocked() const { return HasPlayerFlagEx(PLAYER_FLAGS_EX_REAGENT_BANK_UNLOCKED); }
-        void UnlockReagentBank() { AddPlayerFlagEx(PLAYER_FLAGS_EX_REAGENT_BANK_UNLOCKED); }
+        void UnlockReagentBank() { SetPlayerFlagEx(PLAYER_FLAGS_EX_REAGENT_BANK_UNLOCKED); }
 
         void CreateGarrison(uint32 garrSiteId);
         void DeleteGarrison();
@@ -2722,12 +2728,12 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool MeetPlayerCondition(uint32 conditionId) const;
 
         bool HasPlayerFlag(PlayerFlags flags) const { return HasFlag(PLAYER_FLAGS, flags); }
-        void AddPlayerFlag(PlayerFlags flags) { SetFlag(PLAYER_FLAGS, flags); }
+        void SetPlayerFlag(PlayerFlags flags) { SetFlag(PLAYER_FLAGS, flags); }
         void RemovePlayerFlag(PlayerFlags flags) { RemoveFlag(PLAYER_FLAGS, flags); }
         void ReplaceAllPlayerFlags(PlayerFlags flags) { SetUInt32Value(PLAYER_FLAGS, flags); }
 
         bool HasPlayerFlagEx(PlayerFlagsEx flags) const { return HasFlag(PLAYER_FLAGS_EX, flags); }
-        void AddPlayerFlagEx(PlayerFlagsEx flags) { SetFlag(PLAYER_FLAGS_EX, flags); }
+        void SetPlayerFlagEx(PlayerFlagsEx flags) { SetFlag(PLAYER_FLAGS_EX, flags); }
         void RemovePlayerFlagEx(PlayerFlagsEx flags) { RemoveFlag(PLAYER_FLAGS_EX, flags); }
         void ReplaceAllPlayerFlagsEx(PlayerFlagsEx flags) { SetUInt32Value(PLAYER_FLAGS_EX, flags); }
 
@@ -2773,7 +2779,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         ObjectGuid GetSummonedBattlePetGUID() const { return GetGuidValue(PLAYER_FIELD_SUMMONED_BATTLE_PET_ID); }
         void SetSummonedBattlePetGUID(ObjectGuid guid) { SetGuidValue(PLAYER_FIELD_SUMMONED_BATTLE_PET_ID, guid);  }
 
-        void AddTrackCreatureFlag(uint32 flags) { SetFlag(PLAYER_TRACK_CREATURES, flags); }
+        void SetTrackCreatureFlag(uint32 flags) { SetFlag(PLAYER_TRACK_CREATURES, flags); }
         void RemoveTrackCreatureFlag(uint32 flags) { RemoveFlag(PLAYER_TRACK_CREATURES, flags); }
 
         void AddTrackResourceFlag(uint32 flags) { SetFlag(PLAYER_TRACK_RESOURCES, flags); }
@@ -2786,7 +2792,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void ApplyModOverrideAPBySpellPowerPercent(float mod, bool apply) { ApplyModSignedFloatValue(PLAYER_FIELD_OVERRIDE_AP_BY_SPELL_POWER_PERCENT, mod, apply); }
 
         bool HasPlayerLocalFlag(PlayerLocalFlags flags) const { return HasFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
-        void AddPlayerLocalFlag(PlayerLocalFlags flags) { SetFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
+        void SetPlayerLocalFlag(PlayerLocalFlags flags) { SetFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
         void RemovePlayerLocalFlag(PlayerLocalFlags flags) { RemoveFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
         void ReplaceAllPlayerLocalFlags(PlayerLocalFlags flags) { SetUInt32Value(PLAYER_FIELD_LOCAL_FLAGS, flags); }
 

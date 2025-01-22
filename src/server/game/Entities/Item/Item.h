@@ -185,7 +185,7 @@ class TC_GAME_API Item : public Object
         ItemBondingType GetBonding() const { return _bonusData.Bonding; }
         void SetBinding(bool val) { ApplyModFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_SOULBOUND, val); }
         bool HasItemFlag(ItemFieldFlags flag) const { return HasFlag(ITEM_FIELD_FLAGS, flag); }
-        void AddItemFlag(ItemFieldFlags flags) { SetFlag(ITEM_FIELD_FLAGS, flags); }
+        void SetItemFlag(ItemFieldFlags flags) { SetFlag(ITEM_FIELD_FLAGS, flags); }
         void RemoveItemFlag(ItemFieldFlags flags) { RemoveFlag(ITEM_FIELD_FLAGS, flags); }
         void ReplaceAllItemFlags(ItemFieldFlags flags) { SetUInt32Value(ITEM_FIELD_FLAGS, flags); }
         bool IsSoulBound() const { return HasItemFlag(ITEM_FIELD_FLAG_SOULBOUND); }

@@ -1784,7 +1784,7 @@ bool Item::IsRefundExpired()
 
 void Item::SetSoulboundTradeable(GuidSet const& allowedLooters)
 {
-    AddItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE);
+    SetItemFlag(ITEM_FIELD_FLAG_BOP_TRADEABLE);
     allowedGUIDs = allowedLooters;
 }
 

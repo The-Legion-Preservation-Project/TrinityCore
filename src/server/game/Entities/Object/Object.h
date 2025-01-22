@@ -181,7 +181,7 @@ class TC_GAME_API Object
 
         uint32 GetDynamicFlags() const { return GetUInt32Value(OBJECT_DYNAMIC_FLAGS); }
         bool HasDynamicFlag(uint32 flag) const { return HasFlag(OBJECT_DYNAMIC_FLAGS, flag); }
-        void AddDynamicFlag(uint32 flag) { SetFlag(OBJECT_DYNAMIC_FLAGS, flag); }
+        void SetDynamicFlag(uint32 flag) { SetFlag(OBJECT_DYNAMIC_FLAGS, flag); }
         void RemoveDynamicFlag(uint32 flag) { RemoveFlag(OBJECT_DYNAMIC_FLAGS, flag); }
         void ReplaceAllDynamicFlags(uint32 flag) { SetUInt32Value(OBJECT_DYNAMIC_FLAGS, flag); }
 

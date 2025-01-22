@@ -184,7 +184,7 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
         void getFishLootJunk(Loot* loot, Player* loot_owner);
 
         bool HasFlag(GameObjectFlags flags) const { return Object::HasFlag(GAMEOBJECT_FLAGS, flags); }
-        void AddFlag(GameObjectFlags flags) { SetFlag(GAMEOBJECT_FLAGS, flags); }
+        void SetFlag(GameObjectFlags flags) { Object::SetFlag(GAMEOBJECT_FLAGS, flags); }
         void RemoveFlag(GameObjectFlags flags) { Object::RemoveFlag(GAMEOBJECT_FLAGS, flags); }
         void ReplaceAllFlags(GameObjectFlags flags) { SetUInt32Value(GAMEOBJECT_FLAGS, flags); }
 

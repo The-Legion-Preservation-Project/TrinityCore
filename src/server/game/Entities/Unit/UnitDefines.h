@@ -19,6 +19,7 @@
 #define UnitDefines_h__
 
 #include "Define.h"
+#include "EnumFlag.h"
 #include <string>
 
 #define MIN_MELEE_REACH             2.0f
@@ -114,6 +115,8 @@ enum UnitPVPStateFlags : uint8
     UNIT_BYTE2_FLAG_UNK7        = 0x80
 };
 
+DEFINE_ENUM_FLAG(UnitPVPStateFlags);
+
 // byte (2 from 0..3) of UNIT_FIELD_BYTES_2
 enum UnitPetFlag : uint8
 {
@@ -121,6 +124,8 @@ enum UnitPetFlag : uint8
     UNIT_PET_FLAG_CAN_BE_RENAMED    = 0x01,
     UNIT_PET_FLAG_CAN_BE_ABANDONED  = 0x02
 };
+
+DEFINE_ENUM_FLAG(UnitPetFlag);
 
 enum UnitMoveType
 {
@@ -185,6 +190,8 @@ enum UnitFlags : uint32
     UNIT_FLAG_ALLOWED               = (0xFFFFFFFF & ~UNIT_FLAG_DISALLOWED)
 };
 
+DEFINE_ENUM_FLAG(UnitFlags);
+
 // Value masks for UNIT_FIELD_FLAGS_2
 // EnumUtils: DESCRIBE THIS
 enum UnitFlags2 : uint32
@@ -235,6 +242,8 @@ enum UnitFlags2 : uint32
     UNIT_FLAG2_ALLOWED                                          = (0xFFFFFFFF & ~UNIT_FLAG2_DISALLOWED)
 };
 
+DEFINE_ENUM_FLAG(UnitFlags2);
+
 // Value masks for UNIT_FIELD_FLAGS_3
 // EnumUtils: DESCRIBE THIS
 enum UnitFlags3 : uint32
@@ -245,13 +254,15 @@ enum UnitFlags3 : uint32
     UNIT_FLAG3_ALLOWED                      = (0xFFFFFFFF & ~UNIT_FLAG3_DISALLOWED)
 };
 
+DEFINE_ENUM_FLAG(UnitFlags3);
+
 /// Non Player Character flags
 // EnumUtils: DESCRIBE THIS
 enum NPCFlags : uint64
 {
     UNIT_NPC_FLAG_NONE                      = 0x00000000000,
-    UNIT_NPC_FLAG_GOSSIP                    = 0x00000001,     // TITLE has gossip menu DESCRIPTION 100%
-    UNIT_NPC_FLAG_QUESTGIVER                = 0x00000002,     // TITLE is quest giver DESCRIPTION 100%
+    UNIT_NPC_FLAG_GOSSIP                    = 0x00000000001,     // TITLE has gossip menu DESCRIPTION 100%
+    UNIT_NPC_FLAG_QUESTGIVER                = 0x00000000002,     // TITLE is quest giver DESCRIPTION 100%
     UNIT_NPC_FLAG_UNK1                      = 0x00000000004,
     UNIT_NPC_FLAG_UNK2                      = 0x00000000008,
     UNIT_NPC_FLAG_TRAINER                   = 0x00000000010,     // TITLE is trainer DESCRIPTION 100%
@@ -291,6 +302,8 @@ enum NPCFlags : uint64
     UNIT_NPC_FLAG_BLACK_MARKET_VIEW         = 0x08000000000,     // TITLE is black market view DESCRIPTION only allows viewing black market auctions, no bidding
     UNIT_NPC_FLAG_CONTRIBUTION_COLLECTOR    = 0x40000000000,     // TITLE is contribution collector
 };
+
+DEFINE_ENUM_FLAG(NPCFlags);
 
 enum MovementFlags : uint32
 {

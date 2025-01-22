@@ -168,6 +168,8 @@ enum ItemFieldFlags : uint32
     ITEM_FIELD_FLAG_UNK26         = 0x80000000
 };
 
+DEFINE_ENUM_FLAG(ItemFieldFlags);
+
 enum ItemFlags : uint32
 {
     ITEM_FLAG_NO_PICKUP                         = 0x00000001,
