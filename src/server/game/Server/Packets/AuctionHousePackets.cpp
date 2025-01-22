@@ -262,10 +262,16 @@ void AuctionListItems::Read()
     _worldPacket >> MaxLevel;
     _worldPacket >> Quality;
     DataSort.resize(_worldPacket.read<uint8>());
-    KnownPets.resize(_worldPacket.read<uint32>());
+
+    uint32 knownPetsSize = _worldPacket.read<uint32>();
+    uint32 const sizeLimit = sBattlePetSpeciesStore.GetNumRows() / (sizeof(decltype(KnownPets)::value_type) * 8) + 1;
+    if (knownPetsSize >= sizeLimit)
+        throw PacketArrayMaxCapacityException(knownPetsSize, sizeLimit);
+
+    KnownPets.resize(knownPetsSize);
     _worldPacket >> MaxPetLevel;
-    for (std::size_t i = 0; i < KnownPets.size(); ++i)
-        _worldPacket >> KnownPets[i];
+    for (uint8& knownPetMask : KnownPets)
+        _worldPacket >> knownPetMask;
 
     Name = _worldPacket.ReadString(_worldPacket.ReadBits(8));
     ClassFilters.resize(_worldPacket.ReadBits(3));

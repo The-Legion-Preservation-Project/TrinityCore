@@ -173,8 +173,6 @@ enum ArtifactPowerFlag : uint8
 
 #define MAX_ARTIFACT_TIER 1
 
-#define BATTLE_PET_SPECIES_MAX_ID 2164
-
 enum class BattlePetSpeciesFlags : uint16
 {
     NoRename                 = 0x0001,

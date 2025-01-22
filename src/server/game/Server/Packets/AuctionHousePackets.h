@@ -278,7 +278,7 @@ namespace WorldPackets
             uint8 MinLevel = 1;
             uint8 MaxLevel = 100;
             int32 Quality = 0;
-            Array<uint8, BATTLE_PET_SPECIES_MAX_ID / 8 + 1> KnownPets;
+            std::vector<uint8> KnownPets; // size checked separately in Read()
             int8 MaxPetLevel = 0;
             std::string Name;
             Array<AuctionListFilterClass, 7> ClassFilters;
