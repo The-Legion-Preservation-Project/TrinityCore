@@ -98,6 +98,9 @@ bool DynamicObject::CreateDynamicObject(ObjectGuid::LowType guidlow, Unit* caste
     WorldObject::_Create(ObjectGuid::Create<HighGuid::DynamicObject>(GetMapId(), spell->Id, guidlow));
     PhasingHandler::InheritPhaseShift(this, caster);
 
+    UpdatePositionData();
+    SetZoneScript();
+
     SetEntry(spell->Id);
     SetObjectScale(1.0f);
     SetGuidValue(DYNAMICOBJECT_CASTER, caster->GetGUID());

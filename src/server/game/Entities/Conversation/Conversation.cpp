@@ -160,6 +160,9 @@ bool Conversation::Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry,
     Object::_Create(ObjectGuid::Create<HighGuid::Conversation>(GetMapId(), conversationEntry, lowGuid));
     PhasingHandler::InheritPhaseShift(this, creator);
 
+    UpdatePositionData();
+    SetZoneScript();
+
     SetEntry(conversationEntry);
     SetObjectScale(1.0f);
 

@@ -23,6 +23,7 @@
 #include "CreatureAISelector.h"
 #include "DatabaseEnv.h"
 #include "DB2Stores.h"
+#include "GameEventSender.h"
 #include "GameObjectAI.h"
 #include "GameObjectModel.h"
 #include "GameObjectPackets.h"
@@ -809,8 +810,9 @@ void GameObject::Update(uint32 diff)
                                 {
                                     if (Battleground* bg = map->GetBG())
                                     {
-                                        EventInform(GetGOInfo()->capturePoint.CaptureEventHorde);
-                                        bg->SendBroadcastText(GetGOInfo()->capturePoint.CaptureBroadcastHorde, CHAT_MSG_BG_SYSTEM_HORDE);
+                                        if (goInfo->capturePoint.CaptureEventHorde)
+                                            GameEvents::Trigger(goInfo->capturePoint.CaptureEventHorde, this, this);
+                                        bg->SendBroadcastText(goInfo->capturePoint.CaptureBroadcastHorde, CHAT_MSG_BG_SYSTEM_HORDE);
                                     }
                                 }
                             }
@@ -821,8 +823,9 @@ void GameObject::Update(uint32 diff)
                                 {
                                     if (Battleground* bg = map->GetBG())
                                     {
-                                        EventInform(GetGOInfo()->capturePoint.CaptureEventAlliance);
-                                        bg->SendBroadcastText(GetGOInfo()->capturePoint.CaptureBroadcastAlliance, CHAT_MSG_BG_SYSTEM_ALLIANCE);
+                                        if (goInfo->capturePoint.CaptureEventAlliance)
+                                            GameEvents::Trigger(goInfo->capturePoint.CaptureEventAlliance, this, this);
+                                        bg->SendBroadcastText(goInfo->capturePoint.CaptureBroadcastAlliance, CHAT_MSG_BG_SYSTEM_ALLIANCE);
                                     }
                                 }
                             }
@@ -1972,8 +1975,7 @@ void GameObject::Use(Unit* user)
                 if (info->goober.eventID)
                 {
                     TC_LOG_DEBUG("maps.script", "Goober ScriptStart id %u for GO entry %u (GUID " UI64FMTD ").", info->goober.eventID, GetEntry(), GetSpawnId());
-                    GetMap()->ScriptsStart(sEventScripts, info->goober.eventID, player, this);
-                    EventInform(info->goober.eventID, user);
+                    GameEvents::Trigger(info->goober.eventID, player, this);
                 }
 
                 // possible quest objective for active quests
@@ -2030,10 +2032,7 @@ void GameObject::Use(Unit* user)
                 player->SendCinematicStart(info->camera.camera);
 
             if (info->camera.eventID)
-            {
-                GetMap()->ScriptsStart(sEventScripts, info->camera.eventID, player, this);
-                EventInform(info->camera.eventID, user);
-            }
+                GameEvents::Trigger(info->camera.eventID, player, this);
 
             return;
         }
@@ -2499,22 +2498,6 @@ bool GameObject::IsInRange(float x, float y, float z, float radius) const
         && dz < info->GeoBoxMax.Z + radius && dz > info->GeoBoxMin.Z - radius;
 }
 
-void GameObject::EventInform(uint32 eventId, WorldObject* invoker /*= nullptr*/)
-{
-    if (!eventId)
-        return;
-
-    if (AI())
-        AI()->EventInform(eventId);
-
-    if (GetZoneScript())
-        GetZoneScript()->ProcessEvent(this, eventId, invoker);
-
-    if (BattlegroundMap* bgMap = GetMap()->ToBattlegroundMap())
-        if (bgMap->GetBG())
-            bgMap->GetBG()->ProcessEvent(this, eventId, invoker);
-}
-
 uint32 GameObject::GetScriptId() const
 {
     if (GameObjectData const* gameObjectData = GetGameObjectData())
@@ -2657,7 +2640,8 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, WorldOb
             break;
         case GO_DESTRUCTIBLE_DAMAGED:
         {
-            EventInform(m_goInfo->destructibleBuilding.DamagedEvent, attackerOrHealer);
+            if (GetGOInfo()->destructibleBuilding.DamagedEvent)
+                GameEvents::Trigger(GetGOInfo()->destructibleBuilding.DamagedEvent, attackerOrHealer, this);
             AI()->Damaged(attackerOrHealer, m_goInfo->destructibleBuilding.DamagedEvent);
 
             RemoveFlag(GO_FLAG_DESTROYED);
@@ -2682,7 +2666,8 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, WorldOb
         }
         case GO_DESTRUCTIBLE_DESTROYED:
         {
-            EventInform(m_goInfo->destructibleBuilding.DestroyedEvent, attackerOrHealer);
+            if (GetGOInfo()->destructibleBuilding.DestroyedEvent)
+                GameEvents::Trigger(GetGOInfo()->destructibleBuilding.DestroyedEvent, attackerOrHealer, this);
             AI()->Destroyed(attackerOrHealer, m_goInfo->destructibleBuilding.DestroyedEvent);
 
             if (Player* player = attackerOrHealer ? attackerOrHealer->GetCharmerOrOwnerPlayerOrPlayerItself() : nullptr)
@@ -2708,7 +2693,8 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, WorldOb
         }
         case GO_DESTRUCTIBLE_REBUILDING:
         {
-            EventInform(m_goInfo->destructibleBuilding.RebuildingEvent, attackerOrHealer);
+            if (GetGOInfo()->destructibleBuilding.RebuildingEvent)
+                GameEvents::Trigger(GetGOInfo()->destructibleBuilding.RebuildingEvent, attackerOrHealer, this);
             RemoveFlag(GO_FLAG_DAMAGED | GO_FLAG_DESTROYED);
 
             uint32 modelId = m_goInfo->displayId;
@@ -3179,7 +3165,8 @@ void GameObject::AssaultCapturePoint(Player* player)
             m_goValue.CapturePoint.State = WorldPackets::Battleground::BattlegroundCapturePointState::HordeCaptured;
             battleground->SendBroadcastText(GetGOInfo()->capturePoint.DefendedBroadcastHorde, CHAT_MSG_BG_SYSTEM_HORDE, player);
             UpdateCapturePoint();
-            EventInform(GetGOInfo()->capturePoint.DefendedEventHorde, player);
+            if (GetGOInfo()->capturePoint.DefendedEventHorde)
+                GameEvents::Trigger(GetGOInfo()->capturePoint.DefendedEventHorde, player, this);
             return;
         }
 
@@ -3191,7 +3178,8 @@ void GameObject::AssaultCapturePoint(Player* player)
                 m_goValue.CapturePoint.State = WorldPackets::Battleground::BattlegroundCapturePointState::ContestedHorde;
                 battleground->SendBroadcastText(GetGOInfo()->capturePoint.AssaultBroadcastHorde, CHAT_MSG_BG_SYSTEM_HORDE, player);
                 UpdateCapturePoint();
-                EventInform(GetGOInfo()->capturePoint.AssaultBroadcastHorde, player);
+                if (GetGOInfo()->capturePoint.ContestedEventHorde)
+                    GameEvents::Trigger(GetGOInfo()->capturePoint.ContestedEventHorde, player, this);
                 m_goValue.CapturePoint.AssaultTimer = GetGOInfo()->capturePoint.CaptureTime;
                 break;
             default:
@@ -3206,7 +3194,8 @@ void GameObject::AssaultCapturePoint(Player* player)
             m_goValue.CapturePoint.State = WorldPackets::Battleground::BattlegroundCapturePointState::AllianceCaptured;
             battleground->SendBroadcastText(GetGOInfo()->capturePoint.DefendedBroadcastAlliance, CHAT_MSG_BG_SYSTEM_ALLIANCE, player);
             UpdateCapturePoint();
-            EventInform(GetGOInfo()->capturePoint.DefendedEventAlliance, player);
+            if (GetGOInfo()->capturePoint.DefendedEventAlliance)
+                GameEvents::Trigger(GetGOInfo()->capturePoint.DefendedEventAlliance, player, this);
             return;
         }
 
@@ -3218,7 +3207,8 @@ void GameObject::AssaultCapturePoint(Player* player)
                 m_goValue.CapturePoint.State = WorldPackets::Battleground::BattlegroundCapturePointState::ContestedAlliance;
                 battleground->SendBroadcastText(GetGOInfo()->capturePoint.AssaultBroadcastAlliance, CHAT_MSG_BG_SYSTEM_ALLIANCE, player);
                 UpdateCapturePoint();
-                EventInform(GetGOInfo()->capturePoint.ContestedEventAlliance, player);
+                if (GetGOInfo()->capturePoint.ContestedEventAlliance)
+                    GameEvents::Trigger(GetGOInfo()->capturePoint.ContestedEventAlliance, player, this);
                 m_goValue.CapturePoint.AssaultTimer = GetGOInfo()->capturePoint.CaptureTime;
                 break;
             default:
