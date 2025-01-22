@@ -473,6 +473,7 @@ void AuctionHouseMgr::LoadAuctions()
             auction.BidAmount = fields[10].GetUInt64();
             auction.StartTime = std::chrono::system_clock::from_time_t(fields[11].GetInt64());
             auction.EndTime = std::chrono::system_clock::from_time_t(fields[12].GetInt64());
+            auction.ServerFlags = static_cast<AuctionPostingServerFlag>(fields[13].GetUInt8());
 
             auctionHouse->AddAuction(nullptr, std::move(auction));
 
@@ -739,6 +740,7 @@ void AuctionHouseObject::AddAuction(CharacterDatabaseTransaction trans, AuctionP
         stmt->setUInt64(8, auction.BidAmount);
         stmt->setInt64(9, std::chrono::system_clock::to_time_t(auction.StartTime));
         stmt->setInt64(10, std::chrono::system_clock::to_time_t(auction.EndTime));
+        stmt->setUInt8(11, auction.ServerFlags.AsUnderlyingType());
         trans->Append(stmt);
     }
 
@@ -1084,18 +1086,16 @@ void AuctionHouseObject::SendAuctionWon(AuctionPosting const* auction, Player* b
 
     // data for gm.log
     std::string bidderName;
-    bool logGmTrade = false;
+    bool logGmTrade = auction->ServerFlags.HasFlag(AuctionPostingServerFlag::GmLogBuyer);
 
     if (bidder)
     {
         bidderAccId = bidder->GetSession()->GetAccountId();
         bidderName = bidder->GetName();
-        logGmTrade = bidder->GetSession()->HasPermission(rbac::RBAC_PERM_LOG_GM_TRADE);
     }
     else
     {
         bidderAccId = sCharacterCache->GetCharacterAccountIdByGuid(auction->Bidder);
-        logGmTrade = AccountMgr::HasPermission(bidderAccId, rbac::RBAC_PERM_LOG_GM_TRADE, realm.Id.Realm);
 
         if (logGmTrade && !sCharacterCache->GetCharacterNameByGuid(auction->Bidder, bidderName))
             bidderName = sObjectMgr->GetTrinityStringForDBCLocale(LANG_UNKNOWN);

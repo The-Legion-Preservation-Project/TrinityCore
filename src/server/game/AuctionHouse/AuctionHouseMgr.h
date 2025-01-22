@@ -124,6 +124,15 @@ struct AuctionSearchClassFilters
     std::array<SubclassFilter, MAX_ITEM_CLASS> Classes = { };
 };
 
+enum class AuctionPostingServerFlag : uint8
+{
+    None        = 0x0,
+    GmLogBuyer  = 0x1  // write transaction to gm log file for buyer (optimization flag - avoids querying database for offline player permissions)
+};
+
+DEFINE_ENUM_FLAG(AuctionPostingServerFlag);
+
+// This structure represents the result of a single C_AuctionHouse.PostItem/PostCommodity call
 struct AuctionPosting
 {
     uint32 Id = 0;
@@ -138,6 +147,7 @@ struct AuctionPosting
     uint64 BidAmount = 0;
     SystemTimePoint StartTime = SystemTimePoint::min();
     SystemTimePoint EndTime = SystemTimePoint::min();
+    EnumFlag<AuctionPostingServerFlag> ServerFlags = AuctionPostingServerFlag::None;
 
     void BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* auctionItem, bool censorServerInfo, bool censorBidInfo) const;
     static uint64 CalculateMinIncrement(uint64 currentBid);
