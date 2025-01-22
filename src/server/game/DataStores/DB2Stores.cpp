@@ -1387,7 +1387,7 @@ std::vector<uint8> const* DB2Manager::GetHotfixBlobData(uint32 tableHash, int32 
 
 uint32 DB2Manager::GetEmptyAnimStateID() const
 {
-    return sAnimationDataStore.GetNumRows();
+    return 0; //sAnimationDataStore.GetNumRows();
 }
 
 void DB2Manager::InsertNewHotfix(uint32 tableHash, uint32 recordId)
