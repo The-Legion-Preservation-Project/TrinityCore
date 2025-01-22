@@ -1893,7 +1893,6 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond) const
                     case SPELL_EFFECT_APPLY_AREA_AURA_OWNER:
                     case SPELL_EFFECT_APPLY_AURA_ON_PET:
                     case SPELL_EFFECT_APPLY_AREA_AURA_SUMMONS:
-                    case SPELL_EFFECT_APPLY_AREA_AURA_PARTY_NONRANDOM:
                         continue;
                     default:
                         break;

@@ -4641,7 +4641,7 @@ void Player::DurabilityRepair(uint16 pos, bool takeCost, float discountMod)
 
     bool isBroken = item->IsBroken();
 
-    item->SetDurability(item->GetUInt32Value(ITEM_FIELD_MAXDURABILITY););
+    item->SetDurability(item->GetUInt32Value(ITEM_FIELD_MAXDURABILITY));
     item->SetState(ITEM_CHANGED, this);
 
     // reapply mods for total broken and repaired item if equipped

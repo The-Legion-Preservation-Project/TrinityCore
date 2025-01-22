@@ -986,7 +986,7 @@ class spell_gen_consumption : public SpellScript
             return;
 
         int32 damage = 0;
-        if (SpellInfo const* createdBySpell = sSpellMgr->GetSpellInfo(caster->m_unitData->CreatedBySpell, GetCastDifficulty()))
+        if (SpellInfo const* createdBySpell = sSpellMgr->GetSpellInfo(caster->GetUInt32Value(UNIT_CREATED_BY_SPELL), GetCastDifficulty()))
             damage = createdBySpell->GetEffect(EFFECT_1).CalcValue();
 
         if (damage)

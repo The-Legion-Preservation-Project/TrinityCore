@@ -1206,11 +1206,11 @@ void Item::SetCount(uint32 value)
 
 uint64 Item::CalculateDurabilityRepairCost(float discount) const
 {
-    uint32 maxDurability = m_itemData->MaxDurability;
+    uint32 maxDurability = GetUInt32Value(ITEM_FIELD_MAXDURABILITY);
     if (!maxDurability)
         return 0;
 
-    uint32 curDurability = m_itemData->Durability;
+    uint32 curDurability = GetUInt32Value(ITEM_FIELD_DURABILITY);
     ASSERT(maxDurability >= curDurability);
 
     uint32 lostDurability = maxDurability - curDurability;
