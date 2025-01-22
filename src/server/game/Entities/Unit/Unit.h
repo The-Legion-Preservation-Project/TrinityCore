@@ -1853,8 +1853,6 @@ class TC_GAME_API Unit : public WorldObject
 
         bool m_ControlledByPlayer;
 
-        bool m_AutoRepeatFirstCast;
-
         float m_createStats[MAX_STATS];
 
         AttackerSet m_attackers;
