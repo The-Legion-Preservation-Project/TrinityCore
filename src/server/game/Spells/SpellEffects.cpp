@@ -2236,12 +2236,8 @@ void Spell::EffectTeleUnitsFaceCaster()
     if (unitTarget->IsInFlight())
         return;
 
-    float dis = effectInfo->CalcRadius(m_caster);
-
-    float fx, fy, fz;
-    m_caster->GetClosePoint(fx, fy, fz, unitTarget->GetCombatReach(), dis);
-
-    unitTarget->NearTeleportTo(fx, fy, fz, -m_caster->GetOrientation(), unitTarget == m_caster);
+    if (m_targets.HasDst())
+        unitTarget->NearTeleportTo(destTarget->GetPositionX(), destTarget->GetPositionY(), destTarget->GetPositionZ(), destTarget->GetAbsoluteAngle(m_caster), unitTarget == m_caster);
 }
 
 void Spell::EffectLearnSkill()
