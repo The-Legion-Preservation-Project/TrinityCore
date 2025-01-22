@@ -475,7 +475,7 @@ class TC_GAME_API SpellInfo
         bool HasAttribute(SpellAttr13 attribute) const { return !!(AttributesEx13 & attribute); }
         bool HasAttribute(SpellCustomAttributes customAttribute) const { return !!(AttributesCu & customAttribute); }
 
-        bool CanBeInterrupted(WorldObject const* interruptCaster, Unit const* interruptTarget) const;
+        bool CanBeInterrupted(WorldObject const* interruptCaster, Unit const* interruptTarget, bool ignoreImmunity = false) const;
 
         bool HasAnyAuraInterruptFlag() const;
         bool HasAuraInterruptFlag(SpellAuraInterruptFlags flag) const { return AuraInterruptFlags.HasFlag(flag); }
@@ -603,6 +603,8 @@ class TC_GAME_API SpellInfo
         bool SpellCancelsAuraEffect(AuraEffect const* aurEff) const;
 
         uint32 GetAllowedMechanicMask() const;
+
+        uint32 GetMechanicImmunityMask(Unit const* caster) const;
 
         bool HasLabel(uint32 labelId) const;
 
