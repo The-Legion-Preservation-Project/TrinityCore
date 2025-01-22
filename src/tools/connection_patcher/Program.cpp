@@ -109,7 +109,8 @@ namespace Connection_Patcher
 
             Trinity::Crypto::RSA rsa;
             rsa.LoadFromString(Patches::Common::CertificatePrivateKey(), Trinity::Crypto::RSA::PrivateKey{});
-            rsa.Sign(signatureHash.GetDigest(), signature.data(), Trinity::Crypto::RSA::SHA256{});
+            auto digest = signatureHash.GetDigest();
+            rsa.Sign(digest.data(), digest.size(), signature.data(), Trinity::Crypto::RSA::SHA256{});
 
             ofs.write(reinterpret_cast<char const*>(signature.data()), signature.size());
         }

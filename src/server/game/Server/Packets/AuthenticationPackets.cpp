@@ -250,7 +250,7 @@ OHYtKG3GK3GEcFDwZU2LPHq21EroUAdtRfbrJ4KW2yc8igtXKxTBYw==
 -----END RSA PRIVATE KEY-----
 )";
 
-std::unique_ptr<Trinity::Crypto::RsaSignature> ConnectToRSA;
+std::unique_ptr<Trinity::Crypto::RSA> ConnectToRSA;
 
 uint8 const WherePacketHmac[] =
 {
@@ -263,8 +263,8 @@ uint8 const WherePacketHmac[] =
 
 bool WorldPackets::Auth::ConnectTo::InitializeEncryption()
 {
-    std::unique_ptr<Trinity::Crypto::RsaSignature> rsa = std::make_unique<Trinity::Crypto::RsaSignature>();
-    if (!rsa->LoadKeyFromString(RSAPrivateKey))
+    std::unique_ptr<Trinity::Crypto::RSA> rsa = std::make_unique<Trinity::Crypto::RSA>();
+    if (!rsa->LoadFromString(RSAPrivateKey, Trinity::Crypto::RSA::PrivateKey{}))
         return false;
 
     ConnectToRSA = std::move(rsa);
@@ -318,8 +318,8 @@ WorldPacket const* WorldPackets::Auth::ConnectTo::Write()
 
     ConnectToRSA->Encrypt(payload.contents(), payload.size(),
         _worldPacket.contents() + encryptedPayloadPos,
-        Trinity::Crypto::RsaSignature::PrivateKey{},
-        Trinity::Crypto::RsaSignature::NoPadding{});
+        Trinity::Crypto::RSA::PrivateKey{},
+        Trinity::Crypto::RSA::NoPadding{});
 
     return &_worldPacket;
 }

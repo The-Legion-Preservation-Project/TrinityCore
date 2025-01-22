@@ -18,6 +18,7 @@
 #ifndef TRINITYCORE_RSA_H
 #define TRINITYCORE_RSA_H
 
+#include "BigNumber.h"
 #include "Define.h"
 #include <openssl/evp.h>
 #include <openssl/rsa.h>
@@ -29,6 +30,54 @@ namespace Trinity
 {
 namespace Crypto
 {
+class TC_COMMON_API RSA
+{
+public:
+    RSA(RSA const& rsa) = delete;
+    RSA& operator=(RSA const& rsa) = delete;
+
+    struct PublicKey {};
+    struct PrivateKey {};
+
+    struct NoPadding : std::integral_constant<int32, RSA_NO_PADDING> {};
+    struct PKCS1Padding : std::integral_constant<int32, RSA_PKCS1_PADDING> {};
+
+    struct SHA256 : std::integral_constant<int32, NID_sha256> {};
+
+    RSA();
+    RSA(RSA&& rsa);
+    ~RSA();
+
+    template <typename KeyTag>
+    bool LoadFromFile(std::string const& fileName, KeyTag);
+
+    template <typename KeyTag>
+    bool LoadFromString(std::string const& keyPem, KeyTag);
+
+    uint32 GetOutputSize() const { return uint32(RSA_size(_rsa)); }
+    BigNumber GetModulus() const;
+
+    template <typename KeyTag, typename PaddingTag>
+    bool Encrypt(uint8 const* data, std::size_t dataLength, uint8* output, KeyTag, PaddingTag)
+    {
+        return Encrypt<KeyTag>(data, dataLength, output, PaddingTag::value);
+    }
+
+    template <typename HashTag>
+    bool Sign(uint8 const* dataHash, std::size_t dataHashLength, uint8* output, HashTag)
+    {
+        return Sign(HashTag::value, dataHash, dataHashLength, output);
+    }
+
+private:
+    template <typename KeyTag>
+    bool Encrypt(uint8 const* data, std::size_t dataLength, uint8* output, int32 paddingType);
+
+    bool Sign(int32 hashType, uint8 const* dataHash, std::size_t dataHashLength, uint8* output);
+
+    ::RSA* _rsa;
+};
+
 class TC_COMMON_API RsaSignature
 {
 public:
@@ -60,11 +109,6 @@ public:
         size_t _keyLength;
     };
 
-    struct PublicKey {};
-    struct PrivateKey {};
-
-    struct NoPadding : std::integral_constant<int32, RSA_NO_PADDING> {};
-
     RsaSignature();
     RsaSignature(RsaSignature const& other);
     RsaSignature(RsaSignature&& other) noexcept;
@@ -77,9 +121,6 @@ public:
 
     bool LoadKeyFromString(std::string const& keyPem);
 
-    // TheLegionPreservationProject
-    uint32 GetOutputSize() const { return uint32(RSA_size(_rsa)); }
-
     template <std::size_t N>
     bool Sign(std::array<uint8, N> const& message, DigestGenerator& generator, std::vector<uint8>& output)
     {
@@ -88,23 +129,9 @@ public:
 
     bool Sign(uint8 const* message, std::size_t messageLength, DigestGenerator& generator, std::vector<uint8>& output);
 
-    // TheLegionPreservationProject
-    template <typename KeyTag, typename PaddingTag>
-    bool Encrypt(uint8 const* data, std::size_t dataLength, uint8* output, KeyTag, PaddingTag)
-    {
-        return Encrypt<KeyTag>(data, dataLength, output, PaddingTag::value);
-    }
-
 private:
-    // TheLegionPreservationProject
-    template <typename KeyTag>
-    bool Encrypt(uint8 const* data, std::size_t dataLength, uint8* output, int32 paddingType);
-
     EVP_MD_CTX* _ctx = nullptr;
     EVP_PKEY* _key = nullptr;
-
-    // TheLegionPreservationProject
-    ::RSA* _rsa;
 };
 }
 }

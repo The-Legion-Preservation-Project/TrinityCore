@@ -22,14 +22,15 @@
 #include <memory>
 #include <vector>
 #include <cstring>
+#include <boost/iterator/reverse_iterator.hpp>
 
 #define CHECK_AND_DECLARE_FUNCTION_TYPE(name, publicKey, privateKey)                                        \
     static_assert(std::is_same<decltype(&publicKey), decltype(&privateKey)>::value,                         \
         "Public key and private key functions must have the same signature");                               \
     using name ## _t = decltype(&publicKey);                                                                \
     template <typename KeyTag> inline name ## _t get_ ## name () { return nullptr; }                        \
-    template <> inline name ## _t get_ ## name<Trinity::Crypto::RsaSignature::PublicKey>() { return &publicKey; }    \
-    template <> inline name ## _t get_ ## name<Trinity::Crypto::RsaSignature::PrivateKey>() { return &privateKey; }
+    template <> inline name ## _t get_ ## name<Trinity::Crypto::RSA::PublicKey>() { return &publicKey; }    \
+    template <> inline name ## _t get_ ## name<Trinity::Crypto::RSA::PrivateKey>() { return &privateKey; }
 
 namespace
 {
@@ -40,8 +41,6 @@ struct BIODeleter
         BIO_free(bio);
     }
 };
-
-CHECK_AND_DECLARE_FUNCTION_TYPE(RSA_encrypt, RSA_public_encrypt, RSA_private_encrypt);
 
 struct HMAC_SHA256_MD
 {
@@ -149,10 +148,85 @@ struct HMAC_SHA256_MD
 private:
     EVP_MD* _md;
 } HmacSha256Md;
+
+CHECK_AND_DECLARE_FUNCTION_TYPE(PEM_read, PEM_read_bio_RSAPublicKey, PEM_read_bio_RSAPrivateKey);
+CHECK_AND_DECLARE_FUNCTION_TYPE(RSA_encrypt, RSA_public_encrypt, RSA_private_encrypt);
 }
 
 namespace Trinity::Crypto
 {
+RSA::RSA()
+{
+    _rsa = RSA_new();
+}
+
+RSA::RSA(RSA&& rsa)
+{
+    _rsa = rsa._rsa;
+    rsa._rsa = RSA_new();
+}
+
+RSA::~RSA()
+{
+    RSA_free(_rsa);
+}
+
+template <typename KeyTag>
+bool RSA::LoadFromFile(std::string const& fileName, KeyTag)
+{
+    std::unique_ptr<BIO, BIODeleter> keyBIO(BIO_new_file(fileName.c_str(), "r"));
+    if (!keyBIO)
+        return false;
+
+    if (!get_PEM_read<KeyTag>()(keyBIO.get(), &_rsa, nullptr, nullptr))
+        return false;
+
+    return true;
+}
+
+template <typename KeyTag>
+bool RSA::LoadFromString(std::string const& keyPem, KeyTag)
+{
+    std::unique_ptr<BIO, BIODeleter> keyBIO(BIO_new_mem_buf(const_cast<char*>(keyPem.c_str()), keyPem.length() + 1));
+    if (!keyBIO)
+        return false;
+
+    if (!get_PEM_read<KeyTag>()(keyBIO.get(), &_rsa, nullptr, nullptr))
+        return false;
+
+    return true;
+}
+
+BigNumber RSA::GetModulus() const
+{
+    BigNumber bn;
+#if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x10100000L
+    const BIGNUM* rsa_n;
+    RSA_get0_key(_rsa, &rsa_n, nullptr, nullptr);
+    BN_copy(bn.BN(), rsa_n);
+#else
+    BN_copy(bn.BN(), _rsa->n);
+#endif
+    return bn;
+}
+
+template <typename KeyTag>
+bool RSA::Encrypt(uint8 const* data, std::size_t dataLength, uint8* output, int32 paddingType)
+{
+    std::vector<uint8> inputData(boost::make_reverse_iterator(data + dataLength), boost::make_reverse_iterator(data));
+    int result = get_RSA_encrypt<KeyTag>()(inputData.size(), inputData.data(), output, _rsa, paddingType);
+    std::reverse(output, output + GetOutputSize());
+    return result != -1;
+}
+
+bool RSA::Sign(int32 hashType, uint8 const* dataHash, std::size_t dataHashLength, uint8* output)
+{
+    uint32 signatureLength = 0;
+    auto result = RSA_sign(hashType, dataHash, dataHashLength, output, &signatureLength, _rsa);
+    std::reverse(output, output + GetOutputSize());
+    return result != -1;
+}
+
 EVP_MD const* RsaSignature::SHA256::GetGenerator() const
 {
     return EVP_sha256();
@@ -256,15 +330,6 @@ bool RsaSignature::LoadKeyFromString(std::string const& keyPem)
     return true;
 }
 
-template <typename KeyTag>
-bool RsaSignature::Encrypt(uint8 const* data, std::size_t dataLength, uint8* output, int32 paddingType)
-{
-    std::vector<uint8> inputData(std::make_reverse_iterator(data + dataLength), std::make_reverse_iterator(data));
-    int result = get_RSA_encrypt<KeyTag>()(inputData.size(), inputData.data(), output, _rsa, paddingType);
-    std::reverse(output, output + GetOutputSize());
-    return result != -1;
-}
-
 bool RsaSignature::Sign(uint8 const* message, std::size_t messageLength, DigestGenerator& generator, std::vector<uint8>& output)
 {
     size_t signatureLength = 0;
@@ -281,7 +346,10 @@ bool RsaSignature::Sign(uint8 const* message, std::size_t messageLength, DigestG
     return result != 0;
 }
 
-template TC_COMMON_API bool RsaSignature::Encrypt<RsaSignature::PublicKey>(uint8 const* data, std::size_t dataLength, uint8* output, int32 paddingType);
-template TC_COMMON_API bool RsaSignature::Encrypt<RsaSignature::PrivateKey>(uint8 const* data, std::size_t dataLength, uint8* output, int32 paddingType);
-
+template TC_COMMON_API bool RSA::LoadFromFile(std::string const& fileName, RSA::PublicKey);
+template TC_COMMON_API bool RSA::LoadFromFile(std::string const& fileName, RSA::PrivateKey);
+template TC_COMMON_API bool RSA::LoadFromString(std::string const& keyPem, RSA::PublicKey);
+template TC_COMMON_API bool RSA::LoadFromString(std::string const& keyPem, RSA::PrivateKey);
+template TC_COMMON_API bool RSA::Encrypt<RSA::PublicKey>(uint8 const* data, std::size_t dataLength, uint8* output, int32 paddingType);
+template TC_COMMON_API bool RSA::Encrypt<RSA::PrivateKey>(uint8 const* data, std::size_t dataLength, uint8* output, int32 paddingType);
 }
