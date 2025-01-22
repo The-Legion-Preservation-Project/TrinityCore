@@ -8281,9 +8281,6 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, Objec
 
 void Player::ApplyItemLootedSpell(Item* item, bool apply)
 {
-    if (item->GetTemplate()->HasFlag(ITEM_FLAG_LEGACY))
-        return;
-
     auto lootedEffectItr = std::find_if(item->GetEffects().begin(), item->GetEffects().end(), [](ItemEffectEntry const* effectData)
     {
         return effectData->TriggerType == ITEM_SPELLTRIGGER_ON_LOOTED;

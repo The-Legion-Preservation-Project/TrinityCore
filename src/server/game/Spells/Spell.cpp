@@ -5081,9 +5081,9 @@ void Spell::SendChannelStart(uint32 duration)
         unitCaster->AddChannelObject(unitCaster->GetGUID());
 
     if (Creature* creatureCaster = unitCaster->ToCreature())
-        if (unitCaster->m_unitData->ChannelObjects.size() == 1 && unitCaster->m_unitData->ChannelObjects[0].IsUnit())
+        if (unitCaster->GetChannelObjects().size() == 1 && unitCaster->GetChannelObjects().begin()->IsUnit())
             if (!creatureCaster->HasSpellFocus(this))
-                creatureCaster->SetSpellFocus(this, ObjectAccessor::GetWorldObject(*creatureCaster, unitCaster->m_unitData->ChannelObjects[0]));
+                creatureCaster->SetSpellFocus(this, ObjectAccessor::GetWorldObject(*creatureCaster, *unitCaster->GetChannelObjects().begin()));
 
     unitCaster->SetChannelSpellId(m_spellInfo->Id);
     unitCaster->SetChannelSpellXSpellVisualId(m_SpellVisual);
