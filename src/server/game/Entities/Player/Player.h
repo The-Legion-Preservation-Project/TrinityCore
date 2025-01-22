@@ -2211,7 +2211,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         int16 GetSkillTempBonusValue(uint32 skill) const;
         uint16 GetSkillStep(uint32 skill) const;            // 0...6
         bool HasSkill(uint32 skill) const;
-        void LearnSkillRewardedSpells(uint32 skillId, uint32 skillValue);
+        void LearnSkillRewardedSpells(uint32 skillId, uint32 skillValue, Races race);
         void SetSkillLineId(uint32 pos, uint16 skillLineId) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_ID_OFFSET + pos / 2, pos & 1, skillLineId); }
         void SetSkillStep(uint32 pos, uint16 step) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_STEP_OFFSET + pos / 2, pos & 1, step); }
         void SetSkillRank(uint32 pos, uint16 rank) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_RANK_OFFSET + pos / 2, pos & 1, rank); }

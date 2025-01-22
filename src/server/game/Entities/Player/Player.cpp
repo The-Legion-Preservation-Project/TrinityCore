@@ -5490,7 +5490,7 @@ bool Player::UpdateSkillPro(uint16 skillId, int32 chance, uint32 step)
     {
         if (value < bsl && new_value >= bsl)
         {
-            LearnSkillRewardedSpells(skillId, new_value);
+            LearnSkillRewardedSpells(skillId, new_value, Races(GetRace()));
             break;
         }
     }
@@ -5518,6 +5518,7 @@ void Player::ModifySkillBonus(uint32 skillid, int32 val, bool talent)
 
 void Player::UpdateSkillsForLevel()
 {
+    Races race = Races(GetRace());
     uint32 maxSkill = GetMaxSkillValueForLevel();
 
     for (SkillStatusMap::iterator itr = mSkillStatus.begin(); itr != mSkillStatus.end(); ++itr)
@@ -5544,7 +5545,7 @@ void Player::UpdateSkillsForLevel()
         }
 
         // Update level dependent skillline spells
-        LearnSkillRewardedSpells(rcEntry->SkillID, GetUInt16Value(PLAYER_SKILL_LINEID + SKILL_RANK_OFFSET + field, offset));
+        LearnSkillRewardedSpells(rcEntry->SkillID, GetUInt16Value(PLAYER_SKILL_LINEID + SKILL_RANK_OFFSET + field, offset), race);
     }
 }
 
@@ -5579,7 +5580,7 @@ void Player::SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal)
             if (itr->second.uState != SKILL_NEW)
                 itr->second.uState = SKILL_CHANGED;
 
-            LearnSkillRewardedSpells(id, newVal);
+            LearnSkillRewardedSpells(id, newVal, Races(GetRace()));
             // if skill value is going up, update enchantments after setting the new value
             if (newVal > currVal)
             {
@@ -5690,7 +5691,7 @@ void Player::SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal)
                         effect->HandleEffect(this, AURA_EFFECT_HANDLE_SKILL, true);
 
                 // Learn all spells for skill
-                LearnSkillRewardedSpells(id, newVal);
+                LearnSkillRewardedSpells(id, newVal, Races(GetRace()));
                 UpdateCriteria(CriteriaType::SkillRaised, id);
                 UpdateCriteria(CriteriaType::AchieveSkillStep, id);
                 return;
@@ -24655,9 +24656,8 @@ void Player::LearnQuestRewardedSpells()
     }
 }
 
-void Player::LearnSkillRewardedSpells(uint32 skillId, uint32 skillValue)
+void Player::LearnSkillRewardedSpells(uint32 skillId, uint32 skillValue, Races race)
 {
-    uint8 race  = GetRace();
     uint32 classMask = GetClassMask();
     for (uint32 j = 0; j < sSkillLineAbilityStore.GetNumRows(); ++j)
     {
@@ -26351,6 +26351,7 @@ void Player::_LoadSkills(PreparedQueryResult result)
     //                                                           0      1      2
     // SetPQuery(PLAYER_LOGIN_QUERY_LOADSKILLS,          "SELECT skill, value, max FROM character_skills WHERE guid = '%u'", GUID_LOPART(m_guid));
 
+    Races race = Races(GetRace());
     uint8 professionCount = 0;
     std::unordered_map<uint32, uint32> loadedSkillValues;
     if (result)
@@ -26369,11 +26370,11 @@ void Player::_LoadSkills(PreparedQueryResult result)
             uint16 value    = fields[1].GetUInt16();
             uint16 max      = fields[2].GetUInt16();
 
-            SkillRaceClassInfoEntry const* rcEntry = sDB2Manager.GetSkillRaceClassInfo(skill, GetRace(), GetClass());
+            SkillRaceClassInfoEntry const* rcEntry = sDB2Manager.GetSkillRaceClassInfo(skill, race, GetClass());
             if (!rcEntry)
             {
                 TC_LOG_ERROR("entities.player", "Player::_LoadSkills: Player '%s' (%s, Race: %u, Class: %u) has forbidden skill %u for his race/class combination",
-                    GetName().c_str(), GetGUID().ToString().c_str(), uint32(GetRace()), uint32(GetClass()), skill);
+                    GetName().c_str(), GetGUID().ToString().c_str(), uint32(race), uint32(GetClass()), skill);
 
                 mSkillStatus.insert(SkillStatusMap::value_type(skill, SkillStatusData(0, SKILL_DELETED)));
                 continue;
@@ -26429,8 +26430,8 @@ void Player::_LoadSkills(PreparedQueryResult result)
     }
 
     // Learn skill rewarded spells after all skills have been loaded to prevent learning a skill from them before its loaded with proper value from DB
-    for (auto& skill : loadedSkillValues)
-        LearnSkillRewardedSpells(skill.first, skill.second);
+    for (auto const& skill : loadedSkillValues)
+        LearnSkillRewardedSpells(skill.first, skill.second, race);
 
     if (HasSkill(SKILL_FIST_WEAPONS))
         SetSkill(SKILL_FIST_WEAPONS, 0, GetSkillValue(SKILL_UNARMED), GetMaxSkillValueForLevel());
