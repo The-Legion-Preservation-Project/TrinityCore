@@ -203,28 +203,30 @@ namespace WorldPackets
             WorldAttempt5   = 89
         };
 
-        class ConnectTo final : public ServerPacket
+        class TC_GAME_API ConnectTo final : public ServerPacket
         {
             static std::string const Haiku;
             static uint8 const PiDigits[130];
 
         public:
             static bool InitializeEncryption();
+            static void ShutdownEncryption();
 
             enum AddressType : uint8
             {
+                None = 0,
                 IPv4 = 1,
                 IPv6 = 2
             };
 
             struct ConnectPayload
             {
-                std::array<uint8, 16> Where;
-                uint16 Port;
-                AddressType Type;
+                std::array<uint8, 16> Where = { };
+                uint16 Port = 0;
+                AddressType Type = None;
                 uint32 Adler32 = 0;
                 uint8 XorMagic = 0x2A;
-                uint8 PanamaKey[32];
+                std::array<uint8, 32> PanamaKey = { };
             };
 
             ConnectTo();

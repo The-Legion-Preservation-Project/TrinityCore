@@ -271,10 +271,15 @@ bool WorldPackets::Auth::ConnectTo::InitializeEncryption()
     return true;
 }
 
+void WorldPackets::Auth::ConnectTo::ShutdownEncryption()
+{
+    ConnectToRSA.reset();
+}
+
 WorldPackets::Auth::ConnectTo::ConnectTo() : ServerPacket(SMSG_CONNECT_TO, 8 + 4 + 256 + 1)
 {
     Payload.Where.fill(0);
-    Trinity::Impl::HexStrToByteArray("F41DCB2D728CF3337A4FF338FA89DB01BBBE9C3B65E9DA96268687353E48B94C", Payload.PanamaKey, 32);
+    Trinity::Impl::HexStrToByteArray("F41DCB2D728CF3337A4FF338FA89DB01BBBE9C3B65E9DA96268687353E48B94C", Payload.PanamaKey.data(), 32);
     Payload.Adler32 = 0xA0A66C10;
 }
 
@@ -285,7 +290,7 @@ WorldPacket const* WorldPackets::Auth::ConnectTo::Write()
     hmacHash.UpdateData(reinterpret_cast<uint8 const*>(&Payload.Type), 1);
     hmacHash.UpdateData(reinterpret_cast<uint8 const*>(&Payload.Port), 2);
     hmacHash.UpdateData(reinterpret_cast<uint8 const*>(Haiku.c_str()), 71);
-    hmacHash.UpdateData(Payload.PanamaKey, 32);
+    hmacHash.UpdateData(Payload.PanamaKey.data(), 32);
     hmacHash.UpdateData(PiDigits, 108);
     hmacHash.UpdateData(&Payload.XorMagic, 1);
     hmacHash.Finalize();
@@ -296,7 +301,7 @@ WorldPacket const* WorldPackets::Auth::ConnectTo::Write()
     payload.append(Payload.Where.data(), 16);
     payload << uint16(Payload.Port);
     payload.append(Haiku.data(), 71);
-    payload.append(Payload.PanamaKey, 32);
+    payload.append(Payload.PanamaKey.data(), 32);
     payload.append(PiDigits, 108);
     payload << uint8(Payload.XorMagic);
     payload.append(hmacHash.GetDigest());
