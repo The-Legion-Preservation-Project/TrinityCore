@@ -486,7 +486,6 @@ class TC_GAME_API SpellInfo
 
         bool IsExplicitDiscovery() const;
         bool IsLootCrafting() const;
-        bool IsQuestTame() const;
         bool IsProfession() const;
         bool IsPrimaryProfession() const;
         bool IsPrimaryProfessionFirstRank() const;
