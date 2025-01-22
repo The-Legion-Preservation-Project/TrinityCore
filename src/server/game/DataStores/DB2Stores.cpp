@@ -1227,38 +1227,25 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
 
     // Initialize global taxinodes mask
     // include existed nodes that have at least single not spell base (scripted) path
+    for (TaxiNodesEntry const* node : sTaxiNodesStore)
     {
-        if (sTaxiNodesStore.GetNumRows())
-        {
-            ASSERT(TaxiMaskSize >= ((sTaxiNodesStore.GetNumRows() - 1) / 8) + 1,
-                "TaxiMaskSize is not large enough to contain all taxi nodes! (current value %d, required %d)",
-                TaxiMaskSize, (((sTaxiNodesStore.GetNumRows() - 1) / 8) + 1));
-        }
+        if (!(node->Flags & (TAXI_NODE_FLAG_ALLIANCE | TAXI_NODE_FLAG_HORDE)))
+            continue;
 
-        sTaxiNodesMask.fill(0);
-        sOldContinentsNodesMask.fill(0);
-        sHordeTaxiNodesMask.fill(0);
-        sAllianceTaxiNodesMask.fill(0);
-        for (TaxiNodesEntry const* node : sTaxiNodesStore)
-        {
-            if (!(node->Flags & (TAXI_NODE_FLAG_ALLIANCE | TAXI_NODE_FLAG_HORDE)))
-                continue;
+        // valid taxi network node
+        uint32 field = uint32((node->ID - 1) / (sizeof(TaxiMask::value_type) * 8));
+        TaxiMask::value_type submask = TaxiMask::value_type(1 << ((node->ID - 1) % (sizeof(TaxiMask::value_type) * 8)));
 
-            // valid taxi network node
-            uint32 field = uint32((node->ID - 1) / 8);
-            uint32 submask = 1 << ((node->ID - 1) % 8);
+        sTaxiNodesMask[field] |= submask;
+        if (node->Flags & TAXI_NODE_FLAG_HORDE)
+            sHordeTaxiNodesMask[field] |= submask;
+        if (node->Flags & TAXI_NODE_FLAG_ALLIANCE)
+            sAllianceTaxiNodesMask[field] |= submask;
 
-            sTaxiNodesMask[field] |= submask;
-            if (node->Flags & TAXI_NODE_FLAG_HORDE)
-                sHordeTaxiNodesMask[field] |= submask;
-            if (node->Flags & TAXI_NODE_FLAG_ALLIANCE)
-                sAllianceTaxiNodesMask[field] |= submask;
-
-            uint32 nodeMap;
-            DeterminaAlternateMapPosition(node->ContinentID, node->Pos.X, node->Pos.Y, node->Pos.Z, &nodeMap);
-            if (nodeMap < 2)
-                sOldContinentsNodesMask[field] |= submask;
-        }
+        uint32 nodeMap;
+        DeterminaAlternateMapPosition(node->ContinentID, node->Pos.X, node->Pos.Y, node->Pos.Z, &nodeMap);
+        if (nodeMap < 2)
+            sOldContinentsNodesMask[field] |= submask;
     }
 
     for (ToyEntry const* toy : sToyStore)
@@ -2430,6 +2417,11 @@ bool ChrClassesXPowerTypesEntryComparator::Compare(ChrClassesXPowerTypesEntry co
 bool ItemLevelSelectorQualityEntryComparator::Compare(ItemLevelSelectorQualityEntry const* left, ItemLevelSelectorQualityEntry const* right)
 {
     return left->Quality < right->Quality;
+}
+
+TaxiMask::TaxiMask()
+{
+    _data.resize(((sTaxiNodesStore.GetNumRows() - 1) / (sizeof(value_type) * 8)) + 1, 0);
 }
 
 bool DB2Manager::FriendshipRepReactionEntryComparator::Compare(FriendshipRepReactionEntry const* left, FriendshipRepReactionEntry const* right)
