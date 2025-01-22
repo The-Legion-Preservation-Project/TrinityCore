@@ -1059,6 +1059,7 @@ void Group::GroupLoot(Loot* loot, WorldObject* lootedObject)
             continue;
 
         item = ASSERT_NOTNULL(sObjectMgr->GetItemTemplate(i->itemid));
+        ASSERT(item);
 
         //roll for over-threshold item if it's one-player loot
         if (item->GetQuality() >= uint32(m_lootThreshold))
