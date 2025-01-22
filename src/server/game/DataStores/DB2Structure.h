@@ -961,6 +961,8 @@ struct CriteriaEntry
     uint8 FailEvent;
     uint8 Flags;
     int8 EligibilityWorldStateValue;
+
+    EnumFlag<CriteriaFlags> GetFlags() const { return static_cast<CriteriaFlags>(Flags); }
 };
 
 struct CriteriaTreeEntry
