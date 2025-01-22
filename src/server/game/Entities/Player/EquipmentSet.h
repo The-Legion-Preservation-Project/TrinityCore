@@ -51,9 +51,9 @@ struct EquipmentSetInfo
         int32 AssignedSpecIndex = -1;                           ///< Index of character specialization that this set is automatically equipped for
         std::string SetName;
         std::string SetIcon;
-        std::array<ObjectGuid, EQUIPMENT_SET_SLOTS> Pieces;
-        std::array<int32, EQUIPMENT_SET_SLOTS> Appearances;     ///< ItemModifiedAppearanceID
-        std::array<int32, 2> Enchants;                          ///< SpellItemEnchantmentID
+        std::array<ObjectGuid, EQUIPMENT_SET_SLOTS> Pieces = {};
+        std::array<int32, EQUIPMENT_SET_SLOTS> Appearances = {};///< ItemModifiedAppearanceID
+        std::array<int32, 2> Enchants = {};                     ///< SpellItemEnchantmentID
     } Data;
 
     /// Server-side data
