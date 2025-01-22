@@ -188,7 +188,6 @@ bool Battlefield::Update(uint32 diff)
                 objective_changed = true;
     }
 
-
     if (m_LastResurrectTimer <= diff)
     {
         for (uint8 i = 0; i < m_GraveyardList.size(); i++)

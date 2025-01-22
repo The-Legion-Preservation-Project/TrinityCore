@@ -375,7 +375,6 @@ Unit::Unit(bool isWorldObject) :
     }
     m_baseSpellCritChance = 5;
 
-
     for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
         m_speed_rate[i] = 1.0f;
 
@@ -10778,7 +10777,6 @@ void Unit::SetRooted(bool apply, bool packetOnly /*= false*/)
         else
             RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
     }
-
 
     static OpcodeServer const rootOpcodeTable[2][2] =
     {

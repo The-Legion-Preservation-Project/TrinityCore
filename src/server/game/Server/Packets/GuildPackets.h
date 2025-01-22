@@ -744,7 +744,6 @@ namespace WorldPackets
             bool FullUpdate = false;
         };
 
-
         class GuildBankRemainingWithdrawMoneyQuery final : public ClientPacket
         {
         public:

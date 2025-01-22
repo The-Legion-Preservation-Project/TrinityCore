@@ -7040,7 +7040,6 @@ void ObjectMgr::RemoveGraveyardLink(uint32 id, uint32 zoneId, uint32 team, bool 
 
     bool found = false;
 
-
     for (; range.first != range.second; ++range.first)
     {
         GraveyardData & data = range.first->second;

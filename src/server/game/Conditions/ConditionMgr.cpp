@@ -2973,7 +2973,6 @@ bool ConditionMgr::IsPlayerMeetingCondition(Player const* player, PlayerConditio
             return false;
     }
 
-
     if (condition->SpellID[0])
     {
         std::array<bool, std::tuple_size_v<decltype(condition->SpellID)>> results;

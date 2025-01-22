@@ -466,7 +466,6 @@ void WorldSession::HandleRequestBattlefieldStatusOpcode(WorldPackets::Battlegrou
             if (!bg)
                 continue;
 
-
             WorldPackets::Battleground::BattlefieldStatusNeedConfirmation battlefieldStatus;
             sBattlegroundMgr->BuildBattlegroundStatusNeedConfirmation(&battlefieldStatus, bg, _player, i, _player->GetBattlegroundQueueJoinTime(bgQueueTypeId), getMSTimeDiff(getMSTime(), ginfo.RemoveInviteTime), arenaType);
             SendPacket(battlefieldStatus.Write());

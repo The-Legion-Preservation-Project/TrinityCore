@@ -3493,7 +3493,6 @@ void Guild::SendBankList(WorldSession* session, uint8 tabId, bool fullUpdate) co
                 {
                     WorldPackets::Guild::GuildBankItemInfo& itemInfo = packet.ItemInfo.emplace_back();
 
-
                     itemInfo.Slot = int32(slotId);
                     itemInfo.Item.ItemID = tabItem->GetEntry();
                     itemInfo.Count = int32(tabItem->GetCount());

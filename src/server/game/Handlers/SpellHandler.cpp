@@ -310,7 +310,6 @@ void WorldSession::HandleCastSpellOpcode(WorldPackets::Spells::CastSpell& cast)
     {
         bool allow = false;
 
-
         // allow casting of unknown spells for special lock cases
         if (GameObject* go = targets.GetGOTarget())
             if (go->GetSpellForLock(caster->ToPlayer()) == spellInfo)
