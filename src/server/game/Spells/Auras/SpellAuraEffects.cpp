@@ -1090,7 +1090,8 @@ void AuraEffect::PeriodicTick(AuraApplication* aurApp, Unit* caster) const
     Unit* target = aurApp->GetTarget();
 
     // Update serverside orientation of tracking channeled auras on periodic update ticks
-    if (caster && m_spellInfo->IsChanneled() && m_spellInfo->HasAttribute(SPELL_ATTR1_CHANNEL_TRACK_TARGET) && caster->GetChannelObjects().size())
+    // exclude players because can turn during channeling and shouldn't desync orientation client/server
+    if (caster && !caster->IsPlayer() && m_spellInfo->IsChanneled() && m_spellInfo->HasAttribute(SPELL_ATTR1_CHANNEL_TRACK_TARGET) && caster->GetChannelObjects().size())
     {
         ObjectGuid const channelGuid = *caster->GetChannelObjects().begin();
         if (channelGuid != caster->GetGUID())
