@@ -60,7 +60,7 @@ void WorldSession::SendAuthResponse(uint32 code, bool queued, uint32 queuePos)
     SendPacket(response.Write());
 }
 
-void WorldSession::SendAuthWaitQue(uint32 position)
+void WorldSession::SendAuthWaitQueue(uint32 position)
 {
     if (position)
     {
