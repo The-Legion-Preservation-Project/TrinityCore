@@ -30,16 +30,16 @@ ByteBuffer& operator<<(ByteBuffer& data, MovementInfo const& movementInfo)
     bool hasSpline = false; // todo 6.x send this infos
 
     data << movementInfo.guid;
-    data << movementInfo.time;
+    data << uint32(movementInfo.time);
     data << movementInfo.pos.PositionXYZOStream();
-    data << movementInfo.pitch;
-    data << movementInfo.splineElevation;
+    data << float(movementInfo.pitch);
+    data << float(movementInfo.splineElevation);
 
     uint32 removeMovementForcesCount = 0;
     data << removeMovementForcesCount;
 
-    uint32 int168 = 0;
-    data << int168;
+    uint32 moveIndex = 0;
+    data << moveIndex;
 
     /*for (uint32 i = 0; i < removeMovementForcesCount; ++i)
     {
@@ -63,16 +63,16 @@ ByteBuffer& operator<<(ByteBuffer& data, MovementInfo const& movementInfo)
 
     if (hasFallData)
     {
-        data << movementInfo.jump.fallTime;
-        data << movementInfo.jump.zspeed;
+        data << uint32(movementInfo.jump.fallTime);
+        data << float(movementInfo.jump.zspeed);
 
         data.WriteBit(hasFallDirection);
         data.FlushBits();
         if (hasFallDirection)
         {
-            data << movementInfo.jump.sinAngle;
-            data << movementInfo.jump.cosAngle;
-            data << movementInfo.jump.xyspeed;
+            data << float(movementInfo.jump.sinAngle);
+            data << float(movementInfo.jump.cosAngle);
+            data << float(movementInfo.jump.xyspeed);
         }
     }
 

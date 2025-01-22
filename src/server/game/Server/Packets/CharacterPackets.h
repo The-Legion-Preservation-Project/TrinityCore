@@ -631,7 +631,7 @@ namespace WorldPackets
             int32 Original = 0;
             uint8 Reason = 0;
             int32 Amount = 0;
-            float GroupBonus = 0;
+            float GroupBonus = 0.0f;
             uint8 ReferAFriendBonusType = 0;    // 1 - 300% of normal XP; 2 - 150% of normal XP
         };
 

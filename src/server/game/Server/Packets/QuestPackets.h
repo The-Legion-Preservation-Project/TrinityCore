@@ -668,10 +668,10 @@ namespace WorldPackets
         {
             int32 ResponseID = 0;
             int32 ChoiceArtFileID = 0;
-            std::string Answer;
-            std::string Header;
-            std::string Description;
-            std::string Confirmation;
+            std::string_view Answer;
+            std::string_view Header;
+            std::string_view Description;
+            std::string_view Confirmation;
             Optional<PlayerChoiceResponseReward> Reward;
         };
 
@@ -685,7 +685,7 @@ namespace WorldPackets
             ObjectGuid SenderGUID;
             int32 ChoiceID = 0;
             int32 UiTextureKitID = 0;
-            std::string Question;
+            std::string_view Question;
             std::vector<PlayerChoiceResponse> Responses;
             bool CloseChoiceFrame = false;
             bool HideWarboardHeader = false;
