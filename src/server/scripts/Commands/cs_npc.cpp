@@ -412,7 +412,7 @@ public:
             return false;
         }
 
-        creature->SetNpcFlags(npcFlags);
+        creature->ReplaceAllNpcFlags(npcFlags);
 
         WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_UPD_CREATURE_NPCFLAG);
 

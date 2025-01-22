@@ -182,10 +182,12 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
         void SendGameObjectDespawn();
         void getFishLoot(Loot* loot, Player* loot_owner);
         void getFishLootJunk(Loot* loot, Player* loot_owner);
+
         bool HasFlag(GameObjectFlags flags) const { return Object::HasFlag(GAMEOBJECT_FLAGS, flags); }
         void AddFlag(GameObjectFlags flags) { SetFlag(GAMEOBJECT_FLAGS, flags); }
         void RemoveFlag(GameObjectFlags flags) { Object::RemoveFlag(GAMEOBJECT_FLAGS, flags); }
-        void SetFlags(GameObjectFlags flags) { SetUInt32Value(GAMEOBJECT_FLAGS, flags); }
+        void ReplaceAllFlags(GameObjectFlags flags) { SetUInt32Value(GAMEOBJECT_FLAGS, flags); }
+
         void SetLevel(uint32 level) { SetUInt32Value(GAMEOBJECT_LEVEL, level); }
         GameobjectTypes GetGoType() const { return GameobjectTypes(GetByteValue(GAMEOBJECT_BYTES_1, 1)); }
         void SetGoType(GameobjectTypes type) { SetByteValue(GAMEOBJECT_BYTES_1, 1, type); }

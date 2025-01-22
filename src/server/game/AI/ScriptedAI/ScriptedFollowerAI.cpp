@@ -184,7 +184,7 @@ void FollowerAI::StartFollow(Player* player, uint32 factionForFollower, uint32 q
     me->GetMotionMaster()->Clear(MOTION_PRIORITY_NORMAL);
     me->PauseMovement();
 
-    me->SetNpcFlags(UNIT_NPC_FLAG_NONE);
+    me->ReplaceAllNpcFlags(UNIT_NPC_FLAG_NONE);
 
     AddFollowState(STATE_FOLLOW_INPROGRESS);
 

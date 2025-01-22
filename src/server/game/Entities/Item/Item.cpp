@@ -747,7 +747,7 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
         need_save = true;
     }
 
-    SetItemFlags(ItemFieldFlags(itemFlags));
+    ReplaceAllItemFlags(ItemFieldFlags(itemFlags));
 
     uint32 durability = fields[11].GetUInt16();
     SetDurability(durability);
@@ -1564,7 +1564,7 @@ Item* Item::CloneItem(uint32 count, Player const* player /*= nullptr*/) const
 
     newItem->SetCreator(GetCreator());
     newItem->SetGiftCreator(GetGiftCreator());
-    newItem->RemoveItemFlag(ItemFieldFlags(ITEM_FIELD_FLAG_REFUNDABLE | ITEM_FIELD_FLAG_BOP_TRADEABLE));
+    newItem->ReplaceAllItemFlags(ItemFieldFlags(GetUInt32Value(ITEM_FIELD_FLAGS) & ~(ITEM_FIELD_FLAG_REFUNDABLE | ITEM_FIELD_FLAG_BOP_TRADEABLE)));
     newItem->SetExpiration(GetExpiration());
     // player CAN be NULL in which case we must not update random properties because that accesses player's item update queue
     if (player)

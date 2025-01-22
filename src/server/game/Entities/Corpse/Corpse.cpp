@@ -171,8 +171,8 @@ bool Corpse::LoadCorpseFromDB(ObjectGuid::LowType guid, Field* fields)
     _LoadIntoDataField(fields[6].GetString(), CORPSE_FIELD_ITEM, EQUIPMENT_SLOT_END);
     SetUInt32Value(CORPSE_FIELD_BYTES_1, fields[7].GetUInt32());
     SetUInt32Value(CORPSE_FIELD_BYTES_2, fields[8].GetUInt32());
-    SetFlags(fields[9].GetUInt8());
-    SetCorpseDynamicFlags(CorpseDynFlags(fields[10].GetUInt8()));
+    ReplaceAllFlags(fields[9].GetUInt8());
+    ReplaceAllCorpseDynamicFlags(CorpseDynFlags(fields[10].GetUInt8()));
     SetOwnerGUID(ObjectGuid::Create<HighGuid::Player>(fields[14].GetUInt64()));
     if (CharacterCacheEntry const* characterInfo = sCharacterCache->GetCharacterCacheByGuid(GetGuidValue(CORPSE_FIELD_OWNER)))
         SetFactionTemplate(sChrRacesStore.AssertEntry(characterInfo->Race)->FactionID);

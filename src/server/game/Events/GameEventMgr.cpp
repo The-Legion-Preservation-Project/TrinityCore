@@ -1184,7 +1184,7 @@ void GameEventMgr::UpdateEventNPCFlags(uint16 event_id)
                     if (CreatureTemplate const* creatureTemplate = creature->GetCreatureTemplate())
                         npcflag |= creatureTemplate->npcflag;
 
-                    creature->SetNpcFlags(NPCFlags(npcflag));
+                    creature->ReplaceAllNpcFlags(NPCFlags(npcflag));
                     // reset gossip options, since the flag change might have added / removed some
                     //cr->ResetGossipOptions();
                 }

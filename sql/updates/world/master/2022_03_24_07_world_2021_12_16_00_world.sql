@@ -6,7 +6,7 @@ INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
 -- Gor Grimgut
 -- Revert change to WDB, 0 in 2011, 0 in sniff, otherwise despawns on its own and not like in sniff, breaks script.
 -- It allows to summon him twice, yes
-UPDATE `gameobject_template` SET `Data5`=0, `ContentTuningId`=41, `VerifiedBuild`=42698 WHERE `entry`=184729; -- The Thunderspike
+UPDATE `gameobject_template` SET `Data5`=0 WHERE `entry`=184729; -- The Thunderspike
 
 UPDATE `event_scripts` SET `delay` = 0, `Comment` = "Event (Object 'The Thunderspike' (184729)) - On Event - Summon Creature 'Gor Grimgut'" WHERE `id` = 13685;
 

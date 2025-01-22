@@ -67,11 +67,11 @@ void SmartAI::StartPath(bool run/* = false*/, uint32 pathId/* = 0*/, bool repeat
     // Do not use AddEscortState, removing everything from previous
     _escortState = SMART_ESCORT_ESCORTING;
 
-        if (invoker && invoker->GetTypeId() == TYPEID_PLAYER)
-        {
-            _escortNPCFlags = me->GetUInt32Value(UNIT_NPC_FLAGS);
-            me->SetNpcFlags((NPCFlags)0);
-        }
+    if (invoker && invoker->GetTypeId() == TYPEID_PLAYER)
+    {
+        _escortNPCFlags = me->GetUInt32Value(UNIT_NPC_FLAGS);
+        me->ReplaceAllNpcFlags((NPCFlags)0);
+    }
 
     me->GetMotionMaster()->MovePath(_path, _repeatWaypointPath);
 }
@@ -194,7 +194,7 @@ void SmartAI::EndPath(bool fail)
 
     if (_escortNPCFlags)
     {
-        me->SetNpcFlags((NPCFlags)_escortNPCFlags);
+        me->ReplaceAllNpcFlags((NPCFlags)_escortNPCFlags);
         _escortNPCFlags = 0;
     }
 

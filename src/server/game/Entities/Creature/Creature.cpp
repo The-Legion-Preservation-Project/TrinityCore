@@ -591,18 +591,18 @@ bool Creature::UpdateEntry(uint32 entry, CreatureData const* data /*= nullptr*/,
     if (cInfo->flags_extra & CREATURE_FLAG_EXTRA_WORLDEVENT)
         npcFlags |= sGameEventMgr->GetNPCFlag(this);
 
-    SetNpcFlags(NPCFlags(npcFlags & 0xFFFFFFFF));
+    ReplaceAllNpcFlags(NPCFlags(npcFlags & 0xFFFFFFFF));
 
     // if unit is in combat, keep this flag
     unitFlags &= ~UNIT_FLAG_IN_COMBAT;
     if (IsInCombat())
         unitFlags |= UNIT_FLAG_IN_COMBAT;
 
-    SetUnitFlags(UnitFlags(unitFlags));
-    SetUnitFlags2(UnitFlags2(unitFlags2));
-    SetUnitFlags3(UnitFlags3(unitFlags3));
+    ReplaceAllUnitFlags(UnitFlags(unitFlags));
+    ReplaceAllUnitFlags2(UnitFlags2(unitFlags2));
+    ReplaceAllUnitFlags3(UnitFlags3(unitFlags3));
 
-    SetDynamicFlags(dynamicFlags);
+    ReplaceAllDynamicFlags(dynamicFlags);
 
     SetUInt32Value(UNIT_FIELD_STATE_ANIM_ID, sDB2Manager.GetEmptyAnimStateID());
 
@@ -2104,7 +2104,7 @@ void Creature::setDeathState(DeathState s)
         DoNotReacquireSpellFocusTarget();  // cancel delayed re-target
         SetTarget(ObjectGuid::Empty);      // drop target - dead mobs shouldn't ever target things
 
-        SetNpcFlags(UNIT_NPC_FLAG_NONE);
+        ReplaceAllNpcFlags(UNIT_NPC_FLAG_NONE);
 
         SetMountDisplayId(0); // if creature is mounted on a virtual mount, remove it at death
 
@@ -2152,12 +2152,12 @@ void Creature::setDeathState(DeathState s)
             if (cInfo->flags_extra & CREATURE_FLAG_EXTRA_WORLDEVENT)
                 npcFlags |= sGameEventMgr->GetNPCFlag(this);
 
-            SetNpcFlags(NPCFlags(npcFlags));
+            ReplaceAllNpcFlags(NPCFlags(npcFlags));
 
-            SetUnitFlags(UnitFlags(unitFlags));
-            SetUnitFlags2(UnitFlags2(unitFlags2));
-            SetUnitFlags3(UnitFlags3(unitFlags3));
-            SetDynamicFlags(dynamicFlags);
+            ReplaceAllUnitFlags(UnitFlags(unitFlags));
+            ReplaceAllUnitFlags2(UnitFlags2(unitFlags2));
+            ReplaceAllUnitFlags3(UnitFlags3(unitFlags3));
+            ReplaceAllDynamicFlags(dynamicFlags);
 
             RemoveUnitFlag(UNIT_FLAG_IN_COMBAT);
 
@@ -2648,7 +2648,7 @@ bool Creature::LoadCreaturesAddon()
 
         SetStandState(UnitStandStateType(cainfo->bytes1 & 0xFF));
         SetByteValue(UNIT_FIELD_BYTES_1, UNIT_BYTES_1_OFFSET_PET_TALENTS, 0);
-        SetVisFlags(UnitVisFlags((cainfo->bytes1 >> 16) & 0xFF));
+        ReplaceAllVisFlags(UnitVisFlags((cainfo->bytes1 >> 16) & 0xFF));
         SetAnimTier(AnimTier((cainfo->bytes1 >> 24) & 0xFF), false);
 
         //! Suspected correlation between UNIT_FIELD_BYTES_1, offset 3, value 0x2:
@@ -2668,8 +2668,8 @@ bool Creature::LoadCreaturesAddon()
         // 3 ShapeshiftForm     Must be determined/set by shapeshift spell/aura
 
         SetSheath(SheathState(cainfo->bytes2 & 0xFF));
-        SetPvpFlags(UNIT_BYTE2_FLAG_NONE);
-        SetPetFlags(UNIT_PET_FLAG_NONE);
+        ReplaceAllPvpFlags(UNIT_BYTE2_FLAG_NONE);
+        ReplaceAllPetFlags(UNIT_PET_FLAG_NONE);
         SetShapeshiftForm(FORM_NONE);
     }
 
@@ -3455,7 +3455,7 @@ void Creature::AtDisengage()
 
     ClearUnitState(UNIT_STATE_ATTACK_PLAYER);
     if (IsAlive() && HasDynamicFlag(UNIT_DYNFLAG_TAPPED))
-        SetDynamicFlags(GetCreatureTemplate()->dynamicflags);
+        ReplaceAllDynamicFlags(GetCreatureTemplate()->dynamicflags);
 
     if (IsPet() || IsGuardian()) // update pets' speed for catchup OOC speed
     {

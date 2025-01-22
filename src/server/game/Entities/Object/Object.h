@@ -183,7 +183,7 @@ class TC_GAME_API Object
         bool HasDynamicFlag(uint32 flag) const { return HasFlag(OBJECT_DYNAMIC_FLAGS, flag); }
         void AddDynamicFlag(uint32 flag) { SetFlag(OBJECT_DYNAMIC_FLAGS, flag); }
         void RemoveDynamicFlag(uint32 flag) { RemoveFlag(OBJECT_DYNAMIC_FLAGS, flag); }
-        void SetDynamicFlags(uint32 flag) { SetUInt32Value(OBJECT_DYNAMIC_FLAGS, flag); }
+        void ReplaceAllDynamicFlags(uint32 flag) { SetUInt32Value(OBJECT_DYNAMIC_FLAGS, flag); }
 
         TypeID GetTypeId() const { return m_objectTypeId; }
         bool isType(uint16 mask) const { return (mask & m_objectType) != 0; }

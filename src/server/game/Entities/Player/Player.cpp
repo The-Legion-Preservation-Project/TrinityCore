@@ -4319,7 +4319,7 @@ void Player::KillPlayer()
     setDeathState(CORPSE);
     //SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_IN_PVP);
 
-    SetDynamicFlags(UNIT_DYNFLAG_NONE);
+    ReplaceAllDynamicFlags(UNIT_DYNFLAG_NONE);
     if (!sMapStore.LookupEntry(GetMapId())->Instanceable() && !HasAuraType(SPELL_AURA_PREVENT_RESURRECTION))
         AddPlayerLocalFlag(PLAYER_LOCAL_FLAG_RELEASE_TIMER);
     else
@@ -4386,7 +4386,7 @@ Corpse* Player::CreateCorpse()
     if (IsFFAPvP())
         flags |= CORPSE_FLAG_FFA_PVP;
 
-    corpse->SetFlags(flags);
+    corpse->ReplaceAllFlags(flags);
     corpse->SetDisplayId(GetNativeDisplayId());
     corpse->SetFactionTemplate(sChrRacesStore.AssertEntry(GetRace())->FactionID);
 
@@ -17753,8 +17753,8 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     SetBankBagSlotCount(fields.bankSlots);
     SetNativeGender(fields.gender);
     SetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_INEBRIATION, fields.drunk);
-    SetPlayerFlags(fields.playerFlags);
-    SetPlayerFlagsEx(fields.playerFlagsEx);
+    ReplaceAllPlayerFlags(fields.playerFlags);
+    ReplaceAllPlayerFlagsEx(fields.playerFlagsEx);
     SetWatchedFactionIndex(fields.watchedFaction);
 
     m_atLoginFlags = fields.at_login;
@@ -28316,7 +28316,7 @@ Pet* Player::SummonPet(uint32 entry, Optional<PetSaveMode> slot, float x, float 
     pet->SetCreatorGUID(GetGUID());
     pet->SetFaction(GetFaction());
 
-    pet->SetNpcFlags(UNIT_NPC_FLAG_NONE);
+    pet->ReplaceAllNpcFlags(UNIT_NPC_FLAG_NONE);
     pet->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
     pet->InitStatsForLevel(GetLevel());
 

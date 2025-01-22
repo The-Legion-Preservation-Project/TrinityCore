@@ -2724,15 +2724,15 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool HasPlayerFlag(PlayerFlags flags) const { return HasFlag(PLAYER_FLAGS, flags); }
         void AddPlayerFlag(PlayerFlags flags) { SetFlag(PLAYER_FLAGS, flags); }
         void RemovePlayerFlag(PlayerFlags flags) { RemoveFlag(PLAYER_FLAGS, flags); }
-        void SetPlayerFlags(PlayerFlags flags) { SetUInt32Value(PLAYER_FLAGS, flags); }
-
-        void SetAverageItemLevelTotal(float newItemLevel) { SetFloatValue(PLAYER_FIELD_AVG_ITEM_LEVEL + 0, newItemLevel); }
-        void SetAverageItemLevelEquipped(float newItemLevel) { SetFloatValue(PLAYER_FIELD_AVG_ITEM_LEVEL + 1, newItemLevel); }
+        void ReplaceAllPlayerFlags(PlayerFlags flags) { SetUInt32Value(PLAYER_FLAGS, flags); }
 
         bool HasPlayerFlagEx(PlayerFlagsEx flags) const { return HasFlag(PLAYER_FLAGS_EX, flags); }
         void AddPlayerFlagEx(PlayerFlagsEx flags) { SetFlag(PLAYER_FLAGS_EX, flags); }
         void RemovePlayerFlagEx(PlayerFlagsEx flags) { RemoveFlag(PLAYER_FLAGS_EX, flags); }
-        void SetPlayerFlagsEx(PlayerFlagsEx flags) { SetUInt32Value(PLAYER_FLAGS_EX, flags); }
+        void ReplaceAllPlayerFlagsEx(PlayerFlagsEx flags) { SetUInt32Value(PLAYER_FLAGS_EX, flags); }
+
+        void SetAverageItemLevelTotal(float newItemLevel) { SetFloatValue(PLAYER_FIELD_AVG_ITEM_LEVEL + 0, newItemLevel); }
+        void SetAverageItemLevelEquipped(float newItemLevel) { SetFloatValue(PLAYER_FIELD_AVG_ITEM_LEVEL + 1, newItemLevel); }
 
         void SetSkinId(uint8 skinId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_SKIN_ID, skinId); }
         void SetFaceId(uint8 faceId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_FACE_ID, faceId); }
@@ -2788,7 +2788,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool HasPlayerLocalFlag(PlayerLocalFlags flags) const { return HasFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
         void AddPlayerLocalFlag(PlayerLocalFlags flags) { SetFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
         void RemovePlayerLocalFlag(PlayerLocalFlags flags) { RemoveFlag(PLAYER_FIELD_LOCAL_FLAGS, flags); }
-        void SetPlayerLocalFlags(PlayerLocalFlags flags) { SetUInt32Value(PLAYER_FIELD_LOCAL_FLAGS, flags); }
+        void ReplaceAllPlayerLocalFlags(PlayerLocalFlags flags) { SetUInt32Value(PLAYER_FIELD_LOCAL_FLAGS, flags); }
 
         void SetWatchedFactionIndex(int32 index) { SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, index); }
 

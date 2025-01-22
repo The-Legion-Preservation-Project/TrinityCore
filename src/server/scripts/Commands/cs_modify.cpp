@@ -266,9 +266,9 @@ public:
         handler->PSendSysMessage(LANG_YOU_CHANGE_FACTION, target->GetGUID().ToString().c_str(), factionid, flag, std::to_string(npcflag).c_str(), dyflag);
 
         target->SetFaction(factionid);
-        target->SetUnitFlags(UnitFlags(flag));
-        target->SetNpcFlags(NPCFlags(npcflag));
-        target->SetDynamicFlags(dyflag);
+        target->ReplaceAllUnitFlags(UnitFlags(flag));
+        target->ReplaceAllNpcFlags(NPCFlags(npcflag));
+        target->ReplaceAllDynamicFlags(dyflag);
 
         return true;
     }
