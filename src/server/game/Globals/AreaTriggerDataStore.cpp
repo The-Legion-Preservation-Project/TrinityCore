@@ -50,7 +50,7 @@ namespace std
 namespace
 {
     std::unordered_map<std::pair<uint32/*mapId*/, uint32/*cell_id*/>, std::set<ObjectGuid::LowType>> _areaTriggerSpawnsByLocation;
-    std::unordered_map<uint32, AreaTriggerSpawn> _areaTriggerSpawnsBySpawnId;
+    std::unordered_map<ObjectGuid::LowType, AreaTriggerSpawn> _areaTriggerSpawnsBySpawnId;
     std::unordered_map<AreaTriggerId, AreaTriggerTemplate> _areaTriggerTemplateStore;
     std::unordered_map<uint32, AreaTriggerCreateProperties> _areaTriggerCreateProperties;
 }
