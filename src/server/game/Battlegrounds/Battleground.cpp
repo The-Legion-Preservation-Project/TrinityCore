@@ -1100,7 +1100,8 @@ void Battleground::AddPlayer(Player* player)
     }
 
     // reset all map criterias on map enter
-    player->ResetCriteria(CriteriaFailEvent::LeaveBattleground, GetMapId(), true);
+    if (!isInBattleground)
+        player->ResetCriteria(CriteriaFailEvent::LeaveBattleground, GetMapId(), true);
 
     // setup BG group membership
     PlayerAddedToBGCheckIfBGIsRunning(player);
