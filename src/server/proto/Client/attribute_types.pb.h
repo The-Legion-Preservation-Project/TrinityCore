@@ -459,9 +459,7 @@ class TC_PROTO_API AttributeFilter : public ::google::protobuf::Message {
 };
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -1087,7 +1085,6 @@ AttributeFilter::mutable_attribute() {
   // @@protoc_insertion_point(field_mutable_list:bgs.protocol.AttributeFilter.attribute)
   return &attribute_;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

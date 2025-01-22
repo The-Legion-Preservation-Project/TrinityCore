@@ -35,7 +35,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_entity_5ftypes_2eproto() {
   protobuf_AddDesc_entity_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -433,7 +432,6 @@ void EntityId::Swap(EntityId* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -711,7 +709,6 @@ void Identity::Swap(Identity* other) {
   metadata.reflection = Identity_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1162,7 +1159,6 @@ void AccountInfo::Swap(AccountInfo* other) {
   metadata.reflection = AccountInfo_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

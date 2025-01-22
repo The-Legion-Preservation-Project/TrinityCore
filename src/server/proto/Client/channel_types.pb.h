@@ -1028,9 +1028,7 @@ class TC_PROTO_API Member : public ::google::protobuf::Message {
 };
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -2223,7 +2221,6 @@ inline void Member::set_allocated_state(::bgs::protocol::channel::v1::MemberStat
   }
   // @@protoc_insertion_point(field_set_allocated:bgs.protocol.channel.v1.Member.state)
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

@@ -1425,7 +1425,6 @@ class TC_PROTO_API ChallengeListener : public ServiceBase
 
 // ===================================================================
 
-
 // ===================================================================
 
 // Challenge
@@ -3091,7 +3090,6 @@ inline void ChallengeExternalResult::set_passed(bool value) {
   // @@protoc_insertion_point(field_set:bgs.protocol.challenge.v1.ChallengeExternalResult.passed)
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace v1
@@ -3102,7 +3100,6 @@ inline void ChallengeExternalResult::set_passed(bool value) {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

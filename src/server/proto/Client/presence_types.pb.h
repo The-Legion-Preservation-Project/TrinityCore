@@ -592,9 +592,7 @@ class TC_PROTO_API ChannelState : public ::google::protobuf::Message {
 };
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -1026,7 +1024,6 @@ inline void ChannelState::set_healing(bool value) {
   healing_ = value;
   // @@protoc_insertion_point(field_set:bgs.protocol.presence.v1.ChannelState.healing)
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

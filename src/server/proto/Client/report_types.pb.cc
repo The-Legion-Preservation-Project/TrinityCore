@@ -65,7 +65,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_report_5ftypes_2eproto() {
   protobuf_AddDesc_report_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -486,7 +485,6 @@ void ReportType::clear_type() {
   }
   _oneof_case_[0] = TYPE_NOT_SET;
 }
-
 
 void ReportType::Clear() {
   if (has_note()) {
@@ -960,7 +958,6 @@ void ReportType::Swap(ReportType* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1304,7 +1301,6 @@ void CustomReport::Swap(CustomReport* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 const ::google::protobuf::EnumDescriptor* SpamReport_SpamSource_descriptor() {
@@ -1606,7 +1602,6 @@ void SpamReport::Swap(SpamReport* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1897,7 +1892,6 @@ void HarassmentReport::Swap(HarassmentReport* other) {
   metadata.reflection = HarassmentReport_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2190,7 +2184,6 @@ void RealLifeThreatReport::Swap(RealLifeThreatReport* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2482,7 +2475,6 @@ void InappropriateBattleTagReport::Swap(InappropriateBattleTagReport* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2712,7 +2704,6 @@ void HackingReport::Swap(HackingReport* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2941,7 +2932,6 @@ void BottingReport::Swap(BottingReport* other) {
   metadata.reflection = BottingReport_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3410,7 +3400,6 @@ void Report::Swap(Report* other) {
   metadata.reflection = Report_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

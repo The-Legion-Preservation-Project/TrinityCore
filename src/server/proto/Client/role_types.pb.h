@@ -236,9 +236,7 @@ class TC_PROTO_API Role : public ::google::protobuf::Message {
 };
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -590,7 +588,6 @@ Role::mutable_removable_role() {
   return &removable_role_;
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace protocol
@@ -599,7 +596,6 @@ Role::mutable_removable_role() {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

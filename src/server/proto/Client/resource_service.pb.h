@@ -175,7 +175,6 @@ class TC_PROTO_API ResourcesService : public ServiceBase
 
 // ===================================================================
 
-
 // ===================================================================
 
 // ContentHandleRequest
@@ -252,7 +251,6 @@ inline void ContentHandleRequest::set_version(::google::protobuf::uint32 value) 
   // @@protoc_insertion_point(field_set:bgs.protocol.resources.v1.ContentHandleRequest.version)
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace v1
@@ -263,7 +261,6 @@ inline void ContentHandleRequest::set_version(::google::protobuf::uint32 value) 
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

@@ -931,9 +931,7 @@ class TC_PROTO_API GameAccountList : public ::google::protobuf::Message {
 };
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -2342,7 +2340,6 @@ GameAccountList::mutable_game_accounts() {
   // @@protoc_insertion_point(field_mutable_list:Battlenet.JSON.Login.GameAccountList.game_accounts)
   return &game_accounts_;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

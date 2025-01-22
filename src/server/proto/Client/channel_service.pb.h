@@ -1503,7 +1503,6 @@ class TC_PROTO_API ChannelListener : public ServiceBase
 
 // ===================================================================
 
-
 // ===================================================================
 
 // RemoveMemberRequest
@@ -3286,7 +3285,6 @@ inline void UpdateMemberStateNotification::set_allocated_subscriber(::bgs::proto
   // @@protoc_insertion_point(field_set_allocated:bgs.protocol.channel.v1.UpdateMemberStateNotification.subscriber)
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace v1
@@ -3297,7 +3295,6 @@ inline void UpdateMemberStateNotification::set_allocated_subscriber(::bgs::proto
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

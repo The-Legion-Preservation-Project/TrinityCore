@@ -34,7 +34,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_game_5futilities_5ftypes_2eproto() {
   protobuf_AddDesc_game_5futilities_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -444,7 +443,6 @@ void PlayerVariables::Swap(PlayerVariables* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -725,7 +723,6 @@ void ClientInfo::Swap(ClientInfo* other) {
   metadata.reflection = ClientInfo_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

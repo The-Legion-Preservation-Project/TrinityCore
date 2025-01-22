@@ -1036,9 +1036,7 @@ class TC_PROTO_API GenericInvitationRequest : public ::google::protobuf::Message
 };
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -2675,7 +2673,6 @@ inline void GenericInvitationRequest::set_reason(::google::protobuf::uint32 valu
   // @@protoc_insertion_point(field_set:bgs.protocol.GenericInvitationRequest.reason)
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace protocol
@@ -2684,7 +2681,6 @@ inline void GenericInvitationRequest::set_reason(::google::protobuf::uint32 valu
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

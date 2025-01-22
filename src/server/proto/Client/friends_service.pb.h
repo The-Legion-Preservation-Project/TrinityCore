@@ -1570,7 +1570,6 @@ class TC_PROTO_API FriendsListener : public ServiceBase
 
 // ===================================================================
 
-
 // ===================================================================
 
 // SubscribeRequest
@@ -3010,7 +3009,6 @@ inline void InvitationNotification::set_allocated_account_id(::bgs::protocol::En
   // @@protoc_insertion_point(field_set_allocated:bgs.protocol.friends.v1.InvitationNotification.account_id)
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace v1
@@ -3021,7 +3019,6 @@ inline void InvitationNotification::set_allocated_account_id(::bgs::protocol::En
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

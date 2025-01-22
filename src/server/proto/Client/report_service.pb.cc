@@ -37,7 +37,6 @@ const ::google::protobuf::ServiceDescriptor* ReportService_descriptor_ = NULL;
 
 }  // namespace
 
-
 void protobuf_AssignDesc_report_5fservice_2eproto() {
   protobuf_AddDesc_report_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -373,7 +372,6 @@ void SendReportRequest::Swap(SendReportRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -652,7 +650,6 @@ void SubmitReportRequest::Swap(SubmitReportRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 ReportService::ReportService(bool use_original_hash) : service_hash_(use_original_hash ? OriginalHash::value : NameHash::value) {
@@ -760,7 +757,6 @@ uint32 ReportService::HandleSubmitReport(::bgs::protocol::report::v1::SubmitRepo
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

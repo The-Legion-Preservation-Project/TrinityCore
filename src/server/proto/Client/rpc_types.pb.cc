@@ -51,7 +51,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_rpc_5ftypes_2eproto() {
   protobuf_AddDesc_rpc_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -486,7 +485,6 @@ void NO_RESPONSE::Swap(NO_RESPONSE* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -771,7 +769,6 @@ void Address::Swap(Address* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1046,7 +1043,6 @@ void ProcessId::Swap(ProcessId* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1318,7 +1314,6 @@ void ObjectAddress::Swap(ObjectAddress* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1491,7 +1486,6 @@ void NoData::Swap(NoData* other) {
   metadata.reflection = NoData_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1853,7 +1847,6 @@ void ErrorInfo::Swap(ErrorInfo* other) {
   metadata.reflection = ErrorInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2343,7 +2336,6 @@ void TraceInfo::Swap(TraceInfo* other) {
   metadata.reflection = TraceInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3016,7 +3008,6 @@ void Header::Swap(Header* other) {
   metadata.reflection = Header_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

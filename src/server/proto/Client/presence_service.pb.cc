@@ -58,7 +58,6 @@ const ::google::protobuf::ServiceDescriptor* PresenceService_descriptor_ = NULL;
 
 }  // namespace
 
-
 void protobuf_AssignDesc_presence_5fservice_2eproto() {
   protobuf_AddDesc_presence_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -755,7 +754,6 @@ void SubscribeRequest::Swap(SubscribeRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -985,7 +983,6 @@ void SubscribeNotificationRequest::Swap(SubscribeNotificationRequest* other) {
   metadata.reflection = SubscribeNotificationRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1304,7 +1301,6 @@ void UnsubscribeRequest::Swap(UnsubscribeRequest* other) {
   metadata.reflection = UnsubscribeRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1662,7 +1658,6 @@ void UpdateRequest::Swap(UpdateRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1982,7 +1977,6 @@ void QueryRequest::Swap(QueryRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2201,7 +2195,6 @@ void QueryResponse::Swap(QueryResponse* other) {
   metadata.reflection = QueryResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2472,7 +2465,6 @@ void OwnershipRequest::Swap(OwnershipRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2702,7 +2694,6 @@ void MigrateOlympusCustomMessageRequest::Swap(MigrateOlympusCustomMessageRequest
   metadata.reflection = MigrateOlympusCustomMessageRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2986,7 +2977,6 @@ void MigrateOlympusCustomMessageResponse::Swap(MigrateOlympusCustomMessageRespon
   metadata.reflection = MigrateOlympusCustomMessageResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3310,7 +3300,6 @@ uint32 PresenceService::HandleMigrateOlympusCustomMessage(::bgs::protocol::prese
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

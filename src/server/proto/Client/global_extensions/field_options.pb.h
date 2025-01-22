@@ -35,7 +35,6 @@ void TC_PROTO_API protobuf_AddDesc_global_5fextensions_2ffield_5foptions_2eproto
 void protobuf_AssignDesc_global_5fextensions_2ffield_5foptions_2eproto();
 void protobuf_ShutdownFile_global_5fextensions_2ffield_5foptions_2eproto();
 
-
 enum LogOption {
   HIDDEN = 1,
   HEX = 2
@@ -57,9 +56,7 @@ inline bool LogOption_Parse(
 }
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -69,7 +66,6 @@ TC_PROTO_API extern ::google::protobuf::internal::ExtensionIdentifier< ::google:
   log;
 
 // ===================================================================
-
 
 // @@protoc_insertion_point(namespace_scope)
 

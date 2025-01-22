@@ -32,7 +32,6 @@ const ::google::protobuf::EnumDescriptor* LogOption_descriptor_ = NULL;
 
 }  // namespace
 
-
 void protobuf_AssignDesc_global_5fextensions_2ffield_5foptions_2eproto() {
   protobuf_AddDesc_global_5fextensions_2ffield_5foptions_2eproto();
   const ::google::protobuf::FileDescriptor* file =

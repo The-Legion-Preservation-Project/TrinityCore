@@ -759,9 +759,7 @@ class TC_PROTO_API SubscribeResponse : public ::google::protobuf::Message {
 };
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -1919,7 +1917,6 @@ SubscribeResponse::mutable_received_invitations() {
   return &received_invitations_;
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace v1
@@ -1930,7 +1927,6 @@ SubscribeResponse::mutable_received_invitations() {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

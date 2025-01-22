@@ -64,7 +64,6 @@ const ::google::protobuf::ServiceDescriptor* ConnectionService_descriptor_ = NUL
 
 }  // namespace
 
-
 void protobuf_AssignDesc_connection_5fservice_2eproto() {
   protobuf_AddDesc_connection_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -729,7 +728,6 @@ void ConnectRequest::Swap(ConnectRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -948,7 +946,6 @@ void ConnectionMeteringContentHandles::Swap(ConnectionMeteringContentHandles* ot
   metadata.reflection = ConnectionMeteringContentHandles_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1494,7 +1491,6 @@ void ConnectResponse::Swap(ConnectResponse* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1766,7 +1762,6 @@ void BoundService::Swap(BoundService* other) {
   metadata.reflection = BoundService_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2127,7 +2122,6 @@ void BindRequest::Swap(BindRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2369,7 +2363,6 @@ void BindResponse::Swap(BindResponse* other) {
   metadata.reflection = BindResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2677,7 +2670,6 @@ void EchoRequest::Swap(EchoRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2947,7 +2939,6 @@ void EchoResponse::Swap(EchoResponse* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3169,7 +3160,6 @@ void DisconnectRequest::Swap(DisconnectRequest* other) {
   metadata.reflection = DisconnectRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3455,7 +3445,6 @@ void DisconnectNotification::Swap(DisconnectNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3628,7 +3617,6 @@ void EncryptRequest::Swap(EncryptRequest* other) {
   metadata.reflection = EncryptRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3901,7 +3889,6 @@ uint32 ConnectionService::HandleRequestDisconnect(::bgs::protocol::connection::v
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

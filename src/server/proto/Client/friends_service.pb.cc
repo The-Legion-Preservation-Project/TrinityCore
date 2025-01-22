@@ -74,7 +74,6 @@ const ::google::protobuf::ServiceDescriptor* FriendsListener_descriptor_ = NULL;
 
 }  // namespace
 
-
 void protobuf_AssignDesc_friends_5fservice_2eproto() {
   protobuf_AddDesc_friends_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -821,7 +820,6 @@ void SubscribeRequest::Swap(SubscribeRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1091,7 +1089,6 @@ void UnsubscribeRequest::Swap(UnsubscribeRequest* other) {
   metadata.reflection = UnsubscribeRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1372,7 +1369,6 @@ void GenericFriendRequest::Swap(GenericFriendRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1601,7 +1597,6 @@ void GenericFriendResponse::Swap(GenericFriendResponse* other) {
   metadata.reflection = GenericFriendResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1926,7 +1921,6 @@ void AssignRoleRequest::Swap(AssignRoleRequest* other) {
   metadata.reflection = AssignRoleRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2271,7 +2265,6 @@ void ViewFriendsRequest::Swap(ViewFriendsRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2490,7 +2483,6 @@ void ViewFriendsResponse::Swap(ViewFriendsResponse* other) {
   metadata.reflection = ViewFriendsResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2850,7 +2842,6 @@ void UpdateFriendStateRequest::Swap(UpdateFriendStateRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3129,7 +3120,6 @@ void GetFriendListRequest::Swap(GetFriendListRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3348,7 +3338,6 @@ void GetFriendListResponse::Swap(GetFriendListResponse* other) {
   metadata.reflection = GetFriendListResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3691,7 +3680,6 @@ void CreateFriendshipRequest::Swap(CreateFriendshipRequest* other) {
   metadata.reflection = CreateFriendshipRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4066,7 +4054,6 @@ void FriendNotification::Swap(FriendNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4439,7 +4426,6 @@ void UpdateFriendStateNotification::Swap(UpdateFriendStateNotification* other) {
   metadata.reflection = UpdateFriendStateNotification_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4852,7 +4838,6 @@ void InvitationNotification::Swap(InvitationNotification* other) {
   metadata.reflection = InvitationNotification_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -5681,7 +5666,6 @@ uint32 FriendsListener::HandleOnUpdateFriendState(::bgs::protocol::friends::v1::
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

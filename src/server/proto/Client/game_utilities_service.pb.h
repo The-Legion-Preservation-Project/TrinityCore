@@ -1372,7 +1372,6 @@ class TC_PROTO_API GameUtilitiesService : public ServiceBase
 
 // ===================================================================
 
-
 // ===================================================================
 
 // ClientRequest
@@ -2632,7 +2631,6 @@ GetAllValuesForAttributeResponse::mutable_attribute_value() {
   return &attribute_value_;
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace v1
@@ -2643,7 +2641,6 @@ GetAllValuesForAttributeResponse::mutable_attribute_value() {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

@@ -70,7 +70,6 @@ const ::google::protobuf::ServiceDescriptor* GameUtilitiesService_descriptor_ = 
 
 }  // namespace
 
-
 void protobuf_AssignDesc_game_5futilities_5fservice_2eproto() {
   protobuf_AddDesc_game_5futilities_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -933,7 +932,6 @@ void ClientRequest::Swap(ClientRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1152,7 +1150,6 @@ void ClientResponse::Swap(ClientResponse* other) {
   metadata.reflection = ClientResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1464,7 +1461,6 @@ void ServerRequest::Swap(ServerRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1683,7 +1679,6 @@ void ServerResponse::Swap(ServerResponse* other) {
   metadata.reflection = ServerResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2058,7 +2053,6 @@ void PresenceChannelCreatedRequest::Swap(PresenceChannelCreatedRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2329,7 +2323,6 @@ void GetPlayerVariablesRequest::Swap(GetPlayerVariablesRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2548,7 +2541,6 @@ void GetPlayerVariablesResponse::Swap(GetPlayerVariablesResponse* other) {
   metadata.reflection = GetPlayerVariablesResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2889,7 +2881,6 @@ void GameAccountOnlineNotification::Swap(GameAccountOnlineNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3229,7 +3220,6 @@ void GameAccountOfflineNotification::Swap(GameAccountOfflineNotification* other)
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3459,7 +3449,6 @@ void GetAchievementsFileRequest::Swap(GetAchievementsFileRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3688,7 +3677,6 @@ void GetAchievementsFileResponse::Swap(GetAchievementsFileResponse* other) {
   metadata.reflection = GetAchievementsFileResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4018,7 +4006,6 @@ void GetAllValuesForAttributeRequest::Swap(GetAllValuesForAttributeRequest* othe
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4237,7 +4224,6 @@ void GetAllValuesForAttributeResponse::Swap(GetAllValuesForAttributeResponse* ot
   metadata.reflection = GetAllValuesForAttributeResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4570,7 +4556,6 @@ uint32 GameUtilitiesService::HandleGetAllValuesForAttribute(::bgs::protocol::gam
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

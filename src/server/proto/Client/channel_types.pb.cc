@@ -53,7 +53,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_channel_5ftypes_2eproto() {
   protobuf_AddDesc_channel_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -574,7 +573,6 @@ void Message::Swap(Message* other) {
   metadata.reflection = Message_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1131,7 +1129,6 @@ void ListChannelsOptions::Swap(ListChannelsOptions* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1450,7 +1447,6 @@ void ChannelDescription::Swap(ChannelDescription* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1720,7 +1716,6 @@ void ChannelInfo::Swap(ChannelInfo* other) {
   metadata.reflection = ChannelInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2405,7 +2400,6 @@ void ChannelState::Swap(ChannelState* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2647,7 +2641,6 @@ void MemberAccountInfo::Swap(MemberAccountInfo* other) {
   metadata.reflection = MemberAccountInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3021,7 +3014,6 @@ void MemberState::Swap(MemberState* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3300,7 +3292,6 @@ void Member::Swap(Member* other) {
   metadata.reflection = Member_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

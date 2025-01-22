@@ -29,7 +29,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_role_5ftypes_2eproto() {
   protobuf_AddDesc_role_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -803,7 +802,6 @@ void Role::Swap(Role* other) {
   metadata.reflection = Role_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

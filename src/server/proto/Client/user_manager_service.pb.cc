@@ -71,7 +71,6 @@ const ::google::protobuf::ServiceDescriptor* UserManagerListener_descriptor_ = N
 
 }  // namespace
 
-
 void protobuf_AssignDesc_user_5fmanager_5fservice_2eproto() {
   protobuf_AddDesc_user_5fmanager_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -761,7 +760,6 @@ void SubscribeRequest::Swap(SubscribeRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1061,7 +1059,6 @@ void SubscribeResponse::Swap(SubscribeResponse* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1331,7 +1328,6 @@ void UnsubscribeRequest::Swap(UnsubscribeRequest* other) {
   metadata.reflection = UnsubscribeRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1644,7 +1640,6 @@ void AddRecentPlayersRequest::Swap(AddRecentPlayersRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1905,7 +1900,6 @@ void AddRecentPlayersResponse::Swap(AddRecentPlayersResponse* other) {
   metadata.reflection = AddRecentPlayersResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2177,7 +2171,6 @@ void ClearRecentPlayersRequest::Swap(ClearRecentPlayersRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2398,7 +2391,6 @@ void ClearRecentPlayersResponse::Swap(ClearRecentPlayersResponse* other) {
   metadata.reflection = ClearRecentPlayersResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2718,7 +2710,6 @@ void BlockPlayerRequest::Swap(BlockPlayerRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2997,7 +2988,6 @@ void UnblockPlayerRequest::Swap(UnblockPlayerRequest* other) {
   metadata.reflection = UnblockPlayerRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3325,7 +3315,6 @@ void BlockedPlayerAddedNotification::Swap(BlockedPlayerAddedNotification* other)
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3652,7 +3641,6 @@ void BlockedPlayerRemovedNotification::Swap(BlockedPlayerRemovedNotification* ot
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3872,7 +3860,6 @@ void RecentPlayersAddedNotification::Swap(RecentPlayersAddedNotification* other)
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4091,7 +4078,6 @@ void RecentPlayersRemovedNotification::Swap(RecentPlayersRemovedNotification* ot
   metadata.reflection = RecentPlayersRemovedNotification_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4584,7 +4570,6 @@ uint32 UserManagerListener::HandleOnRecentPlayersRemoved(::bgs::protocol::user_m
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

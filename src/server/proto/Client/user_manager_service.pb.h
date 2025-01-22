@@ -1372,7 +1372,6 @@ class TC_PROTO_API UserManagerListener : public ServiceBase
 
 // ===================================================================
 
-
 // ===================================================================
 
 // SubscribeRequest
@@ -2389,7 +2388,6 @@ RecentPlayersRemovedNotification::mutable_player() {
   return &player_;
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace v1
@@ -2400,7 +2398,6 @@ RecentPlayersRemovedNotification::mutable_player() {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

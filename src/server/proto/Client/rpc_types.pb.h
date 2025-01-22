@@ -954,9 +954,7 @@ class TC_PROTO_API Header : public ::google::protobuf::Message {
 };
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -1961,7 +1959,6 @@ inline void Header::set_allocated_trace_info(::bgs::protocol::TraceInfo* trace_i
   }
   // @@protoc_insertion_point(field_set_allocated:bgs.protocol.Header.trace_info)
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

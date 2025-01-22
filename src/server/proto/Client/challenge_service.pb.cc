@@ -68,7 +68,6 @@ const ::google::protobuf::ServiceDescriptor* ChallengeListener_descriptor_ = NUL
 
 }  // namespace
 
-
 void protobuf_AssignDesc_challenge_5fservice_2eproto() {
   protobuf_AddDesc_challenge_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -853,7 +852,6 @@ void Challenge::Swap(Challenge* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1162,7 +1160,6 @@ void ChallengePickedRequest::Swap(ChallengePickedRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1392,7 +1389,6 @@ void ChallengePickedResponse::Swap(ChallengePickedResponse* other) {
   metadata.reflection = ChallengePickedResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1725,7 +1721,6 @@ void ChallengeAnsweredRequest::Swap(ChallengeAnsweredRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2045,7 +2040,6 @@ void ChallengeAnsweredResponse::Swap(ChallengeAnsweredResponse* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2266,7 +2260,6 @@ void ChallengeCancelledRequest::Swap(ChallengeCancelledRequest* other) {
   metadata.reflection = ChallengeCancelledRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2797,7 +2790,6 @@ void SendChallengeToUserRequest::Swap(SendChallengeToUserRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3018,7 +3010,6 @@ void SendChallengeToUserResponse::Swap(SendChallengeToUserResponse* other) {
   metadata.reflection = SendChallengeToUserResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3460,7 +3451,6 @@ void ChallengeUserRequest::Swap(ChallengeUserRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3821,7 +3811,6 @@ void ChallengeResultRequest::Swap(ChallengeResultRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4172,7 +4161,6 @@ void ChallengeExternalRequest::Swap(ChallengeExternalRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4453,7 +4441,6 @@ void ChallengeExternalResult::Swap(ChallengeExternalResult* other) {
   metadata.reflection = ChallengeExternalResult_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4774,7 +4761,6 @@ uint32 ChallengeListener::HandleOnExternalChallengeResult(::bgs::protocol::chall
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

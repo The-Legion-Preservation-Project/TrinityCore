@@ -163,7 +163,6 @@ const ::google::protobuf::EnumDescriptor* IdentityVerificationStatus_descriptor_
 
 }  // namespace
 
-
 void protobuf_AssignDesc_account_5ftypes_2eproto() {
   protobuf_AddDesc_account_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -1476,7 +1475,6 @@ bool IdentityVerificationStatus_IsValid(int value) {
   }
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1696,7 +1694,6 @@ void AccountId::Swap(AccountId* other) {
   metadata.reflection = AccountId_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1972,7 +1969,6 @@ void AccountLicense::Swap(AccountLicense* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2244,7 +2240,6 @@ void AccountCredential::Swap(AccountCredential* other) {
   metadata.reflection = AccountCredential_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3370,7 +3365,6 @@ void AccountBlob::Swap(AccountBlob* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3589,7 +3583,6 @@ void AccountBlobList::Swap(AccountBlobList* other) {
   metadata.reflection = AccountBlobList_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3899,7 +3892,6 @@ void GameAccountHandle::Swap(GameAccountHandle* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4191,7 +4183,6 @@ void GameAccountLink::Swap(GameAccountLink* other) {
   metadata.reflection = GameAccountLink_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -5051,7 +5042,6 @@ void GameAccountBlob::Swap(GameAccountBlob* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -5270,7 +5260,6 @@ void GameAccountBlobList::Swap(GameAccountBlobList* other) {
   metadata.reflection = GameAccountBlobList_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -5711,7 +5700,6 @@ void AccountReference::Swap(AccountReference* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -6036,7 +6024,6 @@ void Identity::Swap(Identity* other) {
   metadata.reflection = Identity_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -6488,7 +6475,6 @@ void AccountInfo::Swap(AccountInfo* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -6758,7 +6744,6 @@ void ProgramTag::Swap(ProgramTag* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -7027,7 +7012,6 @@ void RegionTag::Swap(RegionTag* other) {
   metadata.reflection = RegionTag_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -7454,7 +7438,6 @@ void AccountFieldTags::Swap(AccountFieldTags* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -7795,7 +7778,6 @@ void GameAccountFieldTags::Swap(GameAccountFieldTags* other) {
   metadata.reflection = GameAccountFieldTags_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -8248,7 +8230,6 @@ void AccountFieldOptions::Swap(AccountFieldOptions* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -8627,7 +8608,6 @@ void GameAccountFieldOptions::Swap(GameAccountFieldOptions* other) {
   metadata.reflection = GameAccountFieldOptions_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -9113,7 +9093,6 @@ void SubscriberReference::Swap(SubscriberReference* other) {
   metadata.reflection = SubscriberReference_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -9826,7 +9805,6 @@ void AccountLevelInfo::Swap(AccountLevelInfo* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 const ::google::protobuf::EnumDescriptor* PrivacyInfo_GameInfoPrivacy_descriptor() {
@@ -10201,7 +10179,6 @@ void PrivacyInfo::Swap(PrivacyInfo* other) {
   metadata.reflection = PrivacyInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -10652,7 +10629,6 @@ void ParentalControlInfo::Swap(ParentalControlInfo* other) {
   metadata.reflection = ParentalControlInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -11172,7 +11148,6 @@ void GameLevelInfo::Swap(GameLevelInfo* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -11515,7 +11490,6 @@ void GameTimeInfo::Swap(GameTimeInfo* other) {
   metadata.reflection = GameTimeInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -11865,7 +11839,6 @@ void GameTimeRemainingInfo::Swap(GameTimeRemainingInfo* other) {
   metadata.reflection = GameTimeRemainingInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -12284,7 +12257,6 @@ void GameStatus::Swap(GameStatus* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -12514,7 +12486,6 @@ void RAFInfo::Swap(RAFInfo* other) {
   metadata.reflection = RAFInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -12990,7 +12961,6 @@ void GameSessionInfo::Swap(GameSessionInfo* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -13216,7 +13186,6 @@ void GameSessionUpdateInfo::Swap(GameSessionUpdateInfo* other) {
   metadata.reflection = GameSessionUpdateInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -13560,7 +13529,6 @@ void GameSessionLocation::Swap(GameSessionLocation* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -13872,7 +13840,6 @@ void CAIS::Swap(CAIS* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -14133,7 +14100,6 @@ void GameAccountList::Swap(GameAccountList* other) {
   metadata.reflection = GameAccountList_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -14573,7 +14539,6 @@ void AccountState::Swap(AccountState* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -14848,7 +14813,6 @@ void AccountStateTagged::Swap(AccountStateTagged* other) {
   metadata.reflection = AccountStateTagged_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -15213,7 +15177,6 @@ void GameAccountState::Swap(GameAccountState* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -15488,7 +15451,6 @@ void GameAccountStateTagged::Swap(GameAccountStateTagged* other) {
   metadata.reflection = GameAccountStateTagged_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -15777,7 +15739,6 @@ void AuthorizedData::Swap(AuthorizedData* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -16061,7 +16022,6 @@ void BenefactorAddress::Swap(BenefactorAddress* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -16332,7 +16292,6 @@ void ExternalBenefactorLookup::Swap(ExternalBenefactorLookup* other) {
   metadata.reflection = ExternalBenefactorLookup_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -16703,7 +16662,6 @@ void AuthBenefactor::Swap(AuthBenefactor* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -17010,7 +16968,6 @@ void ApplicationInfo::Swap(ApplicationInfo* other) {
   metadata.reflection = ApplicationInfo_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -17581,7 +17538,6 @@ void DeductRecord::Swap(DeductRecord* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -17663,7 +17619,6 @@ void IgrId::clear_type() {
   }
   _oneof_case_[0] = TYPE_NOT_SET;
 }
-
 
 void IgrId::Clear() {
   clear_type();
@@ -17873,7 +17828,6 @@ void IgrId::Swap(IgrId* other) {
   metadata.reflection = IgrId_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

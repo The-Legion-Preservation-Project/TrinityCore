@@ -143,7 +143,6 @@ const ::google::protobuf::ServiceDescriptor* AccountListener_descriptor_ = NULL;
 
 }  // namespace
 
-
 void protobuf_AssignDesc_account_5fservice_2eproto() {
   protobuf_AddDesc_account_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -1860,7 +1859,6 @@ void GetAccountRequest::Swap(GetAccountRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2451,7 +2449,6 @@ void GetAccountResponse::Swap(GetAccountResponse* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2884,7 +2881,6 @@ void CreateGameAccountRequest::Swap(CreateGameAccountRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3113,7 +3109,6 @@ void CreateGameAccountResponse::Swap(CreateGameAccountResponse* other) {
   metadata.reflection = CreateGameAccountResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3424,7 +3419,6 @@ void CacheExpireRequest::Swap(CacheExpireRequest* other) {
   metadata.reflection = CacheExpireRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3777,7 +3771,6 @@ void CredentialUpdateRequest::Swap(CredentialUpdateRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3950,7 +3943,6 @@ void CredentialUpdateResponse::Swap(CredentialUpdateResponse* other) {
   metadata.reflection = CredentialUpdateResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4310,7 +4302,6 @@ void AccountFlagUpdateRequest::Swap(AccountFlagUpdateRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4631,7 +4622,6 @@ void GameAccountFlagUpdateRequest::Swap(GameAccountFlagUpdateRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4851,7 +4841,6 @@ void SubscriptionUpdateRequest::Swap(SubscriptionUpdateRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -5070,7 +5059,6 @@ void SubscriptionUpdateResponse::Swap(SubscriptionUpdateResponse* other) {
   metadata.reflection = SubscriptionUpdateResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -5354,7 +5342,6 @@ void IsIgrAddressRequest::Swap(IsIgrAddressRequest* other) {
   metadata.reflection = IsIgrAddressRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -5640,7 +5627,6 @@ void AccountServiceRegion::Swap(AccountServiceRegion* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -5859,7 +5845,6 @@ void AccountServiceConfig::Swap(AccountServiceConfig* other) {
   metadata.reflection = AccountServiceConfig_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -6271,7 +6256,6 @@ void GetAccountStateRequest::Swap(GetAccountStateRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -6546,7 +6530,6 @@ void GetAccountStateResponse::Swap(GetAccountStateResponse* other) {
   metadata.reflection = GetAccountStateResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -6914,7 +6897,6 @@ void GetGameAccountStateRequest::Swap(GetGameAccountStateRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -7189,7 +7171,6 @@ void GetGameAccountStateResponse::Swap(GetGameAccountStateResponse* other) {
   metadata.reflection = GetGameAccountStateResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -7617,7 +7598,6 @@ void GetLicensesRequest::Swap(GetLicensesRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -7836,7 +7816,6 @@ void GetLicensesResponse::Swap(GetLicensesResponse* other) {
   metadata.reflection = GetLicensesResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -8067,7 +8046,6 @@ void GetGameSessionInfoRequest::Swap(GetGameSessionInfoRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -8296,7 +8274,6 @@ void GetGameSessionInfoResponse::Swap(GetGameSessionInfoResponse* other) {
   metadata.reflection = GetGameSessionInfoResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -8576,7 +8553,6 @@ void GetGameTimeRemainingInfoRequest::Swap(GetGameTimeRemainingInfoRequest* othe
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -8802,7 +8778,6 @@ void GetGameTimeRemainingInfoResponse::Swap(GetGameTimeRemainingInfoResponse* ot
   metadata.reflection = GetGameTimeRemainingInfoResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -9033,7 +9008,6 @@ void GetCAISInfoRequest::Swap(GetCAISInfoRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -9259,7 +9233,6 @@ void GetCAISInfoResponse::Swap(GetCAISInfoResponse* other) {
   metadata.reflection = GetCAISInfoResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -9489,7 +9462,6 @@ void ForwardCacheExpireRequest::Swap(ForwardCacheExpireRequest* other) {
   metadata.reflection = ForwardCacheExpireRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -9810,7 +9782,6 @@ void GetAuthorizedDataRequest::Swap(GetAuthorizedDataRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -10028,7 +9999,6 @@ void GetAuthorizedDataResponse::Swap(GetAuthorizedDataResponse* other) {
   metadata.reflection = GetAuthorizedDataResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -10494,7 +10464,6 @@ void UpdateParentalControlsAndCAISRequest::Swap(UpdateParentalControlsAndCAISReq
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -10723,7 +10692,6 @@ void QueueDeductRecordRequest::Swap(QueueDeductRecordRequest* other) {
   metadata.reflection = QueueDeductRecordRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -10993,7 +10961,6 @@ void GetGameAccountRequest::Swap(GetGameAccountRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -11222,7 +11189,6 @@ void GetGameAccountResponse::Swap(GetGameAccountResponse* other) {
   metadata.reflection = GetGameAccountResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -11575,7 +11541,6 @@ void AccountStateNotification::Swap(AccountStateNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -11927,7 +11892,6 @@ void GameAccountStateNotification::Swap(GameAccountStateNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -12236,7 +12200,6 @@ void GameAccountNotification::Swap(GameAccountNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -12511,7 +12474,6 @@ void GameAccountSessionNotification::Swap(GameAccountSessionNotification* other)
   metadata.reflection = GameAccountSessionNotification_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -13555,7 +13517,6 @@ uint32 AccountListener::HandleOnGameSessionUpdated(::bgs::protocol::account::v1:
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

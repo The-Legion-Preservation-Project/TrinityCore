@@ -28,9 +28,7 @@ namespace protocol {
 
 namespace {
 
-
 }  // namespace
-
 
 void protobuf_AssignDesc_global_5fextensions_2fmethod_5foptions_2eproto() {
   protobuf_AddDesc_global_5fextensions_2fmethod_5foptions_2eproto();

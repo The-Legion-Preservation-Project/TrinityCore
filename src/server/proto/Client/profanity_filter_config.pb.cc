@@ -34,7 +34,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_profanity_5ffilter_5fconfig_2eproto() {
   protobuf_AddDesc_profanity_5ffilter_5fconfig_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -431,7 +430,6 @@ void WordFilter::Swap(WordFilter* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -650,7 +648,6 @@ void WordFilters::Swap(WordFilters* other) {
   metadata.reflection = WordFilters_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

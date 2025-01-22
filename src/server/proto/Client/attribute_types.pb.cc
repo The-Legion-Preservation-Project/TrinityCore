@@ -36,7 +36,6 @@ const ::google::protobuf::EnumDescriptor* AttributeFilter_Operation_descriptor_ 
 
 }  // namespace
 
-
 void protobuf_AssignDesc_attribute_5ftypes_2eproto() {
   protobuf_AddDesc_attribute_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -784,7 +783,6 @@ void Variant::Swap(Variant* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1076,7 +1074,6 @@ void Attribute::Swap(Attribute* other) {
   metadata.reflection = Attribute_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1370,7 +1367,6 @@ void AttributeFilter::Swap(AttributeFilter* other) {
   metadata.reflection = AttributeFilter_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

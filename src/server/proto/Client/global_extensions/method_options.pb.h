@@ -34,12 +34,9 @@ void TC_PROTO_API protobuf_AddDesc_global_5fextensions_2fmethod_5foptions_2eprot
 void protobuf_AssignDesc_global_5fextensions_2fmethod_5foptions_2eproto();
 void protobuf_ShutdownFile_global_5fextensions_2fmethod_5foptions_2eproto();
 
-
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -50,7 +47,6 @@ TC_PROTO_API extern ::google::protobuf::internal::ExtensionIdentifier< ::google:
 
 // ===================================================================
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace protocol
@@ -59,7 +55,6 @@ TC_PROTO_API extern ::google::protobuf::internal::ExtensionIdentifier< ::google:
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

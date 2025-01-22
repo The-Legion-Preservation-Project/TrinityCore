@@ -92,7 +92,6 @@ const ::google::protobuf::ServiceDescriptor* AuthenticationService_descriptor_ =
 
 }  // namespace
 
-
 void protobuf_AssignDesc_authentication_5fservice_2eproto() {
   protobuf_AddDesc_authentication_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -990,7 +989,6 @@ void ModuleLoadRequest::Swap(ModuleLoadRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1264,7 +1262,6 @@ void ModuleNotification::Swap(ModuleNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1536,7 +1533,6 @@ void ModuleMessageRequest::Swap(ModuleMessageRequest* other) {
   metadata.reflection = ModuleMessageRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2434,7 +2430,6 @@ void LogonRequest::Swap(LogonRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3111,7 +3106,6 @@ void LogonResult::Swap(LogonResult* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3330,7 +3324,6 @@ void GenerateSSOTokenRequest::Swap(GenerateSSOTokenRequest* other) {
   metadata.reflection = GenerateSSOTokenRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3611,7 +3604,6 @@ void GenerateSSOTokenResponse::Swap(GenerateSSOTokenResponse* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3833,7 +3825,6 @@ void LogonUpdateRequest::Swap(LogonUpdateRequest* other) {
   metadata.reflection = LogonUpdateRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4146,7 +4137,6 @@ void LogonQueueUpdateRequest::Swap(LogonQueueUpdateRequest* other) {
   metadata.reflection = LogonQueueUpdateRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4530,7 +4520,6 @@ void AccountSettingsNotification::Swap(AccountSettingsNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4804,7 +4793,6 @@ void ServerStateChangeRequest::Swap(ServerStateChangeRequest* other) {
   metadata.reflection = ServerStateChangeRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -5177,7 +5165,6 @@ void VersionInfo::Swap(VersionInfo* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -5403,7 +5390,6 @@ void VersionInfoNotification::Swap(VersionInfoNotification* other) {
   metadata.reflection = VersionInfoNotification_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -5732,7 +5718,6 @@ void MemModuleLoadRequest::Swap(MemModuleLoadRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -5964,7 +5949,6 @@ void MemModuleLoadResponse::Swap(MemModuleLoadResponse* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -6194,7 +6178,6 @@ void SelectGameAccountRequest::Swap(SelectGameAccountRequest* other) {
   metadata.reflection = SelectGameAccountRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -6467,7 +6450,6 @@ void GameAccountSelectedRequest::Swap(GameAccountSelectedRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -6686,7 +6668,6 @@ void GenerateWebCredentialsRequest::Swap(GenerateWebCredentialsRequest* other) {
   metadata.reflection = GenerateWebCredentialsRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -6918,7 +6899,6 @@ void GenerateWebCredentialsResponse::Swap(GenerateWebCredentialsResponse* other)
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -7148,7 +7128,6 @@ void VerifyWebCredentialsRequest::Swap(VerifyWebCredentialsRequest* other) {
   metadata.reflection = VerifyWebCredentialsRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -7831,7 +7810,6 @@ uint32 AuthenticationService::HandleGenerateWebCredentials(::bgs::protocol::auth
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

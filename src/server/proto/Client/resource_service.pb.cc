@@ -34,7 +34,6 @@ const ::google::protobuf::ServiceDescriptor* ResourcesService_descriptor_ = NULL
 
 }  // namespace
 
-
 void protobuf_AssignDesc_resource_5fservice_2eproto() {
   protobuf_AddDesc_resource_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -423,7 +422,6 @@ void ContentHandleRequest::Swap(ContentHandleRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 ResourcesService::ResourcesService(bool use_original_hash) : service_hash_(use_original_hash ? OriginalHash::value : NameHash::value) {
@@ -488,7 +486,6 @@ uint32 ResourcesService::HandleGetContentHandle(::bgs::protocol::resources::v1::
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

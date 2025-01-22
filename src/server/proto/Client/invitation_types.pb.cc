@@ -50,7 +50,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_invitation_5ftypes_2eproto() {
   protobuf_AddDesc_invitation_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -930,7 +929,6 @@ void Invitation::Swap(Invitation* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1376,7 +1374,6 @@ void InvitationSuggestion::Swap(InvitationSuggestion* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1746,7 +1743,6 @@ void InvitationTarget::Swap(InvitationTarget* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2026,7 +2022,6 @@ void InvitationParams::CopyFrom(const InvitationParams& from) {
 
 bool InvitationParams::IsInitialized() const {
 
-
   if (!_extensions_.IsInitialized()) return false;  return true;
 }
 
@@ -2048,7 +2043,6 @@ void InvitationParams::Swap(InvitationParams* other) {
   metadata.reflection = InvitationParams_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2470,7 +2464,6 @@ void SendInvitationRequest::Swap(SendInvitationRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2643,7 +2636,6 @@ void SendInvitationResponse::Swap(SendInvitationResponse* other) {
   metadata.reflection = SendInvitationResponse_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2960,7 +2952,6 @@ void UpdateInvitationRequest::Swap(UpdateInvitationRequest* other) {
   metadata.reflection = UpdateInvitationRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3563,7 +3554,6 @@ void GenericInvitationRequest::Swap(GenericInvitationRequest* other) {
   metadata.reflection = GenericInvitationRequest_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

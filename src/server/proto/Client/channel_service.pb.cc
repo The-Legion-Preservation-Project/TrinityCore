@@ -68,7 +68,6 @@ const ::google::protobuf::ServiceDescriptor* ChannelListener_descriptor_ = NULL;
 
 }  // namespace
 
-
 void protobuf_AssignDesc_channel_5fservice_2eproto() {
   protobuf_AddDesc_channel_5fservice_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -817,7 +816,6 @@ void RemoveMemberRequest::Swap(RemoveMemberRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1136,7 +1134,6 @@ void SendMessageRequest::Swap(SendMessageRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1415,7 +1412,6 @@ void UpdateChannelStateRequest::Swap(UpdateChannelStateRequest* other) {
   metadata.reflection = UpdateChannelStateRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1750,7 +1746,6 @@ void UpdateMemberStateRequest::Swap(UpdateMemberStateRequest* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2020,7 +2015,6 @@ void DissolveRequest::Swap(DissolveRequest* other) {
   metadata.reflection = DissolveRequest_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2435,7 +2429,6 @@ void JoinNotification::Swap(JoinNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2761,7 +2754,6 @@ void MemberAddedNotification::Swap(MemberAddedNotification* other) {
   metadata.reflection = MemberAddedNotification_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -3175,7 +3167,6 @@ void LeaveNotification::Swap(LeaveNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -3587,7 +3578,6 @@ void MemberRemovedNotification::Swap(MemberRemovedNotification* other) {
   metadata.reflection = MemberRemovedNotification_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -4061,7 +4051,6 @@ void SendMessageNotification::Swap(SendMessageNotification* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4435,7 +4424,6 @@ void UpdateChannelStateNotification::Swap(UpdateChannelStateNotification* other)
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -4800,7 +4788,6 @@ void UpdateMemberStateNotification::Swap(UpdateMemberStateNotification* other) {
   metadata.reflection = UpdateMemberStateNotification_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -5242,7 +5229,6 @@ uint32 ChannelListener::HandleOnUpdateMemberState(::bgs::protocol::channel::v1::
     GetCallerInfo().c_str(), request->ShortDebugString().c_str());
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

@@ -36,7 +36,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_client_2fv1_2fchannel_5fid_2eproto() {
   protobuf_AddDesc_client_2fv1_2fchannel_5fid_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -428,7 +427,6 @@ void ChannelId::Swap(ChannelId* other) {
   metadata.reflection = ChannelId_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

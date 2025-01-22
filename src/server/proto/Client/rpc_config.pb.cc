@@ -39,7 +39,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_rpc_5fconfig_2eproto() {
   protobuf_AddDesc_rpc_5fconfig_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -1021,7 +1020,6 @@ void RPCMethodConfig::Swap(RPCMethodConfig* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1412,7 +1410,6 @@ void RPCMeterConfig::Swap(RPCMeterConfig* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1717,7 +1714,6 @@ void ProtocolAlias::Swap(ProtocolAlias* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1936,7 +1932,6 @@ void ServiceAliases::Swap(ServiceAliases* other) {
   metadata.reflection = ServiceAliases_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

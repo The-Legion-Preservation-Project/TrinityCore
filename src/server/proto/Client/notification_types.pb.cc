@@ -37,7 +37,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_notification_5ftypes_2eproto() {
   protobuf_AddDesc_notification_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -472,7 +471,6 @@ void Target::Swap(Target* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -781,7 +779,6 @@ void Subscription::Swap(Subscription* other) {
   metadata.reflection = Subscription_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -1473,7 +1470,6 @@ void Notification::Swap(Notification* other) {
   metadata.reflection = Notification_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

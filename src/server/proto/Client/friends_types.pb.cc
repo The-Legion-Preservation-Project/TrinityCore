@@ -43,7 +43,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_friends_5ftypes_2eproto() {
   protobuf_AddDesc_friends_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -689,7 +688,6 @@ void Friend::Swap(Friend* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1235,7 +1233,6 @@ void FriendOfFriend::Swap(FriendOfFriend* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -1524,7 +1521,6 @@ void FriendInvitation::Swap(FriendInvitation* other) {
   metadata.reflection = FriendInvitation_reflection_;
   return metadata;
 }
-
 
 // ===================================================================
 
@@ -2140,7 +2136,6 @@ void FriendInvitationParams::Swap(FriendInvitationParams* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -2614,7 +2609,6 @@ void SubscribeResponse::Swap(SubscribeResponse* other) {
   metadata.reflection = SubscribeResponse_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

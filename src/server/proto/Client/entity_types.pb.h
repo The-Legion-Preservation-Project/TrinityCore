@@ -360,9 +360,7 @@ class TC_PROTO_API AccountInfo : public ::google::protobuf::Message {
 };
 // ===================================================================
 
-
 // ===================================================================
-
 
 // ===================================================================
 
@@ -719,7 +717,6 @@ inline void AccountInfo::set_account_muted(bool value) {
   // @@protoc_insertion_point(field_set:bgs.protocol.AccountInfo.account_muted)
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace protocol
@@ -728,7 +725,6 @@ inline void AccountInfo::set_account_muted(bool value) {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

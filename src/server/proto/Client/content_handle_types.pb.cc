@@ -29,7 +29,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_content_5fhandle_5ftypes_2eproto() {
   protobuf_AddDesc_content_5fhandle_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -481,7 +480,6 @@ void ContentHandle::Swap(ContentHandle* other) {
   metadata.reflection = ContentHandle_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

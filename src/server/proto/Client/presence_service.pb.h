@@ -977,7 +977,6 @@ class TC_PROTO_API PresenceService : public ServiceBase
 
 // ===================================================================
 
-
 // ===================================================================
 
 // SubscribeRequest
@@ -1805,7 +1804,6 @@ inline void MigrateOlympusCustomMessageResponse::set_custom_message_time_epoch(:
   // @@protoc_insertion_point(field_set:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse.custom_message_time_epoch)
 }
 
-
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace v1
@@ -1816,7 +1814,6 @@ inline void MigrateOlympusCustomMessageResponse::set_custom_message_time_epoch(:
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 
 }  // namespace google
 }  // namespace protobuf

@@ -34,7 +34,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 
 }  // namespace
 
-
 void protobuf_AssignDesc_user_5fmanager_5ftypes_2eproto() {
   protobuf_AddDesc_user_5fmanager_5ftypes_2eproto();
   const ::google::protobuf::FileDescriptor* file =
@@ -598,7 +597,6 @@ void RecentPlayer::Swap(RecentPlayer* other) {
   return metadata;
 }
 
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -993,7 +991,6 @@ void BlockedPlayer::Swap(BlockedPlayer* other) {
   metadata.reflection = BlockedPlayer_reflection_;
   return metadata;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 
