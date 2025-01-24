@@ -37,7 +37,7 @@ WorldPacket const* GarrisonDeleteResult::Write()
     return &_worldPacket;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, GarrisonPlotInfo& plotInfo)
+ByteBuffer& operator<<(ByteBuffer& data, GarrisonPlotInfo const& plotInfo)
 {
     data << uint32(plotInfo.GarrPlotInstanceID);
     data << plotInfo.PlotPos;

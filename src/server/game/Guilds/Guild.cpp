@@ -653,7 +653,7 @@ bool Guild::Member::CheckStats() const
         return false;
     }
 
-    if (m_class < CLASS_WARRIOR || m_class >= MAX_CLASSES)
+    if (!sChrClassesStore.LookupEntry(m_class))
     {
         TC_LOG_ERROR("guild", "%s has a broken data in field `characters`.`class`, deleting him from guild!", m_guid.ToString().c_str());
         return false;
