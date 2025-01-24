@@ -23,6 +23,7 @@
 #include "CreatureAISelector.h"
 #include "DatabaseEnv.h"
 #include "DB2Stores.h"
+#include "G3DPosition.hpp"
 #include "GameEventSender.h"
 #include "GameObjectAI.h"
 #include "GameObjectModel.h"
@@ -115,6 +116,371 @@ QuaternionData QuaternionData::fromEulerAnglesZYX(float Z, float Y, float X)
     return QuaternionData(quat.x, quat.y, quat.z, quat.w);
 }
 
+GameObjectTypeBase::CustomCommand::~CustomCommand() = default;
+
+namespace GameObjectType
+{
+//11 GAMEOBJECT_TYPE_TRANSPORT
+class Transport : public GameObjectTypeBase, public TransportBase
+{
+public:
+    static constexpr Milliseconds PositionUpdateInterval = 50ms;
+
+    explicit Transport(GameObject& owner) : GameObjectTypeBase(owner), _animationInfo(sTransportMgr->GetTransportAnimInfo(owner.GetGOInfo()->entry)),
+        _pathProgress(GameTime::GetGameTimeMS() % GetTransportPeriod()), _stateChangeTime(GameTime::GetGameTimeMS()), _stateChangeProgress(_pathProgress),
+        _autoCycleBetweenStopFrames(false)
+    {
+        GameObjectTemplate const* goInfo = _owner.GetGOInfo();
+        if (goInfo->transport.Timeto2ndfloor > 0)
+        {
+            _stopFrames.push_back(goInfo->transport.Timeto2ndfloor);
+            if (goInfo->transport.Timeto3rdfloor > 0)
+            {
+                _stopFrames.push_back(goInfo->transport.Timeto3rdfloor);
+                if (goInfo->transport.Timeto4thfloor > 0)
+                {
+                    _stopFrames.push_back(goInfo->transport.Timeto4thfloor);
+                    if (goInfo->transport.Timeto5thfloor > 0)
+                    {
+                        _stopFrames.push_back(goInfo->transport.Timeto5thfloor);
+                        if (goInfo->transport.Timeto6thfloor > 0)
+                        {
+                            _stopFrames.push_back(goInfo->transport.Timeto6thfloor);
+                            if (goInfo->transport.Timeto7thfloor > 0)
+                            {
+                                _stopFrames.push_back(goInfo->transport.Timeto7thfloor);
+                                if (goInfo->transport.Timeto8thfloor > 0)
+                                {
+                                    _stopFrames.push_back(goInfo->transport.Timeto8thfloor);
+                                    if (goInfo->transport.Timeto9thfloor > 0)
+                                    {
+                                        _stopFrames.push_back(goInfo->transport.Timeto9thfloor);
+                                        if (goInfo->transport.Timeto10thfloor > 0)
+                                            _stopFrames.push_back(goInfo->transport.Timeto10thfloor);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        _positionUpdateTimer.Reset(PositionUpdateInterval);
+    }
+
+    void Update(uint32 diff) override
+    {
+        if (!_animationInfo)
+            return;
+
+        _positionUpdateTimer.Update(diff);
+        if (!_positionUpdateTimer.Passed())
+            return;
+
+        _positionUpdateTimer.Reset(PositionUpdateInterval);
+
+        uint32 now = GameTime::GetGameTimeMS();
+        uint32 period = GetTransportPeriod();
+        uint32 newProgress = 0;
+        if (_stopFrames.empty())
+            newProgress = now % period;
+        else
+        {
+            int32 stopTargetTime = 0;
+            if (_owner.GetGoState() == GO_STATE_TRANSPORT_ACTIVE)
+                stopTargetTime = 0;
+            else
+                stopTargetTime = _stopFrames[_owner.GetGoState() - GO_STATE_TRANSPORT_STOPPED];
+
+            if (now < _owner.GetUInt32Value(GAMEOBJECT_LEVEL))
+            {
+                int32 timeToStop = _owner.GetUInt32Value(GAMEOBJECT_LEVEL) - _stateChangeTime;
+                float stopSourcePathPct = float(_stateChangeProgress) / float(period);
+                float stopTargetPathPct = float(stopTargetTime) / float(period);
+                float timeSinceStopProgressPct = float(now - _stateChangeTime) / float(timeToStop);
+
+                float progressPct;
+                if (!_owner.HasDynamicFlag(GO_DYNFLAG_LO_INVERTED_MOVEMENT))
+                {
+                    if (_owner.GetGoState() == GO_STATE_TRANSPORT_ACTIVE)
+                        stopTargetPathPct = 1.0f;
+
+                    float pathPctBetweenStops = stopTargetPathPct - stopSourcePathPct;
+                    if (pathPctBetweenStops < 0.0f)
+                        pathPctBetweenStops += 1.0f;
+
+                    progressPct = pathPctBetweenStops * timeSinceStopProgressPct + stopSourcePathPct;
+                    if (progressPct > 1.0f)
+                        progressPct = progressPct - 1.0f;
+                }
+                else
+                {
+                    float pathPctBetweenStops = stopSourcePathPct - stopTargetPathPct;
+                    if (pathPctBetweenStops < 0.0f)
+                        pathPctBetweenStops += 1.0f;
+
+                    progressPct = stopSourcePathPct - pathPctBetweenStops * timeSinceStopProgressPct;
+                    if (progressPct < 0.0f)
+                        progressPct += 1.0f;
+                }
+
+                newProgress = uint32(float(period) * progressPct) % period;
+            }
+            else
+                newProgress = stopTargetTime;
+
+            if (int32(newProgress) == stopTargetTime && newProgress != _pathProgress)
+            {
+                uint32 eventId = [&]()
+                {
+                    switch (_owner.GetGoState() - GO_STATE_TRANSPORT_ACTIVE)
+                    {
+                        case 0:
+                            return _owner.GetGOInfo()->transport.Reached1stfloor;
+                        case 1:
+                            return _owner.GetGOInfo()->transport.Reached2ndfloor;
+                        case 2:
+                            return _owner.GetGOInfo()->transport.Reached3rdfloor;
+                        case 3:
+                            return _owner.GetGOInfo()->transport.Reached4thfloor;
+                        case 4:
+                            return _owner.GetGOInfo()->transport.Reached5thfloor;
+                        case 5:
+                            return _owner.GetGOInfo()->transport.Reached6thfloor;
+                        case 6:
+                            return _owner.GetGOInfo()->transport.Reached7thfloor;
+                        case 7:
+                            return _owner.GetGOInfo()->transport.Reached8thfloor;
+                        case 8:
+                            return _owner.GetGOInfo()->transport.Reached9thfloor;
+                        case 9:
+                            return _owner.GetGOInfo()->transport.Reached10thfloor;
+                        default:
+                            return 0u;
+                    }
+                }();
+                if (eventId)
+                    GameEvents::Trigger(eventId, &_owner, nullptr);
+
+                if (_autoCycleBetweenStopFrames)
+                {
+                    GOState currentState = _owner.GetGoState();
+                    GOState newState;
+                    if (currentState == GO_STATE_TRANSPORT_ACTIVE)
+                        newState = GO_STATE_TRANSPORT_STOPPED;
+                    else if (currentState - GO_STATE_TRANSPORT_ACTIVE == int32(_stopFrames.size()))
+                        newState = GOState(currentState - 1);
+                    else if (_owner.HasDynamicFlag(GO_DYNFLAG_LO_INVERTED_MOVEMENT))
+                        newState = GOState(currentState - 1);
+                    else
+                        newState = GOState(currentState + 1);
+
+                    _owner.SetGoState(newState);
+                }
+            }
+        }
+
+        if (_pathProgress == newProgress)
+            return;
+
+        _pathProgress = newProgress;
+
+        TransportAnimationEntry const* oldAnimation = _animationInfo->GetPrevAnimNode(newProgress);
+        TransportAnimationEntry const* newAnimation = _animationInfo->GetNextAnimNode(newProgress);
+        if (oldAnimation && newAnimation)
+        {
+            G3D::Matrix3 pathRotation = G3D::Quat(_owner.GetFloatValue(GAMEOBJECT_PARENTROTATION + 0), _owner.GetFloatValue(GAMEOBJECT_PARENTROTATION + 1),
+                _owner.GetFloatValue(GAMEOBJECT_PARENTROTATION + 2), _owner.GetFloatValue(GAMEOBJECT_PARENTROTATION + 3)).toRotationMatrix();
+
+            G3D::Vector3 prev(oldAnimation->Pos.X, oldAnimation->Pos.Y, oldAnimation->Pos.Z);
+            G3D::Vector3 next(newAnimation->Pos.X, newAnimation->Pos.Y, newAnimation->Pos.Z);
+
+            float animProgress = float(newProgress - oldAnimation->TimeIndex) / float(newAnimation->TimeIndex - oldAnimation->TimeIndex);
+
+            G3D::Vector3 dst = prev.lerp(next, animProgress) * pathRotation;
+
+            dst += PositionToVector3(&_owner.GetStationaryPosition());
+
+            _owner.GetMap()->GameObjectRelocation(&_owner, dst.x, dst.y, dst.z, _owner.GetOrientation());
+        }
+
+        TransportRotationEntry const* oldRotation = _animationInfo->GetPrevAnimRotation(newProgress);
+        TransportRotationEntry const* newRotation = _animationInfo->GetNextAnimRotation(newProgress);
+        if (oldRotation && newRotation)
+        {
+            G3D::Quat prev(oldRotation->Rot[0], oldRotation->Rot[1], oldRotation->Rot[2], oldRotation->Rot[3]);
+            G3D::Quat next(newRotation->Rot[0], newRotation->Rot[1], newRotation->Rot[2], newRotation->Rot[3]);
+
+            float animProgress = float(newProgress - oldRotation->TimeIndex) / float(newRotation->TimeIndex - oldRotation->TimeIndex);
+
+            G3D::Quat rotation = prev.slerp(next, animProgress);
+
+            _owner.SetLocalRotation(rotation.x, rotation.y, rotation.z, rotation.w);
+            _owner.UpdateModelPosition();
+        }
+
+        // update progress marker for client
+        _owner.SetPathProgressForClient(float(_pathProgress) / float(period));
+    }
+
+    void OnStateChanged(GOState oldState, GOState newState) override
+    {
+        ASSERT(newState >= GO_STATE_TRANSPORT_ACTIVE);
+
+        // transports without stop frames just keep animating in state 24
+        if (_stopFrames.empty())
+        {
+            if (newState != GO_STATE_TRANSPORT_ACTIVE)
+                _owner.SetGoState(GO_STATE_TRANSPORT_ACTIVE);
+            return;
+        }
+
+        int32 stopPathProgress = 0;
+
+        if (newState != GO_STATE_TRANSPORT_ACTIVE)
+        {
+            ASSERT(newState < GOState(GO_STATE_TRANSPORT_STOPPED + MAX_GO_STATE_TRANSPORT_STOP_FRAMES));
+            uint32 stopFrame = newState - GO_STATE_TRANSPORT_STOPPED;
+            ASSERT(stopFrame < _stopFrames.size());
+            stopPathProgress = _stopFrames[stopFrame];
+        }
+
+        _stateChangeTime = GameTime::GetGameTimeMS();
+        _stateChangeProgress = _pathProgress;
+        uint32 timeToStop = std::abs(int32(_pathProgress) - stopPathProgress);
+        _owner.SetLevel(GameTime::GetGameTimeMS() + timeToStop);
+        _owner.SetPathProgressForClient(float(_pathProgress) / float(GetTransportPeriod()));
+
+        if (oldState == GO_STATE_ACTIVE || oldState == newState)
+        {
+            // initialization
+            if (int32(_pathProgress) > stopPathProgress)
+                _owner.SetDynamicFlag(GO_DYNFLAG_LO_INVERTED_MOVEMENT);
+            else
+                _owner.RemoveDynamicFlag(GO_DYNFLAG_LO_INVERTED_MOVEMENT);
+
+             return;
+        }
+
+        int32 pauseTimesCount = _stopFrames.size();
+        int32 newToOldStateDelta = newState - oldState;
+        if (newToOldStateDelta < 0)
+            newToOldStateDelta += pauseTimesCount + 1;
+
+        int32 oldToNewStateDelta = oldState - newState;
+        if (oldToNewStateDelta < 0)
+            oldToNewStateDelta += pauseTimesCount + 1;
+
+        if (oldToNewStateDelta < newToOldStateDelta)
+            _owner.SetDynamicFlag(GO_DYNFLAG_LO_INVERTED_MOVEMENT);
+        else
+            _owner.RemoveDynamicFlag(GO_DYNFLAG_LO_INVERTED_MOVEMENT);
+    }
+
+    void OnRelocated() override
+    {
+        UpdatePassengerPositions();
+    }
+
+    void UpdatePassengerPositions()
+    {
+        for (WorldObject* passenger : _passengers)
+        {
+            float x, y, z, o;
+            passenger->m_movementInfo.transport.pos.GetPosition(x, y, z, o);
+            CalculatePassengerPosition(x, y, z, &o);
+            UpdatePassengerPosition(_owner.GetMap(), passenger, x, y, z, o, true);
+        }
+    }
+
+    uint32 GetTransportPeriod() const
+    {
+        if (_animationInfo)
+            return _animationInfo->TotalTime;
+
+        return 1;
+    }
+
+    std::vector<uint32> const* GetPauseTimes() const
+    {
+        return &_stopFrames;
+    }
+
+    ObjectGuid GetTransportGUID() const override { return _owner.GetGUID(); }
+
+    float GetTransportOrientation() const override { return _owner.GetOrientation(); }
+
+    void AddPassenger(WorldObject* passenger) override
+    {
+        if (!_owner.IsInWorld())
+            return;
+
+        if (_passengers.insert(passenger).second)
+        {
+            passenger->SetTransport(this);
+            passenger->m_movementInfo.transport.guid = GetTransportGUID();
+            TC_LOG_DEBUG("entities.transport", "Object %s boarded transport %s.", passenger->GetName().c_str(), _owner.GetName().c_str());
+        }
+    }
+
+    TransportBase* RemovePassenger(WorldObject* passenger) override
+    {
+        if (_passengers.erase(passenger) > 0)
+        {
+            passenger->SetTransport(nullptr);
+            passenger->m_movementInfo.transport.Reset();
+            TC_LOG_DEBUG("entities.transport", "Object %s removed from transport %s.", passenger->GetName().c_str(), _owner.GetName().c_str());
+
+            if (Player* plr = passenger->ToPlayer())
+                plr->SetFallInformation(0, plr->GetPositionZ());
+        }
+
+        return this;
+    }
+
+    void CalculatePassengerPosition(float& x, float& y, float& z, float* o) const override
+    {
+        TransportBase::CalculatePassengerPosition(x, y, z, o, _owner.GetPositionX(), _owner.GetPositionY(), _owner.GetPositionZ(), _owner.GetOrientation());
+    }
+
+    void CalculatePassengerOffset(float& x, float& y, float& z, float* o) const override
+    {
+        TransportBase::CalculatePassengerOffset(x, y, z, o, _owner.GetPositionX(), _owner.GetPositionY(), _owner.GetPositionZ(), _owner.GetOrientation());
+    }
+
+    int32 GetMapIdForSpawning() const override
+    {
+        return _owner.GetGOInfo()->transport.SpawnMap;
+    }
+
+    void SetAutoCycleBetweenStopFrames(bool on)
+    {
+        _autoCycleBetweenStopFrames = on;
+    }
+
+private:
+    TransportAnimation const* _animationInfo;
+    uint32 _pathProgress;
+    uint32 _stateChangeTime;
+    uint32 _stateChangeProgress;
+    std::vector<uint32> _stopFrames;
+    bool _autoCycleBetweenStopFrames;
+    TimeTracker _positionUpdateTimer;
+    std::unordered_set<WorldObject*> _passengers;
+};
+
+SetTransportAutoCycleBetweenStopFrames::SetTransportAutoCycleBetweenStopFrames(bool on) : _on(on)
+{
+}
+
+void SetTransportAutoCycleBetweenStopFrames::Execute(GameObjectTypeBase& type) const
+{
+    if (Transport* transport = dynamic_cast<Transport*>(&type))
+        transport->SetAutoCycleBetweenStopFrames(_on);
+}
+}
+
 GameObject::GameObject() : WorldObject(false), MapObject(),
     m_model(nullptr), m_goValue(), m_AI(nullptr), m_respawnCompatibilityMode(false), _animKitId(0), _worldEffectID(0)
 {
@@ -155,10 +521,6 @@ GameObject::~GameObject()
 {
     delete m_AI;
     delete m_model;
-    if (m_goInfo && m_goInfo->type == GAMEOBJECT_TYPE_TRANSPORT)
-        delete m_goValue.Transport.StopFrames;
-    //if (m_uint32Values)                                      // field array can be not exist if GameOBject not loaded
-    //    CleanupsBeforeDelete();
 }
 
 void GameObject::AIM_Destroy()
@@ -385,37 +747,14 @@ bool GameObject::Create(uint32 entry, Map* map, Position const& pos, QuaternionD
             break;
         case GAMEOBJECT_TYPE_TRANSPORT:
         {
-            m_goValue.Transport.AnimationInfo = sTransportMgr->GetTransportAnimInfo(goInfo->entry);
-            m_goValue.Transport.PathProgress = getMSTime();
-            if (m_goValue.Transport.AnimationInfo)
-                m_goValue.Transport.PathProgress -= m_goValue.Transport.PathProgress % GetTransportPeriod();    // align to period
-            m_goValue.Transport.CurrentSeg = 0;
-            m_goValue.Transport.StateUpdateTimer = 0;
-            m_goValue.Transport.StopFrames = new std::vector<uint32>();
-            if (goInfo->transport.Timeto2ndfloor > 0)
-                m_goValue.Transport.StopFrames->push_back(goInfo->transport.Timeto2ndfloor);
-            if (goInfo->transport.Timeto3rdfloor > 0)
-                m_goValue.Transport.StopFrames->push_back(goInfo->transport.Timeto3rdfloor);
-            if (goInfo->transport.Timeto4thfloor > 0)
-                m_goValue.Transport.StopFrames->push_back(goInfo->transport.Timeto4thfloor);
-            if (goInfo->transport.Timeto5thfloor > 0)
-                m_goValue.Transport.StopFrames->push_back(goInfo->transport.Timeto5thfloor);
-            if (goInfo->transport.Timeto6thfloor > 0)
-                m_goValue.Transport.StopFrames->push_back(goInfo->transport.Timeto6thfloor);
-            if (goInfo->transport.Timeto7thfloor > 0)
-                m_goValue.Transport.StopFrames->push_back(goInfo->transport.Timeto7thfloor);
-            if (goInfo->transport.Timeto8thfloor > 0)
-                m_goValue.Transport.StopFrames->push_back(goInfo->transport.Timeto8thfloor);
-            if (goInfo->transport.Timeto9thfloor > 0)
-                m_goValue.Transport.StopFrames->push_back(goInfo->transport.Timeto9thfloor);
-            if (goInfo->transport.Timeto10thfloor > 0)
-                m_goValue.Transport.StopFrames->push_back(goInfo->transport.Timeto10thfloor);
+            m_goTypeImpl = std::make_unique<GameObjectType::Transport>(*this);
             if (goInfo->transport.startOpen)
-                SetTransportState(GO_STATE_TRANSPORT_STOPPED, goInfo->transport.startOpen - 1);
+                SetGoState(GO_STATE_TRANSPORT_STOPPED);
             else
-                SetTransportState(GO_STATE_TRANSPORT_ACTIVE);
+                SetGoState(GO_STATE_TRANSPORT_ACTIVE);
 
             SetGoAnimProgress(animProgress);
+            setActive(true);
             break;
         }
         case GAMEOBJECT_TYPE_FISHINGNODE:
@@ -552,6 +891,9 @@ void GameObject::Update(uint32 diff)
         }
     }
 
+    if (m_goTypeImpl)
+        m_goTypeImpl->Update(diff);
+
     switch (m_lootState)
     {
         case GO_NOT_READY:
@@ -571,53 +913,6 @@ void GameObject::Update(uint32 diff)
                             m_cooldownTime = GameTime::GetGameTimeMS() + goInfo->trap.startDelay * IN_MILLISECONDS;
 
                     SetLootState(GO_READY);
-                    break;
-                }
-                case GAMEOBJECT_TYPE_TRANSPORT:
-                {
-                    if (!m_goValue.Transport.AnimationInfo)
-                        break;
-
-                    if (GetGoState() == GO_STATE_TRANSPORT_ACTIVE)
-                    {
-                        m_goValue.Transport.PathProgress += diff;
-                        /* TODO: Fix movement in unloaded grid - currently GO will just disappear
-                        uint32 timer = m_goValue.Transport.PathProgress % GetTransportPeriod();
-                        TransportAnimationEntry const* node = m_goValue.Transport.AnimationInfo->GetAnimNode(timer);
-                        if (node && m_goValue.Transport.CurrentSeg != node->TimeSeg)
-                        {
-                            m_goValue.Transport.CurrentSeg = node->TimeSeg;
-
-                            G3D::Quat rotation;
-                            if (TransportRotationEntry const* rot = m_goValue.Transport.AnimationInfo->GetAnimRotation(timer))
-                                rotation = G3D::Quat(rot->X, rot->Y, rot->Z, rot->W);
-
-                            G3D::Vector3 pos = rotation.toRotationMatrix()
-                                             * G3D::Matrix3::fromEulerAnglesZYX(GetOrientation(), 0.0f, 0.0f)
-                                             * G3D::Vector3(node->X, node->Y, node->Z);
-
-                            pos += G3D::Vector3(GetStationaryX(), GetStationaryY(), GetStationaryZ());
-
-                            G3D::Vector3 src(GetPositionX(), GetPositionY(), GetPositionZ());
-
-                            TC_LOG_DEBUG("misc", "Src: %s Dest: %s", src.toString().c_str(), pos.toString().c_str());
-
-                            GetMap()->GameObjectRelocation(this, pos.x, pos.y, pos.z, GetOrientation());
-                        }
-                        */
-
-                        if (!m_goValue.Transport.StopFrames->empty())
-                        {
-                            uint32 visualStateBefore = (m_goValue.Transport.StateUpdateTimer / 20000) & 1;
-                            m_goValue.Transport.StateUpdateTimer += diff;
-                            uint32 visualStateAfter = (m_goValue.Transport.StateUpdateTimer / 20000) & 1;
-                            if (visualStateBefore != visualStateAfter)
-                            {
-                                ForceValuesUpdateAtIndex(GAMEOBJECT_LEVEL);
-                                ForceValuesUpdateAtIndex(GAMEOBJECT_BYTES_1);
-                            }
-                        }
-                    }
                     break;
                 }
                 case GAMEOBJECT_TYPE_FISHINGNODE:
@@ -1161,7 +1456,12 @@ void GameObject::SaveToDB()
         return;
     }
 
-    SaveToDB(GetMapId(), data->spawnDifficulties);
+    uint32 mapId = GetMapId();
+    if (TransportBase* transport = GetTransport())
+        if (transport->GetMapIdForSpawning() >= 0)
+            mapId = transport->GetMapIdForSpawning();
+
+    SaveToDB(mapId, data->spawnDifficulties);
 }
 
 void GameObject::SaveToDB(uint32 mapid, std::vector<Difficulty> const& spawnDifficulties)
@@ -1409,7 +1709,7 @@ bool GameObject::IsDynTransport() const
     if (!gInfo)
         return false;
 
-    return gInfo->type == GAMEOBJECT_TYPE_MAP_OBJ_TRANSPORT || (gInfo->type == GAMEOBJECT_TYPE_TRANSPORT && m_goValue.Transport.StopFrames->empty());
+    return gInfo->type == GAMEOBJECT_TYPE_MAP_OBJ_TRANSPORT || gInfo->type == GAMEOBJECT_TYPE_TRANSPORT;
 }
 
 bool GameObject::IsDestructibleBuilding() const
@@ -1730,8 +2030,9 @@ void GameObject::ActivateObject(GameObjectActions action, int32 param, WorldObje
         case GameObjectActions::GoTo8thFloor:
         case GameObjectActions::GoTo9thFloor:
         case GameObjectActions::GoTo10thFloor:
+            static_assert(int32(GO_STATE_TRANSPORT_ACTIVE) == int32(GameObjectActions::GoTo1stFloor));
             if (GetGoType() == GAMEOBJECT_TYPE_TRANSPORT)
-                SetTransportState(GO_STATE_TRANSPORT_STOPPED, uint32(action) - uint32(GameObjectActions::GoTo1stFloor));
+                SetGoState(GOState(action));
             else
                 TC_LOG_ERROR("spell", "Spell %d targeted non-transport gameobject for transport only action \"Go to Floor\" %d in effect %d", spellId, int32(action), effectIndex);
             break;
@@ -2566,7 +2867,7 @@ void GameObject::SetLocalRotationAngles(float z_rot, float y_rot, float x_rot)
 QuaternionData GameObject::GetWorldRotation() const
 {
     QuaternionData localRotation = GetLocalRotation();
-    if (Transport* transport = GetTransport())
+    if (Transport* transport = dynamic_cast<Transport*>(GetTransport()))
     {
         QuaternionData worldRotation = transport->GetWorldRotation();
 
@@ -2758,9 +3059,14 @@ void GameObject::SetLootGenerationTime()
 
 void GameObject::SetGoState(GOState state)
 {
+    GOState oldState = GetGoState();
     SetByteValue(GAMEOBJECT_BYTES_1, 0, state);
     if (AI())
         AI()->OnStateChanged(state);
+
+    if (m_goTypeImpl)
+        m_goTypeImpl->OnStateChanged(oldState, state);
+
     if (m_model && !IsTransport())
     {
         if (!IsInWorld())
@@ -2772,39 +3078,6 @@ void GameObject::SetGoState(GOState state)
             collision = !collision;
 
         EnableCollision(collision);
-    }
-}
-
-uint32 GameObject::GetTransportPeriod() const
-{
-    ASSERT(GetGOInfo()->type == GAMEOBJECT_TYPE_TRANSPORT);
-    if (m_goValue.Transport.AnimationInfo)
-        return m_goValue.Transport.AnimationInfo->TotalTime;
-
-    return 0;
-}
-
-void GameObject::SetTransportState(GOState state, uint32 stopFrame /*= 0*/)
-{
-    if (GetGoState() == state)
-        return;
-
-    ASSERT(GetGOInfo()->type == GAMEOBJECT_TYPE_TRANSPORT);
-    ASSERT(state >= GO_STATE_TRANSPORT_ACTIVE);
-    if (state == GO_STATE_TRANSPORT_ACTIVE)
-    {
-        m_goValue.Transport.StateUpdateTimer = 0;
-        m_goValue.Transport.PathProgress = getMSTime();
-        if (GetGoState() >= GO_STATE_TRANSPORT_STOPPED)
-            m_goValue.Transport.PathProgress += m_goValue.Transport.StopFrames->at(GetGoState() - GO_STATE_TRANSPORT_STOPPED);
-        SetGoState(GO_STATE_TRANSPORT_ACTIVE);
-    }
-    else
-    {
-        ASSERT(state < GOState(GO_STATE_TRANSPORT_STOPPED + MAX_GO_STATE_TRANSPORT_STOP_FRAMES));
-        ASSERT(stopFrame < m_goValue.Transport.StopFrames->size());
-        m_goValue.Transport.PathProgress = getMSTime() + m_goValue.Transport.StopFrames->at(stopFrame);
-        SetGoState(GOState(GO_STATE_TRANSPORT_STOPPED + stopFrame));
     }
 }
 
@@ -2941,7 +3214,7 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player co
     if (!target)
         return;
 
-    bool isStoppableTransport = GetGoType() == GAMEOBJECT_TYPE_TRANSPORT && !m_goValue.Transport.StopFrames->empty();
+    //bool isStoppableTransport = GetGoType() == GAMEOBJECT_TYPE_TRANSPORT && !m_goValue.Transport.StopFrames->empty();
     bool forcedFlags = GetGoType() == GAMEOBJECT_TYPE_CHEST && GetGOInfo()->chest.usegrouplootrules && HasLootRecipient();
     bool targetIsGM = target->IsGameMaster();
 
@@ -2986,12 +3259,18 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player co
                             dynFlags |= GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
                         break;
                     case GAMEOBJECT_TYPE_TRANSPORT:
+                    {
+                        dynFlags = GetDynamicFlags() & 0xFFFF;
+                        pathProgress = GetDynamicFlags() >> 16;
+                        break;
+                    }
                     case GAMEOBJECT_TYPE_MAP_OBJ_TRANSPORT:
                     {
-                        if (uint32 transportPeriod = GetTransportPeriod())
+                        Transport const* transport = ToTransport();
+                        if (uint32 transportPeriod = transport->GetTransportPeriod())
                         {
-                            float timer = float(m_goValue.Transport.PathProgress % transportPeriod);
-                            pathProgress = int16(timer / float(transportPeriod) * 65535.0f);
+                            float timer = float(transport->GetTimer() % transportPeriod);
+                            pathProgress = uint16(timer / float(transportPeriod) * 65535.0f);
                         }
                         break;
                     }
@@ -3017,31 +3296,55 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player co
 
                 *data << goFlags;
             }
-            else if (index == GAMEOBJECT_LEVEL)
-            {
-                if (isStoppableTransport)
-                    *data << uint32(m_goValue.Transport.PathProgress);
-                else
-                    *data << m_uint32Values[index];
-            }
-            else if (index == GAMEOBJECT_BYTES_1)
-            {
-                uint32 bytes1 = m_uint32Values[index];
-                if (isStoppableTransport && GetGoState() == GO_STATE_TRANSPORT_ACTIVE)
-                {
-                    if ((m_goValue.Transport.StateUpdateTimer / 20000) & 1)
-                    {
-                        bytes1 &= 0xFFFFFF00;
-                        bytes1 |= GO_STATE_TRANSPORT_STOPPED;
-                    }
-                }
-
-                *data << bytes1;
-            }
+            // else if (index == GAMEOBJECT_LEVEL)
+            // {
+            //     if (isStoppableTransport)
+            //         *data << uint32(m_goValue.Transport.PathProgress);
+            //     else
+            //         *data << m_uint32Values[index];
+            // }
+            // else if (index == GAMEOBJECT_BYTES_1)
+            // {
+            //     uint32 bytes1 = m_uint32Values[index];
+            //     if (isStoppableTransport && GetGoState() == GO_STATE_TRANSPORT_ACTIVE)
+            //     {
+            //         if ((m_goValue.Transport.StateUpdateTimer / 20000) & 1)
+            //         {
+            //             bytes1 &= 0xFFFFFF00;
+            //             bytes1 |= GO_STATE_TRANSPORT_STOPPED;
+            //         }
+            //     }
+            //
+            //     *data << bytes1;
+            // }
             else
                 *data << m_uint32Values[index];                // other cases
         }
     }
+}
+
+std::vector<uint32> const* GameObject::GetPauseTimes() const
+{
+    if (GameObjectType::Transport const* transport = dynamic_cast<GameObjectType::Transport const*>(m_goTypeImpl.get()))
+        return transport->GetPauseTimes();
+
+    return nullptr;
+}
+
+void GameObject::SetPathProgressForClient(float progress)
+{
+    DoWithSuppressingObjectUpdates([&]()
+    {
+        bool marked = _changesMask[OBJECT_DYNAMIC_FLAGS] > 0;
+
+        uint32 dynamicFlags = GetDynamicFlags();
+        dynamicFlags &= 0xFFFF; // remove high bits
+        dynamicFlags |= uint32(progress * 65535.0f) << 16;
+        ReplaceAllDynamicFlags(dynamicFlags);
+
+        if (!marked)
+            _changesMask[OBJECT_DYNAMIC_FLAGS] = 0;
+    });
 }
 
 void GameObject::GetRespawnPosition(float &x, float &y, float &z, float* ori /* = nullptr*/) const
@@ -3060,6 +3363,31 @@ void GameObject::GetRespawnPosition(float &x, float &y, float &z, float* ori /* 
         else
             GetPosition(x, y, z);
     }
+}
+
+TransportBase const* GameObject::ToTransportBase() const
+{
+    switch (GetGoType())
+    {
+        case GAMEOBJECT_TYPE_TRANSPORT:
+            return static_cast<GameObjectType::Transport const*>(m_goTypeImpl.get());
+        case GAMEOBJECT_TYPE_MAP_OBJ_TRANSPORT:
+            return static_cast<Transport const*>(this);
+        default:
+            break;
+    }
+
+    return nullptr;
+}
+
+void GameObject::AfterRelocation()
+{
+    UpdateModelPosition();
+    UpdatePositionData();
+    if (m_goTypeImpl)
+        m_goTypeImpl->OnRelocated();
+
+    UpdateObjectVisibility(false);
 }
 
 float GameObject::GetInteractionDistance() const
@@ -3321,6 +3649,12 @@ public:
 private:
     GameObject* _owner;
 };
+
+void GameObject::HandleCustomTypeCommand(GameObjectTypeBase::CustomCommand const& command) const
+{
+    if (m_goTypeImpl)
+        command.Execute(*m_goTypeImpl);
+}
 
 void GameObject::CreateModel()
 {
