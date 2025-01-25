@@ -41,10 +41,13 @@ namespace Movement
 
 enum AreaTriggerScaleCurveOffsets
 {
-    AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE = 0,
+    // TheLegionPreservationProject: these might be incorrect
     AREATRIGGER_SCALE_CURVE_OFFSET_START_TIME      = 1,
-    AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE = 2,
-    AREATRIGGER_SCALE_CURVE_OFFSET_POINTS          = 3
+    AREATRIGGER_SCALE_CURVE_OFFSET_POINTS          = 3,
+
+    // TheLegionPreservationProject: these are correct
+    AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE = 5,
+    AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE = 6,
 };
 
 class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigger>, public MapObject
