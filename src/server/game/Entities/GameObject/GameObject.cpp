@@ -3259,19 +3259,10 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player co
                             dynFlags |= GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
                         break;
                     case GAMEOBJECT_TYPE_TRANSPORT:
+                    case GAMEOBJECT_TYPE_MAP_OBJ_TRANSPORT:
                     {
                         dynFlags = GetDynamicFlags() & 0xFFFF;
                         pathProgress = GetDynamicFlags() >> 16;
-                        break;
-                    }
-                    case GAMEOBJECT_TYPE_MAP_OBJ_TRANSPORT:
-                    {
-                        Transport const* transport = ToTransport();
-                        if (uint32 transportPeriod = transport->GetTransportPeriod())
-                        {
-                            float timer = float(transport->GetTimer() % transportPeriod);
-                            pathProgress = uint16(timer / float(transportPeriod) * 65535.0f);
-                        }
                         break;
                     }
                     case GAMEOBJECT_TYPE_CAPTURE_POINT:
@@ -3284,8 +3275,7 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player co
                         break;
                 }
 
-                *data << uint16(dynFlags);
-                *data << int16(pathProgress);
+                *data << ((uint32(pathProgress) << 16) | uint32(dynFlags));
             }
             else if (index == GAMEOBJECT_FLAGS)
             {
