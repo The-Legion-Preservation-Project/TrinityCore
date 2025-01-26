@@ -25,15 +25,20 @@ void WorldPackets::Spells::CancelAura::Read()
     _worldPacket >> CasterGUID;
 }
 
+void WorldPackets::Spells::CancelChannelling::Read()
+{
+    _worldPacket >> ChannelSpell;
+}
+
+void WorldPackets::Spells::CancelModSpeedNoControlAuras::Read()
+{
+    _worldPacket >> TargetGUID;
+}
+
 void WorldPackets::Spells::PetCancelAura::Read()
 {
     _worldPacket >> PetGUID;
     _worldPacket >> SpellID;
-}
-
-void WorldPackets::Spells::CancelChannelling::Read()
-{
-    _worldPacket >> ChannelSpell;
 }
 
 WorldPacket const* WorldPackets::Spells::CategoryCooldown::Write()
