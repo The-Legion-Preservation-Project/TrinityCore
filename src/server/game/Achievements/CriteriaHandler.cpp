@@ -3606,6 +3606,8 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
     return true;
 }
 
+CriteriaList const CriteriaMgr::EmptyCriteriaList;
+
 char const* CriteriaMgr::GetCriteriaTypeString(uint32 type)
 {
     return GetCriteriaTypeString(CriteriaType(type));
@@ -4134,6 +4136,8 @@ CriteriaList const& CriteriaMgr::GetPlayerCriteriaByType(CriteriaType type, uint
         auto itr = _criteriasByAsset[size_t(type)].find(asset);
         if (itr != _criteriasByAsset[size_t(type)].end())
             return itr->second;
+
+        return EmptyCriteriaList;
     }
 
     return _criteriasByType[size_t(type)];
