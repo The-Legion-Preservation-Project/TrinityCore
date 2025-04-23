@@ -44,7 +44,6 @@
 #include "Transport.h"
 #include "Util.h"
 #include "WorldStateMgr.h"
-#include "WorldStatePackets.h"
 #include <cstdarg>
 
 template<class Do>
@@ -419,7 +418,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
         Seconds countdownMaxForBGType = Seconds(isArena() ? ARENA_COUNTDOWN_MAX : BATTLEGROUND_COUNTDOWN_MAX);
 
         WorldPackets::Misc::StartTimer startTimer;
-        startTimer.Type         = 0;
+        startTimer.Type         = WorldPackets::Misc::StartTimer::Pvp;
         startTimer.TimeLeft     = std::chrono::duration_cast<Seconds>(countdownMaxForBGType - Milliseconds(GetElapsedTime()));
         startTimer.TotalTime    = countdownMaxForBGType;
 
@@ -1098,7 +1097,7 @@ void Battleground::AddPlayer(Player* player)
             Seconds countdownMaxForBGType = Seconds(isArena() ? ARENA_COUNTDOWN_MAX : BATTLEGROUND_COUNTDOWN_MAX);
 
             WorldPackets::Misc::StartTimer startTimer;
-            startTimer.Type         = 0;
+            startTimer.Type         = WorldPackets::Misc::StartTimer::Pvp;
             startTimer.TimeLeft     = std::chrono::duration_cast<Seconds>(countdownMaxForBGType - Milliseconds(GetElapsedTime()));
             startTimer.TotalTime    = countdownMaxForBGType;
             player->SendDirectMessage(startTimer.Write());
