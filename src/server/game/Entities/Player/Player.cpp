@@ -7208,7 +7208,7 @@ void Player::UpdateHostileAreaState(AreaTableEntry const* area)
     {
         if (area)
         {
-            if (InBattleground() || area->Flags[0] & AREA_FLAG_COMBAT || (area->PvpCombatWorldStateID != -1 && sWorld->getWorldState(area->PvpCombatWorldStateID) != 0))
+            if (InBattleground() || area->Flags[0] & AREA_FLAG_COMBAT || (area->PvpCombatWorldStateID != -1 && sWorldStateMgr->GetValue(area->PvpCombatWorldStateID, GetMap()) != 0))
                 pvpInfo.IsInHostileArea = true;
             else if (sWorld->IsPvPRealm() || (area->Flags[0] & AREA_FLAG_UNK3))
             {
