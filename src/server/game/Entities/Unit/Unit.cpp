@@ -13448,6 +13448,18 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* t
                 {
                     CreatureTemplate const* cinfo = creature->GetCreatureTemplate();
 
+                    if (TempSummon const* summon = ToTempSummon())
+                    {
+                        if (summon->GetSummonerGUID() == target->GetGUID())
+                        {
+                            if (summon->GetCreatureIdVisibleToSummoner())
+                                cinfo = sObjectMgr->GetCreatureTemplate(*summon->GetCreatureIdVisibleToSummoner());
+
+                            if (summon->GetDisplayIdVisibleToSummoner())
+                                displayId = *summon->GetDisplayIdVisibleToSummoner();
+                        }
+                    }
+
                     // this also applies for transform auras
                     if (SpellInfo const* transform = sSpellMgr->GetSpellInfo(GetTransformSpell(), GetMap()->GetDifficultyID()))
                         for (SpellEffectInfo const& spellEffectInfo : transform->GetEffects())
@@ -13507,6 +13519,17 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* t
                 }
                 else
                     *data << m_uint32Values[index];
+            }
+            else if (index == OBJECT_FIELD_ENTRY)
+            {
+                uint32 entryId = m_uint32Values[index];
+
+                if (Unit const* unit = ToUnit())
+                    if (TempSummon const* summon = unit->ToTempSummon())
+                        if (summon->GetSummonerGUID() == target->GetGUID() && summon->GetCreatureIdVisibleToSummoner())
+                            entryId = *summon->GetCreatureIdVisibleToSummoner();
+
+                *data << entryId;
             }
             else
             {
