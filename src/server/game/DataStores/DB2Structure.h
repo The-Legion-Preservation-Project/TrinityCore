@@ -2982,7 +2982,7 @@ struct SpellItemEnchantmentEntry
     uint8 MaxLevel;
     int8 ScalingClass;
     int8 ScalingClassRestricted;
-    uint32 TransmogUseConditionID;
+    uint32 TransmogUnlockConditionID;
 
     EnumFlag<SpellItemEnchantmentFlags> GetFlags() const { return static_cast<SpellItemEnchantmentFlags>(Flags); }
 };

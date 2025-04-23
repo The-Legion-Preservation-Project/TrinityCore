@@ -435,6 +435,7 @@ namespace
     ToyItemIdsContainer _toys;
     std::unordered_map<uint32, std::vector<TransmogSetEntry const*>> _transmogSetsByItemModifiedAppearance;
     std::unordered_map<uint32, std::vector<TransmogSetItemEntry const*>> _transmogSetItemsByTransmogSet;
+    std::unordered_set<uint32> _transmogUnlockQuests;
     WMOAreaTableLookupContainer _wmoAreaTableLookup;
     WorldMapAreaByAreaIDContainer _worldMapAreaByAreaID;
 }
@@ -1185,6 +1186,13 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
 
     for (SpellClassOptionsEntry const* classOption : sSpellClassOptionsStore)
         _spellFamilyNames.insert(classOption->SpellClassSet);
+
+    for (SpellItemEnchantmentEntry const* entry : sSpellItemEnchantmentStore)
+        if (entry->TransmogUnlockConditionID > 0)
+            if (auto const* condition = sPlayerConditionStore.LookupEntry(entry->TransmogUnlockConditionID))
+                for (int i=0; i<4; i++)
+                    if (condition->PrevQuestID[i] > 0)
+                        _transmogUnlockQuests.emplace(condition->PrevQuestID[i]);
 
     for (SpellProcsPerMinuteModEntry const* ppmMod : sSpellProcsPerMinuteModStore)
         _spellProcsPerMinuteMods[ppmMod->SpellProcsPerMinuteID].push_back(ppmMod);
@@ -2402,6 +2410,11 @@ void DB2Manager::DeterminaAlternateMapPosition(uint32 mapId, float x, float y, f
 
     newPos->X = x + transformation->RegionOffset.X;
     newPos->Y = y + transformation->RegionOffset.Y;
+}
+
+bool DB2Manager::IsTransmogUnlockQuest(uint32 questId)
+{
+    return _transmogUnlockQuests.find(questId) != _transmogUnlockQuests.end();
 }
 
 bool ChrClassesXPowerTypesEntryComparator::Compare(ChrClassesXPowerTypesEntry const* left, ChrClassesXPowerTypesEntry const* right)

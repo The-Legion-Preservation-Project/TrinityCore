@@ -129,7 +129,7 @@ void WorldSession::HandleTransmogrifyItems(WorldPackets::Transmogrification::Tra
                 return;
             }
 
-            if (PlayerConditionEntry const* condition = sPlayerConditionStore.LookupEntry(illusion->TransmogUseConditionID))
+            if (PlayerConditionEntry const* condition = sPlayerConditionStore.LookupEntry(illusion->TransmogUnlockConditionID))
             {
                 if (!sConditionMgr->IsPlayerMeetingCondition(player, condition))
                 {
