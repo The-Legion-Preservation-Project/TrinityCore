@@ -120,8 +120,6 @@ DELETE FROM `gameobject` WHERE `guid` = @OGUID+0;
 INSERT INTO `gameobject` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficulties`, `PhaseId`, `PhaseGroup`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecs`, `animprogress`, `state`, `VerifiedBuild`) VALUES
 (@OGUID+0, 237016, 1116, 6719, 6922, '0', 0, 0, 1288.34375, 39.26041793823242187, 76.92043304443359375, 5.683261871337890625, 0, 0, -0.29548358917236328, 0.955347836017608642, 7200, 255, 1, 44325); -- Wanted: Kuu'rat (Area: -Unknown- - Difficulty: 0)
 
-UPDATE `gameobject_template` SET `ContentTuningId`=63, `VerifiedBuild`=44325 WHERE `entry`=237016; -- Wanted: Kuu'rat
-
 -- SAI
 UPDATE `creature_template` SET `AIName` = 'SmartAI', `ScriptName` = '' WHERE `entry` IN (82378, 82452);
 DELETE FROM `smart_scripts` WHERE `source_type` IN (0, 9) AND `entryOrGuid` IN (-(@CGUID+4), -(@CGUID+39), -(@CGUID+38), -(@CGUID+42), -(@CGUID+33), 8237800);

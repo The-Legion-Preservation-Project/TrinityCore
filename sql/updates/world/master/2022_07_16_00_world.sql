@@ -507,10 +507,6 @@ INSERT INTO `gameobject` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficu
 (@OGUID+6, 223239, 1116, 7078, 7211, '0', 0, 0, 1728.189208984375, 715.421875, 29.36570930480957031, 6.040675640106201171, -0.26486158370971679, 0.330596923828125, -0.01000785827636718, 0.905789077281951904, 7200, 255, 1, 43971), -- Lunar Rock (Area: -Unknown- - Difficulty: 0)
 (@OGUID+7, 237486, 1116, 6719, 6796, '0', 0, 0, 1293.298583984375, 45.42013931274414062, 75.5564117431640625, 2.426819801330566406, 0, 0, 0.936814308166503906, 0.349827021360397338, 7200, 255, 1, 43971); -- Pilgrim's Shrine (Area: -Unknown- - Difficulty: 0)
 
-UPDATE `gameobject_template` SET `ContentTuningId`=63, `VerifiedBuild`=43971 WHERE `entry`=237486; -- Pilgrim's Shrine
-UPDATE `gameobject_template` SET `ContentTuningId`=63, `VerifiedBuild`=43971 WHERE `entry` IN (227271, 222690, 227272); -- Shrouding Stone
-UPDATE `gameobject_template` SET `ContentTuningId`=63, `VerifiedBuild`=43971 WHERE `entry`=223239; -- Lunar Rock
-
 -- Add SpellScript to Feign Death Aura
 DELETE FROM `spell_script_names` WHERE `spell_id` = 159474;
 INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
