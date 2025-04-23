@@ -24152,9 +24152,15 @@ bool Player::ModifyMoney(int64 amount, bool sendError /*= true*/)
 
 void Player::SetMoney(uint64 value)
 {
-    MoneyChanged(value);
+    bool loading = GetSession()->PlayerLoading();
+
+    if (!loading)
+        MoneyChanged(value);
+
     SetUInt64Value(PLAYER_FIELD_COINAGE, value);
-    UpdateCriteria(CriteriaType::MostMoneyOwned);
+
+    if (!loading)
+        UpdateCriteria(CriteriaType::MostMoneyOwned);
 }
 
 bool Player::IsQuestRewarded(uint32 quest_id) const
