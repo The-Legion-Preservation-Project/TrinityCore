@@ -17954,8 +17954,22 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
         ObjectGuid transGUID = ObjectGuid::Create<HighGuid::Transport>(fields.transguid);
 
         Transport* transport = nullptr;
-        if (Transport* go = HashMapHolder<Transport>::Find(transGUID))
-            transport = go;
+        if (Map* transportMap = sMapMgr->CreateMap(mapId, this, instanceId))
+        {
+            if (Transport* transportOnMap = transportMap->GetTransport(transGUID))
+            {
+                if (transportOnMap->GetExpectedMapId() != mapId)
+                {
+                    mapId = transportOnMap->GetExpectedMapId();
+                    instanceId = 0;
+                    transportMap = sMapMgr->CreateMap(mapId, this, instanceId);
+                    if (transportMap)
+                        transport = transportMap->GetTransport(transGUID);
+                }
+                else
+                    transport = transportOnMap;
+            }
+        }
 
         if (transport)
         {
@@ -20073,8 +20087,7 @@ bool Player::_LoadHomeBind(PreparedQueryResult result)
     {
         PlayerInfo::CreatePosition const& createPosition = info->createPosition;
 
-        m_homebind.m_mapId = createPosition.Loc.GetMapId();
-
+        m_homebind.WorldRelocate(createPosition.Loc);
         m_homebindAreaId = sMapMgr->GetAreaId(PhasingHandler::GetEmptyPhaseShift(), m_homebind);
 
         saveHomebindToDb();
