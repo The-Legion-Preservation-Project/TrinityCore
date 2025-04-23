@@ -28,13 +28,13 @@ INSERT INTO `areatrigger_scripts` VALUES
 
 DELETE FROM `points_of_interest` WHERE `ID` BETWEEN 10463 AND 10468;
 DELETE FROM `points_of_interest` WHERE `ID` BETWEEN 2716 AND 2721;
-INSERT INTO `points_of_interest` (`ID`, `PositionX`, `PositionY`, `PositionZ`, `Icon`, `Flags`, `Importance`, `Name`, `Unknown905`, `VerifiedBuild`) VALUES
-(2716, -3998.494873046875, 6280.140625, 13.06377983093261718, 7, 99, 0, 'AAA Whack-a-Gnoll', 0, 44127),
-(2717, -4018.01904296875, 6292.56103515625, 13.03492259979248046, 7, 99, 0, 'AAA Cannon', 0, 44127),
-(2718, -4076.423583984375, 6351.39599609375, 13.00009632110595703, 7, 99, 0, 'AAA Shooting Gallery', 0, 44127),
-(2719, -4128.34033203125, 6324.9287109375, 13.11676025390625, 7, 99, 0, 'AAA Tonk Arena', 0, 44127),
-(2720, -4263.24853515625, 6281.23095703125, 13.11678886413574218, 7, 99, 0, 'AAA Fortune Teller', 0, 44127),
-(2721, -4290.15625, 6308.5537109375, 13.11675357818603515, 7, 99, 0, 'AAA Ring Toss', 0, 44127);
+INSERT INTO `points_of_interest` (`ID`, `PositionX`, `PositionY`, `Icon`, `Flags`, `Importance`, `Name`, `VerifiedBuild`) VALUES
+(2716, -3998.494873046875, 6280.140625, 7, 99, 0, 'AAA Whack-a-Gnoll', 44127),
+(2717, -4018.01904296875, 6292.56103515625, 7, 99, 0, 'AAA Cannon', 44127),
+(2718, -4076.423583984375, 6351.39599609375, 7, 99, 0, 'AAA Shooting Gallery', 44127),
+(2719, -4128.34033203125, 6324.9287109375, 7, 99, 0, 'AAA Tonk Arena', 44127),
+(2720, -4263.24853515625, 6281.23095703125, 7, 99, 0, 'AAA Fortune Teller', 44127),
+(2721, -4290.15625, 6308.5537109375, 7, 99, 0, 'AAA Ring Toss', 44127);
 
 DELETE FROM `points_of_interest_locale` WHERE `ID` BETWEEN 2716 AND 2721;
 INSERT INTO `points_of_interest_locale` (`ID`, `locale`, `Name`, `VerifiedBuild`) VALUES
