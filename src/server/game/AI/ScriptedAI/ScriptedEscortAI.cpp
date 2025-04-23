@@ -320,6 +320,7 @@ void EscortAI::Start(bool isActiveAttacker /* = true*/, bool run /* = false */, 
 
     // disable npcflags
     me->ReplaceAllNpcFlags(UNIT_NPC_FLAG_NONE);
+    me->ReplaceAllNpcFlags2(UNIT_NPC_FLAG_2_NONE);
     if (me->IsImmuneToNPC())
     {
         _hasImmuneToNPCFlags = true;

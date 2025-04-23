@@ -1074,11 +1074,17 @@ class TC_GAME_API Unit : public WorldObject
 
         MeleeHitOutcome RollMeleeOutcomeAgainst(Unit const* victim, WeaponAttackType attType) const;
 
-        NPCFlags GetNpcFlags() const { return NPCFlags(GetUInt64Value(UNIT_NPC_FLAGS)); }
-        bool HasNpcFlag(NPCFlags flags) const { return HasFlag64(UNIT_NPC_FLAGS, flags); }
-        void SetNpcFlag(NPCFlags flags) { SetFlag64(UNIT_NPC_FLAGS, flags); }
-        void RemoveNpcFlag(NPCFlags flags) { RemoveFlag64(UNIT_NPC_FLAGS, flags); }
-        void ReplaceAllNpcFlags(NPCFlags flags) { SetUInt64Value(UNIT_NPC_FLAGS, flags); }
+        NPCFlags GetNpcFlags() const { return NPCFlags(GetUInt32Value(UNIT_NPC_FLAGS)); }
+        bool HasNpcFlag(NPCFlags flags) const { return HasFlag(UNIT_NPC_FLAGS, flags); }
+        void SetNpcFlag(NPCFlags flags) { SetFlag(UNIT_NPC_FLAGS, flags); }
+        void RemoveNpcFlag(NPCFlags flags) { RemoveFlag(UNIT_NPC_FLAGS, flags); }
+        void ReplaceAllNpcFlags(NPCFlags flags) { SetUInt32Value(UNIT_NPC_FLAGS, flags); }
+
+        NPCFlags2 GetNpcFlags2() const { return NPCFlags2(GetUInt32Value(UNIT_NPC_FLAGS + 1)); }
+        bool HasNpcFlag2(NPCFlags2 flags) const { return HasFlag(UNIT_NPC_FLAGS + 1, flags); }
+        void SetNpcFlag2(NPCFlags2 flags) { SetFlag(UNIT_NPC_FLAGS + 1, flags); }
+        void RemoveNpcFlag2(NPCFlags2 flags) { RemoveFlag(UNIT_NPC_FLAGS + 1, flags); }
+        void ReplaceAllNpcFlags2(NPCFlags2 flags) { SetUInt32Value(UNIT_NPC_FLAGS + 1, flags); }
 
         bool IsVendor()         const { return HasNpcFlag(UNIT_NPC_FLAG_VENDOR); }
         bool IsTrainer()        const { return HasNpcFlag(UNIT_NPC_FLAG_TRAINER); }

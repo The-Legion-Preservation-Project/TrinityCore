@@ -274,6 +274,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petEntry, uint32 petnumber, bool c
     SetDisplayId(petInfo->DisplayId, true);
     uint8 petlevel = petInfo->Level;
     ReplaceAllNpcFlags(UNIT_NPC_FLAG_NONE);
+    ReplaceAllNpcFlags2(UNIT_NPC_FLAG_2_NONE);
     SetName(petInfo->Name);
 
     switch (getPetType())

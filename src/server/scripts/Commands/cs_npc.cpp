@@ -401,7 +401,7 @@ public:
     }
 
     //set npcflag of creature
-    static bool HandleNpcSetFlagCommand(ChatHandler* handler, NPCFlags npcFlags)
+    static bool HandleNpcSetFlagCommand(ChatHandler* handler, NPCFlags npcFlags, NPCFlags2 npcFlags2)
     {
         Creature* creature = handler->getSelectedCreature();
 
@@ -413,10 +413,11 @@ public:
         }
 
         creature->ReplaceAllNpcFlags(npcFlags);
+        creature->ReplaceAllNpcFlags2(npcFlags2);
 
         WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_UPD_CREATURE_NPCFLAG);
 
-        stmt->setUInt64(0, npcFlags);
+        stmt->setUInt64(0, uint64(npcFlags) | (uint64(npcFlags2) << 32));
         stmt->setUInt32(1, creature->GetEntry());
 
         WorldDatabase.Execute(stmt);
@@ -478,7 +479,7 @@ public:
         CreatureTemplate const* cInfo = target->GetCreatureTemplate();
 
         uint32 faction = target->GetFaction();
-        uint64 npcflags = target->GetUInt64Value(UNIT_NPC_FLAGS);
+        uint64 npcflags = target->GetUInt32Value(UNIT_NPC_FLAGS);
         uint32 mechanicImmuneMask = cInfo->MechanicImmuneMask;
         uint32 displayid = target->GetDisplayId();
         uint32 nativeid = target->GetNativeDisplayId();
@@ -543,6 +544,10 @@ public:
         handler->PSendSysMessage(LANG_NPCINFO_NPC_FLAGS, npcflags);
         for (NPCFlags flag : EnumUtils::Iterate<NPCFlags>())
             if (target->HasNpcFlag(flag))
+                handler->PSendSysMessage("* %s (0x%X)", EnumUtils::ToTitle(flag), flag);
+
+        for (NPCFlags2 flag : EnumUtils::Iterate<NPCFlags2>())
+            if (target->HasNpcFlag2(flag))
                 handler->PSendSysMessage("* %s (0x%X)", EnumUtils::ToTitle(flag), flag);
 
         handler->PSendSysMessage(LANG_NPCINFO_MECHANIC_IMMUNE, mechanicImmuneMask);

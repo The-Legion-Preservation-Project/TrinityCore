@@ -388,7 +388,7 @@ void WorldSession::HandleSellItemOpcode(WorldPackets::Item::SellItem& packet)
     if (packet.ItemGUID.IsEmpty())
         return;
 
-    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(packet.VendorGUID, UNIT_NPC_FLAG_VENDOR);
+    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(packet.VendorGUID, UNIT_NPC_FLAG_VENDOR, UNIT_NPC_FLAG_2_NONE);
     if (!creature)
     {
         TC_LOG_DEBUG("network", "WORLD: HandleSellItemOpcode - %s not found or you can not interact with him.", packet.VendorGUID.ToString().c_str());
@@ -506,7 +506,7 @@ void WorldSession::HandleBuybackItem(WorldPackets::Item::BuyBackItem& packet)
 {
     TC_LOG_DEBUG("network", "WORLD: Received CMSG_BUYBACK_ITEM: Vendor %s, Slot: %u", packet.VendorGUID.ToString().c_str(), packet.Slot);
 
-    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(packet.VendorGUID, UNIT_NPC_FLAG_VENDOR);
+    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(packet.VendorGUID, UNIT_NPC_FLAG_VENDOR, UNIT_NPC_FLAG_2_NONE);
     if (!creature)
     {
         TC_LOG_DEBUG("network", "WORLD: HandleBuybackItem - Unit (%s) not found or you can not interact with him.", packet.VendorGUID.ToString().c_str());
@@ -592,7 +592,7 @@ void WorldSession::HandleListInventoryOpcode(WorldPackets::NPC::Hello& packet)
 
 void WorldSession::SendListInventory(ObjectGuid vendorGuid)
 {
-    Creature* vendor = GetPlayer()->GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_VENDOR);
+    Creature* vendor = GetPlayer()->GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_VENDOR, UNIT_NPC_FLAG_2_NONE);
     if (!vendor)
     {
         TC_LOG_DEBUG("network", "WORLD: SendListInventory - %s not found or you can not interact with him.", vendorGuid.ToString().c_str());
@@ -1186,7 +1186,7 @@ bool WorldSession::CanUseBank(ObjectGuid bankerGUID) const
 
     if (!isUsingBankCommand)
     {
-        Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(bankerGUID, UNIT_NPC_FLAG_BANKER);
+        Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(bankerGUID, UNIT_NPC_FLAG_BANKER, UNIT_NPC_FLAG_2_NONE);
         if (!creature)
             return false;
     }
@@ -1216,7 +1216,7 @@ void WorldSession::HandleUseCritterItem(WorldPackets::Item::UseCritterItem& useC
 void WorldSession::HandleUpgradeItem(WorldPackets::Item::UpgradeItem& upgradeItem)
 {
     WorldPackets::Item::ItemUpgradeResult itemUpgradeResult;
-    if (!_player->GetNPCIfCanInteractWith(upgradeItem.ItemMaster, UNIT_NPC_FLAG_ITEM_UPGRADE_MASTER))
+    if (!_player->GetNPCIfCanInteractWith(upgradeItem.ItemMaster, UNIT_NPC_FLAG_NONE, UNIT_NPC_FLAG_2_ITEM_UPGRADE_MASTER))
     {
         TC_LOG_DEBUG("network", "WORLD: HandleUpgradeItems - %s not found or player can't interact with it.", upgradeItem.ItemMaster.ToString().c_str());
         itemUpgradeResult.Success = false;

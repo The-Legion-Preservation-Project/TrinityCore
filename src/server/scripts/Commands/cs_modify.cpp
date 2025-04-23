@@ -267,7 +267,8 @@ public:
 
         target->SetFaction(factionid);
         target->ReplaceAllUnitFlags(UnitFlags(flag));
-        target->ReplaceAllNpcFlags(NPCFlags(npcflag));
+        target->ReplaceAllNpcFlags(NPCFlags(npcflag & 0xFFFFFFFF));
+        target->ReplaceAllNpcFlags2(NPCFlags2(npcflag >> 32));
         target->ReplaceAllDynamicFlags(dyflag);
 
         return true;

@@ -52,7 +52,7 @@ bool WorldSession::CanOpenMailBox(ObjectGuid guid)
     }
     else if (guid.IsAnyTypeCreature())
     {
-        if (!_player->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_MAILBOX))
+        if (!_player->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_MAILBOX, UNIT_NPC_FLAG_2_NONE))
             return false;
     }
     else

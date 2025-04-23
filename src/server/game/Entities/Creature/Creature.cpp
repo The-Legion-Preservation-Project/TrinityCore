@@ -592,6 +592,7 @@ bool Creature::UpdateEntry(uint32 entry, CreatureData const* data /*= nullptr*/,
         npcFlags |= sGameEventMgr->GetNPCFlag(this);
 
     ReplaceAllNpcFlags(NPCFlags(npcFlags & 0xFFFFFFFF));
+    ReplaceAllNpcFlags2(NPCFlags2(npcFlags >> 32));
 
     // if unit is in combat, keep this flag
     unitFlags &= ~UNIT_FLAG_IN_COMBAT;
@@ -2099,6 +2100,7 @@ void Creature::setDeathState(DeathState s)
         SetTarget(ObjectGuid::Empty);      // drop target - dead mobs shouldn't ever target things
 
         ReplaceAllNpcFlags(UNIT_NPC_FLAG_NONE);
+        ReplaceAllNpcFlags2(UNIT_NPC_FLAG_2_NONE);
 
         SetMountDisplayId(0); // if creature is mounted on a virtual mount, remove it at death
 
@@ -2146,7 +2148,8 @@ void Creature::setDeathState(DeathState s)
             if (cInfo->flags_extra & CREATURE_FLAG_EXTRA_WORLDEVENT)
                 npcFlags |= sGameEventMgr->GetNPCFlag(this);
 
-            ReplaceAllNpcFlags(NPCFlags(npcFlags));
+            ReplaceAllNpcFlags(NPCFlags(npcFlags & 0xFFFFFFFF));
+            ReplaceAllNpcFlags2(NPCFlags2(npcFlags >> 32));
 
             ReplaceAllUnitFlags(UnitFlags(unitFlags));
             ReplaceAllUnitFlags2(UnitFlags2(unitFlags2));
