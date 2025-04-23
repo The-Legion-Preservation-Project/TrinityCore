@@ -1966,7 +1966,7 @@ void WorldSession::HandleEquipmentSetSave(WorldPackets::EquipmentSet::SaveEquipm
             if (!illusion->ItemVisual || !illusion->GetFlags().HasFlag(SpellItemEnchantmentFlags::AllowTransmog))
                 return false;
 
-            if (PlayerConditionEntry const* condition = sPlayerConditionStore.LookupEntry(illusion->TransmogUseConditionID))
+            if (PlayerConditionEntry const* condition = sPlayerConditionStore.LookupEntry(illusion->TransmogUnlockConditionID))
                 if (!sConditionMgr->IsPlayerMeetingCondition(_player, condition))
                     return false;
 
