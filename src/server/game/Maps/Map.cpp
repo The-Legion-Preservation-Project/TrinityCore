@@ -695,7 +695,7 @@ int32 Map::GetWorldStateValue(int32 worldStateId) const
     return 0;
 }
 
-void Map::SetWorldStateValue(int32 worldStateId, int32 value)
+void Map::SetWorldStateValue(int32 worldStateId, int32 value, bool hidden)
 {
     auto itr = _worldStateValues.try_emplace(worldStateId, 0).first;
     int32 oldValue = itr->second;
@@ -709,6 +709,7 @@ void Map::SetWorldStateValue(int32 worldStateId, int32 value)
     WorldPackets::WorldState::UpdateWorldState updateWorldState;
     updateWorldState.VariableID = worldStateId;
     updateWorldState.Value = value;
+    updateWorldState.Hidden = hidden;
     updateWorldState.Write();
 
     for (MapReference const& mapReference : m_mapRefManager)
