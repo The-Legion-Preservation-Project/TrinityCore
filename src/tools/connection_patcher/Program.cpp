@@ -27,7 +27,7 @@
 
 #include "Banner.h"
 #include "BigNumber.h"
-#include "RSA.h"
+#include "LegacyRSA.h"
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/program_options.hpp>
@@ -64,8 +64,8 @@ namespace Connection_Patcher
             patcher->Patch(Patches::Common::CertBundleUrl(), Patterns::Common::CertBundleUrl());
 
             std::cout << "patching BNet certificate file signature\n";
-            Trinity::Crypto::RSA rsa;
-            rsa.LoadFromString(Patches::Common::CertificatePrivateKey(), Trinity::Crypto::RSA::PrivateKey{});
+            Trinity::Crypto::LegacyRSA rsa;
+            rsa.LoadFromString(Patches::Common::CertificatePrivateKey(), Trinity::Crypto::LegacyRSA::PrivateKey{});
             std::vector<uint8> modulusArray = rsa.GetModulus().ToByteVector(256, true);
             patcher->Patch(modulusArray, Patterns::Common::CertSignatureModulus());
 
@@ -107,10 +107,10 @@ namespace Connection_Patcher
             signatureHash.Finalize();
             std::array<uint8, 256> signature;
 
-            Trinity::Crypto::RSA rsa;
-            rsa.LoadFromString(Patches::Common::CertificatePrivateKey(), Trinity::Crypto::RSA::PrivateKey{});
+            Trinity::Crypto::LegacyRSA rsa;
+            rsa.LoadFromString(Patches::Common::CertificatePrivateKey(), Trinity::Crypto::LegacyRSA::PrivateKey{});
             auto digest = signatureHash.GetDigest();
-            rsa.Sign(digest.data(), digest.size(), signature.data(), Trinity::Crypto::RSA::SHA256{});
+            rsa.Sign(digest.data(), digest.size(), signature.data(), Trinity::Crypto::LegacyRSA::SHA256{});
 
             ofs.write(reinterpret_cast<char const*>(signature.data()), signature.size());
         }

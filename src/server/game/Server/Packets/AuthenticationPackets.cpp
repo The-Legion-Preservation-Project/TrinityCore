@@ -21,7 +21,7 @@
 #include "CryptoHash.h"
 #include "HMAC.h"
 #include "ObjectMgr.h"
-#include "RSA.h"
+#include "LegacyRSA.h"
 #include "Util.h"
 
 ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Auth::VirtualRealmNameInfo const& virtualRealmInfo)
@@ -250,7 +250,7 @@ OHYtKG3GK3GEcFDwZU2LPHq21EroUAdtRfbrJ4KW2yc8igtXKxTBYw==
 -----END RSA PRIVATE KEY-----
 )";
 
-std::unique_ptr<Trinity::Crypto::RSA> ConnectToRSA;
+std::unique_ptr<Trinity::Crypto::LegacyRSA> ConnectToRSA;
 
 uint8 const WherePacketHmac[] =
 {
@@ -263,8 +263,8 @@ uint8 const WherePacketHmac[] =
 
 bool WorldPackets::Auth::ConnectTo::InitializeEncryption()
 {
-    std::unique_ptr<Trinity::Crypto::RSA> rsa = std::make_unique<Trinity::Crypto::RSA>();
-    if (!rsa->LoadFromString(RSAPrivateKey, Trinity::Crypto::RSA::PrivateKey{}))
+    std::unique_ptr<Trinity::Crypto::LegacyRSA> rsa = std::make_unique<Trinity::Crypto::LegacyRSA>();
+    if (!rsa->LoadFromString(RSAPrivateKey, Trinity::Crypto::LegacyRSA::PrivateKey{}))
         return false;
 
     ConnectToRSA = std::move(rsa);
@@ -318,8 +318,8 @@ WorldPacket const* WorldPackets::Auth::ConnectTo::Write()
 
     ConnectToRSA->Encrypt(payload.contents(), payload.size(),
         _worldPacket.contents() + encryptedPayloadPos,
-        Trinity::Crypto::RSA::PrivateKey{},
-        Trinity::Crypto::RSA::NoPadding{});
+        Trinity::Crypto::LegacyRSA::PrivateKey{},
+        Trinity::Crypto::LegacyRSA::NoPadding{});
 
     return &_worldPacket;
 }
