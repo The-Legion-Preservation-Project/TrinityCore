@@ -3376,22 +3376,11 @@ SpellCastResult Spell::prepare(SpellCastTargets const& targets, AuraEffect const
     // Prepare data for triggers
     prepareDataForTriggerSystem();
 
-    if (Player* player = m_caster->ToPlayer())
-    {
-        if (!player->GetCommandStatus(CHEAT_CASTTIME))
-        {
-            // calculate cast time (calculated after first CheckCast check to prevent charge counting for first CheckCast fail)
-            m_casttime = m_spellInfo->CalcCastTime(player->GetLevel(), this);
-        }
-        else
-            m_casttime = 0; // Set cast time to 0 if .cheat casttime is enabled.
-    }
-    else if (m_caster->IsUnit())
-        m_casttime = m_spellInfo->CalcCastTime(m_caster->ToUnit()->GetLevel(), this);
-    else
-        m_casttime = m_spellInfo->CalcCastTime(0, this);
+    uint32 cast_time_level = 0;
+    if (m_caster->IsUnit())
+        cast_time_level = m_caster->ToUnit()->GetLevel();
 
-    CallScriptOnCalcCastTimeHandlers();
+    m_casttime = CallScriptCalcCastTimeHandlers(m_spellInfo->CalcCastTime(cast_time_level, this));
 
     if (m_caster->IsUnit() && m_caster->ToUnit()->isMoving())
     {
@@ -8387,18 +8376,6 @@ void Spell::CallScriptAfterCastHandlers()
     }
 }
 
-void Spell::CallScriptOnCalcCastTimeHandlers()
-{
-    for (auto scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end(); ++scritr)
-    {
-        (*scritr)->_PrepareScriptCall(SPELL_SCRIPT_HOOK_CALC_CAST_TIME);
-        auto hookItrEnd = (*scritr)->OnCalcCastTime.end(), hookItr = (*scritr)->OnCalcCastTime.begin();
-        for (; hookItr != hookItrEnd; ++hookItr)
-            (*hookItr).Call(*scritr, m_casttime);
-        (*scritr)->_FinishScriptCall();
-    }
-}
-
 SpellCastResult Spell::CallScriptCheckCastHandlers()
 {
     SpellCastResult retVal = SPELL_CAST_OK;
@@ -8416,6 +8393,17 @@ SpellCastResult Spell::CallScriptCheckCastHandlers()
         (*scritr)->_FinishScriptCall();
     }
     return retVal;
+}
+
+int32 Spell::CallScriptCalcCastTimeHandlers(int32 castTime)
+{
+    for (auto scritr = m_loadedScripts.begin(); scritr != m_loadedScripts.end(); ++scritr)
+    {
+        (*scritr)->_PrepareScriptCall(SPELL_SCRIPT_HOOK_CALC_CAST_TIME);
+        castTime = (*scritr)->CalcCastTime(castTime);
+        (*scritr)->_FinishScriptCall();
+    }
+    return castTime;
 }
 
 bool Spell::CallScriptEffectHandlers(SpellEffIndex effIndex, SpellEffectHandleMode mode)

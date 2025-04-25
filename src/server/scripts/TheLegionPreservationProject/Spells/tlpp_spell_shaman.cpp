@@ -78,7 +78,7 @@ class tlpp_spell_sha_healing_surge: public SpellScript
     PrepareSpellScript(tlpp_spell_sha_healing_surge);
 
 public:
-    void HandleCalcCastTime(int32& castTime)
+    int32 CalcCastTime(int32 castTime) override
     {
         int32 requiredMaelstrom = GetEffectInfo(EFFECT_2).BasePoints;
         if (GetCaster()->GetPower(POWER_MAELSTROM) >= requiredMaelstrom)
@@ -86,6 +86,8 @@ public:
             castTime = 0;
             _takenPower = requiredMaelstrom;
         }
+
+        return castTime;
     }
 
     void HandleEnergize(SpellEffIndex /*effIndex*/)
@@ -95,7 +97,6 @@ public:
 
     void Register() override
     {
-        OnCalcCastTime += SpellOnCalcCastTimeFn(tlpp_spell_sha_healing_surge::HandleCalcCastTime);
         OnEffectHitTarget += SpellEffectFn(tlpp_spell_sha_healing_surge::HandleEnergize, EFFECT_1, SPELL_EFFECT_ENERGIZE);
     }
 private:

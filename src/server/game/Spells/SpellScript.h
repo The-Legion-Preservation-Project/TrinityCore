@@ -215,9 +215,9 @@ enum SpellScriptHookType
     SPELL_SCRIPT_HOOK_ON_CAST,
     SPELL_SCRIPT_HOOK_ON_RESIST_ABSORB_CALCULATION,
     SPELL_SCRIPT_HOOK_AFTER_CAST,
-    SPELL_SCRIPT_HOOK_CALC_CAST_TIME,
     SPELL_SCRIPT_HOOK_CALC_CRIT_CHANCE,
     SPELL_SCRIPT_HOOK_ON_PRECAST,
+    SPELL_SCRIPT_HOOK_CALC_CAST_TIME,
 };
 
 #define HOOK_SPELL_HIT_START SPELL_SCRIPT_HOOK_EFFECT_HIT
@@ -238,8 +238,7 @@ class TC_GAME_API SpellScript : public _SpellScript
             typedef void(CLASSNAME::*SpellOnResistAbsorbCalculateFnType)(DamageInfo const& damageInfo, uint32& resistAmount, int32& absorbAmount); \
             typedef void(CLASSNAME::*SpellObjectAreaTargetSelectFnType)(std::list<WorldObject*>&); \
             typedef void(CLASSNAME::*SpellObjectTargetSelectFnType)(WorldObject*&); \
-            typedef void(CLASSNAME::*SpellDestinationTargetSelectFnType)(SpellDestination&); \
-            typedef void(CLASSNAME::*SpellOnCalcCastTimeFnType)(int32& castTime);
+            typedef void(CLASSNAME::*SpellDestinationTargetSelectFnType)(SpellDestination&);
 
         SPELLSCRIPT_FUNCTION_TYPE_DEFINES(SpellScript)
 
@@ -269,15 +268,6 @@ class TC_GAME_API SpellScript : public _SpellScript
                 SpellCastResult Call(SpellScript* spellScript);
             private:
                 SpellCheckCastFnType _checkCastHandlerScript;
-        };
-
-        class TC_GAME_API OnCalcCastTimeHandler
-        {
-            public:
-                OnCalcCastTimeHandler(SpellOnCalcCastTimeFnType OnCalcCastTimeHandlerScript);
-                void Call(SpellScript* spellScript, int32& castTime);
-            private:
-                SpellOnCalcCastTimeFnType _onCalcCastTimeHandlerScript;
         };
 
         class TC_GAME_API EffectHandler : public  _SpellScript::EffectNameCheck, public _SpellScript::EffectHook
@@ -415,7 +405,6 @@ class TC_GAME_API SpellScript : public _SpellScript
         #define SPELLSCRIPT_FUNCTION_CAST_DEFINES(CLASSNAME) \
         class CastHandlerFunction : public SpellScript::CastHandler { public: explicit CastHandlerFunction(SpellCastFnType _pCastHandlerScript) : SpellScript::CastHandler((SpellScript::SpellCastFnType)_pCastHandlerScript) { } }; \
         class CheckCastHandlerFunction : public SpellScript::CheckCastHandler { public: explicit CheckCastHandlerFunction(SpellCheckCastFnType _checkCastHandlerScript) : SpellScript::CheckCastHandler((SpellScript::SpellCheckCastFnType)_checkCastHandlerScript) { } }; \
-        class OnCalcCastTimeHandlerFunction: public SpellScript::OnCalcCastTimeHandler { public: explicit OnCalcCastTimeHandlerFunction(SpellOnCalcCastTimeFnType _onCalcCastTimeHandlerScript) : SpellScript::OnCalcCastTimeHandler((SpellScript::SpellOnCalcCastTimeFnType)_onCalcCastTimeHandlerScript) {} }; \
         class EffectHandlerFunction : public SpellScript::EffectHandler { public: explicit EffectHandlerFunction(SpellEffectFnType _pEffectHandlerScript, uint8 _effIndex, uint16 _effName) : SpellScript::EffectHandler((SpellScript::SpellEffectFnType)_pEffectHandlerScript, _effIndex, _effName) { } }; \
         class HitHandlerFunction : public SpellScript::HitHandler { public: explicit HitHandlerFunction(SpellHitFnType _pHitHandlerScript) : SpellScript::HitHandler((SpellScript::SpellHitFnType)_pHitHandlerScript) { } }; \
         class BeforeHitHandlerFunction : public SpellScript::BeforeHitHandler { public: explicit BeforeHitHandlerFunction(SpellBeforeHitFnType pBeforeHitHandlerScript) : SpellScript::BeforeHitHandler((SpellScript::SpellBeforeHitFnType)pBeforeHitHandlerScript) { } }; \
@@ -427,6 +416,7 @@ class TC_GAME_API SpellScript : public _SpellScript
 
         #define PrepareSpellScript(CLASSNAME) SPELLSCRIPT_FUNCTION_TYPE_DEFINES(CLASSNAME) SPELLSCRIPT_FUNCTION_CAST_DEFINES(CLASSNAME)
     public:
+        SpellScript() : m_spell(nullptr), m_hitPreventEffectMask(0), m_hitPreventDefaultEffectMask(0) { }
         bool _Validate(SpellInfo const* entry) override;
         bool _Load(Spell* spell);
         void _InitHit();
@@ -448,7 +438,7 @@ class TC_GAME_API SpellScript : public _SpellScript
         //
         // SpellScript interface
         //
-        // example: void OnPrecast override { }
+        // example: void OnPrecast() override { }
         virtual void OnPrecast() { }
         //
         // hooks to which you can attach your functions
@@ -466,10 +456,8 @@ class TC_GAME_API SpellScript : public _SpellScript
         HookList<CheckCastHandler> OnCheckCast;
         #define SpellCheckCastFn(F) CheckCastHandlerFunction(&F)
 
-        // example: OnCalcCastTime += SpellOnCalcCastTimeFn(class::function);
-        // where function is void function(int32& castTime)
-        HookList<OnCalcCastTimeHandler> OnCalcCastTime;
-        #define SpellOnCalcCastTimeFn(F) OnCalcCastTimeHandlerFunction(&F)
+        // example: int32 CalcCastTime(int32 castTime) override { return 1500; }
+        virtual int32 CalcCastTime(int32 castTime) { return castTime; }
 
         // example: OnCalculateResistAbsorb += SpellOnResistAbsorbCalculateFn(class::function);
         // where function is void function(DamageInfo const& damageInfo, uint32& resistAmount, int32& absorbAmount)

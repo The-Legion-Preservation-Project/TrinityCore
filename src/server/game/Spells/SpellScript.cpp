@@ -224,16 +224,6 @@ SpellCastResult SpellScript::CheckCastHandler::Call(SpellScript* spellScript)
     return (spellScript->*_checkCastHandlerScript)();
 }
 
-void SpellScript::OnCalcCastTimeHandler::Call(SpellScript* spellScript, int32& castTime)
-{
-    (spellScript->*_onCalcCastTimeHandlerScript)(castTime);
-}
-
-SpellScript::OnCalcCastTimeHandler::OnCalcCastTimeHandler(SpellOnCalcCastTimeFnType OnCalcCastTimeHandlerScript)
-{
-    _onCalcCastTimeHandlerScript = OnCalcCastTimeHandlerScript;
-}
-
 SpellScript::OnCalculateResistAbsorbHandler::OnCalculateResistAbsorbHandler(SpellOnResistAbsorbCalculateFnType onResistAbsorbCalculateHandlerScript) :
     pOnCalculateResistAbsorbHandlerScript(onResistAbsorbCalculateHandlerScript)
 {
