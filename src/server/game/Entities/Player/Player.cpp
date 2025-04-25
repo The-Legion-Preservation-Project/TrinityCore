@@ -6070,7 +6070,7 @@ void Player::CheckAreaExploreAndOutdoor()
         return;
     }
 
-    uint32 offset = areaEntry->AreaBit / 32;
+    uint32 offset = areaEntry->AreaBit / PLAYER_EXPLORED_ZONES_BITS;
 
     if (offset >= PLAYER_EXPLORED_ZONES_SIZE)
     {
@@ -6079,7 +6079,7 @@ void Player::CheckAreaExploreAndOutdoor()
         return;
     }
 
-    uint32 val = (uint32)(1 << (areaEntry->AreaBit % 32));
+    uint32 val = (uint32)(1 << (areaEntry->AreaBit % PLAYER_EXPLORED_ZONES_BITS));
     uint32 currFields = GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + offset);
 
     if (!(currFields & val))

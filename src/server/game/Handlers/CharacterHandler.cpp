@@ -1326,8 +1326,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder const& holder)
         // start with every map explored
         if (sWorld->getBoolConfig(CONFIG_START_ALL_EXPLORED))
         {
-            for (uint16 i = 0; i<PLAYER_EXPLORED_ZONES_SIZE; i++)
-                pCurrChar->SetFlag(PLAYER_EXPLORED_ZONES_1 + i, 0xFFFFFFFF);
+            for (uint16 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; i++)
+                pCurrChar->AddExploredZones(i, 0xFFFFFFFF);
         }
 
         // Max relevant reputations if "StartAllReputation" is enabled

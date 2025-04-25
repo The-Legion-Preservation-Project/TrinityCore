@@ -130,7 +130,11 @@ enum SkillFieldOffset
     SKILL_PERM_BONUS_OFFSET = SKILL_TEMP_BONUS_OFFSET + 64
 };
 
-#define PLAYER_EXPLORED_ZONES_SIZE  320
+enum PlayerExplorationConstants
+{
+    PLAYER_EXPLORED_ZONES_SIZE  = 320,
+    PLAYER_EXPLORED_ZONES_BITS  = 32
+};
 
 enum SpellModType : uint8
 {
@@ -2231,12 +2235,12 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void ProcessDelayedOperations();
 
         void CheckAreaExploreAndOutdoor(void);
-        void AddExploredZones(uint32 pos, uint64 mask)
+        void AddExploredZones(uint32 pos, uint32 mask)
         {
             uint32 currFields = GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + pos);
             SetUInt32Value(PLAYER_EXPLORED_ZONES_1 + pos, uint32((currFields | mask)));
         }
-        void RemoveExploredZones(uint32 pos, uint64 mask)
+        void RemoveExploredZones(uint32 pos, uint32 mask)
         {
             uint32 currFields = GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + pos);
             SetUInt32Value(PLAYER_EXPLORED_ZONES_1 + pos, uint32((currFields & ~mask)));

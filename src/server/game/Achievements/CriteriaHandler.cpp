@@ -1526,11 +1526,11 @@ bool CriteriaHandler::RequirementsSatisfied(Criteria const* criteria, uint64 mis
                 if (area->AreaBit < 0)
                     continue;
 
-                uint16 playerIndexOffset = uint16(uint32(area->AreaBit) / 32);
+                uint16 playerIndexOffset = uint16(uint32(area->AreaBit) / PLAYER_EXPLORED_ZONES_BITS);
                 if (playerIndexOffset >= PLAYER_EXPLORED_ZONES_SIZE)
                     continue;
 
-                uint32 mask = 1 << (uint32(area->AreaBit) % 32);
+                uint32 mask = 1 << (uint32(area->AreaBit) % PLAYER_EXPLORED_ZONES_BITS);
                 if (referencePlayer->GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + playerIndexOffset) & mask)
                 {
                     matchFound = true;
@@ -2271,10 +2271,10 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
                 return false;
             if (areaTable->AreaBit <= 0)
                 break; // success
-            uint32 playerIndexOffset = uint32(areaTable->AreaBit) / 32;
+            uint32 playerIndexOffset = uint32(areaTable->AreaBit) / PLAYER_EXPLORED_ZONES_BITS;
             if (playerIndexOffset >= PLAYER_EXPLORED_ZONES_SIZE)
                 break;
-            if (!(referencePlayer->GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + playerIndexOffset) & (1 << (areaTable->AreaBit % 32))))
+            if (!(referencePlayer->GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + playerIndexOffset) & (1 << (areaTable->AreaBit % PLAYER_EXPLORED_ZONES_BITS))))
                 return false;
             break;
         }
