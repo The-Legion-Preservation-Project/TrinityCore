@@ -20,18 +20,19 @@
 
 #include "Define.h"
 
-struct TC_COMMON_API DB2MetaField
+struct DB2MetaField
 {
-    DB2MetaField(DBCFormer type, uint8 arraySize, bool isSigned);
-
     DBCFormer Type;
     uint8 ArraySize;
     bool IsSigned;
 };
 
-struct TC_COMMON_API DB2Meta
+struct DB2Meta
 {
-    DB2Meta(uint32 fileDataId, int32 indexField, uint32 fieldCount, uint32 layoutHash, DB2MetaField const* fields, int32 parentIndexField);
+    constexpr explicit DB2Meta(uint32 fileDataId, int32 indexField, uint32 fieldCount, uint32 layoutHash, DB2MetaField const* fields, int32 parentIndexField)
+        : FileDataId(fileDataId), IndexField(indexField), FieldCount(fieldCount), LayoutHash(layoutHash), Fields(fields), ParentIndexField(parentIndexField)
+    {
+    }
 
     bool HasIndexFieldInData() const;
 
