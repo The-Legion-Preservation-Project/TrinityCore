@@ -1231,6 +1231,11 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
         sTaxiPathNodesByPath[entry->PathID][entry->NodeIndex] = entry;
 
     // Initialize global taxinodes mask
+    // reinitialize internal storage for globals after loading TaxiNodes.db2
+    sTaxiNodesMask = {};
+    sHordeTaxiNodesMask = {};
+    sAllianceTaxiNodesMask = {};
+    sOldContinentsNodesMask = {};
     // include existed nodes that have at least single not spell base (scripted) path
     for (TaxiNodesEntry const* node : sTaxiNodesStore)
     {
@@ -2433,7 +2438,8 @@ bool ItemLevelSelectorQualityEntryComparator::Compare(ItemLevelSelectorQualityEn
 
 TaxiMask::TaxiMask()
 {
-    _data.resize(((sTaxiNodesStore.GetNumRows() - 1) / (sizeof(value_type) * 8)) + 1, 0);
+    if (sTaxiNodesStore.GetNumRows())
+        _data.resize(((sTaxiNodesStore.GetNumRows() - 1) / (sizeof(value_type) * 8)) + 1, 0);
 }
 
 bool DB2Manager::FriendshipRepReactionEntryComparator::Compare(FriendshipRepReactionEntry const* left, FriendshipRepReactionEntry const* right)
