@@ -2338,15 +2338,17 @@ uint32 DB2Manager::GetVirtualMapForMapAndZone(uint32 mapId, uint32 zoneId) const
     return mapId;
 }
 
-void DB2Manager::Zone2MapCoordinates(uint32 areaId, float& x, float& y) const
+bool DB2Manager::Zone2MapCoordinates(uint32 areaId, float& x, float& y) const
 {
     auto itr = _worldMapAreaByAreaID.find(areaId);
     if (itr == _worldMapAreaByAreaID.end())
-        return;
+        return false;
 
     std::swap(x, y);                                         // at client map coords swapped
     x = x*((itr->second->LocBottom - itr->second->LocTop) / 100) + itr->second->LocTop;
     y = y*((itr->second->LocRight - itr->second->LocLeft) / 100) + itr->second->LocLeft;        // client y coord from top to down
+
+    return true;
 }
 
 void DB2Manager::Map2ZoneCoordinates(uint32 areaId, float& x, float& y) const
