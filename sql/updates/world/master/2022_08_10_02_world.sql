@@ -12,11 +12,11 @@ INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `b
 (103135, 0, 0, 50331648, 1, 0, 0, 0, 0, 0, ''), -- 103135 (Zen'tabra)
 (103133, 0, 0, 0, 1, 0, 9979, 0, 0, 0, '204637'); -- 103133 (Naralex) - Meditating
 
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` IN (103133,103135,103136));
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(103133, 0, 0, 0, 642, 44908),
-(103135, 0, 0, 0, 642, 44908),
-(103136, 0, 0, 0, 642, 44908);
+# DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` IN (103133,103135,103136));
+# INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
+# (103133, 0, 0, 0, 642, 44908),
+# (103135, 0, 0, 0, 642, 44908),
+# (103136, 0, 0, 0, 642, 44908);
 
 UPDATE `creature_template` SET `minlevel`=45, `maxlevel`=45, `VerifiedBuild`=44908 WHERE `entry` IN (103136, 103135); -- Zen'tabra
 UPDATE `creature_template` SET `minlevel`=45, `maxlevel`=45, `VerifiedBuild`=44908 WHERE `entry`=103133; -- Naralex
