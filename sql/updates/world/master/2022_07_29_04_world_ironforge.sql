@@ -1,5 +1,5 @@
 -- Ironforge Guard (Ironforge)
-UPDATE `creature_template` SET `minlevel`=60, `maxlevel`=60 WHERE `entry`=5595;
+#UPDATE `creature_template` SET `minlevel`=60, `maxlevel`=60 WHERE `entry`=5595;
 
 UPDATE `gossip_menu_option` SET `ActionPoiID`=418 WHERE `MenuID`=2121 AND `OptionID`=0;
 UPDATE `gossip_menu_option` SET `ActionPoiID`=415 WHERE `MenuID`=2121 AND `OptionID`=1;

@@ -1,5 +1,5 @@
 -- Ironforge Mountaineer | Mounted Ironforge Mountaineer (Kharanos)
-UPDATE `creature_template` SET `gossip_menu_id`=3533, `minlevel`=30, `maxlevel`=30 WHERE `entry` IN (727, 12996);
+UPDATE `creature_template` SET `gossip_menu_id`=3533 WHERE `entry` IN (727, 12996);
 
 UPDATE `gossip_menu_option` SET `OptionBroadcastTextId`=3426 WHERE `MenuID`=3533 AND `OptionID`=0;
 UPDATE `gossip_menu_option` SET `OptionBroadcastTextId`=5081 WHERE `MenuID`=3533 AND `OptionID`=1;
