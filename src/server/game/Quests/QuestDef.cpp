@@ -208,7 +208,7 @@ void Quest::LoadQuestOfferReward(Field* fields)
             continue;
         }
 
-        OfferRewardEmote[i] = fields[1 + i].GetUInt16();
+        OfferRewardEmote[i] = fields[1 + i].GetInt16();
     }
 
     for (uint32 i = 0; i < QUEST_EMOTE_COUNT; ++i)
