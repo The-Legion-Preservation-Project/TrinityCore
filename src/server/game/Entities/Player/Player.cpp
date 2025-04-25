@@ -16008,11 +16008,15 @@ void Player::SetQuestCompletedBit(uint32 questBit, bool completed)
     if (!questBit)
         return;
 
-    uint32 fieldOffset = (questBit - 1) >> 5;
+    uint32 fieldOffset = (questBit - 1) / QUESTS_COMPLETED_BITS_PER_BLOCK;
     if (fieldOffset >= QUESTS_COMPLETED_BITS_SIZE)
         return;
 
-    ApplyModFlag(PLAYER_FIELD_QUEST_COMPLETED + ((questBit - 1) >> 5), 1 << ((questBit - 1) & 31), completed);
+    uint32 flag = 1 << ((questBit - 1) % QUESTS_COMPLETED_BITS_PER_BLOCK);
+    if (completed)
+        SetFlag(PLAYER_FIELD_QUEST_COMPLETED, flag);
+    else
+        RemoveFlag(PLAYER_FIELD_QUEST_COMPLETED, flag);
 }
 
 void Player::AreaExploredOrEventHappens(uint32 questId)

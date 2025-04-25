@@ -118,7 +118,11 @@ TC_GAME_API Item* GetItemInBag(Bag const* bag, uint8 slot);
 
 typedef std::deque<Mail*> PlayerMails;
 
-#define PLAYER_MAX_SKILLS                       128
+enum PlayerSkillsConstants
+{
+    PLAYER_MAX_SKILLS   = 128
+};
+
 enum SkillFieldOffset
 {
     SKILL_ID_OFFSET = 0,
@@ -649,7 +653,11 @@ enum QuestSaveType
 typedef std::map<uint32, QuestSaveType> QuestStatusSaveMap;
 
 // Size of client completed quests bit map
-#define QUESTS_COMPLETED_BITS_SIZE 1750
+enum PlayerQuestCompletedConstants
+{
+    QUESTS_COMPLETED_BITS_SIZE      = 1750,
+    QUESTS_COMPLETED_BITS_PER_BLOCK = 32
+};
 
 enum QuestSlotOffsets
 {
@@ -659,8 +667,11 @@ enum QuestSlotOffsets
     QUEST_TIME_OFFSET   = 14
 };
 
-#define MAX_QUEST_COUNTS 24
-#define MAX_QUEST_OFFSET 16
+enum PlayerQuestLogConstants
+{
+    MAX_QUEST_COUNTS = 24,
+    MAX_QUEST_OFFSET = 16
+};
 
 enum QuestSlotStateMask
 {
