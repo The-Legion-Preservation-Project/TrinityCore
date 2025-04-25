@@ -42,6 +42,7 @@
 #include "ObjectAccessor.h"
 #include "ObjectGridLoader.h"
 #include "ObjectMgr.h"
+#include "OutdoorPvPMgr.h"
 #include "Pet.h"
 #include "PhasingHandler.h"
 #include "PoolMgr.h"
@@ -92,6 +93,8 @@ Map::~Map()
 
     if (!m_scriptSchedule.empty())
         sMapMgr->DecreaseScheduledScriptCount(m_scriptSchedule.size());
+
+    sOutdoorPvPMgr->DestroyOutdoorPvPForMap(this);
 
     if (m_parentMap == this)
         delete m_childTerrainMaps;
@@ -373,6 +376,8 @@ i_scriptLock(false), _respawnCheckTimer(0)
     MMAP::MMapFactory::createOrGetMMapManager()->loadMapInstance(sWorld->GetDataPath(), GetId(), i_InstanceId);
 
     _worldStateValues = sWorldStateMgr->GetInitialWorldStatesForMap(this);
+
+    sOutdoorPvPMgr->CreateOutdoorPvPForMap(this);
 
     sScriptMgr->OnCreateMap(this);
 }
