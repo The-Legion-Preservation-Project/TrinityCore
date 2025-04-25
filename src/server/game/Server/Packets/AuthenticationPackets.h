@@ -279,7 +279,7 @@ namespace WorldPackets
             void Read() override;
         };
 
-        class EnterEncryptedMode final : public ServerPacket
+        class TC_GAME_API EnterEncryptedMode final : public ServerPacket
         {
         public:
             EnterEncryptedMode() : ServerPacket(SMSG_ENTER_ENCRYPTED_MODE, 0) { }
