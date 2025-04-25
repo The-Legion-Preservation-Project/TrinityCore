@@ -451,6 +451,7 @@ class TC_GAME_API HealInfo
         Unit* const _healer;
         Unit* const _target;
         uint32 _heal;
+        uint32 const _originalHeal;
         uint32 _effectiveHeal;
         uint32 _absorb;
         SpellInfo const* const _spellInfo;
@@ -466,6 +467,7 @@ class TC_GAME_API HealInfo
         Unit* GetHealer() const { return _healer; }
         Unit* GetTarget() const { return _target; }
         uint32 GetHeal() const { return _heal; }
+        uint32 GetOriginalHeal() const { return _originalHeal; }
         uint32 GetEffectiveHeal() const { return _effectiveHeal; }
         uint32 GetAbsorb() const { return _absorb; }
         SpellInfo const* GetSpellInfo() const { return _spellInfo; };

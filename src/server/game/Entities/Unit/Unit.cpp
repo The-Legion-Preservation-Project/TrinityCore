@@ -240,7 +240,7 @@ ProcFlagsHit DamageInfo::GetHitMask() const
 }
 
 HealInfo::HealInfo(Unit* healer, Unit* target, uint32 heal, SpellInfo const* spellInfo, SpellSchoolMask schoolMask)
-    : _healer(healer), _target(target), _heal(heal), _effectiveHeal(0), _absorb(0), _spellInfo(spellInfo), _schoolMask(schoolMask), _hitMask(0)
+    : _healer(healer), _target(target), _heal(heal), _originalHeal(heal), _effectiveHeal(0), _absorb(0), _spellInfo(spellInfo), _schoolMask(schoolMask), _hitMask(0)
 {
 }
 
@@ -1923,8 +1923,7 @@ void Unit::HandleEmoteCommand(Emote emoteId, Player* target /*=nullptr*/)
         AuraApplication const* aurApp = absorbAurEff->GetBase()->GetApplicationOfTarget(healInfo.GetTarget()->GetGUID());
         if (!aurApp)
             continue;
-
-        if (!(absorbAurEff->GetMiscValue() & healInfo.GetSpellInfo()->GetSchoolMask()))
+        if (!(absorbAurEff->GetMiscValue() & healInfo.GetSchoolMask()))
             continue;
 
         // get amount which can be still absorbed by the aura
@@ -1940,27 +1939,40 @@ void Unit::HandleEmoteCommand(Emote emoteId, Player* target /*=nullptr*/)
         absorbAurEff->GetBase()->CallScriptEffectAbsorbHandlers(absorbAurEff, aurApp, healInfo, tempAbsorb, defaultPrevented);
         currentAbsorb = tempAbsorb;
 
-        if (defaultPrevented)
-            continue;
-
-        // currentAbsorb - damage can be absorbed by shield
-        // If need absorb less damage
-        currentAbsorb = std::min<int32>(healInfo.GetHeal(), currentAbsorb);
-
-        healInfo.AbsorbHeal(currentAbsorb);
-
-        tempAbsorb = currentAbsorb;
-        absorbAurEff->GetBase()->CallScriptEffectAfterAbsorbHandlers(absorbAurEff, aurApp, healInfo, tempAbsorb);
-
-        // Check if our aura is using amount to count heal
-        if (absorbAurEff->GetAmount() >= 0)
+        if (!defaultPrevented)
         {
-            // Reduce shield amount
-            absorbAurEff->ChangeAmount(absorbAurEff->GetAmount() - currentAbsorb);
-            // Aura cannot absorb anything more - remove it
-            if (absorbAurEff->GetAmount() <= 0)
-                existExpired = true;
+            // absorb must be smaller than the heal itself
+            currentAbsorb = RoundToInterval(currentAbsorb, 0, int32(healInfo.GetHeal()));
+
+            healInfo.AbsorbHeal(currentAbsorb);
+
+            tempAbsorb = currentAbsorb;
+            absorbAurEff->GetBase()->CallScriptEffectAfterAbsorbHandlers(absorbAurEff, aurApp, healInfo, tempAbsorb);
+
+            // Check if our aura is using amount to count damage
+            if (absorbAurEff->GetAmount() >= 0)
+            {
+                // Reduce shield amount
+                absorbAurEff->ChangeAmount(absorbAurEff->GetAmount() - currentAbsorb);
+                // Aura cannot absorb anything more - remove it
+                if (absorbAurEff->GetAmount() <= 0)
+                    absorbAurEff->GetBase()->Remove(AURA_REMOVE_BY_ENEMY_SPELL);
+            }
         }
+
+        // TheLegionPreservationProject: NYI
+//        if (currentAbsorb)
+//        {
+//            WorldPackets::CombatLog::SpellHealAbsorbLog absorbLog;
+//            absorbLog.Healer = healInfo.GetHealer() ? healInfo.GetHealer()->GetGUID() : ObjectGuid::Empty;
+//            absorbLog.Target = healInfo.GetTarget()->GetGUID();
+//            absorbLog.AbsorbCaster = absorbAurEff->GetBase()->GetCasterGUID();
+//            absorbLog.AbsorbedSpellID = healInfo.GetSpellInfo() ? healInfo.GetSpellInfo()->Id : 0;
+//            absorbLog.AbsorbSpellID = absorbAurEff->GetId();
+//            absorbLog.Absorbed = currentAbsorb;
+//            absorbLog.OriginalHeal = healInfo.GetOriginalHeal();
+//            healInfo.GetTarget()->SendMessageToSet(absorbLog.Write(), true);
+//        }
     }
 
     // Remove all expired absorb auras
@@ -6353,6 +6365,7 @@ void Unit::SendHealSpellLog(HealInfo& healInfo, bool critical /*= false*/)
 
     spellHealLog.SpellID = healInfo.GetSpellInfo()->Id;
     spellHealLog.Health = healInfo.GetHeal();
+    //spellHealLog.OriginalHeal = healInfo.GetOriginalHeal();
     spellHealLog.OverHeal = int32(healInfo.GetHeal()) - healInfo.GetEffectiveHeal();
     spellHealLog.Absorbed = healInfo.GetAbsorb();
 
