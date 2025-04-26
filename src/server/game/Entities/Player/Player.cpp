@@ -13817,17 +13817,6 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
                 case GossipOptionNpc::AdventureMap:
                 case GossipOptionNpc::GarrisonTalent:
                 case GossipOptionNpc::ContributionCollector:
-                case GossipOptionNpc::AzeriteRespec:
-                case GossipOptionNpc::IslandsMission:
-                case GossipOptionNpc::UIItemInteraction:
-                case GossipOptionNpc::WorldMap:
-                case GossipOptionNpc::Soulbind:
-                case GossipOptionNpc::ChromieTime:
-                case GossipOptionNpc::CovenantPreview:
-                case GossipOptionNpc::RuneforgeLegendaryCrafting:
-                case GossipOptionNpc::NewPlayerGuide:
-                case GossipOptionNpc::RuneforgeLegendaryUpgrade:
-                case GossipOptionNpc::CovenantRenown:
                     break;                                         // NYI
                 default:
                     TC_LOG_ERROR("sql.sql", "Creature entry %u has an unknown gossip option icon %u for menu %u.", creature->GetEntry(), AsUnderlyingType(itr->second.OptionNpc), itr->second.MenuID);
