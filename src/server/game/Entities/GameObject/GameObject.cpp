@@ -898,6 +898,40 @@ void GameObject::Update(uint32 diff)
     if (m_goTypeImpl)
         m_goTypeImpl->Update(diff);
 
+    if (m_perPlayerState)
+    {
+        for (auto itr = m_perPlayerState->begin(); itr != m_perPlayerState->end(); )
+        {
+            if (itr->second.ValidUntil > GameTime::GetSystemTime())
+            {
+                ++itr;
+                continue;
+            }
+
+            Player* seer = ObjectAccessor::GetPlayer(*this, itr->first);
+            bool needsStateUpdate = itr->second.State != GetGoState();
+            bool despawned = itr->second.Despawned;
+
+            itr = m_perPlayerState->erase(itr);
+
+            if (seer)
+            {
+                if (despawned)
+                {
+                    seer->UpdateVisibilityOf(this);
+                }
+                else if (needsStateUpdate)
+                {
+                    UpdateData udata(GetMapId());
+                    BuildValuesUpdate(UPDATETYPE_HACK_STATE, &udata.GetBuffer(), seer);
+                    WorldPacket packet;
+                    udata.BuildPacket(&packet);
+                    seer->SendDirectMessage(&packet);
+                }
+            }
+        }
+    }
+
     switch (m_lootState)
     {
         case GO_NOT_READY:
@@ -1792,14 +1826,19 @@ bool GameObject::IsAlwaysVisibleFor(WorldObject const* seer) const
     return false;
 }
 
-bool GameObject::IsInvisibleDueToDespawn() const
+bool GameObject::IsInvisibleDueToDespawn(WorldObject const* seer) const
 {
-    if (WorldObject::IsInvisibleDueToDespawn())
+    if (WorldObject::IsInvisibleDueToDespawn(seer))
         return true;
 
     // Despawned
     if (!isSpawned())
         return true;
+
+    if (m_perPlayerState)
+        if (PerPlayerState const* state = Trinity::Containers::MapGetValuePtr(*m_perPlayerState, seer->GetGUID()))
+            if (state->Despawned)
+                return true;
 
     return false;
 }
@@ -3166,6 +3205,29 @@ bool GameObject::IsFullyLooted() const
     return true;
 }
 
+void GameObject::OnLootRelease(Player* looter)
+{
+    switch (GetGoType())
+    {
+        case GAMEOBJECT_TYPE_CHEST:
+        {
+            GameObjectTemplate const* goInfo = GetGOInfo();
+            if (!goInfo->chest.consumable && goInfo->chest.chestPersonalLoot)
+            {
+                PerPlayerState& perPlayerState = GetOrCreatePerPlayerStates()[looter->GetGUID()];
+                perPlayerState.ValidUntil = GameTime::GetSystemTime() + (goInfo->chest.chestRestockTime
+                    ? Seconds(goInfo->chest.chestRestockTime)
+                    : Seconds(m_respawnDelayTime)); // not hiding this object permanently to prevent infinite growth of m_perPlayerState
+                                                    // while also maintaining some sort of cheater protection (not getting rid of entries on logout)
+                perPlayerState.Despawned = true;
+
+                looter->UpdateVisibilityOf(this);
+            }
+            break;
+        }
+    }
+}
+
 void GameObject::SetGoState(GOState state)
 {
     GOState oldState = GetGoState();
@@ -3188,6 +3250,28 @@ void GameObject::SetGoState(GOState state)
 
         EnableCollision(collision);
     }
+}
+
+GOState GameObject::GetGoStateFor(ObjectGuid const& viewer) const
+{
+    if (m_perPlayerState)
+        if (PerPlayerState const* state = Trinity::Containers::MapGetValuePtr(*m_perPlayerState, viewer))
+            if (state->State)
+                return *state->State;
+
+    return GetGoState();
+}
+
+void GameObject::SetGoStateFor(GOState state, Player const* viewer)
+{
+    PerPlayerState& perPlayerState = GetOrCreatePerPlayerStates()[viewer->GetGUID()];
+    perPlayerState.ValidUntil = GameTime::GetSystemTime() + Seconds(m_respawnDelayTime);
+    perPlayerState.State = state;
+
+    WorldPackets::GameObject::GameObjectSetStateLocal setStateLocal;
+    setStateLocal.ObjectGUID = GetGUID();
+    setStateLocal.State = state;
+    viewer->SendDirectMessage(setStateLocal.Write());
 }
 
 void GameObject::SetDisplayId(uint32 displayid)
@@ -3309,9 +3393,15 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player co
 
     for (uint16 index = 0; index < m_valuesCount; ++index)
     {
-        if (_fieldNotifyFlags & flags[index] ||
-            ((updateType == UPDATETYPE_VALUES ? _changesMask[index] : m_uint32Values[index]) && (flags[index] & visibleFlag)) ||
-            (index == GAMEOBJECT_FLAGS && forcedFlags))
+        bool shouldUpdate = _fieldNotifyFlags & flags[index] ||
+                            ((updateType == UPDATETYPE_VALUES ? _changesMask[index] : m_uint32Values[index]) && (flags[index] & visibleFlag)) ||
+                            (index == GAMEOBJECT_FLAGS && forcedFlags);
+
+        // TheLegionPreservationProject: hack for personal game object state/visibility updates
+        if (updateType == UPDATETYPE_HACK_STATE && index == GAMEOBJECT_BYTES_1)
+            shouldUpdate = true;
+
+        if (shouldUpdate)
         {
             UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
 
@@ -3363,6 +3453,15 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player co
                         goFlags |= GO_FLAG_LOCKED | GO_FLAG_NOT_SELECTABLE;
 
                 *data << goFlags;
+            }
+            else if (index == GAMEOBJECT_BYTES_1)
+            {
+                uint32 bytes1 = m_uint32Values[GAMEOBJECT_BYTES_1];
+
+                bytes1 &= 0xFFFFFF00;
+                bytes1 |= GetGoStateFor(target->GetGUID());
+
+                *data << bytes1;
             }
             // else if (index == GAMEOBJECT_LEVEL)
             // {
@@ -3697,6 +3796,14 @@ bool GameObject::CanInteractWithCapturePoint(Player const* target) const
     // For Alliance players
     return m_goValue.CapturePoint.State == WorldPackets::Battleground::BattlegroundCapturePointState::ContestedHorde
         || m_goValue.CapturePoint.State == WorldPackets::Battleground::BattlegroundCapturePointState::HordeCaptured;
+}
+
+std::unordered_map<ObjectGuid, GameObject::PerPlayerState>& GameObject::GetOrCreatePerPlayerStates()
+{
+    if (!m_perPlayerState)
+        m_perPlayerState = std::make_unique<std::unordered_map<ObjectGuid, PerPlayerState>>();
+
+    return *m_perPlayerState;
 }
 
 class GameObjectModelOwnerImpl : public GameObjectModelOwnerBase

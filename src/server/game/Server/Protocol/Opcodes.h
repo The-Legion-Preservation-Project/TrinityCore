@@ -1064,7 +1064,7 @@ enum OpcodeServer : uint16
     SMSG_GAME_OBJECT_PLAY_SPELL_VISUAL                = 0x2C4B,
     SMSG_GAME_OBJECT_PLAY_SPELL_VISUAL_KIT            = 0x2C4A,
     SMSG_GAME_OBJECT_RESET_STATE                      = 0x275D,
-    SMSG_GAME_OBJECT_SET_STATE                        = 0x2841,
+    SMSG_GAME_OBJECT_SET_STATE_LOCAL                  = 0x2841,
     SMSG_GAME_OBJECT_UI_LINK                          = 0x275A,
     SMSG_GAME_SPEED_SET                               = 0x26AA,
     SMSG_GAME_TIME_SET                                = 0x274B,
