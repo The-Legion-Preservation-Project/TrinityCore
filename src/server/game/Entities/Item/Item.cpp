@@ -29,6 +29,7 @@
 #include "ItemEnchantmentMgr.h"
 #include "ItemPackets.h"
 #include "Log.h"
+#include "Loot.h"
 #include "LootItemStorage.h"
 #include "LootMgr.h"
 #include "Map.h"
@@ -673,7 +674,7 @@ void Item::SaveToDB(CharacterDatabaseTransaction trans)
                 CharacterDatabase.CommitTransaction(trans);
 
             // Delete the items if this is a container
-            if (!loot.isLooted())
+            if (m_loot && !m_loot->isLooted())
                 sLootItemStorage->RemoveStoredLootForContainer(GetGUID().GetCounter());
 
             delete this;
@@ -989,7 +990,7 @@ void Item::DeleteFromDB(CharacterDatabaseTransaction trans)
     DeleteFromDB(trans, GetGUID().GetCounter());
 
     // Delete the items if this is a container
-    if (!loot.isLooted())
+    if (m_loot && !m_loot->isLooted())
         sLootItemStorage->RemoveStoredLootForContainer(GetGUID().GetCounter());
 }
 
