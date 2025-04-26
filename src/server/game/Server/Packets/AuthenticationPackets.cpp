@@ -264,7 +264,7 @@ uint8 const WherePacketHmac[] =
 bool WorldPackets::Auth::ConnectTo::InitializeEncryption()
 {
     std::unique_ptr<Trinity::Crypto::LegacyRSA> rsa = std::make_unique<Trinity::Crypto::LegacyRSA>();
-    if (!rsa->LoadFromString(RSAPrivateKey, Trinity::Crypto::LegacyRSA::PrivateKey{}))
+    if (!rsa->LoadFromString(RSAPrivateKey))
         return false;
 
     ConnectToRSA = std::move(rsa);
@@ -318,7 +318,6 @@ WorldPacket const* WorldPackets::Auth::ConnectTo::Write()
 
     ConnectToRSA->Encrypt(payload.contents(), payload.size(),
         _worldPacket.contents() + encryptedPayloadPos,
-        Trinity::Crypto::LegacyRSA::PrivateKey{},
         Trinity::Crypto::LegacyRSA::NoPadding{});
 
     return &_worldPacket;

@@ -65,7 +65,7 @@ namespace Connection_Patcher
 
             std::cout << "patching BNet certificate file signature\n";
             Trinity::Crypto::LegacyRSA rsa;
-            rsa.LoadFromString(Patches::Common::CertificatePrivateKey(), Trinity::Crypto::LegacyRSA::PrivateKey{});
+            rsa.LoadFromString(Patches::Common::CertificatePrivateKey());
             std::vector<uint8> modulusArray = rsa.GetModulus().ToByteVector(256, true);
             patcher->Patch(modulusArray, Patterns::Common::CertSignatureModulus());
 
@@ -108,7 +108,7 @@ namespace Connection_Patcher
             std::array<uint8, 256> signature;
 
             Trinity::Crypto::LegacyRSA rsa;
-            rsa.LoadFromString(Patches::Common::CertificatePrivateKey(), Trinity::Crypto::LegacyRSA::PrivateKey{});
+            rsa.LoadFromString(Patches::Common::CertificatePrivateKey());
             auto digest = signatureHash.GetDigest();
             rsa.Sign(digest.data(), digest.size(), signature.data(), Trinity::Crypto::LegacyRSA::SHA256{});
 

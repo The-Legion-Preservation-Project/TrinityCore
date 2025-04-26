@@ -19,9 +19,6 @@ public:
     LegacyRSA(LegacyRSA const& rsa) = delete;
     LegacyRSA& operator=(LegacyRSA const& rsa) = delete;
 
-    struct PublicKey {};
-    struct PrivateKey {};
-
     struct NoPadding : std::integral_constant<int32, RSA_NO_PADDING> {};
     struct PKCS1Padding : std::integral_constant<int32, RSA_PKCS1_PADDING> {};
 
@@ -31,19 +28,17 @@ public:
     LegacyRSA(LegacyRSA&& rsa);
     ~LegacyRSA();
 
-    template <typename KeyTag>
-    bool LoadFromFile(std::string const& fileName, KeyTag);
+    bool LoadFromFile(std::string const& fileName);
 
-    template <typename KeyTag>
-    bool LoadFromString(std::string const& keyPem, KeyTag);
+    bool LoadFromString(std::string const& keyPem);
 
     uint32 GetOutputSize() const { return uint32(RSA_size(_rsa)); }
     BigNumber GetModulus() const;
 
-    template <typename KeyTag, typename PaddingTag>
-    bool Encrypt(uint8 const* data, std::size_t dataLength, uint8* output, KeyTag, PaddingTag)
+    template <typename PaddingTag>
+    bool Encrypt(uint8 const* data, std::size_t dataLength, uint8* output, PaddingTag)
     {
-        return Encrypt<KeyTag>(data, dataLength, output, PaddingTag::value);
+        return Encrypt(data, dataLength, output, PaddingTag::value);
     }
 
     template <typename HashTag>
@@ -53,7 +48,6 @@ public:
     }
 
 private:
-    template <typename KeyTag>
     bool Encrypt(uint8 const* data, std::size_t dataLength, uint8* output, int32 paddingType);
 
     bool Sign(int32 hashType, uint8 const* dataHash, std::size_t dataHashLength, uint8* output);
