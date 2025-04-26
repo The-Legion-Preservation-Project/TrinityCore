@@ -9526,8 +9526,8 @@ void ObjectMgr::LoadGossipMenuItems()
     _gossipMenuItemsStore.clear();
 
     QueryResult result = WorldDatabase.Query(
-        //      0       1         2           3           4                      5             6              7             8        9        10        11
-        "SELECT MenuID, OptionID, OptionNpc, OptionText, OptionBroadcastTextID, OptionNpcFlag, ActionMenuID, ActionPoiID, BoxCoded, BoxMoney, BoxText, BoxBroadcastTextID "
+        //      0       1         2          3           4                      6             7            8         9         10       11
+        "SELECT MenuID, OptionID, OptionNpc, OptionText, OptionBroadcastTextID, ActionMenuID, ActionPoiID, BoxCoded, BoxMoney, BoxText, BoxBroadcastTextID "
         "FROM gossip_menu_option ORDER BY MenuID, OptionID");
 
     if (!result)
@@ -9547,13 +9547,12 @@ void ObjectMgr::LoadGossipMenuItems()
         gMenuItem.OptionNpc             = GossipOptionNpc(fields[2].GetUInt8());
         gMenuItem.OptionText            = fields[3].GetString();
         gMenuItem.OptionBroadcastTextID = fields[4].GetUInt32();
-        gMenuItem.OptionNpcFlag         = fields[6].GetUInt64();
-        gMenuItem.ActionMenuID          = fields[7].GetUInt32();
-        gMenuItem.ActionPoiID           = fields[8].GetUInt32();
-        gMenuItem.BoxCoded              = fields[9].GetBool();
-        gMenuItem.BoxMoney              = fields[10].GetUInt32();
-        gMenuItem.BoxText               = fields[11].GetString();
-        gMenuItem.BoxBroadcastTextID    = fields[12].GetUInt32();
+        gMenuItem.ActionMenuID          = fields[5].GetUInt32();
+        gMenuItem.ActionPoiID           = fields[6].GetUInt32();
+        gMenuItem.BoxCoded              = fields[7].GetBool();
+        gMenuItem.BoxMoney              = fields[8].GetUInt32();
+        gMenuItem.BoxText               = fields[9].GetString();
+        gMenuItem.BoxBroadcastTextID    = fields[10].GetUInt32();
 
         if (gMenuItem.OptionNpc >= GossipOptionNpc::Count)
         {

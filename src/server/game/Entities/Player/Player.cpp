@@ -13382,12 +13382,9 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId, bool showQues
 
     Trinity::IteratorPair menuItemBounds = sObjectMgr->GetGossipMenuItemsMapBounds(menuId);
 
-    uint64 npcflags = 0;
-
     if (source->GetTypeId() == TYPEID_UNIT)
     {
-        npcflags = source->GetUInt64Value(UNIT_NPC_FLAGS);
-        if (showQuests && npcflags & UNIT_NPC_FLAG_QUESTGIVER)
+        if (showQuests && source->ToUnit()->IsQuestGiver())
             PrepareQuestMenu(source->GetGUID());
     }
     else if (source->GetTypeId() == TYPEID_GAMEOBJECT)
@@ -13402,9 +13399,6 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId, bool showQues
         bool canTalk = true;
         if (Creature* creature = source->ToCreature())
         {
-            if (!(gossipMenuItem.OptionNpcFlag & npcflags))
-                continue;
-
             switch (gossipMenuItem.OptionNpc)
             {
                 case GossipOptionNpc::TaxiNode:
