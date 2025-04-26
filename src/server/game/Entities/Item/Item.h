@@ -92,7 +92,7 @@ struct BonusData
     uint16 GemRelicRankBonus[MAX_ITEM_PROTO_SOCKETS];
     int32 RelicType;
     int32 RequiredLevelOverride;
-    bool HasItemLevelBonus;
+    bool CanDisenchant;
     uint32 Suffix;
     std::array<ItemEffectEntry const*, 13> Effects;
     std::size_t EffectCount;

@@ -2227,6 +2227,9 @@ int32 Item::GetItemStatValue(uint32 index, Player const* owner) const
 
 ItemDisenchantLootEntry const* Item::GetDisenchantLoot(Player const* owner) const
 {
+    if (!_bonusData.CanDisenchant)
+        return nullptr;
+
     return Item::GetDisenchantLoot(GetTemplate(), GetQuality(), GetItemLevel(owner));
 }
 
@@ -2635,9 +2638,9 @@ void BonusData::Initialize(ItemTemplate const* proto)
     ScalingStatDistribution = proto->GetScalingStatDistribution();
     SandboxScalingId = 0;
     RelicType = -1;
-    HasItemLevelBonus = false;
     HasFixedLevel = false;
     RequiredLevelOverride = 0;
+    CanDisenchant = !proto->HasFlag(ITEM_FLAG_NO_DISENCHANT);
 
     Suffix = 0;
 
@@ -2680,7 +2683,6 @@ void BonusData::AddBonus(uint32 type, std::array<int32, 3> const& values)
     {
         case ITEM_BONUS_ITEM_LEVEL:
             ItemLevelBonus += values[0];
-            HasItemLevelBonus = true;
             break;
         case ITEM_BONUS_STAT:
         {

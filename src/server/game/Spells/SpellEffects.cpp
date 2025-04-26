@@ -46,6 +46,7 @@
 #include "Item.h"
 #include "Language.h"
 #include "Log.h"
+#include "Loot.h"
 #include "LootMgr.h"
 #include "Map.h"
 #include "MiscPackets.h"

@@ -217,7 +217,7 @@ namespace WorldPackets
 
             ObjectGuid LootObj;
             int32 MapID = 0;
-            uint32 RollTime = 0;
+            Duration<Milliseconds, uint32> RollTime;
             uint8 Method = 0;
             uint8 ValidRolls = 0;
             LootItemData Item;
@@ -282,7 +282,7 @@ namespace WorldPackets
 
             WorldPacket const* Write() override;
 
-            std::vector<ObjectGuid> Players;
+            GuidUnorderedSet Players;
             ObjectGuid LootObj;
         };
 
@@ -293,7 +293,7 @@ namespace WorldPackets
 
             WorldPacket const* Write() override;
 
-            uint32 Count;
+            uint32 Count = 0;
         };
 
         class AELootTargetsAck final : public ServerPacket
