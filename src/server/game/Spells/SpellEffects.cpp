@@ -1509,6 +1509,7 @@ void Spell::SendLoot(ObjectGuid guid, LootType loottype)
                 return;
 
             case GAMEOBJECT_TYPE_CHEST:
+            {
                 if (Battleground* bg = player->GetBattleground())
                 {
                     if (!bg->CanActivateGO(gameObjTarget->GetEntry(), bg->GetPlayerTeam(player->GetGUID())))
@@ -1518,6 +1519,7 @@ void Spell::SendLoot(ObjectGuid guid, LootType loottype)
                     }
                 }
 
+                Loot* loot = nullptr;
                 if (gameObjTarget->getLootState() == GO_READY)
                 {
                     if (uint32 lootId = gameObjTarget->GetGOInfo()->GetLootId())
@@ -1527,7 +1529,7 @@ void Spell::SendLoot(ObjectGuid guid, LootType loottype)
                         Group const* group = player->GetGroup();
                         bool groupRules = group && gameObjTarget->GetGOInfo()->chest.usegrouplootrules;
 
-                        Loot* loot = new Loot(gameObjTarget->GetMap(), guid, loottype, groupRules ? group : nullptr);
+                        loot = new Loot(gameObjTarget->GetMap(), guid, loottype, groupRules ? group : nullptr);
                         gameObjTarget->m_loot.reset(loot);
 
                         loot->FillLoot(lootId, LootTemplates_Gameobject, player, !groupRules, false, gameObjTarget->GetLootMode(), gameObjTarget->GetMap()->GetDifficultyLootItemContext());
@@ -1550,16 +1552,18 @@ void Spell::SendLoot(ObjectGuid guid, LootType loottype)
 
                     gameObjTarget->SetLootState(GO_ACTIVATED, player);
                 }
+                else
+                    loot = gameObjTarget->GetLootForPlayer(player);
 
-                // Don't return, let loots been taken
+                // Send loot
+                if (loot)
+                    player->SendLoot(*loot);
                 break;
+            }
             default:
                 break;
         }
     }
-
-    // Send loot
-    player->SendLoot(guid, loottype);
 }
 
 void Spell::EffectOpenLock()
@@ -2243,7 +2247,7 @@ void Spell::EffectPickPocket()
         return;
     }
 
-    player->SendLoot(unitTarget->GetGUID(), LOOT_PICKPOCKETING);
+    player->SendLoot(*creature->m_loot);
 }
 
 void Spell::EffectAddFarsight()
@@ -3443,7 +3447,7 @@ void Spell::EffectDisEnchant()
         caster->UpdateCraftSkill(m_spellInfo);
         itemTarget->m_loot.reset(new Loot(caster->GetMap(), itemTarget->GetGUID(), LOOT_DISENCHANTING, nullptr));
         itemTarget->m_loot->FillLoot(ASSERT_NOTNULL(itemTarget->GetDisenchantLoot(caster))->ID, LootTemplates_Disenchant, caster, true);
-        caster->SendLoot(itemTarget->GetGUID(), LOOT_DISENCHANTING);
+        caster->SendLoot(*itemTarget->m_loot);
     }
 
     // item will be removed at disenchanting end
@@ -3819,7 +3823,7 @@ void Spell::EffectSkinning()
     creature->m_loot.reset(new Loot(creature->GetMap(), creature->GetGUID(), LOOT_SKINNING, nullptr));
     creature->m_loot->FillLoot(creature->GetCreatureTemplate()->SkinLootId, LootTemplates_Skinning, player, true);
     creature->SetLootRecipient(player, false);
-    player->SendLoot(creature->GetGUID(), LOOT_SKINNING);
+    player->SendLoot(*creature->m_loot);
 
     int32 reqValue = targetLevel < 10 ? 0 : targetLevel < 20 ? (targetLevel-10)*10 : targetLevel*5;
 
@@ -4491,7 +4495,7 @@ void Spell::EffectProspecting()
 
     itemTarget->m_loot.reset(new Loot(player->GetMap(), itemTarget->GetGUID(), LOOT_PROSPECTING, nullptr));
     itemTarget->m_loot->FillLoot(itemTarget->GetEntry(), LootTemplates_Prospecting, player, true);
-    player->SendLoot(itemTarget->GetGUID(), LOOT_PROSPECTING);
+    player->SendLoot(*itemTarget->m_loot);
 }
 
 void Spell::EffectMilling()
@@ -4518,7 +4522,7 @@ void Spell::EffectMilling()
 
     itemTarget->m_loot.reset(new Loot(player->GetMap(), itemTarget->GetGUID(), LOOT_MILLING, nullptr));
     itemTarget->m_loot->FillLoot(itemTarget->GetEntry(), LootTemplates_Milling, player, true);
-    player->SendLoot(itemTarget->GetGUID(), LOOT_MILLING);
+    player->SendLoot(*itemTarget->m_loot);
 }
 
 void Spell::EffectSkill()
