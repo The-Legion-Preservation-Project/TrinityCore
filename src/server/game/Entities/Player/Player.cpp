@@ -1680,9 +1680,7 @@ void Player::RemoveFromWorld()
         StopCastingBindSight();
         UnsummonPetTemporaryIfAny();
         ClearComboPoints();
-        ObjectGuid lootGuid = GetLootGUID();
-        if (!lootGuid.IsEmpty())
-            m_session->DoLootRelease(lootGuid);
+        m_session->DoLootReleaseAll();
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
         sBattlefieldMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
     }
@@ -12738,7 +12736,7 @@ void Player::SwapItem(uint16 src, uint16 dst)
 
     // if player is moving bags and is looting an item inside this bag
     // release the loot
-    if (!GetLootGUID().IsEmpty())
+    if (!GetAELootView().empty())
     {
         bool released = false;
         if (IsBagPos(src))
@@ -12748,9 +12746,9 @@ void Player::SwapItem(uint16 src, uint16 dst)
             {
                 if (Item* bagItem = bag->GetItemByPos(i))
                 {
-                    if (bagItem->GetGUID() == GetLootGUID())
+                    if (HasLootWorldObjectGUID(bagItem->GetGUID()))
                     {
-                        m_session->DoLootRelease(GetLootGUID());
+                        m_session->DoLootReleaseAll();
                         released = true;                    // so we don't need to look at dstBag
                         break;
                     }
@@ -12765,9 +12763,9 @@ void Player::SwapItem(uint16 src, uint16 dst)
             {
                 if (Item* bagItem = bag->GetItemByPos(i))
                 {
-                    if (bagItem->GetGUID() == GetLootGUID())
+                    if (HasLootWorldObjectGUID(bagItem->GetGUID()))
                     {
-                        m_session->DoLootRelease(GetLootGUID());
+                        m_session->DoLootReleaseAll();
                         break;
                     }
                 }

@@ -341,7 +341,8 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
     player->SendLootRelease(lguid);
     player->RemoveAELootedWorldObject(lguid);
 
-    player->RemoveUnitFlag(UNIT_FLAG_LOOTING);
+    if (player->GetAELootView().empty())
+        player->RemoveUnitFlag(UNIT_FLAG_LOOTING);
 
     if (!player->IsInWorld())
         return;
