@@ -593,7 +593,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPackets::AreaTrigger::AreaTrigge
                     reviveAtTrigger = true;
                     break;
                 case Map::CANNOT_ENTER_CORPSE_IN_DIFFERENT_INSTANCE:
-                    player->GetSession()->SendPacket(WorldPackets::AreaTrigger::AreaTriggerNoCorpse().Write());
+                    SendPacket(WorldPackets::AreaTrigger::AreaTriggerNoCorpse().Write());
                     TC_LOG_DEBUG("maps", "MAP: Player '%s' does not have a corpse in instance map %d and cannot enter", player->GetName().c_str(), at->target_mapId);
                     break;
                 case Map::CANNOT_ENTER_INSTANCE_BIND_MISMATCH:
@@ -617,6 +617,11 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPackets::AreaTrigger::AreaTrigge
                     break;
                 case Map::CANNOT_ENTER_ZONE_IN_COMBAT:
                     player->SendTransferAborted(at->target_mapId, TRANSFER_ABORT_ZONE_IN_COMBAT);
+                    reviveAtTrigger = true;
+                    break;
+                case Map::CANNOT_ENTER_INSTANCE_SHUTTING_DOWN:
+                    player->SendTransferAborted(at->target_mapId, TRANSFER_ABORT_NOT_FOUND);
+                    TC_LOG_DEBUG("maps", "MAP: Player '%s' cannot enter instance map %d because instance is resetting.", player->GetName().c_str(), at->target_mapId);
                     reviveAtTrigger = true;
                     break;
                 default:
@@ -878,13 +883,22 @@ void WorldSession::HandleSetTitleOpcode(WorldPackets::Character::SetTitle& packe
 
 void WorldSession::HandleResetInstancesOpcode(WorldPackets::Instance::ResetInstances& /*packet*/)
 {
+    Map* map = _player->FindMap();
+    if (map && map->Instanceable())
+        return;
+
     if (Group* group = _player->GetGroup())
     {
-        if (group->IsLeader(_player->GetGUID()))
-            group->ResetInstances(INSTANCE_RESET_ALL, false, false, _player);
+        if (!group->IsLeader(_player->GetGUID()))
+            return;
+
+        if (group->isLFGGroup())
+            return;
+
+        group->ResetInstances(InstanceResetMethod::Manual, _player);
     }
     else
-        _player->ResetInstances(INSTANCE_RESET_ALL, false, false);
+        _player->ResetInstances(InstanceResetMethod::Manual);
 }
 
 void WorldSession::HandleSetDungeonDifficultyOpcode(WorldPackets::Misc::SetDungeonDifficulty& setDungeonDifficulty)
@@ -917,7 +931,7 @@ void WorldSession::HandleSetDungeonDifficultyOpcode(WorldPackets::Misc::SetDunge
 
     // cannot reset while in an instance
     Map* map = _player->FindMap();
-    if (map && map->IsDungeon())
+    if (map && map->Instanceable())
     {
         TC_LOG_DEBUG("network", "WorldSession::HandleSetDungeonDifficultyOpcode: player (Name: %s, %s) tried to reset the instance while player is inside!",
             _player->GetName().c_str(), _player->GetGUID().ToString().c_str());
@@ -927,33 +941,19 @@ void WorldSession::HandleSetDungeonDifficultyOpcode(WorldPackets::Misc::SetDunge
     Group* group = _player->GetGroup();
     if (group)
     {
-        if (group->IsLeader(_player->GetGUID()))
-        {
-            for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
-            {
-                Player* groupGuy = itr->GetSource();
-                if (!groupGuy)
-                    continue;
+        if (!group->IsLeader(_player->GetGUID()))
+            return;
 
-                if (!groupGuy->IsInWorld())
-                    return;
+        if (group->isLFGGroup())
+            return;
 
-                if (groupGuy->GetMap()->IsNonRaidDungeon())
-                {
-                    TC_LOG_DEBUG("network", "WorldSession::HandleSetDungeonDifficultyOpcode: player %s tried to reset the instance while group member (Name: %s, %s) is inside!",
-                        _player->GetGUID().ToString().c_str(), groupGuy->GetName().c_str(), groupGuy->GetGUID().ToString().c_str());
-                    return;
-                }
-            }
-            // the difficulty is set even if the instances can't be reset
-            //_player->SendDungeonDifficulty(true);
-            group->ResetInstances(INSTANCE_RESET_CHANGE_DIFFICULTY, false, false, _player);
-            group->SetDungeonDifficultyID(difficultyID);
-        }
+        // the difficulty is set even if the instances can't be reset
+        group->ResetInstances(InstanceResetMethod::OnChangeDifficulty, _player);
+        group->SetDungeonDifficultyID(difficultyID);
     }
     else
     {
-        _player->ResetInstances(INSTANCE_RESET_CHANGE_DIFFICULTY, false, false);
+        _player->ResetInstances(InstanceResetMethod::OnChangeDifficulty);
         _player->SetDungeonDifficultyID(difficultyID);
         _player->SendDungeonDifficulty();
     }
@@ -983,7 +983,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPackets::Misc::SetRaidDiff
         return;
     }
 
-    if (((difficultyEntry->Flags & DIFFICULTY_FLAG_LEGACY) >> 5) != setRaidDifficulty.Legacy)
+    if (((difficultyEntry->Flags & DIFFICULTY_FLAG_LEGACY) != 0) != setRaidDifficulty.Legacy)
     {
         TC_LOG_DEBUG("network", "WorldSession::HandleSetDungeonDifficultyOpcode: %s sent not matching legacy difficulty %u!",
             _player->GetGUID().ToString().c_str(), difficultyEntry->ID);
@@ -996,7 +996,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPackets::Misc::SetRaidDiff
 
     // cannot reset while in an instance
     Map* map = _player->FindMap();
-    if (map && map->IsDungeon())
+    if (map && map->Instanceable())
     {
         TC_LOG_DEBUG("network", "WorldSession::HandleSetRaidDifficultyOpcode: player (Name: %s, %s) tried to reset the instance while player is inside!",
             _player->GetName().c_str(), _player->GetGUID().ToString().c_str());
@@ -1006,35 +1006,22 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPackets::Misc::SetRaidDiff
     Group* group = _player->GetGroup();
     if (group)
     {
-        if (group->IsLeader(_player->GetGUID()))
-        {
-            for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
-            {
-                Player* groupGuy = itr->GetSource();
-                if (!groupGuy)
-                    continue;
+        if (!group->IsLeader(_player->GetGUID()))
+            return;
 
-                if (!groupGuy->IsInWorld())
-                    return;
+        if (group->isLFGGroup())
+            return;
 
-                if (groupGuy->GetMap()->IsRaid())
-                {
-                    TC_LOG_DEBUG("network", "WorldSession::HandleSetRaidDifficultyOpcode: player %s tried to reset the instance while group member (Name: %s, %s) is inside!",
-                        _player->GetGUID().ToString().c_str(), groupGuy->GetName().c_str(), groupGuy->GetGUID().ToString().c_str());
-                    return;
-                }
-            }
-            // the difficulty is set even if the instances can't be reset
-            group->ResetInstances(INSTANCE_RESET_CHANGE_DIFFICULTY, true, setRaidDifficulty.Legacy != 0, _player);
-            if (setRaidDifficulty.Legacy)
-                group->SetLegacyRaidDifficultyID(difficultyID);
-            else
-                group->SetRaidDifficultyID(difficultyID);
-        }
+        // the difficulty is set even if the instances can't be reset
+        group->ResetInstances(InstanceResetMethod::OnChangeDifficulty, _player);
+        if (setRaidDifficulty.Legacy)
+            group->SetLegacyRaidDifficultyID(difficultyID);
+        else
+            group->SetRaidDifficultyID(difficultyID);
     }
     else
     {
-        _player->ResetInstances(INSTANCE_RESET_CHANGE_DIFFICULTY, true, setRaidDifficulty.Legacy != 0);
+        _player->ResetInstances(InstanceResetMethod::OnChangeDifficulty);
         if (setRaidDifficulty.Legacy)
             _player->SetLegacyRaidDifficultyID(difficultyID);
         else
