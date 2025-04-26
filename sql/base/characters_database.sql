@@ -435,11 +435,11 @@ DROP TABLE IF EXISTS `character_action`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `character_action` (
-  `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `spec` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `button` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `action` int(10) unsigned NOT NULL DEFAULT '0',
-  `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `guid` bigint unsigned NOT NULL DEFAULT '0',
+  `spec` tinyint unsigned NOT NULL DEFAULT '0',
+  `button` tinyint unsigned NOT NULL DEFAULT '0',
+  `action` bigint unsigned NOT NULL DEFAULT '0',
+  `type` tinyint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`spec`,`button`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -3382,7 +3382,8 @@ INSERT INTO `updates` VALUES ('2014_10_20_00_characters.sql','A5882DA0979CF4DAE3
 ('2022_02_28_00_characters_2020_09_27_00_characters.sql','2292A1ED0E7F46DEC41384F75FA6D9461464EEB8','RELEASED','2022-02-28 12:43:58',0),
 ('2022_03_11_00_characters_2021_07_18_00_characters.sql','0BA579ED21F4E75AC2B4797421B5029568B3F6E2','RELEASED','2022-03-11 18:56:07',0),
 ('2022_07_03_00_characters.sql','D3F04078C0846BCF7C8330AC20C39B8C3AEE7002','RELEASED','2022-07-03 23:37:24',0),
-('2022_07_14_00_characters.sql','2EAD57D77FC39F6678F2D2A7D9C24046E6B836D8','RELEASED','2022-07-14 21:44:35',0);
+('2022_07_14_00_characters.sql','2EAD57D77FC39F6678F2D2A7D9C24046E6B836D8','RELEASED','2022-07-14 21:44:35',0),
+('2022_09_18_00_characters.sql','A7DF0C1F0E074F3E63A6CDD0AF873A1F3DC33B29','RELEASED','2022-09-18 21:48:42',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
