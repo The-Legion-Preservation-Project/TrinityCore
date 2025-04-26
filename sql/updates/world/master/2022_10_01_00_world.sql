@@ -79,9 +79,9 @@ DELETE FROM `creature_addon` WHERE `guid`=@CGUID+4;
 INSERT INTO `creature_addon` (`guid`, `path_id`, `mount`, `MountCreatureID`, `bytes1`, `bytes2`, `emote`, `aiAnimKit`, `movementAnimKit`, `meleeAnimKit`, `visibilityDistanceType`, `auras`) VALUES 
 (@CGUID+4, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, '83231');
 
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44365);
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(44365, 0, 0, 0, 7, 45338);
+# DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44365);
+# INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
+# (44365, 0, 0, 0, 7, 45338);
 
 DELETE FROM `gossip_menu` WHERE `MenuID`=11823 AND `TextID`=16575;
 INSERT INTO `gossip_menu` (`MenuID`, `TextID`, `VerifiedBuild`) VALUES 
@@ -110,18 +110,18 @@ INSERT INTO `creature_addon` (`guid`, `path_id`, `mount`, `MountCreatureID`, `by
 (322163, 0, 0, 0, 50397184, 1, 0, 0, 0, 0, 3, '83988');
 
 -- Arthura
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44610);
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(44610, 0, 0, 0, 7, 45338);
+# DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44610);
+# INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
+# (44610, 0, 0, 0, 7, 45338);
 
 DELETE FROM `creature_addon` WHERE `guid`=@CGUID+5;
 INSERT INTO `creature_addon` (`guid`, `path_id`, `mount`, `MountCreatureID`, `bytes1`, `bytes2`, `emote`, `aiAnimKit`, `movementAnimKit`, `meleeAnimKit`, `visibilityDistanceType`, `auras`) VALUES 
 (@CGUID+5, 0, 0, 0, 50397184, 1, 0, 0, 0, 0, 3, '83231');
 
 -- Daschla
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44609);
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(44609, 0, 0, 0, 7, 45338);
+# DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44609);
+# INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
+# (44609, 0, 0, 0, 7, 45338);
 
 DELETE FROM `creature_addon` WHERE `guid`=@CGUID+6;
 INSERT INTO `creature_addon` (`guid`, `path_id`, `mount`, `MountCreatureID`, `bytes1`, `bytes2`, `emote`, `aiAnimKit`, `movementAnimKit`, `meleeAnimKit`, `visibilityDistanceType`, `auras`) VALUES 
@@ -130,9 +130,9 @@ INSERT INTO `creature_addon` (`guid`, `path_id`, `mount`, `MountCreatureID`, `by
 -- High Warlord Cromush 
 UPDATE `creature_template` SET `minlevel`=30, `maxlevel`=30, `unit_flags2`=2099200 WHERE `entry`=44640; -- High Warlord Cromush
 
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44640);
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(44640, 0, 0, 0, 7, 45338);
+# DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44640);
+# INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
+# (44640, 0, 0, 0, 7, 45338);
 
 SET @PATH := (@CGUID+12) * 10;
 DELETE FROM `waypoint_data` WHERE `id` = @PATH;
@@ -229,9 +229,9 @@ INSERT INTO `gossip_menu` (`MenuID`, `TextID`, `VerifiedBuild`) VALUES
 (11892, 16683, 45338);
 
 DELETE FROM `gossip_menu_option` WHERE `MenuID`=11892 AND `OptionID` IN (0, 1);
-INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionNpc`, `OptionText`, `OptionBroadcastTextID`, `OptionNpcFlag`, `Language`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES 
-(11892, 0, 0, 'I need to take a bat to the Dawning Isles.', 44905, 0, 0, 0, 0, 0, 0, NULL, 0, 45338),
-(11892, 1, 0, 'Show me where I can fly.', 12271, 0, 0, 0, 0, 0, 0, NULL, 0, 45338);
+INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionNpc`, `OptionText`, `OptionBroadcastTextID`, `OptionNpcFlag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
+(11892, 0, 0, 'I need to take a bat to the Dawning Isles.', 44905, 0, 0, 0, 0, 0, NULL, 0, 45338),
+(11892, 1, 0, 'Show me where I can fly.', 12271, 0, 0, 0, 0, 0, NULL, 0, 45338);
 
 DELETE FROM `creature_text` WHERE `CreatureID`=44825 AND `GroupID`=0 AND `ID`=0;
 INSERT INTO `creature_text` (`CreatureID`, `GroupID`, `ID`, `Text`, `Type`, `Language`, `Probability`, `Emote`, `Duration`, `Sound`, `SoundPlayType`, `BroadcastTextId`, `TextRange`, `comment`) VALUES 
@@ -337,9 +337,9 @@ DELETE FROM `creature_template_addon` WHERE `entry` =44789;
 INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `MountCreatureID`, `bytes1`, `bytes2`, `emote`, `aiAnimKit`, `movementAnimKit`, `meleeAnimKit`, `visibilityDistanceType`, `auras`) VALUES 
 (44789, 0, 0, 0, 65544, 1, 0, 0, 0, 0, 0, '83231');
 
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44789);
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(44789, 0, 0, 0, 7, 45338);
+# DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44789);
+# INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
+# (44789, 0, 0, 0, 7, 45338);
 
 -- Deathstalker
 UPDATE `creature_template` SET `minlevel`=30, `maxlevel`=30, `ScriptName`='npc_silverpine_deathstalker' WHERE `entry`=44790; -- Deathstalker
@@ -348,9 +348,9 @@ DELETE FROM `creature_template_addon` WHERE `entry` =44790;
 INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `MountCreatureID`, `bytes1`, `bytes2`, `emote`, `aiAnimKit`, `movementAnimKit`, `meleeAnimKit`, `visibilityDistanceType`, `auras`) VALUES 
 (44790, 0, 0, 0, 65544, 1, 0, 0, 0, 0, 0, '83231');
 
-DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44790);
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(44790, 0, 0, 0, 7, 45338);
+# DELETE FROM `creature_template_scaling` WHERE (`DifficultyID`=0 AND `Entry` =44790);
+# INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
+# (44790, 0, 0, 0, 7, 45338);
 
 -- Apothecary Witherbloom
 UPDATE `creature_template` SET `minlevel`=30, `maxlevel`=30 WHERE `entry`=44778; -- Apothecary Witherbloom
