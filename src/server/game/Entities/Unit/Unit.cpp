@@ -13493,10 +13493,10 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* t
 
                 if (creature)
                 {
-                    if (creature->hasLootRecipient() && !creature->isTappedBy(target))
-                        dynamicFlags |= UNIT_DYNFLAG_TAPPED;
+                    if (dynamicFlags & UNIT_DYNFLAG_TAPPED && creature->isTappedBy(target))
+                        dynamicFlags &= ~UNIT_DYNFLAG_TAPPED;
 
-                    if (!target->isAllowedToLoot(creature))
+                    if (dynamicFlags & UNIT_DYNFLAG_LOOTABLE && !target->isAllowedToLoot(creature))
                         dynamicFlags &= ~UNIT_DYNFLAG_LOOTABLE;
 
                     if (dynamicFlags & UNIT_DYNFLAG_CAN_SKIN && creature->IsSkinnedBy(target))
