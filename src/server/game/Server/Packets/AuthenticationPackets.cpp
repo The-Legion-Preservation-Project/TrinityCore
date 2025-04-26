@@ -21,7 +21,12 @@
 #include "CryptoHash.h"
 #include "HMAC.h"
 #include "ObjectMgr.h"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include "LegacyRSA.h"
+#pragma GCC diagnostic pop
+
 #include "Util.h"
 
 ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Auth::VirtualRealmNameInfo const& virtualRealmInfo)
