@@ -53,6 +53,7 @@ struct AuctionPosting;
 struct BlackMarketTemplate;
 struct DeclinedName;
 struct ItemTemplate;
+struct Loot;
 struct MovementInfo;
 struct Petition;
 struct Position;
@@ -1098,7 +1099,7 @@ class TC_GAME_API WorldSession
         void SendNotInArenaTeamPacket(uint8 type);
         void SendPetitionShowList(ObjectGuid guid);
 
-        void DoLootRelease(ObjectGuid lguid);
+        void DoLootRelease(Loot* loot);
         void DoLootReleaseAll();
 
         // Account mute time
