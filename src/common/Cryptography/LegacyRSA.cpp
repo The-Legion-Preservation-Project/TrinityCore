@@ -18,6 +18,9 @@ namespace
     };
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 namespace Trinity::Crypto
 {
 LegacyRSA::LegacyRSA()
@@ -60,6 +63,11 @@ bool LegacyRSA::LoadFromString(std::string const& keyPem)
     return true;
 }
 
+uint32 LegacyRSA::GetOutputSize() const
+{
+    return uint32(RSA_size(_rsa));
+}
+
 BigNumber LegacyRSA::GetModulus() const
 {
     BigNumber bn;
@@ -89,3 +97,5 @@ bool LegacyRSA::Sign(int32 hashType, uint8 const* dataHash, std::size_t dataHash
     return result != -1;
 }
 }
+
+#pragma GCC diagnostic pop

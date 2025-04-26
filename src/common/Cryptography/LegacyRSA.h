@@ -32,7 +32,7 @@ public:
 
     bool LoadFromString(std::string const& keyPem);
 
-    uint32 GetOutputSize() const { return uint32(RSA_size(_rsa)); }
+    uint32 GetOutputSize() const;
     BigNumber GetModulus() const;
 
     template <typename PaddingTag>
