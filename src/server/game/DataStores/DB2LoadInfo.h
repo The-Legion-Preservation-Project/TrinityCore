@@ -1990,6 +1990,24 @@ struct GarrSiteLevelPlotInstLoadInfo
     }
 };
 
+struct GarrTalentTreeLoadInfo
+{
+    static DB2LoadInfo const* Instance()
+    {
+        static constexpr DB2FieldMeta fields[] =
+        {
+            { false, FT_INT, "ID" },
+            { false, FT_SHORT, "UiTextureKitID" },
+            { true, FT_BYTE, "MaxTiers" },
+            { true, FT_BYTE, "UiOrder" },
+            { true, FT_INT, "ClassID" },
+            { true, FT_INT, "GarrTypeID" },
+        };
+        static DB2LoadInfo const loadInfo(&fields[0], std::size(fields), GarrTalentTreeMeta::Instance(), HOTFIX_SEL_GARR_TALENT_TREE);
+        return &loadInfo;
+    }
+};
+
 struct GemPropertiesLoadInfo
 {
     static DB2LoadInfo const* Instance()

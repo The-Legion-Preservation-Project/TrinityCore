@@ -751,6 +751,11 @@ struct GossipMenuItems
     ConditionContainer  Conditions;
 };
 
+struct GossipMenuItemAddon
+{
+    Optional<int32> GarrTalentTreeID;
+};
+
 struct GossipMenus
 {
     uint32              MenuID;
@@ -768,6 +773,7 @@ typedef std::pair<GossipMenusContainer::const_iterator, GossipMenusContainer::co
 typedef std::pair<GossipMenusContainer::iterator, GossipMenusContainer::iterator> GossipMenusMapBoundsNonConst;
 typedef std::multimap<uint32, GossipMenuItems> GossipMenuItemsContainer;
 typedef std::unordered_map<uint32, GossipMenuAddon> GossipMenuAddonContainer;
+typedef std::unordered_map<std::pair<uint32, uint32>, GossipMenuItemAddon> GossipMenuItemAddonContainer;
 
 struct QuestPOIBlobPoint
 {
@@ -1331,7 +1337,8 @@ class TC_GAME_API ObjectMgr
 
         void LoadGossipMenu();
         void LoadGossipMenuItems();
-        void LoadGossipMenuFriendshipFactions();
+        void LoadGossipMenuAddon();
+        void LoadGossipMenuItemAddon();
 
         void LoadVendors();
         void LoadTrainers();
@@ -1634,6 +1641,13 @@ class TC_GAME_API ObjectMgr
                 return &itr->second;
             return nullptr;
         }
+        GossipMenuItemAddon const* GetGossipMenuItemAddon(uint32 menuId, uint32 optionId) const
+        {
+            auto itr = _gossipMenuItemAddonStore.find({ menuId, optionId });
+            if (itr != _gossipMenuItemAddonStore.end())
+                return &itr->second;
+            return nullptr;
+        }
 
         // for wintergrasp only
         GraveyardContainer GraveyardStore;
@@ -1772,6 +1786,7 @@ class TC_GAME_API ObjectMgr
         GossipMenusContainer _gossipMenusStore;
         GossipMenuItemsContainer _gossipMenuItemsStore;
         GossipMenuAddonContainer _gossipMenuAddonStore;
+        GossipMenuItemAddonContainer _gossipMenuItemAddonStore;
         PointOfInterestContainer _pointsOfInterestStore;
 
         QuestPOIContainer _questPOIStore;

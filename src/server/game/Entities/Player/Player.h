@@ -2799,6 +2799,8 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         bool IsInFriendlyArea() const;
         bool IsFriendlyArea(AreaTableEntry const* inArea) const;
 
+        void SendGarrisonOpenTalentNpc(ObjectGuid guid, int32 garrTalentTreeId, int32 friendshipFactionId);
+
         std::string GetDebugInfo() const override;
 
     protected:

@@ -4225,10 +4225,10 @@ struct GarrTalentTreeMeta
         static constexpr DB2MetaField fields[5] =
         {
             { FT_SHORT, 1, false },
-            { FT_BYTE, 1, false },
-            { FT_BYTE, 1, false },
-            { FT_INT, 1, false },
-            { FT_INT, 1, false },
+            { FT_BYTE, 1, true },
+            { FT_BYTE, 1, true },
+            { FT_INT, 1, true },
+            { FT_INT, 1, true },
         };
 
         static constexpr DB2Meta instance(1361030, -1, 5, 0x676CBC04, fields, -1);

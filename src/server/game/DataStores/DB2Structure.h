@@ -1430,6 +1430,16 @@ struct GarrSiteLevelPlotInstEntry
     uint8 UiMarkerSize;
 };
 
+struct GarrTalentTreeEntry
+{
+    uint32 ID;
+    uint16 UiTextureKitID;
+    int8 MaxTiers;
+    int8 UiOrder;
+    int32 ClassID;
+    int32 GarrTypeID;
+};
+
 struct GemPropertiesEntry
 {
     uint32 ID;
