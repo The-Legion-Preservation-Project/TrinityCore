@@ -42,7 +42,6 @@ class BlackMarketEntry;
 class CollectionMgr;
 class Creature;
 class InstanceLock;
-class InstanceSave;
 class Item;
 class LoginQueryHolder;
 class Player;
@@ -1671,8 +1670,6 @@ class TC_GAME_API WorldSession
         void HandleCalendarEventSignup(WorldPackets::Calendar::CalendarEventSignUp& calendarEventSignUp);
 
         void SendCalendarRaidLockoutAdded(InstanceLock const* lock);
-        void SendCalendarRaidLockoutUpdated(InstanceSave const* save);
-        void SendCalendarRaidLockoutRemoved(InstanceSave const* save);
         void SendCalendarRaidLockoutRemoved(InstanceLock const* lock);
         void HandleSetSavedInstanceExtend(WorldPackets::Calendar::SetSavedInstanceExtend& setSavedInstanceExtend);
 
