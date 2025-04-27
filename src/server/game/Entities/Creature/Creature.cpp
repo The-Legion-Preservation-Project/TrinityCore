@@ -251,6 +251,27 @@ WorldPacket CreatureTemplate::BuildQueryData(LocaleConstant loc) const
     return queryTemp.Move();
 }
 
+CreatureLevelScaling const* CreatureTemplate::GetLevelScaling(Difficulty difficulty) const
+{
+    auto it = scalingStore.find(difficulty);
+    if (it != scalingStore.end())
+        return &it->second;
+
+    struct DefaultCreatureLevelScaling : public CreatureLevelScaling
+    {
+        DefaultCreatureLevelScaling()
+        {
+            MinLevel = 0;
+            MaxLevel = 0;
+            DeltaLevelMin = 0;
+            DeltaLevelMax = 0;
+        }
+    };
+
+    static const DefaultCreatureLevelScaling defScaling;
+    return &defScaling;
+}
+
 bool AssistDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
 {
     if (Unit* victim = ObjectAccessor::GetUnit(m_owner, m_victim))
@@ -2855,24 +2876,24 @@ void Creature::AllLootRemovedFromCorpse()
 bool Creature::HasScalableLevels() const
 {
     CreatureTemplate const* cinfo = GetCreatureTemplate();
-    return cinfo->levelScaling.has_value();
+    CreatureLevelScaling const* scaling = cinfo->GetLevelScaling(GetMap()->GetDifficultyID());
+
+    return (scaling->MinLevel != 0 && scaling->MaxLevel != 0);
 }
 
 void Creature::ApplyLevelScaling()
 {
-    if (HasScalableLevels())
-    {
-        CreatureTemplate const* cInfo = GetCreatureTemplate();
+    CreatureTemplate const* cInfo = GetCreatureTemplate();
+    CreatureLevelScaling const* scaling = cInfo->GetLevelScaling(GetMap()->GetDifficultyID());
 
-        SetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MIN, cInfo->levelScaling->MinLevel);
-        SetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MAX, cInfo->levelScaling->MaxLevel);
+    SetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MIN, scaling->MinLevel);
+    SetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MAX, scaling->MaxLevel);
 
-        int8 mindelta = std::min(cInfo->levelScaling->DeltaLevelMax, cInfo->levelScaling->DeltaLevelMin);
-        int8 maxdelta = std::max(cInfo->levelScaling->DeltaLevelMax, cInfo->levelScaling->DeltaLevelMin);
-        int8 delta = mindelta == maxdelta ? mindelta : irand(mindelta, maxdelta);
+    int8 mindelta = std::min(scaling->DeltaLevelMax, scaling->DeltaLevelMin);
+    int8 maxdelta = std::max(scaling->DeltaLevelMax, scaling->DeltaLevelMin);
+    int8 delta = mindelta == maxdelta ? mindelta : irand(mindelta, maxdelta);
 
-        SetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA, delta);
-    }
+    SetInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA, delta);
 }
 
 uint64 Creature::GetMaxHealthByLevel(uint8 level) const

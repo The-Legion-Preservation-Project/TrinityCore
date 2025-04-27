@@ -425,7 +425,7 @@ struct TC_GAME_API CreatureTemplate
     uint32  GossipMenuId;
     int16   minlevel;
     int16   maxlevel;
-    Optional<CreatureLevelScaling> levelScaling;
+    std::unordered_map<Difficulty, CreatureLevelScaling> scalingStore;
     int32   HealthScalingExpansion;
     uint32  RequiredExpansion;
     uint32  VignetteID;                                     /// @todo Read Vignette.db2
@@ -485,6 +485,7 @@ struct TC_GAME_API CreatureTemplate
     CreatureModel const* GetFirstVisibleModel() const;
     std::pair<int16, int16> GetMinMaxLevel() const;
     int32 GetHealthScalingExpansion() const;
+    CreatureLevelScaling const* GetLevelScaling(Difficulty difficulty) const;
 
     // helpers
     SkillType GetRequiredLootSkill() const

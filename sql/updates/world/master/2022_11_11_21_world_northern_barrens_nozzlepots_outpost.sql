@@ -2,7 +2,7 @@ SET @CGUID := 396406;
 SET @OGUID := 246881;
 
 -- Gameobject templates
-UPDATE `gameobject_template` SET `Data6`=0 `VerifiedBuild`=46366 WHERE `entry`=208166; -- Candy Bucket
+UPDATE `gameobject_template` SET `Data6`=0, `VerifiedBuild`=46366 WHERE `entry`=208166; -- Candy Bucket
 
 UPDATE `gameobject_template_addon` SET `faction`=1735 WHERE `entry`=208166; -- Candy Bucket
 
