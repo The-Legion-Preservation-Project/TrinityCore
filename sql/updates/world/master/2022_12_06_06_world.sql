@@ -9,11 +9,11 @@ UPDATE `creature_template` SET `gossip_menu_id`=10569 WHERE `entry`=34786; -- Al
 -- Equipments
 # UPDATE `creature_equip_template` SET `VerifiedBuild`=46741 WHERE (`ID`=1 AND `CreatureID` IN (50484,34786,19882,18951,16221,16192,15970));
 
--- Scaling
-DELETE FROM `creature_template_scaling` WHERE `DifficultyID`=0 AND `Entry` IN (34786, 34787);
-INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
-(34786, 0, 0, 0, 389, 46741),
-(34787, 0, 0, 0, 389, 46741);
+# -- Scaling
+# DELETE FROM `creature_template_scaling` WHERE `DifficultyID`=0 AND `Entry` IN (34786, 34787);
+# INSERT INTO `creature_template_scaling` (`Entry`, `DifficultyID`, `LevelScalingDeltaMin`, `LevelScalingDeltaMax`, `ContentTuningID`, `VerifiedBuild`) VALUES
+# (34786, 0, 0, 0, 389, 46741),
+# (34787, 0, 0, 0, 389, 46741);
 
 # UPDATE `creature_template_scaling` SET `VerifiedBuild`=46741 WHERE (`DifficultyID`=0 AND `Entry` IN (118514,118510,50484,27946,19882,19169,18951,16221,16192,15971,15970,15649,13321));
 

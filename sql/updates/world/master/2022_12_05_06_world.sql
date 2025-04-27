@@ -3,7 +3,7 @@ SET @OGUID := 248521;
 SET @EVENT := 26;
 
 -- Creature templates
-UPDATE `creature_template` SET WHERE `entry`=34783; -- Ranisa Whitebough
+# UPDATE `creature_template` SET WHERE `entry`=34783; -- Ranisa Whitebough
 UPDATE `creature_template` SET `gossip_menu_id`=10569, `npcflag`=81, `unit_flags`=33536 WHERE `entry`=34785; -- Alnar Whitebough
 
 # -- Scaling
