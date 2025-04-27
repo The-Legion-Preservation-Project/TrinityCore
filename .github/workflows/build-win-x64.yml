@@ -48,7 +48,7 @@ jobs:
         path: ${{ env.OPENSSL_ROOT_DIR }}
         key: ${{ steps.openssl-info.outputs.cache-key }}
 
-    - name: Download and install Openssl 3.x
+    - name: Download and install Openssl 1.1.1w
       if: ${{ steps.cache-openssl.outputs.cache-hit != 'true' }}
       run: |
         (New-Object System.Net.WebClient).DownloadFile("${{ steps.openssl-info.outputs.url }}", "${{ env.TEMP }}\openssl.exe")
@@ -84,21 +84,21 @@ jobs:
 
     - name: Copy Dependencies
       run: |
-        cd ${{ steps.strings.outputs.build-output-dir }}/bin/${{ env.CMAKE_BUILD_TYPE }}
+        cd ${{ steps.strings.outputs.build-output-dir }}/bin
         copy "${{ env.MYSQL_ROOT_DIR }}/lib/libmysql.dll" libmysql.dll
         copy "${{ env.OPENSSL_ROOT_DIR }}/bin/libssl-1_1-x64.dll" libssl-1_1-x64.dll
         copy "${{ env.OPENSSL_ROOT_DIR }}/bin/libcrypto-1_1-x64.dll" libcrypto-1_1-x64.dll
 
     - name: Check binaries
       run: |
-        cd ${{ steps.strings.outputs.build-output-dir }}/bin/${{ env.CMAKE_BUILD_TYPE }}
+        cd ${{ steps.strings.outputs.build-output-dir }}/bin
         ./bnetserver --version
         ./worldserver --version
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
-        path: ${{ steps.strings.outputs.build-output-dir }}/bin/${{ env.CMAKE_BUILD_TYPE }}
+        path: ${{ steps.strings.outputs.build-output-dir }}/bin
         name: TrinityCore735Win64VS2022
         # Set a custom retention for artifacts
         #retention-days: 7
