@@ -703,6 +703,33 @@ struct GameObjectTemplate
         }
     }
 
+    uint32 GetConditionID1() const
+    {
+        switch (type)
+        {
+            case GAMEOBJECT_TYPE_DOOR:           return door.conditionID1;
+            case GAMEOBJECT_TYPE_BUTTON:         return button.conditionID1;
+            case GAMEOBJECT_TYPE_QUESTGIVER:     return questgiver.conditionID1;
+            case GAMEOBJECT_TYPE_CHEST:          return chest.conditionID1;
+            case GAMEOBJECT_TYPE_GENERIC:        return generic.conditionID1;
+            case GAMEOBJECT_TYPE_TRAP:           return trap.conditionID1;
+            case GAMEOBJECT_TYPE_CHAIR:          return chair.conditionID1;
+            case GAMEOBJECT_TYPE_SPELL_FOCUS:    return spellFocus.conditionID1;
+            case GAMEOBJECT_TYPE_TEXT:           return text.conditionID1;
+            case GAMEOBJECT_TYPE_GOOBER:         return goober.conditionID1;
+            case GAMEOBJECT_TYPE_CAMERA:         return camera.conditionID1;
+            case GAMEOBJECT_TYPE_RITUAL:         return ritual.conditionID1;
+            case GAMEOBJECT_TYPE_MAILBOX:        return mailbox.conditionID1;
+            case GAMEOBJECT_TYPE_SPELLCASTER:    return spellCaster.conditionID1;
+            case GAMEOBJECT_TYPE_FLAGSTAND:      return flagStand.conditionID1;
+            case GAMEOBJECT_TYPE_AURA_GENERATOR: return auraGenerator.conditionID1;
+            case GAMEOBJECT_TYPE_GUILD_BANK:     return guildbank.conditionID1;
+            case GAMEOBJECT_TYPE_NEW_FLAG:       return newflag.conditionID1;
+            case GAMEOBJECT_TYPE_GATHERING_NODE: return gatheringNode.conditionID1;
+            default: return 0;
+        }
+    }
+
     uint32 GetRequireLOS() const
     {
         switch (type)
@@ -769,6 +796,16 @@ struct GameObjectTemplate
             case GAMEOBJECT_TYPE_GOOBER:     return goober.noDamageImmune;
             case GAMEOBJECT_TYPE_FLAGSTAND:  return flagStand.noDamageImmune;
             case GAMEOBJECT_TYPE_FLAGDROP:   return flagDrop.noDamageImmune;
+            default: return 0;
+        }
+    }
+
+    uint32 GetNotInCombat() const
+    {
+        switch (type)
+        {
+            case GAMEOBJECT_TYPE_CHEST:          return chest.notInCombat;
+            case GAMEOBJECT_TYPE_GATHERING_NODE: return gatheringNode.notInCombat;
             default: return 0;
         }
     }
@@ -845,6 +882,26 @@ struct GameObjectTemplate
             case GAMEOBJECT_TYPE_CHAIR:             return chair.triggeredEvent;
             case GAMEOBJECT_TYPE_CAMERA:            return camera.eventID;
             case GAMEOBJECT_TYPE_GATHERING_NODE:    return gatheringNode.triggeredEvent;
+            default: return 0;
+        }
+    }
+
+    uint32 GetTrivialSkillHigh() const
+    {
+        switch (type)
+        {
+            case GAMEOBJECT_TYPE_CHEST:          return chest.trivialSkillHigh;
+            case GAMEOBJECT_TYPE_GATHERING_NODE: return gatheringNode.trivialSkillHigh;
+            default: return 0;
+        }
+    }
+
+    uint32 GetTrivialSkillLow() const
+    {
+        switch (type)
+        {
+            case GAMEOBJECT_TYPE_CHEST:          return chest.trivialSkillLow;
+            case GAMEOBJECT_TYPE_GATHERING_NODE: return gatheringNode.trivialSkillLow;
             default: return 0;
         }
     }

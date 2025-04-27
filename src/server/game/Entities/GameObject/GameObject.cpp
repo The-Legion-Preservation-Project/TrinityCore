@@ -923,7 +923,7 @@ void GameObject::Update(uint32 diff)
                 else if (needsStateUpdate)
                 {
                     UpdateData udata(GetMapId());
-                    BuildValuesUpdate(UPDATETYPE_HACK_STATE, &udata.GetBuffer(), seer);
+                    BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &udata.GetBuffer(), seer, {GAMEOBJECT_BYTES_1});
                     WorldPacket packet;
                     udata.BuildPacket(&packet);
                     seer->SendDirectMessage(&packet);
@@ -2883,6 +2883,56 @@ void GameObject::Use(Unit* user)
             player->SendDirectMessage(gameObjectUILink.Write());
             return;
         }
+        case GAMEOBJECT_TYPE_GATHERING_NODE:                //50
+        {
+            Player* player = user->ToPlayer();
+            if (!player)
+                return;
+
+            GameObjectTemplate const* info = GetGOInfo();
+            if (!m_personalLoot.count(player->GetGUID()))
+            {
+                if (info->gatheringNode.chestLoot)
+                {
+                    Loot* loot = new Loot(GetMap(), GetGUID(), LOOT_CHEST, nullptr);
+                    m_personalLoot[player->GetGUID()].reset(loot);
+
+                    loot->FillLoot(info->gatheringNode.chestLoot, LootTemplates_Gameobject, player, true, false, GetLootMode(), GetMap()->GetDifficultyLootItemContext());
+                }
+
+                if (info->gatheringNode.triggeredEvent)
+                    GameEvents::Trigger(info->gatheringNode.triggeredEvent, player, this);
+
+                // triggering linked GO
+                if (uint32 trapEntry = info->gatheringNode.linkedTrap)
+                    TriggeringLinkedGameObject(trapEntry, player);
+
+                if (info->gatheringNode.xpDifficulty && info->gatheringNode.xpDifficulty < 10)
+                    if (QuestXPEntry const* questXp = sQuestXPStore.LookupEntry(player->GetLevel()))
+                        if (uint32 xp = Quest::RoundXPValue(questXp->Difficulty[info->gatheringNode.xpDifficulty]))
+                            player->GiveXP(xp, nullptr);
+
+                spellId = info->gatheringNode.spell;
+            }
+
+            if (m_personalLoot.size() >= info->gatheringNode.MaxNumberofLoots)
+            {
+                SetGoState(GO_STATE_ACTIVE);
+                SetDynamicFlag(GO_DYNFLAG_LO_NO_INTERACT);
+            }
+
+            if (getLootState() != GO_ACTIVATED)
+            {
+                SetLootState(GO_ACTIVATED, player);
+                if (info->gatheringNode.ObjectDespawnDelay)
+                    DespawnOrUnsummon(Seconds(info->gatheringNode.ObjectDespawnDelay));
+            }
+
+            // Send loot
+            if (Loot* loot = GetLootForPlayer(player))
+                player->SendLoot(*loot);
+            break;
+        }
         default:
             if (GetGoType() >= MAX_GAMEOBJECT_TYPE)
                 TC_LOG_ERROR("misc", "GameObject::Use(): unit (%s, name: %s) tries to use object (%s, name: %s) of unknown type (%u)",
@@ -3225,6 +3275,17 @@ void GameObject::OnLootRelease(Player* looter)
             }
             break;
         }
+        case GAMEOBJECT_TYPE_GATHERING_NODE:
+        {
+            SetGoStateFor(GO_STATE_ACTIVE, looter);
+
+            UpdateData udata(GetMapId());
+            BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &udata.GetBuffer(), looter, {OBJECT_DYNAMIC_FLAGS});
+            WorldPacket packet;
+            udata.BuildPacket(&packet);
+            looter->SendDirectMessage(&packet);
+            break;
+        }
         default:
             break;
     }
@@ -3375,6 +3436,11 @@ GameObject* GameObject::GetLinkedTrap()
 
 void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const
 {
+    BuildValuesUpdateWithMask(updateType, data, target, {});
+}
+
+void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const
+{
     if (!target)
         return;
 
@@ -3399,8 +3465,8 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player co
                             ((updateType == UPDATETYPE_VALUES ? _changesMask[index] : m_uint32Values[index]) && (flags[index] & visibleFlag)) ||
                             (index == GAMEOBJECT_FLAGS && forcedFlags);
 
-        // TheLegionPreservationProject: hack for personal game object state/visibility updates
-        if (updateType == UPDATETYPE_HACK_STATE && index == GAMEOBJECT_BYTES_1)
+        // TheLegionPreservationProject: hack for "masked" updates
+        if (indexes.size() > 0 && (indexes.find(index) != indexes.end()))
             shouldUpdate = true;
 
         if (shouldUpdate)
@@ -3441,9 +3507,18 @@ void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player co
                         else
                             dynFlags &= ~GO_DYNFLAG_LO_NO_INTERACT;
                         break;
+                    case GAMEOBJECT_TYPE_GATHERING_NODE:
+                        if (ActivateToQuest(target))
+                            dynFlags |= GO_DYNFLAG_LO_ACTIVATE | GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
+                        if (GetGoStateFor(target->GetGUID()) == GO_STATE_ACTIVE)
+                            dynFlags |= GO_DYNFLAG_LO_DEPLETED;
+                        break;
                     default:
                         break;
                 }
+
+                if (!MeetsInteractCondition(target))
+                    dynFlags |= GO_DYNFLAG_LO_NO_INTERACT;
 
                 *data << ((uint32(pathProgress) << 16) | uint32(dynFlags));
             }
@@ -3561,6 +3636,9 @@ void GameObject::AfterRelocation()
 
 float GameObject::GetInteractionDistance() const
 {
+//    if (GetGOInfo()->GetInteractRadiusOverride())
+//        return float(GetGOInfo()->GetInteractRadiusOverride()) / 100.0f;
+
     switch (GetGoType())
     {
         case GAMEOBJECT_TYPE_AREADAMAGE:
@@ -3798,6 +3876,18 @@ bool GameObject::CanInteractWithCapturePoint(Player const* target) const
     // For Alliance players
     return m_goValue.CapturePoint.State == WorldPackets::Battleground::BattlegroundCapturePointState::ContestedHorde
         || m_goValue.CapturePoint.State == WorldPackets::Battleground::BattlegroundCapturePointState::HordeCaptured;
+}
+
+bool GameObject::MeetsInteractCondition(Player const* user) const
+{
+    if (!m_goInfo->GetConditionID1())
+        return true;
+
+    if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(m_goInfo->GetConditionID1()))
+        if (!ConditionMgr::IsPlayerMeetingCondition(user, playerCondition))
+            return false;
+
+    return true;
 }
 
 std::unordered_map<ObjectGuid, GameObject::PerPlayerState>& GameObject::GetOrCreatePerPlayerStates()

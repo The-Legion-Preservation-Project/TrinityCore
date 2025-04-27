@@ -365,6 +365,8 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
         void UpdateCapturePoint();
         bool CanInteractWithCapturePoint(Player const* target) const;
 
+        bool MeetsInteractCondition(Player const* user) const;
+
         void AIM_Destroy();
         bool AIM_Initialize();
 
@@ -414,6 +416,7 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
         ObjectGuid m_linkedTrap;
 
     private:
+        void BuildValuesUpdateWithMask(uint8 updatetype, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const;
         void RemoveFromOwner();
         void SwitchDoorOrButton(bool activate, bool alternative = false);
         void UpdatePackedRotation();
