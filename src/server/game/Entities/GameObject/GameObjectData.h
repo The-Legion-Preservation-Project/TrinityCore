@@ -920,11 +920,14 @@ struct GameObjectTemplate
     {
         switch (type)
         {
-            case GAMEOBJECT_TYPE_DOOR:          return door.InfiniteAOI != 0;
-            case GAMEOBJECT_TYPE_FLAGSTAND:     return flagStand.InfiniteAOI != 0;
-            case GAMEOBJECT_TYPE_FLAGDROP:      return flagDrop.InfiniteAOI != 0;
-            case GAMEOBJECT_TYPE_TRAPDOOR:      return trapdoor.InfiniteAOI != 0;
-            case GAMEOBJECT_TYPE_NEW_FLAG:      return newflag.InfiniteAOI != 0;
+            case GAMEOBJECT_TYPE_DOOR:                  return door.InfiniteAOI != 0;
+            case GAMEOBJECT_TYPE_FLAGSTAND:             return flagStand.InfiniteAOI != 0;
+            case GAMEOBJECT_TYPE_FLAGDROP:              return flagDrop.InfiniteAOI != 0;
+            case GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING: return true;
+            case GAMEOBJECT_TYPE_TRAPDOOR:              return trapdoor.InfiniteAOI != 0;
+            case GAMEOBJECT_TYPE_NEW_FLAG:              return newflag.InfiniteAOI != 0;
+            case GAMEOBJECT_TYPE_GARRISON_BUILDING:     return true;
+            case GAMEOBJECT_TYPE_PHASEABLE_MO:          return true;
             default: return false;
         }
     }
@@ -949,6 +952,7 @@ struct GameObjectTemplate
             case GAMEOBJECT_TYPE_DUNGEON_DIFFICULTY:    return dungeonDifficulty.GiganticAOI != 0;
             case GAMEOBJECT_TYPE_TRAPDOOR:              return trapdoor.GiganticAOI != 0;
             case GAMEOBJECT_TYPE_NEW_FLAG:              return newflag.GiganticAOI != 0;
+            case GAMEOBJECT_TYPE_GARRISON_PLOT:         return true;
             case GAMEOBJECT_TYPE_CAPTURE_POINT:         return capturePoint.GiganticAOI != 0;
             case GAMEOBJECT_TYPE_GARRISON_SHIPMENT:     return garrisonShipment.GiganticAOI != 0;
             case GAMEOBJECT_TYPE_UI_LINK:               return UILink.GiganticAOI != 0;
