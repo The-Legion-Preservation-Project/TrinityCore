@@ -55,14 +55,14 @@ INSERT INTO `game_event_gameobject` (`eventEntry`, `guid`) VALUES
 (12, @OGUID+12);
 
 DELETE FROM `gameobject_template` WHERE `entry` IN (251826 /*Crooked Tree Candle*/, 251824 /*Crooked Tree Rug*/, 251823 /*Crooked Tree Bed*/, 251822 /*Crooked Tree Chair*/, 251768 /*Spooky Light Big*/, 251765 /*Crooked Tree Tent*/, 251706 /*Crooked Tree Cauldron*/, 243192 /*Campfire*/, 369301 /*Area of Suspicious Activity*/, 369302 /*Area of Suspicious Activity*/);
-INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `size`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `Data6`, `Data7`, `Data8`, `Data9`, `Data10`, `Data11`, `Data12`, `Data13`, `Data14`, `Data15`, `Data16`, `Data17`, `Data18`, `Data19`, `Data20`, `Data21`, `Data22`, `Data23`, `Data24`, `Data25`, `Data26`, `Data27`, `Data28`, `Data29`, `Data30`, `Data31`, `Data32`, `Data33`, `Data34`, `ContentTuningId`, `VerifiedBuild`) VALUES
-(251826, 5, 35490, 'Crooked Tree Candle', '', '', '', 1.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 425, 46366), -- Crooked Tree Candle
-(251824, 5, 35483, 'Crooked Tree Rug', '', '', '', 0.699999988079071044, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 425, 46366), -- Crooked Tree Rug
-(251823, 5, 26987, 'Crooked Tree Bed', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 425, 46366), -- Crooked Tree Bed
-(251822, 5, 14518, 'Crooked Tree Chair', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 425, 46366), -- Crooked Tree Chair
-(251768, 5, 35401, 'Spooky Light Big', '', '', '', 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 425, 46366), -- Spooky Light Big
-(251765, 5, 35474, 'Crooked Tree Tent', '', '', '', 0.699999988079071044, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 425, 46366), -- Crooked Tree Tent
-(251706, 10, 16741, 'Crooked Tree Cauldron', '', '', '', 1, 0, 0, 0, 3000, 0, 0, 0, 0, 0, 0, 218367, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 41554, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 425, 46366); -- Crooked Tree Cauldron
+INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `size`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `Data6`, `Data7`, `Data8`, `Data9`, `Data10`, `Data11`, `Data12`, `Data13`, `Data14`, `Data15`, `Data16`, `Data17`, `Data18`, `Data19`, `Data20`, `Data21`, `Data22`, `Data23`, `Data24`, `Data25`, `Data26`, `Data27`, `Data28`, `Data29`, `Data30`, `Data31`, `Data32`, `Data33`, `VerifiedBuild`) VALUES
+(251826, 5, 35490, 'Crooked Tree Candle', '', '', '', 1.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46366), -- Crooked Tree Candle
+(251824, 5, 35483, 'Crooked Tree Rug', '', '', '', 0.699999988079071044, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46366), -- Crooked Tree Rug
+(251823, 5, 26987, 'Crooked Tree Bed', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46366), -- Crooked Tree Bed
+(251822, 5, 14518, 'Crooked Tree Chair', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46366), -- Crooked Tree Chair
+(251768, 5, 35401, 'Spooky Light Big', '', '', '', 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46366), -- Spooky Light Big
+(251765, 5, 35474, 'Crooked Tree Tent', '', '', '', 0.699999988079071044, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46366), -- Crooked Tree Tent
+(251706, 10, 16741, 'Crooked Tree Cauldron', '', '', '', 1, 0, 0, 0, 3000, 0, 0, 0, 0, 0, 0, 218367, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 41554, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46366); -- Crooked Tree Cauldron
 
 DELETE FROM `gameobject_template_addon` WHERE `entry` IN (251706 /*Crooked Tree Cauldron*/, 251765 /*Crooked Tree Tent*/);
 INSERT INTO `gameobject_template_addon` (`entry`, `faction`, `flags`, `WorldEffectID`, `AIAnimKitID`) VALUES

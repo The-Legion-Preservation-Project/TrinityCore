@@ -2,7 +2,7 @@ SET @CGUID := 396076;
 SET @OGUID := 244266;
 
 -- Creature templates
-UPDATE `creature_template` SET `gossip_menu_id`=8936 `npcflag`=1 WHERE `entry`=19171; -- Draenei Commoner
+UPDATE `creature_template` SET `gossip_menu_id`=8936, `npcflag`=1 WHERE `entry`=19171; -- Draenei Commoner
 
 DELETE FROM `creature_template_addon` WHERE `entry`=19171;
 INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `aiAnimKit`, `movementAnimKit`, `meleeAnimKit`, `visibilityDistanceType`, `auras`) VALUES
