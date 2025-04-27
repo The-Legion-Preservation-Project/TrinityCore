@@ -15,7 +15,7 @@ INSERT INTO `gossip_menu` (`MenuID`, `TextID`, `VerifiedBuild`) VALUES
 (10571, 14630, 46741); -- 34768 (William Mullins)
 
 -- Equipments
-UPDATE `creature_equip_template` SET `VerifiedBuild`=46741 WHERE (`ID`=1 AND `CreatureID` IN (34768,34712,34677,5754,5705,5702,5670,5669,5668,4603,4570)) OR (`ID`=2 AND `CreatureID`=5697);
+# UPDATE `creature_equip_template` SET `VerifiedBuild`=46741 WHERE (`ID`=1 AND `CreatureID` IN (34768,34712,34677,5754,5705,5702,5670,5669,5668,4603,4570)) OR (`ID`=2 AND `CreatureID`=5697);
 
 # -- Scaling
 # DELETE FROM `creature_template_scaling` WHERE `DifficultyID`=0 AND `Entry` IN (34677, 34683, 34712, 34768, 35341);
@@ -26,7 +26,7 @@ UPDATE `creature_equip_template` SET `VerifiedBuild`=46741 WHERE (`ID`=1 AND `Cr
 # (34768, 0, 0, 0, 389, 46741),
 # (35341, 0, 0, 0, 389, 46741);
 
-UPDATE `creature_template_scaling` SET `VerifiedBuild`=46741 WHERE (`DifficultyID`=0 AND `Entry` IN (153285,61905,61829,61753,61366,53591,53517,51384,43359,37574,37543,36213,23103,20725,16030,5754,5705,5702,5697,5674,5670,5669,5668,4603,4570,4075));
+# UPDATE `creature_template_scaling` SET `VerifiedBuild`=46741 WHERE (`DifficultyID`=0 AND `Entry` IN (153285,61905,61829,61753,61366,53591,53517,51384,43359,37574,37543,36213,23103,20725,16030,5754,5705,5702,5697,5674,5670,5669,5668,4603,4570,4075));
 
 -- Trainer
 DELETE FROM `creature_trainer` WHERE `CreatureID`=34712;
@@ -34,7 +34,7 @@ INSERT INTO `creature_trainer` (`CreatureID`, `TrainerID`, `MenuID`, `OptionID`)
 (34712, 136, 10569, 0);
 
 -- Quests
-UPDATE `quest_poi_points` SET `VerifiedBuild`=46741 WHERE (`QuestID`=14059 AND `Idx1`=2 AND `Idx2`=0) OR (`QuestID`=14059 AND `Idx1`=1 AND `Idx2`=0) OR (`QuestID`=14059 AND `Idx1`=0 AND `Idx2`=0) OR (`QuestID`=14058 AND `Idx1`=2 AND `Idx2`=0) OR (`QuestID`=14058 AND `Idx1`=1 AND `Idx2`=0) OR (`QuestID`=14058 AND `Idx1`=0 AND `Idx2`=0) OR (`QuestID`=14037 AND `Idx1`=2 AND `Idx2`=0) OR (`QuestID`=14037 AND `Idx1`=1 AND `Idx2`=0) OR (`QuestID`=14037 AND `Idx1`=0 AND `Idx2`=0);
+# UPDATE `quest_poi_points` SET `VerifiedBuild`=46741 WHERE (`QuestID`=14059 AND `Idx1`=2 AND `Idx2`=0) OR (`QuestID`=14059 AND `Idx1`=1 AND `Idx2`=0) OR (`QuestID`=14059 AND `Idx1`=0 AND `Idx2`=0) OR (`QuestID`=14058 AND `Idx1`=2 AND `Idx2`=0) OR (`QuestID`=14058 AND `Idx1`=1 AND `Idx2`=0) OR (`QuestID`=14058 AND `Idx1`=0 AND `Idx2`=0) OR (`QuestID`=14037 AND `Idx1`=2 AND `Idx2`=0) OR (`QuestID`=14037 AND `Idx1`=1 AND `Idx2`=0) OR (`QuestID`=14037 AND `Idx1`=0 AND `Idx2`=0);
 
 DELETE FROM `quest_details` WHERE `ID` IN (14059 /*We're Out of Cranberry Chutney Again?*/, 14058 /*She Says Potato*/, 14037 /*Spice Bread Stuffing*/);
 INSERT INTO `quest_details` (`ID`, `Emote1`, `Emote2`, `Emote3`, `Emote4`, `EmoteDelay1`, `EmoteDelay2`, `EmoteDelay3`, `EmoteDelay4`, `VerifiedBuild`) VALUES
@@ -48,9 +48,9 @@ DELETE FROM `creature_queststarter` WHERE (`id` IN (34677, 34768) AND `quest`=14
 INSERT INTO `creature_queststarter` (`id`, `quest`, `VerifiedBuild`) VALUES
 (34677, 14037, 46741); -- Spice Bread Stuffing offered Miles Standish
 
-UPDATE `creature_queststarter` SET `VerifiedBuild`=46741 WHERE (`id`=34712 AND `quest`=14059) OR (`id`=34768 AND `quest`=14058);
-
-UPDATE `creature_questender` SET `VerifiedBuild`=46741 WHERE (`id`=34712 AND `quest`=14059) OR (`id`=34768 AND `quest` IN (14058,14037));
+# UPDATE `creature_queststarter` SET `VerifiedBuild`=46741 WHERE (`id`=34712 AND `quest`=14059) OR (`id`=34768 AND `quest`=14058);
+#
+# UPDATE `creature_questender` SET `VerifiedBuild`=46741 WHERE (`id`=34712 AND `quest`=14059) OR (`id`=34768 AND `quest` IN (14058,14037));
 
 -- Creature spawns
 DELETE FROM `creature` WHERE `guid` BETWEEN @CGUID+0 AND @CGUID+11;
