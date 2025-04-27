@@ -15079,7 +15079,7 @@ bool Player::SatisfyQuestStatus(Quest const* qInfo, bool msg) const
 
 bool Player::SatisfyQuestConditions(Quest const* qInfo, bool msg) const
 {
-    if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_QUEST_AVAILABLE, qInfo->GetQuestId(), const_cast<Player*>(this)))
+    if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_QUEST_AVAILABLE, qInfo->GetQuestId(), this))
     {
         if (msg)
         {
@@ -23528,7 +23528,7 @@ void Player::SetDailyQuestStatus(uint32 quest_id)
     }
 }
 
-bool Player::IsDailyQuestDone(uint32 quest_id)
+bool Player::IsDailyQuestDone(uint32 quest_id) const
 {
     bool found = false;
     if (sObjectMgr->GetQuestTemplate(quest_id))
@@ -25769,7 +25769,7 @@ bool Player::CanSeeSpellClickOn(Creature const* c) const
         if (!clickPair.second.IsFitToRequirements(this, c))
             return false;
 
-        if (sConditionMgr->IsObjectMeetingSpellClickConditions(c->GetEntry(), clickPair.second.spellId, const_cast<Player*>(this), const_cast<Creature*>(c)))
+        if (sConditionMgr->IsObjectMeetingSpellClickConditions(c->GetEntry(), clickPair.second.spellId, this, c))
             return true;
     }
 
