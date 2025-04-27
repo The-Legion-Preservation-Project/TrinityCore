@@ -100,7 +100,7 @@ const uint8 OLD_TOTAL_LOCALES = 9; /// @todo convert in simple system
 
 TC_COMMON_API extern char const* localeNames[TOTAL_LOCALES];
 
-TC_COMMON_API LocaleConstant GetLocaleByName(std::string const& name);
+TC_COMMON_API LocaleConstant GetLocaleByName(std::string_view name);
 
 constexpr inline bool IsValidLocale(LocaleConstant locale)
 {
