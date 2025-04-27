@@ -542,6 +542,40 @@ struct ChrClassesEntry
     uint8 RangedAttackPowerPerAgility;
     uint8 PrimaryStatPriority;
     uint32 ID;
+
+    // TheLegionPreservationProject: data from 9.x DBC; makes things easier
+    uint32 ArmorTypeMask() const
+    {
+        switch (ID)
+        {
+            case 1: //CLASS_WARRIOR:
+                return 113;
+            case 2: //CLASS_PALADIN:
+                return 2289;
+            case 3: //CLASS_HUNTER:
+                return 41;
+            case 4: //CLASS_ROGUE:
+                return 37;
+            case 5: //CLASS_PRIEST:
+                return 35;
+            case 6: //CLASS_DEATH_KNIGHT:
+                return 3121;
+            case 7: //CLASS_SHAMAN:
+                return 2665;
+            case 8: //CLASS_MAGE:
+                return 35;
+            case 9: //CLASS_WARLOCK:
+                return 35;
+            case 10: //CLASS_MONK:
+                return 37;
+            case 11: //CLASS_DRUID:
+                return 2341;
+            case 12: //CLASS_DEMON_HUNTER:
+                return 37;
+            default:
+                return 0;
+        }
+    }
 };
 
 struct ChrClassesXPowerTypesEntry
