@@ -36,7 +36,7 @@ jobs:
           Where-Object { $_.bits -eq '64' } |
           Where-Object { $_.light -eq $false } |
           Where-Object { $_.installer  -eq 'exe' } |
-          Sort-Object -Descending @{ Expression = { [version]$_.basever } } |
+          Sort-Object -Ascending @{ Expression = { [version]$_.basever } } |
           Select-Object -First 1
         [System.String]::Format("cache-key=openssl-{0}-win-{1}-{2}", $openSSL.basever, $openSSL.arch, $openSSL.bits) >> $env:GITHUB_OUTPUT
         [System.String]::Format("url={0}", $openSSL.url) >> $env:GITHUB_OUTPUT
@@ -86,9 +86,8 @@ jobs:
       run: |
         cd ${{ steps.strings.outputs.build-output-dir }}/bin/${{ env.CMAKE_BUILD_TYPE }}
         copy "${{ env.MYSQL_ROOT_DIR }}/lib/libmysql.dll" libmysql.dll
-        copy "${{ env.OPENSSL_ROOT_DIR }}/bin/libssl-3-x64.dll" libssl-3-x64.dll
-        copy "${{ env.OPENSSL_ROOT_DIR }}/bin/libcrypto-3-x64.dll" libcrypto-3-x64.dll
-        copy "${{ env.OPENSSL_ROOT_DIR }}/bin/legacy.dll" legacy.dll
+        copy "${{ env.OPENSSL_ROOT_DIR }}/bin/libssl-1_1-x64.dll" libssl-1_1-x64.dll
+        copy "${{ env.OPENSSL_ROOT_DIR }}/bin/libcrypto-1_1-x64.dll" libcrypto-1_1-x64.dll
 
     - name: Check binaries
       run: |
