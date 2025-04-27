@@ -26,6 +26,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 
 using namespace boost::filesystem;
 
