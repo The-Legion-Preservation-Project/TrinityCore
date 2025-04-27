@@ -36,7 +36,7 @@ jobs:
           Where-Object { $_.bits -eq '64' } |
           Where-Object { $_.light -eq $false } |
           Where-Object { $_.installer  -eq 'exe' } |
-          Sort-Object -Ascending @{ Expression = { [version]$_.basever } } |
+          Sort-Object @{ Expression = { [version]$_.basever } } |
           Select-Object -First 1
         [System.String]::Format("cache-key=openssl-{0}-win-{1}-{2}", $openSSL.basever, $openSSL.arch, $openSSL.bits) >> $env:GITHUB_OUTPUT
         [System.String]::Format("url={0}", $openSSL.url) >> $env:GITHUB_OUTPUT
