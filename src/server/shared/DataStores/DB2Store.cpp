@@ -47,7 +47,7 @@ void DB2StorageBase::WriteRecordData(char const* entry, LocaleConstant locale, B
 
     for (; i < _loadInfo->FieldCount; ++i)
     {
-        switch (_loadInfo->TypesString[i])
+        switch (_loadInfo->Fields[i].Type)
         {
             case FT_INT:
                 buffer << *(uint32*)entry;

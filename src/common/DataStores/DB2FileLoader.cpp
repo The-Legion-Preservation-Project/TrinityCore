@@ -109,19 +109,11 @@ struct DB2IndexData
     std::unique_ptr<DB2IndexEntry[]> Entries;
 };
 
-DB2FileLoadInfo::DB2FileLoadInfo(DB2FieldMeta const* fields, std::size_t fieldCount, DB2Meta const* meta)
-    : Fields(fields), FieldCount(fieldCount), Meta(meta)
-{
-    TypesString.reserve(FieldCount);
-    for (std::size_t i = 0; i < FieldCount; ++i)
-        TypesString += char(Fields[i].Type);
-}
-
 uint32 DB2FileLoadInfo::GetStringFieldCount(bool localizedOnly) const
 {
     uint32 stringFields = 0;
-    for (char fieldType : TypesString)
-        if (fieldType == FT_STRING || (fieldType == FT_STRING_NOT_LOCALIZED && !localizedOnly))
+    for (std::size_t i = 0; i < FieldCount; ++i)
+        if (Fields[i].Type == FT_STRING || (Fields[i].Type == FT_STRING_NOT_LOCALIZED && !localizedOnly))
             ++stringFields;
 
     return stringFields;
@@ -388,7 +380,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceData(uint32& indexTableSize, char**& 
         {
             for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
-                switch (_loadInfo->TypesString[fieldIndex])
+                switch (_loadInfo->Fields[fieldIndex].Type)
                 {
                     case FT_FLOAT:
                         *((float*)(&dataTable[offset])) = RecordGetFloat(rawRecord, x, z);
@@ -413,6 +405,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceData(uint32& indexTableSize, char**& 
                     case FT_STRING:
                         for (char const*& localeStr : ((LocalizedString*)(&dataTable[offset]))->Str)
                             localeStr = nullStr;
+
                         offset += sizeof(LocalizedString);
                         break;
                     case FT_STRING_NOT_LOCALIZED:
@@ -421,7 +414,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceData(uint32& indexTableSize, char**& 
                         break;
                     default:
                         ABORT_MSG("Unknown format character '%c' found in %s meta for field %s",
-                            _loadInfo->TypesString[fieldIndex], _fileName, _loadInfo->Fields[fieldIndex].Name);
+                            _loadInfo->Fields[fieldIndex].Type, _fileName, _loadInfo->Fields[fieldIndex].Name);
                         break;
                 }
                 ++fieldIndex;
@@ -432,7 +425,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceData(uint32& indexTableSize, char**& 
         {
             for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
-                switch (_loadInfo->TypesString[fieldIndex])
+                switch (_loadInfo->Fields[fieldIndex].Type)
                 {
                     case FT_FLOAT:
                         *((float*)(&dataTable[offset])) = 0;
@@ -465,7 +458,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceData(uint32& indexTableSize, char**& 
                         break;
                     default:
                         ABORT_MSG("Unknown format character '%c' found in %s meta for field %s",
-                            _loadInfo->TypesString[fieldIndex], _fileName, _loadInfo->Fields[fieldIndex].Name);
+                            _loadInfo->Fields[fieldIndex].Type, _fileName, _loadInfo->Fields[fieldIndex].Name);
                         break;
                 }
                 ++fieldIndex;
@@ -530,7 +523,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceStrings(char** indexTable, uint32 ind
         {
             for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
-                switch (_loadInfo->TypesString[fieldIndex])
+                switch (_loadInfo->Fields[fieldIndex].Type)
                 {
                     case FT_FLOAT:
                     case FT_INT:
@@ -546,16 +539,20 @@ char* DB2FileLoaderRegularImpl::AutoProduceStrings(char** indexTable, uint32 ind
                         offset += 8;
                         break;
                     case FT_STRING:
+                    {
                         ((LocalizedString*)(&recordData[offset]))->Str[locale] = stringPool + (RecordGetString(rawRecord, x, z) - (char const*)_stringTable);
                         offset += sizeof(LocalizedString);
                         break;
+                    }
                     case FT_STRING_NOT_LOCALIZED:
+                    {
                         *((char**)(&recordData[offset])) = stringPool + (RecordGetString(rawRecord, x, z) - (char const*)_stringTable);
                         offset += sizeof(char*);
                         break;
+                    }
                     default:
                         ABORT_MSG("Unknown format character '%c' found in %s meta for field %s",
-                            _loadInfo->TypesString[fieldIndex], _fileName, _loadInfo->Fields[fieldIndex].Name);
+                            _loadInfo->Fields[fieldIndex].Type, _fileName, _loadInfo->Fields[fieldIndex].Name);
                         break;
                 }
                 ++fieldIndex;
@@ -962,49 +959,50 @@ char* DB2FileLoaderSparseImpl::AutoProduceData(uint32& indexTableSize, char**& i
             ++fieldIndex;
         }
 
-        for (uint32 x = 0; x < _header->FieldCount; ++x)
-        {
-            for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
+            for (uint32 x = 0; x < _header->FieldCount; ++x)
             {
-                switch (_loadInfo->TypesString[fieldIndex])
+                for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
                 {
-                    case FT_FLOAT:
-                        *((float*)(&dataTable[offset])) = RecordGetFloat(rawRecord, x, z);
-                        offset += 4;
-                        break;
-                    case FT_INT:
-                        *((uint32*)(&dataTable[offset])) = RecordGetVarInt(rawRecord, x, z, _loadInfo->Fields[fieldIndex].IsSigned);
-                        offset += 4;
-                        break;
-                    case FT_BYTE:
-                        *((uint8*)(&dataTable[offset])) = RecordGetUInt8(rawRecord, x, z);
-                        offset += 1;
-                        break;
-                    case FT_SHORT:
-                        *((uint16*)(&dataTable[offset])) = RecordGetUInt16(rawRecord, x, z);
-                        offset += 2;
-                        break;
-                    case FT_LONG:
-                        *((uint64*)(&dataTable[offset])) = RecordGetUInt64(rawRecord, x, z);
-                        offset += 8;
-                        break;
-                    case FT_STRING:
-                        for (char const*& localeStr : ((LocalizedString*)(&dataTable[offset]))->Str)
-                            localeStr = nullStr;
+                    switch (_loadInfo->Fields[fieldIndex].Type)
+                    {
+                        case FT_FLOAT:
+                            *((float*)(&dataTable[offset])) = RecordGetFloat(rawRecord, x, z);
+                            offset += 4;
+                            break;
+                        case FT_INT:
+                            *((uint32*)(&dataTable[offset])) = RecordGetVarInt(rawRecord, x, z, _loadInfo->Fields[fieldIndex].IsSigned);
+                            offset += 4;
+                            break;
+                        case FT_BYTE:
+                            *((uint8*)(&dataTable[offset])) = RecordGetUInt8(rawRecord, x, z);
+                            offset += 1;
+                            break;
+                        case FT_SHORT:
+                            *((uint16*)(&dataTable[offset])) = RecordGetUInt16(rawRecord, x, z);
+                            offset += 2;
+                            break;
+                        case FT_LONG:
+                            *((uint64*)(&dataTable[offset])) = RecordGetUInt64(rawRecord, x, z);
+                            offset += 8;
+                            break;
+                        case FT_STRING:
+                            for (char const*& localeStr : ((LocalizedString*)(&dataTable[offset]))->Str)
+                                localeStr = nullStr;
 
-                        offset += sizeof(LocalizedString);
-                        break;
-                    case FT_STRING_NOT_LOCALIZED:
-                        *(char const**)(&dataTable[offset]) = nullStr;
-                        offset += sizeof(char*);
-                        break;
-                    default:
-                        ABORT_MSG("Unknown format character '%c' found in %s meta", _loadInfo->TypesString[x], _fileName);
-                        break;
+                            offset += sizeof(LocalizedString);
+                            break;
+                        case FT_STRING_NOT_LOCALIZED:
+                            *(char const**)(&dataTable[offset]) = nullStr;
+                            offset += sizeof(char*);
+                            break;
+                        default:
+                            ABORT_MSG("Unknown format character '%c' found in %s meta for field %s",
+                                _loadInfo->Fields[fieldIndex].Type, _fileName, _loadInfo->Fields[fieldIndex].Name);
+                            break;
+                    }
+                    ++fieldIndex;
                 }
-                ++fieldIndex;
             }
-        }
 
         ++recordNum;
     }
@@ -1081,7 +1079,7 @@ char* DB2FileLoaderSparseImpl::AutoProduceStrings(char** indexTable, uint32 inde
         {
             for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
-                switch (_loadInfo->TypesString[fieldIndex])
+                switch (_loadInfo->Fields[fieldIndex].Type)
                 {
                     case FT_FLOAT:
                         offset += 4;
@@ -1117,7 +1115,8 @@ char* DB2FileLoaderSparseImpl::AutoProduceStrings(char** indexTable, uint32 inde
                         break;
                     }
                     default:
-                        ABORT_MSG("Unknown format character '%c' found in %s meta", _loadInfo->TypesString[x], _fileName);
+                        ABORT_MSG("Unknown format character '%c' found in %s meta for field %s",
+                            _loadInfo->Fields[fieldIndex].Type, _fileName, _loadInfo->Fields[fieldIndex].Name);
                         break;
                 }
                 ++fieldIndex;
