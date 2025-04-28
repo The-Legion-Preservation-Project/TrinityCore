@@ -85,26 +85,20 @@ namespace WorldPackets
 
             std::vector<InvItem> Items;
         };
+
+        ByteBuffer& operator<<(ByteBuffer& data, ItemBonuses const& itemBonusInstanceData);
+        ByteBuffer& operator>>(ByteBuffer& data, ItemBonuses& itemBonusInstanceData);
+
+        ByteBuffer& operator<<(ByteBuffer& data, ItemInstance const& itemInstance);
+        ByteBuffer& operator>>(ByteBuffer& data, ItemInstance& itemInstance);
+
+        ByteBuffer& operator<<(ByteBuffer& data, ItemEnchantData const& itemEnchantData);
+
+        ByteBuffer& operator<<(ByteBuffer& data, ItemGemData const& itemGemInstanceData);
+        ByteBuffer& operator>>(ByteBuffer& data, ItemGemData& itemGemInstanceData);
+
+        ByteBuffer& operator>>(ByteBuffer& data, InvUpdate& invUpdate);
     }
-}
-
-namespace WorldPackets
-{
-namespace Item
-{
-ByteBuffer& operator<<(ByteBuffer& data, ItemBonuses const& itemBonusInstanceData);
-ByteBuffer& operator>>(ByteBuffer& data, ItemBonuses& itemBonusInstanceData);
-
-ByteBuffer& operator<<(ByteBuffer& data, ItemInstance const& itemInstance);
-ByteBuffer& operator>>(ByteBuffer& data, ItemInstance& itemInstance);
-
-ByteBuffer& operator<<(ByteBuffer& data, ItemEnchantData const& itemEnchantData);
-
-ByteBuffer& operator<<(ByteBuffer& data, ItemGemData const& itemGemInstanceData);
-ByteBuffer& operator>>(ByteBuffer& data, ItemGemData& itemGemInstanceData);
-
-ByteBuffer& operator>>(ByteBuffer& data, InvUpdate& invUpdate);
-}
 }
 
 #endif // ItemPacketsCommon_h__

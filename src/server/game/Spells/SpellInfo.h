@@ -379,6 +379,10 @@ class TC_GAME_API SpellInfo
         uint32 TargetAuraSpell = 0;
         uint32 ExcludeCasterAuraSpell = 0;
         uint32 ExcludeTargetAuraSpell = 0;
+        AuraType CasterAuraType = SPELL_AURA_NONE;
+        AuraType TargetAuraType = SPELL_AURA_NONE;
+        AuraType ExcludeCasterAuraType = SPELL_AURA_NONE;
+        AuraType ExcludeTargetAuraType = SPELL_AURA_NONE;
         SpellCastTimesEntry const* CastTimeEntry = nullptr;
         uint32 RecoveryTime = 0;
         uint32 CategoryRecoveryTime = 0;

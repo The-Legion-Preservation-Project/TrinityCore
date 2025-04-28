@@ -49,12 +49,12 @@ namespace WorldPackets
 
         struct ClientGossipOptions
         {
-            int32 ClientOption  = 0;
-            GossipOptionNpc OptionNPC = GossipOptionNpc(0);
+            int32 OptionID      = 0;
+            GossipOptionNpc OptionNPC = {};
             uint8 OptionFlags   = 0;
             int32 OptionCost    = 0;
-            std::string Text;
-            std::string Confirm;
+            std::string_view Text;
+            std::string_view Confirm;
         };
 
         struct ClientGossipText

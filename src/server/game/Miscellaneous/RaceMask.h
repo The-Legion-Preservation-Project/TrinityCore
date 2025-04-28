@@ -65,7 +65,7 @@ namespace Trinity
 template<typename T>
 struct RaceMask
 {
-    static_assert(std::is_integral<T>::value, "RaceMask<T> must be integral");
+    static_assert(std::is_integral_v<T>, "RaceMask<T> must be integral");
 
     T RawValue;
 
@@ -74,16 +74,40 @@ struct RaceMask
         return (RawValue & GetMaskForRace(raceId)) != 0;
     }
 
+    static constexpr int32 GetRaceBit(uint8 raceId)
+    {
+        switch (raceId)
+        {
+            case RACE_HUMAN:
+            case RACE_ORC:
+            case RACE_DWARF:
+            case RACE_NIGHTELF:
+            case RACE_UNDEAD_PLAYER:
+            case RACE_TAUREN:
+            case RACE_GNOME:
+            case RACE_TROLL:
+            case RACE_GOBLIN:
+            case RACE_BLOODELF:
+            case RACE_DRAENEI:
+            case RACE_WORGEN:
+            case RACE_PANDAREN_NEUTRAL:
+            case RACE_PANDAREN_ALLIANCE:
+            case RACE_PANDAREN_HORDE:
+            case RACE_NIGHTBORNE:
+            case RACE_HIGHMOUNTAIN_TAUREN:
+            case RACE_VOID_ELF:
+            case RACE_LIGHTFORGED_DRAENEI:
+                return raceId - 1;
+            default:
+                break;
+        }
+        return -1;
+    }
+
     static constexpr T GetMaskForRace(uint8 raceId)
     {
-        constexpr int32 raceBits[MAX_RACES] =
-        {
-            0, 0, 1, 2, 3, 4, 5, 6, 7, 8,
-            9, 10, -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, 21, -1, 23, 24, 25, 26, 27, 28,
-            29
-        };
-        return raceId < MAX_RACES && raceBits[raceId] >= 0 && raceBits[raceId] < 64 ? (T(1) << raceBits[raceId]) : T(0);
+        int32 raceBit = GetRaceBit(raceId);
+        return raceBit >= 0 && uint32(raceBit) < sizeof(T) * 8 ? (T(1) << raceBit) : T(0);
     }
 
     constexpr bool IsEmpty() const { return RawValue == T(0); }

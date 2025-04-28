@@ -18,9 +18,7 @@
 #include "SystemPackets.h"
 #include "Errors.h"
 
-namespace WorldPackets
-{
-namespace System
+namespace WorldPackets::System
 {
 ByteBuffer& operator<<(ByteBuffer& data, SavedThrottleObjectState const& throttleState)
 {
@@ -68,6 +66,7 @@ WorldPacket const* FeatureSystemStatus::Write()
     _worldPacket.WriteBit(BpayStoreDisabledByParentalControls);
     _worldPacket.WriteBit(ItemRestorationButtonEnabled);
     _worldPacket.WriteBit(BrowserEnabled);
+
     _worldPacket.WriteBit(SessionAlert.has_value());
     _worldPacket.WriteBit(RecruitAFriendSendingEnabled);
     _worldPacket.WriteBit(CharUndeleteEnabled);
@@ -76,6 +75,7 @@ WorldPacket const* FeatureSystemStatus::Write()
     _worldPacket.WriteBit(NPETutorialsEnabled);
     _worldPacket.WriteBit(TwitterEnabled);
     _worldPacket.WriteBit(CommerceSystemEnabled);
+
     _worldPacket.WriteBit(Unk67);
     _worldPacket.WriteBit(WillKickFromWorld);
     _worldPacket.WriteBit(KioskModeEnabled);
@@ -141,6 +141,7 @@ WorldPacket const* FeatureSystemStatusGlueScreen::Write()
     _worldPacket.WriteBit(Unk14);
     _worldPacket.WriteBit(WillKickFromWorld);
     _worldPacket.WriteBit(IsExpansionPreorderInStore);
+
     _worldPacket.WriteBit(KioskModeEnabled);
     _worldPacket.WriteBit(CompetitiveModeEnabled);
     _worldPacket.WriteBit(false); // not accessed in handler
@@ -185,6 +186,5 @@ WorldPacket const* SetTimeZoneInformation::Write()
     _worldPacket.WriteString(GameTimeTZ);
 
     return &_worldPacket;
-}
 }
 }

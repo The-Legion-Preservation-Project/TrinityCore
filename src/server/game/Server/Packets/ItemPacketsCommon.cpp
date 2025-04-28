@@ -20,9 +20,7 @@
 #include "Loot.h"
 #include "Player.h"
 
-namespace WorldPackets
-{
-namespace Item
+namespace WorldPackets::Item
 {
 bool ItemBonuses::operator==(ItemBonuses const& r) const
 {
@@ -241,6 +239,5 @@ ByteBuffer& operator>>(ByteBuffer& data, InvUpdate& invUpdate)
     }
 
     return data;
-}
 }
 }

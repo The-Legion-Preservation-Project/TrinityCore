@@ -17,9 +17,7 @@
 
 #include "QuestPackets.h"
 
-namespace WorldPackets
-{
-namespace Quest
+namespace WorldPackets::Quest
 {
 void QuestGiverStatusQuery::Read()
 {
@@ -681,6 +679,5 @@ void ChoiceResponse::Read()
 {
     _worldPacket >> ChoiceID;
     _worldPacket >> ResponseID;
-}
 }
 }

@@ -18,12 +18,14 @@
 #include "InspectPackets.h"
 #include "Item.h"
 
-void WorldPackets::Inspect::Inspect::Read()
+namespace WorldPackets::Inspect
+{
+void Inspect::Read()
 {
     _worldPacket >> Target;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Inspect::InspectEnchantData const& enchantData)
+ByteBuffer& operator<<(ByteBuffer& data, InspectEnchantData const& enchantData)
 {
     data << uint32(enchantData.Id);
     data << uint8(enchantData.Index);
@@ -31,7 +33,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Inspect::InspectEnchantDa
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Inspect::InspectItemData const& itemData)
+ByteBuffer& operator<<(ByteBuffer& data, InspectItemData const& itemData)
 {
     data << itemData.CreatorGUID;
     data << uint8(itemData.Index);
@@ -41,16 +43,16 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Inspect::InspectItemData 
     data.WriteBits(itemData.Gems.size(), 2);
     data.FlushBits();
 
-    for (auto const& gem : itemData.Gems)
+    for (Item::ItemGemData const& gem : itemData.Gems)
         data << gem;
 
-    for (size_t i = 0; i < itemData.Enchants.size(); ++i)
-        data << itemData.Enchants[i];
+    for (InspectEnchantData const& enchantData : itemData.Enchants)
+        data << enchantData;
 
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Inspect::InspectGuildData const& guildData)
+ByteBuffer& operator<<(ByteBuffer& data, InspectGuildData const& guildData)
 {
     data << guildData.GuildGUID;
     data << int32(guildData.NumGuildMembers);
@@ -59,7 +61,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Inspect::InspectGuildData
     return data;
 }
 
-WorldPackets::Inspect::InspectItemData::InspectItemData(::Item const* item, uint8 index)
+InspectItemData::InspectItemData(::Item const* item, uint8 index)
 {
     CreatorGUID = item->GetCreator();
 
@@ -78,7 +80,7 @@ WorldPackets::Inspect::InspectItemData::InspectItemData(::Item const* item, uint
         {
             Gems.emplace_back();
 
-            WorldPackets::Item::ItemGemData& gem = Gems.back();
+            Item::ItemGemData& gem = Gems.back();
             gem.Slot = i;
             gem.Item.Initialize(&gemData);
         }
@@ -86,7 +88,7 @@ WorldPackets::Inspect::InspectItemData::InspectItemData(::Item const* item, uint
     }
 }
 
-WorldPacket const* WorldPackets::Inspect::InspectResult::Write()
+WorldPacket const* InspectResult::Write()
 {
     _worldPacket << InspecteeGUID;
     _worldPacket << uint32(Items.size());
@@ -115,12 +117,12 @@ WorldPacket const* WorldPackets::Inspect::InspectResult::Write()
     return &_worldPacket;
 }
 
-void WorldPackets::Inspect::RequestHonorStats::Read()
+void RequestHonorStats::Read()
 {
     _worldPacket >> TargetGUID;
 }
 
-WorldPacket const* WorldPackets::Inspect::InspectHonorStats::Write()
+WorldPacket const* InspectHonorStats::Write()
 {
     _worldPacket << PlayerGUID;
     _worldPacket << uint8(LifetimeMaxRank);
@@ -131,13 +133,13 @@ WorldPacket const* WorldPackets::Inspect::InspectHonorStats::Write()
     return &_worldPacket;
 }
 
-void WorldPackets::Inspect::InspectPVPRequest::Read()
+void InspectPVPRequest::Read()
 {
     _worldPacket >> InspectTarget;
     _worldPacket >> InspectRealmAddress;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Inspect::PVPBracketData const& bracket)
+ByteBuffer& operator<<(ByteBuffer& data, PVPBracketData const& bracket)
 {
     data << int32(bracket.Rating);
     data << int32(bracket.Rank);
@@ -152,7 +154,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Inspect::PVPBracketData c
     return data;
 }
 
-WorldPacket const* WorldPackets::Inspect::InspectPVPResponse::Write()
+WorldPacket const* InspectPVPResponse::Write()
 {
     _worldPacket << ClientGUID;
 
@@ -165,7 +167,8 @@ WorldPacket const* WorldPackets::Inspect::InspectPVPResponse::Write()
     return &_worldPacket;
 }
 
-void WorldPackets::Inspect::QueryInspectAchievements::Read()
+void QueryInspectAchievements::Read()
 {
     _worldPacket >> Guid;
+}
 }

@@ -1852,6 +1852,7 @@ class OpcodeTable
         }
 
     private:
+        bool ValidateClientOpcode(OpcodeClient opcode, char const* name) const;
         template<typename Handler, Handler HandlerFunction>
         void ValidateAndSetClientOpcode(OpcodeClient opcode, char const* name, SessionStatus status, PacketProcessing processing);
 

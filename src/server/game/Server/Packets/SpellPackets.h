@@ -132,7 +132,7 @@ namespace WorldPackets
 
             bool InitialLogin = false;
             std::vector<uint32> KnownSpells;
-            std::vector<uint32> FavoriteSpells;         // tradeskill recipes
+            std::vector<uint32> FavoriteSpells; // tradeskill recipes
         };
 
         class UpdateActionButtons final : public ServerPacket
@@ -140,14 +140,11 @@ namespace WorldPackets
         public:
             static std::size_t constexpr NumActionButtons = 132;
 
-            UpdateActionButtons() : ServerPacket(SMSG_UPDATE_ACTION_BUTTONS, NumActionButtons * 8 + 1)
-            {
-                ActionButtons.fill(0);
-            }
+            UpdateActionButtons() : ServerPacket(SMSG_UPDATE_ACTION_BUTTONS, NumActionButtons * 8 + 1) { }
 
             WorldPacket const* Write() override;
 
-            std::array<uint64, NumActionButtons> ActionButtons;
+            std::array<uint64, NumActionButtons> ActionButtons = { };
             uint8 Reason = 0;
             /*
                 Reason can be 0, 1, 2
@@ -519,7 +516,7 @@ namespace WorldPackets
             WorldPacket const* Write() override;
 
             bool IsPet = false;
-            int32 SpellID;
+            int32 SpellID = 0;
         };
 
         class ClearCooldowns final : public ServerPacket
@@ -589,8 +586,8 @@ namespace WorldPackets
             int32 CategoryRecoveryTime = 0;
             float ModRate = 1.0f;
             bool OnHold = false;
-            Optional<uint32> unused622_1;   ///< This field is not used for anything in the client in 6.2.2.20444
-            Optional<uint32> unused622_2;   ///< This field is not used for anything in the client in 6.2.2.20444
+            Optional<uint32> unused622_1; ///< This field is not used for anything in the client in 6.2.2.20444
+            Optional<uint32> unused622_2; ///< This field is not used for anything in the client in 6.2.2.20444
         };
 
         class SendSpellHistory final : public ServerPacket
@@ -1029,9 +1026,9 @@ namespace WorldPackets
             bool Reverse = false;
             int32 SpellID = 0;
         };
+
+        ByteBuffer& operator>>(ByteBuffer& buffer, SpellCastRequest& request);
     }
 }
-
-ByteBuffer& operator>>(ByteBuffer& buffer, WorldPackets::Spells::SpellCastRequest& request);
 
 #endif // SpellPackets_h__

@@ -17,10 +17,24 @@
 
 #include "NPCPackets.h"
 
-namespace WorldPackets
+namespace WorldPackets::NPC
 {
-namespace NPC
+ByteBuffer& operator<<(ByteBuffer& data, ClientGossipOptions const& gossipOption)
 {
+    data << int32(gossipOption.OptionID);
+    data << uint8(gossipOption.OptionNPC);
+    data << int8(gossipOption.OptionFlags);
+    data << int32(gossipOption.OptionCost);
+    data.WriteBits(gossipOption.Text.size(), 12);
+    data.WriteBits(gossipOption.Confirm.size(), 12);
+    data.FlushBits();
+
+    data.WriteString(gossipOption.Text);
+    data.WriteString(gossipOption.Confirm);
+
+    return data;
+}
+
 ByteBuffer& operator<<(ByteBuffer& data, ClientGossipText const& gossipText)
 {
     data << int32(gossipText.QuestID);
@@ -54,18 +68,7 @@ WorldPacket const* GossipMessage::Write()
     _worldPacket << uint32(GossipText.size());
 
     for (ClientGossipOptions const& options : GossipOptions)
-    {
-        _worldPacket << int32(options.ClientOption);
-        _worldPacket << uint8(options.OptionNPC);
-        _worldPacket << int8(options.OptionFlags);
-        _worldPacket << int32(options.OptionCost);
-        _worldPacket.WriteBits(options.Text.size(), 12);
-        _worldPacket.WriteBits(options.Confirm.size(), 12);
-        _worldPacket.FlushBits();
-
-        _worldPacket.WriteString(options.Text);
-        _worldPacket.WriteString(options.Confirm);
-    }
+        _worldPacket << options;
 
     for (ClientGossipText const& text : GossipText)
         _worldPacket << text;
@@ -200,6 +203,5 @@ void SetPetSlot::Read()
     _worldPacket >> PetNumber;
     _worldPacket >> DestSlot;
     _worldPacket >> StableMaster;
-}
 }
 }

@@ -345,7 +345,7 @@ namespace WorldPackets
                                                  // only set if different than real ID (similar to CreatureTemplate.KillCredit)
             int32 Quantity                  = 0;
             int32 QuantityInInventory       = 0;
-            int32 DungeonEncounterID       = 0;
+            int32 DungeonEncounterID        = 0;
             int32 BattlePetSpeciesID        = 0;
             int32 BattlePetBreedID          = 0;
             uint32 BattlePetBreedQuality    = 0;

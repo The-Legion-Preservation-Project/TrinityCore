@@ -44,7 +44,7 @@ namespace WorldPackets
         {
             InspectEnchantData(uint32 id, uint8 index) : Id(id), Index(index) { }
 
-            uint32 Id   = 0;
+            uint32 Id = 0;
             uint8 Index = 0;
         };
 

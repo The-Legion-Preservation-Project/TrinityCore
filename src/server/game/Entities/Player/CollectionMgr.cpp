@@ -314,13 +314,18 @@ void CollectionMgr::CheckHeirloomUpgrades(Item* item)
             return;
         }
 
-        std::vector<uint32> const& fields = item->GetDynamicValues(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS);
+        std::vector<uint32> const& bonusListIDs = item->GetDynamicValues(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS);
 
-        for (uint32 bonusId : fields)
+        for (uint32 bonusId : bonusListIDs)
+        {
             if (bonusId != itr->second.bonusId)
+            {
                 item->ClearDynamicValue(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS);
+                break;
+            }
+        }
 
-        if (std::find(fields.begin(), fields.end(), int32(itr->second.bonusId)) == fields.end())
+        if (std::find(bonusListIDs.begin(), bonusListIDs.end(), int32(itr->second.bonusId)) == bonusListIDs.end())
             item->AddBonuses(itr->second.bonusId);
     }
 }
