@@ -474,11 +474,11 @@ bool SpellEffectInfo::IsUnitOwnedAuraEffect() const
 
 int32 SpellEffectInfo::CalcValue(WorldObject const* caster /*= nullptr*/, int32 const* bp /*= nullptr*/, Unit const* target /*= nullptr*/, float* variance /*= nullptr*/, uint32 castItemId /*= 0*/, int32 itemLevel /*= -1*/) const
 {
-    float basePointsPerLevel = RealPointsPerLevel;
+    double basePointsPerLevel = RealPointsPerLevel;
     // TODO: this needs to be a float, not rounded
     int32 basePoints = CalcBaseValue(caster, target, castItemId, itemLevel);
-    float value = bp ? *bp : BasePoints;
-    float comboDamage = PointsPerResource;
+    double value = bp ? *bp : BasePoints;
+    double comboDamage = PointsPerResource;
 
     Unit const* casterUnit = nullptr;
     if (caster)
@@ -487,8 +487,8 @@ int32 SpellEffectInfo::CalcValue(WorldObject const* caster /*= nullptr*/, int32 
     if (Scaling.Variance)
     {
         float delta = fabs(Scaling.Variance * 0.5f);
-        float valueVariance = frand(-delta, delta);
-        value += basePoints * valueVariance;
+        double valueVariance = frand(-delta, delta);
+        value += double(basePoints) * valueVariance;
 
         if (variance)
             *variance = valueVariance;
