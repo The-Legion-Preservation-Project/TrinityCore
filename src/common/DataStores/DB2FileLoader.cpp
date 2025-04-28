@@ -565,10 +565,14 @@ char* DB2FileLoaderRegularImpl::AutoProduceStrings(char** indexTable, uint32 ind
 
 void DB2FileLoaderRegularImpl::AutoProduceRecordCopies(uint32 records, char** indexTable, char* dataTable)
 {
+    uint32 recordCopies = GetRecordCopyCount();
+    if (!recordCopies)
+        return;
+
     uint32 recordsize = _loadInfo->Meta->GetRecordSize();
     uint32 offset = _header->RecordCount * recordsize;
     uint32 idFieldOffset = _loadInfo->Meta->HasIndexFieldInData() ? GetFieldOffset(_loadInfo->Meta->GetIndexField()) : 0;
-    for (uint32 c = 0; c < GetRecordCopyCount(); ++c)
+    for (uint32 c = 0; c < recordCopies; ++c)
     {
         DB2RecordCopy copy = GetRecordCopy(c);
         if (copy.SourceRowId && copy.SourceRowId < records && copy.NewRowId < records && indexTable[copy.SourceRowId])
