@@ -285,11 +285,16 @@ void Quest::LoadQuestObjectiveVisualEffect(Field* fields)
 
 uint32 Quest::XPValue(Player const* player) const
 {
+    return XPValue(player, _rewardXPDifficulty, _rewardXPMultiplier, _expansion);
+}
+
+uint32 Quest::XPValue(Player const* player, uint32 xpDifficulty, float xpMultiplier /*= 1.0f*/, int32 expansion /*= -1*/)
+{
     if (player)
     {
         uint32 questLevel = player->GetQuestLevel(this);
         QuestXPEntry const* questXp = sQuestXPStore.LookupEntry(questLevel);
-        if (!questXp || _rewardXPDifficulty >= 10)
+        if (!questXp || xpDifficulty >= 10)
             return 0;
 
         int32 diffFactor = 2 * (questLevel - player->GetLevel()) + 12;
@@ -298,15 +303,15 @@ uint32 Quest::XPValue(Player const* player) const
         else if (diffFactor > 10)
             diffFactor = 10;
 
-        uint32 xp = diffFactor * questXp->Difficulty[_rewardXPDifficulty] * _rewardXPMultiplier / 10;
-        if (player->GetLevel() >= GetMaxLevelForExpansion(CURRENT_EXPANSION - 1) && player->GetSession()->GetExpansion() == CURRENT_EXPANSION && _expansion < CURRENT_EXPANSION)
+        uint32 xp = diffFactor * questXp->Difficulty[xpDifficulty] * xpMultiplier / 10;
+        if (player->GetLevel() >= GetMaxLevelForExpansion(CURRENT_EXPANSION - 1) && player->GetSession()->GetExpansion() == CURRENT_EXPANSION && expansion >= 0 && expansion < CURRENT_EXPANSION)
             xp = uint32(xp / 9.0f);
 
         xp = RoundXPValue(xp);
 
         if (sWorld->getIntConfig(CONFIG_MIN_QUEST_SCALED_XP_RATIO))
         {
-            uint32 minScaledXP = RoundXPValue(questXp->Difficulty[_rewardXPDifficulty] * _rewardXPMultiplier) * sWorld->getIntConfig(CONFIG_MIN_QUEST_SCALED_XP_RATIO) / 100;
+            uint32 minScaledXP = RoundXPValue(questXp->Difficulty[xpDifficulty] * xpMultiplier) * sWorld->getIntConfig(CONFIG_MIN_QUEST_SCALED_XP_RATIO) / 100;
             xp = std::max(minScaledXP, xp);
         }
 

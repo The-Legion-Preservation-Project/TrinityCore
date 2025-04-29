@@ -66,7 +66,6 @@ void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
     if (restBonus > rest_bonus_max)
         restBonus = rest_bonus_max;
 
-    // TheLegionPreservationProject: future fix ade34a7f484dfcc7e41eddfd1014e7728c8dc2c1
     uint32 oldBonus = uint32(_restBonus[restType]);
     _restBonus[restType] = restBonus;
 

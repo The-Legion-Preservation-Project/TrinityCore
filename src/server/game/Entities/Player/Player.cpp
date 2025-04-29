@@ -7794,7 +7794,7 @@ void Player::ApplyItemObtainSpells(Item* item, bool apply)
         if (apply)
         {
             if (!HasAura(spellId))
-                CastSpell(this, spellId, item);
+                CastSpell(this, spellId, CastSpellExtraArgs().SetCastItem(item));
         }
         else
             RemoveAurasDueToSpell(spellId);
