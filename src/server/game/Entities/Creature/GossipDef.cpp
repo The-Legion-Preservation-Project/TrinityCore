@@ -39,7 +39,7 @@ GossipMenu::GossipMenu()
 
 GossipMenu::~GossipMenu() = default;
 
-uint32 GossipMenu::AddMenuItem(int32 menuItemId, GossipOptionNpc optionNpc, std::string optionText,
+uint32 GossipMenu::AddMenuItem(int32 menuItemId, GossipOptionNpc optionNpc, std::string optionText, uint32 actionMenuId, uint32 actionPoiId,
                                bool boxCoded, uint32 boxMoney, std::string boxText, uint32 sender, uint32 action)
 {
     ASSERT(_menuItems.size() <= GOSSIP_MAX_MENU_ITEMS);
@@ -79,6 +79,8 @@ uint32 GossipMenu::AddMenuItem(int32 menuItemId, GossipOptionNpc optionNpc, std:
     menuItem.BoxCoded = boxCoded;
     menuItem.BoxMoney = boxMoney;
     menuItem.BoxText = std::move(boxText);
+    menuItem.ActionMenuID = actionMenuId;
+    menuItem.ActionPoiID = actionPoiId;
     menuItem.Sender = sender;
     menuItem.Action = action;
     return menuItemId;
@@ -142,17 +144,9 @@ void GossipMenu::AddMenuItem(GossipMenuItems const& menuItem, uint32 sender, uin
                 ObjectMgr::GetLocaleString(gossipMenuLocale->BoxText, GetLocale(), strBoxText);
     }
 
-    AddMenuItem(menuItem.OptionID, menuItem.OptionNpc, std::move(strOptionText),
-        menuItem.BoxCoded, menuItem.BoxMoney, std::move(strBoxText), sender, action);
+    AddMenuItem(menuItem.OptionID, menuItem.OptionNpc, std::move(strOptionText), menuItem.ActionMenuID, menuItem.ActionPoiID,
+                menuItem.BoxCoded, menuItem.BoxMoney, std::move(strBoxText), sender, action);
     AddGossipMenuItemData(menuItem.OptionID, menuItem.ActionMenuID, menuItem.ActionPoiID);
-}
-
-void GossipMenu::AddGossipMenuItemData(uint32 menuItemId, uint32 gossipActionMenuId, uint32 gossipActionPoi)
-{
-    GossipMenuItem& menuItem = _menuItems[menuItemId];
-
-    menuItem.ActionMenuID = gossipActionMenuId;
-    menuItem.ActionPoiID = gossipActionPoi;
 }
 
 GossipMenuItem const* GossipMenu::GetItem(uint32 menuItemId) const

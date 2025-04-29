@@ -111,7 +111,7 @@ class TC_GAME_API GossipMenu
         GossipMenu& operator=(GossipMenu&&) = delete;
         ~GossipMenu();
 
-        uint32 AddMenuItem(int32 menuItemId, GossipOptionNpc optionNpc, std::string optionText,
+        uint32 AddMenuItem(int32 menuItemId, GossipOptionNpc optionNpc, std::string optionText, uint32 actionMenuId, uint32 actionPoiId,
                            bool boxCoded, uint32 boxMoney, std::string boxText, uint32 sender, uint32 action);
         void AddMenuItem(uint32 menuId, uint32 menuItemId, uint32 sender, uint32 action);
         void AddMenuItem(GossipMenuItems const& menuItem, uint32 sender, uint32 action);
@@ -120,8 +120,6 @@ class TC_GAME_API GossipMenu
         uint32 GetMenuId() const { return _menuId; }
         void SetLocale(LocaleConstant locale) { _locale = locale; }
         LocaleConstant GetLocale() const { return _locale; }
-
-        void AddGossipMenuItemData(uint32 menuItemId, uint32 gossipActionMenuId, uint32 gossipActionPoi);
 
         uint32 GetMenuItemCount() const
         {
