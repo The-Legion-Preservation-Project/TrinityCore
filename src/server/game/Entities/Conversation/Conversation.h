@@ -79,8 +79,9 @@ class TC_GAME_API Conversation : public WorldObject, public GridObject<Conversat
         void Remove();
         int32 GetDuration() const { return _duration; }
 
-        static Conversation* CreateConversation(uint32 conversationEntry, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr);
-        bool Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry, Map* map, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr);
+        static Conversation* CreateConversation(uint32 conversationEntry, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr, bool autoStart = true);
+        void Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry, Map* map, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr);
+        bool Start();
         void AddActor(int32 actorId, uint32 actorIdx, ObjectGuid const& actorGuid);
         void AddActor(int32 actorId, uint32 actorIdx, ConversationActorType type, uint32 creatureId, uint32 creatureDisplayInfoId);
 
@@ -101,6 +102,7 @@ class TC_GAME_API Conversation : public WorldObject, public GridObject<Conversat
         ObjectGuid _creatorGuid;
         uint32 _duration;
         uint32 _textureKitId;
+        std::set<uint16> _actorIndices;
 };
 
 #endif // TRINITYCORE_CONVERSATION_H
