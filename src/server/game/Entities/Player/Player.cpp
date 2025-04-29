@@ -3080,26 +3080,30 @@ bool Player::AddSpell(uint32 spellId, bool active, bool learning, bool dependent
             return false;
     }
 
+    bool castSpell = false;
+
     // cast talents with SPELL_EFFECT_LEARN_SPELL (other dependent spells will learned later as not auto-learned)
     // note: all spells with SPELL_EFFECT_LEARN_SPELL isn't passive
     if (!loading && spellInfo->HasAttribute(SPELL_ATTR0_CU_IS_TALENT) && spellInfo->HasEffect(SPELL_EFFECT_LEARN_SPELL))
-    {
         // ignore stance requirement for talent learn spell (stance set for spell only for client spell description show)
-        CastSpell(this, spellId, true);
-    }
+        castSpell = true;
     // also cast passive spells (including all talents without SPELL_EFFECT_LEARN_SPELL) with additional checks
     else if (spellInfo->IsPassive())
-    {
-        if (HandlePassiveSpellLearn(spellInfo))
-            CastSpell(this, spellId, true);
-    }
+        castSpell = HandlePassiveSpellLearn(spellInfo);
     else if (spellInfo->HasEffect(SPELL_EFFECT_SKILL_STEP))
-    {
-        CastSpell(this, spellId, true);
-        return false;
-    }
+        castSpell = true;
     else if (spellInfo->HasAttribute(SPELL_ATTR1_CAST_WHEN_LEARNED))
-        CastSpell(this, spellId, true);
+        castSpell = true;
+
+    if (castSpell)
+    {
+        CastSpellExtraArgs args;
+        args.SetTriggerFlags(TRIGGERED_FULL_MASK);
+
+        CastSpell(this, spellId, args);
+        if (spellInfo->HasEffect(SPELL_EFFECT_SKILL_STEP))
+            return false;
+    }
 
     // update free primary prof.points (if any, can be none in case GM .learn prof. learning)
     if (uint32 freeProfs = GetFreePrimaryProfessionPoints())
@@ -17263,7 +17267,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     // update items with duration and realtime
     UpdateItemDuration(time_diff, true);
 
-    _LoadActions(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_ACTIONS));
+    StartLoadingActionButtons();
 
     // unread mails and next delivery time, actual mails not loaded
     _LoadMail(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_MAILS),
@@ -26262,22 +26266,7 @@ void Player::ActivateTalentGroup(ChrSpecializationEntry const* spec)
 
     InitTalentForLevel();
 
-    // load them asynchronously
-    {
-        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_ACTIONS_SPEC);
-        stmt->setUInt64(0, GetGUID().GetCounter());
-        stmt->setUInt8(1, GetActiveTalentGroup());
-
-        WorldSession* mySess = GetSession();
-        mySess->GetQueryProcessor().AddCallback(CharacterDatabase.AsyncQuery(stmt)
-            .WithPreparedCallback([mySess](PreparedQueryResult result)
-        {
-            // safe callback, we can't pass this pointer directly
-            // in case player logs out before db response (player would be deleted in that case)
-            if (Player* thisPlayer = mySess->GetPlayer())
-                thisPlayer->LoadActions(result);
-        }));
-    }
+    StartLoadingActionButtons();
 
     UpdateDisplayPower();
     Powers pw = GetPowerType();
@@ -26311,6 +26300,27 @@ void Player::ActivateTalentGroup(ChrSpecializationEntry const* spec)
         aurEff->HandleShapeshiftBoosts(this, false);
         aurEff->HandleShapeshiftBoosts(this, true);
     }
+}
+
+void Player::StartLoadingActionButtons(std::function<void()>&& callback /*= nullptr*/)
+{
+    // load them asynchronously
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_ACTIONS_SPEC);
+    stmt->setUInt64(0, GetGUID().GetCounter());
+    stmt->setUInt8(1, GetActiveTalentGroup());
+
+    WorldSession* mySess = GetSession();
+    mySess->GetQueryProcessor().AddCallback(CharacterDatabase.AsyncQuery(stmt)
+        .WithPreparedCallback([mySess, myGuid = GetGUID(), callback = std::move(callback)](PreparedQueryResult result)
+    {
+        // safe callback, we can't pass this pointer directly
+        // in case player logs out before db response (player would be deleted in that case)
+        if (Player* thisPlayer = mySess->GetPlayer(); thisPlayer && thisPlayer->GetGUID() == myGuid)
+            thisPlayer->LoadActions(result);
+
+        if (callback)
+            callback();
+    }));
 }
 
 void Player::LoadActions(PreparedQueryResult result)

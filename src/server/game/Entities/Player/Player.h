@@ -1097,7 +1097,7 @@ struct GroupUpdateCounter
     int32 UpdateSequenceNumber;
 };
 
-enum TalentLearnResult
+enum TalentLearnResult : int32
 {
     TALENT_LEARN_OK                                     = 0,
     TALENT_FAILED_UNKNOWN                               = 1,
@@ -1898,6 +1898,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         std::vector<uint32> const& GetGlyphs(uint8 spec) const { return _specializationInfo.Glyphs[spec]; }
         std::vector<uint32>& GetGlyphs(uint8 spec) { return _specializationInfo.Glyphs[spec]; }
         ActionButtonList const& GetActionButtons() const { return m_actionButtons; }
+        void StartLoadingActionButtons(std::function<void()>&& callback = nullptr);
         void LoadActions(PreparedQueryResult result);
 
         uint32 GetFreePrimaryProfessionPoints() const { return GetUInt32Value(PLAYER_CHARACTER_POINTS); }
