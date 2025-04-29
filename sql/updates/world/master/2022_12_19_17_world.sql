@@ -5,7 +5,7 @@ SET @EVENT := 2;
 -- Areatrigger templates
 DELETE FROM `areatrigger_template` WHERE (`Id`=12198 AND `IsServerSide`=0);
 INSERT INTO `areatrigger_template` (`Id`, `IsServerSide`, `Type`, `Flags`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `VerifiedBuild`) VALUES
-(12198, 47187);
+(12198, 0, 0, 4, 15, 15, 0, 0, 0, 0, 47187);
 
 -- DELETE FROM `areatrigger_create_properties` WHERE `Id`=x;
 -- INSERT INTO `areatrigger_create_properties` (`Id`, `AreaTriggerId`, `MoveCurveId`, `ScaleCurveId`, `MorphCurveId`, `FacingCurveId`, `AnimId`, `AnimKitId`, `DecalPropertiesId`, `TimeToTarget`, `TimeToTargetScale`, `Shape`, `ShapeData0`, `ShapeData1`, `ShapeData2`, `ShapeData3`, `ShapeData4`, `ShapeData5`, `ShapeData6`, `ShapeData7`, `VerifiedBuild`) VALUES

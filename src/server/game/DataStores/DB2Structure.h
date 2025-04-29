@@ -85,11 +85,11 @@ struct AdventureMapPOIEntry
     LocalizedString Title;
     LocalizedString Description;
     DBCPosition2D WorldPosition;
+    uint32 RewardItemID;
     uint8 Type;
     uint32 PlayerConditionID;
     uint32 QuestID;
     uint32 LfgDungeonID;
-    uint32 RewardItemID;
     uint32 UiTextureAtlasMemberID;
     uint32 UiTextureKitID;
     uint32 WorldMapAreaID;

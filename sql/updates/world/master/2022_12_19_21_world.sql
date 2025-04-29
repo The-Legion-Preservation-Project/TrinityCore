@@ -3,8 +3,8 @@ SET @OGUID := 251805;
 SET @EVENT := 2;
 
 -- Creature templates
-UPDATE `creature_template` SET `gossip_menu_id`=5181, WHERE `entry`=23009; -- Bessbi Jinglepocket
-UPDATE `creature_template` SET `gossip_menu_id`=5181, WHERE `entry`=23010; -- Wolgren Jinglepocket
+UPDATE `creature_template` SET `gossip_menu_id`=5181 WHERE `entry`=23009; -- Bessbi Jinglepocket
+UPDATE `creature_template` SET `gossip_menu_id`=5181 WHERE `entry`=23010; -- Wolgren Jinglepocket
 UPDATE `creature_template` SET `gossip_menu_id`=6813, `faction`=774, `speed_walk`=1, `npcflag`=1, `unit_flags`=32768 WHERE `entry` IN (23000, 23001); -- Draenei Winter Reveler
 
 DELETE FROM `creature_template_addon` WHERE `entry` IN (23009, 23010);
