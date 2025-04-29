@@ -178,6 +178,7 @@ class TC_GAME_API Item : public Object
         ObjectGuid GetGiftCreator()    const { return GetGuidValue(ITEM_FIELD_GIFTCREATOR); }
         void SetGiftCreator(ObjectGuid guid) { SetGuidValue(ITEM_FIELD_GIFTCREATOR, guid); }
         Player* GetOwner() const;
+        bool IsDeleted() const { return m_deleted; }
 
         uint32 GetExpiration() const { return GetUInt32Value(ITEM_FIELD_DURATION); }
         void SetExpiration(uint32 expiration) { SetUInt32Value(ITEM_FIELD_DURATION, expiration); }
@@ -395,6 +396,7 @@ class TC_GAME_API Item : public Object
         BonusData _bonusData;
 
     private:
+        bool m_deleted;
         std::string m_text;
         uint8 m_slot;
         Bag* m_container;

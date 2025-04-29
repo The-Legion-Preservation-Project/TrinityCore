@@ -285,14 +285,13 @@ void Quest::LoadQuestObjectiveVisualEffect(Field* fields)
 
 uint32 Quest::XPValue(Player const* player) const
 {
-    return XPValue(player, _rewardXPDifficulty, _rewardXPMultiplier, _expansion);
+    return XPValue(player, player->GetQuestLevel(this), _rewardXPDifficulty, _rewardXPMultiplier, _expansion);
 }
 
-uint32 Quest::XPValue(Player const* player, uint32 xpDifficulty, float xpMultiplier /*= 1.0f*/, int32 expansion /*= -1*/)
+uint32 Quest::XPValue(Player const* player, uint32 questLevel, uint32 xpDifficulty, float xpMultiplier /*= 1.0f*/, int32 expansion /*= -1*/)
 {
     if (player)
     {
-        uint32 questLevel = player->GetQuestLevel(this);
         QuestXPEntry const* questXp = sQuestXPStore.LookupEntry(questLevel);
         if (!questXp || xpDifficulty >= 10)
             return 0;

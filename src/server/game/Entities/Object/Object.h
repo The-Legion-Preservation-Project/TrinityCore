@@ -174,8 +174,8 @@ class TC_GAME_API Object
 
         static ObjectGuid GetGUID(Object const* o) { return o ? o->GetGUID() : ObjectGuid::Empty; }
         ObjectGuid const& GetGUID() const { return m_guid; }
-        uint32 GetEntry() const { return GetUInt32Value(OBJECT_FIELD_ENTRY); }
-        void SetEntry(uint32 entry) { SetUInt32Value(OBJECT_FIELD_ENTRY, entry); }
+        uint32 GetEntry() const { return m_entry; }
+        void SetEntry(uint32 entry);
 
         float GetObjectScale() const { return GetFloatValue(OBJECT_FIELD_SCALE_X); }
         virtual void SetObjectScale(float scale) { SetFloatValue(OBJECT_FIELD_SCALE_X, scale); }
@@ -437,6 +437,7 @@ class TC_GAME_API Object
 
     private:
         ObjectGuid m_guid;
+        uint32 m_entry;
         bool m_inWorld;
         bool m_isNewObject;
         bool m_isDestroyedObject;

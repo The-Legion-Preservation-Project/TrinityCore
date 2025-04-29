@@ -597,7 +597,9 @@ uint32 const PlayerClassByArmorSubclass[MAX_ITEM_SUBCLASS_ARMOR] =
 
 void CollectionMgr::AddItemAppearance(Item* item)
 {
-    if (!item->IsSoulBound())
+    // TheLegionPreservationProject: item 120205 will already have destructor called here,
+    // and accessing update fields will crash
+    if (item->IsDeleted() || !item->IsSoulBound())
         return;
 
     ItemModifiedAppearanceEntry const* itemModifiedAppearance = item->GetItemModifiedAppearance();

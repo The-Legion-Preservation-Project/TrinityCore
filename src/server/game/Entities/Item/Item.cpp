@@ -1091,6 +1091,7 @@ void Item::SetState(ItemUpdateState state, Player* forplayer)
             RemoveItemFromUpdateQueueOf(this, forplayer);
             forplayer->DeleteRefundReference(GetGUID());
         }
+        m_deleted = true;
         delete this;
         return;
     }

@@ -146,7 +146,6 @@ void GossipMenu::AddMenuItem(GossipMenuItems const& menuItem, uint32 sender, uin
 
     AddMenuItem(menuItem.OptionID, menuItem.OptionNpc, std::move(strOptionText), menuItem.ActionMenuID, menuItem.ActionPoiID,
                 menuItem.BoxCoded, menuItem.BoxMoney, std::move(strBoxText), sender, action);
-    AddGossipMenuItemData(menuItem.OptionID, menuItem.ActionMenuID, menuItem.ActionPoiID);
 }
 
 GossipMenuItem const* GossipMenu::GetItem(uint32 menuItemId) const

@@ -13318,7 +13318,7 @@ void Player::SendItemDurations()
 
 void Player::SendNewItem(Item* item, uint32 quantity, bool pushed, bool created, bool broadcast /*= false*/, uint32 dungeonEncounterId /*= 0*/)
 {
-    if (!item)  // prevent crash
+    if (!item || item->IsDeleted())  // prevent crash
         return;
 
     WorldPackets::Item::ItemPushResult packet;

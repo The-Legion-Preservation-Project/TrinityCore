@@ -188,6 +188,12 @@ void Object::RemoveFromWorld()
     ClearUpdateMask(true);
 }
 
+void Object::SetEntry(uint32 entry)
+{
+    m_entry = entry;
+    SetUInt32Value(OBJECT_FIELD_ENTRY, entry);
+}
+
 void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const
 {
     if (!target)
