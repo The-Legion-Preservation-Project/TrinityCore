@@ -3495,6 +3495,8 @@ SpellCastResult WorldObject::CastSpell(CastSpellTargetArg const& targets, uint32
                 spell->m_CastItem = triggeringAuraCaster->GetItemByGuid(args.TriggeringAura->GetBase()->GetCastItemGUID());
     }
 
+    spell->m_customArg = args.CustomArg;
+
     return spell->prepare(*targets.Targets, args.TriggeringAura);
 }
 
