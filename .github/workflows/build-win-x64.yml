@@ -3,7 +3,7 @@ name: Windows x64
 on:
   push:
     branches:
-      - main
+      - 7.3.5
   pull_request:
 
 jobs:
