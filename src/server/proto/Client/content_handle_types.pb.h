@@ -372,7 +372,6 @@ inline void ContentHandle::set_allocated_proto_url(::std::string* proto_url) {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

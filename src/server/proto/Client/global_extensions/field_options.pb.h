@@ -20,9 +20,11 @@
 #endif
 
 #include <google/protobuf/generated_message_util.h>
+#include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
 #include <google/protobuf/generated_enum_reflection.h>
+#include <google/protobuf/unknown_field_set.h>
 #include "google/protobuf/descriptor.pb.h"
 #include "Define.h" // for TC_PROTO_API
 // @@protoc_insertion_point(includes)
@@ -34,6 +36,8 @@ namespace protocol {
 void TC_PROTO_API protobuf_AddDesc_global_5fextensions_2ffield_5foptions_2eproto();
 void protobuf_AssignDesc_global_5fextensions_2ffield_5foptions_2eproto();
 void protobuf_ShutdownFile_global_5fextensions_2ffield_5foptions_2eproto();
+
+class BGSFieldOptions;
 
 enum LogOption {
   HIDDEN = 1,
@@ -56,16 +60,154 @@ inline bool LogOption_Parse(
 }
 // ===================================================================
 
+class TC_PROTO_API BGSFieldOptions : public ::google::protobuf::Message {
+ public:
+  BGSFieldOptions();
+  virtual ~BGSFieldOptions();
+
+  BGSFieldOptions(const BGSFieldOptions& from);
+
+  inline BGSFieldOptions& operator=(const BGSFieldOptions& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BGSFieldOptions& default_instance();
+
+  void Swap(BGSFieldOptions* other);
+
+  // implements Message ----------------------------------------------
+
+  BGSFieldOptions* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BGSFieldOptions& from);
+  void MergeFrom(const BGSFieldOptions& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .bgs.protocol.LogOption log = 1;
+  inline bool has_log() const;
+  inline void clear_log();
+  static const int kLogFieldNumber = 1;
+  inline ::bgs::protocol::LogOption log() const;
+  inline void set_log(::bgs::protocol::LogOption value);
+
+  // optional bool shard_key = 2;
+  inline bool has_shard_key() const;
+  inline void clear_shard_key();
+  static const int kShardKeyFieldNumber = 2;
+  inline bool shard_key() const;
+  inline void set_shard_key(bool value);
+
+  // @@protoc_insertion_point(class_scope:bgs.protocol.BGSFieldOptions)
+ private:
+  inline void set_has_log();
+  inline void clear_has_log();
+  inline void set_has_shard_key();
+  inline void clear_has_shard_key();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  int log_;
+  bool shard_key_;
+  friend void TC_PROTO_API protobuf_AddDesc_global_5fextensions_2ffield_5foptions_2eproto();
+  friend void protobuf_AssignDesc_global_5fextensions_2ffield_5foptions_2eproto();
+  friend void protobuf_ShutdownFile_global_5fextensions_2ffield_5foptions_2eproto();
+
+  void InitAsDefaultInstance();
+  static BGSFieldOptions* default_instance_;
+};
 // ===================================================================
 
 // ===================================================================
 
-static const int kLogFieldNumber = 50000;
+static const int kFieldOptionsFieldNumber = 90000;
 TC_PROTO_API extern ::google::protobuf::internal::ExtensionIdentifier< ::google::protobuf::FieldOptions,
-    ::google::protobuf::internal::EnumTypeTraits< ::bgs::protocol::LogOption, ::bgs::protocol::LogOption_IsValid>, 14, false >
-  log;
+    ::google::protobuf::internal::MessageTypeTraits< ::bgs::protocol::BGSFieldOptions >, 11, false >
+  field_options;
 
 // ===================================================================
+
+// BGSFieldOptions
+
+// optional .bgs.protocol.LogOption log = 1;
+inline bool BGSFieldOptions::has_log() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BGSFieldOptions::set_has_log() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BGSFieldOptions::clear_has_log() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BGSFieldOptions::clear_log() {
+  log_ = 1;
+  clear_has_log();
+}
+inline ::bgs::protocol::LogOption BGSFieldOptions::log() const {
+  // @@protoc_insertion_point(field_get:bgs.protocol.BGSFieldOptions.log)
+  return static_cast< ::bgs::protocol::LogOption >(log_);
+}
+inline void BGSFieldOptions::set_log(::bgs::protocol::LogOption value) {
+  assert(::bgs::protocol::LogOption_IsValid(value));
+  set_has_log();
+  log_ = value;
+  // @@protoc_insertion_point(field_set:bgs.protocol.BGSFieldOptions.log)
+}
+
+// optional bool shard_key = 2;
+inline bool BGSFieldOptions::has_shard_key() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void BGSFieldOptions::set_has_shard_key() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void BGSFieldOptions::clear_has_shard_key() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void BGSFieldOptions::clear_shard_key() {
+  shard_key_ = false;
+  clear_has_shard_key();
+}
+inline bool BGSFieldOptions::shard_key() const {
+  // @@protoc_insertion_point(field_get:bgs.protocol.BGSFieldOptions.shard_key)
+  return shard_key_;
+}
+inline void BGSFieldOptions::set_shard_key(bool value) {
+  set_has_shard_key();
+  shard_key_ = value;
+  // @@protoc_insertion_point(field_set:bgs.protocol.BGSFieldOptions.shard_key)
+}
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -75,13 +217,11 @@ TC_PROTO_API extern ::google::protobuf::internal::ExtensionIdentifier< ::google:
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 template <> struct is_proto_enum< ::bgs::protocol::LogOption> : ::google::protobuf::internal::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::bgs::protocol::LogOption>() {
   return ::bgs::protocol::LogOption_descriptor();
 }
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

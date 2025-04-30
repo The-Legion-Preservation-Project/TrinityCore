@@ -457,7 +457,6 @@ inline void ClientInfo::set_privileged_network(bool value) {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

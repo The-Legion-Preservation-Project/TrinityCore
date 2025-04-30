@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "rpc_config.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,7 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
 
 namespace bgs {
@@ -205,7 +203,6 @@ struct StaticDescriptorInitializer_rpc_5fconfig_2eproto {
     protobuf_AddDesc_rpc_5fconfig_2eproto();
   }
 } static_descriptor_initializer_rpc_5fconfig_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -985,7 +982,6 @@ void RPCMethodConfig::CopyFrom(const RPCMethodConfig& from) {
 }
 
 bool RPCMethodConfig::IsInitialized() const {
-
   return true;
 }
 
@@ -1385,7 +1381,6 @@ void RPCMeterConfig::CopyFrom(const RPCMeterConfig& from) {
 }
 
 bool RPCMeterConfig::IsInitialized() const {
-
   return true;
 }
 
@@ -1692,7 +1687,6 @@ void ProtocolAlias::CopyFrom(const ProtocolAlias& from) {
 
 bool ProtocolAlias::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
-
   return true;
 }
 
@@ -1911,7 +1905,6 @@ void ServiceAliases::CopyFrom(const ServiceAliases& from) {
 }
 
 bool ServiceAliases::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->protocol_alias())) return false;
   return true;
 }

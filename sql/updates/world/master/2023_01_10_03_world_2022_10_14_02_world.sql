@@ -1,7 +1,7 @@
 -- *** Quest "Last rites" ***
 DELETE FROM `gossip_menu_option` WHERE `MenuID`=9417;
-INSERT INTO `gossip_menu_option` (`MenuID`,`GossipOptionID`,`OptionID`,`OptionNpc`,`OptionText`,`OptionBroadcastTextID`,`ActionMenuID`,`ActionPoiID`,`BoxCoded`,`BoxMoney`,`BoxText`,`BoxBroadcastTextID`,`VerifiedBuild`) VALUES
-(9417,-2410752,0,0,"Let's do this, Thassarian.  It's now or never.",25840,0,0,0,0,NULL,0,0);
+INSERT INTO `gossip_menu_option` (`MenuID`,`OptionID`,`OptionNpc`,`OptionText`,`OptionBroadcastTextID`,`ActionMenuID`,`ActionPoiID`,`BoxCoded`,`BoxMoney`,`BoxText`,`BoxBroadcastTextID`,`VerifiedBuild`) VALUES
+(9417,0,0,"Let's do this, Thassarian.  It's now or never.",25840,0,0,0,0,NULL,0,0);
 
 -- Add missing gossip text
 DELETE FROM `gossip_menu` WHERE `MenuID`=9417 AND `TextID`=12664;

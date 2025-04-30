@@ -1094,13 +1094,11 @@ AttributeFilter::mutable_attribute() {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 template <> struct is_proto_enum< ::bgs::protocol::AttributeFilter_Operation> : ::google::protobuf::internal::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::bgs::protocol::AttributeFilter_Operation>() {
   return ::bgs::protocol::AttributeFilter_Operation_descriptor();
 }
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "channel_types.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,7 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
 
 namespace bgs {
@@ -335,7 +333,6 @@ struct StaticDescriptorInitializer_channel_5ftypes_2eproto {
     protobuf_AddDesc_channel_5ftypes_2eproto();
   }
 } static_descriptor_initializer_channel_5ftypes_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -550,7 +547,6 @@ void Message::CopyFrom(const Message& from) {
 }
 
 bool Message::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
 
   if (!_extensions_.IsInitialized()) return false;  return true;
@@ -1098,7 +1094,6 @@ void ListChannelsOptions::CopyFrom(const ListChannelsOptions& from) {
 
 bool ListChannelsOptions::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000040) != 0x00000040) return false;
-
   if (has_attribute_filter()) {
     if (!this->attribute_filter().IsInitialized()) return false;
   }
@@ -1418,7 +1413,6 @@ void ChannelDescription::CopyFrom(const ChannelDescription& from) {
 
 bool ChannelDescription::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_channel_id()) {
     if (!this->channel_id().IsInitialized()) return false;
   }
@@ -1691,7 +1685,6 @@ void ChannelInfo::CopyFrom(const ChannelInfo& from) {
 
 bool ChannelInfo::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_description()) {
     if (!this->description().IsInitialized()) return false;
   }
@@ -2366,7 +2359,6 @@ void ChannelState::CopyFrom(const ChannelState& from) {
 }
 
 bool ChannelState::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->invitation())) return false;
 
@@ -2621,7 +2613,6 @@ void MemberAccountInfo::CopyFrom(const MemberAccountInfo& from) {
 }
 
 bool MemberAccountInfo::IsInitialized() const {
-
   return true;
 }
 
@@ -2989,7 +2980,6 @@ void MemberState::CopyFrom(const MemberState& from) {
 }
 
 bool MemberState::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
   return true;
 }
@@ -3265,7 +3255,6 @@ void Member::CopyFrom(const Member& from) {
 
 bool Member::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
-
   if (has_identity()) {
     if (!this->identity().IsInitialized()) return false;
   }

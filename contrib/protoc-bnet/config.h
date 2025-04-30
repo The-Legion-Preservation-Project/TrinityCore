@@ -29,3 +29,8 @@
 /* define if you want to use zlib.  See readme.txt for additional
 * requirements. */
 // #define HAVE_ZLIB 1
+#define HASH_MAP_CLASS unordered_map
+
+#define HASH_SET_CLASS unordered_set
+
+#define HASH_SET_H <unordered_set>

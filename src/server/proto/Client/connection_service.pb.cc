@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "connection_service.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,8 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
-#include "Errors.h"
 #include "BattlenetRpcErrorCodes.h"
 // @@protoc_insertion_point(includes)
 
@@ -359,26 +356,27 @@ void protobuf_AddDesc_connection_5fservice_2eproto() {
     "\001(\014\"\'\n\021DisconnectRequest\022\022\n\nerror_code\030\001"
     " \002(\r\"<\n\026DisconnectNotification\022\022\n\nerror_"
     "code\030\001 \002(\r\022\016\n\006reason\030\002 \001(\t\"\020\n\016EncryptReq"
-    "uest2\330\005\n\021ConnectionService\022h\n\007Connect\022*."
+    "uest2\361\005\n\021ConnectionService\022j\n\007Connect\022*."
     "bgs.protocol.connection.v1.ConnectReques"
     "t\032+.bgs.protocol.connection.v1.ConnectRe"
-    "sponse\"\004\200\265\030\001\022b\n\004Bind\022\'.bgs.protocol.conn"
-    "ection.v1.BindRequest\032(.bgs.protocol.con"
-    "nection.v1.BindResponse\"\007\210\002\001\200\265\030\002\022_\n\004Echo"
-    "\022\'.bgs.protocol.connection.v1.EchoReques"
-    "t\032(.bgs.protocol.connection.v1.EchoRespo"
-    "nse\"\004\200\265\030\003\022f\n\017ForceDisconnect\0222.bgs.proto"
-    "col.connection.v1.DisconnectNotification"
-    "\032\031.bgs.protocol.NO_RESPONSE\"\004\200\265\030\004\022B\n\tKee"
-    "pAlive\022\024.bgs.protocol.NoData\032\031.bgs.proto"
-    "col.NO_RESPONSE\"\004\200\265\030\005\022T\n\007Encrypt\022*.bgs.p"
-    "rotocol.connection.v1.EncryptRequest\032\024.b"
-    "gs.protocol.NoData\"\007\210\002\001\200\265\030\006\022c\n\021RequestDi"
-    "sconnect\022-.bgs.protocol.connection.v1.Di"
-    "sconnectRequest\032\031.bgs.protocol.NO_RESPON"
-    "SE\"\004\200\265\030\007\032-\312>*bnet.protocol.connection.Co"
-    "nnectionServiceB=\n\033bnet.protocol.connect"
-    "ion.v1B\026ConnectionServiceProtoH\001\200\001\000\210\001\001", 2198);
+    "sponse\"\006\202\371+\002\010\001\022d\n\004Bind\022\'.bgs.protocol.co"
+    "nnection.v1.BindRequest\032(.bgs.protocol.c"
+    "onnection.v1.BindResponse\"\t\210\002\001\202\371+\002\010\002\022a\n\004"
+    "Echo\022\'.bgs.protocol.connection.v1.EchoRe"
+    "quest\032(.bgs.protocol.connection.v1.EchoR"
+    "esponse\"\006\202\371+\002\010\003\022h\n\017ForceDisconnect\0222.bgs"
+    ".protocol.connection.v1.DisconnectNotifi"
+    "cation\032\031.bgs.protocol.NO_RESPONSE\"\006\202\371+\002\010"
+    "\004\022D\n\tKeepAlive\022\024.bgs.protocol.NoData\032\031.b"
+    "gs.protocol.NO_RESPONSE\"\006\202\371+\002\010\005\022V\n\007Encry"
+    "pt\022*.bgs.protocol.connection.v1.EncryptR"
+    "equest\032\024.bgs.protocol.NoData\"\t\210\002\001\202\371+\002\010\006\022"
+    "e\n\021RequestDisconnect\022-.bgs.protocol.conn"
+    "ection.v1.DisconnectRequest\032\031.bgs.protoc"
+    "ol.NO_RESPONSE\"\006\202\371+\002\010\007\0328\202\371+,\n*bnet.proto"
+    "col.connection.ConnectionService\212\371+\004\010\001\020\001"
+    "B=\n\033bnet.protocol.connection.v1B\026Connect"
+    "ionServiceProtoH\001\200\001\000\210\001\001", 2223);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "connection_service.proto", &protobuf_RegisterTypes);
   ConnectRequest::default_instance_ = new ConnectRequest();
@@ -412,7 +410,6 @@ struct StaticDescriptorInitializer_connection_5fservice_2eproto {
     protobuf_AddDesc_connection_5fservice_2eproto();
   }
 } static_descriptor_initializer_connection_5fservice_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -699,7 +696,6 @@ void ConnectRequest::CopyFrom(const ConnectRequest& from) {
 }
 
 bool ConnectRequest::IsInitialized() const {
-
   if (has_client_id()) {
     if (!this->client_id().IsInitialized()) return false;
   }
@@ -925,7 +921,6 @@ void ConnectionMeteringContentHandles::CopyFrom(const ConnectionMeteringContentH
 }
 
 bool ConnectionMeteringContentHandles::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->content_handle())) return false;
   return true;
 }
@@ -1451,7 +1446,6 @@ void ConnectResponse::CopyFrom(const ConnectResponse& from) {
 
 bool ConnectResponse::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_server_id()) {
     if (!this->server_id().IsInitialized()) return false;
   }
@@ -1741,7 +1735,6 @@ void BoundService::CopyFrom(const BoundService& from) {
 
 bool BoundService::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
-
   return true;
 }
 
@@ -2095,7 +2088,6 @@ void BindRequest::CopyFrom(const BindRequest& from) {
 }
 
 bool BindRequest::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->deprecated_exported_service())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->exported_service())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->imported_service())) return false;
@@ -2343,7 +2335,6 @@ void BindResponse::CopyFrom(const BindResponse& from) {
 }
 
 bool BindResponse::IsInitialized() const {
-
   return true;
 }
 
@@ -2647,7 +2638,6 @@ void EchoRequest::CopyFrom(const EchoRequest& from) {
 }
 
 bool EchoRequest::IsInitialized() const {
-
   return true;
 }
 
@@ -2917,7 +2907,6 @@ void EchoResponse::CopyFrom(const EchoResponse& from) {
 }
 
 bool EchoResponse::IsInitialized() const {
-
   return true;
 }
 
@@ -3140,7 +3129,6 @@ void DisconnectRequest::CopyFrom(const DisconnectRequest& from) {
 
 bool DisconnectRequest::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   return true;
 }
 
@@ -3423,7 +3411,6 @@ void DisconnectNotification::CopyFrom(const DisconnectNotification& from) {
 
 bool DisconnectNotification::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   return true;
 }
 
@@ -3599,7 +3586,6 @@ void EncryptRequest::CopyFrom(const EncryptRequest& from) {
 }
 
 bool EncryptRequest::IsInitialized() const {
-
   return true;
 }
 
@@ -3620,7 +3606,7 @@ void EncryptRequest::Swap(EncryptRequest* other) {
 
 // ===================================================================
 
-ConnectionService::ConnectionService(bool use_original_hash) : service_hash_(use_original_hash ? OriginalHash::value : NameHash::value) {
+ConnectionService::ConnectionService(bool use_original_hash) : ServiceBase(use_original_hash ? OriginalHash::value : NameHash::value) {
 }
 
 ConnectionService::~ConnectionService() {
@@ -3631,263 +3617,223 @@ google::protobuf::ServiceDescriptor const* ConnectionService::descriptor() {
   return ConnectionService_descriptor_;
 }
 
-void ConnectionService::Connect(::bgs::protocol::connection::v1::ConnectRequest const* request, std::function<void(::bgs::protocol::connection::v1::ConnectResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method ConnectionService.Connect(bgs.protocol.connection.v1.ConnectRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void ConnectionService::Connect(::bgs::protocol::connection::v1::ConnectRequest const* request, std::function<void(::bgs::protocol::connection::v1::ConnectResponse const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("ConnectionService.Connect", "bgs.protocol.connection.v1.ConnectRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::connection::v1::ConnectResponse response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 1, request, std::move(callback));
+  SendRequest(service_hash_, 1 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
-void ConnectionService::Bind(::bgs::protocol::connection::v1::BindRequest const* request, std::function<void(::bgs::protocol::connection::v1::BindResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method ConnectionService.Bind(bgs.protocol.connection.v1.BindRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void ConnectionService::Bind(::bgs::protocol::connection::v1::BindRequest const* request, std::function<void(::bgs::protocol::connection::v1::BindResponse const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("ConnectionService.Bind", "bgs.protocol.connection.v1.BindRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::connection::v1::BindResponse response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 2, request, std::move(callback));
+  SendRequest(service_hash_, 2 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
-void ConnectionService::Echo(::bgs::protocol::connection::v1::EchoRequest const* request, std::function<void(::bgs::protocol::connection::v1::EchoResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method ConnectionService.Echo(bgs.protocol.connection.v1.EchoRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void ConnectionService::Echo(::bgs::protocol::connection::v1::EchoRequest const* request, std::function<void(::bgs::protocol::connection::v1::EchoResponse const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("ConnectionService.Echo", "bgs.protocol.connection.v1.EchoRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::connection::v1::EchoResponse response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 3, request, std::move(callback));
+  SendRequest(service_hash_, 3 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
-void ConnectionService::ForceDisconnect(::bgs::protocol::connection::v1::DisconnectNotification const* request) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method ConnectionService.ForceDisconnect(bgs.protocol.connection.v1.DisconnectNotification{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  SendRequest(service_hash_, 4, request);
+void ConnectionService::ForceDisconnect(::bgs::protocol::connection::v1::DisconnectNotification const* request, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("ConnectionService.ForceDisconnect", "bgs.protocol.connection.v1.DisconnectNotification", request);
+  SendRequest(service_hash_, 4 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request);
 }
 
-void ConnectionService::KeepAlive(::bgs::protocol::NoData const* request) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method ConnectionService.KeepAlive(bgs.protocol.NoData{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  SendRequest(service_hash_, 5, request);
+void ConnectionService::KeepAlive(::bgs::protocol::NoData const* request, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("ConnectionService.KeepAlive", "bgs.protocol.NoData", request);
+  SendRequest(service_hash_, 5 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request);
 }
 
-void ConnectionService::Encrypt(::bgs::protocol::connection::v1::EncryptRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method ConnectionService.Encrypt(bgs.protocol.connection.v1.EncryptRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void ConnectionService::Encrypt(::bgs::protocol::connection::v1::EncryptRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("ConnectionService.Encrypt", "bgs.protocol.connection.v1.EncryptRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::NoData response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 6, request, std::move(callback));
+  SendRequest(service_hash_, 6 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
-void ConnectionService::RequestDisconnect(::bgs::protocol::connection::v1::DisconnectRequest const* request) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method ConnectionService.RequestDisconnect(bgs.protocol.connection.v1.DisconnectRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  SendRequest(service_hash_, 7, request);
+void ConnectionService::RequestDisconnect(::bgs::protocol::connection::v1::DisconnectRequest const* request, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("ConnectionService.RequestDisconnect", "bgs.protocol.connection.v1.DisconnectRequest", request);
+  SendRequest(service_hash_, 7 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request);
 }
 
 void ConnectionService::CallServerMethod(uint32 token, uint32 methodId, MessageBuffer buffer) {
-  switch(methodId) {
-    case 1: {
-      ::bgs::protocol::connection::v1::ConnectRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for ConnectionService.Connect server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 1, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.Connect(bgs.protocol.connection.v1.ConnectRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::connection::v1::ConnectResponse::descriptor());
-        ConnectionService* self = static_cast<ConnectionService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.Connect() returned bgs.protocol.connection.v1.ConnectResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 1, token, response);
-        else
-          self->SendResponse(self->service_hash_, 1, token, status);
-      };
-      ::bgs::protocol::connection::v1::ConnectResponse response;
-      uint32 status = HandleConnect(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+  switch(methodId & 0x3FFFFFFF) {
+    case 1:
+      ParseAndHandleConnect(token, methodId, buffer);
       break;
-    }
-    case 2: {
-      ::bgs::protocol::connection::v1::BindRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for ConnectionService.Bind server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 2, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.Bind(bgs.protocol.connection.v1.BindRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::connection::v1::BindResponse::descriptor());
-        ConnectionService* self = static_cast<ConnectionService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.Bind() returned bgs.protocol.connection.v1.BindResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 2, token, response);
-        else
-          self->SendResponse(self->service_hash_, 2, token, status);
-      };
-      ::bgs::protocol::connection::v1::BindResponse response;
-      uint32 status = HandleBind(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 2:
+      ParseAndHandleBind(token, methodId, buffer);
       break;
-    }
-    case 3: {
-      ::bgs::protocol::connection::v1::EchoRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for ConnectionService.Echo server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 3, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.Echo(bgs.protocol.connection.v1.EchoRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::connection::v1::EchoResponse::descriptor());
-        ConnectionService* self = static_cast<ConnectionService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.Echo() returned bgs.protocol.connection.v1.EchoResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 3, token, response);
-        else
-          self->SendResponse(self->service_hash_, 3, token, status);
-      };
-      ::bgs::protocol::connection::v1::EchoResponse response;
-      uint32 status = HandleEcho(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 3:
+      ParseAndHandleEcho(token, methodId, buffer);
       break;
-    }
-    case 4: {
-      ::bgs::protocol::connection::v1::DisconnectNotification request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for ConnectionService.ForceDisconnect server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 4, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      uint32 status = HandleForceDisconnect(&request);
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.ForceDisconnect(bgs.protocol.connection.v1.DisconnectNotification{ %s }) status %u.",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str(), status);
-      if (status)
-        SendResponse(service_hash_, 4, token, status);
+    case 4:
+      ParseAndHandleForceDisconnect(token, methodId, buffer);
       break;
-    }
-    case 5: {
-      ::bgs::protocol::NoData request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for ConnectionService.KeepAlive server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 5, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      uint32 status = HandleKeepAlive(&request);
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.KeepAlive(bgs.protocol.NoData{ %s }) status %u.",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str(), status);
-      if (status)
-        SendResponse(service_hash_, 5, token, status);
+    case 5:
+      ParseAndHandleKeepAlive(token, methodId, buffer);
       break;
-    }
-    case 6: {
-      ::bgs::protocol::connection::v1::EncryptRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for ConnectionService.Encrypt server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 6, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.Encrypt(bgs.protocol.connection.v1.EncryptRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::NoData::descriptor());
-        ConnectionService* self = static_cast<ConnectionService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.Encrypt() returned bgs.protocol.NoData{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 6, token, response);
-        else
-          self->SendResponse(self->service_hash_, 6, token, status);
-      };
-      ::bgs::protocol::NoData response;
-      uint32 status = HandleEncrypt(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 6:
+      ParseAndHandleEncrypt(token, methodId, buffer);
       break;
-    }
-    case 7: {
-      ::bgs::protocol::connection::v1::DisconnectRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for ConnectionService.RequestDisconnect server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 7, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      uint32 status = HandleRequestDisconnect(&request);
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method ConnectionService.RequestDisconnect(bgs.protocol.connection.v1.DisconnectRequest{ %s }) status %u.",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str(), status);
-      if (status)
-        SendResponse(service_hash_, 7, token, status);
+    case 7:
+      ParseAndHandleRequestDisconnect(token, methodId, buffer);
       break;
-    }
     default:
-      TC_LOG_ERROR("service.protobuf", "Bad method id %u.", methodId);
+      LogInvalidMethod(methodId);
       SendResponse(service_hash_, methodId, token, ERROR_RPC_INVALID_METHOD);
       break;
     }
 }
 
-uint32 ConnectionService::HandleConnect(::bgs::protocol::connection::v1::ConnectRequest const* request, ::bgs::protocol::connection::v1::ConnectResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method ConnectionService.Connect({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 ConnectionService::HandleConnect(::bgs::protocol::connection::v1::ConnectRequest const* request, ::bgs::protocol::connection::v1::ConnectResponse* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("ConnectionService.Connect", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 ConnectionService::HandleBind(::bgs::protocol::connection::v1::BindRequest const* request, ::bgs::protocol::connection::v1::BindResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method ConnectionService.Bind({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 ConnectionService::HandleBind(::bgs::protocol::connection::v1::BindRequest const* request, ::bgs::protocol::connection::v1::BindResponse* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("ConnectionService.Bind", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 ConnectionService::HandleEcho(::bgs::protocol::connection::v1::EchoRequest const* request, ::bgs::protocol::connection::v1::EchoResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method ConnectionService.Echo({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 ConnectionService::HandleEcho(::bgs::protocol::connection::v1::EchoRequest const* request, ::bgs::protocol::connection::v1::EchoResponse* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("ConnectionService.Echo", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
 uint32 ConnectionService::HandleForceDisconnect(::bgs::protocol::connection::v1::DisconnectNotification const* request) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method ConnectionService.ForceDisconnect({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+  LogUnimplementedServerMethod("ConnectionService.ForceDisconnect", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
 uint32 ConnectionService::HandleKeepAlive(::bgs::protocol::NoData const* request) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method ConnectionService.KeepAlive({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+  LogUnimplementedServerMethod("ConnectionService.KeepAlive", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 ConnectionService::HandleEncrypt(::bgs::protocol::connection::v1::EncryptRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method ConnectionService.Encrypt({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 ConnectionService::HandleEncrypt(::bgs::protocol::connection::v1::EncryptRequest const* request, ::bgs::protocol::NoData* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("ConnectionService.Encrypt", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
 uint32 ConnectionService::HandleRequestDisconnect(::bgs::protocol::connection::v1::DisconnectRequest const* request) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method ConnectionService.RequestDisconnect({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+  LogUnimplementedServerMethod("ConnectionService.RequestDisconnect", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
+}
+
+void ConnectionService::ParseAndHandleConnect(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::connection::v1::ConnectRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("ConnectionService.Connect");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("ConnectionService.Connect", "bgs.protocol.connection.v1.ConnectRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "ConnectionService.Connect", ::bgs::protocol::connection::v1::ConnectResponse::descriptor());
+  ::bgs::protocol::connection::v1::ConnectResponse response;
+  uint32 status = HandleConnect(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void ConnectionService::ParseAndHandleBind(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::connection::v1::BindRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("ConnectionService.Bind");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("ConnectionService.Bind", "bgs.protocol.connection.v1.BindRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "ConnectionService.Bind", ::bgs::protocol::connection::v1::BindResponse::descriptor());
+  ::bgs::protocol::connection::v1::BindResponse response;
+  uint32 status = HandleBind(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void ConnectionService::ParseAndHandleEcho(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::connection::v1::EchoRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("ConnectionService.Echo");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("ConnectionService.Echo", "bgs.protocol.connection.v1.EchoRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "ConnectionService.Echo", ::bgs::protocol::connection::v1::EchoResponse::descriptor());
+  ::bgs::protocol::connection::v1::EchoResponse response;
+  uint32 status = HandleEcho(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void ConnectionService::ParseAndHandleForceDisconnect(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::connection::v1::DisconnectNotification request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("ConnectionService.ForceDisconnect");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  uint32 status = HandleForceDisconnect(&request);
+  LogCallServerMethod("ConnectionService.ForceDisconnect", "bgs.protocol.connection.v1.DisconnectNotification", &request);
+  if (status)
+    SendResponse(service_hash_, methodId, token, status);
+}
+
+void ConnectionService::ParseAndHandleKeepAlive(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::NoData request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("ConnectionService.KeepAlive");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  uint32 status = HandleKeepAlive(&request);
+  LogCallServerMethod("ConnectionService.KeepAlive", "bgs.protocol.NoData", &request);
+  if (status)
+    SendResponse(service_hash_, methodId, token, status);
+}
+
+void ConnectionService::ParseAndHandleEncrypt(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::connection::v1::EncryptRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("ConnectionService.Encrypt");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("ConnectionService.Encrypt", "bgs.protocol.connection.v1.EncryptRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "ConnectionService.Encrypt", ::bgs::protocol::NoData::descriptor());
+  ::bgs::protocol::NoData response;
+  uint32 status = HandleEncrypt(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void ConnectionService::ParseAndHandleRequestDisconnect(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::connection::v1::DisconnectRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("ConnectionService.RequestDisconnect");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  uint32 status = HandleRequestDisconnect(&request);
+  LogCallServerMethod("ConnectionService.RequestDisconnect", "bgs.protocol.connection.v1.DisconnectRequest", &request);
+  if (status)
+    SendResponse(service_hash_, methodId, token, status);
 }
 
 // @@protoc_insertion_point(namespace_scope)

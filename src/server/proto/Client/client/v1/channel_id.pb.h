@@ -248,7 +248,6 @@ inline void ChannelId::set_id(::google::protobuf::uint32 value) {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

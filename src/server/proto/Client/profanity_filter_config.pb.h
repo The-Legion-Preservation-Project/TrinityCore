@@ -425,7 +425,6 @@ WordFilters::mutable_filters() {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

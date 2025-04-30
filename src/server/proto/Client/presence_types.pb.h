@@ -1035,13 +1035,11 @@ inline void ChannelState::set_healing(bool value) {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 template <> struct is_proto_enum< ::bgs::protocol::presence::v1::FieldOperation_OperationType> : ::google::protobuf::internal::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::bgs::protocol::presence::v1::FieldOperation_OperationType>() {
   return ::bgs::protocol::presence::v1::FieldOperation_OperationType_descriptor();
 }
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

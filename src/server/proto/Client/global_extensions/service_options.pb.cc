@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "global_extensions/service_options.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,18 +14,19 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
-
-// Fix stupid windows.h included from Log.h->Common.h
-#ifdef SendMessage
-#undef SendMessage
-#endif
 
 namespace bgs {
 namespace protocol {
 
 namespace {
+
+const ::google::protobuf::Descriptor* BGSServiceOptions_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  BGSServiceOptions_reflection_ = NULL;
+const ::google::protobuf::Descriptor* SDKServiceOptions_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  SDKServiceOptions_reflection_ = NULL;
 
 }  // namespace
 
@@ -36,6 +36,37 @@ void protobuf_AssignDesc_global_5fextensions_2fservice_5foptions_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "global_extensions/service_options.proto");
   GOOGLE_CHECK(file != NULL);
+  BGSServiceOptions_descriptor_ = file->message_type(0);
+  static const int BGSServiceOptions_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BGSServiceOptions, descriptor_name_),
+  };
+  BGSServiceOptions_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      BGSServiceOptions_descriptor_,
+      BGSServiceOptions::default_instance_,
+      BGSServiceOptions_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BGSServiceOptions, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BGSServiceOptions, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(BGSServiceOptions));
+  SDKServiceOptions_descriptor_ = file->message_type(1);
+  static const int SDKServiceOptions_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SDKServiceOptions, inbound_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SDKServiceOptions, outbound_),
+  };
+  SDKServiceOptions_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      SDKServiceOptions_descriptor_,
+      SDKServiceOptions::default_instance_,
+      SDKServiceOptions_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SDKServiceOptions, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SDKServiceOptions, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(SDKServiceOptions));
 }
 
 namespace {
@@ -48,11 +79,19 @@ inline void protobuf_AssignDescriptorsOnce() {
 
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    BGSServiceOptions_descriptor_, &BGSServiceOptions::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    SDKServiceOptions_descriptor_, &SDKServiceOptions::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_global_5fextensions_2fservice_5foptions_2eproto() {
+  delete BGSServiceOptions::default_instance_;
+  delete BGSServiceOptions_reflection_;
+  delete SDKServiceOptions::default_instance_;
+  delete SDKServiceOptions_reflection_;
 }
 
 void protobuf_AddDesc_global_5fextensions_2fservice_5foptions_2eproto() {
@@ -65,19 +104,29 @@ void protobuf_AddDesc_global_5fextensions_2fservice_5foptions_2eproto() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\'global_extensions/service_options.prot"
     "o\022\014bgs.protocol\032 google/protobuf/descrip"
-    "tor.proto:R\n(original_fully_qualified_de"
-    "scriptor_name\022\037.google.protobuf.ServiceO"
-    "ptions\030\351\007 \001(\t:5\n\nservice_id\022\037.google.pro"
-    "tobuf.ServiceOptions\030\320\206\003 \001(\rB&\n\rbnet.pro"
-    "tocolB\023ServiceOptionsProtoH\001", 268);
+    "tor.proto\",\n\021BGSServiceOptions\022\027\n\017descri"
+    "ptor_name\030\001 \001(\t\"6\n\021SDKServiceOptions\022\017\n\007"
+    "inbound\030\001 \001(\010\022\020\n\010outbound\030\002 \001(\010:[\n\017servi"
+    "ce_options\022\037.google.protobuf.ServiceOpti"
+    "ons\030\220\277\005 \001(\0132\037.bgs.protocol.BGSServiceOpt"
+    "ions:_\n\023sdk_service_options\022\037.google.pro"
+    "tobuf.ServiceOptions\030\221\277\005 \001(\0132\037.bgs.proto"
+    "col.SDKServiceOptionsB&\n\rbnet.protocolB\023"
+    "ServiceOptionsProtoH\001", 421);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "global_extensions/service_options.proto", &protobuf_RegisterTypes);
-  ::google::protobuf::internal::ExtensionSet::RegisterExtension(
+  BGSServiceOptions::default_instance_ = new BGSServiceOptions();
+  SDKServiceOptions::default_instance_ = new SDKServiceOptions();
+  ::google::protobuf::internal::ExtensionSet::RegisterMessageExtension(
     &::google::protobuf::ServiceOptions::default_instance(),
-    1001, 9, false, false);
-  ::google::protobuf::internal::ExtensionSet::RegisterExtension(
+    90000, 11, false, false,
+    &::bgs::protocol::BGSServiceOptions::default_instance());
+  ::google::protobuf::internal::ExtensionSet::RegisterMessageExtension(
     &::google::protobuf::ServiceOptions::default_instance(),
-    50000, 13, false, false);
+    90001, 11, false, false,
+    &::bgs::protocol::SDKServiceOptions::default_instance());
+  BGSServiceOptions::default_instance_->InitAsDefaultInstance();
+  SDKServiceOptions::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_global_5fextensions_2fservice_5foptions_2eproto);
 }
 
@@ -87,14 +136,521 @@ struct StaticDescriptorInitializer_global_5fextensions_2fservice_5foptions_2epro
     protobuf_AddDesc_global_5fextensions_2fservice_5foptions_2eproto();
   }
 } static_descriptor_initializer_global_5fextensions_2fservice_5foptions_2eproto_;
-const ::std::string original_fully_qualified_descriptor_name_default("");
-::google::protobuf::internal::ExtensionIdentifier< ::google::protobuf::ServiceOptions,
-    ::google::protobuf::internal::StringTypeTraits, 9, false >
-  original_fully_qualified_descriptor_name(kOriginalFullyQualifiedDescriptorNameFieldNumber, original_fully_qualified_descriptor_name_default);
-::google::protobuf::internal::ExtensionIdentifier< ::google::protobuf::ServiceOptions,
-    ::google::protobuf::internal::PrimitiveTypeTraits< ::google::protobuf::uint32 >, 13, false >
-  service_id(kServiceIdFieldNumber, 0u);
+// ===================================================================
 
+#ifndef _MSC_VER
+const int BGSServiceOptions::kDescriptorNameFieldNumber;
+#endif  // !_MSC_VER
+
+BGSServiceOptions::BGSServiceOptions()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:bgs.protocol.BGSServiceOptions)
+}
+
+void BGSServiceOptions::InitAsDefaultInstance() {
+}
+
+BGSServiceOptions::BGSServiceOptions(const BGSServiceOptions& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:bgs.protocol.BGSServiceOptions)
+}
+
+void BGSServiceOptions::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  descriptor_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+BGSServiceOptions::~BGSServiceOptions() {
+  // @@protoc_insertion_point(destructor:bgs.protocol.BGSServiceOptions)
+  SharedDtor();
+}
+
+void BGSServiceOptions::SharedDtor() {
+  if (descriptor_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete descriptor_name_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void BGSServiceOptions::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* BGSServiceOptions::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return BGSServiceOptions_descriptor_;
+}
+
+const BGSServiceOptions& BGSServiceOptions::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_global_5fextensions_2fservice_5foptions_2eproto();
+  return *default_instance_;
+}
+
+BGSServiceOptions* BGSServiceOptions::default_instance_ = NULL;
+
+BGSServiceOptions* BGSServiceOptions::New() const {
+  return new BGSServiceOptions;
+}
+
+void BGSServiceOptions::Clear() {
+  if (has_descriptor_name()) {
+    if (descriptor_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+      descriptor_name_->clear();
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool BGSServiceOptions::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:bgs.protocol.BGSServiceOptions)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional string descriptor_name = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_descriptor_name()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->descriptor_name().data(), this->descriptor_name().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "descriptor_name");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:bgs.protocol.BGSServiceOptions)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:bgs.protocol.BGSServiceOptions)
+  return false;
+#undef DO_
+}
+
+void BGSServiceOptions::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:bgs.protocol.BGSServiceOptions)
+  // optional string descriptor_name = 1;
+  if (has_descriptor_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->descriptor_name().data(), this->descriptor_name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "descriptor_name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->descriptor_name(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:bgs.protocol.BGSServiceOptions)
+}
+
+::google::protobuf::uint8* BGSServiceOptions::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:bgs.protocol.BGSServiceOptions)
+  // optional string descriptor_name = 1;
+  if (has_descriptor_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->descriptor_name().data(), this->descriptor_name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "descriptor_name");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->descriptor_name(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:bgs.protocol.BGSServiceOptions)
+  return target;
+}
+
+int BGSServiceOptions::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // optional string descriptor_name = 1;
+    if (has_descriptor_name()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->descriptor_name());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void BGSServiceOptions::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const BGSServiceOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const BGSServiceOptions*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void BGSServiceOptions::MergeFrom(const BGSServiceOptions& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_descriptor_name()) {
+      set_descriptor_name(from.descriptor_name());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void BGSServiceOptions::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void BGSServiceOptions::CopyFrom(const BGSServiceOptions& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool BGSServiceOptions::IsInitialized() const {
+  return true;
+}
+
+void BGSServiceOptions::Swap(BGSServiceOptions* other) {
+  if (other != this) {
+    std::swap(descriptor_name_, other->descriptor_name_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata BGSServiceOptions::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = BGSServiceOptions_descriptor_;
+  metadata.reflection = BGSServiceOptions_reflection_;
+  return metadata;
+}
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int SDKServiceOptions::kInboundFieldNumber;
+const int SDKServiceOptions::kOutboundFieldNumber;
+#endif  // !_MSC_VER
+
+SDKServiceOptions::SDKServiceOptions()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:bgs.protocol.SDKServiceOptions)
+}
+
+void SDKServiceOptions::InitAsDefaultInstance() {
+}
+
+SDKServiceOptions::SDKServiceOptions(const SDKServiceOptions& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:bgs.protocol.SDKServiceOptions)
+}
+
+void SDKServiceOptions::SharedCtor() {
+  _cached_size_ = 0;
+  inbound_ = false;
+  outbound_ = false;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+SDKServiceOptions::~SDKServiceOptions() {
+  // @@protoc_insertion_point(destructor:bgs.protocol.SDKServiceOptions)
+  SharedDtor();
+}
+
+void SDKServiceOptions::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void SDKServiceOptions::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* SDKServiceOptions::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return SDKServiceOptions_descriptor_;
+}
+
+const SDKServiceOptions& SDKServiceOptions::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_global_5fextensions_2fservice_5foptions_2eproto();
+  return *default_instance_;
+}
+
+SDKServiceOptions* SDKServiceOptions::default_instance_ = NULL;
+
+SDKServiceOptions* SDKServiceOptions::New() const {
+  return new SDKServiceOptions;
+}
+
+void SDKServiceOptions::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<SDKServiceOptions*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(inbound_, outbound_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool SDKServiceOptions::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:bgs.protocol.SDKServiceOptions)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional bool inbound = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &inbound_)));
+          set_has_inbound();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_outbound;
+        break;
+      }
+
+      // optional bool outbound = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_outbound:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &outbound_)));
+          set_has_outbound();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:bgs.protocol.SDKServiceOptions)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:bgs.protocol.SDKServiceOptions)
+  return false;
+#undef DO_
+}
+
+void SDKServiceOptions::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:bgs.protocol.SDKServiceOptions)
+  // optional bool inbound = 1;
+  if (has_inbound()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->inbound(), output);
+  }
+
+  // optional bool outbound = 2;
+  if (has_outbound()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->outbound(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:bgs.protocol.SDKServiceOptions)
+}
+
+::google::protobuf::uint8* SDKServiceOptions::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:bgs.protocol.SDKServiceOptions)
+  // optional bool inbound = 1;
+  if (has_inbound()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(1, this->inbound(), target);
+  }
+
+  // optional bool outbound = 2;
+  if (has_outbound()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->outbound(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:bgs.protocol.SDKServiceOptions)
+  return target;
+}
+
+int SDKServiceOptions::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // optional bool inbound = 1;
+    if (has_inbound()) {
+      total_size += 1 + 1;
+    }
+
+    // optional bool outbound = 2;
+    if (has_outbound()) {
+      total_size += 1 + 1;
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void SDKServiceOptions::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const SDKServiceOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const SDKServiceOptions*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void SDKServiceOptions::MergeFrom(const SDKServiceOptions& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_inbound()) {
+      set_inbound(from.inbound());
+    }
+    if (from.has_outbound()) {
+      set_outbound(from.outbound());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void SDKServiceOptions::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SDKServiceOptions::CopyFrom(const SDKServiceOptions& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SDKServiceOptions::IsInitialized() const {
+  return true;
+}
+
+void SDKServiceOptions::Swap(SDKServiceOptions* other) {
+  if (other != this) {
+    std::swap(inbound_, other->inbound_);
+    std::swap(outbound_, other->outbound_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata SDKServiceOptions::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = SDKServiceOptions_descriptor_;
+  metadata.reflection = SDKServiceOptions_reflection_;
+  return metadata;
+}
+
+::google::protobuf::internal::ExtensionIdentifier< ::google::protobuf::ServiceOptions,
+    ::google::protobuf::internal::MessageTypeTraits< ::bgs::protocol::BGSServiceOptions >, 11, false >
+  service_options(kServiceOptionsFieldNumber, ::bgs::protocol::BGSServiceOptions::default_instance());
+::google::protobuf::internal::ExtensionIdentifier< ::google::protobuf::ServiceOptions,
+    ::google::protobuf::internal::MessageTypeTraits< ::bgs::protocol::SDKServiceOptions >, 11, false >
+  sdk_service_options(kSdkServiceOptionsFieldNumber, ::bgs::protocol::SDKServiceOptions::default_instance());
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace protocol

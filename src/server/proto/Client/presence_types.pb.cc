@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "presence_types.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,7 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
 
 namespace bgs {
@@ -230,7 +228,6 @@ struct StaticDescriptorInitializer_presence_5ftypes_2eproto {
     protobuf_AddDesc_presence_5ftypes_2eproto();
   }
 } static_descriptor_initializer_presence_5ftypes_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -516,7 +513,6 @@ void RichPresenceLocalizationKey::CopyFrom(const RichPresenceLocalizationKey& fr
 
 bool RichPresenceLocalizationKey::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
-
   return true;
 }
 
@@ -865,7 +861,6 @@ void FieldKey::CopyFrom(const FieldKey& from) {
 
 bool FieldKey::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
-
   return true;
 }
 
@@ -1140,7 +1135,6 @@ void Field::CopyFrom(const Field& from) {
 
 bool Field::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
-
   if (has_key()) {
     if (!this->key().IsInitialized()) return false;
   }
@@ -1441,7 +1435,6 @@ void FieldOperation::CopyFrom(const FieldOperation& from) {
 
 bool FieldOperation::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_field()) {
     if (!this->field().IsInitialized()) return false;
   }
@@ -1753,7 +1746,6 @@ void ChannelState::CopyFrom(const ChannelState& from) {
 }
 
 bool ChannelState::IsInitialized() const {
-
   if (has_entity_id()) {
     if (!this->entity_id().IsInitialized()) return false;
   }

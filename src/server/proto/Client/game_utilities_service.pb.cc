@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "game_utilities_service.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,8 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
-#include "Errors.h"
 #include "BattlenetRpcErrorCodes.h"
 // @@protoc_insertion_point(includes)
 
@@ -416,37 +413,38 @@ void protobuf_AddDesc_game_5futilities_5fservice_2eproto() {
     "(\t\022(\n\010agent_id\030\002 \001(\0132\026.bgs.protocol.Enti"
     "tyId\022\017\n\007program\030\005 \001(\007\"R\n GetAllValuesFor"
     "AttributeResponse\022.\n\017attribute_value\030\001 \003"
-    "(\0132\025.bgs.protocol.Variant2\365\010\n\024GameUtilit"
-    "iesService\022{\n\024ProcessClientRequest\022-.bgs"
+    "(\0132\025.bgs.protocol.Variant2\220\t\n\024GameUtilit"
+    "iesService\022}\n\024ProcessClientRequest\022-.bgs"
     ".protocol.game_utilities.v1.ClientReques"
     "t\032..bgs.protocol.game_utilities.v1.Clien"
-    "tResponse\"\004\200\265\030\001\022s\n\026PresenceChannelCreate"
-    "d\022=.bgs.protocol.game_utilities.v1.Prese"
-    "nceChannelCreatedRequest\032\024.bgs.protocol."
-    "NoData\"\004\200\265\030\002\022\221\001\n\022GetPlayerVariables\0229.bg"
-    "s.protocol.game_utilities.v1.GetPlayerVa"
-    "riablesRequest\032:.bgs.protocol.game_utili"
-    "ties.v1.GetPlayerVariablesResponse\"\004\200\265\030\003"
-    "\022{\n\024ProcessServerRequest\022-.bgs.protocol."
-    "game_utilities.v1.ServerRequest\032..bgs.pr"
-    "otocol.game_utilities.v1.ServerResponse\""
-    "\004\200\265\030\006\022u\n\023OnGameAccountOnline\022=.bgs.proto"
-    "col.game_utilities.v1.GameAccountOnlineN"
-    "otification\032\031.bgs.protocol.NO_RESPONSE\"\004"
-    "\200\265\030\007\022w\n\024OnGameAccountOffline\022>.bgs.proto"
-    "col.game_utilities.v1.GameAccountOffline"
-    "Notification\032\031.bgs.protocol.NO_RESPONSE\""
-    "\004\200\265\030\010\022\224\001\n\023GetAchievementsFile\022:.bgs.prot"
-    "ocol.game_utilities.v1.GetAchievementsFi"
-    "leRequest\032;.bgs.protocol.game_utilities."
-    "v1.GetAchievementsFileResponse\"\004\200\265\030\t\022\243\001\n"
-    "\030GetAllValuesForAttribute\022\?.bgs.protocol"
-    ".game_utilities.v1.GetAllValuesForAttrib"
-    "uteRequest\032@.bgs.protocol.game_utilities"
-    ".v1.GetAllValuesForAttributeResponse\"\004\200\265"
-    "\030\n\032-\312>*bnet.protocol.game_utilities.Game"
-    "UtilitiesBD\n\037bnet.protocol.game_utilitie"
-    "s.v1B\031GameUtilitiesServiceProtoH\001\200\001\000\210\001\001", 2999);
+    "tResponse\"\006\202\371+\002\010\001\022u\n\026PresenceChannelCrea"
+    "ted\022=.bgs.protocol.game_utilities.v1.Pre"
+    "senceChannelCreatedRequest\032\024.bgs.protoco"
+    "l.NoData\"\006\202\371+\002\010\002\022\223\001\n\022GetPlayerVariables\022"
+    "9.bgs.protocol.game_utilities.v1.GetPlay"
+    "erVariablesRequest\032:.bgs.protocol.game_u"
+    "tilities.v1.GetPlayerVariablesResponse\"\006"
+    "\202\371+\002\010\003\022}\n\024ProcessServerRequest\022-.bgs.pro"
+    "tocol.game_utilities.v1.ServerRequest\032.."
+    "bgs.protocol.game_utilities.v1.ServerRes"
+    "ponse\"\006\202\371+\002\010\006\022w\n\023OnGameAccountOnline\022=.b"
+    "gs.protocol.game_utilities.v1.GameAccoun"
+    "tOnlineNotification\032\031.bgs.protocol.NO_RE"
+    "SPONSE\"\006\202\371+\002\010\007\022y\n\024OnGameAccountOffline\022>"
+    ".bgs.protocol.game_utilities.v1.GameAcco"
+    "untOfflineNotification\032\031.bgs.protocol.NO"
+    "_RESPONSE\"\006\202\371+\002\010\010\022\226\001\n\023GetAchievementsFil"
+    "e\022:.bgs.protocol.game_utilities.v1.GetAc"
+    "hievementsFileRequest\032;.bgs.protocol.gam"
+    "e_utilities.v1.GetAchievementsFileRespon"
+    "se\"\006\202\371+\002\010\t\022\245\001\n\030GetAllValuesForAttribute\022"
+    "\?.bgs.protocol.game_utilities.v1.GetAllV"
+    "aluesForAttributeRequest\032@.bgs.protocol."
+    "game_utilities.v1.GetAllValuesForAttribu"
+    "teResponse\"\006\202\371+\002\010\n\0328\202\371+,\n*bnet.protocol."
+    "game_utilities.GameUtilities\212\371+\004\010\001\020\001BD\n\037"
+    "bnet.protocol.game_utilities.v1B\031GameUti"
+    "litiesServiceProtoH\001\200\001\000\210\001\001", 3026);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "game_utilities_service.proto", &protobuf_RegisterTypes);
   ClientRequest::default_instance_ = new ClientRequest();
@@ -484,7 +482,6 @@ struct StaticDescriptorInitializer_game_5futilities_5fservice_2eproto {
     protobuf_AddDesc_game_5futilities_5fservice_2eproto();
   }
 } static_descriptor_initializer_game_5futilities_5fservice_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -896,7 +893,6 @@ void ClientRequest::CopyFrom(const ClientRequest& from) {
 }
 
 bool ClientRequest::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
   if (has_host()) {
     if (!this->host().IsInitialized()) return false;
@@ -1129,7 +1125,6 @@ void ClientResponse::CopyFrom(const ClientResponse& from) {
 }
 
 bool ClientResponse::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
   return true;
 }
@@ -1434,7 +1429,6 @@ void ServerRequest::CopyFrom(const ServerRequest& from) {
 
 bool ServerRequest::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000002) != 0x00000002) return false;
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
   if (has_host()) {
     if (!this->host().IsInitialized()) return false;
@@ -1658,7 +1652,6 @@ void ServerResponse::CopyFrom(const ServerResponse& from) {
 }
 
 bool ServerResponse::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
   return true;
 }
@@ -2017,7 +2010,6 @@ void PresenceChannelCreatedRequest::CopyFrom(const PresenceChannelCreatedRequest
 
 bool PresenceChannelCreatedRequest::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_id()) {
     if (!this->id().IsInitialized()) return false;
   }
@@ -2297,7 +2289,6 @@ void GetPlayerVariablesRequest::CopyFrom(const GetPlayerVariablesRequest& from) 
 }
 
 bool GetPlayerVariablesRequest::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->player_variables())) return false;
   if (has_host()) {
     if (!this->host().IsInitialized()) return false;
@@ -2520,7 +2511,6 @@ void GetPlayerVariablesResponse::CopyFrom(const GetPlayerVariablesResponse& from
 }
 
 bool GetPlayerVariablesResponse::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->player_variables())) return false;
   return true;
 }
@@ -2852,7 +2842,6 @@ void GameAccountOnlineNotification::CopyFrom(const GameAccountOnlineNotification
 
 bool GameAccountOnlineNotification::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_game_account_id()) {
     if (!this->game_account_id().IsInitialized()) return false;
   }
@@ -3191,7 +3180,6 @@ void GameAccountOfflineNotification::CopyFrom(const GameAccountOfflineNotificati
 
 bool GameAccountOfflineNotification::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_game_account_id()) {
     if (!this->game_account_id().IsInitialized()) return false;
   }
@@ -3425,7 +3413,6 @@ void GetAchievementsFileRequest::CopyFrom(const GetAchievementsFileRequest& from
 }
 
 bool GetAchievementsFileRequest::IsInitialized() const {
-
   if (has_host()) {
     if (!this->host().IsInitialized()) return false;
   }
@@ -3654,7 +3641,6 @@ void GetAchievementsFileResponse::CopyFrom(const GetAchievementsFileResponse& fr
 }
 
 bool GetAchievementsFileResponse::IsInitialized() const {
-
   if (has_content_handle()) {
     if (!this->content_handle().IsInitialized()) return false;
   }
@@ -3980,7 +3966,6 @@ void GetAllValuesForAttributeRequest::CopyFrom(const GetAllValuesForAttributeReq
 }
 
 bool GetAllValuesForAttributeRequest::IsInitialized() const {
-
   if (has_agent_id()) {
     if (!this->agent_id().IsInitialized()) return false;
   }
@@ -4203,7 +4188,6 @@ void GetAllValuesForAttributeResponse::CopyFrom(const GetAllValuesForAttributeRe
 }
 
 bool GetAllValuesForAttributeResponse::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute_value())) return false;
   return true;
 }
@@ -4227,7 +4211,7 @@ void GetAllValuesForAttributeResponse::Swap(GetAllValuesForAttributeResponse* ot
 
 // ===================================================================
 
-GameUtilitiesService::GameUtilitiesService(bool use_original_hash) : service_hash_(use_original_hash ? OriginalHash::value : NameHash::value) {
+GameUtilitiesService::GameUtilitiesService(bool use_original_hash) : ServiceBase(use_original_hash ? OriginalHash::value : NameHash::value) {
 }
 
 GameUtilitiesService::~GameUtilitiesService() {
@@ -4238,323 +4222,263 @@ google::protobuf::ServiceDescriptor const* GameUtilitiesService::descriptor() {
   return GameUtilitiesService_descriptor_;
 }
 
-void GameUtilitiesService::ProcessClientRequest(::bgs::protocol::game_utilities::v1::ClientRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::ClientResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method GameUtilitiesService.ProcessClientRequest(bgs.protocol.game_utilities.v1.ClientRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void GameUtilitiesService::ProcessClientRequest(::bgs::protocol::game_utilities::v1::ClientRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::ClientResponse const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("GameUtilitiesService.ProcessClientRequest", "bgs.protocol.game_utilities.v1.ClientRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::game_utilities::v1::ClientResponse response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 1, request, std::move(callback));
+  SendRequest(service_hash_, 1 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
-void GameUtilitiesService::PresenceChannelCreated(::bgs::protocol::game_utilities::v1::PresenceChannelCreatedRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method GameUtilitiesService.PresenceChannelCreated(bgs.protocol.game_utilities.v1.PresenceChannelCreatedRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void GameUtilitiesService::PresenceChannelCreated(::bgs::protocol::game_utilities::v1::PresenceChannelCreatedRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("GameUtilitiesService.PresenceChannelCreated", "bgs.protocol.game_utilities.v1.PresenceChannelCreatedRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::NoData response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 2, request, std::move(callback));
+  SendRequest(service_hash_, 2 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
-void GameUtilitiesService::GetPlayerVariables(::bgs::protocol::game_utilities::v1::GetPlayerVariablesRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::GetPlayerVariablesResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method GameUtilitiesService.GetPlayerVariables(bgs.protocol.game_utilities.v1.GetPlayerVariablesRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void GameUtilitiesService::GetPlayerVariables(::bgs::protocol::game_utilities::v1::GetPlayerVariablesRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::GetPlayerVariablesResponse const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("GameUtilitiesService.GetPlayerVariables", "bgs.protocol.game_utilities.v1.GetPlayerVariablesRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::game_utilities::v1::GetPlayerVariablesResponse response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 3, request, std::move(callback));
+  SendRequest(service_hash_, 3 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
-void GameUtilitiesService::ProcessServerRequest(::bgs::protocol::game_utilities::v1::ServerRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::ServerResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method GameUtilitiesService.ProcessServerRequest(bgs.protocol.game_utilities.v1.ServerRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void GameUtilitiesService::ProcessServerRequest(::bgs::protocol::game_utilities::v1::ServerRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::ServerResponse const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("GameUtilitiesService.ProcessServerRequest", "bgs.protocol.game_utilities.v1.ServerRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::game_utilities::v1::ServerResponse response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 6, request, std::move(callback));
+  SendRequest(service_hash_, 6 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
-void GameUtilitiesService::OnGameAccountOnline(::bgs::protocol::game_utilities::v1::GameAccountOnlineNotification const* request) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method GameUtilitiesService.OnGameAccountOnline(bgs.protocol.game_utilities.v1.GameAccountOnlineNotification{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  SendRequest(service_hash_, 7, request);
+void GameUtilitiesService::OnGameAccountOnline(::bgs::protocol::game_utilities::v1::GameAccountOnlineNotification const* request, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("GameUtilitiesService.OnGameAccountOnline", "bgs.protocol.game_utilities.v1.GameAccountOnlineNotification", request);
+  SendRequest(service_hash_, 7 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request);
 }
 
-void GameUtilitiesService::OnGameAccountOffline(::bgs::protocol::game_utilities::v1::GameAccountOfflineNotification const* request) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method GameUtilitiesService.OnGameAccountOffline(bgs.protocol.game_utilities.v1.GameAccountOfflineNotification{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  SendRequest(service_hash_, 8, request);
+void GameUtilitiesService::OnGameAccountOffline(::bgs::protocol::game_utilities::v1::GameAccountOfflineNotification const* request, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("GameUtilitiesService.OnGameAccountOffline", "bgs.protocol.game_utilities.v1.GameAccountOfflineNotification", request);
+  SendRequest(service_hash_, 8 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request);
 }
 
-void GameUtilitiesService::GetAchievementsFile(::bgs::protocol::game_utilities::v1::GetAchievementsFileRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::GetAchievementsFileResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method GameUtilitiesService.GetAchievementsFile(bgs.protocol.game_utilities.v1.GetAchievementsFileRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void GameUtilitiesService::GetAchievementsFile(::bgs::protocol::game_utilities::v1::GetAchievementsFileRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::GetAchievementsFileResponse const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("GameUtilitiesService.GetAchievementsFile", "bgs.protocol.game_utilities.v1.GetAchievementsFileRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::game_utilities::v1::GetAchievementsFileResponse response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 9, request, std::move(callback));
+  SendRequest(service_hash_, 9 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
-void GameUtilitiesService::GetAllValuesForAttribute(::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method GameUtilitiesService.GetAllValuesForAttribute(bgs.protocol.game_utilities.v1.GetAllValuesForAttributeRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+void GameUtilitiesService::GetAllValuesForAttribute(::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeRequest const* request, std::function<void(::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeResponse const*)> responseCallback, bool client /*= false*/, bool server /*= false*/) {
+  LogCallClientMethod("GameUtilitiesService.GetAllValuesForAttribute", "bgs.protocol.game_utilities.v1.GetAllValuesForAttributeRequest", request);
   std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
     ::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeResponse response;
     if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
       responseCallback(&response);
   };
-  SendRequest(service_hash_, 10, request, std::move(callback));
+  SendRequest(service_hash_, 10 | (client ? 0x40000000 : 0) | (server ? 0x80000000 : 0), request, std::move(callback));
 }
 
 void GameUtilitiesService::CallServerMethod(uint32 token, uint32 methodId, MessageBuffer buffer) {
-  switch(methodId) {
-    case 1: {
-      ::bgs::protocol::game_utilities::v1::ClientRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for GameUtilitiesService.ProcessClientRequest server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 1, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.ProcessClientRequest(bgs.protocol.game_utilities.v1.ClientRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::game_utilities::v1::ClientResponse::descriptor());
-        GameUtilitiesService* self = static_cast<GameUtilitiesService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.ProcessClientRequest() returned bgs.protocol.game_utilities.v1.ClientResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 1, token, response);
-        else
-          self->SendResponse(self->service_hash_, 1, token, status);
-      };
-      ::bgs::protocol::game_utilities::v1::ClientResponse response;
-      uint32 status = HandleProcessClientRequest(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+  switch(methodId & 0x3FFFFFFF) {
+    case 1:
+      ParseAndHandleProcessClientRequest(token, methodId, buffer);
       break;
-    }
-    case 2: {
-      ::bgs::protocol::game_utilities::v1::PresenceChannelCreatedRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for GameUtilitiesService.PresenceChannelCreated server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 2, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.PresenceChannelCreated(bgs.protocol.game_utilities.v1.PresenceChannelCreatedRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::NoData::descriptor());
-        GameUtilitiesService* self = static_cast<GameUtilitiesService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.PresenceChannelCreated() returned bgs.protocol.NoData{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 2, token, response);
-        else
-          self->SendResponse(self->service_hash_, 2, token, status);
-      };
-      ::bgs::protocol::NoData response;
-      uint32 status = HandlePresenceChannelCreated(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 2:
+      ParseAndHandlePresenceChannelCreated(token, methodId, buffer);
       break;
-    }
-    case 3: {
-      ::bgs::protocol::game_utilities::v1::GetPlayerVariablesRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for GameUtilitiesService.GetPlayerVariables server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 3, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.GetPlayerVariables(bgs.protocol.game_utilities.v1.GetPlayerVariablesRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::game_utilities::v1::GetPlayerVariablesResponse::descriptor());
-        GameUtilitiesService* self = static_cast<GameUtilitiesService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.GetPlayerVariables() returned bgs.protocol.game_utilities.v1.GetPlayerVariablesResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 3, token, response);
-        else
-          self->SendResponse(self->service_hash_, 3, token, status);
-      };
-      ::bgs::protocol::game_utilities::v1::GetPlayerVariablesResponse response;
-      uint32 status = HandleGetPlayerVariables(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 3:
+      ParseAndHandleGetPlayerVariables(token, methodId, buffer);
       break;
-    }
-    case 6: {
-      ::bgs::protocol::game_utilities::v1::ServerRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for GameUtilitiesService.ProcessServerRequest server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 6, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.ProcessServerRequest(bgs.protocol.game_utilities.v1.ServerRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::game_utilities::v1::ServerResponse::descriptor());
-        GameUtilitiesService* self = static_cast<GameUtilitiesService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.ProcessServerRequest() returned bgs.protocol.game_utilities.v1.ServerResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 6, token, response);
-        else
-          self->SendResponse(self->service_hash_, 6, token, status);
-      };
-      ::bgs::protocol::game_utilities::v1::ServerResponse response;
-      uint32 status = HandleProcessServerRequest(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 6:
+      ParseAndHandleProcessServerRequest(token, methodId, buffer);
       break;
-    }
-    case 7: {
-      ::bgs::protocol::game_utilities::v1::GameAccountOnlineNotification request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for GameUtilitiesService.OnGameAccountOnline server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 7, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      uint32 status = HandleOnGameAccountOnline(&request);
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.OnGameAccountOnline(bgs.protocol.game_utilities.v1.GameAccountOnlineNotification{ %s }) status %u.",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str(), status);
-      if (status)
-        SendResponse(service_hash_, 7, token, status);
+    case 7:
+      ParseAndHandleOnGameAccountOnline(token, methodId, buffer);
       break;
-    }
-    case 8: {
-      ::bgs::protocol::game_utilities::v1::GameAccountOfflineNotification request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for GameUtilitiesService.OnGameAccountOffline server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 8, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      uint32 status = HandleOnGameAccountOffline(&request);
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.OnGameAccountOffline(bgs.protocol.game_utilities.v1.GameAccountOfflineNotification{ %s }) status %u.",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str(), status);
-      if (status)
-        SendResponse(service_hash_, 8, token, status);
+    case 8:
+      ParseAndHandleOnGameAccountOffline(token, methodId, buffer);
       break;
-    }
-    case 9: {
-      ::bgs::protocol::game_utilities::v1::GetAchievementsFileRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for GameUtilitiesService.GetAchievementsFile server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 9, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.GetAchievementsFile(bgs.protocol.game_utilities.v1.GetAchievementsFileRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::game_utilities::v1::GetAchievementsFileResponse::descriptor());
-        GameUtilitiesService* self = static_cast<GameUtilitiesService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.GetAchievementsFile() returned bgs.protocol.game_utilities.v1.GetAchievementsFileResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 9, token, response);
-        else
-          self->SendResponse(self->service_hash_, 9, token, status);
-      };
-      ::bgs::protocol::game_utilities::v1::GetAchievementsFileResponse response;
-      uint32 status = HandleGetAchievementsFile(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 9:
+      ParseAndHandleGetAchievementsFile(token, methodId, buffer);
       break;
-    }
-    case 10: {
-      ::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for GameUtilitiesService.GetAllValuesForAttribute server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 10, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.GetAllValuesForAttribute(bgs.protocol.game_utilities.v1.GetAllValuesForAttributeRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeResponse::descriptor());
-        GameUtilitiesService* self = static_cast<GameUtilitiesService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method GameUtilitiesService.GetAllValuesForAttribute() returned bgs.protocol.game_utilities.v1.GetAllValuesForAttributeResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 10, token, response);
-        else
-          self->SendResponse(self->service_hash_, 10, token, status);
-      };
-      ::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeResponse response;
-      uint32 status = HandleGetAllValuesForAttribute(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 10:
+      ParseAndHandleGetAllValuesForAttribute(token, methodId, buffer);
       break;
-    }
     default:
-      TC_LOG_ERROR("service.protobuf", "Bad method id %u.", methodId);
+      LogInvalidMethod(methodId);
       SendResponse(service_hash_, methodId, token, ERROR_RPC_INVALID_METHOD);
       break;
     }
 }
 
-uint32 GameUtilitiesService::HandleProcessClientRequest(::bgs::protocol::game_utilities::v1::ClientRequest const* request, ::bgs::protocol::game_utilities::v1::ClientResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method GameUtilitiesService.ProcessClientRequest({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 GameUtilitiesService::HandleProcessClientRequest(::bgs::protocol::game_utilities::v1::ClientRequest const* request, ::bgs::protocol::game_utilities::v1::ClientResponse* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("GameUtilitiesService.ProcessClientRequest", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 GameUtilitiesService::HandlePresenceChannelCreated(::bgs::protocol::game_utilities::v1::PresenceChannelCreatedRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method GameUtilitiesService.PresenceChannelCreated({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 GameUtilitiesService::HandlePresenceChannelCreated(::bgs::protocol::game_utilities::v1::PresenceChannelCreatedRequest const* request, ::bgs::protocol::NoData* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("GameUtilitiesService.PresenceChannelCreated", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 GameUtilitiesService::HandleGetPlayerVariables(::bgs::protocol::game_utilities::v1::GetPlayerVariablesRequest const* request, ::bgs::protocol::game_utilities::v1::GetPlayerVariablesResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method GameUtilitiesService.GetPlayerVariables({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 GameUtilitiesService::HandleGetPlayerVariables(::bgs::protocol::game_utilities::v1::GetPlayerVariablesRequest const* request, ::bgs::protocol::game_utilities::v1::GetPlayerVariablesResponse* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("GameUtilitiesService.GetPlayerVariables", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 GameUtilitiesService::HandleProcessServerRequest(::bgs::protocol::game_utilities::v1::ServerRequest const* request, ::bgs::protocol::game_utilities::v1::ServerResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method GameUtilitiesService.ProcessServerRequest({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 GameUtilitiesService::HandleProcessServerRequest(::bgs::protocol::game_utilities::v1::ServerRequest const* request, ::bgs::protocol::game_utilities::v1::ServerResponse* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("GameUtilitiesService.ProcessServerRequest", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
 uint32 GameUtilitiesService::HandleOnGameAccountOnline(::bgs::protocol::game_utilities::v1::GameAccountOnlineNotification const* request) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method GameUtilitiesService.OnGameAccountOnline({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+  LogUnimplementedServerMethod("GameUtilitiesService.OnGameAccountOnline", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
 uint32 GameUtilitiesService::HandleOnGameAccountOffline(::bgs::protocol::game_utilities::v1::GameAccountOfflineNotification const* request) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method GameUtilitiesService.OnGameAccountOffline({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+  LogUnimplementedServerMethod("GameUtilitiesService.OnGameAccountOffline", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 GameUtilitiesService::HandleGetAchievementsFile(::bgs::protocol::game_utilities::v1::GetAchievementsFileRequest const* request, ::bgs::protocol::game_utilities::v1::GetAchievementsFileResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method GameUtilitiesService.GetAchievementsFile({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 GameUtilitiesService::HandleGetAchievementsFile(::bgs::protocol::game_utilities::v1::GetAchievementsFileRequest const* request, ::bgs::protocol::game_utilities::v1::GetAchievementsFileResponse* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("GameUtilitiesService.GetAchievementsFile", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 GameUtilitiesService::HandleGetAllValuesForAttribute(::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeRequest const* request, ::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method GameUtilitiesService.GetAllValuesForAttribute({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 GameUtilitiesService::HandleGetAllValuesForAttribute(::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeRequest const* request, ::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeResponse* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("GameUtilitiesService.GetAllValuesForAttribute", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
+}
+
+void GameUtilitiesService::ParseAndHandleProcessClientRequest(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::game_utilities::v1::ClientRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("GameUtilitiesService.ProcessClientRequest");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("GameUtilitiesService.ProcessClientRequest", "bgs.protocol.game_utilities.v1.ClientRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "GameUtilitiesService.ProcessClientRequest", ::bgs::protocol::game_utilities::v1::ClientResponse::descriptor());
+  ::bgs::protocol::game_utilities::v1::ClientResponse response;
+  uint32 status = HandleProcessClientRequest(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void GameUtilitiesService::ParseAndHandlePresenceChannelCreated(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::game_utilities::v1::PresenceChannelCreatedRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("GameUtilitiesService.PresenceChannelCreated");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("GameUtilitiesService.PresenceChannelCreated", "bgs.protocol.game_utilities.v1.PresenceChannelCreatedRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "GameUtilitiesService.PresenceChannelCreated", ::bgs::protocol::NoData::descriptor());
+  ::bgs::protocol::NoData response;
+  uint32 status = HandlePresenceChannelCreated(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void GameUtilitiesService::ParseAndHandleGetPlayerVariables(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::game_utilities::v1::GetPlayerVariablesRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("GameUtilitiesService.GetPlayerVariables");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("GameUtilitiesService.GetPlayerVariables", "bgs.protocol.game_utilities.v1.GetPlayerVariablesRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "GameUtilitiesService.GetPlayerVariables", ::bgs::protocol::game_utilities::v1::GetPlayerVariablesResponse::descriptor());
+  ::bgs::protocol::game_utilities::v1::GetPlayerVariablesResponse response;
+  uint32 status = HandleGetPlayerVariables(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void GameUtilitiesService::ParseAndHandleProcessServerRequest(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::game_utilities::v1::ServerRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("GameUtilitiesService.ProcessServerRequest");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("GameUtilitiesService.ProcessServerRequest", "bgs.protocol.game_utilities.v1.ServerRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "GameUtilitiesService.ProcessServerRequest", ::bgs::protocol::game_utilities::v1::ServerResponse::descriptor());
+  ::bgs::protocol::game_utilities::v1::ServerResponse response;
+  uint32 status = HandleProcessServerRequest(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void GameUtilitiesService::ParseAndHandleOnGameAccountOnline(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::game_utilities::v1::GameAccountOnlineNotification request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("GameUtilitiesService.OnGameAccountOnline");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  uint32 status = HandleOnGameAccountOnline(&request);
+  LogCallServerMethod("GameUtilitiesService.OnGameAccountOnline", "bgs.protocol.game_utilities.v1.GameAccountOnlineNotification", &request);
+  if (status)
+    SendResponse(service_hash_, methodId, token, status);
+}
+
+void GameUtilitiesService::ParseAndHandleOnGameAccountOffline(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::game_utilities::v1::GameAccountOfflineNotification request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("GameUtilitiesService.OnGameAccountOffline");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  uint32 status = HandleOnGameAccountOffline(&request);
+  LogCallServerMethod("GameUtilitiesService.OnGameAccountOffline", "bgs.protocol.game_utilities.v1.GameAccountOfflineNotification", &request);
+  if (status)
+    SendResponse(service_hash_, methodId, token, status);
+}
+
+void GameUtilitiesService::ParseAndHandleGetAchievementsFile(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::game_utilities::v1::GetAchievementsFileRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("GameUtilitiesService.GetAchievementsFile");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("GameUtilitiesService.GetAchievementsFile", "bgs.protocol.game_utilities.v1.GetAchievementsFileRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "GameUtilitiesService.GetAchievementsFile", ::bgs::protocol::game_utilities::v1::GetAchievementsFileResponse::descriptor());
+  ::bgs::protocol::game_utilities::v1::GetAchievementsFileResponse response;
+  uint32 status = HandleGetAchievementsFile(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void GameUtilitiesService::ParseAndHandleGetAllValuesForAttribute(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("GameUtilitiesService.GetAllValuesForAttribute");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("GameUtilitiesService.GetAllValuesForAttribute", "bgs.protocol.game_utilities.v1.GetAllValuesForAttributeRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "GameUtilitiesService.GetAllValuesForAttribute", ::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeResponse::descriptor());
+  ::bgs::protocol::game_utilities::v1::GetAllValuesForAttributeResponse response;
+  uint32 status = HandleGetAllValuesForAttribute(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
 }
 
 // @@protoc_insertion_point(namespace_scope)

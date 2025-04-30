@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "global_extensions/field_options.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,19 +14,16 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
-
-// Fix stupid windows.h included from Log.h->Common.h
-#ifdef SendMessage
-#undef SendMessage
-#endif
 
 namespace bgs {
 namespace protocol {
 
 namespace {
 
+const ::google::protobuf::Descriptor* BGSFieldOptions_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  BGSFieldOptions_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* LogOption_descriptor_ = NULL;
 
 }  // namespace
@@ -38,6 +34,22 @@ void protobuf_AssignDesc_global_5fextensions_2ffield_5foptions_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "global_extensions/field_options.proto");
   GOOGLE_CHECK(file != NULL);
+  BGSFieldOptions_descriptor_ = file->message_type(0);
+  static const int BGSFieldOptions_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BGSFieldOptions, log_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BGSFieldOptions, shard_key_),
+  };
+  BGSFieldOptions_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      BGSFieldOptions_descriptor_,
+      BGSFieldOptions::default_instance_,
+      BGSFieldOptions_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BGSFieldOptions, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BGSFieldOptions, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(BGSFieldOptions));
   LogOption_descriptor_ = file->enum_type(0);
 }
 
@@ -51,11 +63,15 @@ inline void protobuf_AssignDescriptorsOnce() {
 
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    BGSFieldOptions_descriptor_, &BGSFieldOptions::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_global_5fextensions_2ffield_5foptions_2eproto() {
+  delete BGSFieldOptions::default_instance_;
+  delete BGSFieldOptions_reflection_;
 }
 
 void protobuf_AddDesc_global_5fextensions_2ffield_5foptions_2eproto() {
@@ -68,16 +84,21 @@ void protobuf_AddDesc_global_5fextensions_2ffield_5foptions_2eproto() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n%global_extensions/field_options.proto\022"
     "\014bgs.protocol\032 google/protobuf/descripto"
-    "r.proto* \n\tLogOption\022\n\n\006HIDDEN\020\001\022\007\n\003HEX\020"
-    "\002:E\n\003log\022\035.google.protobuf.FieldOptions\030"
-    "\320\206\003 \001(\0162\027.bgs.protocol.LogOptionB$\n\rbnet"
-    ".protocolB\021FieldOptionsProtoH\001", 230);
+    "r.proto\"J\n\017BGSFieldOptions\022$\n\003log\030\001 \001(\0162"
+    "\027.bgs.protocol.LogOption\022\021\n\tshard_key\030\002 "
+    "\001(\010* \n\tLogOption\022\n\n\006HIDDEN\020\001\022\007\n\003HEX\020\002:U\n"
+    "\rfield_options\022\035.google.protobuf.FieldOp"
+    "tions\030\220\277\005 \001(\0132\035.bgs.protocol.BGSFieldOpt"
+    "ionsB$\n\rbnet.protocolB\021FieldOptionsProto"
+    "H\001", 322);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "global_extensions/field_options.proto", &protobuf_RegisterTypes);
-  ::google::protobuf::internal::ExtensionSet::RegisterEnumExtension(
+  BGSFieldOptions::default_instance_ = new BGSFieldOptions();
+  ::google::protobuf::internal::ExtensionSet::RegisterMessageExtension(
     &::google::protobuf::FieldOptions::default_instance(),
-    50000, 14, false, false,
-    &::bgs::protocol::LogOption_IsValid);
+    90000, 11, false, false,
+    &::bgs::protocol::BGSFieldOptions::default_instance());
+  BGSFieldOptions::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_global_5fextensions_2ffield_5foptions_2eproto);
 }
 
@@ -101,10 +122,274 @@ bool LogOption_IsValid(int value) {
   }
 }
 
-::google::protobuf::internal::ExtensionIdentifier< ::google::protobuf::FieldOptions,
-    ::google::protobuf::internal::EnumTypeTraits< ::bgs::protocol::LogOption, ::bgs::protocol::LogOption_IsValid>, 14, false >
-  log(kLogFieldNumber, static_cast< ::bgs::protocol::LogOption >(1));
+// ===================================================================
 
+#ifndef _MSC_VER
+const int BGSFieldOptions::kLogFieldNumber;
+const int BGSFieldOptions::kShardKeyFieldNumber;
+#endif  // !_MSC_VER
+
+BGSFieldOptions::BGSFieldOptions()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:bgs.protocol.BGSFieldOptions)
+}
+
+void BGSFieldOptions::InitAsDefaultInstance() {
+}
+
+BGSFieldOptions::BGSFieldOptions(const BGSFieldOptions& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:bgs.protocol.BGSFieldOptions)
+}
+
+void BGSFieldOptions::SharedCtor() {
+  _cached_size_ = 0;
+  log_ = 1;
+  shard_key_ = false;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+BGSFieldOptions::~BGSFieldOptions() {
+  // @@protoc_insertion_point(destructor:bgs.protocol.BGSFieldOptions)
+  SharedDtor();
+}
+
+void BGSFieldOptions::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void BGSFieldOptions::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* BGSFieldOptions::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return BGSFieldOptions_descriptor_;
+}
+
+const BGSFieldOptions& BGSFieldOptions::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_global_5fextensions_2ffield_5foptions_2eproto();
+  return *default_instance_;
+}
+
+BGSFieldOptions* BGSFieldOptions::default_instance_ = NULL;
+
+BGSFieldOptions* BGSFieldOptions::New() const {
+  return new BGSFieldOptions;
+}
+
+void BGSFieldOptions::Clear() {
+  if (_has_bits_[0 / 32] & 3) {
+    log_ = 1;
+    shard_key_ = false;
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool BGSFieldOptions::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:bgs.protocol.BGSFieldOptions)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional .bgs.protocol.LogOption log = 1;
+      case 1: {
+        if (tag == 8) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::bgs::protocol::LogOption_IsValid(value)) {
+            set_log(static_cast< ::bgs::protocol::LogOption >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(1, value);
+          }
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_shard_key;
+        break;
+      }
+
+      // optional bool shard_key = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_shard_key:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &shard_key_)));
+          set_has_shard_key();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:bgs.protocol.BGSFieldOptions)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:bgs.protocol.BGSFieldOptions)
+  return false;
+#undef DO_
+}
+
+void BGSFieldOptions::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:bgs.protocol.BGSFieldOptions)
+  // optional .bgs.protocol.LogOption log = 1;
+  if (has_log()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->log(), output);
+  }
+
+  // optional bool shard_key = 2;
+  if (has_shard_key()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->shard_key(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:bgs.protocol.BGSFieldOptions)
+}
+
+::google::protobuf::uint8* BGSFieldOptions::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:bgs.protocol.BGSFieldOptions)
+  // optional .bgs.protocol.LogOption log = 1;
+  if (has_log()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      1, this->log(), target);
+  }
+
+  // optional bool shard_key = 2;
+  if (has_shard_key()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->shard_key(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:bgs.protocol.BGSFieldOptions)
+  return target;
+}
+
+int BGSFieldOptions::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // optional .bgs.protocol.LogOption log = 1;
+    if (has_log()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->log());
+    }
+
+    // optional bool shard_key = 2;
+    if (has_shard_key()) {
+      total_size += 1 + 1;
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void BGSFieldOptions::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const BGSFieldOptions* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const BGSFieldOptions*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void BGSFieldOptions::MergeFrom(const BGSFieldOptions& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_log()) {
+      set_log(from.log());
+    }
+    if (from.has_shard_key()) {
+      set_shard_key(from.shard_key());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void BGSFieldOptions::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void BGSFieldOptions::CopyFrom(const BGSFieldOptions& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool BGSFieldOptions::IsInitialized() const {
+  return true;
+}
+
+void BGSFieldOptions::Swap(BGSFieldOptions* other) {
+  if (other != this) {
+    std::swap(log_, other->log_);
+    std::swap(shard_key_, other->shard_key_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata BGSFieldOptions::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = BGSFieldOptions_descriptor_;
+  metadata.reflection = BGSFieldOptions_reflection_;
+  return metadata;
+}
+
+::google::protobuf::internal::ExtensionIdentifier< ::google::protobuf::FieldOptions,
+    ::google::protobuf::internal::MessageTypeTraits< ::bgs::protocol::BGSFieldOptions >, 11, false >
+  field_options(kFieldOptionsFieldNumber, ::bgs::protocol::BGSFieldOptions::default_instance());
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace protocol

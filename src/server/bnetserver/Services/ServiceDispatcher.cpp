@@ -21,7 +21,6 @@ Battlenet::ServiceDispatcher::ServiceDispatcher()
 {
     AddService<Services::Account>();
     AddService<Services::Authentication>();
-    AddService<Service<challenge::v1::ChallengeService>>();
     AddService<Service<channel::v1::ChannelService>>();
     AddService<Services::Connection>();
     AddService<Service<friends::v1::FriendsService>>();

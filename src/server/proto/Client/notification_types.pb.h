@@ -1186,7 +1186,6 @@ inline void Notification::set_allocated_forwarding_identity(::bgs::protocol::acc
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

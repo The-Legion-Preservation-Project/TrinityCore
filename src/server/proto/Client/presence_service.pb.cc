@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "presence_service.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,8 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
-#include "Errors.h"
 #include "BattlenetRpcErrorCodes.h"
 // @@protoc_insertion_point(includes)
 
@@ -48,12 +45,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* OwnershipRequest_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   OwnershipRequest_reflection_ = NULL;
-const ::google::protobuf::Descriptor* MigrateOlympusCustomMessageRequest_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  MigrateOlympusCustomMessageRequest_reflection_ = NULL;
-const ::google::protobuf::Descriptor* MigrateOlympusCustomMessageResponse_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  MigrateOlympusCustomMessageResponse_reflection_ = NULL;
 const ::google::protobuf::ServiceDescriptor* PresenceService_descriptor_ = NULL;
 
 }  // namespace
@@ -65,12 +56,13 @@ void protobuf_AssignDesc_presence_5fservice_2eproto() {
       "presence_service.proto");
   GOOGLE_CHECK(file != NULL);
   SubscribeRequest_descriptor_ = file->message_type(0);
-  static const int SubscribeRequest_offsets_[5] = {
+  static const int SubscribeRequest_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SubscribeRequest, agent_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SubscribeRequest, entity_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SubscribeRequest, object_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SubscribeRequest, program_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SubscribeRequest, flag_public_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SubscribeRequest, key_),
   };
   SubscribeRequest_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -181,37 +173,6 @@ void protobuf_AssignDesc_presence_5fservice_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(OwnershipRequest));
-  MigrateOlympusCustomMessageRequest_descriptor_ = file->message_type(7);
-  static const int MigrateOlympusCustomMessageRequest_offsets_[1] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MigrateOlympusCustomMessageRequest, account_),
-  };
-  MigrateOlympusCustomMessageRequest_reflection_ =
-    new ::google::protobuf::internal::GeneratedMessageReflection(
-      MigrateOlympusCustomMessageRequest_descriptor_,
-      MigrateOlympusCustomMessageRequest::default_instance_,
-      MigrateOlympusCustomMessageRequest_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MigrateOlympusCustomMessageRequest, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MigrateOlympusCustomMessageRequest, _unknown_fields_),
-      -1,
-      ::google::protobuf::DescriptorPool::generated_pool(),
-      ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(MigrateOlympusCustomMessageRequest));
-  MigrateOlympusCustomMessageResponse_descriptor_ = file->message_type(8);
-  static const int MigrateOlympusCustomMessageResponse_offsets_[2] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MigrateOlympusCustomMessageResponse, custom_message_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MigrateOlympusCustomMessageResponse, custom_message_time_epoch_),
-  };
-  MigrateOlympusCustomMessageResponse_reflection_ =
-    new ::google::protobuf::internal::GeneratedMessageReflection(
-      MigrateOlympusCustomMessageResponse_descriptor_,
-      MigrateOlympusCustomMessageResponse::default_instance_,
-      MigrateOlympusCustomMessageResponse_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MigrateOlympusCustomMessageResponse, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MigrateOlympusCustomMessageResponse, _unknown_fields_),
-      -1,
-      ::google::protobuf::DescriptorPool::generated_pool(),
-      ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(MigrateOlympusCustomMessageResponse));
   PresenceService_descriptor_ = file->service(0);
 }
 
@@ -239,10 +200,6 @@ void protobuf_RegisterTypes(const ::std::string&) {
     QueryResponse_descriptor_, &QueryResponse::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     OwnershipRequest_descriptor_, &OwnershipRequest::default_instance());
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    MigrateOlympusCustomMessageRequest_descriptor_, &MigrateOlympusCustomMessageRequest::default_instance());
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    MigrateOlympusCustomMessageResponse_descriptor_, &MigrateOlympusCustomMessageResponse::default_instance());
 }
 
 }  // namespace
@@ -262,10 +219,6 @@ void protobuf_ShutdownFile_presence_5fservice_2eproto() {
   delete QueryResponse_reflection_;
   delete OwnershipRequest::default_instance_;
   delete OwnershipRequest_reflection_;
-  delete MigrateOlympusCustomMessageRequest::default_instance_;
-  delete MigrateOlympusCustomMessageRequest_reflection_;
-  delete MigrateOlympusCustomMessageResponse::default_instance_;
-  delete MigrateOlympusCustomMessageResponse_reflection_;
 }
 
 void protobuf_AddDesc_presence_5fservice_2eproto() {
@@ -280,53 +233,46 @@ void protobuf_AddDesc_presence_5fservice_2eproto() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\026presence_service.proto\022\030bgs.protocol.p"
     "resence.v1\032\022entity_types.proto\032\024presence"
-    "_types.proto\032\017rpc_types.proto\"\252\001\n\020Subscr"
+    "_types.proto\032\017rpc_types.proto\"\333\001\n\020Subscr"
     "ibeRequest\022(\n\010agent_id\030\001 \001(\0132\026.bgs.proto"
     "col.EntityId\022)\n\tentity_id\030\002 \002(\0132\026.bgs.pr"
     "otocol.EntityId\022\021\n\tobject_id\030\003 \002(\004\022\017\n\007pr"
     "ogram\030\004 \003(\007\022\035\n\013flag_public\030\005 \001(\010:\004trueB\002"
-    "\030\001\"I\n\034SubscribeNotificationRequest\022)\n\ten"
-    "tity_id\030\001 \002(\0132\026.bgs.protocol.EntityId\"|\n"
-    "\022UnsubscribeRequest\022(\n\010agent_id\030\001 \001(\0132\026."
-    "bgs.protocol.EntityId\022)\n\tentity_id\030\002 \002(\013"
-    "2\026.bgs.protocol.EntityId\022\021\n\tobject_id\030\003 "
-    "\001(\004\"\301\001\n\rUpdateRequest\022)\n\tentity_id\030\001 \002(\013"
-    "2\026.bgs.protocol.EntityId\022A\n\017field_operat"
-    "ion\030\002 \003(\0132(.bgs.protocol.presence.v1.Fie"
-    "ldOperation\022\030\n\tno_create\030\003 \001(\010:\005false\022(\n"
-    "\010agent_id\030\004 \001(\0132\026.bgs.protocol.EntityId\""
-    "\224\001\n\014QueryRequest\022)\n\tentity_id\030\001 \002(\0132\026.bg"
-    "s.protocol.EntityId\022/\n\003key\030\002 \003(\0132\".bgs.p"
-    "rotocol.presence.v1.FieldKey\022(\n\010agent_id"
-    "\030\003 \001(\0132\026.bgs.protocol.EntityId\"\?\n\rQueryR"
-    "esponse\022.\n\005field\030\002 \003(\0132\037.bgs.protocol.pr"
-    "esence.v1.Field\"_\n\020OwnershipRequest\022)\n\te"
-    "ntity_id\030\001 \002(\0132\026.bgs.protocol.EntityId\022 "
-    "\n\021release_ownership\030\002 \001(\010:\005false\"M\n\"Migr"
-    "ateOlympusCustomMessageRequest\022\'\n\007accoun"
-    "t\030\001 \002(\0132\026.bgs.protocol.EntityId\"`\n#Migra"
-    "teOlympusCustomMessageResponse\022\026\n\016custom"
-    "_message\030\001 \001(\t\022!\n\031custom_message_time_ep"
-    "och\030\002 \001(\r2\376\005\n\017PresenceService\022S\n\tSubscri"
-    "be\022*.bgs.protocol.presence.v1.SubscribeR"
-    "equest\032\024.bgs.protocol.NoData\"\004\200\265\030\001\022W\n\013Un"
-    "subscribe\022,.bgs.protocol.presence.v1.Uns"
-    "ubscribeRequest\032\024.bgs.protocol.NoData\"\004\200"
-    "\265\030\002\022M\n\006Update\022\'.bgs.protocol.presence.v1"
-    ".UpdateRequest\032\024.bgs.protocol.NoData\"\004\200\265"
-    "\030\003\022^\n\005Query\022&.bgs.protocol.presence.v1.Q"
-    "ueryRequest\032\'.bgs.protocol.presence.v1.Q"
-    "ueryResponse\"\004\200\265\030\004\022S\n\tOwnership\022*.bgs.pr"
+    "\030\001\022/\n\003key\030\006 \003(\0132\".bgs.protocol.presence."
+    "v1.FieldKey\"I\n\034SubscribeNotificationRequ"
+    "est\022)\n\tentity_id\030\001 \002(\0132\026.bgs.protocol.En"
+    "tityId\"|\n\022UnsubscribeRequest\022(\n\010agent_id"
+    "\030\001 \001(\0132\026.bgs.protocol.EntityId\022)\n\tentity"
+    "_id\030\002 \002(\0132\026.bgs.protocol.EntityId\022\021\n\tobj"
+    "ect_id\030\003 \001(\004\"\301\001\n\rUpdateRequest\022)\n\tentity"
+    "_id\030\001 \002(\0132\026.bgs.protocol.EntityId\022A\n\017fie"
+    "ld_operation\030\002 \003(\0132(.bgs.protocol.presen"
+    "ce.v1.FieldOperation\022\030\n\tno_create\030\003 \001(\010:"
+    "\005false\022(\n\010agent_id\030\004 \001(\0132\026.bgs.protocol."
+    "EntityId\"\224\001\n\014QueryRequest\022)\n\tentity_id\030\001"
+    " \002(\0132\026.bgs.protocol.EntityId\022/\n\003key\030\002 \003("
+    "\0132\".bgs.protocol.presence.v1.FieldKey\022(\n"
+    "\010agent_id\030\003 \001(\0132\026.bgs.protocol.EntityId\""
+    "\?\n\rQueryResponse\022.\n\005field\030\002 \003(\0132\037.bgs.pr"
+    "otocol.presence.v1.Field\"_\n\020OwnershipReq"
+    "uest\022)\n\tentity_id\030\001 \002(\0132\026.bgs.protocol.E"
+    "ntityId\022 \n\021release_ownership\030\002 \001(\010:\005fals"
+    "e2\360\004\n\017PresenceService\022U\n\tSubscribe\022*.bgs"
+    ".protocol.presence.v1.SubscribeRequest\032\024"
+    ".bgs.protocol.NoData\"\006\202\371+\002\010\001\022Y\n\013Unsubscr"
+    "ibe\022,.bgs.protocol.presence.v1.Unsubscri"
+    "beRequest\032\024.bgs.protocol.NoData\"\006\202\371+\002\010\002\022"
+    "O\n\006Update\022\'.bgs.protocol.presence.v1.Upd"
+    "ateRequest\032\024.bgs.protocol.NoData\"\006\202\371+\002\010\003"
+    "\022`\n\005Query\022&.bgs.protocol.presence.v1.Que"
+    "ryRequest\032\'.bgs.protocol.presence.v1.Que"
+    "ryResponse\"\006\202\371+\002\010\004\022U\n\tOwnership\022*.bgs.pr"
     "otocol.presence.v1.OwnershipRequest\032\024.bg"
-    "s.protocol.NoData\"\004\200\265\030\005\022k\n\025SubscribeNoti"
-    "fication\0226.bgs.protocol.presence.v1.Subs"
-    "cribeNotificationRequest\032\024.bgs.protocol."
-    "NoData\"\004\200\265\030\007\022\240\001\n\033MigrateOlympusCustomMes"
-    "sage\022<.bgs.protocol.presence.v1.MigrateO"
-    "lympusCustomMessageRequest\032=.bgs.protoco"
-    "l.presence.v1.MigrateOlympusCustomMessag"
-    "eResponse\"\004\200\265\030\010\032)\312>&bnet.protocol.presen"
-    "ce.PresenceServiceB\005H\001\200\001\000", 1945);
+    "s.protocol.NoData\"\006\202\371+\002\010\005\022m\n\025SubscribeNo"
+    "tification\0226.bgs.protocol.presence.v1.Su"
+    "bscribeNotificationRequest\032\024.bgs.protoco"
+    "l.NoData\"\006\202\371+\002\010\007\0322\202\371+(\n&bnet.protocol.pr"
+    "esence.PresenceService\212\371+\002\020\001B\005H\001\200\001\000", 1675);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "presence_service.proto", &protobuf_RegisterTypes);
   SubscribeRequest::default_instance_ = new SubscribeRequest();
@@ -336,8 +282,6 @@ void protobuf_AddDesc_presence_5fservice_2eproto() {
   QueryRequest::default_instance_ = new QueryRequest();
   QueryResponse::default_instance_ = new QueryResponse();
   OwnershipRequest::default_instance_ = new OwnershipRequest();
-  MigrateOlympusCustomMessageRequest::default_instance_ = new MigrateOlympusCustomMessageRequest();
-  MigrateOlympusCustomMessageResponse::default_instance_ = new MigrateOlympusCustomMessageResponse();
   SubscribeRequest::default_instance_->InitAsDefaultInstance();
   SubscribeNotificationRequest::default_instance_->InitAsDefaultInstance();
   UnsubscribeRequest::default_instance_->InitAsDefaultInstance();
@@ -345,8 +289,6 @@ void protobuf_AddDesc_presence_5fservice_2eproto() {
   QueryRequest::default_instance_->InitAsDefaultInstance();
   QueryResponse::default_instance_->InitAsDefaultInstance();
   OwnershipRequest::default_instance_->InitAsDefaultInstance();
-  MigrateOlympusCustomMessageRequest::default_instance_->InitAsDefaultInstance();
-  MigrateOlympusCustomMessageResponse::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_presence_5fservice_2eproto);
 }
 
@@ -356,7 +298,6 @@ struct StaticDescriptorInitializer_presence_5fservice_2eproto {
     protobuf_AddDesc_presence_5fservice_2eproto();
   }
 } static_descriptor_initializer_presence_5fservice_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -365,6 +306,7 @@ const int SubscribeRequest::kEntityIdFieldNumber;
 const int SubscribeRequest::kObjectIdFieldNumber;
 const int SubscribeRequest::kProgramFieldNumber;
 const int SubscribeRequest::kFlagPublicFieldNumber;
+const int SubscribeRequest::kKeyFieldNumber;
 #endif  // !_MSC_VER
 
 SubscribeRequest::SubscribeRequest()
@@ -439,6 +381,7 @@ void SubscribeRequest::Clear() {
     flag_public_ = true;
   }
   program_.Clear();
+  key_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -523,6 +466,20 @@ bool SubscribeRequest::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(50)) goto parse_key;
+        break;
+      }
+
+      // repeated .bgs.protocol.presence.v1.FieldKey key = 6;
+      case 6: {
+        if (tag == 50) {
+         parse_key:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_key()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(50)) goto parse_key;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -580,6 +537,12 @@ void SubscribeRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(5, this->flag_public(), output);
   }
 
+  // repeated .bgs.protocol.presence.v1.FieldKey key = 6;
+  for (int i = 0; i < this->key_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      6, this->key(i), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -618,6 +581,13 @@ void SubscribeRequest::SerializeWithCachedSizes(
   // optional bool flag_public = 5 [default = true, deprecated = true];
   if (has_flag_public()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(5, this->flag_public(), target);
+  }
+
+  // repeated .bgs.protocol.presence.v1.FieldKey key = 6;
+  for (int i = 0; i < this->key_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        6, this->key(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -666,6 +636,14 @@ int SubscribeRequest::ByteSize() const {
     total_size += 1 * this->program_size() + data_size;
   }
 
+  // repeated .bgs.protocol.presence.v1.FieldKey key = 6;
+  total_size += 1 * this->key_size();
+  for (int i = 0; i < this->key_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->key(i));
+  }
+
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -692,6 +670,7 @@ void SubscribeRequest::MergeFrom(const ::google::protobuf::Message& from) {
 void SubscribeRequest::MergeFrom(const SubscribeRequest& from) {
   GOOGLE_CHECK_NE(&from, this);
   program_.MergeFrom(from.program_);
+  key_.MergeFrom(from.key_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_agent_id()) {
       mutable_agent_id()->::bgs::protocol::EntityId::MergeFrom(from.agent_id());
@@ -723,13 +702,13 @@ void SubscribeRequest::CopyFrom(const SubscribeRequest& from) {
 
 bool SubscribeRequest::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000006) != 0x00000006) return false;
-
   if (has_agent_id()) {
     if (!this->agent_id().IsInitialized()) return false;
   }
   if (has_entity_id()) {
     if (!this->entity_id().IsInitialized()) return false;
   }
+  if (!::google::protobuf::internal::AllAreInitialized(this->key())) return false;
   return true;
 }
 
@@ -740,6 +719,7 @@ void SubscribeRequest::Swap(SubscribeRequest* other) {
     std::swap(object_id_, other->object_id_);
     program_.Swap(&other->program_);
     std::swap(flag_public_, other->flag_public_);
+    key_.Swap(&other->key_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -960,7 +940,6 @@ void SubscribeNotificationRequest::CopyFrom(const SubscribeNotificationRequest& 
 
 bool SubscribeNotificationRequest::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_entity_id()) {
     if (!this->entity_id().IsInitialized()) return false;
   }
@@ -1273,7 +1252,6 @@ void UnsubscribeRequest::CopyFrom(const UnsubscribeRequest& from) {
 
 bool UnsubscribeRequest::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000002) != 0x00000002) return false;
-
   if (has_agent_id()) {
     if (!this->agent_id().IsInitialized()) return false;
   }
@@ -1627,7 +1605,6 @@ void UpdateRequest::CopyFrom(const UpdateRequest& from) {
 
 bool UpdateRequest::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_entity_id()) {
     if (!this->entity_id().IsInitialized()) return false;
   }
@@ -1947,7 +1924,6 @@ void QueryRequest::CopyFrom(const QueryRequest& from) {
 
 bool QueryRequest::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_entity_id()) {
     if (!this->entity_id().IsInitialized()) return false;
   }
@@ -2174,7 +2150,6 @@ void QueryResponse::CopyFrom(const QueryResponse& from) {
 }
 
 bool QueryResponse::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->field())) return false;
   return true;
 }
@@ -2440,7 +2415,6 @@ void OwnershipRequest::CopyFrom(const OwnershipRequest& from) {
 
 bool OwnershipRequest::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (has_entity_id()) {
     if (!this->entity_id().IsInitialized()) return false;
   }
@@ -2467,520 +2441,7 @@ void OwnershipRequest::Swap(OwnershipRequest* other) {
 
 // ===================================================================
 
-#ifndef _MSC_VER
-const int MigrateOlympusCustomMessageRequest::kAccountFieldNumber;
-#endif  // !_MSC_VER
-
-MigrateOlympusCustomMessageRequest::MigrateOlympusCustomMessageRequest()
-  : ::google::protobuf::Message() {
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-}
-
-void MigrateOlympusCustomMessageRequest::InitAsDefaultInstance() {
-  account_ = const_cast< ::bgs::protocol::EntityId*>(&::bgs::protocol::EntityId::default_instance());
-}
-
-MigrateOlympusCustomMessageRequest::MigrateOlympusCustomMessageRequest(const MigrateOlympusCustomMessageRequest& from)
-  : ::google::protobuf::Message() {
-  SharedCtor();
-  MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-}
-
-void MigrateOlympusCustomMessageRequest::SharedCtor() {
-  _cached_size_ = 0;
-  account_ = NULL;
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-}
-
-MigrateOlympusCustomMessageRequest::~MigrateOlympusCustomMessageRequest() {
-  // @@protoc_insertion_point(destructor:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-  SharedDtor();
-}
-
-void MigrateOlympusCustomMessageRequest::SharedDtor() {
-  if (this != default_instance_) {
-    delete account_;
-  }
-}
-
-void MigrateOlympusCustomMessageRequest::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ::google::protobuf::Descriptor* MigrateOlympusCustomMessageRequest::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return MigrateOlympusCustomMessageRequest_descriptor_;
-}
-
-const MigrateOlympusCustomMessageRequest& MigrateOlympusCustomMessageRequest::default_instance() {
-  if (default_instance_ == NULL) protobuf_AddDesc_presence_5fservice_2eproto();
-  return *default_instance_;
-}
-
-MigrateOlympusCustomMessageRequest* MigrateOlympusCustomMessageRequest::default_instance_ = NULL;
-
-MigrateOlympusCustomMessageRequest* MigrateOlympusCustomMessageRequest::New() const {
-  return new MigrateOlympusCustomMessageRequest;
-}
-
-void MigrateOlympusCustomMessageRequest::Clear() {
-  if (has_account()) {
-    if (account_ != NULL) account_->::bgs::protocol::EntityId::Clear();
-  }
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->Clear();
-}
-
-bool MigrateOlympusCustomMessageRequest::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .bgs.protocol.EntityId account = 1;
-      case 1: {
-        if (tag == 10) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_account()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, mutable_unknown_fields()));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-  return false;
-#undef DO_
-}
-
-void MigrateOlympusCustomMessageRequest::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-  // required .bgs.protocol.EntityId account = 1;
-  if (has_account()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, this->account(), output);
-  }
-
-  if (!unknown_fields().empty()) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        unknown_fields(), output);
-  }
-  // @@protoc_insertion_point(serialize_end:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-}
-
-::google::protobuf::uint8* MigrateOlympusCustomMessageRequest::SerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-  // required .bgs.protocol.EntityId account = 1;
-  if (has_account()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        1, this->account(), target);
-  }
-
-  if (!unknown_fields().empty()) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        unknown_fields(), target);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest)
-  return target;
-}
-
-int MigrateOlympusCustomMessageRequest::ByteSize() const {
-  int total_size = 0;
-
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .bgs.protocol.EntityId account = 1;
-    if (has_account()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->account());
-    }
-
-  }
-  if (!unknown_fields().empty()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        unknown_fields());
-  }
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void MigrateOlympusCustomMessageRequest::MergeFrom(const ::google::protobuf::Message& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  const MigrateOlympusCustomMessageRequest* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const MigrateOlympusCustomMessageRequest*>(
-      &from);
-  if (source == NULL) {
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-    MergeFrom(*source);
-  }
-}
-
-void MigrateOlympusCustomMessageRequest::MergeFrom(const MigrateOlympusCustomMessageRequest& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_account()) {
-      mutable_account()->::bgs::protocol::EntityId::MergeFrom(from.account());
-    }
-  }
-  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
-}
-
-void MigrateOlympusCustomMessageRequest::CopyFrom(const ::google::protobuf::Message& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void MigrateOlympusCustomMessageRequest::CopyFrom(const MigrateOlympusCustomMessageRequest& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool MigrateOlympusCustomMessageRequest::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
-  if (has_account()) {
-    if (!this->account().IsInitialized()) return false;
-  }
-  return true;
-}
-
-void MigrateOlympusCustomMessageRequest::Swap(MigrateOlympusCustomMessageRequest* other) {
-  if (other != this) {
-    std::swap(account_, other->account_);
-    std::swap(_has_bits_[0], other->_has_bits_[0]);
-    _unknown_fields_.Swap(&other->_unknown_fields_);
-    std::swap(_cached_size_, other->_cached_size_);
-  }
-}
-
-::google::protobuf::Metadata MigrateOlympusCustomMessageRequest::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = MigrateOlympusCustomMessageRequest_descriptor_;
-  metadata.reflection = MigrateOlympusCustomMessageRequest_reflection_;
-  return metadata;
-}
-
-// ===================================================================
-
-#ifndef _MSC_VER
-const int MigrateOlympusCustomMessageResponse::kCustomMessageFieldNumber;
-const int MigrateOlympusCustomMessageResponse::kCustomMessageTimeEpochFieldNumber;
-#endif  // !_MSC_VER
-
-MigrateOlympusCustomMessageResponse::MigrateOlympusCustomMessageResponse()
-  : ::google::protobuf::Message() {
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-}
-
-void MigrateOlympusCustomMessageResponse::InitAsDefaultInstance() {
-}
-
-MigrateOlympusCustomMessageResponse::MigrateOlympusCustomMessageResponse(const MigrateOlympusCustomMessageResponse& from)
-  : ::google::protobuf::Message() {
-  SharedCtor();
-  MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-}
-
-void MigrateOlympusCustomMessageResponse::SharedCtor() {
-  ::google::protobuf::internal::GetEmptyString();
-  _cached_size_ = 0;
-  custom_message_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  custom_message_time_epoch_ = 0u;
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-}
-
-MigrateOlympusCustomMessageResponse::~MigrateOlympusCustomMessageResponse() {
-  // @@protoc_insertion_point(destructor:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-  SharedDtor();
-}
-
-void MigrateOlympusCustomMessageResponse::SharedDtor() {
-  if (custom_message_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete custom_message_;
-  }
-  if (this != default_instance_) {
-  }
-}
-
-void MigrateOlympusCustomMessageResponse::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ::google::protobuf::Descriptor* MigrateOlympusCustomMessageResponse::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return MigrateOlympusCustomMessageResponse_descriptor_;
-}
-
-const MigrateOlympusCustomMessageResponse& MigrateOlympusCustomMessageResponse::default_instance() {
-  if (default_instance_ == NULL) protobuf_AddDesc_presence_5fservice_2eproto();
-  return *default_instance_;
-}
-
-MigrateOlympusCustomMessageResponse* MigrateOlympusCustomMessageResponse::default_instance_ = NULL;
-
-MigrateOlympusCustomMessageResponse* MigrateOlympusCustomMessageResponse::New() const {
-  return new MigrateOlympusCustomMessageResponse;
-}
-
-void MigrateOlympusCustomMessageResponse::Clear() {
-  if (_has_bits_[0 / 32] & 3) {
-    if (has_custom_message()) {
-      if (custom_message_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-        custom_message_->clear();
-      }
-    }
-    custom_message_time_epoch_ = 0u;
-  }
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->Clear();
-}
-
-bool MigrateOlympusCustomMessageResponse::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional string custom_message = 1;
-      case 1: {
-        if (tag == 10) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_custom_message()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->custom_message().data(), this->custom_message().length(),
-            ::google::protobuf::internal::WireFormat::PARSE,
-            "custom_message");
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(16)) goto parse_custom_message_time_epoch;
-        break;
-      }
-
-      // optional uint32 custom_message_time_epoch = 2;
-      case 2: {
-        if (tag == 16) {
-         parse_custom_message_time_epoch:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &custom_message_time_epoch_)));
-          set_has_custom_message_time_epoch();
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, mutable_unknown_fields()));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-  return false;
-#undef DO_
-}
-
-void MigrateOlympusCustomMessageResponse::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-  // optional string custom_message = 1;
-  if (has_custom_message()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->custom_message().data(), this->custom_message().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "custom_message");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->custom_message(), output);
-  }
-
-  // optional uint32 custom_message_time_epoch = 2;
-  if (has_custom_message_time_epoch()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->custom_message_time_epoch(), output);
-  }
-
-  if (!unknown_fields().empty()) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        unknown_fields(), output);
-  }
-  // @@protoc_insertion_point(serialize_end:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-}
-
-::google::protobuf::uint8* MigrateOlympusCustomMessageResponse::SerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-  // optional string custom_message = 1;
-  if (has_custom_message()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->custom_message().data(), this->custom_message().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "custom_message");
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        1, this->custom_message(), target);
-  }
-
-  // optional uint32 custom_message_time_epoch = 2;
-  if (has_custom_message_time_epoch()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->custom_message_time_epoch(), target);
-  }
-
-  if (!unknown_fields().empty()) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        unknown_fields(), target);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse)
-  return target;
-}
-
-int MigrateOlympusCustomMessageResponse::ByteSize() const {
-  int total_size = 0;
-
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // optional string custom_message = 1;
-    if (has_custom_message()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->custom_message());
-    }
-
-    // optional uint32 custom_message_time_epoch = 2;
-    if (has_custom_message_time_epoch()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->custom_message_time_epoch());
-    }
-
-  }
-  if (!unknown_fields().empty()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        unknown_fields());
-  }
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void MigrateOlympusCustomMessageResponse::MergeFrom(const ::google::protobuf::Message& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  const MigrateOlympusCustomMessageResponse* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const MigrateOlympusCustomMessageResponse*>(
-      &from);
-  if (source == NULL) {
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-    MergeFrom(*source);
-  }
-}
-
-void MigrateOlympusCustomMessageResponse::MergeFrom(const MigrateOlympusCustomMessageResponse& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_custom_message()) {
-      set_custom_message(from.custom_message());
-    }
-    if (from.has_custom_message_time_epoch()) {
-      set_custom_message_time_epoch(from.custom_message_time_epoch());
-    }
-  }
-  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
-}
-
-void MigrateOlympusCustomMessageResponse::CopyFrom(const ::google::protobuf::Message& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void MigrateOlympusCustomMessageResponse::CopyFrom(const MigrateOlympusCustomMessageResponse& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool MigrateOlympusCustomMessageResponse::IsInitialized() const {
-
-  return true;
-}
-
-void MigrateOlympusCustomMessageResponse::Swap(MigrateOlympusCustomMessageResponse* other) {
-  if (other != this) {
-    std::swap(custom_message_, other->custom_message_);
-    std::swap(custom_message_time_epoch_, other->custom_message_time_epoch_);
-    std::swap(_has_bits_[0], other->_has_bits_[0]);
-    _unknown_fields_.Swap(&other->_unknown_fields_);
-    std::swap(_cached_size_, other->_cached_size_);
-  }
-}
-
-::google::protobuf::Metadata MigrateOlympusCustomMessageResponse::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = MigrateOlympusCustomMessageResponse_descriptor_;
-  metadata.reflection = MigrateOlympusCustomMessageResponse_reflection_;
-  return metadata;
-}
-
-// ===================================================================
-
-PresenceService::PresenceService(bool use_original_hash) : service_hash_(use_original_hash ? OriginalHash::value : NameHash::value) {
+PresenceService::PresenceService(bool use_original_hash) : ServiceBase(use_original_hash ? OriginalHash::value : NameHash::value) {
 }
 
 PresenceService::~PresenceService() {
@@ -2991,314 +2452,151 @@ google::protobuf::ServiceDescriptor const* PresenceService::descriptor() {
   return PresenceService_descriptor_;
 }
 
-void PresenceService::Subscribe(::bgs::protocol::presence::v1::SubscribeRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method PresenceService.Subscribe(bgs.protocol.presence.v1.SubscribeRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
-    ::bgs::protocol::NoData response;
-    if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
-      responseCallback(&response);
-  };
-  SendRequest(service_hash_, 1, request, std::move(callback));
-}
-
-void PresenceService::Unsubscribe(::bgs::protocol::presence::v1::UnsubscribeRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method PresenceService.Unsubscribe(bgs.protocol.presence.v1.UnsubscribeRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
-    ::bgs::protocol::NoData response;
-    if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
-      responseCallback(&response);
-  };
-  SendRequest(service_hash_, 2, request, std::move(callback));
-}
-
-void PresenceService::Update(::bgs::protocol::presence::v1::UpdateRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method PresenceService.Update(bgs.protocol.presence.v1.UpdateRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
-    ::bgs::protocol::NoData response;
-    if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
-      responseCallback(&response);
-  };
-  SendRequest(service_hash_, 3, request, std::move(callback));
-}
-
-void PresenceService::Query(::bgs::protocol::presence::v1::QueryRequest const* request, std::function<void(::bgs::protocol::presence::v1::QueryResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method PresenceService.Query(bgs.protocol.presence.v1.QueryRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
-    ::bgs::protocol::presence::v1::QueryResponse response;
-    if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
-      responseCallback(&response);
-  };
-  SendRequest(service_hash_, 4, request, std::move(callback));
-}
-
-void PresenceService::Ownership(::bgs::protocol::presence::v1::OwnershipRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method PresenceService.Ownership(bgs.protocol.presence.v1.OwnershipRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
-    ::bgs::protocol::NoData response;
-    if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
-      responseCallback(&response);
-  };
-  SendRequest(service_hash_, 5, request, std::move(callback));
-}
-
-void PresenceService::SubscribeNotification(::bgs::protocol::presence::v1::SubscribeNotificationRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method PresenceService.SubscribeNotification(bgs.protocol.presence.v1.SubscribeNotificationRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
-    ::bgs::protocol::NoData response;
-    if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
-      responseCallback(&response);
-  };
-  SendRequest(service_hash_, 7, request, std::move(callback));
-}
-
-void PresenceService::MigrateOlympusCustomMessage(::bgs::protocol::presence::v1::MigrateOlympusCustomMessageRequest const* request, std::function<void(::bgs::protocol::presence::v1::MigrateOlympusCustomMessageResponse const*)> responseCallback) {
-  TC_LOG_DEBUG("service.protobuf", "%s Server called client method PresenceService.MigrateOlympusCustomMessage(bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest{ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  std::function<void(MessageBuffer)> callback = [responseCallback](MessageBuffer buffer) -> void {
-    ::bgs::protocol::presence::v1::MigrateOlympusCustomMessageResponse response;
-    if (response.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize()))
-      responseCallback(&response);
-  };
-  SendRequest(service_hash_, 8, request, std::move(callback));
-}
-
 void PresenceService::CallServerMethod(uint32 token, uint32 methodId, MessageBuffer buffer) {
-  switch(methodId) {
-    case 1: {
-      ::bgs::protocol::presence::v1::SubscribeRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for PresenceService.Subscribe server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 1, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Subscribe(bgs.protocol.presence.v1.SubscribeRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::NoData::descriptor());
-        PresenceService* self = static_cast<PresenceService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Subscribe() returned bgs.protocol.NoData{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 1, token, response);
-        else
-          self->SendResponse(self->service_hash_, 1, token, status);
-      };
-      ::bgs::protocol::NoData response;
-      uint32 status = HandleSubscribe(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+  switch(methodId & 0x3FFFFFFF) {
+    case 1:
+      ParseAndHandleSubscribe(token, methodId, buffer);
       break;
-    }
-    case 2: {
-      ::bgs::protocol::presence::v1::UnsubscribeRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for PresenceService.Unsubscribe server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 2, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Unsubscribe(bgs.protocol.presence.v1.UnsubscribeRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::NoData::descriptor());
-        PresenceService* self = static_cast<PresenceService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Unsubscribe() returned bgs.protocol.NoData{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 2, token, response);
-        else
-          self->SendResponse(self->service_hash_, 2, token, status);
-      };
-      ::bgs::protocol::NoData response;
-      uint32 status = HandleUnsubscribe(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 2:
+      ParseAndHandleUnsubscribe(token, methodId, buffer);
       break;
-    }
-    case 3: {
-      ::bgs::protocol::presence::v1::UpdateRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for PresenceService.Update server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 3, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Update(bgs.protocol.presence.v1.UpdateRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::NoData::descriptor());
-        PresenceService* self = static_cast<PresenceService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Update() returned bgs.protocol.NoData{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 3, token, response);
-        else
-          self->SendResponse(self->service_hash_, 3, token, status);
-      };
-      ::bgs::protocol::NoData response;
-      uint32 status = HandleUpdate(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 3:
+      ParseAndHandleUpdate(token, methodId, buffer);
       break;
-    }
-    case 4: {
-      ::bgs::protocol::presence::v1::QueryRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for PresenceService.Query server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 4, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Query(bgs.protocol.presence.v1.QueryRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::presence::v1::QueryResponse::descriptor());
-        PresenceService* self = static_cast<PresenceService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Query() returned bgs.protocol.presence.v1.QueryResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 4, token, response);
-        else
-          self->SendResponse(self->service_hash_, 4, token, status);
-      };
-      ::bgs::protocol::presence::v1::QueryResponse response;
-      uint32 status = HandleQuery(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 4:
+      ParseAndHandleQuery(token, methodId, buffer);
       break;
-    }
-    case 5: {
-      ::bgs::protocol::presence::v1::OwnershipRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for PresenceService.Ownership server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 5, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Ownership(bgs.protocol.presence.v1.OwnershipRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::NoData::descriptor());
-        PresenceService* self = static_cast<PresenceService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.Ownership() returned bgs.protocol.NoData{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 5, token, response);
-        else
-          self->SendResponse(self->service_hash_, 5, token, status);
-      };
-      ::bgs::protocol::NoData response;
-      uint32 status = HandleOwnership(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 5:
+      ParseAndHandleOwnership(token, methodId, buffer);
       break;
-    }
-    case 7: {
-      ::bgs::protocol::presence::v1::SubscribeNotificationRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for PresenceService.SubscribeNotification server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 7, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.SubscribeNotification(bgs.protocol.presence.v1.SubscribeNotificationRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::NoData::descriptor());
-        PresenceService* self = static_cast<PresenceService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.SubscribeNotification() returned bgs.protocol.NoData{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 7, token, response);
-        else
-          self->SendResponse(self->service_hash_, 7, token, status);
-      };
-      ::bgs::protocol::NoData response;
-      uint32 status = HandleSubscribeNotification(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
+    case 7:
+      ParseAndHandleSubscribeNotification(token, methodId, buffer);
       break;
-    }
-    case 8: {
-      ::bgs::protocol::presence::v1::MigrateOlympusCustomMessageRequest request;
-      if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
-        TC_LOG_DEBUG("service.protobuf", "%s Failed to parse request for PresenceService.MigrateOlympusCustomMessage server method call.", GetCallerInfo().c_str());
-        SendResponse(service_hash_, 8, token, ERROR_RPC_MALFORMED_REQUEST);
-        return;
-      }
-      TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.MigrateOlympusCustomMessage(bgs.protocol.presence.v1.MigrateOlympusCustomMessageRequest{ %s }).",
-        GetCallerInfo().c_str(), request.ShortDebugString().c_str());
-      std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = [token](ServiceBase* service, uint32 status, ::google::protobuf::Message const* response)
-      {
-        ASSERT(response->GetDescriptor() == ::bgs::protocol::presence::v1::MigrateOlympusCustomMessageResponse::descriptor());
-        PresenceService* self = static_cast<PresenceService*>(service);
-        TC_LOG_DEBUG("service.protobuf", "%s Client called server method PresenceService.MigrateOlympusCustomMessage() returned bgs.protocol.presence.v1.MigrateOlympusCustomMessageResponse{ %s } status %u.",
-          self->GetCallerInfo().c_str(), response->ShortDebugString().c_str(), status);
-        if (!status)
-          self->SendResponse(self->service_hash_, 8, token, response);
-        else
-          self->SendResponse(self->service_hash_, 8, token, status);
-      };
-      ::bgs::protocol::presence::v1::MigrateOlympusCustomMessageResponse response;
-      uint32 status = HandleMigrateOlympusCustomMessage(&request, &response, continuation);
-      if (continuation)
-        continuation(this, status, &response);
-      break;
-    }
     default:
-      TC_LOG_ERROR("service.protobuf", "Bad method id %u.", methodId);
+      LogInvalidMethod(methodId);
       SendResponse(service_hash_, methodId, token, ERROR_RPC_INVALID_METHOD);
       break;
     }
 }
 
-uint32 PresenceService::HandleSubscribe(::bgs::protocol::presence::v1::SubscribeRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method PresenceService.Subscribe({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 PresenceService::HandleSubscribe(::bgs::protocol::presence::v1::SubscribeRequest const* request, ::bgs::protocol::NoData* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("PresenceService.Subscribe", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 PresenceService::HandleUnsubscribe(::bgs::protocol::presence::v1::UnsubscribeRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method PresenceService.Unsubscribe({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 PresenceService::HandleUnsubscribe(::bgs::protocol::presence::v1::UnsubscribeRequest const* request, ::bgs::protocol::NoData* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("PresenceService.Unsubscribe", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 PresenceService::HandleUpdate(::bgs::protocol::presence::v1::UpdateRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method PresenceService.Update({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 PresenceService::HandleUpdate(::bgs::protocol::presence::v1::UpdateRequest const* request, ::bgs::protocol::NoData* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("PresenceService.Update", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 PresenceService::HandleQuery(::bgs::protocol::presence::v1::QueryRequest const* request, ::bgs::protocol::presence::v1::QueryResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method PresenceService.Query({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 PresenceService::HandleQuery(::bgs::protocol::presence::v1::QueryRequest const* request, ::bgs::protocol::presence::v1::QueryResponse* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("PresenceService.Query", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 PresenceService::HandleOwnership(::bgs::protocol::presence::v1::OwnershipRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method PresenceService.Ownership({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 PresenceService::HandleOwnership(::bgs::protocol::presence::v1::OwnershipRequest const* request, ::bgs::protocol::NoData* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("PresenceService.Ownership", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 PresenceService::HandleSubscribeNotification(::bgs::protocol::presence::v1::SubscribeNotificationRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method PresenceService.SubscribeNotification({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
+uint32 PresenceService::HandleSubscribeNotification(::bgs::protocol::presence::v1::SubscribeNotificationRequest const* request, ::bgs::protocol::NoData* /*response*/, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& /*continuation*/) {
+  LogUnimplementedServerMethod("PresenceService.SubscribeNotification", request);
   return ERROR_RPC_NOT_IMPLEMENTED;
 }
 
-uint32 PresenceService::HandleMigrateOlympusCustomMessage(::bgs::protocol::presence::v1::MigrateOlympusCustomMessageRequest const* request, ::bgs::protocol::presence::v1::MigrateOlympusCustomMessageResponse* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation) {
-  TC_LOG_ERROR("service.protobuf", "%s Client tried to call not implemented method PresenceService.MigrateOlympusCustomMessage({ %s })",
-    GetCallerInfo().c_str(), request->ShortDebugString().c_str());
-  return ERROR_RPC_NOT_IMPLEMENTED;
+void PresenceService::ParseAndHandleSubscribe(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::presence::v1::SubscribeRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("PresenceService.Subscribe");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("PresenceService.Subscribe", "bgs.protocol.presence.v1.SubscribeRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "PresenceService.Subscribe", ::bgs::protocol::NoData::descriptor());
+  ::bgs::protocol::NoData response;
+  uint32 status = HandleSubscribe(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void PresenceService::ParseAndHandleUnsubscribe(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::presence::v1::UnsubscribeRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("PresenceService.Unsubscribe");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("PresenceService.Unsubscribe", "bgs.protocol.presence.v1.UnsubscribeRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "PresenceService.Unsubscribe", ::bgs::protocol::NoData::descriptor());
+  ::bgs::protocol::NoData response;
+  uint32 status = HandleUnsubscribe(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void PresenceService::ParseAndHandleUpdate(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::presence::v1::UpdateRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("PresenceService.Update");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("PresenceService.Update", "bgs.protocol.presence.v1.UpdateRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "PresenceService.Update", ::bgs::protocol::NoData::descriptor());
+  ::bgs::protocol::NoData response;
+  uint32 status = HandleUpdate(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void PresenceService::ParseAndHandleQuery(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::presence::v1::QueryRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("PresenceService.Query");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("PresenceService.Query", "bgs.protocol.presence.v1.QueryRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "PresenceService.Query", ::bgs::protocol::presence::v1::QueryResponse::descriptor());
+  ::bgs::protocol::presence::v1::QueryResponse response;
+  uint32 status = HandleQuery(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void PresenceService::ParseAndHandleOwnership(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::presence::v1::OwnershipRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("PresenceService.Ownership");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("PresenceService.Ownership", "bgs.protocol.presence.v1.OwnershipRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "PresenceService.Ownership", ::bgs::protocol::NoData::descriptor());
+  ::bgs::protocol::NoData response;
+  uint32 status = HandleOwnership(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
+}
+
+void PresenceService::ParseAndHandleSubscribeNotification(uint32 token, uint32 methodId, MessageBuffer& buffer) {
+  ::bgs::protocol::presence::v1::SubscribeNotificationRequest request;
+  if (!request.ParseFromArray(buffer.GetReadPointer(), buffer.GetActiveSize())) {
+    LogFailedParsingRequest("PresenceService.SubscribeNotification");
+    SendResponse(service_hash_, methodId, token, ERROR_RPC_MALFORMED_REQUEST);
+    return;
+  }
+  LogCallServerMethod("PresenceService.SubscribeNotification", "bgs.protocol.presence.v1.SubscribeNotificationRequest", &request);
+  std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)> continuation = CreateServerContinuation(token, methodId, "PresenceService.SubscribeNotification", ::bgs::protocol::NoData::descriptor());
+  ::bgs::protocol::NoData response;
+  uint32 status = HandleSubscribeNotification(&request, &response, continuation);
+  if (continuation)
+    continuation(this, status, &response);
 }
 
 // @@protoc_insertion_point(namespace_scope)

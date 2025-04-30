@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "content_handle_types.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,7 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
 
 namespace bgs {
@@ -101,7 +99,6 @@ struct StaticDescriptorInitializer_content_5fhandle_5ftypes_2eproto {
     protobuf_AddDesc_content_5fhandle_5ftypes_2eproto();
   }
 } static_descriptor_initializer_content_5fhandle_5ftypes_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -457,7 +454,6 @@ void ContentHandle::CopyFrom(const ContentHandle& from) {
 
 bool ContentHandle::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
-
   return true;
 }
 

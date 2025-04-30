@@ -24,7 +24,6 @@
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
 #include <google/protobuf/unknown_field_set.h>
-#include "attribute_types.pb.h"
 #include "Define.h" // for TC_PROTO_API
 // @@protoc_insertion_point(includes)
 
@@ -161,18 +160,6 @@ class TC_PROTO_API Role : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 relegation_role() const;
   inline void set_relegation_role(::google::protobuf::uint32 value);
 
-  // repeated .bgs.protocol.Attribute attribute = 8;
-  inline int attribute_size() const;
-  inline void clear_attribute();
-  static const int kAttributeFieldNumber = 8;
-  inline const ::bgs::protocol::Attribute& attribute(int index) const;
-  inline ::bgs::protocol::Attribute* mutable_attribute(int index);
-  inline ::bgs::protocol::Attribute* add_attribute();
-  inline const ::google::protobuf::RepeatedPtrField< ::bgs::protocol::Attribute >&
-      attribute() const;
-  inline ::google::protobuf::RepeatedPtrField< ::bgs::protocol::Attribute >*
-      mutable_attribute();
-
   // repeated uint32 kickable_role = 9 [packed = true];
   inline int kickable_role_size() const;
   inline void clear_kickable_role();
@@ -221,7 +208,6 @@ class TC_PROTO_API Role : public ::google::protobuf::Message {
   ::google::protobuf::uint32 id_;
   bool required_;
   bool unique_;
-  ::google::protobuf::RepeatedPtrField< ::bgs::protocol::Attribute > attribute_;
   ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > kickable_role_;
   mutable int _kickable_role_cached_byte_size_;
   ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > removable_role_;
@@ -498,36 +484,6 @@ inline void Role::set_relegation_role(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:bgs.protocol.Role.relegation_role)
 }
 
-// repeated .bgs.protocol.Attribute attribute = 8;
-inline int Role::attribute_size() const {
-  return attribute_.size();
-}
-inline void Role::clear_attribute() {
-  attribute_.Clear();
-}
-inline const ::bgs::protocol::Attribute& Role::attribute(int index) const {
-  // @@protoc_insertion_point(field_get:bgs.protocol.Role.attribute)
-  return attribute_.Get(index);
-}
-inline ::bgs::protocol::Attribute* Role::mutable_attribute(int index) {
-  // @@protoc_insertion_point(field_mutable:bgs.protocol.Role.attribute)
-  return attribute_.Mutable(index);
-}
-inline ::bgs::protocol::Attribute* Role::add_attribute() {
-  // @@protoc_insertion_point(field_add:bgs.protocol.Role.attribute)
-  return attribute_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::bgs::protocol::Attribute >&
-Role::attribute() const {
-  // @@protoc_insertion_point(field_list:bgs.protocol.Role.attribute)
-  return attribute_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::bgs::protocol::Attribute >*
-Role::mutable_attribute() {
-  // @@protoc_insertion_point(field_mutable_list:bgs.protocol.Role.attribute)
-  return &attribute_;
-}
-
 // repeated uint32 kickable_role = 9 [packed = true];
 inline int Role::kickable_role_size() const {
   return kickable_role_.size();
@@ -596,7 +552,6 @@ Role::mutable_removable_role() {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

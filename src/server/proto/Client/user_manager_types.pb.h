@@ -713,7 +713,6 @@ inline void BlockedPlayer::set_privileges(::google::protobuf::uint64 value) {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

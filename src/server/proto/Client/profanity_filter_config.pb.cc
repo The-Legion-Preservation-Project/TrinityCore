@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "profanity_filter_config.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,7 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
 
 namespace bgs {
@@ -125,7 +123,6 @@ struct StaticDescriptorInitializer_profanity_5ffilter_5fconfig_2eproto {
     protobuf_AddDesc_profanity_5ffilter_5fconfig_2eproto();
   }
 } static_descriptor_initializer_profanity_5ffilter_5fconfig_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -408,7 +405,6 @@ void WordFilter::CopyFrom(const WordFilter& from) {
 
 bool WordFilter::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
-
   return true;
 }
 
@@ -627,7 +623,6 @@ void WordFilters::CopyFrom(const WordFilters& from) {
 }
 
 bool WordFilters::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->filters())) return false;
   return true;
 }

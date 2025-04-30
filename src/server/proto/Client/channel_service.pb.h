@@ -1428,6 +1428,10 @@ class TC_PROTO_API ChannelService : public ServiceBase
  public:
 
   explicit ChannelService(bool use_original_hash);
+  ChannelService(ChannelService const&) = delete;
+  ChannelService(ChannelService&&) = delete;
+  ChannelService& operator=(ChannelService const&) = delete;
+  ChannelService& operator=(ChannelService&&) = delete;
   virtual ~ChannelService();
 
   typedef std::integral_constant<uint32, 0xB732DB32u> OriginalHash;
@@ -1435,18 +1439,10 @@ class TC_PROTO_API ChannelService : public ServiceBase
 
   static google::protobuf::ServiceDescriptor const* descriptor();
 
-  // client methods --------------------------------------------------
-
-  void RemoveMember(::bgs::protocol::channel::v1::RemoveMemberRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback);
-  void SendMessage(::bgs::protocol::channel::v1::SendMessageRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback);
-  void UpdateChannelState(::bgs::protocol::channel::v1::UpdateChannelStateRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback);
-  void UpdateMemberState(::bgs::protocol::channel::v1::UpdateMemberStateRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback);
-  void Dissolve(::bgs::protocol::channel::v1::DissolveRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback);
-  // server methods --------------------------------------------------
-
-  void CallServerMethod(uint32 token, uint32 methodId, MessageBuffer buffer) override final;
+  void CallServerMethod(uint32 token, uint32 methodId, MessageBuffer buffer) final;
 
  protected:
+  // server methods --------------------------------------------------
   virtual uint32 HandleRemoveMember(::bgs::protocol::channel::v1::RemoveMemberRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation);
   virtual uint32 HandleSendMessage(::bgs::protocol::channel::v1::SendMessageRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation);
   virtual uint32 HandleUpdateChannelState(::bgs::protocol::channel::v1::UpdateChannelStateRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation);
@@ -1454,9 +1450,11 @@ class TC_PROTO_API ChannelService : public ServiceBase
   virtual uint32 HandleDissolve(::bgs::protocol::channel::v1::DissolveRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation);
 
  private:
-  uint32 service_hash_;
-
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ChannelService);
+  void ParseAndHandleRemoveMember(uint32 token, uint32 methodId, MessageBuffer& buffer);
+  void ParseAndHandleSendMessage(uint32 token, uint32 methodId, MessageBuffer& buffer);
+  void ParseAndHandleUpdateChannelState(uint32 token, uint32 methodId, MessageBuffer& buffer);
+  void ParseAndHandleUpdateMemberState(uint32 token, uint32 methodId, MessageBuffer& buffer);
+  void ParseAndHandleDissolve(uint32 token, uint32 methodId, MessageBuffer& buffer);
 };
 
 // -------------------------------------------------------------------
@@ -1466,6 +1464,10 @@ class TC_PROTO_API ChannelListener : public ServiceBase
  public:
 
   explicit ChannelListener(bool use_original_hash);
+  ChannelListener(ChannelListener const&) = delete;
+  ChannelListener(ChannelListener&&) = delete;
+  ChannelListener& operator=(ChannelListener const&) = delete;
+  ChannelListener& operator=(ChannelListener&&) = delete;
   virtual ~ChannelListener();
 
   typedef std::integral_constant<uint32, 0xBF8C8094u> OriginalHash;
@@ -1474,31 +1476,15 @@ class TC_PROTO_API ChannelListener : public ServiceBase
   static google::protobuf::ServiceDescriptor const* descriptor();
 
   // client methods --------------------------------------------------
+  void OnJoin(::bgs::protocol::channel::v1::JoinNotification const* request, bool client = false, bool server = false);
+  void OnMemberAdded(::bgs::protocol::channel::v1::MemberAddedNotification const* request, bool client = false, bool server = false);
+  void OnLeave(::bgs::protocol::channel::v1::LeaveNotification const* request, bool client = false, bool server = false);
+  void OnMemberRemoved(::bgs::protocol::channel::v1::MemberRemovedNotification const* request, bool client = false, bool server = false);
+  void OnSendMessage(::bgs::protocol::channel::v1::SendMessageNotification const* request, bool client = false, bool server = false);
+  void OnUpdateChannelState(::bgs::protocol::channel::v1::UpdateChannelStateNotification const* request, bool client = false, bool server = false);
+  void OnUpdateMemberState(::bgs::protocol::channel::v1::UpdateMemberStateNotification const* request, bool client = false, bool server = false);
 
-  void OnJoin(::bgs::protocol::channel::v1::JoinNotification const* request);
-  void OnMemberAdded(::bgs::protocol::channel::v1::MemberAddedNotification const* request);
-  void OnLeave(::bgs::protocol::channel::v1::LeaveNotification const* request);
-  void OnMemberRemoved(::bgs::protocol::channel::v1::MemberRemovedNotification const* request);
-  void OnSendMessage(::bgs::protocol::channel::v1::SendMessageNotification const* request);
-  void OnUpdateChannelState(::bgs::protocol::channel::v1::UpdateChannelStateNotification const* request);
-  void OnUpdateMemberState(::bgs::protocol::channel::v1::UpdateMemberStateNotification const* request);
-  // server methods --------------------------------------------------
-
-  void CallServerMethod(uint32 token, uint32 methodId, MessageBuffer buffer) override final;
-
- protected:
-  virtual uint32 HandleOnJoin(::bgs::protocol::channel::v1::JoinNotification const* request);
-  virtual uint32 HandleOnMemberAdded(::bgs::protocol::channel::v1::MemberAddedNotification const* request);
-  virtual uint32 HandleOnLeave(::bgs::protocol::channel::v1::LeaveNotification const* request);
-  virtual uint32 HandleOnMemberRemoved(::bgs::protocol::channel::v1::MemberRemovedNotification const* request);
-  virtual uint32 HandleOnSendMessage(::bgs::protocol::channel::v1::SendMessageNotification const* request);
-  virtual uint32 HandleOnUpdateChannelState(::bgs::protocol::channel::v1::UpdateChannelStateNotification const* request);
-  virtual uint32 HandleOnUpdateMemberState(::bgs::protocol::channel::v1::UpdateMemberStateNotification const* request);
-
- private:
-  uint32 service_hash_;
-
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ChannelListener);
+  void CallServerMethod(uint32 token, uint32 methodId, MessageBuffer buffer) final;
 };
 
 // ===================================================================
@@ -3295,7 +3281,6 @@ inline void UpdateMemberStateNotification::set_allocated_subscriber(::bgs::proto
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

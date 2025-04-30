@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "notification_types.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,7 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
 
 namespace bgs {
@@ -179,7 +177,6 @@ struct StaticDescriptorInitializer_notification_5ftypes_2eproto {
     protobuf_AddDesc_notification_5ftypes_2eproto();
   }
 } static_descriptor_initializer_notification_5ftypes_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -446,7 +443,6 @@ void Target::CopyFrom(const Target& from) {
 }
 
 bool Target::IsInitialized() const {
-
   if (has_identity()) {
     if (!this->identity().IsInitialized()) return false;
   }
@@ -753,7 +749,6 @@ void Subscription::CopyFrom(const Subscription& from) {
 }
 
 bool Subscription::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->target())) return false;
   if (has_subscriber()) {
     if (!this->subscriber().IsInitialized()) return false;
@@ -1422,7 +1417,6 @@ void Notification::CopyFrom(const Notification& from) {
 
 bool Notification::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000006) != 0x00000006) return false;
-
   if (has_sender_id()) {
     if (!this->sender_id().IsInitialized()) return false;
   }

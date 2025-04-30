@@ -227,6 +227,10 @@ class TC_PROTO_API ReportService : public ServiceBase
  public:
 
   explicit ReportService(bool use_original_hash);
+  ReportService(ReportService const&) = delete;
+  ReportService(ReportService&&) = delete;
+  ReportService& operator=(ReportService const&) = delete;
+  ReportService& operator=(ReportService&&) = delete;
   virtual ~ReportService();
 
   typedef std::integral_constant<uint32, 0x7CAF61C9u> OriginalHash;
@@ -234,22 +238,16 @@ class TC_PROTO_API ReportService : public ServiceBase
 
   static google::protobuf::ServiceDescriptor const* descriptor();
 
-  // client methods --------------------------------------------------
-
-  void SendReport(::bgs::protocol::report::v1::SendReportRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback);
-  void SubmitReport(::bgs::protocol::report::v1::SubmitReportRequest const* request, std::function<void(::bgs::protocol::NoData const*)> responseCallback);
-  // server methods --------------------------------------------------
-
-  void CallServerMethod(uint32 token, uint32 methodId, MessageBuffer buffer) override final;
+  void CallServerMethod(uint32 token, uint32 methodId, MessageBuffer buffer) final;
 
  protected:
+  // server methods --------------------------------------------------
   virtual uint32 HandleSendReport(::bgs::protocol::report::v1::SendReportRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation);
   virtual uint32 HandleSubmitReport(::bgs::protocol::report::v1::SubmitReportRequest const* request, ::bgs::protocol::NoData* response, std::function<void(ServiceBase*, uint32, ::google::protobuf::Message const*)>& continuation);
 
  private:
-  uint32 service_hash_;
-
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ReportService);
+  void ParseAndHandleSendReport(uint32 token, uint32 methodId, MessageBuffer& buffer);
+  void ParseAndHandleSubmitReport(uint32 token, uint32 methodId, MessageBuffer& buffer);
 };
 
 // ===================================================================
@@ -395,7 +393,6 @@ inline void SubmitReportRequest::set_allocated_report_type(::bgs::protocol::repo
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

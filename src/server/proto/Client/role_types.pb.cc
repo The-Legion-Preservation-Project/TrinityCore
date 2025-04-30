@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "role_types.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,7 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
 
 namespace bgs {
@@ -36,7 +34,7 @@ void protobuf_AssignDesc_role_5ftypes_2eproto() {
       "role_types.proto");
   GOOGLE_CHECK(file != NULL);
   Role_descriptor_ = file->message_type(0);
-  static const int Role_offsets_[10] = {
+  static const int Role_offsets_[9] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Role, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Role, name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Role, privilege_),
@@ -44,7 +42,6 @@ void protobuf_AssignDesc_role_5ftypes_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Role, required_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Role, unique_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Role, relegation_role_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Role, attribute_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Role, kickable_role_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Role, removable_role_),
   };
@@ -88,16 +85,14 @@ void protobuf_AddDesc_role_5ftypes_2eproto() {
   already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::bgs::protocol::protobuf_AddDesc_attribute_5ftypes_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\020role_types.proto\022\014bgs.protocol\032\025attrib"
-    "ute_types.proto\"\374\001\n\004Role\022\n\n\002id\030\001 \002(\r\022\014\n\004"
-    "name\030\002 \002(\t\022\021\n\tprivilege\030\003 \003(\t\022\033\n\017assigna"
-    "ble_role\030\004 \003(\rB\002\020\001\022\027\n\010required\030\005 \001(\010:\005fa"
-    "lse\022\025\n\006unique\030\006 \001(\010:\005false\022\027\n\017relegation"
-    "_role\030\007 \001(\r\022*\n\tattribute\030\010 \003(\0132\027.bgs.pro"
-    "tocol.Attribute\022\031\n\rkickable_role\030\t \003(\rB\002"
-    "\020\001\022\032\n\016removable_role\030\n \003(\rB\002\020\001B\002H\001", 314);
+    "\n\020role_types.proto\022\014bgs.protocol\"\320\001\n\004Rol"
+    "e\022\n\n\002id\030\001 \002(\r\022\014\n\004name\030\002 \002(\t\022\021\n\tprivilege"
+    "\030\003 \003(\t\022\033\n\017assignable_role\030\004 \003(\rB\002\020\001\022\027\n\010r"
+    "equired\030\005 \001(\010:\005false\022\025\n\006unique\030\006 \001(\010:\005fa"
+    "lse\022\027\n\017relegation_role\030\007 \001(\r\022\031\n\rkickable"
+    "_role\030\t \003(\rB\002\020\001\022\032\n\016removable_role\030\n \003(\rB"
+    "\002\020\001B\002H\001", 247);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "role_types.proto", &protobuf_RegisterTypes);
   Role::default_instance_ = new Role();
@@ -111,7 +106,6 @@ struct StaticDescriptorInitializer_role_5ftypes_2eproto {
     protobuf_AddDesc_role_5ftypes_2eproto();
   }
 } static_descriptor_initializer_role_5ftypes_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -122,7 +116,6 @@ const int Role::kAssignableRoleFieldNumber;
 const int Role::kRequiredFieldNumber;
 const int Role::kUniqueFieldNumber;
 const int Role::kRelegationRoleFieldNumber;
-const int Role::kAttributeFieldNumber;
 const int Role::kKickableRoleFieldNumber;
 const int Role::kRemovableRoleFieldNumber;
 #endif  // !_MSC_VER
@@ -217,7 +210,6 @@ void Role::Clear() {
 
   privilege_.Clear();
   assignable_role_.Clear();
-  attribute_.Clear();
   kickable_role_.Clear();
   removable_role_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -343,20 +335,6 @@ bool Role::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(66)) goto parse_attribute;
-        break;
-      }
-
-      // repeated .bgs.protocol.Attribute attribute = 8;
-      case 8: {
-        if (tag == 66) {
-         parse_attribute:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_attribute()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(66)) goto parse_attribute;
         if (input->ExpectTag(74)) goto parse_kickable_role;
         break;
       }
@@ -472,12 +450,6 @@ void Role::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->relegation_role(), output);
   }
 
-  // repeated .bgs.protocol.Attribute attribute = 8;
-  for (int i = 0; i < this->attribute_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      8, this->attribute(i), output);
-  }
-
   // repeated uint32 kickable_role = 9 [packed = true];
   if (this->kickable_role_size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteTag(9, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
@@ -561,13 +533,6 @@ void Role::SerializeWithCachedSizes(
   // optional uint32 relegation_role = 7;
   if (has_relegation_role()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(7, this->relegation_role(), target);
-  }
-
-  // repeated .bgs.protocol.Attribute attribute = 8;
-  for (int i = 0; i < this->attribute_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        8, this->attribute(i), target);
   }
 
   // repeated uint32 kickable_role = 9 [packed = true];
@@ -666,14 +631,6 @@ int Role::ByteSize() const {
     total_size += data_size;
   }
 
-  // repeated .bgs.protocol.Attribute attribute = 8;
-  total_size += 1 * this->attribute_size();
-  for (int i = 0; i < this->attribute_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->attribute(i));
-  }
-
   // repeated uint32 kickable_role = 9 [packed = true];
   {
     int data_size = 0;
@@ -735,7 +692,6 @@ void Role::MergeFrom(const Role& from) {
   GOOGLE_CHECK_NE(&from, this);
   privilege_.MergeFrom(from.privilege_);
   assignable_role_.MergeFrom(from.assignable_role_);
-  attribute_.MergeFrom(from.attribute_);
   kickable_role_.MergeFrom(from.kickable_role_);
   removable_role_.MergeFrom(from.removable_role_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -772,8 +728,6 @@ void Role::CopyFrom(const Role& from) {
 
 bool Role::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
-
-  if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
   return true;
 }
 
@@ -786,7 +740,6 @@ void Role::Swap(Role* other) {
     std::swap(required_, other->required_);
     std::swap(unique_, other->unique_);
     std::swap(relegation_role_, other->relegation_role_);
-    attribute_.Swap(&other->attribute_);
     kickable_role_.Swap(&other->kickable_role_);
     removable_role_.Swap(&other->removable_role_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);

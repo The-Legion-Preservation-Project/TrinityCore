@@ -1374,7 +1374,6 @@ ServiceAliases::mutable_protocol_alias() {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

@@ -4,7 +4,6 @@
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
 #include "report_types.pb.h"
 
-#include <algorithm>
 #include <utility>
 
 #include <google/protobuf/stubs/common.h>
@@ -15,7 +14,6 @@
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-#include "Log.h"
 // @@protoc_insertion_point(includes)
 
 namespace bgs {
@@ -367,7 +365,6 @@ struct StaticDescriptorInitializer_report_5ftypes_2eproto {
     protobuf_AddDesc_report_5ftypes_2eproto();
   }
 } static_descriptor_initializer_report_5ftypes_2eproto_;
-
 // ===================================================================
 
 #ifndef _MSC_VER
@@ -914,7 +911,6 @@ void ReportType::CopyFrom(const ReportType& from) {
 }
 
 bool ReportType::IsInitialized() const {
-
   if (has_custom_report()) {
     if (!this->custom_report().IsInitialized()) return false;
   }
@@ -1277,7 +1273,6 @@ void CustomReport::CopyFrom(const CustomReport& from) {
 }
 
 bool CustomReport::IsInitialized() const {
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
   return true;
 }
@@ -1577,7 +1572,6 @@ void SpamReport::CopyFrom(const SpamReport& from) {
 }
 
 bool SpamReport::IsInitialized() const {
-
   if (has_target()) {
     if (!this->target().IsInitialized()) return false;
   }
@@ -1868,7 +1862,6 @@ void HarassmentReport::CopyFrom(const HarassmentReport& from) {
 }
 
 bool HarassmentReport::IsInitialized() const {
-
   if (has_target()) {
     if (!this->target().IsInitialized()) return false;
   }
@@ -2159,7 +2152,6 @@ void RealLifeThreatReport::CopyFrom(const RealLifeThreatReport& from) {
 }
 
 bool RealLifeThreatReport::IsInitialized() const {
-
   if (has_target()) {
     if (!this->target().IsInitialized()) return false;
   }
@@ -2450,7 +2442,6 @@ void InappropriateBattleTagReport::CopyFrom(const InappropriateBattleTagReport& 
 }
 
 bool InappropriateBattleTagReport::IsInitialized() const {
-
   if (has_target()) {
     if (!this->target().IsInitialized()) return false;
   }
@@ -2680,7 +2671,6 @@ void HackingReport::CopyFrom(const HackingReport& from) {
 }
 
 bool HackingReport::IsInitialized() const {
-
   if (has_target()) {
     if (!this->target().IsInitialized()) return false;
   }
@@ -2909,7 +2899,6 @@ void BottingReport::CopyFrom(const BottingReport& from) {
 }
 
 bool BottingReport::IsInitialized() const {
-
   if (has_target()) {
     if (!this->target().IsInitialized()) return false;
   }
@@ -3368,7 +3357,6 @@ void Report::CopyFrom(const Report& from) {
 
 bool Report::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-
   if (!::google::protobuf::internal::AllAreInitialized(this->attribute())) return false;
   if (has_reporting_account()) {
     if (!this->reporting_account().IsInitialized()) return false;

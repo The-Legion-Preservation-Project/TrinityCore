@@ -2232,13 +2232,11 @@ inline void Member::set_allocated_state(::bgs::protocol::channel::v1::MemberStat
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 template <> struct is_proto_enum< ::bgs::protocol::channel::v1::ChannelState_PrivacyLevel> : ::google::protobuf::internal::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::bgs::protocol::channel::v1::ChannelState_PrivacyLevel>() {
   return ::bgs::protocol::channel::v1::ChannelState_PrivacyLevel_descriptor();
 }
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG

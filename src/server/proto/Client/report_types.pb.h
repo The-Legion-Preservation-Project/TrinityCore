@@ -2427,13 +2427,11 @@ inline void Report::set_report_timestamp(::google::protobuf::uint64 value) {
 #ifndef SWIG
 namespace google {
 namespace protobuf {
-
 template <> struct is_proto_enum< ::bgs::protocol::report::v1::SpamReport_SpamSource> : ::google::protobuf::internal::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::bgs::protocol::report::v1::SpamReport_SpamSource>() {
   return ::bgs::protocol::report::v1::SpamReport_SpamSource_descriptor();
 }
-
 }  // namespace google
 }  // namespace protobuf
 #endif  // SWIG
