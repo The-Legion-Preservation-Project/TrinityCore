@@ -34,7 +34,7 @@ BattlegroundSA::BattlegroundSA(BattlegroundTemplate const* battlegroundTemplate)
     StartMessageIds[BG_STARTING_EVENT_FOURTH] = 0; // handle by Kanrethad
 
     BgObjects.resize(BG_SA_MAXOBJ);
-    BgCreatures.resize(BG_SA_MAXNPC + BG_SA_MAX_GY);
+    BgCreatures.resize(AsUnderlyingType(BG_SA_MAXNPC) + AsUnderlyingType(BG_SA_MAX_GY));
     TimerEnabled = false;
     UpdateWaitTimer = 0;
     SignaledRoundTwo = false;
@@ -93,7 +93,7 @@ bool BattlegroundSA::ResetObjs()
     for (uint8 i = 0; i < BG_SA_MAXNPC; i++)
         DelCreature(i);
 
-    for (uint8 i = BG_SA_MAXNPC; i < BG_SA_MAXNPC + BG_SA_MAX_GY; i++)
+    for (uint8 i = BG_SA_MAXNPC; i < AsUnderlyingType(BG_SA_MAXNPC) + AsUnderlyingType(BG_SA_MAX_GY); i++)
         DelCreature(i);
 
     for (uint8 i = 0; i < MAX_GATES; ++i)
@@ -749,7 +749,7 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
     if (GraveyardStatus[i] == Attackers)
         return;
 
-    DelCreature(BG_SA_MAXNPC + i);
+    DelCreature(AsUnderlyingType(BG_SA_MAXNPC) + i);
     TeamId teamId = GetTeamIndexByTeamId(GetPlayerTeam(Source->GetGUID()));
     GraveyardStatus[i] = teamId;
     WorldSafeLocsEntry const* sg = sWorldSafeLocsStore.LookupEntry(BG_SA_GYEntries[i]);
@@ -759,7 +759,7 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
         return;
     }
 
-    AddSpiritGuide(i + BG_SA_MAXNPC, sg->Loc.X, sg->Loc.Y, sg->Loc.Z, BG_SA_GYOrientation[i], GraveyardStatus[i]);
+    AddSpiritGuide(i + AsUnderlyingType(BG_SA_MAXNPC), sg->Loc.X, sg->Loc.Y, sg->Loc.Z, BG_SA_GYOrientation[i], GraveyardStatus[i]);
     uint32 npc = 0;
     uint32 flag = 0;
 
