@@ -11546,26 +11546,25 @@ void Unit::SendPlaySpellVisual(Unit* target, uint32 spellVisualId, uint16 missRe
     SendMessageToSet(playSpellVisual.Write(), true);
 }
 
-void Unit::SendCancelSpellVisual(uint32 id)
-{
-    WorldPackets::Spells::CancelSpellVisual cancelSpellVisual;
-    cancelSpellVisual.Source = GetGUID();
-    cancelSpellVisual.SpellVisualID = id;
-    SendMessageToSet(cancelSpellVisual.Write(), true);
-}
-
-void Unit::SendPlaySpellVisual(Position const& targetPosition, float o, uint32 spellVisualId, uint16 missReason, uint16 reflectStatus, float travelSpeed, bool speedAsTime /*= false*/)
+void Unit::SendPlaySpellVisual(Position const& targetPosition, uint32 spellVisualId, uint16 missReason, uint16 reflectStatus, float travelSpeed, bool speedAsTime /*= false*/)
 {
     WorldPackets::Spells::PlaySpellVisual playSpellVisual;
     playSpellVisual.Source = GetGUID();
     playSpellVisual.TargetPosition = targetPosition;
-    playSpellVisual.Orientation = o;
     playSpellVisual.SpellVisualID = spellVisualId;
     playSpellVisual.TravelSpeed = travelSpeed;
     playSpellVisual.MissReason = missReason;
     playSpellVisual.ReflectStatus = reflectStatus;
     playSpellVisual.SpeedAsTime = speedAsTime;
     SendMessageToSet(playSpellVisual.Write(), true);
+}
+
+void Unit::SendCancelSpellVisual(uint32 id)
+{
+    WorldPackets::Spells::CancelSpellVisual cancelSpellVisual;
+    cancelSpellVisual.Source = GetGUID();
+    cancelSpellVisual.SpellVisualID = id;
+    SendMessageToSet(cancelSpellVisual.Write(), true);
 }
 
 void Unit::SendPlaySpellVisualKit(uint32 id, uint32 type, uint32 duration) const
