@@ -158,7 +158,7 @@ void WorldSession::HandleSendMail(WorldPackets::Mail::SendMail& sendMail)
 
         // test the receiver's Faction... or all items are account bound
         bool accountBound = !mailInfo.Attachments.empty();
-        for (auto const& att : mailInfo.Attachments)
+        for (WorldPackets::Mail::SendMail::StructSendMail::MailAttachment const& att : mailInfo.Attachments)
         {
             if (Item* item = player->GetItemByGuid(att.ItemGUID))
             {
@@ -185,7 +185,7 @@ void WorldSession::HandleSendMail(WorldPackets::Mail::SendMail& sendMail)
 
         std::vector<Item*> items;
 
-        for (auto const& att : mailInfo.Attachments)
+        for (WorldPackets::Mail::SendMail::StructSendMail::MailAttachment const& att : mailInfo.Attachments)
         {
             if (att.ItemGUID.IsEmpty())
             {

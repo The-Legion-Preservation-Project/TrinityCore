@@ -839,14 +839,14 @@ struct GameObjectTemplate
         uint32 autoCloseTime = 0;
         switch (type)
         {
-            case GAMEOBJECT_TYPE_DOOR:          autoCloseTime = door.autoClose; break;
-            case GAMEOBJECT_TYPE_BUTTON:        autoCloseTime = button.autoClose; break;
-            case GAMEOBJECT_TYPE_TRAP:          autoCloseTime = trap.autoClose; break;
-            case GAMEOBJECT_TYPE_GOOBER:        autoCloseTime = goober.autoClose; break;
-            case GAMEOBJECT_TYPE_TRANSPORT:     autoCloseTime = transport.autoClose; break;
-            case GAMEOBJECT_TYPE_AREADAMAGE:    autoCloseTime = areaDamage.autoClose; break;
-            case GAMEOBJECT_TYPE_TRAPDOOR:      autoCloseTime = trapdoor.autoClose; break;
-            default: break;
+            case GAMEOBJECT_TYPE_DOOR:          return door.autoClose;
+            case GAMEOBJECT_TYPE_BUTTON:        return button.autoClose;
+            case GAMEOBJECT_TYPE_TRAP:          return trap.autoClose;
+            case GAMEOBJECT_TYPE_GOOBER:        return goober.autoClose;
+            case GAMEOBJECT_TYPE_TRANSPORT:     return transport.autoClose;
+            case GAMEOBJECT_TYPE_AREADAMAGE:    return areaDamage.autoClose;
+            case GAMEOBJECT_TYPE_TRAPDOOR:      return trapdoor.autoClose;
+            default: return 0;
         }
         return autoCloseTime;              // prior to 3.0.3, conversion was / 0x10000;
     }
