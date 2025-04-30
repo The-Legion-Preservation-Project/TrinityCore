@@ -2004,7 +2004,6 @@ void Spell::EffectDispel()
     size_t remaining = dispelList.size();
 
     // Ok if exist some buffs for dispel try dispel it
-    uint32 failCount = 0;
     DispelChargesList successList;
     successList.reserve(damage);
 
@@ -2047,7 +2046,6 @@ void Spell::EffectDispel()
         }
         else
         {
-            ++failCount;
             dispelFailed.FailedSpells.push_back(int32(itr->GetAura()->GetId()));
         }
         ++count;
@@ -4520,7 +4518,6 @@ void Spell::EffectStealBeneficialBuff()
     size_t remaining = stealList.size();
 
     // Ok if exist some buffs for dispel try dispel it
-    uint32 failCount = 0;
     std::vector<std::tuple<uint32, ObjectGuid, int32>> successList;
     successList.reserve(damage);
 
@@ -4551,7 +4548,6 @@ void Spell::EffectStealBeneficialBuff()
         }
         else
         {
-            ++failCount;
             dispelFailed.FailedSpells.push_back(int32(itr->GetAura()->GetId()));
         }
         ++count;

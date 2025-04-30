@@ -946,6 +946,7 @@ char* DB2FileLoaderSparseImpl::AutoProduceData(uint32& indexTableSize, char**& i
 
     uint32 offset = 0;
     uint32 recordNum = 0;
+
     for (uint32 y = 0; y < offsetCount; ++y)
     {
         unsigned char const* rawRecord = GetRawRecordData(y);
