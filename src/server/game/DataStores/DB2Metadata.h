@@ -7515,9 +7515,9 @@ struct SpellKeyboundOverrideMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
+        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { FT_INT, 1, true },
+        { FT_BYTE, 1, true },
     };
 
     static constexpr DB2Meta Instance{ 1127327, -1, 3, 0x6ECA16FC, Fields, -1 };

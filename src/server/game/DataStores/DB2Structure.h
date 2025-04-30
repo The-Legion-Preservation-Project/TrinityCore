@@ -3120,6 +3120,14 @@ struct SpellItemEnchantmentConditionEntry
     std::array<uint8, 5> Logic;
 };
 
+struct SpellKeyboundOverrideEntry
+{
+    uint32 ID;
+    char const* Function;
+    int32 Data;
+    int8 Type;
+};
+
 struct SpellLabelEntry
 {
     uint32 ID;
