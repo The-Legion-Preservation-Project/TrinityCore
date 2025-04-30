@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.8)
 project(protoc_bnet)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(Protobuf REQUIRED)
 
@@ -19,14 +19,12 @@ set(SOURCE_FILES
 include_directories(${CMAKE_SOURCE_DIR} ${PROTOBUF_INCLUDE_DIRS})
 
 add_executable(protoc-gen-bnet ${SOURCE_FILES})
+target_compile_features(protoc-gen-bnet
+  PUBLIC
+    cxx_std_17)
 
 target_link_libraries(protoc-gen-bnet ${PROTOBUF_PROTOC_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR})
-
-add_custom_target(install_plugin
-  make install
-  DEPENDS protoc-gen-bnet
-  COMMENT "Installing protoc_bnet")
 
 install(TARGETS protoc-gen-bnet DESTINATION bin)
