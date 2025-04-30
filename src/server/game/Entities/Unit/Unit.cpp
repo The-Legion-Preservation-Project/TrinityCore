@@ -10551,7 +10551,7 @@ void Unit::SetMeleeAnimKitId(uint16 animKitId)
             {
                 if (dungeonEncounter)
                 {
-                    creature->m_personalLoot = GenerateDungeonEncounterPersonalLoot(dungeonEncounter->ID, creature->GetCreatureTemplate()->lootid,
+                    creature->m_personalLoot = GenerateDungeonEncounterPersonalLoot(dungeonEncounter->ID, creature->GetLootId(),
                         LootTemplates_Creature, LOOT_CORPSE, creature, creature->GetCreatureTemplate()->mingold, creature->GetCreatureTemplate()->maxgold,
                         creature->GetLootMode(), creature->GetMap()->GetDifficultyLootItemContext(), tappers);
                 }
@@ -10562,7 +10562,7 @@ void Unit::SetMeleeAnimKitId(uint16 animKitId)
 
                     Loot* loot = new Loot(creature->GetMap(), creature->GetGUID(), LOOT_CORPSE, dungeonEncounter ? group : nullptr);
 
-                    if (uint32 lootid = creature->GetCreatureTemplate()->lootid)
+                    if (uint32 lootid = creature->GetLootId())
                         loot->FillLoot(lootid, LootTemplates_Creature, looter, dungeonEncounter != nullptr, false, creature->GetLootMode(), creature->GetMap()->GetDifficultyLootItemContext());
 
                     if (creature->GetLootMode() > 0)
@@ -10588,7 +10588,7 @@ void Unit::SetMeleeAnimKitId(uint16 animKitId)
                     if (dungeonEncounter)
                         loot->SetDungeonEncounterId(dungeonEncounter->ID);
 
-                    if (uint32 lootid = creature->GetCreatureTemplate()->lootid)
+                    if (uint32 lootid = creature->GetLootId())
                         loot->FillLoot(lootid, LootTemplates_Creature, tapper, true, false, creature->GetLootMode(), creature->GetMap()->GetDifficultyLootItemContext());
 
                     if (creature->GetLootMode() > 0)
