@@ -82,32 +82,32 @@ void LoadRandomEnchantmentsTable()
                 case ItemRandomEnchantmentType::Property:
                     if (!sItemRandomPropertiesStore.LookupEntry(ench))
                     {
-                        TC_LOG_ERROR("sql.sql", "Property %u used in `item_enchantment_template` by entry %u doesn't have exist in ItemRandomProperties.db2", ench, entry);
+                        TC_LOG_ERROR("sql.sql", "Property {} used in `item_enchantment_template` by entry {} doesn't have exist in ItemRandomProperties.db2", ench, entry);
                         continue;
                     }
                     break;
                 case ItemRandomEnchantmentType::Suffix:
                     if (!sItemRandomSuffixStore.LookupEntry(ench))
                     {
-                        TC_LOG_ERROR("sql.sql", "Suffix %u used in `item_enchantment_template` by entry %u doesn't have exist in ItemRandomSuffix.db2", ench, entry);
+                        TC_LOG_ERROR("sql.sql", "Suffix {} used in `item_enchantment_template` by entry {} doesn't have exist in ItemRandomSuffix.db2", ench, entry);
                         continue;
                     }
                     break;
                 case ItemRandomEnchantmentType::BonusList:
                     if (!sDB2Manager.GetItemBonusList(ench))
                     {
-                        TC_LOG_ERROR("sql.sql", "Bonus list %u used in `item_enchantment_template` by entry %u doesn't have exist in ItemBonus.db2", ench, entry);
+                        TC_LOG_ERROR("sql.sql", "Bonus list {} used in `item_enchantment_template` by entry {} doesn't have exist in ItemBonus.db2", ench, entry);
                         continue;
                     }
                     break;
                 default:
-                    TC_LOG_ERROR("sql.sql", "Invalid random enchantment type specified in `item_enchantment_template` table for `entry` %u `ench` %u", entry, ench);
+                    TC_LOG_ERROR("sql.sql", "Invalid random enchantment type specified in `item_enchantment_template` table for `entry` {} `ench` {}", entry, ench);
                     break;
             }
 
             if (chance < 0.000001f || chance > 100.0f)
             {
-                TC_LOG_ERROR("sql.sql", "Random item enchantment for entry %u type %u ench %u has invalid chance %f", entry, uint32(type), ench, chance);
+                TC_LOG_ERROR("sql.sql", "Random item enchantment for entry {} type {} ench {} has invalid chance {}", entry, uint32(type), ench, chance);
                 continue;
             }
 
@@ -127,7 +127,7 @@ void LoadRandomEnchantmentsTable()
             ++count;
         } while (result->NextRow());
 
-        TC_LOG_INFO("server.loading", ">> Loaded %u Item Enchantment definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+        TC_LOG_INFO("server.loading", ">> Loaded {} Item Enchantment definitions in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
     }
     else
         TC_LOG_INFO("server.loading", ">> Loaded 0 Item Enchantment definitions. DB table `item_enchantment_template` is empty.");
@@ -144,7 +144,7 @@ ItemRandomEnchantmentId GetItemEnchantMod(int32 entry, ItemRandomEnchantmentType
     auto tab = RandomItemEnch[type].find(entry);
     if (tab == RandomItemEnch[type].end())
     {
-        TC_LOG_ERROR("sql.sql", "Item RandomProperty / RandomSuffix id #%u used in `item_template` but it does not have records in `item_enchantment_template` table.", entry);
+        TC_LOG_ERROR("sql.sql", "Item RandomProperty / RandomSuffix id #{} used in `item_template` but it does not have records in `item_enchantment_template` table.", entry);
         return{};
     }
 
@@ -169,7 +169,7 @@ ItemRandomEnchantmentId GenerateItemRandomPropertyId(uint32 item_id)
     // item can have not null only one from field values
     if (itemProto->GetRandomProperty() && itemProto->GetRandomSuffix())
     {
-        TC_LOG_ERROR("sql.sql", "Item template %u have RandomProperty == %u and RandomSuffix == %u, but must have one from field =0", itemProto->GetId(), itemProto->GetRandomProperty(), itemProto->GetRandomSuffix());
+        TC_LOG_ERROR("sql.sql", "Item template {} have RandomProperty == {} and RandomSuffix == {}, but must have one from field =0", itemProto->GetId(), itemProto->GetRandomProperty(), itemProto->GetRandomSuffix());
         return{};
     }
 

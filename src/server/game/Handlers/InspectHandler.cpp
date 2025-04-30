@@ -30,11 +30,11 @@ void WorldSession::HandleInspectOpcode(WorldPackets::Inspect::Inspect& inspect)
     Player* player = ObjectAccessor::GetPlayer(*_player, inspect.Target);
     if (!player)
     {
-        TC_LOG_DEBUG("network", "WorldSession::HandleInspectOpcode: Target %s not found.", inspect.Target.ToString().c_str());
+        TC_LOG_DEBUG("network", "WorldSession::HandleInspectOpcode: Target {} not found.", inspect.Target.ToString());
         return;
     }
 
-    TC_LOG_DEBUG("network", "WorldSession::HandleInspectOpcode: Target %s.", inspect.Target.ToString().c_str());
+    TC_LOG_DEBUG("network", "WorldSession::HandleInspectOpcode: Target {}.", inspect.Target.ToString());
 
     if (!GetPlayer()->IsWithinDistInMap(player, INSPECT_DISTANCE, false))
         return;
@@ -83,11 +83,11 @@ void WorldSession::HandleRequestHonorStatsOpcode(WorldPackets::Inspect::RequestH
     Player* player = ObjectAccessor::FindPlayer(request.TargetGUID);
     if (!player)
     {
-        TC_LOG_DEBUG("network", "WorldSession::HandleRequestHonorStatsOpcode: Target %s not found.", request.TargetGUID.ToString().c_str());
+        TC_LOG_DEBUG("network", "WorldSession::HandleRequestHonorStatsOpcode: Target {} not found.", request.TargetGUID.ToString());
         return;
     }
 
-    TC_LOG_DEBUG("network", "WorldSession::HandleRequestHonorStatsOpcode: Target %s.", request.TargetGUID.ToString().c_str());
+    TC_LOG_DEBUG("network", "WorldSession::HandleRequestHonorStatsOpcode: Target {}.", request.TargetGUID.ToString());
 
     if (!GetPlayer()->IsWithinDistInMap(player, INSPECT_DISTANCE, false))
         return;
@@ -112,11 +112,11 @@ void WorldSession::HandleInspectPVP(WorldPackets::Inspect::InspectPVPRequest& re
     Player* player = ObjectAccessor::FindPlayer(request.InspectTarget);
     if (!player)
     {
-        TC_LOG_DEBUG("network", "WorldSession::HandleInspectPVP: Target %s not found.", request.InspectTarget.ToString().c_str());
+        TC_LOG_DEBUG("network", "WorldSession::HandleInspectPVP: Target {} not found.", request.InspectTarget.ToString());
         return;
     }
 
-    TC_LOG_DEBUG("network", "WorldSession::HandleInspectPVP: Target %s, InspectRealmAddress %u.", request.InspectTarget.ToString().c_str(), request.InspectRealmAddress);
+    TC_LOG_DEBUG("network", "WorldSession::HandleInspectPVP: Target {}, InspectRealmAddress {}.", request.InspectTarget.ToString(), request.InspectRealmAddress);
 
     if (!GetPlayer()->IsWithinDistInMap(player, INSPECT_DISTANCE, false))
         return;
@@ -136,11 +136,11 @@ void WorldSession::HandleQueryInspectAchievements(WorldPackets::Inspect::QueryIn
     Player* player = ObjectAccessor::GetPlayer(*_player, inspect.Guid);
     if (!player)
     {
-        TC_LOG_DEBUG("network", "WorldSession::HandleQueryInspectAchievements: [%s] inspected unknown Player [%s]", GetPlayer()->GetGUID().ToString().c_str(), inspect.Guid.ToString().c_str());
+        TC_LOG_DEBUG("network", "WorldSession::HandleQueryInspectAchievements: [{}] inspected unknown Player [{}]", GetPlayer()->GetGUID().ToString(), inspect.Guid.ToString());
         return;
     }
 
-    TC_LOG_DEBUG("network", "WorldSession::HandleQueryInspectAchievements: [%s] inspected Player [%s]", GetPlayer()->GetGUID().ToString().c_str(), inspect.Guid.ToString().c_str());
+    TC_LOG_DEBUG("network", "WorldSession::HandleQueryInspectAchievements: [{}] inspected Player [{}]", GetPlayer()->GetGUID().ToString(), inspect.Guid.ToString());
 
     if (!GetPlayer()->IsWithinDistInMap(player, INSPECT_DISTANCE, false))
         return;

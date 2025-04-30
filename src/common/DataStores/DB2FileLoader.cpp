@@ -487,7 +487,7 @@ char* DB2FileLoaderRegularImpl::AutoProduceStrings(char** indexTable, uint32 ind
             }
         }
 
-        TC_LOG_ERROR("", "Attempted to load %s which has locales %s as %s. Check if you placed your localized db2 files in correct directory.", _fileName, str.str().c_str(), localeNames[locale]);
+        TC_LOG_ERROR("", "Attempted to load {} which has locales {} as {}. Check if you placed your localized db2 files in correct directory.", _fileName, str.str(), localeNames[locale]);
         return nullptr;
     }
 
@@ -918,7 +918,7 @@ void DB2FileLoaderSparseImpl::SetAdditionalData(std::unique_ptr<DB2FieldEntry[]>
 char* DB2FileLoaderSparseImpl::AutoProduceData(uint32& indexTableSize, char**& indexTable)
 {
     if (_loadInfo->Meta->FieldCount != _header->FieldCount)
-        throw DB2FileLoadException(Trinity::StringFormat("Found unsupported parent index in sparse db2 %s", _fileName));
+        throw DB2FileLoadException(Trinity::StringFormat("Found unsupported parent index in sparse db2 {}", _fileName));
 
     //get struct size and index pos
     uint32 recordsize = _loadInfo->Meta->GetRecordSize();
@@ -1017,7 +1017,7 @@ char* DB2FileLoaderSparseImpl::AutoProduceData(uint32& indexTableSize, char**& i
 char* DB2FileLoaderSparseImpl::AutoProduceStrings(char** indexTable, uint32 indexTableSize, uint32 locale)
 {
     if (_loadInfo->Meta->FieldCount != _header->FieldCount)
-        throw DB2FileLoadException(Trinity::StringFormat("Found unsupported parent index in sparse db2 %s", _fileName));
+        throw DB2FileLoadException(Trinity::StringFormat("Found unsupported parent index in sparse db2 {}", _fileName));
 
     if (!(_header->Locale & (1 << locale)))
     {
@@ -1032,7 +1032,7 @@ char* DB2FileLoaderSparseImpl::AutoProduceStrings(char** indexTable, uint32 inde
             }
         }
 
-        TC_LOG_ERROR("", "Attempted to load %s which has locales %s as %s. Check if you placed your localized db2 files in correct directory.", _fileName, str.str().c_str(), localeNames[locale]);
+        TC_LOG_ERROR("", "Attempted to load {} which has locales {} as {}. Check if you placed your localized db2 files in correct directory.", _fileName, str.str(), localeNames[locale]);
         return nullptr;
     }
 
@@ -1468,11 +1468,11 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
     EndianConvert(_header.ParentLookupDataSize);
 
     if (_header.Signature != 0x31434457)                        //'WDC1'
-        throw DB2FileLoadException(Trinity::StringFormat("Incorrect file signature in %s, expected 'WDC1', got %c%c%c%c", source->GetFileName(),
+        throw DB2FileLoadException(Trinity::StringFormat("Incorrect file signature in {}, expected 'WDC1', got %c%c%c%c", source->GetFileName(),
             char(_header.Signature & 0xFF), char((_header.Signature >> 8) & 0xFF), char((_header.Signature >> 16) & 0xFF), char((_header.Signature >> 24) & 0xFF)));
 
     if (_header.LayoutHash != loadInfo->Meta->LayoutHash)
-        throw DB2FileLoadException(Trinity::StringFormat("Incorrect layout hash in %s, expected 0x%08X, got 0x%08X (possibly wrong client version)",
+        throw DB2FileLoadException(Trinity::StringFormat("Incorrect layout hash in {}, expected 0x{:08X}, got 0x{:08X} (possibly wrong client version)",
             source->GetFileName(), loadInfo->Meta->LayoutHash, _header.LayoutHash));
 
     if (!(_header.Flags & 0x1))
@@ -1490,7 +1490,7 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
             _header.ParentLookupDataSize;
 
         if (source->GetFileSize() != expectedFileSize)
-            throw DB2FileLoadException(Trinity::StringFormat("%s failed size consistency check, expected " SZFMTD ", got " SZFMTD, expectedFileSize, source->GetFileSize()));
+            throw DB2FileLoadException(Trinity::StringFormat("{} failed size consistency check, expected {}, got {}", source->GetFileName(), expectedFileSize, source->GetFileSize()));
     }
 
     if (_header.ParentLookupCount > 1)
@@ -1511,7 +1511,7 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
 
     std::unique_ptr<DB2FieldEntry[]> fieldData = std::make_unique<DB2FieldEntry[]>(_header.FieldCount);
     if (!source->Read(fieldData.get(), sizeof(DB2FieldEntry) * _header.FieldCount))
-        throw DB2FileLoadException(Trinity::StringFormat("Unable to read field information from %s", source->GetFileName()));
+        throw DB2FileLoadException(Trinity::StringFormat("Unable to read field information from {}", source->GetFileName()));
 
     if (!_impl->LoadTableData(source))
         throw DB2FileLoadException(Trinity::StringFormat("Unable to read table data from %s", source->GetFileName()));
@@ -1546,13 +1546,13 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
     {
         columnMeta = std::make_unique<DB2ColumnMeta[]>(_header.TotalFieldCount);
         if (!source->Read(columnMeta.get(), _header.ColumnMetaSize))
-            throw DB2FileLoadException(Trinity::StringFormat("Unable to read field metadata from %s", source->GetFileName()));
+            throw DB2FileLoadException(Trinity::StringFormat("Unable to read field metadata from {}", source->GetFileName()));
 
         if (loadInfo->Meta->HasIndexFieldInData())
         {
             if (columnMeta[loadInfo->Meta->IndexField].CompressionType != DB2ColumnCompression::None
                 && columnMeta[loadInfo->Meta->IndexField].CompressionType != DB2ColumnCompression::Immediate)
-                throw DB2FileLoadException(Trinity::StringFormat("Invalid compression type for index field in %s, expected one of None (0), Immediate (1), SignedImmediate (5), got %u",
+                throw DB2FileLoadException(Trinity::StringFormat("Invalid compression type for index field in {}, expected one of None (0), Immediate (1), SignedImmediate (5), got {}",
                     source->GetFileName(), uint32(columnMeta[loadInfo->Meta->IndexField].CompressionType)));
         }
 
@@ -1564,7 +1564,7 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
 
             palletValues[i] = std::make_unique<DB2PalletValue[]>(columnMeta[i].AdditionalDataSize / sizeof(DB2PalletValue));
             if (!source->Read(palletValues[i].get(), columnMeta[i].AdditionalDataSize))
-                throw DB2FileLoadException(Trinity::StringFormat("Unable to read field pallet values from %s for field %u", source->GetFileName(), i));
+                throw DB2FileLoadException(Trinity::StringFormat("Unable to read field pallet values from {} for field {}", source->GetFileName(), i));
         }
 
         palletArrayValues = std::make_unique<std::unique_ptr<DB2PalletValue[]>[]>(_header.TotalFieldCount);
@@ -1575,7 +1575,7 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
 
             palletArrayValues[i] = std::make_unique<DB2PalletValue[]>(columnMeta[i].AdditionalDataSize / sizeof(DB2PalletValue));
             if (!source->Read(palletArrayValues[i].get(), columnMeta[i].AdditionalDataSize))
-                throw DB2FileLoadException(Trinity::StringFormat("Unable to read field pallet array values from %s for field %u", source->GetFileName(), i));
+                throw DB2FileLoadException(Trinity::StringFormat("Unable to read field pallet array values from {} for field {}", source->GetFileName(), i));
         }
 
         std::unique_ptr<std::unique_ptr<DB2CommonValue[]>[]> commonData = std::make_unique<std::unique_ptr<DB2CommonValue[]>[]>(_header.TotalFieldCount);
@@ -1590,7 +1590,7 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
 
             commonData[i] = std::make_unique<DB2CommonValue[]>(columnMeta[i].AdditionalDataSize / sizeof(DB2CommonValue));
             if (!source->Read(commonData[i].get(), columnMeta[i].AdditionalDataSize))
-                throw DB2FileLoadException(Trinity::StringFormat("Unable to read field common values from %s for field %u", source->GetFileName(), i));
+                throw DB2FileLoadException(Trinity::StringFormat("Unable to read field common values from {} for field {}", source->GetFileName(), i));
 
             uint32 numExtraValuesForField = columnMeta[i].AdditionalDataSize / sizeof(DB2CommonValue);
             for (uint32 record = 0; record < numExtraValuesForField; ++record)
@@ -1610,14 +1610,14 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
         for (uint32 i = 0; i < _header.ParentLookupCount; ++i)
         {
             if (!source->Read(&parentIndexes[i].Info, sizeof(DB2IndexDataInfo)))
-                throw DB2FileLoadException(Trinity::StringFormat("Unable to read parent lookup info from %s for index %u", source->GetFileName(), i));
+                throw DB2FileLoadException(Trinity::StringFormat("Unable to read parent lookup info from {} for index {}", source->GetFileName(), i));
 
             if (!parentIndexes[i].Info.NumEntries)
                 continue;
 
             parentIndexes[i].Entries = std::make_unique<DB2IndexEntry[]>(parentIndexes[i].Info.NumEntries);
             if (!source->Read(parentIndexes[i].Entries.get(), sizeof(DB2IndexEntry) * parentIndexes[i].Info.NumEntries))
-                throw DB2FileLoadException(Trinity::StringFormat("Unable to read parent lookup content from %s for index %u", source->GetFileName(), i));
+                throw DB2FileLoadException(Trinity::StringFormat("Unable to read parent lookup content from {} for index {}", source->GetFileName(), i));
         }
     }
 

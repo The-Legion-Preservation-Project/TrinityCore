@@ -79,7 +79,7 @@ void LanguageMgr::LoadLanguages()
     _langsMap.emplace(LANG_ADDON, LanguageDesc());
 
     // Log load time
-    TC_LOG_INFO("server.loading", ">> Loaded %u languages in %u ms", uint32(_langsMap.size()), GetMSTimeDiffToNow(oldMSTime));
+    TC_LOG_INFO("server.loading", ">> Loaded {} languages in {} ms", uint32(_langsMap.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void LanguageMgr::LoadLanguagesWords()
@@ -98,7 +98,7 @@ void LanguageMgr::LoadLanguagesWords()
     }
 
     // log load time
-    TC_LOG_INFO("server.loading", ">> Loaded %u word groups from %u words in %u ms", uint32(_wordsMap.size()), wordsNum, GetMSTimeDiffToNow(oldMSTime));
+    TC_LOG_INFO("server.loading", ">> Loaded {} word groups from {} words in {} ms", uint32(_wordsMap.size()), wordsNum, GetMSTimeDiffToNow(oldMSTime));
 }
 
 LanguageMgr::WordList const* LanguageMgr::FindWordGroup(uint32 language, uint32 wordLen) const

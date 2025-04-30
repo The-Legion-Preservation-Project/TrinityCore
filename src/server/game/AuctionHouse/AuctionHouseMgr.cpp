@@ -363,17 +363,17 @@ std::string AuctionHouseMgr::BuildAuctionMailSubject(uint32 itemId, AuctionMailT
 
 std::string AuctionHouseMgr::BuildAuctionWonMailBody(ObjectGuid guid, uint64 bid, uint64 buyout)
 {
-    return Trinity::StringFormat("%s:" UI64FMTD ":" UI64FMTD ":0", guid.ToString().c_str(), bid, buyout);
+    return Trinity::StringFormat("{}:{}:{}:0", guid.ToString(), bid, buyout);
 }
 
 std::string AuctionHouseMgr::BuildAuctionSoldMailBody(ObjectGuid guid, uint64 bid, uint64 buyout, uint32 deposit, uint64 consignment)
 {
-    return Trinity::StringFormat("%s:" UI64FMTD ":" UI64FMTD ":%u:" UI64FMTD ":0", guid.ToString().c_str(), bid, buyout, deposit, consignment);
+    return Trinity::StringFormat("{}:{}:{}:{}:{}:0", guid.ToString(), bid, buyout, deposit, consignment);
 }
 
 std::string AuctionHouseMgr::BuildAuctionInvoiceMailBody(ObjectGuid guid, uint64 bid, uint64 buyout, uint32 deposit, uint64 consignment, uint32 moneyDelay, uint32 eta)
 {
-    return Trinity::StringFormat("%s:" UI64FMTD ":" UI64FMTD ":%u:" UI64FMTD ":%u:%u:0", guid.ToString().c_str(), bid, buyout, deposit, consignment, moneyDelay, eta);
+    return Trinity::StringFormat("{}:{}:{}:{}:{}:{}:{}:0", guid.ToString(), bid, buyout, deposit, consignment, moneyDelay, eta);
 }
 
 void AuctionHouseMgr::LoadAuctions()
@@ -405,7 +405,7 @@ void AuctionHouseMgr::LoadAuctions()
             ItemTemplate const* proto = sObjectMgr->GetItemTemplate(itemEntry);
             if (!proto)
             {
-                TC_LOG_ERROR("misc", "AuctionHouseMgr::LoadAuctionItems: Unknown item (GUID: " UI64FMTD " item entry: #%u) in auction, skipped.", itemGuid, itemEntry);
+                TC_LOG_ERROR("misc", "AuctionHouseMgr::LoadAuctionItems: Unknown item (GUID: {} item entry: #{}) in auction, skipped.", itemGuid, itemEntry);
                 continue;
             }
 
@@ -422,7 +422,7 @@ void AuctionHouseMgr::LoadAuctions()
         } while (result->NextRow());
     }
 
-    TC_LOG_INFO("server.loading", ">> Loaded %u auction items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    TC_LOG_INFO("server.loading", ">> Loaded {} auction items in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
 
     oldMSTime = getMSTime();
 
@@ -443,7 +443,7 @@ void AuctionHouseMgr::LoadAuctions()
             AuctionHouseObject* auctionHouse = GetAuctionsById(auctionHouseId);
             if (!auctionHouse)
             {
-                TC_LOG_ERROR("misc", "Auction %u has wrong auctionHouseId %u", auction.Id, auctionHouseId);
+                TC_LOG_ERROR("misc", "Auction {} has wrong auctionHouseId {}", auction.Id, auctionHouseId);
                 CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_AUCTION);
                 stmt->setUInt32(0, auction.Id);
                 trans->Append(stmt);
@@ -453,7 +453,7 @@ void AuctionHouseMgr::LoadAuctions()
             auto itemsItr = itemsByAuction.find(auction.Id);
             if (itemsItr == itemsByAuction.end())
             {
-                TC_LOG_ERROR("misc", "Auction %u has no item", auction.Id);
+                TC_LOG_ERROR("misc", "Auction {} has no item", auction.Id);
                 CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_AUCTION);
                 stmt->setUInt32(0, auction.Id);
                 trans->Append(stmt);
@@ -482,7 +482,7 @@ void AuctionHouseMgr::LoadAuctions()
         CharacterDatabase.CommitTransaction(trans);
     }
 
-    TC_LOG_INFO("server.loading", ">> Loaded %u auctions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    TC_LOG_INFO("server.loading", ">> Loaded {} auctions in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 void AuctionHouseMgr::AddAItem(Item* item)
@@ -603,7 +603,7 @@ void AuctionHouseMgr::UpdatePendingAuctions()
         else
         {
             // Expire any auctions that we couldn't get a deposit for
-            TC_LOG_WARN("auctionHouse", "Player %s was offline, unable to retrieve deposit!", playerGUID.ToString().c_str());
+            TC_LOG_WARN("auctionHouse", "Player {} was offline, unable to retrieve deposit!", playerGUID.ToString());
             ++itr;
             CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
             for (PendingAuctionInfo const& pendingAuction : itr->second.Auctions)
@@ -1108,9 +1108,9 @@ void AuctionHouseObject::SendAuctionWon(AuctionPosting const* auction, Player* b
 
         uint32 ownerAccId = sCharacterCache->GetCharacterAccountIdByGuid(auction->Owner);
 
-        sLog->OutCommand(bidderAccId, "GM %s (Account: %u) won item in auction: %s (Entry: %u Count: %u) and pay money: " UI64FMTD ". Original owner %s (Account: %u)",
-            bidderName.c_str(), bidderAccId, auction->Item->GetNameForLocaleIdx(sWorld->GetDefaultDbcLocale()).c_str(),
-            auction->Item->GetEntry(), auction->Item->GetCount(), auction->BidAmount, ownerName.c_str(), ownerAccId);
+        sLog->OutCommand(bidderAccId, "GM {} (Account: {}) won item in auction: {} (Entry: {} Count: {}) and pay money: {}. Original owner {} (Account: {})",
+            bidderName, bidderAccId, auction->Item->GetNameForLocaleIdx(sWorld->GetDefaultDbcLocale()),
+            auction->Item->GetEntry(), auction->Item->GetCount(), auction->BidAmount, ownerName, ownerAccId);
     }
 
     // receiver exist
