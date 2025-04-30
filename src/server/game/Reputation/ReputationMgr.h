@@ -117,6 +117,7 @@ class TC_GAME_API ReputationMgr
             return forceItr != _forcedReactions.end() ? &forceItr->second : nullptr;
         }
 
+        bool IsParagonReputation(FactionEntry const* factionEntry) const;
         int32 GetParagonLevel(uint32 paragonFactionId) const;
         int32 GetParagonLevel(FactionEntry const* paragonFactionEntry) const;
 

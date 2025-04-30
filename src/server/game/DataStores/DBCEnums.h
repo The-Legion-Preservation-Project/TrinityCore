@@ -641,6 +641,44 @@ enum CharSectionType
     SECTION_TYPE_MAX
 };
 
+enum CurrencyConsts
+{
+    CURRENCY_TYPE_JUSTICE_POINTS        = 395,
+    CURRENCY_TYPE_VALOR_POINTS          = 396,
+    CURRENCY_TYPE_APEXIS_CRYSTALS       = 823,
+    CURRENCY_TYPE_ANCIENT_MANA          = 1155,
+
+    CURRENCY_MAX_CAP_ANCIENT_MANA       = 2000
+};
+
+enum class CurrencyTypesFlags : uint32
+{
+    Tradable                            = 0x00000001, // NYI
+    AppearsInLootWindow                 = 0x00000002, // NYI
+    ComputedWeeklyMaximum               = 0x00000004, // NYI
+    _100_Scaler                         = 0x00000008,
+    NoLowLevelDrop                      = 0x00000010, // NYI
+    IgnoreMaxQtyOnLoad                  = 0x00000020,
+    LogOnWorldChange                    = 0x00000040, // NYI
+    TrackQuantity                       = 0x00000080,
+    ResetTrackedQuantity                = 0x00000100, // NYI
+    UpdateVersionIgnoreMax              = 0x00000200,
+    SuppressChatMessageOnVersionChange  = 0x00000400,
+    SingleDropInLoot                    = 0x00000800, // NYI
+    HasWeeklyCatchup                    = 0x00001000, // NYI
+    DoNotCompressChat                   = 0x00002000, // NYI
+    DoNotLogAcquisitionToBi             = 0x00004000, // NYI
+    NoRaidDrop                          = 0x00008000, // NYI
+    NotPersistent                       = 0x00010000, // NYI
+    Deprecated                          = 0x00020000, // NYI
+    DynamicMaximum                      = 0x00040000,
+    SuppressChatMessages                = 0x00080000,
+    DoNotToast                          = 0x00100000, // NYI
+    DestroyExtraOnLoot                  = 0x00200000 // NYI
+};
+
+DEFINE_ENUM_FLAG(CurrencyTypesFlags);
+
 enum Curves
 {
     CURVE_ID_ARTIFACT_RELIC_ITEM_LEVEL_BONUS = 1718
@@ -1828,14 +1866,6 @@ enum VehicleSeatFlagsB
     VEHICLE_SEAT_FLAG_B_USABLE_FORCED_4          = 0x02000000,
     VEHICLE_SEAT_FLAG_B_CAN_SWITCH               = 0x04000000,
     VEHICLE_SEAT_FLAG_B_VEHICLE_PLAYERFRAME_UI   = 0x80000000            // Lua_UnitHasVehiclePlayerFrameUI - actually checked for flagsb &~ 0x80000000
-};
-
-// CurrencyTypes.dbc
-enum CurrencyTypes
-{
-    CURRENCY_TYPE_JUSTICE_POINTS        = 395,
-    CURRENCY_TYPE_VALOR_POINTS          = 396,
-    CURRENCY_TYPE_APEXIS_CRYSTALS       = 823,
 };
 
 enum WorldMapTransformsFlags

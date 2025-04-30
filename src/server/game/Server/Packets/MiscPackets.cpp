@@ -86,7 +86,7 @@ WorldPacket const* WorldPackets::Misc::SetupCurrency::Write()
         _worldPacket.WriteBit(data.MaxWeeklyQuantity.has_value());
         _worldPacket.WriteBit(data.TrackedQuantity.has_value());
         _worldPacket.WriteBit(data.MaxQuantity.has_value());
-        _worldPacket.WriteBits(data.Flags, 5);
+        _worldPacket.WriteBits(uint8(data.Flags), 5);
         _worldPacket.FlushBits();
 
         if (data.WeeklyQuantity)

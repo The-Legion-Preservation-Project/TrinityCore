@@ -31,7 +31,6 @@
 #include <array>
 #include <map>
 
-enum MountStatusFlags : uint8;
 enum UnitStandStateType : uint8;
 enum WeatherState : uint32;
 
@@ -115,7 +114,7 @@ namespace WorldPackets
 
             int32 Type = 0;
             int32 Quantity = 0;
-            uint32 Flags = 0;
+            CurrencyGainFlags Flags = CurrencyGainFlags(0);
             Optional<int32> WeeklyQuantity;
             Optional<int32> TrackedQuantity;
             Optional<int32> MaxQuantity;

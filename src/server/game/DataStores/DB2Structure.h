@@ -1024,6 +1024,59 @@ struct CurrencyTypesEntry
     uint8 Quality;
     int32 InventoryIconFileID;
     uint32 SpellWeight;
+
+    EnumFlag<CurrencyTypesFlags> GetFlags() const { return static_cast<CurrencyTypesFlags>(Flags); }
+
+    // Helpers
+    int32 GetScaler() const
+    {
+        return GetFlags().HasFlag(CurrencyTypesFlags::_100_Scaler) ? 100 : 1;
+    }
+
+    bool HasMaxEarnablePerWeek() const
+    {
+        return MaxEarnablePerWeek || GetFlags().HasFlag(CurrencyTypesFlags::ComputedWeeklyMaximum);
+    }
+
+    bool HasMaxQuantity(bool onLoad = false, bool onUpdateVersion = false) const
+    {
+        if (onLoad && GetFlags().HasFlag(CurrencyTypesFlags::IgnoreMaxQtyOnLoad))
+            return false;
+
+        if (onUpdateVersion && GetFlags().HasFlag(CurrencyTypesFlags::UpdateVersionIgnoreMax))
+            return false;
+
+        return MaxQty || GetFlags().HasFlag(CurrencyTypesFlags::DynamicMaximum);
+    }
+
+    bool HasTotalEarned() const
+    {
+        return false;
+    }
+
+    bool IsAlliance() const
+    {
+        return false;
+    }
+
+    bool IsHorde() const
+    {
+        return false;
+    }
+
+    bool IsSuppressingChatLog(bool onUpdateVersion = false) const
+    {
+        if ((onUpdateVersion && GetFlags().HasFlag(CurrencyTypesFlags::SuppressChatMessageOnVersionChange)) ||
+            GetFlags().HasFlag(CurrencyTypesFlags::SuppressChatMessages))
+            return true;
+
+        return false;
+    }
+
+    bool IsTrackingQuantity() const
+    {
+        return GetFlags().HasFlag(CurrencyTypesFlags::TrackQuantity);
+    }
 };
 
 struct CurveEntry

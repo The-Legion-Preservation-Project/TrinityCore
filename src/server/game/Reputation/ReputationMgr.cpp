@@ -146,7 +146,7 @@ int32 ReputationMgr::GetMaxReputation(FactionEntry const* factionEntry) const
     if (ParagonReputationEntry const* paragonReputation = sDB2Manager.GetParagonReputation(factionEntry->ID))
     {
         // has reward quest, cap is just before threshold for another quest reward
-        // for example: if current reputation is 12345 and questa are given every 10000 and player has unclaimed reward
+        // for example: if current reputation is 12345 and quests are given every 10000 and player has unclaimed reward
         // then cap will be 19999
 
         // otherwise cap is one theshold level larger
@@ -215,6 +215,14 @@ std::string ReputationMgr::GetReputationRankName(FactionEntry const* factionEntr
 ReputationRank const* ReputationMgr::GetForcedRankIfAny(FactionTemplateEntry const* factionTemplateEntry) const
 {
     return GetForcedRankIfAny(factionTemplateEntry->Faction);
+}
+
+bool ReputationMgr::IsParagonReputation(FactionEntry const* factionEntry) const
+{
+    if (sDB2Manager.GetParagonReputation(factionEntry->ID))
+        return true;
+
+    return false;
 }
 
 int32 ReputationMgr::GetParagonLevel(uint32 paragonFactionId) const
@@ -449,13 +457,14 @@ bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, in
     FactionStateList::iterator itr = _factions.find(factionEntry->ReputationIndex);
     if (itr != _factions.end())
     {
-        int32 BaseRep = GetBaseReputation(factionEntry);
+        int32 baseRep = GetBaseReputation(factionEntry);
+        int32 oldStanding = itr->second.Standing + baseRep;
 
         if (incremental)
         {
             // int32 *= float cause one point loss?
             standing = int32(floor((float)standing * sWorld->getRate(RATE_REPUTATION_GAIN) + 0.5f));
-            standing += itr->second.Standing + BaseRep;
+            standing += oldStanding;
         }
 
         if (standing > GetMaxReputation(factionEntry))
@@ -463,25 +472,36 @@ bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, in
         else if (standing < GetMinReputation(factionEntry))
             standing = GetMinReputation(factionEntry);
 
-        ReputationRank old_rank = ReputationToRank(factionEntry, itr->second.Standing + BaseRep);
-        ReputationRank new_rank = ReputationToRank(factionEntry, standing);
+        // Ignore rank for paragon reputation
+        if (!IsParagonReputation(factionEntry))
+        {
+            ReputationRank oldRank = ReputationToRank(factionEntry, oldStanding);
+            ReputationRank newRank = ReputationToRank(factionEntry, standing);
 
-        int32 oldStanding = itr->second.Standing + BaseRep;
-        int32 newStanding = standing - BaseRep;
+            if (newRank <= REP_HOSTILE)
+                SetAtWar(&itr->second, true);
 
-        _player->ReputationChanged(factionEntry, newStanding - itr->second.Standing);
+            if (newRank > oldRank)
+                _sendFactionIncreased = true;
+
+            if (!factionEntry->FriendshipRepID)
+                UpdateRankCounters(oldRank, newRank);
+        }
+        else
+            _sendFactionIncreased = true; // TODO: Check Paragon reputation
+
+        // Calculate new standing and reputation change
+        int32 newStanding = 0;
+        int32 reputationChange = standing - oldStanding;
+        newStanding = standing - baseRep;
+
+        _player->ReputationChanged(factionEntry, reputationChange);
 
         itr->second.Standing = newStanding;
         itr->second.needSend = true;
         itr->second.needSave = true;
 
         SetVisible(&itr->second);
-
-        if (new_rank <= REP_HOSTILE)
-            SetAtWar(&itr->second, true);
-
-        if (new_rank > old_rank)
-            _sendFactionIncreased = true;
 
         ParagonReputationEntry const* paragonReputation = sDB2Manager.GetParagonReputation(factionEntry->ID);
         if (paragonReputation)
@@ -492,9 +512,6 @@ bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, in
                 if (Quest const* paragonRewardQuest = sObjectMgr->GetQuestTemplate(paragonReputation->QuestID))
                     _player->AddQuestAndCheckCompletion(paragonRewardQuest, nullptr);
         }
-
-        if (!factionEntry->FriendshipRepID && !paragonReputation)
-            UpdateRankCounters(old_rank, new_rank);
 
         _player->UpdateCriteria(CriteriaType::TotalFactionsEncountered, factionEntry->ID);
         _player->UpdateCriteria(CriteriaType::ReputationGained,         factionEntry->ID);
