@@ -185,7 +185,7 @@ CASC::Storage* CASC::Storage::Open(boost::filesystem::path const& path, uint32 l
     Storage* storage = new Storage(handle);
 
     if (!storage->LoadOnlineTactKeys())
-        printf("Failed to load additional encryption keys from wow.tools, some files might not be extracted.\n");
+        printf("Failed to load additional online encryption keys, some files might not be extracted.\n");
 
     return storage;
 }
