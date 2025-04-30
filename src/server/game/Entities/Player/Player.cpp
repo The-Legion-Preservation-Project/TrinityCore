@@ -18292,8 +18292,6 @@ Item* Player::_LoadMailedItem(ObjectGuid const& playerGuid, Player* player, uint
 
 void Player::_LoadMail(PreparedQueryResult mailsResult, PreparedQueryResult mailItemsResult, PreparedQueryResult artifactResult)
 {
-    m_mail.clear();
-
     std::unordered_map<uint32, Mail*> mailById;
 
     if (mailsResult)
