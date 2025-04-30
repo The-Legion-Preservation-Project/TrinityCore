@@ -85,8 +85,8 @@ UPDATE `creature_model_info` SET `BoundingRadius`=0.208000004291534423, `CombatR
 UPDATE `creature_template_scaling` SET `LevelScalingDeltaMin`=-4, `LevelScalingDeltaMax`=-2, `VerifiedBuild`=48069 WHERE (`DifficultyID`=0 AND `Entry` IN (108180,51081));
 
 -- Quests
-UPDATE `quest_template` SET `Expansion`=9, `VerifiedBuild`=48069 WHERE `ID`=24609; -- A Gift for a Lord of Ironforge
-UPDATE `quest_template` SET `Expansion`=9, `VerifiedBuild`=48069 WHERE `ID`=24804; -- Uncommon Scents
+# UPDATE `quest_template` SET `Expansion`=9, `VerifiedBuild`=48069 WHERE `ID`=24609; -- A Gift for a Lord of Ironforge
+# UPDATE `quest_template` SET `Expansion`=9, `VerifiedBuild`=48069 WHERE `ID`=24804; -- Uncommon Scents
 
 UPDATE `quest_template_addon` SET `SpecialFlags`=1 WHERE `ID`=44558;
 UPDATE `quest_template_addon` SET `PrevQuestID`=24657 WHERE `ID` IN (28934, 44558);
