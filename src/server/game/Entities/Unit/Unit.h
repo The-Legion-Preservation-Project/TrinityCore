@@ -1844,6 +1844,10 @@ class TC_GAME_API Unit : public WorldObject
         // enables / disables combat interaction of this unit
         void SetIsCombatDisallowed(bool apply) { _isCombatDisallowed = apply; }
 
+        void AddWorldEffect(int32 worldEffectId) { AddDynamicValue(UNIT_FIELD_STATE_WORLD_EFFECT_ID, worldEffectId); }
+        void RemoveWorldEffect(int32 worldEffectId) { RemoveDynamicValue(UNIT_FIELD_STATE_WORLD_EFFECT_ID, worldEffectId); }
+        void ClearWorldEffects() { ClearDynamicValue(UNIT_FIELD_STATE_WORLD_EFFECT_ID); }
+
         std::string GetDebugInfo() const override;
 
     protected:
