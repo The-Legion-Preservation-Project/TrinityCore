@@ -723,7 +723,6 @@ T DB2FileLoaderRegularImpl::RecordGetVarInt(uint8 const* record, uint32 field, u
         }
         case DB2ColumnCompression::CommonData:
         {
-            // TheLegionPreservationProject: future fix 5c9283244b9b2121037af5db94f626aeebdbddc3
             uint32 id = RecordGetId(record, (record - _data.get()) / _header->RecordSize);
             T value;
             auto valueItr = _commonValues[field].find(id);
