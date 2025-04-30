@@ -119,19 +119,19 @@ void SceneMgr::OnSceneCancel(uint32 sceneInstanceID)
     if (_isDebuggingScenes)
         ChatHandler(GetPlayer()->GetSession()).PSendSysMessage(LANG_COMMAND_SCENE_DEBUG_CANCEL, sceneInstanceID);
 
-    SceneTemplate const* sceneTemplate = GetSceneTemplateFromInstanceId(sceneInstanceID);
-    if (sceneTemplate->PlaybackFlags.HasFlag(SceneFlag::NotCancelable))
+    SceneTemplate sceneTemplate = *GetSceneTemplateFromInstanceId(sceneInstanceID);
+    if (sceneTemplate.PlaybackFlags.HasFlag(SceneFlag::NotCancelable))
         return;
 
     // Must be done before removing aura
     RemoveSceneInstanceId(sceneInstanceID);
 
-    if (sceneTemplate->SceneId != 0)
-        RemoveAurasDueToSceneId(sceneTemplate->SceneId);
+    if (sceneTemplate.SceneId != 0)
+        RemoveAurasDueToSceneId(sceneTemplate.SceneId);
 
-    sScriptMgr->OnSceneCancel(GetPlayer(), sceneInstanceID, sceneTemplate);
+    sScriptMgr->OnSceneCancel(GetPlayer(), sceneInstanceID, &sceneTemplate);
 
-    if (sceneTemplate->PlaybackFlags.HasFlag(SceneFlag::FadeToBlackscreenOnCancel))
+    if (sceneTemplate.PlaybackFlags.HasFlag(SceneFlag::FadeToBlackscreenOnCancel))
         CancelScene(sceneInstanceID, false);
 }
 
@@ -143,17 +143,17 @@ void SceneMgr::OnSceneComplete(uint32 sceneInstanceID)
     if (_isDebuggingScenes)
         ChatHandler(GetPlayer()->GetSession()).PSendSysMessage(LANG_COMMAND_SCENE_DEBUG_COMPLETE, sceneInstanceID);
 
-    SceneTemplate const* sceneTemplate = GetSceneTemplateFromInstanceId(sceneInstanceID);
+    SceneTemplate sceneTemplate = *GetSceneTemplateFromInstanceId(sceneInstanceID);
 
     // Must be done before removing aura
     RemoveSceneInstanceId(sceneInstanceID);
 
-    if (sceneTemplate->SceneId != 0)
-        RemoveAurasDueToSceneId(sceneTemplate->SceneId);
+    if (sceneTemplate.SceneId != 0)
+        RemoveAurasDueToSceneId(sceneTemplate.SceneId);
 
-    sScriptMgr->OnSceneComplete(GetPlayer(), sceneInstanceID, sceneTemplate);
+    sScriptMgr->OnSceneComplete(GetPlayer(), sceneInstanceID, &sceneTemplate);
 
-    if (sceneTemplate->PlaybackFlags.HasFlag(SceneFlag::FadeToBlackscreenOnComplete))
+    if (sceneTemplate.PlaybackFlags.HasFlag(SceneFlag::FadeToBlackscreenOnComplete))
         CancelScene(sceneInstanceID, false);
 }
 
