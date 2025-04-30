@@ -32,7 +32,7 @@
 #include "Optional.h"
 #include "RaceMask.h"
 #include "SharedDefines.h"
-#include <boost/circular_buffer.hpp>
+#include <boost/circular_buffer_fwd.hpp>
 #include <array>
 #include <map>
 #include <memory>
@@ -1895,7 +1895,7 @@ class TC_GAME_API WorldSession
         bool forceExit;
         ObjectGuid m_currentBankerGUID;
 
-        boost::circular_buffer<std::pair<int64, uint32>> _timeSyncClockDeltaQueue; // first member: clockDelta. Second member: latency of the packet exchange that was used to compute that clockDelta.
+        std::unique_ptr<boost::circular_buffer<std::pair<int64, uint32>>> _timeSyncClockDeltaQueue; // first member: clockDelta. Second member: latency of the packet exchange that was used to compute that clockDelta.
         int64 _timeSyncClockDelta;
         void ComputeNewClockDelta();
 

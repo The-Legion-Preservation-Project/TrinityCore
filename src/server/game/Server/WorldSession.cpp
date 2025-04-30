@@ -53,6 +53,7 @@
 #include "WardenWin.h"
 #include "World.h"
 #include "WorldSocket.h"
+#include <boost/circular_buffer.hpp>
 
 namespace {
 
@@ -135,7 +136,7 @@ WorldSession::WorldSession(uint32 id, std::string&& name, uint32 battlenetAccoun
     expireTime(60000), // 1 min after socket loss, session is deleted
     forceExit(false),
     m_currentBankerGUID(),
-    _timeSyncClockDeltaQueue(6),
+    _timeSyncClockDeltaQueue(std::make_unique<boost::circular_buffer<std::pair<int64, uint32>>>(6)),
     _timeSyncClockDelta(0),
     _pendingTimeSyncRequests(),
     _timeSyncNextCounter(0),
