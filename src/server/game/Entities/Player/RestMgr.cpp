@@ -69,7 +69,7 @@ void RestMgr::SetRestBonus(RestTypes restType, float restBonus)
     uint32 oldBonus = uint32(_restBonus[restType]);
     _restBonus[restType] = restBonus;
 
-    PlayerRestState oldRestState = static_cast<PlayerRestState>(_player->GetUInt32Value(PLAYER_FIELD_REST_INFO + restState));
+    PlayerRestState oldRestState = static_cast<PlayerRestState>(_player->GetUInt32Value(PLAYER_FIELD_REST_INFO + AsUnderlyingType(restState)));
     PlayerRestState newRestState = REST_STATE_NORMAL;
 
     // update data for client

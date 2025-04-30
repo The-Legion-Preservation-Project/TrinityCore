@@ -128,7 +128,7 @@ enum PlayerSkillsConstants
     PLAYER_MAX_SKILLS   = 128
 };
 
-enum SkillFieldOffset
+enum SkillFieldOffset : uint16
 {
     SKILL_ID_OFFSET = 0,
     SKILL_STEP_OFFSET = 64,

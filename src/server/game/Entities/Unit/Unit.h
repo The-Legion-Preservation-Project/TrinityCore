@@ -291,7 +291,7 @@ enum UnitState : uint32
 TC_GAME_API extern float baseMoveSpeed[MAX_MOVE_TYPE];
 TC_GAME_API extern float playerBaseMoveSpeed[MAX_MOVE_TYPE];
 
-enum CombatRating
+enum CombatRating : uint8
 {
     CR_AMPLIFY                          = 0,
     CR_DEFENSE_SKILL                    = 1,

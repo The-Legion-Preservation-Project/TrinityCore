@@ -139,23 +139,23 @@ bool AreaTrigger::Create(uint32 areaTriggerCreatePropertiesId, Unit* caster, Uni
     SetUInt32Value(AREATRIGGER_DECAL_PROPERTIES_ID, GetCreateProperties()->DecalPropertiesId);
 
     if (GetCreateProperties()->ExtraScale.Data.Structured.StartTimeOffset)
-        SetUInt32Value(AREATRIGGER_EXTRA_SCALE_CURVE + AREATRIGGER_SCALE_CURVE_OFFSET_START_TIME, GetCreateProperties()->ExtraScale.Data.Structured.StartTimeOffset);
-    if (GetCreateProperties()->ExtraScale.Data.Structured.Points[0] || GetCreateProperties()->ExtraScale.Data.Structured.Points[1])
+        SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AREATRIGGER_SCALE_CURVE_OFFSET_START_TIME, GetCreateProperties()->ExtraScale.Data.Structured.StartTimeOffset);
+    if (GetCreateProperties()->ExtraScale.Data.Structured.Points[0] != 0 || GetCreateProperties()->ExtraScale.Data.Structured.Points[1] != 0)
     {
         Position point(GetCreateProperties()->ExtraScale.Data.Structured.Points[0], GetCreateProperties()->ExtraScale.Data.Structured.Points[1]);
-        SetFloatValue(AREATRIGGER_EXTRA_SCALE_CURVE + AREATRIGGER_SCALE_CURVE_OFFSET_POINTS + 0, point.GetPositionX());
-        SetFloatValue(AREATRIGGER_EXTRA_SCALE_CURVE + AREATRIGGER_SCALE_CURVE_OFFSET_POINTS + 1, point.GetPositionY());
+        SetFloatValue(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + 0, point.GetPositionX());
+        SetFloatValue(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + 1, point.GetPositionY());
     }
-    if (GetCreateProperties()->ExtraScale.Data.Structured.Points[2] || GetCreateProperties()->ExtraScale.Data.Structured.Points[3])
+    if (GetCreateProperties()->ExtraScale.Data.Structured.Points[2] != 0 || GetCreateProperties()->ExtraScale.Data.Structured.Points[3] != 0)
     {
         Position point(GetCreateProperties()->ExtraScale.Data.Structured.Points[2], GetCreateProperties()->ExtraScale.Data.Structured.Points[3]);
-        SetFloatValue(AREATRIGGER_EXTRA_SCALE_CURVE + AREATRIGGER_SCALE_CURVE_OFFSET_POINTS + 2, point.GetPositionX());
-        SetFloatValue(AREATRIGGER_EXTRA_SCALE_CURVE + AREATRIGGER_SCALE_CURVE_OFFSET_POINTS + 3, point.GetPositionY());
+        SetFloatValue(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + 2, point.GetPositionX());
+        SetFloatValue(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + 3, point.GetPositionY());
     }
     if (GetCreateProperties()->ExtraScale.Data.Raw[5])
-        SetUInt32Value(AREATRIGGER_EXTRA_SCALE_CURVE + AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE, GetCreateProperties()->ExtraScale.Data.Raw[5]);
+        SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE), GetCreateProperties()->ExtraScale.Data.Raw[5]);
     if (GetCreateProperties()->ExtraScale.Data.Structured.OverrideActive)
-        SetUInt32Value(AREATRIGGER_EXTRA_SCALE_CURVE + AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE, GetCreateProperties()->ExtraScale.Data.Structured.OverrideActive);
+        SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE), GetCreateProperties()->ExtraScale.Data.Structured.OverrideActive);
 
     PhasingHandler::InheritPhaseShift(this, caster);
 
