@@ -3212,7 +3212,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
         case ModifierTreeType::PlayerIsOnQuestInQuestline: // 236
         {
             bool isOnQuest = false;
-            if (std::unordered_set<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue))
+            if (std::vector<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue))
             {
                 isOnQuest = std::any_of(questLineQuests->begin(), questLineQuests->end(), [referencePlayer](QuestLineXQuestEntry const* questLineQuest)
                 {
@@ -3238,7 +3238,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
         }
         case ModifierTreeType::PlayerCanAcceptQuestInQuestline: // 240
         {
-            std::unordered_set<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue);
+            std::vector<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue);
             if (!questLineQuests)
                 return false;
             bool canTakeQuest = std::any_of(questLineQuests->begin(), questLineQuests->end(), [referencePlayer](QuestLineXQuestEntry const* questLineQuest)
@@ -3253,7 +3253,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
         }
         case ModifierTreeType::PlayerHasCompletedQuestline: // 241
         {
-            std::unordered_set<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue);
+            std::vector<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue);
             if (!questLineQuests)
                 return false;
             for (QuestLineXQuestEntry const* questLineQuest : *questLineQuests)
@@ -3263,7 +3263,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
         }
         case ModifierTreeType::PlayerHasCompletedQuestlineQuestCount: // 242
         {
-            std::unordered_set<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue);
+            std::vector<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue);
             if (!questLineQuests)
                 return false;
             uint32 completedQuests = 0;
@@ -3276,7 +3276,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
         }
         case ModifierTreeType::PlayerHasCompletedPercentageOfQuestline: // 243
         {
-            std::unordered_set<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue);
+            std::vector<QuestLineXQuestEntry const*> const* questLineQuests = sDB2Manager.GetQuestsForQuestLine(reqValue);
             if (!questLineQuests || questLineQuests->empty())
                 return false;
             std::size_t completedQuests = 0;

@@ -32,7 +32,9 @@
 #include "SharedDefines.h"
 #include "SpellDefines.h"
 #include "UpdateFields.h"
+#include <cstring>
 #include <list>
+#include <memory>
 #include <unordered_map>
 
 class AreaTrigger;
