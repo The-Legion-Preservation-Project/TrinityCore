@@ -708,7 +708,7 @@ void ObjectMgr::LoadCreatureTemplateAddons()
 {
     uint32 oldMSTime = getMSTime();
 
-    //                                               0      1        2      3           4         5         6            7         8      9          10               11            12
+    //                                               0      1        2      3           4         5         6            7         8      9          10               11            12                      13
     QueryResult result = WorldDatabase.Query("SELECT entry, path_id, mount, StandState, AnimTier, VisFlags, SheathState, PvPFlags, emote, aiAnimKit, movementAnimKit, meleeAnimKit, visibilityDistanceType, auras FROM creature_template_addon");
 
     if (!result)
@@ -745,7 +745,7 @@ void ObjectMgr::LoadCreatureTemplateAddons()
         creatureAddon.meleeAnimKit              = fields[11].GetUInt16();
         creatureAddon.visibilityDistanceType    = VisibilityDistanceType(fields[12].GetUInt8());
 
-        for (std::string_view aura : Trinity::Tokenize(fields[10].GetStringView(), ' ', false))
+        for (std::string_view aura : Trinity::Tokenize(fields[13].GetStringView(), ' ', false))
         {
             SpellInfo const* spellInfo = nullptr;
             if (Optional<uint32> spellId = Trinity::StringTo<uint32>(aura))
@@ -1294,7 +1294,7 @@ void ObjectMgr::LoadCreatureAddons()
 {
     uint32 oldMSTime = getMSTime();
 
-    //                                               0     1        2      3           4         5         6            7         8      9          10               11            12
+    //                                               0     1        2      3           4         5         6            7         8      9          10               11            12                      13
     QueryResult result = WorldDatabase.Query("SELECT guid, path_id, mount, StandState, AnimTier, VisFlags, SheathState, PvPFlags, emote, aiAnimKit, movementAnimKit, meleeAnimKit, visibilityDistanceType, auras FROM creature_addon");
 
     if (!result)
@@ -1338,7 +1338,7 @@ void ObjectMgr::LoadCreatureAddons()
         creatureAddon.meleeAnimKit              = fields[11].GetUInt16();
         creatureAddon.visibilityDistanceType    = VisibilityDistanceType(fields[12].GetUInt8());
 
-        for (std::string_view aura : Trinity::Tokenize(fields[10].GetStringView(), ' ', false))
+        for (std::string_view aura : Trinity::Tokenize(fields[13].GetStringView(), ' ', false))
         {
             SpellInfo const* spellInfo = nullptr;
             if (Optional<uint32> spellId = Trinity::StringTo<uint32>(aura))
