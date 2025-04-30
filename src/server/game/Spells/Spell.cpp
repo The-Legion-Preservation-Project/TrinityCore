@@ -9078,6 +9078,13 @@ CastSpellTargetArg::CastSpellTargetArg(WorldObject* target)
         Targets.emplace(); // nullptr is allowed
 }
 
+CastSpellExtraArgs::CastSpellExtraArgs() = default;
+CastSpellExtraArgs::CastSpellExtraArgs(CastSpellExtraArgs const& other) = default;
+CastSpellExtraArgs::CastSpellExtraArgs(CastSpellExtraArgs&& other) noexcept = default;
+CastSpellExtraArgs& CastSpellExtraArgs::operator=(CastSpellExtraArgs const& other) = default;
+CastSpellExtraArgs& CastSpellExtraArgs::operator=(CastSpellExtraArgs&& other) noexcept = default;
+CastSpellExtraArgs::~CastSpellExtraArgs() = default;
+
 CastSpellExtraArgs& CastSpellExtraArgs::SetTriggeringSpell(Spell const* triggeringSpell)
 {
     TriggeringSpell = triggeringSpell;
