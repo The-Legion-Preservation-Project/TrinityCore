@@ -898,12 +898,16 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
         for (uint8 i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; ++i)
             SetStatFlatModifier(UnitMods(UNIT_MOD_RESISTANCE_START + i), BASE_VALUE, float(cinfo->resistance[i]));
 
+    Powers powerType = CalculateDisplayPowerType();
+
     // Health, Mana or Power, Armor
     PetLevelInfo const* pInfo = sObjectMgr->GetPetLevelInfo(creature_ID, petlevel);
     if (pInfo)                                      // exist in DB
     {
         SetCreateHealth(pInfo->health);
         SetCreateMana(pInfo->mana);
+
+        SetStatPctModifier(UnitMods(UNIT_MOD_POWER_START + AsUnderlyingType(powerType)), BASE_PCT, 1.0f);
 
         if (pInfo->armor > 0)
             SetStatFlatModifier(UNIT_MOD_ARMOR, BASE_VALUE, float(pInfo->armor));
@@ -915,13 +919,10 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
     {
         // remove elite bonuses included in DB values
         CreatureBaseStats const* stats = sObjectMgr->GetCreatureBaseStats(petlevel, cinfo->unit_class);
-        float healthmod = _GetHealthMod(cinfo->rank);
-        uint32 basehp = stats->GenerateHealth(cinfo);
-        uint32 health = uint32(basehp * healthmod);
-        uint32 mana = stats->GenerateMana(cinfo);
+        ApplyLevelScaling();
 
-        SetCreateHealth(health);
-        SetCreateMana(mana);
+        SetCreateHealth(std::max(stats->GenerateHealth(cinfo) * _GetHealthMod(cinfo->rank), 1.0f));
+        SetCreateMana(stats->BaseMana);
         SetCreateStat(STAT_STRENGTH, 22);
         SetCreateStat(STAT_AGILITY, 22);
         SetCreateStat(STAT_STAMINA, 25);
@@ -929,17 +930,7 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
     }
 
     // Power
-    if (petType == HUNTER_PET) // Hunter pets have focus
-        SetPowerType(POWER_FOCUS);
-    else if (IsPetGhoul() || IsPetAbomination()) // DK pets have energy
-    {
-        SetPowerType(POWER_ENERGY);
-        SetFullPower(POWER_ENERGY);
-    }
-    else if (IsWarlockPet()) // Warlock pets have energy (since 5.x)
-        SetPowerType(POWER_ENERGY);
-    else
-        SetPowerType(POWER_MANA);
+    SetPowerType(powerType);
 
     // Damage
     SetBonusDamage(0);

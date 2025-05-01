@@ -626,15 +626,6 @@ struct TC_GAME_API CreatureBaseStats
         return uint32(ceil(BaseHealth[info->GetHealthScalingExpansion()] * info->ModHealth * info->ModHealthExtra));
     }
 
-    uint32 GenerateMana(CreatureTemplate const* info) const
-    {
-        // Mana can be 0.
-        if (!BaseMana)
-            return 0;
-
-        return uint32(ceil(BaseMana * info->ModMana * info->ModManaExtra));
-    }
-
     uint32 GenerateArmor(CreatureTemplate const* info) const
     {
         return uint32(ceil(BaseArmor * info->ModArmor));

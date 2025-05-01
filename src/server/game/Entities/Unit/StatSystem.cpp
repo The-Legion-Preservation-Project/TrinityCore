@@ -86,6 +86,17 @@ void Unit::UpdateDamagePhysical(WeaponAttackType attType)
     }
 }
 
+int32 Unit::GetCreatePowerValue(Powers power) const
+{
+    if (power == POWER_MANA)
+        return GetCreateMana();
+
+    if (PowerTypeEntry const* powerType = sDB2Manager.GetPowerTypeEntry(power))
+        return powerType->MaxBasePower;
+
+    return 0;
+}
+
 /*#######################################
 ########                         ########
 ########   PLAYERS STAT SYSTEM   ########
@@ -841,6 +852,15 @@ void Player::_RemoveAllStatBonuses()
 ########                         ########
 #######################################*/
 
+int32 Creature::GetCreatePowerValue(Powers power) const
+{
+    if (PowerTypeEntry const* powerType = sDB2Manager.GetPowerTypeEntry(power))
+        if (!powerType->GetFlags().HasFlag(PowerTypeFlags::IsUsedByNPCs))
+            return 0;
+
+    return Unit::GetCreatePowerValue(power);
+}
+
 bool Creature::UpdateStats(Stats /*stat*/)
 {
     return true;
@@ -887,10 +907,15 @@ uint32 Creature::GetPowerIndex(Powers power) const
 {
     if (power == GetPowerType())
         return 0;
-    if (power == POWER_ALTERNATE_POWER)
-        return 1;
-    if (power == POWER_COMBO_POINTS)
-        return 2;
+    switch (power)
+    {
+        case POWER_COMBO_POINTS:
+            return 2;
+        case POWER_ALTERNATE_POWER:
+            return 1;
+        default:
+            break;
+    }
     return MAX_POWERS;
 }
 
