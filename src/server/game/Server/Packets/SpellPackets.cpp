@@ -163,13 +163,12 @@ WorldPacket const* AuraUpdate::Write()
     return &_worldPacket;
 }
 
-ByteBuffer& operator>>(ByteBuffer& buffer, Optional<TargetLocation>& location)
+ByteBuffer& operator>>(ByteBuffer& buffer, TargetLocation& location)
 {
-    location.emplace();
-    buffer >> location->Transport;
-    buffer >> location->Location.m_positionX;
-    buffer >> location->Location.m_positionY;
-    buffer >> location->Location.m_positionZ;
+    buffer >> location.Transport;
+    buffer >> location.Location.m_positionX;
+    buffer >> location.Location.m_positionY;
+    buffer >> location.Location.m_positionZ;
     return buffer;
 }
 
@@ -188,10 +187,10 @@ ByteBuffer& operator>>(ByteBuffer& buffer, SpellTargetData& targetData)
     buffer >> targetData.Item;
 
     if (hasSrcLocation)
-        buffer >> targetData.SrcLocation;
+        buffer >> targetData.SrcLocation.emplace();
 
     if (hasDstLocation)
-        buffer >> targetData.DstLocation;
+        buffer >> targetData.DstLocation.emplace();
 
     if (hasOrientation)
         targetData.Orientation = buffer.read<float>();
@@ -226,10 +225,7 @@ ByteBuffer& operator>>(ByteBuffer& buffer, SpellCastRequest& request)
     buffer >> request.Target;
 
     if (hasMoveUpdate)
-    {
-        request.MoveUpdate.emplace();
-        buffer >> *request.MoveUpdate;
-    }
+        buffer >> request.MoveUpdate.emplace();
 
     for (SpellWeight& weight : request.Weight)
     {
@@ -936,10 +932,7 @@ void UpdateMissileTrajectory::Read()
 
     _worldPacket.ResetBitPos();
     if (hasStatus)
-    {
-        Status.emplace();
-        _worldPacket >> *Status;
-    }
+        _worldPacket >> Status.emplace();
 }
 
 WorldPacket const* SpellDelayed::Write()

@@ -665,10 +665,10 @@ WorldPacket const* WorldPackets::Misc::AccountMountUpdate::Write()
     _worldPacket.WriteBit(IsFullUpdate);
     _worldPacket << uint32(Mounts->size());
 
-    for (auto const& spell : *Mounts)
+    for (auto [spellId, flags] : *Mounts)
     {
-        _worldPacket << int32(spell.first);
-        _worldPacket.WriteBits(spell.second, 2);
+        _worldPacket << int32(spellId);
+        _worldPacket.WriteBits(flags, 2);
     }
 
     _worldPacket.FlushBits();

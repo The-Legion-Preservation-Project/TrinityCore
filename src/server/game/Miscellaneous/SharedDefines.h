@@ -1326,7 +1326,7 @@ enum SpellEffectName
 };
 
 // EnumUtils: DESCRIBE THIS
-enum SpellCastResult
+enum SpellCastResult : int32
 {
     SPELL_FAILED_SUCCESS                                        = 0,
     SPELL_FAILED_AFFECTING_COMBAT                               = 1,
