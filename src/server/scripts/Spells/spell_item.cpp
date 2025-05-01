@@ -4640,6 +4640,93 @@ class spell_item_lightblood_elixir : public AuraScript
     }
 };
 
+enum HighfathersMachination
+{
+    SPELL_HIGHFATHERS_TIMEKEEPING_HEAL = 253288
+};
+
+// 253287 - Highfather's Timekeeping
+class spell_item_highfathers_machination : public AuraScript
+{
+    PrepareAuraScript(spell_item_highfathers_machination);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_HIGHFATHERS_TIMEKEEPING_HEAL });
+    }
+
+    bool CheckHealth(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
+    {
+        return eventInfo.GetDamageInfo() && GetTarget()->HealthBelowPctDamaged(aurEff->GetAmount(), eventInfo.GetDamageInfo()->GetDamage());
+    }
+
+    void Heal(AuraEffect* aurEff, ProcEventInfo& /*procInfo*/)
+    {
+        PreventDefaultAction();
+        if (Unit* caster = GetCaster())
+            caster->CastSpell(GetTarget(), SPELL_HIGHFATHERS_TIMEKEEPING_HEAL, aurEff);
+    }
+
+    void Register() override
+    {
+        DoCheckEffectProc += AuraCheckEffectProcFn(spell_item_highfathers_machination::CheckHealth, EFFECT_0, SPELL_AURA_DUMMY);
+        OnEffectProc += AuraEffectProcFn(spell_item_highfathers_machination::Heal, EFFECT_0, SPELL_AURA_DUMMY);
+    }
+};
+
+enum SeepingScourgewing
+{
+    SPELL_SHADOW_STRIKE_AOE_CHECK   = 255861,
+    SPELL_ISOLATED_STRIKE           = 255609
+};
+
+// 253323 - Shadow Strike
+class spell_item_seeping_scourgewing : public AuraScript
+{
+    PrepareAuraScript(spell_item_seeping_scourgewing);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_SHADOW_STRIKE_AOE_CHECK });
+    }
+
+    void TriggerIsolatedStrikeCheck(AuraEffect* aurEff, ProcEventInfo& eventInfo)
+    {
+        GetTarget()->CastSpell(eventInfo.GetProcTarget(), SPELL_SHADOW_STRIKE_AOE_CHECK,
+            CastSpellExtraArgs(aurEff).SetTriggeringSpell(eventInfo.GetProcSpell()));
+    }
+
+    void Register() override
+    {
+        AfterEffectProc += AuraEffectProcFn(spell_item_seeping_scourgewing::TriggerIsolatedStrikeCheck, EFFECT_0, SPELL_AURA_PROC_TRIGGER_SPELL);
+    }
+};
+
+// 255861 - Shadow Strike
+class spell_item_seeping_scourgewing_aoe_check : public SpellScript
+{
+    PrepareSpellScript(spell_item_seeping_scourgewing_aoe_check);
+
+    void TriggerAdditionalDamage()
+    {
+        if (GetUnitTargetCountForEffect(EFFECT_0) > 1)
+            return;
+
+        CastSpellExtraArgs args;
+        args.TriggerFlags = TRIGGERED_FULL_MASK;
+        args.OriginalCastId = GetSpell()->m_originalCastId;
+        if (GetSpell()->m_castItemLevel >= 0)
+            args.OriginalCastItemLevel = GetSpell()->m_castItemLevel;
+
+        GetCaster()->CastSpell(GetHitUnit(), SPELL_ISOLATED_STRIKE, args);
+    }
+
+    void Register() override
+    {
+        AfterHit += SpellHitFn(spell_item_seeping_scourgewing_aoe_check::TriggerAdditionalDamage);
+    }
+};
+
 void AddSC_item_spell_scripts()
 {
     // 23074 Arcanite Dragonling
@@ -4785,4 +4872,7 @@ void AddSC_item_spell_scripts()
     RegisterSpellScript(spell_item_set_march_of_the_legion);
     RegisterSpellScript(spell_item_seal_of_darkshire_nobility);
     RegisterSpellScript(spell_item_lightblood_elixir);
+    RegisterSpellScript(spell_item_highfathers_machination);
+    RegisterSpellScript(spell_item_seeping_scourgewing);
+    RegisterSpellScript(spell_item_seeping_scourgewing_aoe_check);
 }
