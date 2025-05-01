@@ -2788,6 +2788,8 @@ void Spell::TargetInfo::DoDamageAndTriggers(Spell* spell)
                 if (Creature* victimCreature = damageInfo.target->ToCreature())
                     damageInfo.damage = victimCreature->CalculateDamageForSparring(damageInfo.attacker, damageInfo.damage);
 
+                spell->m_damage = damageInfo.damage;
+
                 caster->DealSpellDamage(&damageInfo, true);
 
                 // Send log damage message to client
