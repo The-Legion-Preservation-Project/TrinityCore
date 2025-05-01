@@ -8,8 +8,8 @@ INSERT INTO `areatrigger_template` (`Id`, `IsServerSide`, `Type`, `Flags`, `Data
 (13260, 0, 0, 0, 3, 3, 0, 0, 0, 0, 48069);
 
 DELETE FROM `areatrigger_create_properties` WHERE `Id`=9242;
-INSERT INTO `areatrigger_create_properties` (`Id`, `AreaTriggerId`, `MoveCurveId`, `ScaleCurveId`, `MorphCurveId`, `FacingCurveId`, `AnimId`, `AnimKitId`, `DecalPropertiesId`, `TimeToTarget`, `TimeToTargetScale`, `Shape`, `ShapeData0`, `ShapeData1`, `ShapeData2`, `ShapeData3`, `ShapeData4`, `ShapeData5`, `ShapeData6`, `ShapeData7`, `VerifiedBuild`) VALUES
-(9242, 13260, 0, 0, 0, 0, -1, 0, 60, 0, 10000, 0, 3, 3, 0, 0, 0, 0, 0, 0, 48069); -- SpellId : 231879
+INSERT INTO `areatrigger_create_properties` (`Id`, `AreaTriggerId`, `MoveCurveId`, `ScaleCurveId`, `MorphCurveId`, `FacingCurveId`, `AnimId`, `AnimKitId`, `DecalPropertiesId`, `TimeToTarget`, `TimeToTargetScale`, `Shape`, `ShapeData0`, `ShapeData1`, `ShapeData2`, `ShapeData3`, `ShapeData4`, `ShapeData5`, `VerifiedBuild`) VALUES
+(9242, 13260, 0, 0, 0, 0, -1, 0, 60, 0, 10000, 0, 3, 3, 0, 0, 0, 0, 48069); -- SpellId : 231879
 
 -- Creature templates
 UPDATE `creature_template` SET `faction`=16, `BaseAttackTime`=2000, `unit_flags`=32768, `unit_flags2`=2048 WHERE `entry`=116285; -- Test Subject
@@ -49,17 +49,17 @@ INSERT INTO `creature_template_movement` (`CreatureId`, `Ground`, `Swim`, `Fligh
 
 -- Gameobject templates
 DELETE FROM `gameobject_template` WHERE `entry` IN (259803 /*Recipe Fragment*/, 259806 /*Love Potion Recipe*/, 259461 /*Crown Chemical Co. Supplies*/, 247561 /*Table Large 01*/, 259459 /*Tools*/, 259804 /*Recipe Fragment*/, 259764 /*Love Potion No. 8*/, 259805 /*Recipe Fragment*/, 244432 /*Memorial Flowers*/, 259523 /*Crown Crate (Large)*/);
-INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `size`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `Data6`, `Data7`, `Data8`, `Data9`, `Data10`, `Data11`, `Data12`, `Data13`, `Data14`, `Data15`, `Data16`, `Data17`, `Data18`, `Data19`, `Data20`, `Data21`, `Data22`, `Data23`, `Data24`, `Data25`, `Data26`, `Data27`, `Data28`, `Data29`, `Data30`, `Data31`, `Data32`, `Data33`, `Data34`, `ContentTuningId`, `VerifiedBuild`) VALUES
-(259803, 10, 15781, 'Recipe Fragment', '', '', '', 1, 43, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 294, 48069), -- Recipe Fragment
-(259806, 2, 9196, 'Love Potion Recipe', 'quest', '', '', 1, 0, 20586, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 378, 48069), -- Love Potion Recipe
-(259461, 3, 6656, 'Crown Chemical Co. Supplies', '', '', '', 0.800000011920928955, 1691, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27766, 0, 0, 0, 0, 378, 48069), -- Crown Chemical Co. Supplies
-(247561, 5, 31545, 'Table Large 01', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 339, 48069), -- Table Large 01
-(259459, 5, 38135, 'Tools', '', '', '', 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069), -- Tools
-(259804, 10, 19417, 'Recipe Fragment', '', '', '', 1, 43, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 294, 48069), -- Recipe Fragment
-(259764, 3, 38182, 'Love Potion No. 8', '', 'Taking', '', 1.299999952316284179, 1690, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 96454, 0, 0, 45033, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69777, 0, 0, 0, 0, 378, 48069), -- Love Potion No. 8
-(259805, 10, 19417, 'Recipe Fragment', '', '', '', 1, 43, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 294, 48069), -- Recipe Fragment
-(244432, 5, 7814, 'Memorial Flowers', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 885, 48069), -- Memorial Flowers
-(259523, 5, 9215, 'Crown Crate (Large)', '', '', '', 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069); -- Crown Crate (Large)
+INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `size`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `Data6`, `Data7`, `Data8`, `Data9`, `Data10`, `Data11`, `Data12`, `Data13`, `Data14`, `Data15`, `Data16`, `Data17`, `Data18`, `Data19`, `Data20`, `Data21`, `Data22`, `Data23`, `Data24`, `Data25`, `Data26`, `Data27`, `Data28`, `Data29`, `Data30`, `Data31`, `Data32`, `Data33`, `VerifiedBuild`) VALUES
+(259803, 10, 15781, 'Recipe Fragment', '', '', '', 1, 43, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069), -- Recipe Fragment
+(259806, 2, 9196, 'Love Potion Recipe', 'quest', '', '', 1, 0, 20586, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069), -- Love Potion Recipe
+(259461, 3, 6656, 'Crown Chemical Co. Supplies', '', '', '', 0.800000011920928955, 1691, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27766, 0, 0, 0, 48069), -- Crown Chemical Co. Supplies
+(247561, 5, 31545, 'Table Large 01', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069), -- Table Large 01
+(259459, 5, 38135, 'Tools', '', '', '', 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069), -- Tools
+(259804, 10, 19417, 'Recipe Fragment', '', '', '', 1, 43, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069), -- Recipe Fragment
+(259764, 3, 38182, 'Love Potion No. 8', '', 'Taking', '', 1.299999952316284179, 1690, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 96454, 0, 0, 45033, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69777, 0, 0, 0, 48069), -- Love Potion No. 8
+(259805, 10, 19417, 'Recipe Fragment', '', '', '', 1, 43, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069), -- Recipe Fragment
+(244432, 5, 7814, 'Memorial Flowers', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069), -- Memorial Flowers
+(259523, 5, 9215, 'Crown Crate (Large)', '', '', '', 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48069); -- Crown Crate (Large)
 
 UPDATE `gameobject_template` SET `size`=0.800000011920928955, `Data6`=0, `VerifiedBuild`=48069 WHERE `entry`=201751; -- Crown Crate
 # UPDATE `gameobject_template` SET `ContentTuningId`=378, `VerifiedBuild`=48069 WHERE `entry`=201716; -- Chemical Wagon
