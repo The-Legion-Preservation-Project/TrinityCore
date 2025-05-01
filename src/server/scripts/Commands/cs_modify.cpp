@@ -34,6 +34,7 @@ EndScriptData */
 #include "RBAC.h"
 #include "ReputationMgr.h"
 #include "SpellPackets.h"
+#include "Util.h"
 #include "WorldSession.h"
 
 #if TRINITY_COMPILER == TRINITY_COMPILER_GNU
@@ -209,10 +210,8 @@ public:
     }
 
     //Edit Player Faction
-    static bool HandleModifyFactionCommand(ChatHandler* handler, char const* args)
+    static bool HandleModifyFactionCommand(ChatHandler* handler, Optional<uint32> factionid, Optional<uint32> flag, Optional<uint64> npcflag, Optional<uint32> dyflag)
     {
-        char* pfactionid = handler->extractKeyFromLink((char*)args, "Hfaction");
-
         Creature* target = handler->getSelectedCreature();
         if (!target)
         {
@@ -221,55 +220,35 @@ public:
             return false;
         }
 
-        if (!pfactionid)
+        if (!flag)
+            flag = target->GetUInt32Value(UNIT_FIELD_FLAGS);
+
+        if (!npcflag)
+            npcflag = target->GetUInt64Value(UNIT_NPC_FLAGS);
+
+        if (!dyflag)
+            dyflag = target->GetUInt32Value(OBJECT_DYNAMIC_FLAGS);
+
+        if (!factionid)
         {
-            uint32 factionid = target->GetFaction();
-            uint32 flag      = target->GetUInt32Value(UNIT_FIELD_FLAGS);
-            uint64 npcflag   = target->GetUInt64Value(UNIT_NPC_FLAGS);
-            uint32 dyflag    = target->GetUInt32Value(OBJECT_DYNAMIC_FLAGS);
-            handler->PSendSysMessage(LANG_CURRENT_FACTION, target->GetGUID().ToString().c_str(), factionid, flag, std::to_string(npcflag).c_str(), dyflag);
+            handler->PSendSysMessage(LANG_CURRENT_FACTION, target->GetGUID().ToString().c_str(), *factionid, *flag, std::to_string(*npcflag).c_str(), *dyflag);
             return true;
         }
 
-        uint32 factionid = atoul(pfactionid);
-        uint32 flag;
-
-        char *pflag = strtok(nullptr, " ");
-        if (!pflag)
-            flag = target->GetUInt32Value(UNIT_FIELD_FLAGS);
-        else
-            flag = atoul(pflag);
-
-        char* pnpcflag = strtok(nullptr, " ");
-
-        uint64 npcflag;
-        if (!pnpcflag)
-            npcflag = target->GetUInt64Value(UNIT_NPC_FLAGS);
-        else
-            npcflag = atoull(pnpcflag);
-
-        char* pdyflag = strtok(nullptr, " ");
-
-        uint32  dyflag;
-        if (!pdyflag)
-            dyflag = target->GetUInt32Value(OBJECT_DYNAMIC_FLAGS);
-        else
-            dyflag = atoul(pdyflag);
-
-        if (!sFactionTemplateStore.LookupEntry(factionid))
+        if (!sFactionTemplateStore.LookupEntry(*factionid))
         {
-            handler->PSendSysMessage(LANG_WRONG_FACTION, factionid);
+            handler->PSendSysMessage(LANG_WRONG_FACTION, *factionid);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_FACTION, target->GetGUID().ToString().c_str(), factionid, flag, std::to_string(npcflag).c_str(), dyflag);
+        handler->PSendSysMessage(LANG_YOU_CHANGE_FACTION, target->GetGUID().ToString().c_str(), *factionid, *flag, std::to_string(*npcflag).c_str(), *dyflag);
 
-        target->SetFaction(factionid);
-        target->ReplaceAllUnitFlags(UnitFlags(flag));
-        target->ReplaceAllNpcFlags(NPCFlags(npcflag & 0xFFFFFFFF));
-        target->ReplaceAllNpcFlags2(NPCFlags2(npcflag >> 32));
-        target->ReplaceAllDynamicFlags(dyflag);
+        target->SetFaction(*factionid);
+        target->ReplaceAllUnitFlags(UnitFlags(*flag));
+        target->ReplaceAllNpcFlags(NPCFlags(*npcflag & 0xFFFFFFFF));
+        target->ReplaceAllNpcFlags2(NPCFlags2(*npcflag >> 32));
+        target->ReplaceAllDynamicFlags(*dyflag);
 
         return true;
     }
@@ -380,13 +359,8 @@ public:
         return false;
     }
 
-    static bool CheckModifySpeed(ChatHandler* handler, char const* args, Unit* target, float& speed, float minimumBound, float maximumBound, bool checkInFlight = true)
+    static bool CheckModifySpeed(ChatHandler* handler, Unit* target, float speed, float minimumBound, float maximumBound, bool checkInFlight = true)
     {
-        if (!*args)
-            return false;
-
-        speed = (float)atof((char*)args);
-
         if (speed > maximumBound || speed < minimumBound)
         {
             handler->SendSysMessage(LANG_BAD_VALUE);
@@ -415,6 +389,15 @@ public:
             }
         }
         return true;
+    }
+
+    static bool CheckModifySpeed(ChatHandler* handler, char const* args, Unit* target, float& speed, float minimumBound, float maximumBound, bool checkInFlight = true)
+    {
+        if (!*args)
+            return false;
+
+        speed = (float)atof((char*)args);
+        return CheckModifySpeed(handler, target, speed, minimumBound, maximumBound, checkInFlight);
     }
 
     //Edit Player Aspeed
@@ -505,18 +488,8 @@ public:
     }
 
     //Enable Player mount
-    static bool HandleModifyMountCommand(ChatHandler* handler, char const* args)
+    static bool HandleModifyMountCommand(ChatHandler* handler, uint32 mount, float speed)
     {
-        if (!*args)
-            return false;
-
-        char const* mount_cstr = strtok(const_cast<char*>(args), " ");
-        char const* speed_cstr = strtok(nullptr, " ");
-
-        if (!mount_cstr || !speed_cstr)
-            return false;
-
-        uint32 mount = atoul(mount_cstr);
         if (!sCreatureDisplayInfoStore.HasRecord(mount))
         {
             handler->SendSysMessage(LANG_NO_MOUNT);
@@ -536,8 +509,7 @@ public:
         if (handler->HasLowerSecurity(target, ObjectGuid::Empty))
             return false;
 
-        float speed;
-        if (!CheckModifySpeed(handler, speed_cstr, target, speed, 0.1f, 50.0f))
+        if (!CheckModifySpeed(handler, target, speed, 0.1f, 50.0f))
             return false;
 
         NotifyModification(handler, target, LANG_YOU_GIVE_MOUNT, LANG_MOUNT_GIVED);
@@ -828,13 +800,8 @@ public:
     }
 
     //morph creature or player
-    static bool HandleModifyMorphCommand(ChatHandler* handler, char const* args)
+    static bool HandleModifyMorphCommand(ChatHandler* handler, uint32 display_id)
     {
-        if (!*args)
-            return false;
-
-        uint32 display_id = atoul(args);
-
         Unit* target = handler->getSelectedUnit();
         if (!target)
             target = handler->GetSession()->GetPlayer();
@@ -849,22 +816,8 @@ public:
     }
 
     // Toggles a phaseid on a player
-    static bool HandleModifyPhaseCommand(ChatHandler* handler, char const* args)
+    static bool HandleModifyPhaseCommand(ChatHandler* handler, uint32 phaseId, Optional<uint32> visibleMapId)
     {
-        if (!*args)
-            return false;
-
-        char* phaseText = strtok((char*)args, " ");
-        if (!phaseText)
-            return false;
-
-        uint32 phaseId = uint32(strtoul(phaseText, nullptr, 10));
-        uint32 visibleMapId = 0;
-
-        char* visibleMapIdText = strtok(nullptr, " ");
-        if (visibleMapIdText)
-            visibleMapId = uint32(strtoul(visibleMapIdText, nullptr, 10));
-
         if (phaseId && !sPhaseStore.LookupEntry(phaseId))
         {
             handler->SendSysMessage(LANG_PHASE_NOTFOUND);
@@ -876,7 +829,7 @@ public:
 
         if (visibleMapId)
         {
-            MapEntry const* visibleMap = sMapStore.LookupEntry(visibleMapId);
+            MapEntry const* visibleMap = sMapStore.LookupEntry(*visibleMapId);
             if (!visibleMap || visibleMap->ParentMapID != int32(target->GetMapId()))
             {
                 handler->SendSysMessage(LANG_PHASE_NOTFOUND);
@@ -884,10 +837,10 @@ public:
                 return false;
             }
 
-            if (!target->GetPhaseShift().HasVisibleMapId(visibleMapId))
-                PhasingHandler::AddVisibleMapId(target, visibleMapId);
+            if (!target->GetPhaseShift().HasVisibleMapId(*visibleMapId))
+                PhasingHandler::AddVisibleMapId(target, *visibleMapId);
             else
-                PhasingHandler::RemoveVisibleMapId(target, visibleMapId);
+                PhasingHandler::RemoveVisibleMapId(target, *visibleMapId);
         }
 
         if (phaseId)
@@ -1095,11 +1048,11 @@ public:
         {
             if (upperCase)
             {
-                c = char(::toupper(c));
+                c = charToUpper(c);
                 upperCase = false;
             }
             else
-                c = char(::tolower(c));
+                c = charToLower(c);
 
             if (c == '_')
             {
