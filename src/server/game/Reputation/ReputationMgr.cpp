@@ -291,13 +291,13 @@ void ReputationMgr::SendState(FactionState const* faction)
     if (faction)
         setFactionStanding.Faction.emplace_back(int32(faction->ReputationListID), faction->Standing);
 
-    for (FactionStateList::iterator itr = _factions.begin(); itr != _factions.end(); ++itr)
+    for (auto& [reputationIndex, state] : _factions)
     {
-        if (itr->second.needSend)
+        if (state.needSend)
         {
-            itr->second.needSend = false;
-            if (!faction || itr->second.ReputationListID != faction->ReputationListID)
-                setFactionStanding.Faction.emplace_back(int32(itr->second.ReputationListID), itr->second.Standing);
+            state.needSend = false;
+            if (!faction || state.ReputationListID != faction->ReputationListID)
+                setFactionStanding.Faction.emplace_back(int32(state.ReputationListID), state.Standing);
         }
     }
 
