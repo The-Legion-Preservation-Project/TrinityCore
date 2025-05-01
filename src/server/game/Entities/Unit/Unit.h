@@ -1942,6 +1942,9 @@ class TC_GAME_API Unit : public WorldObject
         virtual void AtEngage(Unit* /*target*/) {}
         virtual void AtDisengage() {}
 
+    public:
+        void AtStartOfEncounter();
+
     private:
 
         void UpdateSplineMovement(uint32 t_diff);
