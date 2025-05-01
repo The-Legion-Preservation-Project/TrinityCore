@@ -177,8 +177,7 @@ struct dummy_dragonAI : public ScriptedAI
 
     void Reset() override
     {
-        if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
-            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        me->RemoveUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
 
         events.Reset();
         Initialize();
