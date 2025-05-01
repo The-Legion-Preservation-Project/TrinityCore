@@ -1007,6 +1007,17 @@ struct GameObjectTemplate
         }
     }
 
+    bool IsDisplayMandatory() const
+    {
+        switch (type)
+        {
+            case GAMEOBJECT_TYPE_SPELL_FOCUS:
+                return false;
+            default:
+                return true;
+        }
+    }
+
     void InitializeQueryData();
     WorldPacket BuildQueryData(LocaleConstant loc) const;
 };
