@@ -2614,6 +2614,8 @@ struct PowerTypeEntry
     int8 CenterPower;
     int8 DefaultPower;
     int8 DisplayModifier;
+
+    EnumFlag<PowerTypeFlags> GetFlags() const { return static_cast<PowerTypeFlags>(Flags); }
 };
 
 struct PrestigeLevelInfoEntry
