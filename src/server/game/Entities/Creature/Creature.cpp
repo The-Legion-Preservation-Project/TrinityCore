@@ -2979,7 +2979,7 @@ uint64 Creature::GetMaxHealthByLevel(uint8 level) const
 {
     CreatureTemplate const* cInfo = GetCreatureTemplate();
     CreatureBaseStats const* stats = sObjectMgr->GetCreatureBaseStats(level, cInfo->unit_class);
-    return stats->GenerateHealth(cInfo);
+    return std::max(uint64(stats->GenerateHealth(cInfo)), UI64LIT(1));
 }
 
 float Creature::GetHealthMultiplierForTarget(WorldObject const* target) const
