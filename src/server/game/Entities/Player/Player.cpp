@@ -6827,7 +6827,7 @@ void Player::SetCreateCurrency(uint32 id, uint32 amount)
     }
 }
 
-void Player::ModifyCurrency(uint32 id, int32 amount, CurrencyGainSource gainSource/* = CurrencyGainSource::Cheat*/, CurrencyDestroyReason destroyReason/* = CurrencyDestroyReason::Cheat*/)
+void Player::ModifyCurrency(uint32 id, int32 amount, CurrencyGainSource gainSource/* = CurrencyGainSource::Cheat*/, CurrencyDestroyReason /*destroyReason = CurrencyDestroyReason::Cheat*/)
 {
     if (!amount)
         return;
@@ -6855,8 +6855,6 @@ void Player::ModifyCurrency(uint32 id, int32 amount, CurrencyGainSource gainSour
         amount *= GetTotalAuraMultiplierByMiscValue(SPELL_AURA_MOD_CURRENCY_GAIN, id);
         amount *= GetTotalAuraMultiplierByMiscValue(SPELL_AURA_MOD_CURRENCY_CATEGORY_GAIN_PCT, currency->CategoryID);
     }
-
-    int32 scaler = currency->GetScaler();
 
     PlayerCurrenciesMap::iterator itr = _currencyStorage.find(id);
     if (itr == _currencyStorage.end())
