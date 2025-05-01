@@ -5075,6 +5075,68 @@ class spell_gen_despawn_all_summons_owned_by_caster : public SpellScript
     }
 };
 
+enum BloodlustExhaustionSpell : uint32
+{
+    SPELL_SHAMAN_SATED               = 57724, // Bloodlust
+    SPELL_SHAMAN_EXHAUSTION          = 57723, // Heroism, Drums
+    SPELL_MAGE_TEMPORAL_DISPLACEMENT = 80354,
+};
+
+// 2825 - Bloodlust
+// 32182 - Heroism
+// 80353 - Time Warp
+// 264667 - Primal Rage
+// 390386 - Fury of the Aspects
+// 146555 - Drums of Rage
+// 178207 - Drums of Fury
+// 230935 - Drums of the Mountain
+class spell_gen_bloodlust : public SpellScript
+{
+    PrepareSpellScript(spell_gen_bloodlust);
+public:
+    spell_gen_bloodlust(uint32 exhaustionSpellId) : _exhaustionSpellId(exhaustionSpellId) { }
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo(
+        {
+            SPELL_SHAMAN_SATED,
+            SPELL_SHAMAN_EXHAUSTION,
+            SPELL_MAGE_TEMPORAL_DISPLACEMENT,
+        });
+    }
+
+    void FilterTargets(std::list<WorldObject*>& targets)
+    {
+        targets.remove_if([](WorldObject* target) -> bool
+        {
+            Unit* unit = target->ToUnit();
+            if (!unit)
+                return true;
+
+            return unit->HasAura(SPELL_SHAMAN_SATED)
+                || unit->HasAura(SPELL_SHAMAN_EXHAUSTION)
+                || unit->HasAura(SPELL_MAGE_TEMPORAL_DISPLACEMENT);
+        });
+    }
+
+    void HandleHit(SpellEffIndex /*effIndex*/)
+    {
+        Unit* target = GetHitUnit();
+        target->CastSpell(target, _exhaustionSpellId, true);
+    }
+
+    void Register() override
+    {
+        OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_gen_bloodlust::FilterTargets, EFFECT_0, TARGET_UNIT_CASTER_AREA_RAID);
+        OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_gen_bloodlust::FilterTargets, EFFECT_1, TARGET_UNIT_CASTER_AREA_RAID);
+        OnEffectHitTarget += SpellEffectFn(spell_gen_bloodlust::HandleHit, EFFECT_0, SPELL_EFFECT_APPLY_AURA);
+    }
+
+private:
+    uint32 _exhaustionSpellId;
+};
+
 void AddSC_generic_spell_scripts()
 {
     RegisterSpellScript(spell_gen_absorb0_hitlimit1);
@@ -5233,4 +5295,8 @@ void AddSC_generic_spell_scripts()
     RegisterSpellScript(spell_gen_eject_passengers_3_8);
     RegisterSpellScript(spell_gen_reverse_cast_target_to_caster_triggered);
     RegisterSpellScript(spell_gen_despawn_all_summons_owned_by_caster);
+    RegisterSpellScriptWithArgs(spell_gen_bloodlust, "spell_sha_bloodlust", SPELL_SHAMAN_SATED);
+    RegisterSpellScriptWithArgs(spell_gen_bloodlust, "spell_sha_heroism", SPELL_SHAMAN_EXHAUSTION);
+    RegisterSpellScriptWithArgs(spell_gen_bloodlust, "spell_mage_time_warp", SPELL_MAGE_TEMPORAL_DISPLACEMENT);
+    RegisterSpellScriptWithArgs(spell_gen_bloodlust, "spell_item_bloodlust_drums", SPELL_SHAMAN_EXHAUSTION);
 }
