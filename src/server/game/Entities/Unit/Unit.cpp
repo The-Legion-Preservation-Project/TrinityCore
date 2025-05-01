@@ -10030,12 +10030,12 @@ void Unit::SetDisplayId(uint32 modelId, bool setNative /*= false*/)
 {
     SetUInt32Value(UNIT_FIELD_DISPLAYID, modelId);
 
-    // Set Gender by modelId
-    if (CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelInfo(modelId))
-        SetGender(Gender(minfo->gender));
-
     if (setNative)
         SetUInt32Value(UNIT_FIELD_NATIVEDISPLAYID, modelId);
+
+    // Set Gender by modelId
+    if (CreatureModelInfo const* modelInfo = sObjectMgr->GetCreatureModelInfo(modelId))
+        SetGender(Gender(modelInfo->gender));
 }
 
 void Unit::RestoreDisplayId(bool ignorePositiveAurasPreventingMounting /*= false*/)
