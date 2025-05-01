@@ -657,7 +657,7 @@ void WorldSession::HandleAreaSpiritHealerQueryOpcode(WorldPackets::Battleground:
     if (!spiritHealer->IsAreaSpiritHealer())
         return;
 
-    if (_player->GetExactDist(spiritHealer) > MAX_AREA_SPIRIT_HEALER_RANGE)
+    if (!_player->IsWithinDistInMap(spiritHealer, MAX_AREA_SPIRIT_HEALER_RANGE))
         return;
 
     if (spiritHealer->IsAreaSpiritHealerIndividual())
@@ -686,7 +686,7 @@ void WorldSession::HandleAreaSpiritHealerQueueOpcode(WorldPackets::Battleground:
     if (!spiritHealer->IsAreaSpiritHealer())
         return;
 
-    if (_player->GetExactDist(spiritHealer) > MAX_AREA_SPIRIT_HEALER_RANGE)
+    if (!_player->IsWithinDistInMap(spiritHealer, MAX_AREA_SPIRIT_HEALER_RANGE))
         return;
 
     _player->SetAreaSpiritHealer(spiritHealer);
