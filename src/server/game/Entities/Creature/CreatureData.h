@@ -479,7 +479,7 @@ struct TC_GAME_API CreatureTemplate
     std::string  SubName;
     std::string  TitleAlt;
     std::string  IconName;
-    uint32  GossipMenuId;
+    std::vector<uint32> GossipMenuIds;
     int16   minlevel;
     int16   maxlevel;
     std::unordered_map<Difficulty, CreatureLevelScaling> scalingStore;
