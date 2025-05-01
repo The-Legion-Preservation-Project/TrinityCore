@@ -3703,12 +3703,13 @@ void Spell::EffectSkinning()
     loot->FillLoot(creature->GetCreatureTemplate()->SkinLootId, LootTemplates_Skinning, player, true);
     player->SendLoot(*loot);
 
-    int32 reqValue = targetLevel < 10 ? 0 : targetLevel < 20 ? (targetLevel-10)*10 : targetLevel*5;
+    int32 reqValue = targetLevel < 10 ? 0 : targetLevel < 20 ? (targetLevel - 10) * 10 : targetLevel * 5;
 
-    int32 skillValue = m_caster->ToPlayer()->GetPureSkillValue(skill);
-
-    // Double chances for elites
-    m_caster->ToPlayer()->UpdateGatherSkill(skill, skillValue, reqValue, creature->isElite() ? 2 : 1);
+    if (int32 pureSkillValue = m_caster->ToPlayer()->GetPureSkillValue(skill))
+    {
+        // Double chances for elites
+        m_caster->ToPlayer()->UpdateGatherSkill(skill, pureSkillValue, reqValue, creature->isElite() ? 2 : 1);
+    }
 }
 
 void Spell::EffectCharge()
