@@ -54,6 +54,7 @@ TC_GAME_API extern DB2Storage<AuctionHouseEntry>                    sAuctionHous
 TC_GAME_API extern DB2Storage<BankBagSlotPricesEntry>               sBankBagSlotPricesStore;
 TC_GAME_API extern DB2Storage<BannedAddonsEntry>                    sBannedAddonsStore;
 TC_GAME_API extern DB2Storage<BarberShopStyleEntry>                 sBarberShopStyleStore;
+TC_GAME_API extern DB2Storage<BattlePetAbilityEntry>                sBattlePetAbilityStore;
 TC_GAME_API extern DB2Storage<BattlePetBreedQualityEntry>           sBattlePetBreedQualityStore;
 TC_GAME_API extern DB2Storage<BattlePetBreedStateEntry>             sBattlePetBreedStateStore;
 TC_GAME_API extern DB2Storage<BattlePetSpeciesEntry>                sBattlePetSpeciesStore;

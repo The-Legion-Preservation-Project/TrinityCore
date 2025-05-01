@@ -683,9 +683,9 @@ struct BattlePetAbilityMeta
     {
         { FT_STRING, 1, false },
         { FT_STRING, 1, false },
-        { FT_INT, 1, false },
+        { FT_INT, 1, true },
         { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { FT_BYTE, 1, true },
         { FT_BYTE, 1, false },
         { FT_INT, 1, false },
     };
