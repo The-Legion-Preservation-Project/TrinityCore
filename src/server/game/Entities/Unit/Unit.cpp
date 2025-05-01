@@ -12682,6 +12682,9 @@ bool Unit::UpdatePosition(float x, float y, float z, float orientation, bool tel
     _positionUpdateInfo.Relocated = relocated;
     _positionUpdateInfo.Turned = turn;
 
+    if (IsFalling())
+        RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags2::Falling);
+
     bool isInWater = IsInWater();
     if (!IsFalling() || isInWater || IsFlying())
         RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags2::Ground);
