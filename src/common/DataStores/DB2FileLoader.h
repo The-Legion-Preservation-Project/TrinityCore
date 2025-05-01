@@ -78,6 +78,12 @@ struct TC_COMMON_API DB2FileLoadInfo
 
 struct TC_COMMON_API DB2FileSource
 {
+    DB2FileSource();
+    DB2FileSource(DB2FileSource const& other) = delete;
+    DB2FileSource(DB2FileSource&& other) noexcept = delete;
+    DB2FileSource& operator=(DB2FileSource const& other) = delete;
+    DB2FileSource& operator=(DB2FileSource&& other) noexcept = delete;
+
     virtual ~DB2FileSource();
 
     // Returns true when the source is open for reading
@@ -99,9 +105,13 @@ class TC_COMMON_API DB2Record
 {
 public:
     DB2Record(DB2FileLoaderImpl const& db2, uint32 recordIndex, std::size_t* fieldOffsets);
+    DB2Record(DB2Record const& other);
+    DB2Record(DB2Record&& other) noexcept;
+    DB2Record& operator=(DB2Record const& other) = delete;
+    DB2Record& operator=(DB2Record&& other) noexcept = delete;
     ~DB2Record();
 
-    operator bool();
+    explicit operator bool() const;
 
     uint32 GetId() const;
 
@@ -155,6 +165,10 @@ class TC_COMMON_API DB2FileLoader
 {
 public:
     DB2FileLoader();
+    DB2FileLoader(DB2FileLoader const& other) = delete;
+    DB2FileLoader(DB2FileLoader&& other) noexcept = delete;
+    DB2FileLoader& operator=(DB2FileLoader const& other) = delete;
+    DB2FileLoader& operator=(DB2FileLoader&& other) noexcept = delete;
     ~DB2FileLoader();
 
     // loadInfo argument is required when trying to read data from the file
