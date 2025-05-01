@@ -7604,6 +7604,8 @@ void Unit::Mount(uint32 mount, uint32 VehicleId, uint32 creatureEntry)
 
     SetUnitFlag(UNIT_FLAG_MOUNT);
 
+    CalculateHoverHeight();
+
     if (Player* player = ToPlayer())
     {
         // mount as a vehicle
@@ -7651,6 +7653,8 @@ void Unit::Dismount()
 
     if (Player* thisPlayer = ToPlayer())
         thisPlayer->SendMovementSetCollisionHeight(thisPlayer->GetCollisionHeight(), WorldPackets::Movement::UpdateCollisionHeightReason::Mount);
+
+    CalculateHoverHeight();
 
     WorldPackets::Misc::Dismount data;
     data.Guid = GetGUID();
@@ -10052,9 +10056,11 @@ void Unit::SetDisplayId(uint32 modelId, bool setNative /*= false*/)
     if (setNative)
         SetUInt32Value(UNIT_FIELD_NATIVEDISPLAYID, modelId);
 
-    // Set Gender by modelId
+    // Set Gender by ModelInfo
     if (CreatureModelInfo const* modelInfo = sObjectMgr->GetCreatureModelInfo(modelId))
         SetGender(Gender(modelInfo->gender));
+
+    CalculateHoverHeight();
 }
 
 void Unit::RestoreDisplayId(bool ignorePositiveAurasPreventingMounting /*= false*/)
@@ -13510,6 +13516,20 @@ void Unit::SetPlayHoverAnim(bool enable)
     data.PlayHoverAnim = enable;
 
     SendMessageToSet(data.Write(), true);
+}
+
+void Unit::CalculateHoverHeight()
+{
+    float hoverHeight = DEFAULT_PLAYER_HOVER_HEIGHT;
+    float displayScale = DEFAULT_PLAYER_DISPLAY_SCALE;
+
+    uint32 displayId = IsMounted() ? GetMountDisplayId() : GetDisplayId();
+
+    if (CreatureDisplayInfoEntry const* displayInfo = sCreatureDisplayInfoStore.LookupEntry(displayId))
+        if (CreatureModelDataEntry const* modelData = sCreatureModelDataStore.LookupEntry(displayInfo->ModelID))
+            hoverHeight = modelData->HoverHeight * modelData->ModelScale * displayInfo->CreatureModelScale * displayScale;
+
+    SetHoverHeight(hoverHeight ? hoverHeight : DEFAULT_PLAYER_HOVER_HEIGHT);
 }
 
 bool Unit::IsSplineEnabled() const

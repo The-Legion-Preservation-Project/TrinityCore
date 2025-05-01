@@ -470,7 +470,6 @@ bool Player::Create(ObjectGuid::LowType guidlow, WorldPackets::Character::Charac
     }
 
     SetUnitFlag2(UNIT_FLAG2_REGENERATE_POWER);
-    SetHoverHeight(1.0f);            // default for players in 3.0.3
 
     SetWatchedFactionIndex(-1);
 
@@ -16949,7 +16948,6 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     _LoadIntoDataField(fields.knownTitles, PLAYER__FIELD_KNOWN_TITLES, KNOWN_TITLES_SIZE * 2);
 
     SetObjectScale(1.0f);
-    SetHoverHeight(1.0f);
 
     // load achievements before anything else to prevent multiple gains for the same achievement/criteria on every loading (as loading does call UpdateCriteria)
     m_achievementMgr->LoadFromDB(holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_ACHIEVEMENTS), holder.GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_CRITERIA_PROGRESS));
