@@ -201,7 +201,7 @@ Player::Player(WorldSession* session) : Unit(true), m_sceneMgr(this)
     m_DelayedOperations = 0;
     m_bCanDelayTeleport = false;
     m_bHasDelayedTeleport = false;
-    m_teleport_options = 0;
+    m_teleport_options = TELE_TO_NONE;
 
     m_trade = nullptr;
 
@@ -1358,7 +1358,7 @@ uint8 Player::GetChatFlags() const
     return tag;
 }
 
-bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientation, uint32 options /*= 0*/, Optional<uint32> instanceId /*= {}*/)
+bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientation, TeleportToOptions options /*= TELE_TO_NONE*/, Optional<uint32> instanceId /*= {}*/)
 {
     if (!MapManager::IsValidMapCoord(mapid, x, y, z, orientation))
     {
@@ -1596,7 +1596,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     return true;
 }
 
-bool Player::TeleportTo(WorldLocation const& loc, uint32 options /*= 0*/, Optional<uint32> instanceId /*= {}*/)
+bool Player::TeleportTo(WorldLocation const& loc, TeleportToOptions options /*= TELE_TO_NONE*/, Optional<uint32> instanceId /*= {}*/)
 {
     return TeleportTo(loc.GetMapId(), loc.GetPositionX(), loc.GetPositionY(), loc.GetPositionZ(), loc.GetOrientation(), options, instanceId);
 }
@@ -4712,7 +4712,7 @@ void Player::RepopAtGraveyard()
     // and don't show spirit healer location
     if (ClosestGrave)
     {
-        TeleportTo(ClosestGrave->MapID, ClosestGrave->Loc.X, ClosestGrave->Loc.Y, ClosestGrave->Loc.Z, (ClosestGrave->Facing * M_PI) / 180, shouldResurrect ? TELE_REVIVE_AT_TELEPORT : 0); // Orientation is initially in degrees
+        TeleportTo(ClosestGrave->MapID, ClosestGrave->Loc.X, ClosestGrave->Loc.Y, ClosestGrave->Loc.Z, (ClosestGrave->Facing * M_PI) / 180, shouldResurrect ? TELE_REVIVE_AT_TELEPORT : TELE_TO_NONE); // Orientation is initially in degrees
         if (isDead())                                        // not send if alive, because it used in TeleportTo()
         {
             WorldPackets::Misc::DeathReleaseLoc packet;
@@ -24135,7 +24135,7 @@ void Player::SummonIfPossible(bool agree)
     UpdateCriteria(CriteriaType::AcceptSummon, 1);
     RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags::Summon);
 
-    TeleportTo(m_summon_location, 0, m_summon_instanceId);
+    TeleportTo(m_summon_location, TELE_TO_NONE, m_summon_instanceId);
 }
 
 void Player::RemoveItemDurations(Item* item)
