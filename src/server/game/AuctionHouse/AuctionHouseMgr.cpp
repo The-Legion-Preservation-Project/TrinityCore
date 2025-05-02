@@ -119,16 +119,16 @@ uint64 AuctionPosting::CalculateMinIncrement(uint64 bidAmount)
 class AuctionPosting::Sorter
 {
 public:
-    Sorter(LocaleConstant locale, WorldPackets::AuctionHouse::AuctionSortDef const* sorts, std::size_t sortCount)
-        : _locale(locale), _sorts(sorts), _sortCount(sortCount) { }
+    Sorter(LocaleConstant locale, std::span<WorldPackets::AuctionHouse::AuctionSortDef const> sorts)
+        : _locale(locale), _sorts(sorts) { }
 
     bool operator()(AuctionPosting const* left, AuctionPosting const* right) const
     {
-        for (std::size_t i = 0; i < _sortCount; ++i)
+        for (WorldPackets::AuctionHouse::AuctionSortDef const& sort : _sorts)
         {
-            int64 ordering = CompareColumns(_sorts[i].SortOrder, left, right);
+            int64 ordering = CompareColumns(sort.SortOrder, left, right);
             if (ordering != 0)
-                return (ordering < 0) == !_sorts[i].ReverseSort;
+                return (ordering < 0) == !sort.ReverseSort;
         }
 
         // Auctions are processed in LIFO order
@@ -221,8 +221,7 @@ private:
     }
 
     LocaleConstant _locale;
-    WorldPackets::AuctionHouse::AuctionSortDef const* _sorts;
-    std::size_t _sortCount;
+    std::span<WorldPackets::AuctionHouse::AuctionSortDef const> _sorts;
 };
 
 template<typename T>
@@ -231,8 +230,8 @@ class AuctionsResultBuilder
 public:
     using Sorter = typename T::Sorter;
 
-    AuctionsResultBuilder(uint32 offset, LocaleConstant locale, WorldPackets::AuctionHouse::AuctionSortDef const* sorts, std::size_t sortCount, AuctionHouseResultLimits maxResults)
-        : _offset(offset), _sorter(locale, sorts, sortCount), _maxResults(AsUnderlyingType(maxResults)), _hasMoreResults(false)
+    AuctionsResultBuilder(uint32 offset, LocaleConstant locale, std::span<WorldPackets::AuctionHouse::AuctionSortDef const> sorts, AuctionHouseResultLimits maxResults)
+        : _offset(offset), _sorter(locale, sorts), _maxResults(AsUnderlyingType(maxResults)), _hasMoreResults(false)
     {
         _items.reserve(_maxResults + offset + 1);
     }
@@ -251,7 +250,7 @@ public:
 
     Trinity::IteratorPair<typename std::vector<T const*>::const_iterator> GetResultRange() const
     {
-        return std::make_pair(_items.begin() + _offset, _items.end());
+        return Trinity::Containers::MakeIteratorPair(_items.begin() + _offset, _items.end());
     }
 
     bool HasMoreResults() const
@@ -324,7 +323,7 @@ Item* AuctionHouseMgr::GetAItem(ObjectGuid itemGuid)
     return Trinity::Containers::MapGetValuePtr(_itemsByGuid, itemGuid);
 }
 
-uint64 AuctionHouseMgr::GetItemAuctionDeposit(Player* player, Item* item, Minutes time)
+uint64 AuctionHouseMgr::GetItemAuctionDeposit(Player const* player, Item const* item, Minutes time)
 {
     uint32 sellPrice = item->GetSellPrice(player);
     return uint64(fmax(sellPrice * 0.15, 100.0)) * (time.count() / (MIN_AUCTION_TIME / MINUTE));
@@ -492,9 +491,9 @@ void AuctionHouseMgr::AddAItem(Item* item)
     _itemsByGuid[item->GetGUID()] = item;
 }
 
-bool AuctionHouseMgr::RemoveAItem(ObjectGuid id, bool deleteItem /*= false*/, CharacterDatabaseTransaction* trans /*= nullptr*/)
+bool AuctionHouseMgr::RemoveAItem(ObjectGuid itemGuid, bool deleteItem /*= false*/, CharacterDatabaseTransaction* trans /*= nullptr*/)
 {
-    auto i = _itemsByGuid.find(id);
+    auto i = _itemsByGuid.find(itemGuid);
     if (i == _itemsByGuid.end())
         return false;
 
@@ -509,7 +508,7 @@ bool AuctionHouseMgr::RemoveAItem(ObjectGuid id, bool deleteItem /*= false*/, Ch
     return true;
 }
 
-bool AuctionHouseMgr::PendingAuctionAdd(Player* player, uint32 auctionHouseId, uint32 auctionId, uint64 deposit)
+bool AuctionHouseMgr::PendingAuctionAdd(Player const* player, uint32 auctionHouseId, uint32 auctionId, uint64 deposit)
 {
     auto itr = _pendingAuctionsByPlayer.find(player->GetGUID());
     if (itr != _pendingAuctionsByPlayer.end())
@@ -649,7 +648,7 @@ uint32 AuctionHouseMgr::GenerateReplicationId()
     return ++_replicateIdGenerator;
 }
 
-AuctionThrottleResult AuctionHouseMgr::CheckThrottle(Player* player, AuctionCommand command /*= AuctionCommand::SellItem*/)
+AuctionThrottleResult AuctionHouseMgr::CheckThrottle(Player const* player, AuctionCommand command /*= AuctionCommand::SellItem*/)
 {
     TimePoint now = GameTime::Now();
     auto itr = _playerThrottleObjects.emplace(std::piecewise_construct, std::forward_as_tuple(player->GetGUID()), std::forward_as_tuple());
@@ -753,7 +752,7 @@ void AuctionHouseObject::AddAuction(CharacterDatabaseTransaction trans, AuctionP
     AuctionPosting* addedAuction = &(_itemsByAuctionId[auction.Id] = std::move(auction));
 
     WorldPackets::AuctionHouse::AuctionSortDef priceSort{ AuctionHouseSortOrder::Price, false };
-    AuctionPosting::Sorter insertSorter(LOCALE_enUS, &priceSort, 1);
+    AuctionPosting::Sorter insertSorter(LOCALE_enUS, std::span(&priceSort, 1));
     _auctions.insert(std::lower_bound(_auctions.begin(), _auctions.end(), addedAuction, std::cref(insertSorter)), addedAuction);
 
     sScriptMgr->OnAuctionAdd(this, addedAuction);
@@ -844,7 +843,7 @@ void AuctionHouseObject::Update()
     CharacterDatabase.CommitTransaction(trans);
 }
 
-void AuctionHouseObject::BuildListBiddedItems(WorldPackets::AuctionHouse::AuctionListBiddedItemsResult& listBiddedItemsResult, Player* player, uint32 /*offset*/) const
+void AuctionHouseObject::BuildListBiddedItems(WorldPackets::AuctionHouse::AuctionListBiddedItemsResult& listBiddedItemsResult, Player const* player, uint32 /*offset*/) const
 {
     // always full list
     std::vector<AuctionPosting const*> auctions;
@@ -865,7 +864,7 @@ void AuctionHouseObject::BuildListBiddedItems(WorldPackets::AuctionHouse::Auctio
     //listBiddedItemsResult.HasMoreResults = false;
 }
 
-void AuctionHouseObject::BuildListOwnedItems(WorldPackets::AuctionHouse::AuctionListOwnedItemsResult& listOwnedItemsResult, Player* player, uint32 /*offset*/)
+void AuctionHouseObject::BuildListOwnedItems(WorldPackets::AuctionHouse::AuctionListOwnedItemsResult& listOwnedItemsResult, Player const* player, uint32 /*offset*/) const
 {
     // always full list
     std::vector<AuctionPosting const*> auctions;
@@ -887,13 +886,13 @@ void AuctionHouseObject::BuildListOwnedItems(WorldPackets::AuctionHouse::Auction
 }
 
 
-void AuctionHouseObject::BuildListAuctionItems(WorldPackets::AuctionHouse::AuctionListItemsResult& listItemsResult, Player* player,
+void AuctionHouseObject::BuildListAuctionItems(WorldPackets::AuctionHouse::AuctionListItemsResult& listItemsResult, Player const* player,
     std::wstring const& searchedName, uint8 minLevel, uint8 maxLevel, bool onlyUsable, Optional<AuctionSearchClassFilters> const& filters, uint32 quality,
-    uint32 offset, WorldPackets::AuctionHouse::AuctionSortDef const* sorts, std::size_t sortCount)
+    uint32 offset, std::span<WorldPackets::AuctionHouse::AuctionSortDef const> sorts) const
 {
     listItemsResult.TotalCount = 0;
 
-    AuctionsResultBuilder<AuctionPosting> builder(offset, player->GetSession()->GetSessionDbcLocale(), sorts, sortCount, AuctionHouseResultLimits::Items);
+    AuctionsResultBuilder<AuctionPosting> builder(offset, player->GetSession()->GetSessionDbcLocale(), sorts, AuctionHouseResultLimits::Items);
 
     std::chrono::system_clock::time_point curTime = GameTime::GetSystemTime();
 
@@ -1053,7 +1052,7 @@ uint64 AuctionHouseObject::CalculateAuctionHouseCut(uint64 bidAmount) const
 }
 
 // this function notified old bidder that his bid is no longer highest
-void AuctionHouseObject::SendAuctionOutbid(AuctionPosting const* auction, ObjectGuid newBidder, uint64 newBidAmount, CharacterDatabaseTransaction trans)
+void AuctionHouseObject::SendAuctionOutbid(AuctionPosting const* auction, ObjectGuid newBidder, uint64 newBidAmount, CharacterDatabaseTransaction trans) const
 {
     Player* oldBidder = ObjectAccessor::FindConnectedPlayer(auction->Bidder);
 
@@ -1077,7 +1076,7 @@ void AuctionHouseObject::SendAuctionOutbid(AuctionPosting const* auction, Object
     }
 }
 
-void AuctionHouseObject::SendAuctionWon(AuctionPosting const* auction, Player* bidder, CharacterDatabaseTransaction trans)
+void AuctionHouseObject::SendAuctionWon(AuctionPosting const* auction, Player* bidder, CharacterDatabaseTransaction trans) const
 {
     uint32 bidderAccId = 0;
     if (!bidder)
@@ -1151,7 +1150,7 @@ void AuctionHouseObject::SendAuctionWon(AuctionPosting const* auction, Player* b
 }
 
 //call this method to send mail to auction owner, when auction is successful, it does not clear ram
-void AuctionHouseObject::SendAuctionSold(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans)
+void AuctionHouseObject::SendAuctionSold(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans) const
 {
     if (!owner)
         owner = ObjectAccessor::FindConnectedPlayer(auction->Owner);
@@ -1178,7 +1177,7 @@ void AuctionHouseObject::SendAuctionSold(AuctionPosting const* auction, Player* 
     }
 }
 
-void AuctionHouseObject::SendAuctionExpired(AuctionPosting const* auction, CharacterDatabaseTransaction trans)
+void AuctionHouseObject::SendAuctionExpired(AuctionPosting const* auction, CharacterDatabaseTransaction trans) const
 {
     Player* owner = ObjectAccessor::FindConnectedPlayer(auction->Owner);
     // owner exist
@@ -1200,7 +1199,7 @@ void AuctionHouseObject::SendAuctionExpired(AuctionPosting const* auction, Chara
     }
 }
 
-void AuctionHouseObject::SendAuctionRemoved(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans)
+void AuctionHouseObject::SendAuctionRemoved(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans) const
 {
     MailDraft draft(AuctionHouseMgr::BuildItemAuctionMailSubject(AuctionMailType::Cancelled, auction), "");
 
@@ -1210,7 +1209,7 @@ void AuctionHouseObject::SendAuctionRemoved(AuctionPosting const* auction, Playe
 }
 
 //this function sends mail, when auction is cancelled to old bidder
-void AuctionHouseObject::SendAuctionCancelledToBidder(AuctionPosting const* auction, CharacterDatabaseTransaction trans)
+void AuctionHouseObject::SendAuctionCancelledToBidder(AuctionPosting const* auction, CharacterDatabaseTransaction trans) const
 {
     Player* bidder = ObjectAccessor::FindConnectedPlayer(auction->Bidder);
 
@@ -1221,7 +1220,7 @@ void AuctionHouseObject::SendAuctionCancelledToBidder(AuctionPosting const* auct
         .SendMailTo(trans, MailReceiver(bidder, auction->Bidder), this, MAIL_CHECK_MASK_COPIED);
 }
 
-void AuctionHouseObject::SendAuctionInvoice(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans)
+void AuctionHouseObject::SendAuctionInvoice(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans) const
 {
     if (!owner)
         owner = ObjectAccessor::FindConnectedPlayer(auction->Owner);

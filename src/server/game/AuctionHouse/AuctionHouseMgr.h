@@ -25,6 +25,7 @@
 #include "ObjectGuid.h"
 #include "Optional.h"
 #include <map>
+#include <span>
 #include <unordered_map>
 
 class Item;
@@ -150,7 +151,7 @@ struct AuctionPosting
     EnumFlag<AuctionPostingServerFlag> ServerFlags = AuctionPostingServerFlag::None;
 
     void BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* auctionItem, bool censorServerInfo, bool censorBidInfo) const;
-    static uint64 CalculateMinIncrement(uint64 currentBid);
+    static uint64 CalculateMinIncrement(uint64 bidAmount);
     uint64 CalculateMinIncrement() const { return CalculateMinIncrement(BidAmount); }
 
     class Sorter;
@@ -167,7 +168,10 @@ class TC_GAME_API AuctionHouseObject
 {
 public:
     explicit AuctionHouseObject(uint32 auctionHouseId);
-
+    AuctionHouseObject(AuctionHouseObject const&) = delete;
+    AuctionHouseObject(AuctionHouseObject&&) = delete;
+    AuctionHouseObject& operator=(AuctionHouseObject const&) = delete;
+    AuctionHouseObject& operator=(AuctionHouseObject&&) = delete;
     ~AuctionHouseObject();
 
     struct PlayerReplicateThrottleData
@@ -195,22 +199,22 @@ public:
 
     void Update();
 
-    void BuildListBiddedItems(WorldPackets::AuctionHouse::AuctionListBiddedItemsResult& listBiddedItemsResult, Player* player, uint32 /*offset*/) const;
-    void BuildListOwnedItems(WorldPackets::AuctionHouse::AuctionListOwnedItemsResult& listOwnedItemsResult, Player* player, uint32 /*offset*/);
-    void BuildListAuctionItems(WorldPackets::AuctionHouse::AuctionListItemsResult& listItemsResult, Player* player,
-        std::wstring const& searchedName, uint8 minLevel, uint8 maxLevel, bool onlyUsable, Optional<AuctionSearchClassFilters> const& filters, uint32 quality, uint32 offset, WorldPackets::AuctionHouse::AuctionSortDef const* sorts, std::size_t sortCount);
+    void BuildListBiddedItems(WorldPackets::AuctionHouse::AuctionListBiddedItemsResult& listBiddedItemsResult, Player const* player, uint32 /*offset*/) const;
+    void BuildListOwnedItems(WorldPackets::AuctionHouse::AuctionListOwnedItemsResult& listOwnedItemsResult, Player const* player, uint32 /*offset*/) const;
+    void BuildListAuctionItems(WorldPackets::AuctionHouse::AuctionListItemsResult& listItemsResult, Player const* player,
+        std::wstring const& searchedName, uint8 minLevel, uint8 maxLevel, bool onlyUsable, Optional<AuctionSearchClassFilters> const& filters, uint32 quality, uint32 offset, std::span<WorldPackets::AuctionHouse::AuctionSortDef const> sorts) const;
     void BuildReplicate(WorldPackets::AuctionHouse::AuctionReplicateResponse& auctionReplicateResult, Player* player,
         uint32 global, uint32 cursor, uint32 tombstone, uint32 count);
 
     uint64 CalculateAuctionHouseCut(uint64 bidAmount) const;
 
-    void SendAuctionOutbid(AuctionPosting const* auction, ObjectGuid newBidder, uint64 newBidAmount, CharacterDatabaseTransaction trans);
-    void SendAuctionWon(AuctionPosting const* auction, Player* player, CharacterDatabaseTransaction trans);
-    void SendAuctionSold(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans);
-    void SendAuctionExpired(AuctionPosting const* auction, CharacterDatabaseTransaction trans);
-    void SendAuctionRemoved(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans);
-    void SendAuctionCancelledToBidder(AuctionPosting const* auction, CharacterDatabaseTransaction trans);
-    void SendAuctionInvoice(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans);
+    void SendAuctionOutbid(AuctionPosting const* auction, ObjectGuid newBidder, uint64 newBidAmount, CharacterDatabaseTransaction trans) const;
+    void SendAuctionWon(AuctionPosting const* auction, Player* bidder, CharacterDatabaseTransaction trans) const;
+    void SendAuctionSold(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans) const;
+    void SendAuctionExpired(AuctionPosting const* auction, CharacterDatabaseTransaction trans) const;
+    void SendAuctionRemoved(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans) const;
+    void SendAuctionCancelledToBidder(AuctionPosting const* auction, CharacterDatabaseTransaction trans) const;
+    void SendAuctionInvoice(AuctionPosting const* auction, Player* owner, CharacterDatabaseTransaction trans) const;
 
 private:
     AuctionHouseEntry const* _auctionHouse;
@@ -235,6 +239,11 @@ class TC_GAME_API AuctionHouseMgr
         ~AuctionHouseMgr();
 
     public:
+        AuctionHouseMgr(AuctionHouseMgr const&) = delete;
+        AuctionHouseMgr(AuctionHouseMgr&&) = delete;
+        AuctionHouseMgr& operator=(AuctionHouseMgr const&) = delete;
+        AuctionHouseMgr& operator=(AuctionHouseMgr&&) = delete;
+
         static AuctionHouseMgr* instance();
 
         AuctionHouseObject* GetAuctionsMap(uint32 factionTemplateId);
@@ -249,7 +258,7 @@ class TC_GAME_API AuctionHouseMgr
         static std::string BuildAuctionSoldMailBody(ObjectGuid guid, uint64 bid, uint64 buyout, uint32 deposit, uint64 consignment);
         static std::string BuildAuctionInvoiceMailBody(ObjectGuid guid, uint64 bid, uint64 buyout, uint32 deposit, uint64 consignment, uint32 moneyDelay, uint32 eta);
 
-        static uint64 GetItemAuctionDeposit(Player* player, Item* item, Minutes time);
+        static uint64 GetItemAuctionDeposit(Player const* player, Item const* item, Minutes time);
         static AuctionHouseEntry const* GetAuctionHouseEntry(uint32 factionTemplateId, uint32* houseId);
 
     public:
@@ -258,7 +267,7 @@ class TC_GAME_API AuctionHouseMgr
 
         void AddAItem(Item* item);
         bool RemoveAItem(ObjectGuid itemGuid, bool deleteItem = false, CharacterDatabaseTransaction* trans = nullptr);
-        bool PendingAuctionAdd(Player* player, uint32 auctionHouseId, uint32 auctionId, uint64 deposit);
+        bool PendingAuctionAdd(Player const* player, uint32 auctionHouseId, uint32 auctionId, uint64 deposit);
         std::size_t PendingAuctionCount(Player const* player) const;
         void PendingAuctionProcess(Player* player);
         void UpdatePendingAuctions();
@@ -266,7 +275,7 @@ class TC_GAME_API AuctionHouseMgr
 
         uint32 GenerateReplicationId();
 
-        AuctionThrottleResult CheckThrottle(Player* player, AuctionCommand command = AuctionCommand::SellItem);
+        AuctionThrottleResult CheckThrottle(Player const* player, AuctionCommand command = AuctionCommand::SellItem);
 
     private:
 

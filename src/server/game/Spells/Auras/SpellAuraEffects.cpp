@@ -755,7 +755,7 @@ float AuraEffect::CalculateEstimatedfTotalPeriodicAmount(Unit* caster, Unit* tar
     if (spellInfo->IsChanneled())
         caster->ModSpellDurationTime(spellInfo, period);
     else if (spellInfo->HasAttribute(SPELL_ATTR5_SPELL_HASTE_AFFECTS_PERIODIC))
-        period = int32(period * caster->m_unitData->ModCastingSpeed);
+        period = int32(period * caster->GetFloatValue(UNIT_MOD_CAST_SPEED));
 
     if (!period)
         return 0.0f;
