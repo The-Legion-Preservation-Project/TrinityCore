@@ -3610,7 +3610,7 @@ void Spell::EffectQuestComplete()
         uint16 logSlot = player->FindQuestSlot(questId);
         if (logSlot < MAX_QUEST_LOG_SIZE)
             player->AreaExploredOrEventHappens(questId);
-        else if (quest->HasFlag(QUEST_FLAGS_TRACKING))  // Check if the quest is used as a serverside flag.
+        else if (quest->HasFlag(QUEST_FLAGS_TRACKING_EVENT))  // Check if the quest is used as a serverside flag.
         {
             // transmog unlock quests should be immediately sent to client
             if (sDB2Manager.IsTransmogUnlockQuest(questId))
