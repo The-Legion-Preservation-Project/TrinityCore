@@ -478,7 +478,7 @@ void WorldSession::HandleSetPetSlot(WorldPackets::NPC::SetPetSlot& setPetSlot)
         if (dstPet)
         {
             CreatureTemplate const* creatureInfo = sObjectMgr->GetCreatureTemplate(dstPet->CreatureId);
-            if (!creatureInfo || !creatureInfo->IsTameable(_player->CanTameExoticPets()))
+            if (!creatureInfo || !creatureInfo->IsTameable(_player->CanTameExoticPets(), creatureInfo->GetDifficulty(DIFFICULTY_NONE)))
             {
                 SendPetStableResult(StableResult::CantControlExotic);
                 return;
@@ -504,7 +504,7 @@ void WorldSession::HandleSetPetSlot(WorldPackets::NPC::SetPetSlot& setPetSlot)
         }
 
         CreatureTemplate const* creatureInfo = sObjectMgr->GetCreatureTemplate(srcPet->CreatureId);
-        if (!creatureInfo || !creatureInfo->IsTameable(_player->CanTameExoticPets()))
+        if (!creatureInfo || !creatureInfo->IsTameable(_player->CanTameExoticPets(), creatureInfo->GetDifficulty(DIFFICULTY_NONE)))
         {
             SendPetStableResult(StableResult::CantControlExotic);
             return;
