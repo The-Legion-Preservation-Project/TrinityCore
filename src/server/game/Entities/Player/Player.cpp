@@ -15564,7 +15564,7 @@ bool Player::SendQuestUpdate(uint32 questId, bool updateVisiblity /*= true*/)
     return PhasingHandler::OnConditionChange(this, updateVisiblity);
 }
 
-QuestGiverStatus Player::GetQuestDialogStatus(Object* questgiver)
+QuestGiverStatus Player::GetQuestDialogStatus(Object const* questgiver) const
 {
     QuestRelationResult qr, qir;
 
