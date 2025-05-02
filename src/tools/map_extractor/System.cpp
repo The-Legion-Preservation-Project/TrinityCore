@@ -1051,7 +1051,7 @@ void ExtractMaps(uint32 build)
     {
         printf("Extract %s (" SZFMTD "/" SZFMTD ")                  \n", map_ids[z].Name.c_str(), z + 1, map_ids.size());
         // Loadup map grid data
-        storagePath = Trinity::StringFormat("World\\Maps\\%s\\%s.wdt", map_ids[z].Directory, map_ids[z].Directory);
+        storagePath = Trinity::StringFormat("World\\Maps\\{}\\{}.wdt", map_ids[z].Directory, map_ids[z].Directory);
         ChunkedFile wdt;
         std::bitset<(WDT_MAP_SIZE) * (WDT_MAP_SIZE)> existingTiles;
         if (wdt.loadFile(CascStorage, storagePath, false))
