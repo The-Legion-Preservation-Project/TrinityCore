@@ -1601,7 +1601,7 @@ bool Player::TeleportTo(WorldLocation const& loc, TeleportToOptions options /*= 
     return TeleportTo(loc.GetMapId(), loc.GetPositionX(), loc.GetPositionY(), loc.GetPositionZ(), loc.GetOrientation(), options, instanceId);
 }
 
-bool Player::TeleportTo(WorldSafeLocsEntry const* loc, uint32 options /*= 0*/, Optional<uint32> instanceId /*= {}*/)
+bool Player::TeleportTo(WorldSafeLocsEntry const* loc, TeleportToOptions options /*= TELE_TO_NONE*/, Optional<uint32> instanceId /*= {}*/)
 {
     return TeleportTo(loc->MapID, loc->Loc.X, loc->Loc.Y, loc->Loc.Z, loc->Facing, options, instanceId);
 }
