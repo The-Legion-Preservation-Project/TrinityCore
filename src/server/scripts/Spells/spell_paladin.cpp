@@ -1538,64 +1538,6 @@ class spell_pal_t8_2p_bonus : public AuraScript
     }
 };
 
-// 405547 - Paladin Protection 10.1 Class Set 2pc
-class spell_pal_t30_2p_protection_bonus : public AuraScript
-{
-    PrepareAuraScript(spell_pal_t30_2p_protection_bonus);
-
-    bool Validate(SpellInfo const* /*spellInfo*/) override
-    {
-        return ValidateSpellInfo({ SPELL_PALADIN_T30_2P_HEARTFIRE_DAMAGE });
-    }
-
-    void HandleProc(AuraEffect* aurEff, ProcEventInfo& procInfo)
-    {
-        PreventDefaultAction();
-
-        Unit* caster = procInfo.GetActor();
-        uint32 ticks = sSpellMgr->AssertSpellInfo(SPELL_PALADIN_T30_2P_HEARTFIRE_DAMAGE, DIFFICULTY_NONE)->GetMaxTicks();
-        uint32 damage = CalculatePct(procInfo.GetDamageInfo()->GetOriginalDamage(), aurEff->GetAmount()) / ticks;
-
-        caster->CastSpell(procInfo.GetActionTarget(), SPELL_PALADIN_T30_2P_HEARTFIRE_DAMAGE, CastSpellExtraArgs(aurEff)
-            .SetTriggeringSpell(procInfo.GetProcSpell())
-            .AddSpellMod(SPELLVALUE_BASE_POINT0, damage));
-    }
-
-    void Register() override
-    {
-        OnEffectProc += AuraEffectProcFn(spell_pal_t30_2p_protection_bonus::HandleProc, EFFECT_1, SPELL_AURA_DUMMY);
-    }
-};
-
-// 408461 - Heartfire
-class spell_pal_t30_2p_protection_bonus_heal : public AuraScript
-{
-    PrepareAuraScript(spell_pal_t30_2p_protection_bonus_heal);
-
-    bool Validate(SpellInfo const* /*spellInfo*/) override
-    {
-        return ValidateSpellInfo({ SPELL_PALADIN_T30_2P_HEARTFIRE_HEAL });
-    }
-
-    bool CheckProc(AuraEffect const* /*aurEff*/, ProcEventInfo& procInfo)
-    {
-        return procInfo.GetDamageInfo() && procInfo.GetSpellInfo() && procInfo.GetSpellInfo()->HasLabel(SPELL_LABEL_PALADIN_T30_2P_HEARTFIRE);
-    }
-
-    void HandleProc(AuraEffect* aurEff, ProcEventInfo& procInfo)
-    {
-        GetTarget()->CastSpell(GetTarget(), SPELL_PALADIN_T30_2P_HEARTFIRE_HEAL, CastSpellExtraArgs(aurEff)
-            .SetTriggeringSpell(procInfo.GetProcSpell())
-            .AddSpellMod(SPELLVALUE_BASE_POINT0, procInfo.GetDamageInfo()->GetOriginalDamage()));
-    }
-
-    void Register() override
-    {
-        DoCheckEffectProc += AuraCheckEffectProcFn(spell_pal_t30_2p_protection_bonus_heal::CheckProc, EFFECT_0, SPELL_AURA_DUMMY);
-        OnEffectProc += AuraEffectProcFn(spell_pal_t30_2p_protection_bonus_heal::HandleProc, EFFECT_0, SPELL_AURA_DUMMY);
-    }
-};
-
 // 269569 - Zeal
 class spell_pal_zeal : public AuraScript
 {
@@ -1662,7 +1604,5 @@ void AddSC_paladin_spell_scripts()
     RegisterSpellScript(spell_pal_templar_s_verdict);
     RegisterSpellScript(spell_pal_t3_6p_bonus);
     RegisterSpellScript(spell_pal_t8_2p_bonus);
-    RegisterSpellScript(spell_pal_t30_2p_protection_bonus);
-    RegisterSpellScript(spell_pal_t30_2p_protection_bonus_heal);
     RegisterSpellScript(spell_pal_zeal);
 }

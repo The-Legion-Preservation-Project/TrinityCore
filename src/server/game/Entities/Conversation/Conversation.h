@@ -77,7 +77,7 @@ class TC_GAME_API Conversation : public WorldObject, public GridObject<Conversat
 
         void Update(uint32 diff) override;
         void Remove();
-        int32 GetDuration() const { return _duration; }
+        Milliseconds GetDuration() const { return _duration; }
 
         static Conversation* CreateConversation(uint32 conversationEntry, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr, bool autoStart = true);
         void Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry, Map* map, Unit* creator, Position const& pos, ObjectGuid privateObjectOwner, SpellInfo const* spellInfo = nullptr);
@@ -100,7 +100,7 @@ class TC_GAME_API Conversation : public WorldObject, public GridObject<Conversat
     private:
         Position _stationaryPosition;
         ObjectGuid _creatorGuid;
-        uint32 _duration;
+        Milliseconds _duration;
         uint32 _textureKitId;
         std::set<uint16> _actorIndices;
 };

@@ -4905,55 +4905,6 @@ class spell_gen_boost_2_0_paladin_priest_watch_for_shield : public AuraScript
     }
 };
 
-// 269083 - Enlisted
-// 282559 - Enlisted
-class spell_gen_war_mode_enlisted : public AuraScript
-{
-    PrepareAuraScript(spell_gen_war_mode_enlisted);
-
-    void CalcWarModeBonus(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
-    {
-        Player* target = GetUnitOwner()->ToPlayer();
-        if (!target)
-            return;
-
-        switch (target->GetTeamId())
-        {
-            case TEAM_ALLIANCE:
-                amount = sWorldStateMgr->GetValue(WS_WAR_MODE_ALLIANCE_BUFF_VALUE, target->GetMap());
-                break;
-            case TEAM_HORDE:
-                amount = sWorldStateMgr->GetValue(WS_WAR_MODE_HORDE_BUFF_VALUE, target->GetMap());
-                break;
-            default:
-                break;
-        }
-    }
-
-    void Register() override
-    {
-        SpellInfo const* spellInfo = sSpellMgr->AssertSpellInfo(m_scriptSpellId, DIFFICULTY_NONE);
-
-        if (spellInfo->HasAura(SPELL_AURA_MOD_XP_PCT))
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_XP_PCT);
-
-        if (spellInfo->HasAura(SPELL_AURA_MOD_XP_QUEST_PCT))
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_XP_QUEST_PCT);
-
-        if (spellInfo->HasAura(SPELL_AURA_MOD_CURRENCY_GAIN_FROM_SOURCE))
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_CURRENCY_GAIN_FROM_SOURCE);
-
-        if (spellInfo->HasAura(SPELL_AURA_MOD_MONEY_GAIN))
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_MONEY_GAIN);
-
-        if (spellInfo->HasAura(SPELL_AURA_MOD_ANIMA_GAIN))
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_ANIMA_GAIN);
-
-        if (spellInfo->HasAura(SPELL_AURA_DUMMY))
-            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_DUMMY);
-    }
-};
-
 enum DefenderOfAzerothData
 {
     SPELL_DEATH_GATE_TELEPORT_STORMWIND = 316999,

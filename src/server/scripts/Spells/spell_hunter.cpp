@@ -799,36 +799,6 @@ class spell_hun_t9_4p_bonus : public AuraScript
     }
 };
 
-// 394366 - Find The Mark
-class spell_hun_t29_2p_marksmanship_bonus : public AuraScript
-{
-    PrepareAuraScript(spell_hun_t29_2p_marksmanship_bonus);
-
-    bool Validate(SpellInfo const* /*spellInfo*/) override
-    {
-        return ValidateSpellEffect({ { SPELL_HUNTER_T29_2P_MARKSMANSHIP_DAMAGE, EFFECT_0 } })
-            && sSpellMgr->AssertSpellInfo(SPELL_HUNTER_T29_2P_MARKSMANSHIP_DAMAGE, DIFFICULTY_NONE)->GetMaxTicks();
-    }
-
-    void HandleProc(AuraEffect* aurEff, ProcEventInfo& eventInfo)
-    {
-        PreventDefaultAction();
-
-        Unit* caster = eventInfo.GetActor();
-        uint32 ticks = sSpellMgr->AssertSpellInfo(SPELL_HUNTER_T29_2P_MARKSMANSHIP_DAMAGE, DIFFICULTY_NONE)->GetMaxTicks();
-        uint32 damage = CalculatePct(eventInfo.GetDamageInfo()->GetOriginalDamage(), aurEff->GetAmount()) / ticks;
-
-        caster->CastSpell(eventInfo.GetActionTarget(), SPELL_HUNTER_T29_2P_MARKSMANSHIP_DAMAGE, CastSpellExtraArgs(aurEff)
-            .SetTriggeringSpell(eventInfo.GetProcSpell())
-            .AddSpellMod(SPELLVALUE_BASE_POINT0, damage));
-    }
-
-    void Register() override
-    {
-        OnEffectProc += AuraEffectProcFn(spell_hun_t29_2p_marksmanship_bonus::HandleProc, EFFECT_0, SPELL_AURA_DUMMY);
-    }
-};
-
 void AddSC_hunter_spell_scripts()
 {
     RegisterSpellScript(spell_hun_a_murder_of_crows);
@@ -855,5 +825,4 @@ void AddSC_hunter_spell_scripts()
     RegisterSpellScript(spell_hun_steady_shot);
     RegisterSpellScript(spell_hun_tame_beast);
     RegisterSpellScript(spell_hun_t9_4p_bonus);
-    RegisterSpellScript(spell_hun_t29_2p_marksmanship_bonus);
 }
