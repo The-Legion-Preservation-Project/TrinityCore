@@ -480,6 +480,8 @@ struct CreatureDifficulty
     uint32 GoldMin;
     uint32 GoldMax;
 
+    CreatureStaticFlagsHolder StaticFlags;
+
     // Helpers
     int32 GetHealthScalingExpansion() const
     {

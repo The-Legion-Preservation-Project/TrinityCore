@@ -918,8 +918,15 @@ void ObjectMgr::LoadCreatureTemplateDifficulty()
 {
     uint32 oldMSTime = getMSTime();
 
-    //                                                   0      1             2         3         4                5                6                     7                     8                       9               10            11             12              13                    14         15          16      17                18          19       20
-    QueryResult result = WorldDatabase.Query("SELECT Entry, DifficultyID, MinLevel, MaxLevel, LevelScalingMin, LevelScalingMax, LevelScalingDeltaMin, LevelScalingDeltaMax, HealthScalingExpansion, HealthModifier, ManaModifier, ArmorModifier, DamageModifier, CreatureDifficultyID, TypeFlags, TypeFlags2, LootID, PickPocketLootID, SkinLootID, GoldMin, GoldMax FROM creature_template_difficulty ORDER BY Entry");
+    //                                                   0      1             2         3         4                5                6                     7                     8
+    QueryResult result = WorldDatabase.Query("SELECT Entry, DifficultyID, MinLevel, MaxLevel, LevelScalingMin, LevelScalingMax, LevelScalingDeltaMin, LevelScalingDeltaMax, HealthScalingExpansion, "
+    //   9               10            11             12              13                    14         15
+        "HealthModifier, ManaModifier, ArmorModifier, DamageModifier, CreatureDifficultyID, TypeFlags, TypeFlags2, "
+    //   16      17                18          19       20
+        "LootID, PickPocketLootID, SkinLootID, GoldMin, GoldMax,"
+    //   21            22            23            24            25            26            27            28
+        "StaticFlags1, StaticFlags2, StaticFlags3, StaticFlags4, StaticFlags5, StaticFlags6, StaticFlags7, StaticFlags8 "
+        "FROM creature_template_difficulty ORDER BY Entry");
 
     if (!result)
     {
@@ -962,6 +969,9 @@ void ObjectMgr::LoadCreatureTemplateDifficulty()
         creatureDifficulty.SkinLootID             = fields[18].GetUInt32();
         creatureDifficulty.GoldMin                = fields[19].GetUInt32();
         creatureDifficulty.GoldMax                = fields[20].GetUInt32();
+        creatureDifficulty.StaticFlags            = CreatureStaticFlagsHolder(CreatureStaticFlags(fields[21].GetUInt32()), CreatureStaticFlags2(fields[22].GetUInt32()),
+            CreatureStaticFlags3(fields[23].GetUInt32()), CreatureStaticFlags4(fields[24].GetUInt32()), CreatureStaticFlags5(fields[25].GetUInt32()),
+            CreatureStaticFlags6(fields[26].GetUInt32()), CreatureStaticFlags7(fields[27].GetUInt32()),  CreatureStaticFlags8(fields[28].GetUInt32()));
 
         // TODO: Check if this still applies
         creatureDifficulty.DamageModifier *= Creature::_GetDamageMod(itr->second.rank);
