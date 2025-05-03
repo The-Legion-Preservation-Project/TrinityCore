@@ -2059,15 +2059,11 @@ void Unit::AttackerStateUpdate(Unit* victim, WeaponAttackType attType, bool extr
         victim = GetMeleeHitRedirectTarget(victim);
 
         AuraEffectList const& meleeAttackOverrides = GetAuraEffectsByType(SPELL_AURA_OVERRIDE_AUTOATTACK_WITH_MELEE_SPELL);
-        AuraEffect const* meleeAttackAuraEffect = nullptr;
         uint32 meleeAttackSpellId = 0;
         if (attType == BASE_ATTACK)
         {
             if (!meleeAttackOverrides.empty())
-            {
-                meleeAttackAuraEffect = meleeAttackOverrides.front();
-                meleeAttackSpellId = meleeAttackAuraEffect->GetSpellEffectInfo().TriggerSpell;
-            }
+                meleeAttackSpellId = meleeAttackOverrides.front()->GetSpellEffectInfo().TriggerSpell;
         }
         else
         {
@@ -2076,13 +2072,10 @@ void Unit::AttackerStateUpdate(Unit* victim, WeaponAttackType attType, bool extr
                 return aurEff->GetSpellEffectInfo().MiscValue != 0;
             });
             if (itr != meleeAttackOverrides.end())
-            {
-                meleeAttackAuraEffect = *itr;
-                meleeAttackSpellId = meleeAttackAuraEffect->GetSpellEffectInfo().MiscValue;
-            }
+                meleeAttackSpellId = (*itr)->GetSpellEffectInfo().MiscValue;
         }
 
-        if (!meleeAttackAuraEffect)
+        if (!meleeAttackSpellId)
         {
             CalcDamageInfo damageInfo;
             CalculateMeleeDamage(victim, &damageInfo, attType);
@@ -2110,7 +2103,7 @@ void Unit::AttackerStateUpdate(Unit* victim, WeaponAttackType attType, bool extr
         }
         else
         {
-            CastSpell(victim, meleeAttackSpellId, meleeAttackAuraEffect);
+            CastSpell(victim, meleeAttackSpellId, true);
 
             uint32 hitInfo = HITINFO_AFFECTS_VICTIM | HITINFO_NO_ANIMATION;
             if (attType == OFF_ATTACK)
