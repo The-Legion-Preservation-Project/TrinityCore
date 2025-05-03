@@ -332,7 +332,7 @@ uint64 AuctionHouseMgr::GetItemAuctionDeposit(Player const* player, Item const* 
 std::string AuctionHouseMgr::BuildItemAuctionMailSubject(AuctionMailType type, AuctionPosting const* auction)
 {
     return BuildAuctionMailSubject(auction->Item->GetEntry(), type, auction->Id, auction->Item->GetCount(),
-        auction->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_SPECIES_ID), auction->Item->GetContext(), auction->Item->GetDynamicValues(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS));
+        auction->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_SPECIES_ID), auction->Item->GetContext(), auction->Item->GetBonusListIDs());
 }
 
 std::string AuctionHouseMgr::BuildAuctionMailSubject(uint32 itemId, AuctionMailType type, uint32 auctionId, uint32 itemCount, uint32 battlePetSpeciesId,

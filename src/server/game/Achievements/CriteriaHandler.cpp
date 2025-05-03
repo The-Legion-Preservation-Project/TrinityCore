@@ -32,6 +32,7 @@
 #include "Group.h"
 #include "InstanceScript.h"
 #include "Item.h"
+#include "ItemBonusMgr.h"
 #include "LanguageMgr.h"
 #include "Log.h"
 #include "Map.h"
@@ -3086,16 +3087,15 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
         }
         case ModifierTreeType::PlayerHasItemWithBonusListFromTreeAndQuality: // 222
         {
-            std::set<uint32> bonusListIDs = sDB2Manager.GetAllItemBonusTreeBonuses(reqValue);
+            std::vector<int32> bonusListIDs = ItemBonusMgr::GetAllBonusListsForTree(reqValue);
             if (bonusListIDs.empty())
                 return false;
 
             bool bagScanReachedEnd = referencePlayer->ForEachItem(ItemSearchLocation::Everywhere, [&bonusListIDs](Item const* item)
             {
-                std::vector<uint32> const& bonusListIds = item->GetDynamicValues(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS);
-                bool hasBonus = std::any_of(bonusListIds.begin(), bonusListIds.end(), [&bonusListIDs](int32 bonusListID)
+                bool hasBonus = std::any_of(item->GetBonusListIDs().begin(), item->GetBonusListIDs().end(), [&bonusListIDs](int32 bonusListID)
                 {
-                    return bonusListIDs.find(bonusListID) != bonusListIDs.end();
+                    return std::find(bonusListIDs.begin(), bonusListIDs.end(), bonusListID) != bonusListIDs.end();
                 });
                 return hasBonus ? ItemSearchCallbackResult::Stop : ItemSearchCallbackResult::Continue;
             });

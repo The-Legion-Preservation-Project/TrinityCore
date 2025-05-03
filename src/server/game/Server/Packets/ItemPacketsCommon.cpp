@@ -38,7 +38,7 @@ void ItemInstance::Initialize(::Item const* item)
     ItemID               = item->GetEntry();
     RandomPropertiesSeed = item->GetItemSuffixFactor();
     RandomPropertiesID   = item->GetItemRandomPropertyId();
-    std::vector<uint32> const& bonusListIds = item->GetDynamicValues(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS);
+    std::vector<uint32> const& bonusListIds = item->GetBonusListIDs();
     if (!bonusListIds.empty())
     {
         ItemBonus.emplace();

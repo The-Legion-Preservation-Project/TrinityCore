@@ -19,6 +19,7 @@
 #include "Containers.h"
 #include "DatabaseEnv.h"
 #include "DB2Stores.h"
+#include "ItemBonusMgr.h"
 #include "ItemTemplate.h"
 #include "Log.h"
 #include "ObjectMgr.h"
@@ -94,7 +95,7 @@ void LoadRandomEnchantmentsTable()
                     }
                     break;
                 case ItemRandomEnchantmentType::BonusList:
-                    if (!sDB2Manager.GetItemBonusList(ench))
+                    if (ItemBonusMgr::GetItemBonuses(ench).empty())
                     {
                         TC_LOG_ERROR("sql.sql", "Bonus list {} used in `item_enchantment_template` by entry {} doesn't have exist in ItemBonus.db2", ench, entry);
                         continue;
