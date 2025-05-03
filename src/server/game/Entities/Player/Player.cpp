@@ -6870,6 +6870,8 @@ void Player::ModifyCurrency(uint32 id, int32 amount, CurrencyGainSource gainSour
         return false;
     }();
 
+    bool ignoreCaps = isGainOnRefund || gainSource == CurrencyGainSource::QuestRewardIgnoreCaps || gainSource == CurrencyGainSource::WorldQuestRewardIgnoreCaps;
+
     if (amount > 0 && !isGainOnRefund && gainSource != CurrencyGainSource::Vendor)
     {
         amount *= GetTotalAuraMultiplierByMiscValue(SPELL_AURA_MOD_CURRENCY_GAIN, id);
@@ -6889,16 +6891,18 @@ void Player::ModifyCurrency(uint32 id, int32 amount, CurrencyGainSource gainSour
         itr->second.Flags = CurrencyDbFlags(0);
     }
 
-    // Weekly cap
     uint32 weeklyCap = GetCurrencyWeeklyCap(currency);
-    if (weeklyCap && amount > 0 && (itr->second.WeeklyQuantity + amount) > weeklyCap)
-        if (!isGainOnRefund) // Ignore weekly cap for refund
+    if (!ignoreCaps) // Ignore weekly cap for refund
+    {
+        // Weekly cap
+        if (weeklyCap && amount > 0 && (itr->second.WeeklyQuantity + amount) > weeklyCap)
             amount = weeklyCap - itr->second.WeeklyQuantity;
 
-    // Max cap
-    uint32 maxCap = GetCurrencyMaxQuantity(currency, false, gainSource == CurrencyGainSource::UpdatingVersion);
-    if (maxCap && amount > 0 && (itr->second.Quantity + amount) > maxCap)
-        amount = maxCap - itr->second.Quantity;
+        // Max cap
+        uint32 maxCap = GetCurrencyMaxQuantity(currency, false, gainSource == CurrencyGainSource::UpdatingVersion);
+        if (maxCap && amount > 0 && (itr->second.Quantity + amount) > maxCap)
+            amount = maxCap - itr->second.Quantity;
+    }
 
     // Underflow protection
     if (amount < 0 && uint32(std::abs(amount)) > itr->second.Quantity)
@@ -6912,7 +6916,7 @@ void Player::ModifyCurrency(uint32 id, int32 amount, CurrencyGainSource gainSour
 
     itr->second.Quantity += amount;
 
-    if (amount > 0 && !isGainOnRefund) // Ignore total values update for refund
+    if (amount > 0 && !ignoreCaps) // Ignore total values update for refund
     {
         if (weeklyCap)
             itr->second.WeeklyQuantity += amount;
@@ -6923,7 +6927,8 @@ void Player::ModifyCurrency(uint32 id, int32 amount, CurrencyGainSource gainSour
         if (currency->HasTotalEarned())
             itr->second.EarnedQuantity += amount;
 
-        UpdateCriteria(CriteriaType::CurrencyGained, id, amount);
+        if (!isGainOnRefund)
+            UpdateCriteria(CriteriaType::CurrencyGained, id, amount);
     }
 
     CurrencyChanged(id, amount);
@@ -14525,7 +14530,7 @@ void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rew
         }
     }
 
-    if (!quest->HasFlagEx(QUEST_FLAGS_EX_KEEP_ADDITIONAL_ITEMS))
+    if (!quest->HasFlagEx(QUEST_FLAGS_EX_NO_ITEM_REMOVAL))
     {
         for (uint8 i = 0; i < QUEST_ITEM_DROP_COUNT; ++i)
         {
@@ -14561,6 +14566,14 @@ void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rew
 
     CurrencyGainSource currencyGainSource = [&]() -> CurrencyGainSource
     {
+        if (quest->HasFlagEx(QUEST_FLAGS_EX_REWARDS_IGNORE_CAPS))
+        {
+            if (quest->IsWorldQuest())
+                return CurrencyGainSource::WorldQuestRewardIgnoreCaps;
+
+            return CurrencyGainSource::QuestRewardIgnoreCaps;
+        }
+
         CurrencyGainSource gainSource = CurrencyGainSource::QuestReward;
 
         if (quest->IsDaily())
@@ -15609,7 +15622,7 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object const* questgiver) const
         switch (GetQuestStatus(questId))
         {
             case QUEST_STATUS_COMPLETE:
-                if (quest->HasFlagEx(QUEST_FLAGS_EX_LEGENDARY_QUEST))
+                if (quest->HasFlagEx(QUEST_FLAGS_EX_LEGENDARY))
                     result |= quest->HasFlag(QUEST_FLAGS_HIDE_REWARD_POI) ? QuestGiverStatus::LegendaryRewardCompleteNoPOI : QuestGiverStatus::LegendaryRewardCompletePOI;
                 else
                     result |= quest->HasFlag(QUEST_FLAGS_HIDE_REWARD_POI) ? QuestGiverStatus::RewardCompleteNoPOI : QuestGiverStatus::RewardCompletePOI;
@@ -15647,7 +15660,7 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object const* questgiver) const
                 {
                     if (GetLevel() <= (GetQuestLevel(quest) + sWorld->getIntConfig(CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF)))
                     {
-                        if (quest->HasFlagEx(QUEST_FLAGS_EX_LEGENDARY_QUEST))
+                        if (quest->HasFlagEx(QUEST_FLAGS_EX_LEGENDARY))
                             result |= QuestGiverStatus::LegendaryQuest;
                         else if (quest->IsDaily())
                             result |= QuestGiverStatus::DailyQuest;
@@ -15981,6 +15994,10 @@ void Player::UpdateQuestObjectiveProgress(QuestObjectiveType objectiveType, int3
         QuestObjective const& objective = *objectiveItr.second.Objective;
         if (!IsQuestObjectiveCompletable(logSlot, quest, objective))
             continue;
+
+        if (quest->HasFlagEx(QUEST_FLAGS_EX_NO_CREDIT_FOR_PROXY))
+            if (objective.Type == QUEST_OBJECTIVE_MONSTER && victimGuid.IsEmpty())
+                continue;
 
         bool objectiveWasComplete = IsQuestObjectiveComplete(logSlot, quest, objective);
         if (!objectiveWasComplete || addCount < 0)
@@ -18467,6 +18484,9 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
                         SetQuestSlotState(slot, QUEST_STATE_COMPLETE);
                     else if (questStatusData.Status == QUEST_STATUS_FAILED)
                         SetQuestSlotState(slot, QUEST_STATE_FAIL);
+
+                    if (quest->HasFlagEx(QUEST_FLAGS_EX_RECAST_ACCEPT_SPELL_ON_LOGIN) && quest->HasFlag(QUEST_FLAGS_PLAYER_CAST_ACCEPT) && quest->GetSrcSpell() > 0)
+                        CastSpell(this, quest->GetSrcSpell(), TRIGGERED_FULL_MASK);
 
                     ++slot;
                 }
@@ -23749,6 +23769,24 @@ void Player::DailyReset()
 
     m_DFQuests.clear(); // Dungeon Finder Quests.
 
+    for (uint16 slot = 0; slot < MAX_QUEST_LOG_SIZE; ++slot)
+    {
+        uint32 questId = GetQuestSlotQuestId(slot);
+        if (!questId)
+            continue;
+
+        Quest const* quest = sObjectMgr->GetQuestTemplate(questId);
+        if (!quest || !quest->IsDaily() || !quest->HasFlagEx(QUEST_FLAGS_EX_REMOVE_ON_PERIODIC_RESET))
+            continue;
+
+        SetQuestSlot(slot, 0);
+        AbandonQuest(questId);
+        RemoveActiveQuest(questId);
+
+        if (quest->GetLimitTime())
+            RemoveTimedQuest(questId);
+    }
+
     // DB data deleted in caller
     m_DailyQuestChanged = false;
     m_lastDailyQuestTime = 0;
@@ -23765,6 +23803,24 @@ void Player::ResetWeeklyQuestStatus()
     for (uint32 questId : m_weeklyquests)
         if (uint32 questBit = sDB2Manager.GetQuestUniqueBitFlag(questId))
             SetQuestCompletedBit(questBit, false);
+
+    for (uint16 slot = 0; slot < MAX_QUEST_LOG_SIZE; ++slot)
+    {
+        uint32 questId = GetQuestSlotQuestId(slot);
+        if (!questId)
+            continue;
+
+        Quest const* quest = sObjectMgr->GetQuestTemplate(questId);
+        if (!quest || !quest->IsWeekly() || !quest->HasFlagEx(QUEST_FLAGS_EX_REMOVE_ON_PERIODIC_RESET))
+            continue;
+
+        SetQuestSlot(slot, 0);
+        AbandonQuest(questId);
+        RemoveActiveQuest(questId);
+
+        if (quest->GetLimitTime())
+            RemoveTimedQuest(questId);
+    }
 
     m_weeklyquests.clear();
     // DB data deleted in caller
