@@ -62,8 +62,10 @@ void Conversation::RemoveFromWorld()
 
 void Conversation::Update(uint32 diff)
 {
-    if (GetDuration() > int32(diff))
-        _duration -= diff;
+    sScriptMgr->OnConversationUpdate(this, diff);
+
+    if (GetDuration() > Milliseconds(diff))
+        _duration -= Milliseconds(diff);
     else
     {
         Remove(); // expired
@@ -200,6 +202,7 @@ bool Conversation::Start()
     if (!GetMap()->AddToMap(this))
         return false;
 
+    sScriptMgr->OnConversationStart(this);
     return true;
 }
 
