@@ -489,6 +489,8 @@ public:
     bool IsDeletable() const override;
     Spell const* GetSpell() const { return m_Spell; }
 
+    std::string GetDebugInfo() const { return m_Spell->GetDebugInfo(); }
+
 protected:
     Spell* m_Spell;
 };
