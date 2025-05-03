@@ -4880,6 +4880,170 @@ class spell_gen_impatient_mind : public AuraScript
     }
 };
 
+// 209352 - Boost 2.0 [Paladin+Priest] - Watch for Shield
+class spell_gen_boost_2_0_paladin_priest_watch_for_shield : public AuraScript
+{
+    PrepareAuraScript(spell_gen_boost_2_0_paladin_priest_watch_for_shield);
+
+    static constexpr uint32 SPELL_POWER_WORD_SHIELD = 17;
+    static constexpr uint32 SPELL_DIVINE_SHIELD = 642;
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_POWER_WORD_SHIELD, SPELL_DIVINE_SHIELD });
+    }
+
+    bool CheckProc(AuraEffect const* /*aurEff*/, ProcEventInfo& procInfo)
+    {
+        SpellInfo const* spellInfo = procInfo.GetSpellInfo();
+        return spellInfo && (spellInfo->Id == SPELL_POWER_WORD_SHIELD || spellInfo->Id == SPELL_DIVINE_SHIELD);
+    }
+
+    void Register() override
+    {
+        DoCheckEffectProc += AuraCheckEffectProcFn(spell_gen_boost_2_0_paladin_priest_watch_for_shield::CheckProc, EFFECT_0, SPELL_AURA_PROC_TRIGGER_SPELL);
+    }
+};
+
+// 269083 - Enlisted
+// 282559 - Enlisted
+class spell_gen_war_mode_enlisted : public AuraScript
+{
+    PrepareAuraScript(spell_gen_war_mode_enlisted);
+
+    void CalcWarModeBonus(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
+    {
+        Player* target = GetUnitOwner()->ToPlayer();
+        if (!target)
+            return;
+
+        switch (target->GetTeamId())
+        {
+            case TEAM_ALLIANCE:
+                amount = sWorldStateMgr->GetValue(WS_WAR_MODE_ALLIANCE_BUFF_VALUE, target->GetMap());
+                break;
+            case TEAM_HORDE:
+                amount = sWorldStateMgr->GetValue(WS_WAR_MODE_HORDE_BUFF_VALUE, target->GetMap());
+                break;
+            default:
+                break;
+        }
+    }
+
+    void Register() override
+    {
+        SpellInfo const* spellInfo = sSpellMgr->AssertSpellInfo(m_scriptSpellId, DIFFICULTY_NONE);
+
+        if (spellInfo->HasAura(SPELL_AURA_MOD_XP_PCT))
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_XP_PCT);
+
+        if (spellInfo->HasAura(SPELL_AURA_MOD_XP_QUEST_PCT))
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_XP_QUEST_PCT);
+
+        if (spellInfo->HasAura(SPELL_AURA_MOD_CURRENCY_GAIN_FROM_SOURCE))
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_CURRENCY_GAIN_FROM_SOURCE);
+
+        if (spellInfo->HasAura(SPELL_AURA_MOD_MONEY_GAIN))
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_MONEY_GAIN);
+
+        if (spellInfo->HasAura(SPELL_AURA_MOD_ANIMA_GAIN))
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_MOD_ANIMA_GAIN);
+
+        if (spellInfo->HasAura(SPELL_AURA_DUMMY))
+            DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_gen_war_mode_enlisted::CalcWarModeBonus, EFFECT_ALL, SPELL_AURA_DUMMY);
+    }
+};
+
+enum DefenderOfAzerothData
+{
+    SPELL_DEATH_GATE_TELEPORT_STORMWIND = 316999,
+    SPELL_DEATH_GATE_TELEPORT_ORGRIMMAR = 317000,
+
+    QUEST_DEFENDER_OF_AZEROTH_ALLIANCE  = 58902,
+    QUEST_DEFENDER_OF_AZEROTH_HORDE     = 58903,
+
+    NPC_NAZGRIM                         = 161706,
+    NPC_TROLLBANE                       = 161707,
+    NPC_WHITEMANE                       = 161708,
+    NPC_MOGRAINE                        = 161709,
+};
+
+struct BindLocation
+{
+    BindLocation(uint32 mapId, float x, float y, float z, float o, uint32 areaId)
+        : Loc(mapId, x, y, z, o), AreaId(areaId) { }
+    WorldLocation Loc;
+    uint32 AreaId;
+};
+
+BindLocation const StormwindInnLoc(0, -8868.1f, 675.82f, 97.9f, 5.164778709411621093f, 5148);
+BindLocation const OrgrimmarInnLoc(1, 1573.18f, -4441.62f, 16.06f, 1.818284034729003906f, 8618);
+
+class spell_defender_of_azeroth_death_gate_selector : public SpellScript
+{
+    PrepareSpellScript(spell_defender_of_azeroth_death_gate_selector);
+
+    bool Validate(SpellInfo const* /*spell*/) override
+    {
+        return ValidateSpellInfo(
+        {
+            SPELL_DEATH_GATE_TELEPORT_STORMWIND,
+            SPELL_DEATH_GATE_TELEPORT_ORGRIMMAR
+        });
+    }
+
+    void HandleDummy(SpellEffIndex /*effIndex*/)
+    {
+        Player* player = GetHitUnit()->ToPlayer();
+        if (!player)
+            return;
+
+        if (player->GetQuestStatus(QUEST_DEFENDER_OF_AZEROTH_ALLIANCE) == QUEST_STATUS_NONE && player->GetQuestStatus(QUEST_DEFENDER_OF_AZEROTH_HORDE) == QUEST_STATUS_NONE)
+            return;
+
+        BindLocation bindLoc = player->GetTeam() == ALLIANCE ? StormwindInnLoc : OrgrimmarInnLoc;
+        player->SetHomebind(bindLoc.Loc, bindLoc.AreaId);
+        player->SendBindPointUpdate();
+        player->SendPlayerBound(player->GetGUID(), bindLoc.AreaId);
+
+        player->CastSpell(player, player->GetTeam() == ALLIANCE ? SPELL_DEATH_GATE_TELEPORT_STORMWIND : SPELL_DEATH_GATE_TELEPORT_ORGRIMMAR);
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_defender_of_azeroth_death_gate_selector::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+    }
+};
+
+class spell_defender_of_azeroth_speak_with_mograine : public SpellScript
+{
+    PrepareSpellScript(spell_defender_of_azeroth_speak_with_mograine);
+
+    void HandleDummy(SpellEffIndex /*effIndex*/)
+    {
+        if (!GetCaster())
+            return;
+
+        Player* player = GetCaster()->ToPlayer();
+        if (!player)
+            return;
+
+        if (Creature* nazgrim = GetHitUnit()->FindNearestCreature(NPC_NAZGRIM, 10.0f))
+            nazgrim->HandleEmoteCommand(EMOTE_ONESHOT_POINT, player);
+        if (Creature* trollbane = GetHitUnit()->FindNearestCreature(NPC_TROLLBANE, 10.0f))
+            trollbane->HandleEmoteCommand(EMOTE_ONESHOT_POINT, player);
+        if (Creature* whitemane = GetHitUnit()->FindNearestCreature(NPC_WHITEMANE, 10.0f))
+            whitemane->HandleEmoteCommand(EMOTE_ONESHOT_POINT, player);
+
+        // @TODO: spawntracking - show death gate for casting player
+    }
+
+    void Register() override
+    {
+        OnEffectHitTarget += SpellEffectFn(spell_defender_of_azeroth_speak_with_mograine::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+    }
+};
+
 // 118301 - Summon Battle Pet
 class spell_summon_battle_pet : public SpellScript
 {
@@ -5436,6 +5600,7 @@ void AddSC_generic_spell_scripts()
     RegisterSpellScript(spell_gen_azgalor_rain_of_fire_hellfire_citadel);
     RegisterSpellScript(spell_gen_face_rage);
     RegisterSpellScript(spell_gen_impatient_mind);
+    RegisterSpellScript(spell_gen_boost_2_0_paladin_priest_watch_for_shield);
     RegisterSpellScript(spell_summon_battle_pet);
     RegisterSpellScript(spell_gen_trainer_heal_cooldown);
     RegisterSpellScript(spell_gen_anchor_here);

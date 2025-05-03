@@ -4477,6 +4477,65 @@ class spell_item_eggnog : public SpellScript
     }
 };
 
+enum SephuzsSecret
+{
+    SPELL_SEPHUZS_SECRET_COOLDOWN = 226262
+};
+
+// 208051 - Sephuz's Secret
+// 234867 - Sephuz's Secret
+// 236763 - Sephuz's Secret
+class spell_item_sephuzs_secret : public AuraScript
+{
+    PrepareAuraScript(spell_item_sephuzs_secret);
+
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_SEPHUZS_SECRET_COOLDOWN });
+    }
+
+    bool CheckProc(AuraEffect const* /*aurEff*/, ProcEventInfo& eventInfo)
+    {
+        if (GetUnitOwner()->HasAura(SPELL_SEPHUZS_SECRET_COOLDOWN))
+            return false;
+
+        if (eventInfo.GetHitMask() & (PROC_HIT_INTERRUPT | PROC_HIT_DISPEL))
+            return true;
+
+        Spell const* procSpell = eventInfo.GetProcSpell();
+        if (!procSpell)
+            return false;
+
+        bool isCrowdControl = procSpell->GetSpellInfo()->HasAura(SPELL_AURA_MOD_CONFUSE)
+            || procSpell->GetSpellInfo()->HasAura(SPELL_AURA_MOD_FEAR)
+            || procSpell->GetSpellInfo()->HasAura(SPELL_AURA_MOD_STUN)
+            || procSpell->GetSpellInfo()->HasAura(SPELL_AURA_MOD_PACIFY)
+            || procSpell->GetSpellInfo()->HasAura(SPELL_AURA_MOD_ROOT)
+            || procSpell->GetSpellInfo()->HasAura(SPELL_AURA_MOD_SILENCE)
+            || procSpell->GetSpellInfo()->HasAura(SPELL_AURA_MOD_PACIFY_SILENCE)
+            || procSpell->GetSpellInfo()->HasAura(SPELL_AURA_MOD_ROOT_2);
+
+        if (!isCrowdControl)
+            return false;
+
+        return true;
+    }
+
+    void HandleProc(AuraEffect* aurEff, ProcEventInfo& procInfo)
+    {
+        PreventDefaultAction();
+
+        GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_SEPHUZS_SECRET_COOLDOWN, TRIGGERED_FULL_MASK);
+        GetUnitOwner()->CastSpell(procInfo.GetProcTarget(), aurEff->GetSpellEffectInfo().TriggerSpell, CastSpellExtraArgs(aurEff).SetTriggeringSpell(procInfo.GetProcSpell()));
+    }
+
+    void Register() override
+    {
+        DoCheckEffectProc += AuraCheckEffectProcFn(spell_item_sephuzs_secret::CheckProc, EFFECT_0, SPELL_AURA_PROC_TRIGGER_SPELL);
+        OnEffectProc += AuraEffectProcFn(spell_item_sephuzs_secret::HandleProc, EFFECT_0, SPELL_AURA_PROC_TRIGGER_SPELL);
+    }
+};
+
 enum AmalgamsSeventhSpine
 {
     SPELL_FRAGILE_ECHOES_MONK               = 225281,
@@ -4981,6 +5040,7 @@ void AddSC_item_spell_scripts()
     RegisterSpellScript(spell_item_crazy_alchemists_potion);
     RegisterSpellScript(spell_item_eggnog);
 
+    RegisterSpellScript(spell_item_sephuzs_secret);
     RegisterSpellScript(spell_item_amalgams_seventh_spine);
     RegisterSpellScript(spell_item_amalgams_seventh_spine_mana_restore);
     RegisterSpellScript(spell_item_set_march_of_the_legion);
