@@ -2314,7 +2314,7 @@ enum Targets
     TARGET_UNK_145                              = 145,
     TARGET_UNK_146                              = 146,
     TARGET_UNK_147                              = 147,
-    TARGET_UNK_148                              = 148,
+    TARGET_DEST_DEST_TARGET_TOWARDS_CASTER      = 148,
     TARGET_UNK_149                              = 149,
     TOTAL_SPELL_TARGETS
 };
