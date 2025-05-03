@@ -4898,8 +4898,8 @@ struct LiquidMaterialMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { FT_BYTE, 1, true },
+        { FT_BYTE, 1, true },
     };
 
     static constexpr DB2Meta Instance{ 1132538, -1, 2, 0x62BE0340, Fields, -1 };
@@ -4911,7 +4911,7 @@ struct LiquidObjectMeta
     {
         { FT_FLOAT, 1, false },
         { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
+        { FT_SHORT, 1, true },
         { FT_BYTE, 1, false },
         { FT_BYTE, 1, false },
     };
