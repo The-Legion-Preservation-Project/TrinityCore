@@ -954,8 +954,8 @@ void WorldSession::HandleSocketGems(WorldPackets::Item::SocketGems& socketGems)
             gems[i] = gem;
             gemData[i].ItemId = gem->GetEntry();
             gemData[i].Context = gem->GetUInt32Value(ITEM_FIELD_CONTEXT);
-            for (std::size_t b = 0; b < gem->GetDynamicValues(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS).size() && b < 16; ++b)
-                gemData[i].BonusListIDs[b] = gem->GetDynamicValue(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS, b);
+            for (std::size_t b = 0; b < gem->GetBonusListIDs().size() && b < 16; ++b)
+                gemData[i].BonusListIDs[b] = gem->GetBonusListIDs()[b];
 
             gemProperties[i] = sGemPropertiesStore.LookupEntry(gem->GetTemplate()->GetGemProperties());
         }

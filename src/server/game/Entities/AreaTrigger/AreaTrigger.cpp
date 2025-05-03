@@ -272,6 +272,15 @@ bool AreaTrigger::CreateServer(Map* map, AreaTriggerTemplate const* areaTriggerT
 
     SetObjectScale(1.0f);
 
+    SetFloatValue(AREATRIGGER_BOUNDS_RADIUS_2D, GetMaxSearchRadius());
+    SetUInt32Value(AREATRIGGER_DECAL_PROPERTIES_ID, 24); // blue decal, for .debug areatrigger visibility
+
+    float tmp = 1.0000001f;
+    uint32 tmp2;
+    memcpy(&tmp2, &tmp, sizeof(tmp));
+    SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE), tmp2);
+    SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE), true);
+
     _shape = position.Shape;
     _maxSearchRadius = _shape.GetMaxSearchRadius();
 
@@ -982,4 +991,20 @@ void AreaTrigger::AI_Initialize()
 void AreaTrigger::AI_Destroy()
 {
     _ai.reset();
+}
+
+bool AreaTrigger::IsNeverVisibleFor(WorldObject const* seer, bool allowServersideObjects) const
+{
+    if (WorldObject::IsNeverVisibleFor(seer, allowServersideObjects))
+        return true;
+
+    if (IsServerSide() && !allowServersideObjects)
+    {
+        if (Player const* seerPlayer = seer->ToPlayer())
+            return !seerPlayer->isDebugAreaTriggers;
+
+        return true;
+    }
+
+    return false;
 }

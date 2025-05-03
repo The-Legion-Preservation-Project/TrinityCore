@@ -2157,6 +2157,22 @@ struct ItemClassLoadInfo
     static constexpr DB2LoadInfo Instance{ Fields, 5, &ItemClassMeta::Instance, HOTFIX_SEL_ITEM_CLASS };
 };
 
+struct ItemContextPickerEntryLoadInfo
+{
+    static constexpr DB2FieldMeta Fields[7] =
+    {
+        { false, FT_INT, "ID" },
+        { false, FT_BYTE, "ItemCreationContext" },
+        { false, FT_BYTE, "OrderIndex" },
+        { true, FT_INT, "PVal" },
+        { false, FT_INT, "Flags" },
+        { false, FT_INT, "PlayerConditionID" },
+        { false, FT_INT, "ItemContextPickerID" },
+    };
+
+    static constexpr DB2LoadInfo Instance{ Fields, 7, &ItemContextPickerEntryMeta::Instance, HOTFIX_SEL_ITEM_CONTEXT_PICKER_ENTRY };
+};
+
 struct ItemCurrencyCostLoadInfo
 {
     static constexpr DB2FieldMeta Fields[2] =

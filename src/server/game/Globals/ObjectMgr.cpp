@@ -35,6 +35,7 @@
 #include "GuildMgr.h"
 #include "InstanceScript.h"
 #include "Item.h"
+#include "ItemBonusMgr.h"
 #include "Language.h"
 #include "LFGMgr.h"
 #include "Log.h"
@@ -9722,11 +9723,11 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, VendorItem const& vItem, 
             return false;
         }
 
-        for (int32 bonusList : vItem.BonusListIDs)
+        for (int32 bonusListId : vItem.BonusListIDs)
         {
-            if (!sDB2Manager.GetItemBonusList(bonusList))
+            if (ItemBonusMgr::GetItemBonuses(bonusListId).empty())
             {
-                TC_LOG_ERROR("sql.sql", "Table `(game_event_)npc_vendor` have Item (Entry: {}) with invalid bonus {} for vendor ({}), ignore", vItem.item, bonusList, vendor_entry);
+                TC_LOG_ERROR("sql.sql", "Table `(game_event_)npc_vendor` have Item (Entry: {}) with invalid bonus {} for vendor ({}), ignore", vItem.item, bonusListId, vendor_entry);
                 return false;
             }
         }
