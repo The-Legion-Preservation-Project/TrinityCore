@@ -1748,6 +1748,17 @@ struct ItemClassEntry
     uint8 Flags;
 };
 
+struct ItemContextPickerEntryEntry
+{
+    uint32 ID;
+    uint8 ItemCreationContext;
+    uint8 OrderIndex;
+    int32 PVal;
+    uint32 Flags;
+    uint32 PlayerConditionID;
+    uint32 ItemContextPickerID;
+};
+
 struct ItemCurrencyCostEntry
 {
     uint32 ID;
