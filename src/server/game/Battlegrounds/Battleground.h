@@ -82,10 +82,10 @@ enum BattlegroundQuests
     SPELL_AB_QUEST_REWARD_5_BASES   = 24064
 };
 
-enum BattlegroundMarksCount
+enum BattlegroundChests
 {
-    ITEM_WINNER_COUNT               = 3,
-    ITEM_LOSER_COUNT                = 1
+    ITEM_BG_ALLIANCE_CHEST  = 151557,
+    ITEM_BG_HORDE_CHEST     = 151558
 };
 
 enum BattlegroundCreatures
@@ -378,6 +378,7 @@ class TC_GAME_API Battleground : public ZoneScript
         void RemoveAuraOnTeam(uint32 SpellID, uint32 TeamID);
         void RewardHonorToTeam(uint32 Honor, uint32 TeamID);
         void RewardReputationToTeam(uint32 faction_id, uint32 Reputation, uint32 TeamID);
+        void RewardChestToTeam(uint32 TeamID);
         void UpdateWorldState(int32 worldStateId, int32 value, bool hidden = false);
         virtual void EndBattleground(uint32 winner);
         void BlockMovement(Player* player);

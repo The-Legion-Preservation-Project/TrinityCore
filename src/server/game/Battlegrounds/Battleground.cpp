@@ -633,6 +633,13 @@ void Battleground::RewardReputationToTeam(uint32 faction_id, uint32 Reputation, 
     }
 }
 
+void Battleground::RewardChestToTeam(uint32 TeamID)
+{
+    for (BattlegroundPlayerMap::const_iterator itr = m_Players.begin(); itr != m_Players.end(); ++itr)
+        if (Player* player = _GetPlayerForTeam(TeamID, itr, "RewardChestToTeam"))
+            player->AddItem(player->IsInAlliance() ? ITEM_BG_ALLIANCE_CHEST : ITEM_BG_HORDE_CHEST, 1);
+}
+
 void Battleground::UpdateWorldState(int32 worldStateId, int32 value, bool hidden /*= false*/)
 {
     sWorldStateMgr->SetValue(worldStateId, value, hidden, GetBgMap());
@@ -696,6 +703,8 @@ void Battleground::EndBattleground(uint32 winner)
     BuildPvPLogDataPacket(pvpLogData);
 
     BattlegroundQueueTypeId bgQueueTypeId = GetQueueId();
+
+    RewardChestToTeam(winner);
 
     for (BattlegroundPlayerMap::iterator itr = m_Players.begin(); itr != m_Players.end(); ++itr)
     {
