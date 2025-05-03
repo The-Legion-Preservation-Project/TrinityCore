@@ -5615,7 +5615,9 @@ void Player::SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal)
             if (itr->second.uState == SKILL_UNCHANGED)
             {
                 if (currVal == 0)   // activated skill, mark as new to save into database
-                    itr->second.uState = SKILL_NEW;
+                    itr->second.uState = itr->second.uState != SKILL_DELETED
+                        ? SKILL_NEW
+                        : SKILL_CHANGED; // skills marked as SKILL_DELETED already exist in database, mark as changed instead of new
                 else                // updated skill, mark as changed to save into database
                     itr->second.uState = SKILL_CHANGED;
             }
@@ -5632,9 +5634,10 @@ void Player::SetSkill(uint32 id, uint16 step, uint16 newVal, uint16 maxVal)
             SetSkillTempBonus(itr->second.pos, 0);
             SetSkillPermBonus(itr->second.pos, 0);
 
-            // mark as deleted or simply remove from map if not saved yet
-            if (itr->second.uState != SKILL_NEW)
-                itr->second.uState = SKILL_DELETED;
+            // mark as deleted so the next save will delete the data from the database
+            itr->second.uState = itr->second.uState != SKILL_NEW
+                ? SKILL_DELETED
+                : SKILL_UNCHANGED; // skills marked as SKILL_NEW don't exist in database (this distinction is not neccessary for deletion but for re-learning the same skill before save to db happens)
 
             // remove all spells that related to this skill
             for (uint32 j = 0; j < sSkillLineAbilityStore.GetNumRows(); ++j)
