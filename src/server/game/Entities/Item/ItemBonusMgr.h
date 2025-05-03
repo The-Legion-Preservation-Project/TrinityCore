@@ -25,6 +25,8 @@ namespace ItemBonusMgr
 {
 TC_GAME_API void Load();
 
+TC_GAME_API ItemContext GetContextForPlayer(MapDifficultyEntry const* mapDifficulty, Player const* player);
+
 TC_GAME_API std::span<ItemBonusEntry const*> GetItemBonuses(uint32 bonustListId);
 
 TC_GAME_API uint32 GetItemBonusListForItemLevelDelta(int16 delta);

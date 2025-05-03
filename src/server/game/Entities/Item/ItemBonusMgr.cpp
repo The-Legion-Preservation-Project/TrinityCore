@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ConditionMgr.h"
 #include "DB2Stores.h"
 #include "ItemBonusMgr.h"
 #include "MapUtils.h"
@@ -54,6 +55,57 @@ void Load()
 
     for (ItemXBonusTreeEntry const* itemBonusTreeAssignment : sItemXBonusTreeStore)
         _itemToBonusTree.insert({ itemBonusTreeAssignment->ItemID, itemBonusTreeAssignment->ItemBonusTreeID });
+}
+
+ItemContext GetContextForPlayer(MapDifficultyEntry const* mapDifficulty, Player const* player)
+{
+    auto evalContext = [](ItemContext currentContext, ItemContext newContext)
+    {
+        if (newContext == ItemContext::NONE)
+            newContext = currentContext;
+        else if (newContext == ItemContext::Force_to_NONE)
+            newContext = ItemContext::NONE;
+
+        return newContext;
+    };
+
+    ItemContext context = ItemContext::NONE;
+    if (DifficultyEntry const* difficulty = sDifficultyStore.LookupEntry(mapDifficulty->DifficultyID))
+        context = evalContext(context, ItemContext(difficulty->ItemContext));
+
+    context = evalContext(context, ItemContext(mapDifficulty->ItemContext));
+
+    if (mapDifficulty->ItemContextPickerID)
+    {
+        ItemContextPickerEntryEntry const* selectedPickerEntry = nullptr;
+        for (ItemContextPickerEntryEntry const* itemContextPickerEntry : sItemContextPickerEntryStore)
+        {
+            if (itemContextPickerEntry->ItemContextPickerID != mapDifficulty->ItemContextPickerID)
+                continue;
+
+            if (itemContextPickerEntry->PVal <= 0)
+                continue;
+
+            bool meetsPlayerCondition = false;
+            if (player)
+                if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(itemContextPickerEntry->PlayerConditionID))
+                    meetsPlayerCondition = ConditionMgr::IsPlayerMeetingCondition(player, playerCondition);
+
+            if (itemContextPickerEntry->Flags & 0x1)
+                meetsPlayerCondition = !meetsPlayerCondition;
+
+            if (!meetsPlayerCondition)
+                continue;
+
+            if (!selectedPickerEntry || selectedPickerEntry->OrderIndex < itemContextPickerEntry->OrderIndex)
+                selectedPickerEntry = itemContextPickerEntry;
+        }
+
+        if (selectedPickerEntry)
+            context = evalContext(context, ItemContext(selectedPickerEntry->ItemCreationContext));
+    }
+
+    return context;
 }
 
 std::span<ItemBonusEntry const*> GetItemBonuses(uint32 bonusListId)

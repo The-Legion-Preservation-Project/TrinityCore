@@ -34,6 +34,7 @@
 #include "GridNotifiersImpl.h"
 #include "Group.h"
 #include "Item.h"
+#include "ItemBonusMgr.h"
 #include "Log.h"
 #include "Loot.h"
 #include "LootMgr.h"
@@ -1453,9 +1454,10 @@ Loot* GameObject::GetFishLoot(Player* lootOwner)
     Loot* fishLoot = new Loot(GetMap(), GetGUID(), LOOT_FISHING, nullptr);
 
     uint32 areaId = GetAreaId();
+    ItemContext itemContext = ItemBonusMgr::GetContextForPlayer(GetMap()->GetMapDifficulty(), lootOwner);
     while (AreaTableEntry const* areaEntry = sAreaTableStore.LookupEntry(areaId))
     {
-        fishLoot->FillLoot(areaId, LootTemplates_Fishing, lootOwner, true, true);
+        fishLoot->FillLoot(areaId, LootTemplates_Fishing, lootOwner, true, true, LOOT_MODE_DEFAULT, itemContext);
         if (!fishLoot->isLooted())
             break;
 
@@ -1463,7 +1465,7 @@ Loot* GameObject::GetFishLoot(Player* lootOwner)
     }
 
     if (fishLoot->isLooted())
-        fishLoot->FillLoot(defaultzone, LootTemplates_Fishing, lootOwner, true, true);
+        fishLoot->FillLoot(defaultzone, LootTemplates_Fishing, lootOwner, true, true, LOOT_MODE_DEFAULT, itemContext);
 
     return fishLoot;
 }
@@ -1475,9 +1477,10 @@ Loot* GameObject::GetFishLootJunk(Player* lootOwner)
     Loot* fishLoot = new Loot(GetMap(), GetGUID(), LOOT_FISHING_JUNK, nullptr);
 
     uint32 areaId = GetAreaId();
+    ItemContext itemContext = ItemBonusMgr::GetContextForPlayer(GetMap()->GetMapDifficulty(), lootOwner);
     while (AreaTableEntry const* areaEntry = sAreaTableStore.LookupEntry(areaId))
     {
-        fishLoot->FillLoot(areaId, LootTemplates_Fishing, lootOwner, true, true, LOOT_MODE_JUNK_FISH);
+        fishLoot->FillLoot(areaId, LootTemplates_Fishing, lootOwner, true, true, LOOT_MODE_JUNK_FISH, itemContext);
         if (!fishLoot->isLooted())
             break;
 
@@ -1485,7 +1488,7 @@ Loot* GameObject::GetFishLootJunk(Player* lootOwner)
     }
 
     if (fishLoot->isLooted())
-        fishLoot->FillLoot(defaultzone, LootTemplates_Fishing, lootOwner, true, true, LOOT_MODE_JUNK_FISH);
+        fishLoot->FillLoot(defaultzone, LootTemplates_Fishing, lootOwner, true, true, LOOT_MODE_JUNK_FISH, itemContext);;
 
     return fishLoot;
 }
@@ -2233,7 +2236,7 @@ void GameObject::Use(Unit* user)
                     m_loot.reset(loot);
 
                     loot->SetDungeonEncounterId(info->chest.DungeonEncounter);
-                    loot->FillLoot(info->GetLootId(), LootTemplates_Gameobject, player, !groupRules, false, GetLootMode(), GetMap()->GetDifficultyLootItemContext());
+                    loot->FillLoot(info->GetLootId(), LootTemplates_Gameobject, player, !groupRules, false, GetLootMode(), ItemBonusMgr::GetContextForPlayer(GetMap()->GetMapDifficulty(), player));
 
                     if (GetLootMode() > 0)
                         if (GameObjectTemplateAddon const* addon = GetTemplateAddon())
@@ -2264,7 +2267,7 @@ void GameObject::Use(Unit* user)
 
                         m_personalLoot = GenerateDungeonEncounterPersonalLoot(info->chest.DungeonEncounter, info->chest.chestPersonalLoot,
                             LootTemplates_Gameobject, LOOT_CHEST, this, addon ? addon->Mingold : 0, addon ? addon->Maxgold : 0,
-                            GetLootMode(), GetMap()->GetDifficultyLootItemContext(), tappers);
+                            GetLootMode(), GetMap()->GetMapDifficulty(), tappers);
                     }
                     else
                     {
@@ -2272,7 +2275,7 @@ void GameObject::Use(Unit* user)
                         m_personalLoot[player->GetGUID()].reset(loot);
 
                         loot->SetDungeonEncounterId(info->chest.DungeonEncounter);
-                        loot->FillLoot(info->chest.chestPersonalLoot, LootTemplates_Gameobject, player, true, false, GetLootMode(), GetMap()->GetDifficultyLootItemContext());
+                        loot->FillLoot(info->chest.chestPersonalLoot, LootTemplates_Gameobject, player, true, false, GetLootMode(), ItemBonusMgr::GetContextForPlayer(GetMap()->GetMapDifficulty(), player));
 
                         if (GetLootMode() > 0 && addon)
                             loot->generateMoneyLoot(addon->Mingold, addon->Maxgold);
@@ -2285,7 +2288,7 @@ void GameObject::Use(Unit* user)
                 if (info->chest.chestPushLoot)
                 {
                     Loot pushLoot(GetMap(), GetGUID(), LOOT_CHEST, nullptr);
-                    pushLoot.FillLoot(info->chest.chestPushLoot, LootTemplates_Gameobject, player, true, false, GetLootMode(), GetMap()->GetDifficultyLootItemContext());
+                    pushLoot.FillLoot(info->chest.chestPushLoot, LootTemplates_Gameobject, player, true, false, GetLootMode(), ItemBonusMgr::GetContextForPlayer(GetMap()->GetMapDifficulty(), player));
                     pushLoot.AutoStore(player, NULL_BAG, NULL_SLOT);
                 }
 
@@ -2787,7 +2790,7 @@ void GameObject::Use(Unit* user)
             Player* player = user->ToPlayer();
 
             Loot* loot = new Loot(GetMap(), GetGUID(), LOOT_FISHINGHOLE, nullptr);
-            loot->FillLoot(GetGOInfo()->GetLootId(), LootTemplates_Gameobject, player, true);
+            loot->FillLoot(GetGOInfo()->GetLootId(), LootTemplates_Gameobject, player, true, false, LOOT_MODE_DEFAULT, ItemBonusMgr::GetContextForPlayer(GetMap()->GetMapDifficulty(), player));
             m_personalLoot[player->GetGUID()].reset(loot);
 
             player->SendLoot(*loot);
@@ -2931,7 +2934,7 @@ void GameObject::Use(Unit* user)
                     Loot* loot = new Loot(GetMap(), GetGUID(), LOOT_CHEST, nullptr);
                     m_personalLoot[player->GetGUID()].reset(loot);
 
-                    loot->FillLoot(info->gatheringNode.chestLoot, LootTemplates_Gameobject, player, true, false, GetLootMode(), GetMap()->GetDifficultyLootItemContext());
+                    loot->FillLoot(info->gatheringNode.chestLoot, LootTemplates_Gameobject, player, true, false, GetLootMode(), ItemBonusMgr::GetContextForPlayer(GetMap()->GetMapDifficulty(), player));
                 }
 
                 if (info->gatheringNode.triggeredEvent)
