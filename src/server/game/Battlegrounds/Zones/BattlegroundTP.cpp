@@ -67,7 +67,6 @@ BattlegroundTP::BattlegroundTP(BattlegroundTemplate const* battlegroundTemplate)
     m_ReputationCapture = 0;
     m_HonorWinKills = 0;
     m_HonorEndKills = 0;
-    _minutesElapsed = 0;
 }
 
 BattlegroundTP::~BattlegroundTP() { }
@@ -105,11 +104,6 @@ void BattlegroundTP::PostUpdateImpl(uint32 diff)
                         EndBattleground(HORDE);
                     else
                         EndBattleground(ALLIANCE);
-                    break;
-                case TP_EVENT_UPDATE_BATTLEGROUND_TIMER:
-                    _minutesElapsed++;
-                    UpdateWorldState(BG_TP_STATE_TIMER, 25 - _minutesElapsed);
-                    events.Repeat(Minutes(1));
                     break;
                 default:
                     break;
@@ -239,14 +233,11 @@ void BattlegroundTP::StartingEventOpenDoors()
     // Scheduling flag spawn event
     events.ScheduleEvent(TP_EVENT_SPAWN_FLAGS, Seconds(2) + Milliseconds(500));
 
-    // Schedulung battleground timer update
-    events.ScheduleEvent(TP_EVENT_UPDATE_BATTLEGROUND_TIMER, Minutes(1));
+    UpdateWorldState(BG_TP_STATE_TIMER_ACTIVE, 1);
+    UpdateWorldState(BG_TP_STATE_TIMER, GameTime::GetGameTime() + 25 * MINUTE);
 
     // players joining later are not eligibles
     TriggerGameEvent(TP_EVENT_START_BATTLE);
-
-    UpdateWorldState(BG_TP_STATE_TIMER_ACTIVE, 1);
-    UpdateWorldState(BG_TP_STATE_TIMER, 25);
 }
 
 bool BattlegroundTP::SetupBattleground()
