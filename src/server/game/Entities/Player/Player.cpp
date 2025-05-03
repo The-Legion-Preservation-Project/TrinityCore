@@ -15607,19 +15607,13 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object const* questgiver) const
             {
                 if (SatisfyQuestLevel(quest, false))
                 {
-                    if (GetLevel() <= (GetQuestLevel(quest) + sWorld->getIntConfig(CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF)))
-                    {
-                        if (quest->HasFlagEx(QUEST_FLAGS_EX_LEGENDARY))
-                            result |= QuestGiverStatus::LegendaryQuest;
-                        else if (quest->IsDaily())
-                            result |= QuestGiverStatus::DailyQuest;
-                        else
-                            result |= QuestGiverStatus::Quest;
-                    }
+                    bool isTrivial = GetLevel() <= (GetQuestLevel(quest) + sWorld->getIntConfig(CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF));
+                    if (quest->HasFlagEx(QUEST_FLAGS_EX_LEGENDARY))
+                        result |= QuestGiverStatus::LegendaryQuest;
                     else if (quest->IsDaily())
-                        result |= QuestGiverStatus::TrivialDailyQuest;
+                        result |= isTrivial ? QuestGiverStatus::TrivialDailyQuest : QuestGiverStatus::DailyQuest;
                     else
-                        result |= QuestGiverStatus::Trivial;
+                        result |= isTrivial ? QuestGiverStatus::Trivial : QuestGiverStatus::Quest;
                 }
                 else
                     result |= QuestGiverStatus::Future;
@@ -20423,6 +20417,19 @@ bool Player::IsLockedToDungeonEncounter(uint32 dungeonEncounterId) const
         return false;
 
     InstanceLock const* instanceLock = sInstanceLockMgr.FindActiveInstanceLock(GetGUID(), { GetMap()->GetEntry(), GetMap()->GetMapDifficulty() });
+    if (!instanceLock)
+        return false;
+
+    return (instanceLock->GetData()->CompletedEncountersMask & (1u << dungeonEncounter->Bit)) != 0;
+}
+
+bool Player::IsLockedToDungeonEncounter(uint32 dungeonEncounterId, Difficulty difficulty) const
+{
+    DungeonEncounterEntry const* dungeonEncounter = sDungeonEncounterStore.LookupEntry(dungeonEncounterId);
+    if (!dungeonEncounter)
+        return false;
+
+    InstanceLock const* instanceLock = sInstanceLockMgr.FindActiveInstanceLock(GetGUID(), { uint32(dungeonEncounter->MapID), difficulty });
     if (!instanceLock)
         return false;
 
@@ -26691,6 +26698,146 @@ PetStable& Player::GetOrInitPetStable()
         m_petStable = std::make_unique<PetStable>();
 
     return *m_petStable;
+}
+
+void Player::SetPetSlot(uint32 petNumber, PetSaveMode dstPetSlot)
+{
+    RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags::Interacting);
+
+    WorldSession* sess = GetSession();
+    PetStable* petStable = GetPetStable();
+    if (!petStable)
+    {
+        sess->SendPetStableResult(StableResult::InternalError);
+        return;
+    }
+
+    auto [srcPet, srcPetSlot] = Pet::GetLoadPetInfo(*petStable, 0, petNumber, {});
+    PetStable::PetInfo const* dstPet = Pet::GetLoadPetInfo(*petStable, 0, 0, dstPetSlot).first;
+
+    if (!srcPet || srcPet->Type != HUNTER_PET)
+    {
+        sess->SendPetStableResult(StableResult::InternalError);
+        return;
+    }
+
+    if (dstPet && dstPet->Type != HUNTER_PET)
+    {
+        sess->SendPetStableResult(StableResult::InternalError);
+        return;
+    }
+
+    Optional<PetStable::PetInfo>* src = nullptr;
+    Optional<PetStable::PetInfo>* dst = nullptr;
+    Optional<uint32> newActivePetIndex;
+
+    if (IsActivePetSlot(srcPetSlot) && IsActivePetSlot(dstPetSlot))
+    {
+        // active<->active: only swap ActivePets and CurrentPetIndex (do not despawn pets)
+        src = &petStable->ActivePets[srcPetSlot - PET_SAVE_FIRST_ACTIVE_SLOT];
+        dst = &petStable->ActivePets[dstPetSlot - PET_SAVE_FIRST_ACTIVE_SLOT];
+
+        if (petStable->GetCurrentActivePetIndex() == uint32_t(srcPetSlot))
+            newActivePetIndex = dstPetSlot;
+        else if (petStable->GetCurrentActivePetIndex() == uint32(dstPetSlot))
+            newActivePetIndex = srcPetSlot;
+    }
+    else if (IsStabledPetSlot(srcPetSlot) && IsStabledPetSlot(dstPetSlot))
+    {
+        // stabled<->stabled: only swap StabledPets
+        src = &petStable->StabledPets[srcPetSlot - PET_SAVE_FIRST_STABLE_SLOT];
+        dst = &petStable->StabledPets[dstPetSlot - PET_SAVE_FIRST_STABLE_SLOT];
+    }
+    else if (IsActivePetSlot(srcPetSlot) && IsStabledPetSlot(dstPetSlot))
+    {
+        // active<->stabled: swap petStable contents and despawn active pet if it is involved in swap
+        if (petStable->CurrentPetIndex == uint32(srcPetSlot))
+        {
+            Pet* oldPet = GetPet();
+            if (oldPet && !oldPet->IsAlive())
+            {
+                sess->SendPetStableResult(StableResult::InternalError);
+                return;
+            }
+
+            RemovePet(oldPet, PET_SAVE_NOT_IN_SLOT);
+        }
+
+        if (dstPet)
+        {
+            CreatureTemplate const* creatureInfo = sObjectMgr->GetCreatureTemplate(dstPet->CreatureId);
+            if (!creatureInfo || !creatureInfo->IsTameable(CanTameExoticPets(), creatureInfo->GetDifficulty(DIFFICULTY_NONE)))
+            {
+                sess->SendPetStableResult(StableResult::CantControlExotic);
+                return;
+            }
+        }
+
+        src = &petStable->ActivePets[srcPetSlot - PET_SAVE_FIRST_ACTIVE_SLOT];
+        dst = &petStable->StabledPets[dstPetSlot - PET_SAVE_FIRST_STABLE_SLOT];
+    }
+    else if (IsStabledPetSlot(srcPetSlot) && IsActivePetSlot(dstPetSlot))
+    {
+        // stabled<->active: swap petStable contents and despawn active pet if it is involved in swap
+        if (petStable->CurrentPetIndex == uint32(dstPetSlot))
+        {
+            Pet* oldPet = GetPet();
+            if (oldPet && !oldPet->IsAlive())
+            {
+                sess->SendPetStableResult(StableResult::InternalError);
+                return;
+            }
+
+            RemovePet(oldPet, PET_SAVE_NOT_IN_SLOT);
+        }
+
+        CreatureTemplate const* creatureInfo = sObjectMgr->GetCreatureTemplate(srcPet->CreatureId);
+        if (!creatureInfo || !creatureInfo->IsTameable(CanTameExoticPets(), creatureInfo->GetDifficulty(DIFFICULTY_NONE)))
+        {
+            sess->SendPetStableResult(StableResult::CantControlExotic);
+            return;
+        }
+
+        src = &petStable->StabledPets[srcPetSlot - PET_SAVE_FIRST_STABLE_SLOT];
+        dst = &petStable->ActivePets[dstPetSlot - PET_SAVE_FIRST_ACTIVE_SLOT];
+    }
+
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
+
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_PET_SLOT_BY_ID);
+    stmt->setInt16(0, dstPetSlot);
+    stmt->setUInt64(1, GetGUID().GetCounter());
+    stmt->setUInt32(2, srcPet->PetNumber);
+    trans->Append(stmt);
+
+    if (dstPet)
+    {
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_PET_SLOT_BY_ID);
+        stmt->setInt16(0, srcPetSlot);
+        stmt->setUInt64(1, GetGUID().GetCounter());
+        stmt->setUInt32(2, dstPet->PetNumber);
+        trans->Append(stmt);
+    }
+
+    GetSession()->AddTransactionCallback(CharacterDatabase.AsyncCommitTransaction(trans)).AfterComplete(
+        [sess = GetSession(), this, src, dst, newActivePetIndex](bool success)
+    {
+        if (sess->GetPlayer() == this)
+        {
+            if (success)
+            {
+                std::swap(*src, *dst);
+                if (newActivePetIndex)
+                    sess->GetPlayer()->GetPetStable()->SetCurrentActivePetIndex(*newActivePetIndex);
+
+                sess->SendPetStableResult(StableResult::StableSuccess);
+            }
+            else
+            {
+                sess->SendPetStableResult(StableResult::InternalError);
+            }
+        }
+    });
 }
 
 void Player::SendItemRefundResult(Item* item, ItemExtendedCostEntry const* iece, uint8 error) const

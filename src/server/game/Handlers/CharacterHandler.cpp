@@ -389,7 +389,7 @@ void WorldSession::HandleCharEnum(CharacterDatabaseQueryHolder const& holder)
                     charInfo.HairColor = 0;
                     charInfo.FacialHair = 0;
 
-                    if (!(charInfo.Flags2 == CHAR_CUSTOMIZE_FLAG_CUSTOMIZE))
+                    if (!(charInfo.Flags2 & (CHAR_CUSTOMIZE_FLAG_CUSTOMIZE | CHAR_CUSTOMIZE_FLAG_FACTION | CHAR_CUSTOMIZE_FLAG_RACE)))
                     {
                         CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ADD_AT_LOGIN_FLAG);
                         stmt->setUInt16(0, uint16(AT_LOGIN_CUSTOMIZE));

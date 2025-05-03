@@ -387,7 +387,7 @@ namespace
 #define SET_GUID_INFO(type, format, parse) \
             Names[AsUnderlyingType(HighGuid::type)] = #type;\
             ClientFormatFunction[AsUnderlyingType(HighGuid::type)] = &ObjectGuidInfo::format;\
-            ClientParseFunction[AsUnderlyingType(HighGuid::type)] = &ObjectGuidInfo::parse;
+            ClientParseFunction[AsUnderlyingType(HighGuid::type)] = &ObjectGuidInfo::parse
 
         SET_GUID_INFO(Null, FormatNull, ParseNull);
         SET_GUID_INFO(Uniq, FormatUniq, ParseUniq);

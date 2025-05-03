@@ -10428,9 +10428,7 @@ bool Unit::InitTamedPet(Pet* pet, uint8 level, uint32 spell_id)
     pet->SetCreatorGUID(GetGUID());
     pet->SetFaction(GetFaction());
     pet->SetCreatedBySpell(spell_id);
-
-    if (GetTypeId() == TYPEID_PLAYER)
-        pet->SetUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
+    pet->SetUnitFlag(UNIT_FLAG_PLAYER_CONTROLLED);
 
     if (!pet->InitStatsForLevel(level))
     {

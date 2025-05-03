@@ -1281,6 +1281,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         PetStable* GetPetStable() { return m_petStable.get(); }
         PetStable& GetOrInitPetStable();
         PetStable const* GetPetStable() const { return m_petStable.get(); }
+        void SetPetSlot(uint32 petNumber, PetSaveMode dstPetSlot);
 
         Pet* GetPet() const;
         Pet* SummonPet(uint32 entry, Optional<PetSaveMode> slot, float x, float y, float z, float ang, uint32 despwtime, bool* isNew = nullptr);
@@ -2128,6 +2129,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SendResetInstanceFailed(ResetFailedReason reason, uint32 mapID) const;
         void SendResetFailedNotify(uint32 mapid) const;
         bool IsLockedToDungeonEncounter(uint32 dungeonEncounterId) const;
+        bool IsLockedToDungeonEncounter(uint32 dungeonEncounterId, Difficulty difficulty) const;
 
         bool UpdatePosition(float x, float y, float z, float orientation, bool teleport = false) override;
         bool UpdatePosition(Position const& pos, bool teleport = false) override { return UpdatePosition(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), teleport); }
