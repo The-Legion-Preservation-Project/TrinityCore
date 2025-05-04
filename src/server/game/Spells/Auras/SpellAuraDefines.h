@@ -471,7 +471,7 @@ enum AuraType : uint32
     SPELL_AURA_380                                          = 380,
     SPELL_AURA_381                                          = 381,
     SPELL_AURA_MOD_PET_STAT_PCT                             = 382,  // NYI
-    SPELL_AURA_IGNORE_SPELL_COOLDOWN                        = 383,  // NYI
+    SPELL_AURA_IGNORE_SPELL_COOLDOWN                        = 383,
     SPELL_AURA_384                                          = 384,
     SPELL_AURA_385                                          = 385,
     SPELL_AURA_386                                          = 386,
