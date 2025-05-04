@@ -652,6 +652,9 @@ struct ChrSpecializationEntry
     uint32 Flags;
     int32 AnimReplacements;
 
+    EnumFlag<ChrSpecializationFlag> GetFlags() const { return static_cast<ChrSpecializationFlag>(Flags); }
+    ChrSpecializationRole GetRole() const { return static_cast<ChrSpecializationRole>(Role); }
+
     bool IsPetSpecialization() const
     {
         return ClassID == 0;
