@@ -803,8 +803,17 @@ void AreaTrigger::DoActions(Unit* unit)
                     case AREATRIGGER_ACTION_TELEPORT:
                     {
                         if (WorldSafeLocsEntry const* safeLoc = sWorldSafeLocsStore.LookupEntry(action.Param))
+                        {
                             if (Player* player = caster->ToPlayer())
+                            {
+                                if (player->GetMapId() != safeLoc->MapID)
+                                {
+                                    if (WorldSafeLocsEntry const* instanceEntrance = player->GetInstanceEntrance(safeLoc->MapID))
+                                        safeLoc = instanceEntrance;
+                                }
                                 player->TeleportTo(safeLoc);
+                            }
+                        }
                         break;
                     }
                     default:
