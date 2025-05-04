@@ -254,7 +254,7 @@ bool ItemTemplate::IsUsableByLootSpecialization(Player const* player, bool alway
 
     uint32 spec = player->GetLootSpecId();
     if (!spec)
-        spec = player->GetPrimarySpecialization();
+        spec = AsUnderlyingType(player->GetPrimarySpecialization());
     if (!spec)
         spec = player->GetDefaultSpecId();
 

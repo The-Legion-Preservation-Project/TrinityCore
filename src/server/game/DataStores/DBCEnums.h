@@ -281,8 +281,9 @@ enum class ChrSpecializationRole : int8
     Dps     = 2
 };
 
-enum ChrSpecialization : uint32
+enum class ChrSpecialization : uint32
 {
+    None                        = 0,
     MageArcane                  = 62,
     MageFire                    = 63,
     MageFrost                   = 64,

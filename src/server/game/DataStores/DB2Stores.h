@@ -327,7 +327,7 @@ public:
     FriendshipRepReactionSet const* GetFriendshipRepReactions(uint32 friendshipRepID) const;
     HeirloomEntry const* GetHeirloomByItemId(uint32 itemId) const;
     std::vector<uint32> const* GetGlyphBindableSpells(uint32 glyphPropertiesId) const;
-    std::vector<uint32> const* GetGlyphRequiredSpecs(uint32 glyphPropertiesId) const;
+    std::vector<ChrSpecialization> const* GetGlyphRequiredSpecs(uint32 glyphPropertiesId) const;
     ItemChildEquipmentEntry const* GetItemChildEquipment(uint32 itemId) const;
     ItemClassEntry const* GetItemClassByOldEnum(uint32 itemClass) const;
     bool HasItemCurrencyCost(uint32 itemId) const;
