@@ -333,7 +333,7 @@ class BattlegroundAB : public Battleground
         BattlegroundAB(BattlegroundTemplate const* battlegroundTemplate);
         ~BattlegroundAB();
 
-        void AddPlayer(Player* player) override;
+        void AddPlayer(Player* player, BattlegroundQueueTypeId queueId) override;
         void StartingEventCloseDoors() override;
         void StartingEventOpenDoors() override;
         void RemovePlayer(Player* player, ObjectGuid guid, uint32 team) override;

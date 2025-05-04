@@ -614,6 +614,7 @@ CREATE TABLE `character_battleground_data` (
   `taxiStart` int unsigned NOT NULL DEFAULT '0',
   `taxiEnd` int unsigned NOT NULL DEFAULT '0',
   `mountSpell` int unsigned NOT NULL DEFAULT '0',
+  `queueId` BIGINT UNSIGNED DEFAULT '0',
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Player System';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -3172,7 +3173,7 @@ CREATE TABLE `pvpstats_battlegrounds` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `winner_faction` tinyint NOT NULL,
   `bracket_id` tinyint unsigned NOT NULL,
-  `type` tinyint unsigned NOT NULL,
+  `type` int unsigned NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3441,7 +3442,8 @@ INSERT INTO `updates` VALUES
 ('2025_01_07_00_characters_tlpp.sql','2BB8ED90546DBAD5AB432B0074AEBBA30BF128FC','ARCHIVED','2025-01-18 18:09:36',603),
 ('2022_12_17_00_characters.sql','3E005BD6B9C60653749B0B3C19CBC497092B9CCB','RELEASED','2022-12-17 18:26:43',0),
 ('2023_01_29_00_characters.sql','24FA9E0F616BF77AC588A25A8A8699903A19A5FE','RELEASED','2023-01-29 16:31:12',0),
-('2023_05_19_00_characters.sql','5E0C9338554BAA481566EDFF3FE2FCEFF1B67DA9','RELEASED','2023-05-19 18:40:42',0);
+('2023_05_19_00_characters.sql','5E0C9338554BAA481566EDFF3FE2FCEFF1B67DA9','RELEASED','2023-05-19 18:40:42',0),
+('2023_08_26_00_characters.sql','FA50838609AB5E645FB2DCAC970BD5706F9EFAAF','RELEASED','2023-08-26 12:18:22',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
