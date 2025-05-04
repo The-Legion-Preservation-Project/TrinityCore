@@ -945,7 +945,7 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
         }
 
         _chrSpecializationsByIndex[storageIndex][chrSpec->OrderIndex] = chrSpec;
-        if (chrSpec->Flags & CHR_SPECIALIZATION_FLAG_RECOMMENDED)
+        if (chrSpec->Flags & AsUnderlyingType(ChrSpecializationFlag::Recommended))
             _defaultChrSpecializationsByClass[chrSpec->ClassID] = chrSpec;
     }
 

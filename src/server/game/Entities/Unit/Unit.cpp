@@ -12726,7 +12726,7 @@ void Unit::RewardRage(uint32 baseRage, bool attacker)
     }
     // TODO: use expected max health, not actual
     else if (Player const* player = ToPlayer())
-        if (player->GetPrimarySpecialization() == TALENT_SPEC_WARRIOR_PROTECTION)
+        if (player->GetPrimarySpecialization() == ChrSpecialization::WarriorProtection)
             addRage = 50.0f * baseRage / static_cast<float>(GetMaxHealth());
 
     addRage *= sWorld->getRate(RATE_POWER_RAGE_INCOME);

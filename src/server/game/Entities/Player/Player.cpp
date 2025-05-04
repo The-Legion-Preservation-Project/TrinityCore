@@ -25724,7 +25724,7 @@ TalentLearnResult Player::LearnPvpTalent(uint32 talentID, int32* spellOnCooldown
     }
     else if (talentInfo->Role >= 0)
     {
-        if (talentInfo->Role != sChrSpecializationStore.AssertEntry(GetPrimarySpecialization())->Role)
+        if (talentInfo->Role != sChrSpecializationStore.AssertEntry(AsUnderlyingType(GetPrimarySpecialization()))->Role)
             return TALENT_FAILED_UNKNOWN;
     }
 

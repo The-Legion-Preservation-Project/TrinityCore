@@ -73,7 +73,7 @@ void WorldSession::HandleInspectOpcode(WorldPackets::Inspect::Inspect& inspect)
     }
 
     inspectResult.InspecteeGUID = inspect.Target;
-    inspectResult.SpecializationID = player->GetPrimarySpecialization();
+    inspectResult.SpecializationID = AsUnderlyingType(player->GetPrimarySpecialization());
 
     SendPacket(inspectResult.Write());
 }
