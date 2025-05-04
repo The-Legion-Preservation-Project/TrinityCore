@@ -1426,7 +1426,7 @@ void Creature::SaveToDB(uint32 mapid, std::vector<Difficulty> const& spawnDiffic
     CreatureData& data = sObjectMgr->NewOrExistCreatureData(m_spawnId);
 
     uint32 displayId = GetNativeDisplayId();
-    uint64 spawnNpcFlags = (GetUInt32Value(UNIT_NPC_FLAGS + 1) << 32) | GetUInt32Value(UNIT_NPC_FLAGS);
+    uint64 spawnNpcFlags = GetUInt64Value(UNIT_NPC_FLAGS);
     Optional<uint64> npcflag;
     Optional<uint32> unitFlags;
     Optional<uint32> unitFlags2;
