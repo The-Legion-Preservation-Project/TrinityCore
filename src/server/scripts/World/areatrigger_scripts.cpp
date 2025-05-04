@@ -16,6 +16,8 @@
  */
 
 #include "ScriptMgr.h"
+#include "AreaTrigger.h"
+#include "AreaTriggerAI.h"
 #include "DB2Structure.h"
 #include "GameObject.h"
 #include "GameTime.h"
