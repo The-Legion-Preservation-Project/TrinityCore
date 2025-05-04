@@ -38,8 +38,6 @@ enum WarriorSpells
 // 6544 - Heroic leap
 class tlpp_spell_warr_heroic_leap : public SpellScript
 {
-    PrepareSpellScript(tlpp_spell_warr_heroic_leap);
-
 public:
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
@@ -106,8 +104,6 @@ public:
 // 190456 - Ignore Pain
 class tlpp_spell_warr_ignore_pain : public SpellScript
 {
-    PrepareSpellScript(tlpp_spell_warr_ignore_pain);
-
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
         return ValidateSpellInfo({ SPELL_WARRIOR_RENEWED_FURY, SPELL_WARRIOR_VENGEANCE_FOCUSED_RAGE });
@@ -133,8 +129,6 @@ class tlpp_spell_warr_ignore_pain : public SpellScript
 // 190456 - Ignore Pain
 class tlpp_aura_warr_ignore_pain : public AuraScript
 {
-    PrepareAuraScript(tlpp_aura_warr_ignore_pain);
-
     int32 m_ExtraSpellCost = 400;
 
     bool Load() override

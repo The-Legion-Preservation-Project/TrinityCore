@@ -39,8 +39,6 @@ enum ShamanSpells
 // 51533 - Feral Spirit
 class tlpp_spell_sha_feral_spirit : public SpellScript
 {
-    PrepareSpellScript(tlpp_spell_sha_feral_spirit);
-
 public:
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
@@ -75,8 +73,6 @@ struct tlpp_npc_feral_spirit : public ScriptedAI
 // 188070 - Healing Surge
 class tlpp_spell_sha_healing_surge: public SpellScript
 {
-    PrepareSpellScript(tlpp_spell_sha_healing_surge);
-
 public:
     int32 CalcCastTime(int32 castTime) override
     {
@@ -106,8 +102,6 @@ private:
 // 187880 - Maelstrom Weapon
 class tlpp_spell_sha_maelstrom_weapon : public AuraScript
 {
-    PrepareAuraScript(tlpp_spell_sha_maelstrom_weapon);
-
 public:
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
@@ -129,8 +123,6 @@ public:
 // 201845 - Stormbringer
 class tlpp_spell_sha_stormbringer : public AuraScript
 {
-    PrepareAuraScript(tlpp_spell_sha_stormbringer);
-
 public:
     bool Validate(SpellInfo const* /*spellInfo*/) override
     {
