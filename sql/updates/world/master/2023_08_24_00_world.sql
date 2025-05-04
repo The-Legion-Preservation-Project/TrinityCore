@@ -28,6 +28,7 @@ INSERT INTO `creature_addon` (`guid`, `path_id`, `mount`, `StandState`, `AnimTie
 UPDATE `creature_template` SET `unit_flags3`=1048576 WHERE `entry`=78430; -- Cordana Felsong
 UPDATE `creature_template` SET `unit_flags3`=9437184 WHERE `entry`=78554; -- Vindicator Maraad
 UPDATE `creature_template` SET `unit_flags3`=1048576 WHERE `entry`=78553; -- Thrall
+UPDATE `creature_template` SET `npcflag`=3 WHERE `entry`=78423; -- Archmage Khadgar
 
 # UPDATE `creature_queststarter` SET `VerifiedBuild`=50791 WHERE (`id`=78558 AND `quest`=35933) OR (`id`=78423 AND `quest`=36881);
 # UPDATE `creature_questender` SET `VerifiedBuild`=50791 WHERE (`id`=78558 AND `quest`=36881) OR (`id`=78558 AND `quest`=34398);
@@ -35,6 +36,10 @@ UPDATE `creature_template` SET `unit_flags3`=1048576 WHERE `entry`=78553; -- Thr
 DELETE FROM `creature_template_gossip` WHERE (`CreatureID`=79675 AND `MenuID`=16433);
 INSERT INTO `creature_template_gossip` (`CreatureID`, `MenuID`, `VerifiedBuild`) VALUES
 (79675, 16433, 50791); -- Lady Liadrin
+
+DELETE FROM `creature_template_gossip` WHERE (`CreatureID`=78423 AND `MenuID`=16863);
+INSERT INTO `creature_template_gossip` (`CreatureID`, `MenuID`, `VerifiedBuild`) VALUES
+(78423, 16863, -1); -- Archmage Khadgar
 
 -- Gameobjects
 DELETE FROM `gameobject` WHERE `guid` BETWEEN @OGUID+0 AND @OGUID+1;
