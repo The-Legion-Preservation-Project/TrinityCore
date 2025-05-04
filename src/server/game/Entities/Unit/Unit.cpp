@@ -7028,7 +7028,7 @@ float Unit::SpellHealingPctDone(Unit* victim, SpellInfo const* spellProto) const
     float DoneTotalMod = 1.0f;
 
     // Healing done percent
-    if (Player const* thisPlayer = ToPlayer())
+    if (IsPlayer())
         DoneTotalMod *= GetFloatValue(PLAYER_FIELD_MOD_HEALING_DONE_PCT);
     else // SPELL_AURA_MOD_HEALING_DONE_PERCENT is included in m_activePlayerData->ModHealingDonePercent for players
         DoneTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALING_DONE_PERCENT);

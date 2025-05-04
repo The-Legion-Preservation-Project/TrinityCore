@@ -405,11 +405,11 @@ bool TempSummon::IsSharingTotemSlotWith(ObjectGuid objectGuid) const
     if (!otherSummon)
         return false;
 
-    SpellInfo const* mySummonSpell = sSpellMgr->GetSpellInfo(m_unitData->CreatedBySpell, DIFFICULTY_NONE);
+    SpellInfo const* mySummonSpell = sSpellMgr->GetSpellInfo(GetUInt32Value(UNIT_CREATED_BY_SPELL), DIFFICULTY_NONE);
     if (!mySummonSpell)
         return false;
 
-    SpellInfo const* otherSummonSpell = sSpellMgr->GetSpellInfo(otherSummon->m_unitData->CreatedBySpell, DIFFICULTY_NONE);
+    SpellInfo const* otherSummonSpell = sSpellMgr->GetSpellInfo(otherSummon->GetUInt32Value(UNIT_CREATED_BY_SPELL), DIFFICULTY_NONE);
     if (!otherSummonSpell)
         return false;
 
