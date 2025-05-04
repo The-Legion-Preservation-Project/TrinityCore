@@ -2936,6 +2936,13 @@ void GameObject::Use(Unit* user)
             if (user->GetTypeId() != TYPEID_PLAYER)
                 return;
 
+            GameObjectType::NewFlag const* newFlag = dynamic_cast<GameObjectType::NewFlag const*>(m_goTypeImpl.get());
+            if (!newFlag)
+                return;
+
+            if (newFlag->GetState() != FlagState::InBase)
+                return;
+
             spellId = info->newflag.pickupSpell;
             spellCaster = nullptr;
             break;
@@ -2953,6 +2960,13 @@ void GameObject::Use(Unit* user)
             {
                 if (owner->GetGoType() == GAMEOBJECT_TYPE_NEW_FLAG)
                 {
+                    GameObjectType::NewFlag const* newFlag = dynamic_cast<GameObjectType::NewFlag const*>(m_goTypeImpl.get());
+                    if (!newFlag)
+                        return;
+
+                    if (newFlag->GetState() != FlagState::Dropped)
+                        return;
+
                     // friendly with enemy flag means you're taking it
                     bool defenderInteract = !owner->IsFriendlyTo(user);
                     if (defenderInteract && owner->GetGOInfo()->newflag.ReturnonDefenderInteract)
