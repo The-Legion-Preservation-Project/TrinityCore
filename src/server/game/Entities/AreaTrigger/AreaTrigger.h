@@ -42,8 +42,8 @@ namespace Movement
 enum AreaTriggerScaleCurveOffsets
 {
     // TheLegionPreservationProject: these might be incorrect
+    AREATRIGGER_SCALE_CURVE_OFFSET_POINTS          = 0,
     AREATRIGGER_SCALE_CURVE_OFFSET_START_TIME      = 1,
-    AREATRIGGER_SCALE_CURVE_OFFSET_POINTS          = 3,
 
     // TheLegionPreservationProject: these are correct
     AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE = 5,
