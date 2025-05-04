@@ -220,7 +220,7 @@ class spell_rog_cheat_death : public AuraScript
 
     void Register() override
     {
-        OnEffectAbsorb += AuraEffectAbsorbOverkillFn(spell_rog_cheat_death::HandleAbsorb, EFFECT_0);
+        OnEffectAbsorb += AuraEffectAbsorbFn(spell_rog_cheat_death::HandleAbsorb, EFFECT_0);
     }
 };
 
