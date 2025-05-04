@@ -40,7 +40,6 @@ namespace WorldPackets
             std::vector<int32> BonusListIDs;
 
             bool operator==(ItemBonuses const& r) const;
-            bool operator!=(ItemBonuses const& r) const { return !(*this == r); }
         };
 
         struct ItemInstance
@@ -57,7 +56,6 @@ namespace WorldPackets
             Optional<CompactArray<int32>> Modifications;
 
             bool operator==(ItemInstance const& r) const;
-            bool operator!=(ItemInstance const& r) const { return !(*this == r); }
         };
 
         struct ItemEnchantData

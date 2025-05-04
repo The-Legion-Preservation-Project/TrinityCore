@@ -117,22 +117,7 @@ void ItemInstance::Initialize(::VoidStorageItem const* voidItem)
     }
 }
 
-bool ItemInstance::operator==(ItemInstance const& r) const
-{
-    if (ItemID != r.ItemID || RandomPropertiesID != r.RandomPropertiesID || RandomPropertiesSeed != r.RandomPropertiesSeed)
-        return false;
-
-    if (ItemBonus.has_value() != r.ItemBonus.has_value() || Modifications.has_value() != r.Modifications.has_value())
-        return false;
-
-    if (Modifications.has_value() && *Modifications != *r.Modifications)
-        return false;
-
-    if (ItemBonus.has_value() && *ItemBonus != *r.ItemBonus)
-        return false;
-
-    return true;
-}
+bool ItemInstance::operator==(ItemInstance const& r) const = default;
 
 ByteBuffer& operator<<(ByteBuffer& data, ItemBonuses const& itemBonusInstanceData)
 {

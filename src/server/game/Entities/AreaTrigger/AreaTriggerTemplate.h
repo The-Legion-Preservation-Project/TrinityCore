@@ -77,6 +77,8 @@ struct AreaTriggerId
 {
     uint32 Id = 0;
     bool IsServerSide = false;
+
+    friend bool operator==(AreaTriggerId const& left, AreaTriggerId const& right) = default;
 };
 
 struct AreaTriggerAction
