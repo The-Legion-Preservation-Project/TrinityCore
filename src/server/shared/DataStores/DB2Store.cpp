@@ -43,45 +43,44 @@ void DB2StorageBase::WriteRecord(uint32 id, LocaleConstant locale, ByteBuffer& b
     ASSERT(id < _indexTableSize);
     char const* entry = ASSERT_NOTNULL(_indexTable[id]);
 
-    std::size_t i = 0;
     if (!_loadInfo->Meta->HasIndexFieldInData())
-    {
         entry += 4;
-        ++i;
-    }
 
-    for (; i < _loadInfo->Meta->FieldCount; ++i)
+    for (uint32 i = 0; i < _loadInfo->Meta->FieldCount; ++i)
     {
-        switch (_loadInfo->Meta->Fields[i].Type)
+        for (uint8 arr = 0; arr < _loadInfo->Meta->Fields[i].ArraySize; ++arr)
         {
-            case FT_INT:
-                buffer << *reinterpret_cast<uint32 const*>(entry);
-                entry += 4;
-                break;
-            case FT_FLOAT:
-                buffer << *reinterpret_cast<float const*>(entry);
-                entry += 4;
-                break;
-            case FT_BYTE:
-                buffer << *reinterpret_cast<uint8 const*>(entry);
-                entry += 1;
-                break;
-            case FT_SHORT:
-                buffer << *reinterpret_cast<uint16 const*>(entry);
-                entry += 2;
-                break;
-            case FT_LONG:
-                buffer << *reinterpret_cast<uint64 const*>(entry);
-                entry += 8;
-                break;
-            case FT_STRING:
-                buffer << (*reinterpret_cast<LocalizedString const*>(entry))[locale];
-                entry += sizeof(LocalizedString);
-                break;
-            case FT_STRING_NOT_LOCALIZED:
-                buffer << *reinterpret_cast<char const* const*>(entry);
-                entry += sizeof(char const*);
-                break;
+            switch (_loadInfo->Meta->Fields[i].Type)
+            {
+                case FT_INT:
+                    buffer << *reinterpret_cast<uint32 const *>(entry);
+                    entry += 4;
+                    break;
+                case FT_FLOAT:
+                    buffer << *reinterpret_cast<float const *>(entry);
+                    entry += 4;
+                    break;
+                case FT_BYTE:
+                    buffer << *reinterpret_cast<uint8 const *>(entry);
+                    entry += 1;
+                    break;
+                case FT_SHORT:
+                    buffer << *reinterpret_cast<uint16 const *>(entry);
+                    entry += 2;
+                    break;
+                case FT_LONG:
+                    buffer << *reinterpret_cast<uint64 const *>(entry);
+                    entry += 8;
+                    break;
+                case FT_STRING:
+                    buffer << (*reinterpret_cast<LocalizedString const *>(entry))[locale];
+                    entry += sizeof(LocalizedString);
+                    break;
+                case FT_STRING_NOT_LOCALIZED:
+                    buffer << *reinterpret_cast<char const *const *>(entry);
+                    entry += sizeof(char const *);
+                    break;
+            }
         }
     }
 }
