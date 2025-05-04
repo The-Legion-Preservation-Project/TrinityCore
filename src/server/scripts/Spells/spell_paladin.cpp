@@ -169,7 +169,7 @@ class spell_pal_ardent_defender : public AuraScript
 
     void Register() override
     {
-        OnEffectAbsorb += AuraEffectAbsorbOverkillFn(spell_pal_ardent_defender::HandleAbsorb, EFFECT_2);
+        OnEffectAbsorb += AuraEffectAbsorbFn(spell_pal_ardent_defender::HandleAbsorb, EFFECT_0);
     }
 };
 
