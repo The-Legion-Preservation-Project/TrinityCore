@@ -39,6 +39,7 @@
 #include "Transport.h"
 #include "Unit.h"
 #include "UpdateData.h"
+#include <bit>
 
 AreaTrigger::AreaTrigger() : WorldObject(false), MapObject(), _spawnId(0), _aurEff(nullptr), _maxSearchRadius(0.0f),
     _duration(0), _totalDuration(0), _timeSinceCreated(0), _previousCheckOrientation(std::numeric_limits<float>::infinity()),
@@ -140,24 +141,12 @@ bool AreaTrigger::Create(uint32 areaTriggerCreatePropertiesId, Unit* caster, Uni
     SetFloatValue(AREATRIGGER_BOUNDS_RADIUS_2D, GetMaxSearchRadius());
     SetUInt32Value(AREATRIGGER_DECAL_PROPERTIES_ID, GetCreateProperties()->DecalPropertiesId);
 
-    if (GetCreateProperties()->ExtraScale.Data.Structured.StartTimeOffset)
-        SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AREATRIGGER_SCALE_CURVE_OFFSET_START_TIME, GetCreateProperties()->ExtraScale.Data.Structured.StartTimeOffset);
-    if (GetCreateProperties()->ExtraScale.Data.Structured.Points[0] != 0 || GetCreateProperties()->ExtraScale.Data.Structured.Points[1] != 0)
-    {
-        Position point(GetCreateProperties()->ExtraScale.Data.Structured.Points[0], GetCreateProperties()->ExtraScale.Data.Structured.Points[1]);
-        SetFloatValue(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + 0, point.GetPositionX());
-        SetFloatValue(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + 1, point.GetPositionY());
-    }
-    if (GetCreateProperties()->ExtraScale.Data.Structured.Points[2] != 0 || GetCreateProperties()->ExtraScale.Data.Structured.Points[3] != 0)
-    {
-        Position point(GetCreateProperties()->ExtraScale.Data.Structured.Points[2], GetCreateProperties()->ExtraScale.Data.Structured.Points[3]);
-        SetFloatValue(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + 2, point.GetPositionX());
-        SetFloatValue(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + 3, point.GetPositionY());
-    }
-    if (GetCreateProperties()->ExtraScale.Data.Raw[5])
-        SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE), GetCreateProperties()->ExtraScale.Data.Raw[5]);
-    if (GetCreateProperties()->ExtraScale.Data.Structured.OverrideActive)
-        SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE), GetCreateProperties()->ExtraScale.Data.Structured.OverrideActive);
+    SetScaleCurve(AREATRIGGER_EXTRA_SCALE_CURVE, GetCreateProperties()->ExtraScale);
+
+//    SetUpdateFieldValue(areaTriggerData.ModifyValue(&UF::AreaTriggerData::VisualAnim).ModifyValue(&UF::VisualAnim::AnimationDataID), GetCreateProperties()->AnimId);
+//    SetUpdateFieldValue(areaTriggerData.ModifyValue(&UF::AreaTriggerData::VisualAnim).ModifyValue(&UF::VisualAnim::AnimKitID), GetCreateProperties()->AnimKitId);
+//    if (GetTemplate() && GetTemplate()->HasFlag(AREATRIGGER_FLAG_UNK3))
+//        SetUpdateFieldValue(areaTriggerData.ModifyValue(&UF::AreaTriggerData::VisualAnim).ModifyValue(&UF::VisualAnim::Field_C), true);
 
     PhasingHandler::InheritPhaseShift(this, caster);
 
@@ -365,6 +354,100 @@ void AreaTrigger::_UpdateDuration(int32 newDuration)
 float AreaTrigger::GetProgress() const
 {
     return GetTimeSinceCreated() < GetTimeToTargetScale() ? float(GetTimeSinceCreated()) / float(GetTimeToTargetScale()) : 1.0f;
+}
+
+float AreaTrigger::GetScaleCurveValue(AreaTriggerFields scaleCurve, float x) const
+{
+    ASSERT(GetUInt32Value(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE)), "ScaleCurve must be active to evaluate it");
+
+    uint32 parameterCurve = GetUInt32Value(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE));
+
+    // unpack ParameterCurve
+    if (parameterCurve & 1)
+        return std::bit_cast<float>(parameterCurve & ~1);
+
+    std::array<DBCPosition2D, 2> points;
+    for (std::size_t i = 0; i < 2; ++i)
+    {
+        points[i] =
+        {
+            .X = GetFloatValue(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + i * 2),
+            .Y = GetFloatValue(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + (i * 2) + 1)
+        };
+    }
+
+    CurveInterpolationMode mode = CurveInterpolationMode(parameterCurve >> 1 & 0x7);
+    std::size_t pointCount = parameterCurve >> 24 & 0xFF;
+
+    return sDB2Manager.GetCurveValueAt(mode, std::span(points.begin(), pointCount), x);
+}
+
+void AreaTrigger::SetScaleCurve(AreaTriggerFields scaleCurve, Optional<AreaTriggerScaleCurveTemplate> const& curve)
+{
+    if (!curve)
+    {
+        SetUInt32Value(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE), false);
+        return;
+    }
+
+    SetUInt32Value(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE), true);
+    SetUInt32Value(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_START_TIME), curve->StartTimeOffset);
+
+    Position point;
+    // ParameterCurve packing information
+    // (not_using_points & 1) | ((interpolation_mode & 0x7) << 1) | ((first_point_offset & 0xFFFFF) << 4) | ((point_count & 0xFF) << 24)
+    //   if not_using_points is set then the entire field is simply read as a float (ignoring that lowest bit)
+
+    if (float const* simpleFloat = std::get_if<float>(&curve->Curve))
+    {
+        uint32 packedCurve = std::bit_cast<uint32>(*simpleFloat);
+        packedCurve |= 1;
+
+        SetUInt32Value(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE), packedCurve);
+
+        // clear points
+        for (std::size_t i = 0; i < 2; ++i)
+        {
+            SetFloatValue(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + i * 2, point.GetPositionX());
+            SetFloatValue(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + (i * 2) + 1, point.GetPositionY());
+        }
+    }
+    else if (AreaTriggerScaleCurvePointsTemplate const* curvePoints = std::get_if<AreaTriggerScaleCurvePointsTemplate>(&curve->Curve))
+    {
+        CurveInterpolationMode mode = curvePoints->Mode;
+        if (curvePoints->Points[1].X < curvePoints->Points[0].X)
+            mode = CurveInterpolationMode::Constant;
+
+        switch (mode)
+        {
+            case CurveInterpolationMode::CatmullRom:
+                // catmullrom requires at least 4 points, impossible here
+                mode = CurveInterpolationMode::Cosine;
+                break;
+            case CurveInterpolationMode::Bezier3:
+            case CurveInterpolationMode::Bezier4:
+            case CurveInterpolationMode::Bezier:
+                // bezier requires more than 2 points, impossible here
+                mode = CurveInterpolationMode::Linear;
+                break;
+            default:
+                break;
+        }
+
+        uint32 pointCount = 2;
+        if (mode == CurveInterpolationMode::Constant)
+            pointCount = 1;
+
+        uint32 packedCurve = (uint32(mode) << 1) | (pointCount << 24);
+        SetUInt32Value(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE), packedCurve);
+
+        for (std::size_t i = 0; i < curvePoints->Points.size(); ++i)
+        {
+            point.Relocate(curvePoints->Points[i].X, curvePoints->Points[i].Y);
+            SetFloatValue(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + i * 2, point.GetPositionX());
+            SetFloatValue(scaleCurve + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_POINTS) + (i * 2) + 1, point.GetPositionY());
+        }
+    }
 }
 
 void AreaTrigger::UpdateTargetList()

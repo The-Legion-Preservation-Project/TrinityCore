@@ -24,6 +24,7 @@
 #include "SharedDefines.h"
 #include <map>
 #include <set>
+#include <span>
 #include <vector>
 
  // temporary hack until includes are sorted out (don't want to pull in Windows.h)
@@ -320,6 +321,7 @@ public:
     ChrSpecializationEntry const* GetDefaultChrSpecializationForClass(uint32 class_) const;
     static char const* GetCreatureFamilyPetName(uint32 petfamily, LocaleConstant locale);
     float GetCurveValueAt(uint32 curveId, float x) const;
+    float GetCurveValueAt(CurveInterpolationMode mode, std::span<DBCPosition2D const> points, float x) const;
     EmotesTextSoundEntry const* GetTextSoundEmoteFor(uint32 emote, uint8 race, uint8 gender, uint8 class_) const;
     std::vector<uint32> const* GetFactionTeamList(uint32 faction) const;
     FriendshipRepReactionSet const* GetFriendshipRepReactions(uint32 friendshipRepID) const;

@@ -123,6 +123,9 @@ class TC_GAME_API AreaTrigger : public WorldObject, public GridObject<AreaTrigge
         void _UpdateDuration(int32 newDuration);
         float GetProgress() const;
 
+        float GetScaleCurveValue(AreaTriggerFields scaleCurve, float x) const;
+        void SetScaleCurve(AreaTriggerFields scaleCurve, Optional<AreaTriggerScaleCurveTemplate> const& curve);
+
         void UpdateTargetList();
         void SearchUnits(std::vector<Unit*>& targetList, float radius, bool check3D);
         void SearchUnitInSphere(std::vector<Unit*>& targetList);
