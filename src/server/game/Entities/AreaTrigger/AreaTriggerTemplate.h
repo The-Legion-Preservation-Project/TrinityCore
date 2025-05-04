@@ -230,6 +230,7 @@ struct AreaTriggerSpawn : SpawnData
     AreaTriggerId Id;
 
     AreaTriggerShapeInfo Shape;
+    Optional<int32> SpellForVisuals;
 };
 
 #endif

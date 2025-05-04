@@ -275,13 +275,24 @@ bool AreaTrigger::CreateServer(Map* map, AreaTriggerTemplate const* areaTriggerT
     SetObjectScale(1.0f);
 
     SetFloatValue(AREATRIGGER_BOUNDS_RADIUS_2D, GetMaxSearchRadius());
-    SetUInt32Value(AREATRIGGER_DECAL_PROPERTIES_ID, 24); // blue decal, for .debug areatrigger visibility
 
-    float tmp = 1.0000001f;
-    uint32 tmp2;
-    memcpy(&tmp2, &tmp, sizeof(tmp));
-    SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_PARAMETER_CURVE), tmp2);
-    SetUInt32Value(AsUnderlyingType(AREATRIGGER_EXTRA_SCALE_CURVE) + AsUnderlyingType(AREATRIGGER_SCALE_CURVE_OFFSET_OVERRIDE_ACTIVE), true);
+    if (IsServerSide())
+        SetUInt32Value(AREATRIGGER_DECAL_PROPERTIES_ID, 24); // blue decal, for .debug areatrigger visibility
+
+    if (position.SpellForVisuals)
+    {
+        SpellInfo const* spellInfo = sSpellMgr->AssertSpellInfo(*position.SpellForVisuals, DIFFICULTY_NONE);
+        SetUInt32Value(AREATRIGGER_SPELLID, spellInfo->Id);
+        SetUInt32Value(AREATRIGGER_SPELL_FOR_VISUALS, spellInfo->Id);
+        SetUInt32Value(AREATRIGGER_SPELL_X_SPELL_VISUAL_ID, spellInfo->GetSpellXSpellVisualId());
+    }
+
+
+    SetScaleCurve(AREATRIGGER_EXTRA_SCALE_CURVE, AreaTriggerScaleCurveTemplate());
+
+    //SetUpdateFieldValue(areaTriggerData.ModifyValue(&UF::AreaTriggerData::VisualAnim).ModifyValue(&UF::VisualAnim::AnimationDataID), -1);
+
+    SetDuration(-1);
 
     _shape = position.Shape;
     _maxSearchRadius = _shape.GetMaxSearchRadius();
