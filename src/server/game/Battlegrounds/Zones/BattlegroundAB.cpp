@@ -23,13 +23,11 @@
 #include "Log.h"
 #include "Map.h"
 #include "Player.h"
-#include "Random.h"
 #include "SpellInfo.h"
 
 BattlegroundAB::BattlegroundAB(BattlegroundTemplate const* battlegroundTemplate) : Battleground(battlegroundTemplate)
 {
     m_IsInformedNearVictory = false;
-    m_BuffChange = true;
     BgObjects.resize(BG_AB_OBJECT_MAX);
     BgCreatures.resize(BG_AB_ALL_NODES_COUNT + 5);//+5 for aura triggers
 
