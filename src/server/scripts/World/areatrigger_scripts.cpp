@@ -27,6 +27,7 @@
 #include "Player.h"
 #include "TemporarySummon.h"
 #include "World.h"
+#include "ZoneScript.h"
 
 /*######
 ## at_coilfang_waterfall
@@ -420,6 +421,22 @@ public:
     }
 };
 
+struct areatrigger_action_capture_flag : AreaTriggerAI
+{
+    areatrigger_action_capture_flag(AreaTrigger* areatrigger) : AreaTriggerAI(areatrigger) { }
+
+    void OnUnitEnter(Unit* unit) override
+    {
+        if (!unit->IsPlayer())
+            return;
+
+        Player* player = unit->ToPlayer();
+        if (ZoneScript* zoneScript = at->GetZoneScript())
+            if (zoneScript->CanCaptureFlag(at, player))
+                zoneScript->OnCaptureFlag(at, player);
+    }
+};
+
 void AddSC_areatrigger_scripts()
 {
     new AreaTrigger_at_coilfang_waterfall();
@@ -432,4 +449,5 @@ void AddSC_areatrigger_scripts()
     new AreaTrigger_at_frostgrips_hollow();
     RegisterAreaTriggerAI(areatrigger_battleground_buffs);
     new AreaTrigger_at_battleground_buffs();
+    RegisterAreaTriggerAI(areatrigger_action_capture_flag);
 }
