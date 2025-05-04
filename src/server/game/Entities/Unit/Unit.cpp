@@ -6507,17 +6507,11 @@ int32 Unit::SpellDamageBonusDone(Unit* victim, SpellInfo const* spellProto, int3
         APbonus += GetTotalAttackPowerValue(attType);
         DoneTotal += int32(stack * ApCoeffMod * APbonus);
     }
-    else
-    {
-        // No bonus damage for SPELL_DAMAGE_CLASS_NONE class spells by default
-        if (spellProto->DmgClass == SPELL_DAMAGE_CLASS_NONE)
-            return uint32(std::max(pdamage * DoneTotalMod, 0.0f));
-    }
 
     // Default calculation
-    float coeff = spellEffectInfo.BonusCoefficient;
     if (DoneAdvertisedBenefit)
     {
+        float coeff = spellEffectInfo.BonusCoefficient;
         if (Player* modOwner = GetSpellModOwner())
         {
             coeff *= 100.0f;
@@ -6959,7 +6953,6 @@ int32 Unit::SpellHealingBonusDone(Unit* victim, SpellInfo const* spellProto, int
         DoneAdvertisedBenefit += static_cast<Guardian const*>(this)->GetBonusDamage();
 
     // Check for table values
-    float coeff = spellEffectInfo.BonusCoefficient;
     if (spellEffectInfo.BonusCoefficientFromAP > 0.0f)
     {
         WeaponAttackType const attType = (spellProto->IsRangedWeaponSpell() && spellProto->DmgClass != SPELL_DAMAGE_CLASS_MELEE) ? RANGED_ATTACK : BASE_ATTACK;
@@ -6968,16 +6961,11 @@ int32 Unit::SpellHealingBonusDone(Unit* victim, SpellInfo const* spellProto, int
 
         DoneTotal += int32(spellEffectInfo.BonusCoefficientFromAP * stack * APbonus);
     }
-    else if (coeff <= 0.0f) // no AP and no SP coefs, skip
-    {
-        // No bonus healing for SPELL_DAMAGE_CLASS_NONE class spells by default
-        if (spellProto->DmgClass == SPELL_DAMAGE_CLASS_NONE)
-            return uint32(std::max(healamount * DoneTotalMod, 0.0f));
-    }
 
     // Default calculation
     if (DoneAdvertisedBenefit)
     {
+        float coeff = spellEffectInfo.BonusCoefficient;
         if (Player* modOwner = GetSpellModOwner())
         {
             coeff *= 100.0f;
@@ -7037,10 +7025,13 @@ float Unit::SpellHealingPctDone(Unit* victim, SpellInfo const* spellProto) const
     if (spellProto->SpellFamilyName == SPELLFAMILY_POTION)
         return 1.0f;
 
-    if (IsPlayer())
-        return GetFloatValue(PLAYER_FIELD_MOD_HEALING_DONE_PCT);
-
     float DoneTotalMod = 1.0f;
+
+    // Healing done percent
+    if (Player const* thisPlayer = ToPlayer())
+        DoneTotalMod *= GetFloatValue(PLAYER_FIELD_MOD_HEALING_DONE_PCT);
+    else // SPELL_AURA_MOD_HEALING_DONE_PERCENT is included in m_activePlayerData->ModHealingDonePercent for players
+        DoneTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALING_DONE_PERCENT);
 
     // bonus against aurastate
     DoneTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_DAMAGE_DONE_VERSUS_AURASTATE, [victim](AuraEffect const* aurEff) -> bool
@@ -7049,9 +7040,6 @@ float Unit::SpellHealingPctDone(Unit* victim, SpellInfo const* spellProto) const
             return true;
         return false;
     });
-
-    // Healing done percent
-    DoneTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALING_DONE_PERCENT);
 
     // bonus from missing health of target
     float healthPctDiff = 100.0f - victim->GetHealthPct();
