@@ -510,6 +510,9 @@ public:
 
     void SetState(FlagState newState, Player* player)
     {
+        if (_state == newState)
+            return;
+
         FlagState oldState = _state;
         _state = newState;
 
