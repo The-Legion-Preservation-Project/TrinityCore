@@ -2495,6 +2495,9 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         // Temporarily removed pet cache
         uint32 GetTemporaryUnsummonedPetNumber() const { return m_temporaryUnsummonedPetNumber; }
         void SetTemporaryUnsummonedPetNumber(uint32 petnumber) { m_temporaryUnsummonedPetNumber = petnumber; }
+        Optional<ReactStates> GetTemporaryPetReactState() const { return m_temporaryPetReactState; }
+        void DisablePetControlsOnMount(ReactStates reactState, CommandStates commandState);
+        void EnablePetControlsOnDismount();
         void UnsummonPetTemporaryIfAny();
         void ResummonPetTemporaryUnSummonedIfAny();
         bool IsPetNeedBeTemporaryUnsummoned() const;
@@ -3091,6 +3094,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
 
         // Temporary removed pet cache
         uint32 m_temporaryUnsummonedPetNumber;
+        Optional<ReactStates> m_temporaryPetReactState;
         uint32 m_oldpetspell;
 
         std::unique_ptr<PlayerAchievementMgr> m_achievementMgr;
