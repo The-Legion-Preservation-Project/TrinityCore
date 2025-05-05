@@ -63,7 +63,7 @@ namespace WorldPackets
 
             WorldPacket const* Write() override;
 
-            void Initialize(Player* const inviter, int32 proposedRoles, bool canAccept);
+            void Initialize(Player const* inviter, int32 proposedRoles, bool canAccept);
 
             bool MightCRZYou = false;
             bool MustBeBNetFriend = false;

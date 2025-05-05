@@ -12649,7 +12649,7 @@ void Player::SendBuyError(BuyResult msg, Creature* creature, uint32 item, uint32
 void Player::SendSellError(SellResult msg, Creature* creature, ObjectGuid guid) const
 {
     WorldPackets::Item::SellResponse sellResponse;
-    sellResponse.VendorGUID = (creature ? creature->GetGUID() : ObjectGuid::Empty);
+    sellResponse.VendorGUID = creature ? creature->GetGUID() : ObjectGuid::Empty;
     sellResponse.ItemGUID = guid;
     sellResponse.Reason = msg;
     SendDirectMessage(sellResponse.Write());
@@ -24764,7 +24764,7 @@ PartyResult Player::CanUninviteFromGroup(ObjectGuid guidMember) const
             return ERR_PARTY_LFG_BOOT_DUNGEON_COMPLETE;
 
         Player* player = ObjectAccessor::FindConnectedPlayer(guidMember);
-        if (!player->m_lootRolls.empty())
+        if (player && !player->m_lootRolls.empty())
             return ERR_PARTY_LFG_BOOT_LOOT_ROLLS;
 
         /// @todo Should also be sent when anyone has recently left combat, with an aprox ~5 seconds timer.

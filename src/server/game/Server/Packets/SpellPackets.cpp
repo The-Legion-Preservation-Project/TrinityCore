@@ -166,9 +166,7 @@ WorldPacket const* AuraUpdate::Write()
 ByteBuffer& operator>>(ByteBuffer& buffer, TargetLocation& location)
 {
     buffer >> location.Transport;
-    buffer >> location.Location.m_positionX;
-    buffer >> location.Location.m_positionY;
-    buffer >> location.Location.m_positionZ;
+    buffer >> location.Location;
     return buffer;
 }
 
@@ -268,9 +266,7 @@ WorldPacket const* SpellPrepare::Write()
 ByteBuffer& operator<<(ByteBuffer& data, TargetLocation const& targetLocation)
 {
     data << targetLocation.Transport;
-    data << float(targetLocation.Location.m_positionX);
-    data << float(targetLocation.Location.m_positionY);
-    data << float(targetLocation.Location.m_positionZ);
+    data << targetLocation.Location;
     return data;
 }
 
@@ -339,13 +335,6 @@ ByteBuffer& operator<<(ByteBuffer& data, MissileTrajectoryResult const& missileT
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, SpellAmmo const& spellAmmo)
-{
-    data << int32(spellAmmo.DisplayID);
-    data << int8(spellAmmo.InventoryType);
-    return data;
-}
-
 ByteBuffer& operator<<(ByteBuffer& data, CreatureImmunities const& immunities)
 {
     data << int32(immunities.School);
@@ -372,7 +361,7 @@ ByteBuffer& operator<<(ByteBuffer& data, SpellCastData const& spellCastData)
     data << uint32(spellCastData.CastFlags);
     data << uint32(spellCastData.CastTime);
     data << spellCastData.MissileTrajectory;
-    data << int32(spellCastData.Ammo.DisplayID);
+    data << int32(spellCastData.AmmoDisplayID);
     data << uint8(spellCastData.DestLocSpellCastIndex);
     data << spellCastData.Immunities;
     data << spellCastData.Predict;

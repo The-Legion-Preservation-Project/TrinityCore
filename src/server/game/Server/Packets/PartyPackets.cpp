@@ -89,7 +89,7 @@ WorldPacket const* WorldPackets::Party::PartyInvite::Write()
     return &_worldPacket;
 }
 
-void WorldPackets::Party::PartyInvite::Initialize(Player* const inviter, int32 proposedRoles, bool canAccept)
+void WorldPackets::Party::PartyInvite::Initialize(Player const* inviter, int32 proposedRoles, bool canAccept)
 {
     CanAccept = canAccept;
 
@@ -110,10 +110,7 @@ void WorldPackets::Party::PartyInviteResponse::Read()
 
     bool hasRolesDesired = _worldPacket.ReadBit();
     if (hasRolesDesired)
-    {
-        RolesDesired.emplace();
-        _worldPacket >> *RolesDesired;
-    }
+        _worldPacket >> RolesDesired.emplace();
 }
 
 void WorldPackets::Party::PartyUninvite::Read()
