@@ -421,7 +421,7 @@ public:
         conversation->Start();
     }
 
-    void OnConversationStart(Conversation* conversation) override
+    void OnConversationStart(Conversation* /*conversation*/) override
     {
         // LocaleConstant privateOwnerLocale = conversation->GetPrivateObjectOwnerLocale();
 
