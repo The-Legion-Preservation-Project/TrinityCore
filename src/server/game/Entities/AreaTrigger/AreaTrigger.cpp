@@ -273,6 +273,7 @@ bool AreaTrigger::CreateServer(Map* map, AreaTriggerTemplate const* areaTriggerT
     SetEntry(areaTriggerTemplate->Id.Id);
 
     SetObjectScale(1.0f);
+    SetDuration(-1);
 
     SetFloatValue(AREATRIGGER_BOUNDS_RADIUS_2D, GetMaxSearchRadius());
 
@@ -291,8 +292,6 @@ bool AreaTrigger::CreateServer(Map* map, AreaTriggerTemplate const* areaTriggerT
     SetScaleCurve(AREATRIGGER_EXTRA_SCALE_CURVE, AreaTriggerScaleCurveTemplate());
 
     //SetUpdateFieldValue(areaTriggerData.ModifyValue(&UF::AreaTriggerData::VisualAnim).ModifyValue(&UF::VisualAnim::AnimationDataID), -1);
-
-    SetDuration(-1);
 
     _shape = position.Shape;
     _maxSearchRadius = _shape.GetMaxSearchRadius();
@@ -328,16 +327,16 @@ void AreaTrigger::Update(uint32 diff)
         }
         else
             UpdateSplinePosition(diff);
+    }
 
-        if (GetDuration() != -1)
+    if (GetDuration() != -1)
+    {
+        if (GetDuration() > int32(diff))
+            _UpdateDuration(_duration - diff);
+        else
         {
-            if (GetDuration() > int32(diff))
-                _UpdateDuration(_duration - diff);
-            else
-            {
-                Remove(); // expired
-                return;
-            }
+            Remove(); // expired
+            return;
         }
     }
 

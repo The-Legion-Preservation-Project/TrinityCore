@@ -1247,6 +1247,8 @@ class TC_GAME_API ObjectMgr
             return _exclusiveQuestGroups.equal_range(exclusiveGroupId);
         }
 
+        std::vector<Difficulty> ParseSpawnDifficulties(std::string_view difficultyString, std::string_view table, ObjectGuid::LowType spawnId, uint32 mapId, std::set<Difficulty> const& mapDifficulties);
+
         bool LoadTrinityStrings();
 
         void LoadEventScripts();
