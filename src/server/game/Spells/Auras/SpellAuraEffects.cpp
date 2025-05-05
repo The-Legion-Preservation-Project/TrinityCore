@@ -840,9 +840,9 @@ void AuraEffect::CalculatePeriodic(Unit* caster, bool resetPeriodicTimer /*= tru
             if (m_spellInfo->IsChanneled())
                 caster->ModSpellDurationTime(m_spellInfo, _period);
             else if (m_spellInfo->HasAttribute(SPELL_ATTR5_SPELL_HASTE_AFFECTS_PERIODIC))
-                _period = int32(_period * caster->m_unitData->ModCastingSpeed);
+                _period = int32(_period * caster->GetFloatValue(UNIT_MOD_CAST_SPEED));
             else if (m_spellInfo->HasAttribute(SPELL_ATTR8_MELEE_HASTE_AFFECTS_PERIODIC))
-                _period = int32(_period * caster->m_unitData->ModHaste);
+                _period = int32(_period * caster->GetFloatValue(UNIT_FIELD_MOD_HASTE));
         }
     }
     else // prevent infinite loop on Update

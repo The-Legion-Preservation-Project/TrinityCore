@@ -3198,7 +3198,6 @@ bool Map::IsLFR() const
     {
         case DIFFICULTY_LFR:
         case DIFFICULTY_LFR_NEW:
-        case DIFFICULTY_LFR_15TH_ANNIVERSARY:
             return true;
         default:
             return false;
@@ -3213,8 +3212,6 @@ bool Map::IsNormal() const
         case DIFFICULTY_10_N:
         case DIFFICULTY_25_N:
         case DIFFICULTY_NORMAL_RAID:
-        case DIFFICULTY_NORMAL_ISLAND:
-        case DIFFICULTY_NORMAL_WARFRONT:
             return true;
         default:
             return false;

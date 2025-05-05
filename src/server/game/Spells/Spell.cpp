@@ -5255,7 +5255,7 @@ void Spell::SendChannelStart(uint32 duration)
     WorldPackets::Spells::SpellChannelStart spellChannelStart;
     spellChannelStart.CasterGUID = unitCaster->GetGUID();
     spellChannelStart.SpellID = m_spellInfo->Id;
-    spellChannelStart.Visual = m_SpellVisual;
+    spellChannelStart.SpellXSpellVisualID = m_SpellVisual.SpellXSpellVisualID;
     spellChannelStart.ChannelDuration = duration;
 
     uint32 schoolImmunityMask = unitCaster->GetSchoolImmunityMask();
@@ -5271,8 +5271,9 @@ void Spell::SendChannelStart(uint32 duration)
     if (m_spellInfo->HasAttribute(SPELL_ATTR8_HEAL_PREDICTION) && m_caster->IsUnit())
     {
         WorldPackets::Spells::SpellTargetedHealPrediction& healPrediction = spellChannelStart.HealPrediction.emplace();
-        if (unitCaster->m_unitData->ChannelObjects.size() == 1 && unitCaster->m_unitData->ChannelObjects[0].IsUnit())
-            healPrediction.TargetGUID = unitCaster->m_unitData->ChannelObjects[0];
+        auto const channelObjects = unitCaster->GetChannelObjects();
+        if (channelObjects.size() == 1 && channelObjects.begin()->IsUnit())
+            healPrediction.TargetGUID = *channelObjects.begin();
 
         UpdateSpellHealPrediction(healPrediction.Predict, true);
     }
