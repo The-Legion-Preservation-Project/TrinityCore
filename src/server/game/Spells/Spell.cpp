@@ -6577,7 +6577,7 @@ SpellCastResult Spell::CheckCast(bool strict, int32* param1 /*= nullptr*/, int32
                             if (spellEffectInfo.Effect == SPELL_EFFECT_CHANGE_BATTLEPET_QUALITY)
                             {
                                 BattlePets::BattlePetBreedQuality quality = BattlePets::BattlePetBreedQuality::Poor;
-                                switch (spellEffectInfo.BasePoints)
+                                switch (spellEffectInfo.CalcBaseValue(m_caster, creature, m_castItemEntry, m_castItemLevel))
                                 {
                                     case 85:
                                         quality = BattlePets::BattlePetBreedQuality::Rare;
