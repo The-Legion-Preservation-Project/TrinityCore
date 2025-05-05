@@ -20316,6 +20316,8 @@ void Player::_SaveStats(CharacterDatabaseTransaction trans) const
     stmt->setUInt32(index++, GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER));
     stmt->setUInt32(index++, GetBaseSpellPowerBonus());
     stmt->setUInt32(index, GetUInt32Value(PLAYER_FIELD_COMBAT_RATING_1 + AsUnderlyingType(CR_RESILIENCE_PLAYER_DAMAGE)));
+    stmt->setFloat(index++, GetFloatValue(PLAYER_MASTERY));
+    stmt->setInt32(index++, GetInt32Value(PLAYER_VERSATILITY));
 
     trans->Append(stmt);
 }
