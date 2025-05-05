@@ -437,12 +437,15 @@ TC_API_EXPORT EnumText EnumUtils<SellResult>::ToString(SellResult value)
         case SELL_ERR_UNK: return { "SELL_ERR_UNK", "SELL_ERR_UNK", "nothing appears..." };
         case SELL_ERR_ONLY_EMPTY_BAG: return { "SELL_ERR_ONLY_EMPTY_BAG", "SELL_ERR_ONLY_EMPTY_BAG", "You can only do that with empty bags." };
         case SELL_ERR_CANT_SELL_TO_THIS_MERCHANT: return { "SELL_ERR_CANT_SELL_TO_THIS_MERCHANT", "SELL_ERR_CANT_SELL_TO_THIS_MERCHANT", "You cannot sell items to this merchant." };
+        case SELL_ERR_MUST_REPAIR_DURABILITY: return { "SELL_ERR_MUST_REPAIR_DURABILITY", "SELL_ERR_MUST_REPAIR_DURABILITY", "You must repair that item's durability to use it." };
+        case SELL_ERR_VENDOR_REFUSE_SCRAPPABLE_AZERITE: return { "SELL_ERR_VENDOR_REFUSE_SCRAPPABLE_AZERITE", "SELL_ERR_VENDOR_REFUSE_SCRAPPABLE_AZERITE", "The merchant doesn't want that item. Bring it to the Scrapper to extract Titan Residuum." };
+        case SELL_ERR_INTERNAL_BAG_ERROR: return { "SELL_ERR_INTERNAL_BAG_ERROR", "SELL_ERR_INTERNAL_BAG_ERROR", "Internal Bag Error" };
         default: throw std::out_of_range("value");
     }
 }
 
 template <>
-TC_API_EXPORT size_t EnumUtils<SellResult>::Count() { return 7; }
+TC_API_EXPORT size_t EnumUtils<SellResult>::Count() { return 10; }
 
 template <>
 TC_API_EXPORT SellResult EnumUtils<SellResult>::FromIndex(size_t index)
@@ -456,6 +459,9 @@ TC_API_EXPORT SellResult EnumUtils<SellResult>::FromIndex(size_t index)
         case 4: return SELL_ERR_UNK;
         case 5: return SELL_ERR_ONLY_EMPTY_BAG;
         case 6: return SELL_ERR_CANT_SELL_TO_THIS_MERCHANT;
+        case 7: return SELL_ERR_MUST_REPAIR_DURABILITY;
+        case 8: return SELL_ERR_VENDOR_REFUSE_SCRAPPABLE_AZERITE;
+        case 9: return SELL_ERR_INTERNAL_BAG_ERROR;
         default: throw std::out_of_range("index");
     }
 }
@@ -472,6 +478,9 @@ TC_API_EXPORT size_t EnumUtils<SellResult>::ToIndex(SellResult value)
         case SELL_ERR_UNK: return 4;
         case SELL_ERR_ONLY_EMPTY_BAG: return 5;
         case SELL_ERR_CANT_SELL_TO_THIS_MERCHANT: return 6;
+        case SELL_ERR_MUST_REPAIR_DURABILITY: return 7;
+        case SELL_ERR_VENDOR_REFUSE_SCRAPPABLE_AZERITE: return 8;
+        case SELL_ERR_INTERNAL_BAG_ERROR: return 9;
         default: throw std::out_of_range("value");
     }
 }
