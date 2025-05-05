@@ -46,6 +46,7 @@ public:
     bool Create(ObjectGuid::LowType lowGuid, SceneType type, uint32 sceneId, uint32 scriptPackageId, Map* map, Unit* creator,
         Position const& pos, ObjectGuid privateObjectOwner);
 
+    ObjectGuid GetCreatorGUID() const override { return GetGuidValue(SCENEOBJECT_FIELD_CREATEDBY); }
     ObjectGuid GetOwnerGUID() const override { return GetGuidValue(SCENEOBJECT_FIELD_CREATEDBY); }
     uint32 GetFaction() const override { return 0; }
 

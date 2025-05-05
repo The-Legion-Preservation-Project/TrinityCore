@@ -59,6 +59,7 @@ class TC_GAME_API DynamicObject : public WorldObject, public GridObject<DynamicO
         uint32 GetSpellId() const { return GetUInt32Value(DYNAMICOBJECT_SPELLID); }
         SpellInfo const* GetSpellInfo() const;
         ObjectGuid GetCasterGUID() const { return GetGuidValue(DYNAMICOBJECT_CASTER); }
+        ObjectGuid GetCreatorGUID() const override { return GetCasterGUID(); }
         ObjectGuid GetOwnerGUID() const override { return GetCasterGUID(); }
         float GetRadius() const { return GetFloatValue(DYNAMICOBJECT_RADIUS); }
 

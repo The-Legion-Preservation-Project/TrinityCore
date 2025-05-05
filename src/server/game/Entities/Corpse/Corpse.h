@@ -74,6 +74,7 @@ class TC_GAME_API Corpse : public WorldObject, public GridObject<Corpse>
         void RemoveCorpseDynamicFlag(CorpseDynFlags dynamicFlags) { RemoveFlag(CORPSE_FIELD_DYNAMIC_FLAGS, dynamicFlags); }
         void ReplaceAllCorpseDynamicFlags(CorpseDynFlags dynamicFlags) { SetUInt32Value(CORPSE_FIELD_DYNAMIC_FLAGS, dynamicFlags); }
 
+        ObjectGuid GetCreatorGUID() const override { return GetGuidValue(CORPSE_FIELD_OWNER); }
         ObjectGuid GetOwnerGUID() const override { return GetGuidValue(CORPSE_FIELD_OWNER); }
         void SetOwnerGUID(ObjectGuid owner) { SetGuidValue(CORPSE_FIELD_OWNER, owner); }
         void SetDisplayId(uint32 displayId) { SetUInt32Value(CORPSE_FIELD_DISPLAY_ID, displayId); }
