@@ -44,6 +44,7 @@ class TC_GAME_API ChannelMgr
         static void LoadFromDB();
         static ChannelMgr* ForTeam(uint32 team);
         static Channel* GetChannelForPlayerByNamePart(std::string const& namePart, Player* playerSearcher);
+        static AreaTableEntry const* SpecialLinkedArea;
 
         void SaveToDB();
         Channel* GetSystemChannel(uint32 channelId, AreaTableEntry const* zoneEntry = nullptr);

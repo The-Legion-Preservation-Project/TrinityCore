@@ -529,6 +529,8 @@ struct ChatChannelsEntry
     LocalizedString Shortcut;
     int32 Flags;
     int8 FactionGroup;
+
+    EnumFlag<ChatChannelFlags> GetFlags() const { return static_cast<ChatChannelFlags>(Flags); }
 };
 
 struct ChrClassUIDisplayEntry

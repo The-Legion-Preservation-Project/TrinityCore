@@ -22,8 +22,11 @@
 #include "DB2Stores.h"
 #include "Log.h"
 #include "Player.h"
+#include "Realm.h"
 #include "World.h"
 #include "WorldSession.h"
+
+AreaTableEntry const* ChannelMgr::SpecialLinkedArea;
 
 ChannelMgr::~ChannelMgr()
 {
@@ -36,6 +39,9 @@ ChannelMgr::~ChannelMgr()
 
 /*static*/ void ChannelMgr::LoadFromDB()
 {
+    SpecialLinkedArea = sAreaTableStore.AssertEntry(3459);
+    ASSERT(SpecialLinkedArea->GetFlags().HasFlag(AreaFlags::LinkedChatSpecialArea));
+
     if (!sWorld->getBoolConfig(CONFIG_PRESERVE_CUSTOM_CHANNELS))
     {
         TC_LOG_INFO("server.loading", ">> Loaded 0 custom chat channels. Custom channel saving is disabled.");
@@ -155,7 +161,7 @@ Channel* ChannelMgr::GetSystemChannel(uint32 channelId, AreaTableEntry const* zo
 {
     ChatChannelsEntry const* channelEntry = sChatChannelsStore.AssertEntry(channelId);
     uint32 zoneId = zoneEntry ? zoneEntry->ID : 0;
-    if (channelEntry->Flags & (CHANNEL_DBC_FLAG_GLOBAL | CHANNEL_DBC_FLAG_CITY_ONLY))
+    if (channelEntry->GetFlags().HasFlag(ChatChannelFlags::ReadOnly | ChatChannelFlags::OnlyInCities))
         zoneId = 0;
 
     std::pair<uint32, uint32> key = std::make_pair(channelId, zoneId);
@@ -209,7 +215,7 @@ Channel* ChannelMgr::GetChannel(uint32 channelId, std::string const& name, Playe
     {
         ChatChannelsEntry const* channelEntry = sChatChannelsStore.AssertEntry(channelId);
         uint32 zoneId = zoneEntry ? zoneEntry->ID : 0;
-        if (channelEntry->Flags & (CHANNEL_DBC_FLAG_GLOBAL | CHANNEL_DBC_FLAG_CITY_ONLY))
+        if (channelEntry->GetFlags().HasFlag(ChatChannelFlags::ReadOnly | ChatChannelFlags::OnlyInCities))
             zoneId = 0;
 
         std::pair<uint32, uint32> key = std::make_pair(channelId, zoneId);
@@ -245,7 +251,7 @@ void ChannelMgr::LeftChannel(uint32 channelId, AreaTableEntry const* zoneEntry)
 {
     ChatChannelsEntry const* channelEntry = sChatChannelsStore.AssertEntry(channelId);
     uint32 zoneId = zoneEntry ? zoneEntry->ID : 0;
-    if (channelEntry->Flags & (CHANNEL_DBC_FLAG_GLOBAL | CHANNEL_DBC_FLAG_CITY_ONLY))
+    if (channelEntry->GetFlags().HasFlag(ChatChannelFlags::ReadOnly | ChatChannelFlags::OnlyInCities))
         zoneId = 0;
 
     std::pair<uint32, uint32> key = std::make_pair(channelId, zoneId);
