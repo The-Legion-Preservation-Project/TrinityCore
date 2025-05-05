@@ -423,13 +423,13 @@ public:
 
     void OnConversationStart(Conversation* conversation) override
     {
-        LocaleConstant privateOwnerLocale = conversation->GetPrivateObjectOwnerLocale();
+        // LocaleConstant privateOwnerLocale = conversation->GetPrivateObjectOwnerLocale();
 
-        if (Milliseconds const* illidariFacingLineStarted = conversation->GetLineStartTime(privateOwnerLocale, CONVO_LINE_TRIGGER_FACING))
-            _events.ScheduleEvent(EVENT_ILLIDARI_FACE_PLAYERS, *illidariFacingLineStarted);
+        //if (Milliseconds const* illidariFacingLineStarted = conversation->GetLineStartTime(privateOwnerLocale, CONVO_LINE_TRIGGER_FACING))
+            _events.ScheduleEvent(EVENT_ILLIDARI_FACE_PLAYERS, Milliseconds(500)); // *illidariFacingLineStarted);
 
-        if (Milliseconds const* illidariStartPathLineStarted = conversation->GetLineStartTime(privateOwnerLocale, CONVO_LINE_START_PATH))
-            _events.ScheduleEvent(EVENT_ILLIDARI_START_PATH, *illidariStartPathLineStarted);
+        //if (Milliseconds const* illidariStartPathLineStarted = conversation->GetLineStartTime(privateOwnerLocale, CONVO_LINE_START_PATH))
+            _events.ScheduleEvent(EVENT_ILLIDARI_START_PATH, Milliseconds(5500)); // *illidariStartPathLineStarted);
     }
 
     static void StartCloneChannel(ObjectGuid guid, Conversation* conversation)

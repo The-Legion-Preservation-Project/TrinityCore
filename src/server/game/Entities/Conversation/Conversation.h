@@ -95,6 +95,10 @@ class TC_GAME_API Conversation : public WorldObject, public GridObject<Conversat
         float GetStationaryO() const override { return _stationaryPosition.GetOrientation(); }
         void RelocateStationaryPosition(Position const& pos) { _stationaryPosition.Relocate(pos); }
 
+        LocaleConstant GetPrivateObjectOwnerLocale() const;
+        Unit* GetActorUnit(uint32 actorIdx) const;
+        Creature* GetActorCreature(uint32 actorIdx) const;
+
         uint32 GetScriptId() const;
 
     private:

@@ -579,10 +579,6 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPackets::AreaTrigger::AreaTrigge
     if (!packet.Entered)
         return;
 
-    // TheLegionPreservationProject: fix double teleport; future fix f62b1d01909ca721647d32d9b52dbd599afc91e2
-    if (!packet.Entered)
-        return;
-
     AreaTriggerStruct const* at = sObjectMgr->GetAreaTrigger(packet.AreaTriggerID);
     if (!at)
         return;

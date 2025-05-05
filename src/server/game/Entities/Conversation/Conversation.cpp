@@ -22,6 +22,7 @@
 #include "IteratorPair.h"
 #include "Log.h"
 #include "Map.h"
+#include "ObjectAccessor.h"
 #include "PhasingHandler.h"
 #include "ScriptMgr.h"
 #include "Unit.h"
@@ -226,6 +227,34 @@ void Conversation::AddActor(int32 actorId, uint32 actorIdx, ConversationActorTyp
     actorField.ActorGuid = ObjectGuid::Empty;
     actorField.Type = AsUnderlyingType(type);
     SetDynamicStructuredValue(CONVERSATION_DYNAMIC_FIELD_ACTORS, actorIdx, &actorField);
+}
+
+LocaleConstant Conversation::GetPrivateObjectOwnerLocale() const
+{
+    LocaleConstant privateOwnerLocale = LOCALE_enUS;
+    if (Player* owner = ObjectAccessor::GetPlayer(*this, GetPrivateObjectOwner()))
+        privateOwnerLocale = owner->GetSession()->GetSessionDbLocaleIndex();
+    return privateOwnerLocale;
+}
+
+Unit* Conversation::GetActorUnit(uint32 actorIdx) const
+{
+    auto const* actorField = GetDynamicStructuredValue<ConversationDynamicFieldActor>(CONVERSATION_DYNAMIC_FIELD_ACTORS, actorIdx);
+    if (actorField == nullptr || actorField->IsEmpty())
+    {
+        TC_LOG_ERROR("entities.conversation", "Conversation::GetActorUnit: Tried to access invalid actor idx {} (Conversation ID: {}).", actorIdx, GetEntry());
+        return nullptr;
+    }
+
+    return ObjectAccessor::GetUnit(*this, actorField->ActorGuid);
+}
+
+Creature* Conversation::GetActorCreature(uint32 actorIdx) const
+{
+    Unit* actor = GetActorUnit(actorIdx);
+    if (!actor)
+        return nullptr;
+    return actor->ToCreature();
 }
 
 uint32 Conversation::GetScriptId() const
