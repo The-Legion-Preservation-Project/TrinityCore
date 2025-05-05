@@ -4375,7 +4375,7 @@ void CriteriaMgr::LoadCriteriaList()
             _questObjectiveCriteriasByType[criteriaEntry->Type].push_back(criteria);
         }
 
-        if (criteriaEntry->StartTimer)
+        if (criteriaEntry->StartEvent)
             _criteriasByStartEvent[criteriaEntry->StartEvent][criteriaEntry->StartAsset].push_back(criteria);
 
         if (criteriaEntry->FailEvent)
