@@ -392,7 +392,7 @@ std::array<SpellImplicitTargetInfo::StaticData, TOTAL_SPELL_TARGETS> SpellImplic
     {TARGET_OBJECT_TYPE_DEST, TARGET_REFERENCE_TYPE_CASTER, TARGET_SELECT_CATEGORY_DEFAULT, TARGET_CHECK_DEFAULT,  TARGET_DIR_RANDOM},      // 149
 } };
 
-SpellEffectInfo::SpellEffectInfo(SpellInfo const* spellInfo): _spellInfo(spellInfo), EffectIndex(EFFECT_0), Effect(SPELL_EFFECT_NONE), ApplyAuraName(AuraType(0)), ApplyAuraPeriod(0),
+SpellEffectInfo::SpellEffectInfo(): _spellInfo(nullptr), EffectIndex(EFFECT_0), Effect(SPELL_EFFECT_NONE), ApplyAuraName(AuraType(0)), ApplyAuraPeriod(0),
     BasePoints(0), RealPointsPerLevel(0), PointsPerResource(0), Amplitude(0), ChainAmplitude(0),
     BonusCoefficient(0), MiscValue(0), MiscValueB(0), Mechanic(MECHANIC_NONE), PositionFacing(0),
     TargetARadiusEntry(nullptr), TargetBRadiusEntry(nullptr), ChainTargets(0), ItemType(0), TriggerSpell(0),
@@ -438,15 +438,10 @@ SpellEffectInfo::SpellEffectInfo(SpellInfo const* spellInfo, SpellEffectEntry co
     _immunityInfo = nullptr;
 }
 
-SpellEffectInfo::SpellEffectInfo(SpellEffectInfo const&) = default;
 SpellEffectInfo::SpellEffectInfo(SpellEffectInfo&&) noexcept = default;
-SpellEffectInfo& SpellEffectInfo::operator=(SpellEffectInfo const&) = default;
 SpellEffectInfo& SpellEffectInfo::operator=(SpellEffectInfo&&) noexcept = default;
 
-SpellEffectInfo::~SpellEffectInfo()
-{
-    delete _immunityInfo;
-}
+SpellEffectInfo::~SpellEffectInfo() = default;
 
 bool SpellEffectInfo::IsEffect() const
 {
@@ -1097,12 +1092,15 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, Spel
         if (!spellEffect)
             continue;
 
-        Trinity::Containers::EnsureWritableVectorIndex(_effects, spellEffect->EffectIndex, SpellEffectInfo(this)) = SpellEffectInfo(this, *spellEffect);
+        Trinity::Containers::EnsureWritableVectorIndex(_effects, spellEffect->EffectIndex) = SpellEffectInfo(this, *spellEffect);
     }
 
     // Correct EffectIndex for blank effects
     for (size_t i = 0; i < _effects.size(); ++i)
+    {
+        _effects[i]._spellInfo = this;
         _effects[i].EffectIndex = SpellEffIndex(i);
+    }
 
     _effects.shrink_to_fit();
 
@@ -1283,11 +1281,14 @@ SpellInfo::SpellInfo(SpellEntry const* spellEntry, ::Difficulty difficulty, std:
 
     _effects.reserve(32);
     for (SpellEffectEntry const& spellEffect : effects)
-         Trinity::Containers::EnsureWritableVectorIndex(_effects, spellEffect.EffectIndex, SpellEffectInfo(this)) = SpellEffectInfo(this, spellEffect);
+         Trinity::Containers::EnsureWritableVectorIndex(_effects, spellEffect.EffectIndex) = SpellEffectInfo(this, spellEffect);
 
     // Correct EffectIndex for blank effects
     for (size_t i = 0; i < _effects.size(); ++i)
+    {
+        _effects[i]._spellInfo = this;
         _effects[i].EffectIndex = SpellEffIndex(i);
+    }
 
     _effects.shrink_to_fit();
 }
@@ -3480,7 +3481,7 @@ void SpellInfo::_LoadImmunityInfo()
             || !immuneInfo.AuraTypeImmune.empty()
             || !immuneInfo.SpellEffectImmune.empty())
         {
-            effect._immunityInfo = workBuffer.release();
+            effect._immunityInfo = std::move(workBuffer);
             workBuffer = std::make_unique<SpellEffectInfo::ImmunityInfo>();
         }
 
