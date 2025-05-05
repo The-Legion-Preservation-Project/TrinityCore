@@ -44,7 +44,7 @@ namespace lfg
 
 LFGDungeonData::LFGDungeonData() : id(0), name(), map(0), type(0), expansion(0), group(0), minlevel(0),
     maxlevel(0), difficulty(DIFFICULTY_NONE), seasonal(false), x(0.0f), y(0.0f), z(0.0f), o(0.0f),
-    requiredItemLevel(0)
+    requiredItemLevel(0), finalDungeonEncounterId(0)
 {
 }
 
@@ -52,8 +52,10 @@ LFGDungeonData::LFGDungeonData(LFGDungeonsEntry const* dbc) : id(dbc->ID), name(
     type(uint8(dbc->TypeID)), expansion(uint8(dbc->ExpansionLevel)), group(uint8(dbc->GroupID)),
     minlevel(uint8(dbc->MinLevel)), maxlevel(uint8(dbc->MaxLevel)), difficulty(Difficulty(dbc->DifficultyID)),
     seasonal((dbc->Flags & LFG_FLAG_SEASONAL) != 0), x(0.0f), y(0.0f), z(0.0f), o(0.0f),
-    requiredItemLevel(0)
+    requiredItemLevel(0), finalDungeonEncounterId(0)
 {
+    if (JournalEncounterEntry const* journalEncounter = sJournalEncounterStore.LookupEntry(dbc->FinalEncounterID))
+        finalDungeonEncounterId = sObjectMgr->GetFinalDungeonEncounterID(journalEncounter->ID);
 }
 
 LFGMgr::LFGMgr() : m_QueueTimer(0), m_lfgProposalId(1),
@@ -1442,9 +1444,33 @@ void LFGMgr::TeleportPlayer(Player* player, bool out, bool fromOpcode /*= false*
 }
 
 /**
+   Check if dungeon can be rewarded, if any.
+
+   @param[in]     gguid Group guid
+   @param[in]     dungeonEncounterIds DungeonEncounter that was just completed
+   @param[in]     currMap Map of the instance where encounter was completed
+*/
+void LFGMgr::OnDungeonEncounterDone(ObjectGuid gguid, std::array<uint32, 4> const& dungeonEncounterIds, Map const* currMap)
+{
+    if (GetState(gguid) == LFG_STATE_FINISHED_DUNGEON) // Shouldn't happen. Do not reward multiple times
+    {
+        TC_LOG_DEBUG("lfg.dungeon.finish", "Group: {} already rewarded", gguid.ToString());
+        return;
+    }
+
+    uint32 gDungeonId = GetDungeon(gguid);
+    LFGDungeonData const* dungeonDone = GetLFGDungeon(gDungeonId);
+    // LFGDungeons can point to a DungeonEncounter from any difficulty so we need this kind of lenient check
+    if (std::find(dungeonEncounterIds.begin(), dungeonEncounterIds.end(), dungeonDone->finalDungeonEncounterId) == dungeonEncounterIds.end())
+        return;
+
+    FinishDungeon(gguid, gDungeonId, currMap);
+}
+
+/**
    Finish a dungeon and give reward, if any.
 
-   @param[in]     guid Group guid
+   @param[in]     gguid Group guid
    @param[in]     dungeonId Dungeonid
 */
 void LFGMgr::FinishDungeon(ObjectGuid gguid, const uint32 dungeonId, Map const* currMap)

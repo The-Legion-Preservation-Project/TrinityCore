@@ -6158,103 +6158,57 @@ InstanceTemplate const* ObjectMgr::GetInstanceTemplate(uint32 mapID) const
     return nullptr;
 }
 
-void ObjectMgr::LoadInstanceEncounters()
+void ObjectMgr::LoadInstanceFinalEncounter()
 {
     uint32 oldMSTime = getMSTime();
 
-    //                                                 0         1            2                3
-    QueryResult result = WorldDatabase.Query("SELECT entry, creditType, creditEntry, lastEncounterDungeon FROM instance_encounters");
+    //                                               0                   1
+    QueryResult result = WorldDatabase.Query("SELECT JournalEncounterID, FinalDungeonEncounterID FROM instance_final_encounter");
     if (!result)
     {
-        TC_LOG_INFO("server.loading", ">> Loaded 0 instance encounters, table is empty!");
+        TC_LOG_INFO("server.loading", ">> Loaded 0 instance final encounters, table is empty!");
         return;
     }
 
     uint32 count = 0;
-    std::map<uint32, std::pair<uint32, DungeonEncounterEntry const*>> dungeonLastBosses;
     do
     {
         Field* fields = result->Fetch();
-        uint32 entry = fields[0].GetUInt32();
-        uint8 creditType = fields[1].GetUInt8();
-        uint32 creditEntry = fields[2].GetUInt32();
-        uint32 lastEncounterDungeon = fields[3].GetUInt16();
-        DungeonEncounterEntry const* dungeonEncounter = sDungeonEncounterStore.LookupEntry(entry);
+        uint32 journalEncounterId = fields[0].GetUInt32();
+        uint32 finalDungeonEncounterId = fields[1].GetUInt32();
+        JournalEncounterEntry const* journalEncounter = sJournalEncounterStore.LookupEntry(journalEncounterId);
+        if (!journalEncounter)
+        {
+            TC_LOG_ERROR("sql.sql", "Table `instance_final_encounter` has an invalid journal encounter id {}, skipped!", journalEncounterId);
+            continue;
+        }
+
+        DungeonEncounterEntry const* dungeonEncounter = sDungeonEncounterStore.LookupEntry(finalDungeonEncounterId);
         if (!dungeonEncounter)
         {
-            TC_LOG_ERROR("sql.sql", "Table `instance_encounters` has an invalid encounter id {}, skipped!", entry);
+            TC_LOG_ERROR("sql.sql", "Table `instance_final_encounter` has an invalid final dungeon encounter id {}, skipped!", finalDungeonEncounterId);
             continue;
         }
 
-        if (lastEncounterDungeon && !sLFGMgr->GetLFGDungeonEntry(lastEncounterDungeon))
+        JournalInstanceEntry const* journalInstance = sJournalInstanceStore.LookupEntry(journalEncounter->JournalInstanceID);
+        if (!journalEncounter)
         {
-            TC_LOG_ERROR("sql.sql", "Table `instance_encounters` has an encounter {} ({}) marked as final for invalid dungeon id {}, skipped!",
-                entry, dungeonEncounter->Name[sWorld->GetDefaultDbcLocale()], lastEncounterDungeon);
+            TC_LOG_ERROR("sql.sql", "Table `instance_final_encounter` failed to locate journal instance for journal encounter id {}, skipped!", journalEncounterId);
             continue;
         }
 
-        auto itr = dungeonLastBosses.find(lastEncounterDungeon);
-        if (lastEncounterDungeon)
+        if (dungeonEncounter->MapID != journalInstance->MapID)
         {
-            if (itr != dungeonLastBosses.end())
-            {
-                TC_LOG_ERROR("sql.sql", "Table `instance_encounters` specified encounter {} ({}) as last encounter but {} ({}) is already marked as one, skipped!",
-                    entry, dungeonEncounter->Name[sWorld->GetDefaultDbcLocale()], itr->second.first, itr->second.second->Name[sWorld->GetDefaultDbcLocale()]);
-                continue;
-            }
-
-            dungeonLastBosses[lastEncounterDungeon] = std::make_pair(entry, dungeonEncounter);
+            TC_LOG_ERROR("sql.sql", "Table `instance_final_encounter` journal encounter id {} and final dungeon encounter id {} refer to different maps, skipped!", journalEncounterId, finalDungeonEncounterId);
+            continue;
         }
 
-        switch (creditType)
-        {
-            case ENCOUNTER_CREDIT_KILL_CREATURE:
-            {
-                CreatureTemplate const* creatureInfo = GetCreatureTemplate(creditEntry);
-                if (!creatureInfo)
-                {
-                    TC_LOG_ERROR("sql.sql", "Table `instance_encounters` has an invalid creature (entry {}) linked to the encounter {} ({}), skipped!",
-                        creditEntry, entry, dungeonEncounter->Name[sWorld->GetDefaultDbcLocale()]);
-                    continue;
-                }
-                const_cast<CreatureTemplate*>(creatureInfo)->flags_extra |= CREATURE_FLAG_EXTRA_DUNGEON_BOSS;
-                break;
-            }
-            case ENCOUNTER_CREDIT_CAST_SPELL:
-                if (!sSpellMgr->GetSpellInfo(creditEntry, DIFFICULTY_NONE))
-                {
-                    TC_LOG_ERROR("sql.sql", "Table `instance_encounters` has an invalid spell (entry {}) linked to the encounter {} ({}), skipped!",
-                        creditEntry, entry, dungeonEncounter->Name[sWorld->GetDefaultDbcLocale()]);
-                    continue;
-                }
-                break;
-            default:
-                TC_LOG_ERROR("sql.sql", "Table `instance_encounters` has an invalid credit type ({}) for encounter {} ({}), skipped!",
-                    creditType, entry, dungeonEncounter->Name[sWorld->GetDefaultDbcLocale()]);
-                continue;
-        }
-
-        if (!dungeonEncounter->DifficultyID)
-        {
-            for (DifficultyEntry const* difficulty : sDifficultyStore)
-            {
-                if (sDB2Manager.GetMapDifficultyData(dungeonEncounter->MapID, Difficulty(difficulty->ID)))
-                {
-                    DungeonEncounterList& encounters = _dungeonEncounterStore[MAKE_PAIR64(dungeonEncounter->MapID, difficulty->ID)];
-                    encounters.emplace_back(dungeonEncounter, EncounterCreditType(creditType), creditEntry, lastEncounterDungeon);
-                }
-            }
-        }
-        else
-        {
-            DungeonEncounterList& encounters = _dungeonEncounterStore[MAKE_PAIR64(dungeonEncounter->MapID, dungeonEncounter->DifficultyID)];
-            encounters.emplace_back(dungeonEncounter, EncounterCreditType(creditType), creditEntry, lastEncounterDungeon);
-        }
+        _finalDungeonEncounterStore.emplace(journalEncounterId, finalDungeonEncounterId);
 
         ++count;
     } while (result->NextRow());
 
-    TC_LOG_INFO("server.loading", ">> Loaded {} instance encounters in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
+    TC_LOG_INFO("server.loading", ">> Loaded {} instance final encounters in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 NpcText const* ObjectMgr::GetNpcText(uint32 Text_ID) const
@@ -10469,12 +10423,12 @@ VehicleAccessoryList const* ObjectMgr::GetVehicleAccessoryList(Vehicle* veh) con
     return nullptr;
 }
 
-DungeonEncounterList const* ObjectMgr::GetDungeonEncounterList(uint32 mapId, Difficulty difficulty) const
+uint32 ObjectMgr::GetFinalDungeonEncounterID(uint32 journalEncounterId) const
 {
-    auto itr = _dungeonEncounterStore.find(MAKE_PAIR64(mapId, difficulty));
-    if (itr != _dungeonEncounterStore.end())
-        return &itr->second;
-    return nullptr;
+    auto itr = _finalDungeonEncounterStore.find(journalEncounterId);
+    if (itr != _finalDungeonEncounterStore.end())
+        return itr->second;
+    return 0;
 }
 
 PlayerInfo const* ObjectMgr::GetPlayerInfo(uint32 race, uint32 class_) const
