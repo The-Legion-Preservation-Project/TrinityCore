@@ -611,6 +611,21 @@ struct BroadcastTextLoadInfo
     static constexpr DB2LoadInfo Instance{ Fields, 15, &BroadcastTextMeta::Instance, HOTFIX_SEL_BROADCAST_TEXT };
 };
 
+struct CfgCategoriesLoadInfo
+{
+    static constexpr DB2FieldMeta Fields[6] =
+    {
+        { false, FT_INT, "ID" },
+        { false, FT_STRING, "Name" },
+        { false, FT_SHORT, "LocaleMask" },
+        { false, FT_BYTE, "CreateCharsetMask" },
+        { false, FT_BYTE, "ExistingCharsetMask" },
+        { false, FT_BYTE, "Flags" },
+    };
+
+    static constexpr DB2LoadInfo Instance{ Fields, 6, &Cfg_CategoriesMeta::Instance, HOTFIX_SEL_CFG_CATEGORIES };
+};
+
 struct CfgRegionsLoadInfo
 {
     static constexpr DB2FieldMeta Fields[6] =

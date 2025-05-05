@@ -429,6 +429,20 @@ struct BroadcastTextEntry
     std::array<uint32, 2> SoundKitID;
 };
 
+struct Cfg_CategoriesEntry
+{
+    uint32 ID;
+    LocalizedString Name;
+    uint16 LocaleMask;
+    uint8 CreateCharsetMask;
+    uint8 ExistingCharsetMask;
+    uint8 Flags;
+
+    EnumFlag<CfgCategoriesCharsets> GetCreateCharsetMask() const { return static_cast<CfgCategoriesCharsets>(CreateCharsetMask); }
+    EnumFlag<CfgCategoriesCharsets> GetExistingCharsetMask() const { return static_cast<CfgCategoriesCharsets>(ExistingCharsetMask); }
+    EnumFlag<CfgCategoriesFlags> GetFlags() const { return static_cast<CfgCategoriesFlags>(Flags); }
+};
+
 struct Cfg_RegionsEntry
 {
     uint32 ID;
