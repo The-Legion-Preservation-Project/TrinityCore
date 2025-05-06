@@ -3764,7 +3764,7 @@ void Spell::EffectSkinning()
     if (int32 pureSkillValue = m_caster->ToPlayer()->GetPureSkillValue(skill))
     {
         // Double chances for elites
-        m_caster->ToPlayer()->UpdateGatherSkill(skill, pureSkillValue, reqValue, creature->isElite() ? 2 : 1);
+        m_caster->ToPlayer()->UpdateGatherSkill(skill, pureSkillValue, reqValue, creature->IsElite() ? 2 : 1);
     }
 }
 
