@@ -13588,6 +13588,29 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* t
                 else
                     *data << m_uint32Values[index];
             }
+            else if (index == UNIT_FIELD_INTERACT_SPELLID)
+            {
+                uint32 interactSpellId = m_uint32Values[index];
+
+                if (HasNpcFlag(UNIT_NPC_FLAG_SPELLCLICK) && !interactSpellId)
+                {
+                    // this field is not set if there are multiple available spellclick spells
+                    auto clickBounds = sObjectMgr->GetSpellClickInfoMapBounds(GetEntry());
+                    for (auto const& [creatureId, spellClickInfo] : clickBounds)
+                    {
+                        if (!spellClickInfo.IsFitToRequirements(target, this))
+                            continue;
+
+                        if (!sConditionMgr->IsObjectMeetingSpellClickConditions(GetEntry(), spellClickInfo.spellId, target, this))
+                            continue;
+
+                        interactSpellId = spellClickInfo.spellId;
+                        break;
+                    }
+                }
+
+                *data << interactSpellId;
+            }
             else if (index == OBJECT_FIELD_ENTRY)
             {
                 uint32 entryId = m_uint32Values[index];
