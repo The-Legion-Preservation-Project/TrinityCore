@@ -69,6 +69,9 @@ EnumCharactersResult::CharacterInfo::CharacterInfo(Field* fields)
     uint32 playerFlags  = fields[20].GetUInt32();
     uint32 atLoginFlags = fields[21].GetUInt16();
 
+    if (playerFlags & PLAYER_FLAGS_RESTING)
+        Flags |= CHARACTER_FLAG_RESTING;
+
     if (atLoginFlags & AT_LOGIN_RESURRECT)
         playerFlags &= ~PLAYER_FLAGS_GHOST;
 
