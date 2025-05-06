@@ -34,7 +34,6 @@
 #include "ObjectMgr.h"
 #include "Player.h"
 #include "ScriptMgr.h"
-#include "Timezone.h"
 #include "World.h"
 #include "WorldSession.h"
 #include "WowTime.h"
