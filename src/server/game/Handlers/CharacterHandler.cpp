@@ -2249,7 +2249,8 @@ void WorldSession::HandleCharRaceOrFactionChangeCallback(std::shared_ptr<WorldPa
         trans->Append(stmt);
 
         // Race specific languages
-        if (factionChangeInfo->RaceID != RACE_ORC && factionChangeInfo->RaceID != RACE_HUMAN)
+        std::array<uint8, 4> const racesWithoutSpecificLanguages = { RACE_ORC, RACE_HUMAN };
+        if (std::find(racesWithoutSpecificLanguages.begin(), racesWithoutSpecificLanguages.end(), factionChangeInfo->RaceID) == racesWithoutSpecificLanguages.end())
         {
             stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHAR_SKILL_LANGUAGE);
             stmt->setUInt64(0, lowGuid);
@@ -2291,6 +2292,12 @@ void WorldSession::HandleCharRaceOrFactionChangeCallback(std::shared_ptr<WorldPa
                     break;
                 case RACE_NIGHTBORNE:
                     stmt->setUInt16(1, 2464);
+                    break;
+                    stmt->setUInt16(1, 2776);
+                    break;
+                case LANG_PANDAREN_ALLIANCE:
+                case LANG_PANDAREN_HORDE:
+                    stmt->setUInt16(1, 905);
                     break;
                 default:
                     TC_LOG_ERROR("entities.player", "Could not find language data for race ({}).", factionChangeInfo->RaceID);
