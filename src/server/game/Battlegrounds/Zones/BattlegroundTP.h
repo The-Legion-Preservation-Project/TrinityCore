@@ -21,40 +21,10 @@
 #include "Battleground.h"
 #include "BattlegroundScore.h"
 
-class BattlegroundTPScore final : public BattlegroundScore
+enum BG_TP_Objectives
 {
-    protected:
-        BattlegroundTPScore(ObjectGuid playerGuid, uint32 team) : BattlegroundScore(playerGuid, team), FlagCaptures(0), FlagReturns(0) { }
-
-        void UpdateScore(uint32 type, uint32 value) override
-        {
-            switch (type)
-            {
-                case SCORE_FLAG_CAPTURES:
-                    FlagCaptures += value;
-                    break;
-                case SCORE_FLAG_RETURNS:
-                    FlagReturns += value;
-                    break;
-                default:
-                    BattlegroundScore::UpdateScore(type, value);
-                    break;
-            }
-        }
-
-        void BuildPvPLogPlayerDataPacket(WorldPackets::Battleground::PVPMatchStatistics::PlayerData& playerData) const override
-        {
-            BattlegroundScore::BuildPvPLogPlayerDataPacket(playerData);
-
-            playerData.Stats.push_back(FlagCaptures);
-            playerData.Stats.push_back(FlagReturns);
-        }
-
-        uint32 GetAttr1() const final override { return FlagCaptures; }
-        uint32 GetAttr2() const final override { return FlagReturns; }
-
-        uint32 FlagCaptures;
-        uint32 FlagReturns;
+    BG_TP_FLAG_CAPTURES = 290,
+    BG_TP_FLAG_RETURNS  = 291
 };
 
 class BattlegroundTP : public Battleground

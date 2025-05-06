@@ -19,7 +19,6 @@
 #define __BATTLEGROUNDSA_H
 
 #include "Battleground.h"
-#include "BattlegroundScore.h"
 #include "Object.h"
 
 #define BG_SA_FLAG_AMOUNT           3
@@ -520,44 +519,6 @@ struct BG_SA_RoundScore
 {
     TeamId winner;
     uint32 time;
-};
-
-struct BattlegroundSAScore final : public BattlegroundScore
-{
-    friend class BattlegroundSA;
-
-    protected:
-        BattlegroundSAScore(ObjectGuid playerGuid, uint32 team) : BattlegroundScore(playerGuid, team), DemolishersDestroyed(0), GatesDestroyed(0) { }
-
-        void UpdateScore(uint32 type, uint32 value) override
-        {
-            switch (type)
-            {
-                case SCORE_DESTROYED_DEMOLISHER:
-                    DemolishersDestroyed += value;
-                    break;
-                case SCORE_DESTROYED_WALL:
-                    GatesDestroyed += value;
-                    break;
-                default:
-                    BattlegroundScore::UpdateScore(type, value);
-                    break;
-            }
-        }
-
-        void BuildPvPLogPlayerDataPacket(WorldPackets::Battleground::PVPMatchStatistics::PlayerData& playerData) const override
-        {
-            BattlegroundScore::BuildPvPLogPlayerDataPacket(playerData);
-
-            playerData.Stats.push_back(DemolishersDestroyed);
-            playerData.Stats.push_back(GatesDestroyed);
-        }
-
-        uint32 GetAttr1() const final override { return DemolishersDestroyed; }
-        uint32 GetAttr2() const final override { return GatesDestroyed; }
-
-        uint32 DemolishersDestroyed;
-        uint32 GatesDestroyed;
 };
 
 /// Class for manage Strand of Ancient battleground

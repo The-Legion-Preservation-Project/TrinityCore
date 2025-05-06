@@ -19,7 +19,6 @@
 #define __BATTLEGROUNDAB_H
 
 #include "Battleground.h"
-#include "BattlegroundScore.h"
 #include "Object.h"
 
 enum BG_AB_WorldStates
@@ -219,12 +218,6 @@ enum BG_AB_Sounds
     BG_AB_SOUND_NEAR_VICTORY_HORDE      = 8457
 };
 
-enum BG_AB_Objectives
-{
-    AB_OBJECTIVE_ASSAULT_BASE           = 122,
-    AB_OBJECTIVE_DEFEND_BASE            = 123
-};
-
 enum BG_AB_ExploitTeleportLocations
 {
     AB_EXPLOIT_TELEPORT_LOCATION_ALLIANCE = 3705,
@@ -289,63 +282,20 @@ struct BG_AB_BannerTimer
     uint8       teamIndex;
 };
 
-struct BattlegroundABScore final : public BattlegroundScore
-{
-    friend class BattlegroundAB;
-
-    protected:
-        BattlegroundABScore(ObjectGuid playerGuid, uint32 team) : BattlegroundScore(playerGuid, team), BasesAssaulted(0), BasesDefended(0) { }
-
-        void UpdateScore(uint32 type, uint32 value) override
-        {
-            switch (type)
-            {
-                case SCORE_BASES_ASSAULTED:
-                    BasesAssaulted += value;
-                    break;
-                case SCORE_BASES_DEFENDED:
-                    BasesDefended += value;
-                    break;
-                default:
-                    BattlegroundScore::UpdateScore(type, value);
-                    break;
-            }
-        }
-
-        void BuildPvPLogPlayerDataPacket(WorldPackets::Battleground::PVPMatchStatistics::PlayerData& playerData) const override
-        {
-            BattlegroundScore::BuildPvPLogPlayerDataPacket(playerData);
-
-            playerData.Stats.push_back(BasesAssaulted);
-            playerData.Stats.push_back(BasesDefended);
-        }
-
-        uint32 GetAttr1() const final override { return BasesAssaulted; }
-        uint32 GetAttr2() const final override { return BasesDefended; }
-
-        uint32 BasesAssaulted;
-        uint32 BasesDefended;
-};
-
 class BattlegroundAB : public Battleground
 {
     public:
         BattlegroundAB(BattlegroundTemplate const* battlegroundTemplate);
         ~BattlegroundAB();
 
-        void AddPlayer(Player* player, BattlegroundQueueTypeId queueId) override;
         void StartingEventCloseDoors() override;
         void StartingEventOpenDoors() override;
-        void RemovePlayer(Player* player, ObjectGuid guid, uint32 team) override;
         void HandleAreaTrigger(Player* source, uint32 trigger, bool entered) override;
         bool SetupBattleground() override;
         void Reset() override;
         void EndBattleground(uint32 winner) override;
         WorldSafeLocsEntry const* GetClosestGraveyard(Player* player) override;
         WorldSafeLocsEntry const* GetExploitTeleportLocation(Team team) override;
-
-        /* Scorekeeping */
-        bool UpdatePlayerScore(Player* player, uint32 type, uint32 value, bool doAddHonor = true) override;
 
         /* Nodes occupying */
         void EventPlayerClickedOnFlag(Player* source, GameObject* target_obj) override;

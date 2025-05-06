@@ -39,6 +39,7 @@
 #include <iterator>
 #include <map>
 #include <unordered_map>
+#include <unordered_set>
 
 class Item;
 class Unit;
@@ -943,6 +944,7 @@ struct ExtendedPlayerName
 ExtendedPlayerName ExtractExtendedPlayerName(std::string const& name);
 
 typedef std::unordered_map<uint32, uint32> FinalDungeonEncounterContainer;
+typedef std::unordered_map<uint32, std::unordered_set<uint32>> PvpStatContainer;
 
 struct TerrainSwapInfo
 {
@@ -1205,6 +1207,7 @@ class TC_GAME_API ObjectMgr
         VehicleAccessoryList const* GetVehicleAccessoryList(Vehicle* veh) const;
 
         uint32 GetFinalDungeonEncounterID(uint32 journalEncounterId) const;
+        std::unordered_set<uint32> const* GetPVPStatIDsForMap(uint32 mapId) const;
 
         void LoadQuests();
         void LoadQuestStartersAndEnders();
@@ -1280,6 +1283,7 @@ class TC_GAME_API ObjectMgr
         void LoadPointOfInterestLocales();
         void LoadInstanceTemplate();
         void LoadInstanceFinalEncounter();
+        void LoadPVPStatIDs();
         void LoadMailLevelRewards();
         void LoadVehicleTemplateAccessories();
         void LoadVehicleTemplate();
@@ -1742,6 +1746,7 @@ class TC_GAME_API ObjectMgr
         AreaTriggerScriptContainer _areaTriggerScriptStore;
         AccessRequirementContainer _accessRequirementStore;
         FinalDungeonEncounterContainer _finalDungeonEncounterStore;
+        PvpStatContainer _pvpStatStore;
 
         EventContainer _eventStore;
         EventScriptContainer _eventScriptStore;

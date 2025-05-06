@@ -6214,6 +6214,48 @@ void ObjectMgr::LoadInstanceFinalEncounter()
     TC_LOG_INFO("server.loading", ">> Loaded {} instance final encounters in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
+void ObjectMgr::LoadPVPStatIDs()
+{
+    uint32 oldMSTime = getMSTime();
+
+    //                                               0      1
+    QueryResult result = WorldDatabase.Query("SELECT MapID, PVPStatID FROM pvp_stat");
+    if (!result)
+    {
+        TC_LOG_INFO("server.loading", ">> Loaded 0 pvp stats, table is empty!");
+        return;
+    }
+
+    std::unordered_set<uint32> pvpMaps;
+    for (PVPDifficultyEntry const* pvpDifficulty : sPVPDifficultyStore)
+        pvpMaps.emplace(pvpDifficulty->MapID);
+
+    uint32 count = 0;
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 mapId = fields[0].GetUInt32();
+        uint32 pvpStatId = fields[1].GetUInt32();
+        MapEntry const* mapEntry = sMapStore.LookupEntry(mapId);
+        if (!mapEntry)
+        {
+            TC_LOG_ERROR("sql.sql", "Table `pvp_stat` has an invalid map id {}, skipped!", mapId);
+            continue;
+        }
+
+        if (!pvpMaps.contains(mapId))
+        {
+            TC_LOG_ERROR("sql.sql", "Table `pvp_stat` has a map id that is not a PVP map {}, skipped!", mapId);
+        }
+
+        _pvpStatStore[mapId].emplace(pvpStatId);
+
+        ++count;
+    } while (result->NextRow());
+
+    TC_LOG_INFO("server.loading", ">> Loaded {} instance final encounters in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
+}
+
 NpcText const* ObjectMgr::GetNpcText(uint32 Text_ID) const
 {
     NpcTextContainer::const_iterator itr = _npcTextStore.find(Text_ID);
@@ -10408,6 +10450,14 @@ uint32 ObjectMgr::GetFinalDungeonEncounterID(uint32 journalEncounterId) const
     if (itr != _finalDungeonEncounterStore.end())
         return itr->second;
     return 0;
+}
+
+std::unordered_set<uint32> const* ObjectMgr::GetPVPStatIDsForMap(uint32 mapId) const
+{
+    auto itr = _pvpStatStore.find(mapId);
+    if (itr != _pvpStatStore.end())
+        return &itr->second;
+    return nullptr;
 }
 
 PlayerInfo const* ObjectMgr::GetPlayerInfo(uint32 race, uint32 class_) const

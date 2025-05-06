@@ -17,6 +17,8 @@
 
 #include "BattlegroundAB.h"
 #include "BattlegroundMgr.h"
+#include "BattlegroundPackets.h"
+#include "BattlegroundScore.h"
 #include "Creature.h"
 #include "DB2Stores.h"
 #include "GameObject.h"
@@ -24,6 +26,12 @@
 #include "Map.h"
 #include "Player.h"
 #include "SpellInfo.h"
+
+enum ArathiBasinPvpStats
+{
+    PVP_STAT_BASES_ASSAULTED    = 122,
+    PVP_STAT_BASES_DEFENDED     = 123,
+};
 
 BattlegroundAB::BattlegroundAB(BattlegroundTemplate const* battlegroundTemplate) : Battleground(battlegroundTemplate)
 {
@@ -218,18 +226,6 @@ void BattlegroundAB::StartingEventOpenDoors()
 
     // Achievement: Let's Get This Done
     TriggerGameEvent(AB_EVENT_START_BATTLE);
-}
-
-void BattlegroundAB::AddPlayer(Player* player, BattlegroundQueueTypeId queueId)
-{
-    bool const isInBattleground = IsPlayerInBattleground(player->GetGUID());
-    Battleground::AddPlayer(player, queueId);
-    if (!isInBattleground)
-        PlayerScores[player->GetGUID()] = new BattlegroundABScore(player->GetGUID(), player->GetBGTeam());
-}
-
-void BattlegroundAB::RemovePlayer(Player* /*player*/, ObjectGuid /*guid*/, uint32 /*team*/)
-{
 }
 
 void BattlegroundAB::HandleAreaTrigger(Player* player, uint32 trigger, bool entered)
@@ -427,7 +423,7 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
     // If node is neutral, change to contested
     if (m_Nodes[node] == BG_AB_NODE_TYPE_NEUTRAL)
     {
-        UpdatePlayerScore(source, SCORE_BASES_ASSAULTED, 1);
+        UpdatePvpStat(source, PVP_STAT_BASES_ASSAULTED, 1);
         m_prevNodes[node] = m_Nodes[node];
         m_Nodes[node] = teamIndex + 1;
         // burn current neutral banner
@@ -450,7 +446,7 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
         // If last state is NOT occupied, change node to enemy-contested
         if (m_prevNodes[node] < BG_AB_NODE_TYPE_OCCUPIED)
         {
-            UpdatePlayerScore(source, SCORE_BASES_ASSAULTED, 1);
+            UpdatePvpStat(source, PVP_STAT_BASES_ASSAULTED, 1);
             m_prevNodes[node] = m_Nodes[node];
             m_Nodes[node] = uint8(teamIndex) + BG_AB_NODE_TYPE_CONTESTED;
             // burn current contested banner
@@ -468,7 +464,7 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
         // If contested, change back to occupied
         else
         {
-            UpdatePlayerScore(source, SCORE_BASES_DEFENDED, 1);
+            UpdatePvpStat(source, PVP_STAT_BASES_DEFENDED, 1);
             m_prevNodes[node] = m_Nodes[node];
             m_Nodes[node] = uint8(teamIndex) + BG_AB_NODE_TYPE_OCCUPIED;
             // burn current contested banner
@@ -489,7 +485,7 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
     // If node is occupied, change to enemy-contested
     else
     {
-        UpdatePlayerScore(source, SCORE_BASES_ASSAULTED, 1);
+        UpdatePvpStat(source, PVP_STAT_BASES_DEFENDED, 1);
         m_prevNodes[node] = m_Nodes[node];
         m_Nodes[node] = uint8(teamIndex) + BG_AB_NODE_TYPE_CONTESTED;
         // burn current occupied banner
@@ -665,23 +661,4 @@ WorldSafeLocsEntry const* BattlegroundAB::GetClosestGraveyard(Player* player)
 WorldSafeLocsEntry const* BattlegroundAB::GetExploitTeleportLocation(Team team)
 {
     return sWorldSafeLocsStore.LookupEntry(team == ALLIANCE ? AB_EXPLOIT_TELEPORT_LOCATION_ALLIANCE : AB_EXPLOIT_TELEPORT_LOCATION_HORDE);
-}
-
-bool BattlegroundAB::UpdatePlayerScore(Player* player, uint32 type, uint32 value, bool doAddHonor)
-{
-    if (!Battleground::UpdatePlayerScore(player, type, value, doAddHonor))
-        return false;
-
-    switch (type)
-    {
-        case SCORE_BASES_ASSAULTED:
-            player->UpdateCriteria(CriteriaType::TrackedWorldStateUIModified, AB_OBJECTIVE_ASSAULT_BASE);
-            break;
-        case SCORE_BASES_DEFENDED:
-            player->UpdateCriteria(CriteriaType::TrackedWorldStateUIModified, AB_OBJECTIVE_DEFEND_BASE);
-            break;
-        default:
-            break;
-    }
-    return true;
 }
