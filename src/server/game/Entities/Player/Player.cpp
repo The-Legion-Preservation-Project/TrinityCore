@@ -13668,6 +13668,8 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
 
     switch (gossipOptionNpc)
     {
+        case GossipOptionNpc::None:
+            break;
         case GossipOptionNpc::Vendor:
             GetSession()->SendListInventory(guid);
             break;
