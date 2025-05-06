@@ -9,4 +9,9 @@ CREATE TABLE `pvp_stat`  (
 
 INSERT INTO `pvp_stat` (MapID, PVPStatID, Comment) VALUES
 (529, 122, 'Arathi Basin - Bases Assaulted'),
-(529, 123, 'Arathi Basin - Bases Defended');
+(529, 123, 'Arathi Basin - Bases Defended'),
+(30, 61, 'Alterac Valley - Towers Assaulted'),
+(30, 63, 'Alterac Valley - Graveyards Assaulted'),
+(30, 64, 'Alterac Valley - Towers Defended'),
+(30, 65, 'Alterac Valley - Graveyards Defended'),
+(30, 82, 'Alterac Valley - Secondary Objectives');
