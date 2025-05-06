@@ -1745,10 +1745,12 @@ class TC_GAME_API Unit : public WorldObject
 
         std::string GetDebugInfo() const override;
 
+        void BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const;
+
     protected:
         explicit Unit (bool isWorldObject);
 
-        void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const override;
+        void BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const override;
         void DestroyForPlayer(Player* target) const override;
 
         void _UpdateSpells(uint32 time);

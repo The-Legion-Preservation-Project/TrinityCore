@@ -388,7 +388,7 @@ void BattlegroundIC::HandleCapturedNodes(ICNodePoint& node)
 
 WorldSafeLocsEntry const* BattlegroundIC::GetExploitTeleportLocation(Team team)
 {
-    return sObjectMgr->GetWorldSafeLoc(team == ALLIANCE ? IC_EXPLOIT_TELEPORT_LOCATION_ALLIANCE : IC_EXPLOIT_TELEPORT_LOCATION_HORDE);
+    return sWorldSafeLocsStore.LookupEntry(team == ALLIANCE ? IC_EXPLOIT_TELEPORT_LOCATION_ALLIANCE : IC_EXPLOIT_TELEPORT_LOCATION_HORDE);
 }
 
 void BattlegroundIC::OnCreatureCreate(Creature* creature)

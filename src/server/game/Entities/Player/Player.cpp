@@ -2074,11 +2074,6 @@ void Player::UpdateNearbyCreatureNpcFlags()
     GetCreatureListWithOptionsInGrid(creatures, GetVisibilityRange(), { .IgnorePhases = false });
 
     UpdateData udata(GetMapId());
-    UF::ObjectData::Base objMask;
-    UF::UnitData::Base unitMask;
-    for (uint32 i = 0; i < m_unitData->NpcFlags.size(); ++i)
-        unitMask.MarkChanged(&UF::UnitData::NpcFlags, i);
-
     for (Creature* creature : creatures)
     {
         if (!HaveAtClient(creature))
@@ -2088,7 +2083,7 @@ void Player::UpdateNearbyCreatureNpcFlags()
         if (!creature->GetNpcFlags() && !creature->GetNpcFlags2())
             continue;
 
-        creature->BuildValuesUpdateForPlayerWithMask(&udata, objMask.GetChangesMask(), unitMask.GetChangesMask(), this);
+        creature->BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &udata.GetBuffer(), this, {UNIT_NPC_FLAGS, UNIT_NPC_FLAGS + 1});
     }
 
     if (!udata.HasData())

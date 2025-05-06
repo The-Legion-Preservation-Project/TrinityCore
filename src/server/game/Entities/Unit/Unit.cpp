@@ -13456,6 +13456,11 @@ bool Unit::IsSplineEnabled() const
 
 void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const
 {
+    BuildValuesUpdateWithMask(updateType, data, target, {});
+}
+
+void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const
+{
     if (!target)
         return;
 
@@ -13489,10 +13494,16 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* t
 
     for (uint16 index = 0; index < valCount; ++index)
     {
-        if (_fieldNotifyFlags & flags[index] ||
+        bool shouldUpdate = _fieldNotifyFlags & flags[index] ||
             ((flags[index] & visibleFlag) & UF_FLAG_SPECIAL_INFO) ||
             ((updateType == UPDATETYPE_VALUES ? _changesMask[index] : m_uint32Values[index]) && (flags[index] & visibleFlag)) ||
-            (index == UNIT_FIELD_AURASTATE && HasFlag(UNIT_FIELD_AURASTATE, PER_CASTER_AURA_STATE_MASK)))
+            (index == UNIT_FIELD_AURASTATE && HasFlag(UNIT_FIELD_AURASTATE, PER_CASTER_AURA_STATE_MASK));
+
+        // TheLegionPreservationProject: hack for "masked" updates
+        if (indexes.size() > 0 && (indexes.find(index) != indexes.end()))
+            shouldUpdate = true;
+
+        if (shouldUpdate)
         {
             UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
 
