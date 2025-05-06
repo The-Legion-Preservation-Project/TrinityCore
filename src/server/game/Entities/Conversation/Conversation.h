@@ -66,7 +66,7 @@ struct ConversationDynamicFieldActor
 };
 #pragma pack(pop)
 
-class TC_GAME_API Conversation : public WorldObject, public GridObject<Conversation>
+class TC_GAME_API Conversation final : public WorldObject, public GridObject<Conversation>
 {
     public:
         Conversation();
