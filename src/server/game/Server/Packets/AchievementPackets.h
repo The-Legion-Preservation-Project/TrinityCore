@@ -21,6 +21,7 @@
 #include "Packet.h"
 #include "ObjectGuid.h"
 #include "PacketUtilities.h"
+#include "WowTime.h"
 
 namespace WorldPackets
 {
@@ -29,7 +30,7 @@ namespace WorldPackets
         struct EarnedAchievement
         {
             uint32 Id = 0;
-            time_t Date = time_t(0);
+            WowTime Date;
             ObjectGuid Owner;
             uint32 VirtualRealmAddress = 0;
             uint32 NativeRealmAddress = 0;
@@ -41,7 +42,7 @@ namespace WorldPackets
             uint64 Quantity = 0;
             ObjectGuid Player;
             uint32 Flags = 0;
-            time_t Date = time_t(0);
+            WowTime Date;
             Duration<Seconds> TimeFromStart;
             Duration<Seconds> TimeFromCreate;
         };
@@ -94,7 +95,7 @@ namespace WorldPackets
             uint64 Quantity = 0;
             ObjectGuid PlayerGUID;
             uint32 Flags = 0;
-            time_t CurrentTime = time_t(0);
+            WowTime CurrentTime;
             Duration<Seconds> ElapsedTime;
             Timestamp<> CreationTime;
         };
@@ -141,7 +142,7 @@ namespace WorldPackets
             uint32 EarnerNativeRealm = 0;
             uint32 EarnerVirtualRealm = 0;
             uint32 AchievementID = 0;
-            time_t Time = time_t(0);
+            WowTime Time;
             bool Initial = false;
             ObjectGuid Sender;
         };
@@ -164,7 +165,7 @@ namespace WorldPackets
             int32 CriteriaID = 0;
             Timestamp<> DateCreated;
             Timestamp<> DateStarted;
-            time_t DateUpdated = 0;
+            WowTime DateUpdated;
             uint64 Quantity = 0;
             ObjectGuid PlayerGUID;
             int32 Flags = 0;
@@ -210,7 +211,7 @@ namespace WorldPackets
 
             ObjectGuid GuildGUID;
             uint32 AchievementID = 0;
-            time_t TimeDeleted = time_t(0);
+            WowTime TimeDeleted;
         };
 
         class GuildAchievementEarned final : public ServerPacket
@@ -222,7 +223,7 @@ namespace WorldPackets
 
             uint32 AchievementID = 0;
             ObjectGuid GuildGUID;
-            time_t TimeEarned = time_t(0);
+            WowTime TimeEarned;
         };
 
         class AllGuildAchievements final : public ServerPacket
@@ -266,9 +267,9 @@ namespace WorldPackets
             int32 AchievementID = 0;
             std::vector<GuildAchievementMember> Member;
         };
+
+        ByteBuffer& operator<<(ByteBuffer& data, CriteriaProgress const& criteria);
     }
 }
-
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Achievement::CriteriaProgress const& criteria);
 
 #endif // game_AchievementPackets_h__

@@ -25,6 +25,7 @@
 #include "RBAC.h"
 #include "Realm.h"
 #include "SystemPackets.h"
+#include "Timezone.h"
 #include "World.h"
 
 void WorldSession::SendAuthResponse(uint32 code, bool queued, uint32 queuePos)
@@ -84,11 +85,13 @@ void WorldSession::SendClientCacheVersion(uint32 version)
 
 void WorldSession::SendSetTimeZoneInformation()
 {
-    /// @todo: replace dummy values
-    WorldPackets::System::SetTimeZoneInformation packet;
-    packet.ServerTimeTZ = "Europe/Paris";
-    packet.GameTimeTZ = "Europe/Paris";
+    Minutes timezoneOffset = Trinity::Timezone::GetSystemZoneOffset(false);
+    std::string realTimezone = Trinity::Timezone::GetSystemZoneName();
+    std::string_view clientSupportedTZ = Trinity::Timezone::FindClosestClientSupportedTimezone(realTimezone, timezoneOffset);
 
+    WorldPackets::System::SetTimeZoneInformation packet;
+    packet.ServerTimeTZ = clientSupportedTZ;
+    packet.GameTimeTZ = clientSupportedTZ;
     SendPacket(packet.Write());
 }
 
