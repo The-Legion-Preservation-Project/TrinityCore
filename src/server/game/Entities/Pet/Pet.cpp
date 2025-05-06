@@ -910,7 +910,7 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
         ApplyLevelScaling();
 
         CreatureDifficulty const* creatureDifficulty = GetCreatureDifficulty();
-        SetCreateHealth(std::max(stats->GenerateHealth(creatureDifficulty) * _GetHealthMod(cinfo->Classification), 1.0f));
+        SetCreateHealth(std::max(stats->GenerateHealth(creatureDifficulty) * GetHealthMod(cinfo->Classification), 1.0f));
         SetCreateMana(stats->BaseMana);
         SetCreateStat(STAT_STRENGTH, 22);
         SetCreateStat(STAT_AGILITY, 22);
