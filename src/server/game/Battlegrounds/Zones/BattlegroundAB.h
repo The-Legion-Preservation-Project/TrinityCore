@@ -293,14 +293,14 @@ class BattlegroundAB : public Battleground
         void HandleAreaTrigger(Player* source, uint32 trigger, bool entered) override;
         bool SetupBattleground() override;
         void Reset() override;
-        void EndBattleground(uint32 winner) override;
+        void EndBattleground(Team winner) override;
         WorldSafeLocsEntry const* GetClosestGraveyard(Player* player) override;
         WorldSafeLocsEntry const* GetExploitTeleportLocation(Team team) override;
 
         /* Nodes occupying */
         void EventPlayerClickedOnFlag(Player* source, GameObject* target_obj) override;
 
-        uint32 GetPrematureWinner() override;
+        Team GetPrematureWinner() override;
     private:
         void PostUpdateImpl(uint32 diff) override;
         /* Gameobject spawning/despawning */

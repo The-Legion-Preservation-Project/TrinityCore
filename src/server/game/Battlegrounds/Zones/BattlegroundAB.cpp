@@ -515,7 +515,7 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
     PlaySoundToAll(sound);
 }
 
-uint32 BattlegroundAB::GetPrematureWinner()
+Team BattlegroundAB::GetPrematureWinner()
 {
     // How many bases each team owns
     uint8 ally = 0, horde = 0;
@@ -605,7 +605,7 @@ void BattlegroundAB::Reset()
             DelCreature(i);
 }
 
-void BattlegroundAB::EndBattleground(uint32 winner)
+void BattlegroundAB::EndBattleground(Team winner)
 {
     // Win reward
     if (winner == ALLIANCE)
