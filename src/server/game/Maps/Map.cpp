@@ -547,6 +547,9 @@ bool Map::AddToMap(T* obj)
         return false; //Should delete object
     }
 
+    if (IsAlwaysActive())
+        obj->setActive(true);
+
     Cell cell(cellCoord);
     if (obj->isActiveObject())
         EnsureGridLoadedForActiveObject(cell, obj);
@@ -3289,6 +3292,11 @@ bool Map::IsScenario() const
 bool Map::IsGarrison() const
 {
     return i_mapEntry && i_mapEntry->IsGarrison();
+}
+
+bool Map::IsAlwaysActive() const
+{
+    return IsBattlegroundOrArena();
 }
 
 bool Map::GetEntrancePos(int32 &mapid, float &x, float &y)
