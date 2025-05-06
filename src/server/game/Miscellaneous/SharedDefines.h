@@ -2173,6 +2173,7 @@ enum SpellImmunity
     IMMUNITY_DISPEL                = 4,                     // enum DispelType
     IMMUNITY_MECHANIC              = 5,                     // enum Mechanics
     IMMUNITY_ID                    = 6,
+    IMMUNITY_OTHER                 = 7,                     // enum SpellOtherImmunity
 
     MAX_SPELL_IMMUNITY
 };
