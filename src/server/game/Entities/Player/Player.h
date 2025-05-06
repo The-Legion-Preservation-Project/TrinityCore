@@ -1615,7 +1615,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         uint32 GetQuestSlotTime(uint16 slot) const;
         bool GetQuestSlotObjectiveFlag(uint16 slot, int8 objectiveIndex) const;
         int32 GetQuestSlotObjectiveData(uint16 slot, QuestObjective const& objective) const;
-        int32 GetQuestSlotObjectiveData(uint32 questId, uint32 objectiveId) const;
+        int32 GetQuestObjectiveData(uint32 questId, uint32 objectiveId) const;
         void SetQuestSlot(uint16 slot, uint32 quest_id, uint32 timer = 0);
         void SetQuestSlotCounter(uint16 slot, uint8 counter, uint16 count);
         void SetQuestSlotState(uint16 slot, uint32 state);
