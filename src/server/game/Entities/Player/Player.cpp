@@ -13559,7 +13559,7 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId, bool showQues
                     if (!isDead())
                         canTalk = false;
                     break;
-                case GossipOptionNpc::BattleMaster:
+                case GossipOptionNpc::Battlemaster:
                     if (!creature->isCanInteractWithBattleMaster(this, false))
                         canTalk = false;
                     break;
@@ -13588,7 +13588,7 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId, bool showQues
                 case GossipOptionNpc::Binder:
                 case GossipOptionNpc::Banker:
                 case GossipOptionNpc::PetitionVendor:
-                case GossipOptionNpc::TabardVendor:
+                case GossipOptionNpc::GuildTabardVendor:
                 case GossipOptionNpc::Auctioneer:
                 case GossipOptionNpc::Mailbox:
                 case GossipOptionNpc::Transmogrify:
@@ -13716,11 +13716,11 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
             PlayerTalkClass->SendCloseGossip();
             GetSession()->SendPetitionShowList(guid);
             break;
-        case GossipOptionNpc::TabardVendor:
+        case GossipOptionNpc::GuildTabardVendor:
             PlayerTalkClass->SendCloseGossip();
             GetSession()->SendTabardVendorActivate(guid);
             break;
-        case GossipOptionNpc::BattleMaster:
+        case GossipOptionNpc::Battlemaster:
         {
             BattlegroundTypeId bgTypeId = sBattlegroundMgr->GetBattleMasterBG(source->GetEntry());
 
@@ -16912,7 +16912,7 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
         PlayerRestState honorRestState;
         float honorRestBonus;
 
-        PlayerLoadData(Field* fields)
+        explicit PlayerLoadData(Field const* fields)
         {
             std::size_t i = 0;
             guid = fields[i++].GetUInt64();

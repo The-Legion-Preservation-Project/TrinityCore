@@ -3491,7 +3491,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
                     break;
                 case 123: // Shadowlands Season 1 End
                     // timestamp = unknown
-                    break;;
+                    break;
                 case 149: // Shadowlands Season 2 End
                     // timestamp = unknown
                     break;
@@ -4296,11 +4296,11 @@ void CriteriaMgr::LoadCriteriaList()
     uint32 questObjectiveCriterias = 0;
     for (CriteriaEntry const* criteriaEntry : sCriteriaStore)
     {
-        ASSERT(criteriaEntry->Type < uint8(CriteriaType::Count), "CRITERIA_TYPE_TOTAL must be greater than or equal to %u but is currently equal to %u",
+        ASSERT(criteriaEntry->Type < AsUnderlyingType(CriteriaType::Count), "CriteriaType::Count must be greater than or equal to %u but is currently equal to %u",
             criteriaEntry->Type + 1, uint32(CriteriaType::Count));
-        ASSERT(criteriaEntry->StartEvent < uint8(CriteriaStartEvent::Count), "CriteriaStartEvent::Count must be greater than or equal to %u but is currently equal to %u",
+        ASSERT(criteriaEntry->StartEvent < AsUnderlyingType(CriteriaStartEvent::Count), "CriteriaStartEvent::Count must be greater than or equal to %u but is currently equal to %u",
             criteriaEntry->StartEvent + 1, uint32(CriteriaStartEvent::Count));
-        ASSERT(criteriaEntry->FailEvent < uint8(CriteriaFailEvent::Count), "CriteriaFailEvent::Count must be greater than or equal to %u but is currently equal to %u",
+        ASSERT(criteriaEntry->FailEvent < AsUnderlyingType(CriteriaFailEvent::Count), "CriteriaFailEvent::Count must be greater than or equal to %u but is currently equal to %u",
             criteriaEntry->FailEvent + 1, uint32(CriteriaFailEvent::Count));
 
         auto treeItr = _criteriaTreeByCriteria.find(criteriaEntry->ID);

@@ -41,8 +41,8 @@ enum class GossipOptionNpc : uint8
     Binder                     = 5,    // Golden interaction wheel
     Banker                     = 6,    // Brown bag (with gold coin in lower corner)
     PetitionVendor             = 7,    // White chat bubble (with "..." inside)
-    TabardVendor               = 8,    // White tabard
-    BattleMaster               = 9,    // Two crossed swords
+    GuildTabardVendor          = 8,    // White tabard
+    Battlemaster               = 9,    // Two crossed swords
     Auctioneer                 = 10,   // Stack of gold coins
     TalentMaster               = 11,   // White chat bubble
     StableMaster               = 12,   // White chat bubble

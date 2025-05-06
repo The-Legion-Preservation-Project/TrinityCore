@@ -240,13 +240,13 @@ WorldPacket const* WorldPackets::Calendar::CalendarSendCalendar::Write()
     _worldPacket << uint32(Events.size());
     _worldPacket << uint32(RaidLockouts.size());
 
-    for (auto const& invite : Invites)
+    for (CalendarSendCalendarInviteInfo const& invite : Invites)
         _worldPacket << invite;
 
-    for (auto const& lockout : RaidLockouts)
+    for (CalendarSendCalendarRaidLockoutInfo const& lockout : RaidLockouts)
         _worldPacket << lockout;
 
-    for (auto const& event : Events)
+    for (CalendarSendCalendarEventInfo const& event : Events)
         _worldPacket << event;
 
     return &_worldPacket;
