@@ -13492,8 +13492,13 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* t
                 uint32 appendValue = m_uint32Values[UNIT_NPC_FLAGS];
 
                 if (creature)
+                {
+                    if (!target->CanSeeGossipOn(creature))
+                        appendValue &= ~(UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
+
                     if (!target->CanSeeSpellClickOn(creature))
                         appendValue &= ~UNIT_NPC_FLAG_SPELLCLICK;
+                }
 
                 *data << uint32(appendValue);
             }

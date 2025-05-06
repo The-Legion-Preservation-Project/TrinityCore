@@ -2068,6 +2068,37 @@ GameObject* Player::GetGameObjectIfCanInteractWith(ObjectGuid const& guid, Gameo
     return go;
 }
 
+void Player::UpdateNearbyCreatureNpcFlags()
+{
+    std::vector<Creature*> creatures;
+    GetCreatureListWithOptionsInGrid(creatures, GetVisibilityRange(), { .IgnorePhases = false });
+
+    UpdateData udata(GetMapId());
+    UF::ObjectData::Base objMask;
+    UF::UnitData::Base unitMask;
+    for (uint32 i = 0; i < m_unitData->NpcFlags.size(); ++i)
+        unitMask.MarkChanged(&UF::UnitData::NpcFlags, i);
+
+    for (Creature* creature : creatures)
+    {
+        if (!HaveAtClient(creature))
+            continue;
+
+        // skip creatures which dont have any npcflags set
+        if (!creature->GetNpcFlags() && !creature->GetNpcFlags2())
+            continue;
+
+        creature->BuildValuesUpdateForPlayerWithMask(&udata, objMask.GetChangesMask(), unitMask.GetChangesMask(), this);
+    }
+
+    if (!udata.HasData())
+        return;
+
+    WorldPacket packet;
+    udata.BuildPacket(&packet);
+    SendDirectMessage(&packet);
+}
+
 bool Player::IsInAreaTriggerRadius(AreaTriggerEntry const* trigger) const
 {
     if (!trigger)
@@ -13803,7 +13834,7 @@ uint32 Player::GetGossipTextId(uint32 menuId, WorldObject* source)
     return textId;
 }
 
-uint32 Player::GetGossipMenuForSource(WorldObject* source)
+uint32 Player::GetGossipMenuForSource(WorldObject const* source) const
 {
     switch (source->GetTypeId())
     {
@@ -14402,6 +14433,8 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
 
     sScriptMgr->OnQuestStatusChange(this, quest_id);
     sScriptMgr->OnQuestStatusChange(this, quest, oldStatus, questStatusData.Status);
+
+    UpdateNearbyCreatureNpcFlags();
 }
 
 void Player::CompleteQuest(uint32 quest_id)
@@ -14793,6 +14826,8 @@ void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rew
     if (quest->HasFlag(QUEST_FLAGS_UPDATE_PHASESHIFT))
         updateVisibility = PhasingHandler::OnConditionChange(this, false);
 
+    UpdateNearbyCreatureNpcFlags();
+
     //lets remove flag for delayed teleports
     SetCanDelayTeleport(false);
 
@@ -14824,6 +14859,8 @@ void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rew
 
     if (updateVisibility)
         UpdateObjectVisibility();
+
+    UpdateNearbyCreatureNpcFlags();
 }
 
 void Player::SetRewardedQuest(uint32 quest_id)
@@ -15486,6 +15523,8 @@ void Player::SetQuestStatus(uint32 questId, QuestStatus status, bool update /*= 
         sScriptMgr->OnQuestStatusChange(this, quest, oldStatus, status);
     }
 
+    UpdateNearbyCreatureNpcFlags();
+
     if (update)
         SendQuestUpdate(questId);
 }
@@ -15731,6 +15770,8 @@ void Player::SkipQuests(std::vector<uint32> const& questIds)
 
     if (updateVisibility)
         UpdateObjectVisibility();
+
+    UpdateNearbyCreatureNpcFlags();
 }
 
 void Player::DespawnPersonalSummonsForQuest(uint32 questId)
@@ -16248,6 +16289,8 @@ void Player::UpdateQuestObjectiveProgress(QuestObjectiveType objectiveType, int3
 
     if (updatePhaseShift)
         PhasingHandler::OnConditionChange(this);
+
+    UpdateNearbyCreatureNpcFlags();
 
     if (updateZoneAuras)
     {
@@ -26273,6 +26316,39 @@ void Player::ResummonPetTemporaryUnSummonedIfAny()
 bool Player::IsPetNeedBeTemporaryUnsummoned() const
 {
     return !IsInWorld() || !IsAlive() || HasUnitMovementFlag(MOVEMENTFLAG_FLYING);
+}
+
+bool Player::CanSeeGossipOn(Creature const* creature) const
+{
+    if (creature->HasNpcFlag(UNIT_NPC_FLAG_GOSSIP))
+    {
+        if (GetGossipMenuForSource(creature))
+            return true;
+    }
+
+    // for cases with questgiver/ender without gossip menus
+    if (creature->HasNpcFlag(UNIT_NPC_FLAG_QUESTGIVER))
+    {
+        QuestRelationResult objectQIR = sObjectMgr->GetCreatureQuestInvolvedRelations(creature->GetEntry());
+        for (uint32 quest_id : objectQIR)
+        {
+            QuestStatus status = GetQuestStatus(quest_id);
+            if (status == QUEST_STATUS_COMPLETE || status == QUEST_STATUS_INCOMPLETE)
+                return true;
+        }
+
+        QuestRelationResult objectQR = sObjectMgr->GetCreatureQuestRelations(creature->GetEntry());
+        for (uint32 quest_id : objectQR)
+        {
+            Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
+            if (!quest)
+                continue;
+
+            if (CanTakeQuest(quest, false))
+                return true;
+        }
+    }
+    return false;
 }
 
 bool Player::CanSeeSpellClickOn(Creature const* c) const
