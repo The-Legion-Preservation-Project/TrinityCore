@@ -1440,7 +1440,10 @@ void Battleground::SetBgMap(BattlegroundMap* map)
 {
     m_Map = map;
     if (map)
+    {
         _pvpStatIds = sObjectMgr->GetPVPStatIDsForMap(map->GetId());
+        OnMapSet(map);
+    }
     else
         _pvpStatIds = nullptr;
 }
