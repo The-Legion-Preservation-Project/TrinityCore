@@ -3269,6 +3269,15 @@ void GameObject::Use(Unit* user)
             Delete();
             return;
         }
+        case GAMEOBJECT_TYPE_CAPTURE_POINT:
+        {
+            Player* player = user->ToPlayer();
+            if (!player)
+                return;
+
+            AssaultCapturePoint(player);
+            return;
+        }
         case GAMEOBJECT_TYPE_ARTIFACT_FORGE:
         {
             GameObjectTemplate const* info = GetGOInfo();
