@@ -360,11 +360,11 @@ void ObjectMgr::LoadCreatureTemplates()
     //                                       "unit_class, unit_flags, unit_flags2, unit_flags3, "
     //                                        25      26             27    28         29      30
     //                                       "family, trainer_class, type, VehicleId, AIName, MovementType, "
-    //                                        31          32        33          34          35         36          37                         38
-    //                                       "ctm.Ground, ctm.Swim, ctm.Flight, ctm.Rooted, ctm.Chase, ctm.Random, ctm.InteractionPauseTimer, ExperienceModifier, "
-    //                                        39            40          41           42
+    //                                        31                         32         33          34                         35
+    //                                       "ctm.HoverInitiallyEnabled, ctm.Chase, ctm.Random, ctm.InteractionPauseTimer, ExperienceModifier, "
+    //                                        36            37          38           39
     //                                       "RacialLeader, movementId, RegenHealth, CreatureImmunitiesId, "
-    //                                        43           44          45
+    //                                        40           41          42
     //                                       "flags_extra, ScriptName, StringId FROM creature_template WHERE entry = ? OR 1 = ? "
 
     WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_CREATURE_TEMPLATE);
@@ -443,35 +443,27 @@ void ObjectMgr::LoadCreatureTemplate(Field* fields)
     creatureTemplate.VehicleId              = fields[28].GetUInt32();
     creatureTemplate.AIName                 = fields[29].GetString();
     creatureTemplate.MovementType           = uint32(fields[30].GetUInt8());
+
     if (!fields[31].IsNull())
-        creatureTemplate.Movement.Ground = static_cast<CreatureGroundMovementType>(fields[31].GetUInt8());
+        creatureTemplate.Movement.HoverInitiallyEnabled = fields[31].GetBool();
 
     if (!fields[32].IsNull())
-        creatureTemplate.Movement.Swim = fields[32].GetBool();
+        creatureTemplate.Movement.Chase = static_cast<CreatureChaseMovementType>(fields[32].GetUInt8());
 
     if (!fields[33].IsNull())
-        creatureTemplate.Movement.Flight = static_cast<CreatureFlightMovementType>(fields[33].GetUInt8());
+        creatureTemplate.Movement.Random = static_cast<CreatureRandomMovementType>(fields[33].GetUInt8());
 
     if (!fields[34].IsNull())
-        creatureTemplate.Movement.Rooted = fields[34].GetBool();
+        creatureTemplate.Movement.InteractionPauseTimer = fields[34].GetUInt32();
 
-    if (!fields[35].IsNull())
-        creatureTemplate.Movement.Chase = static_cast<CreatureChaseMovementType>(fields[35].GetUInt8());
-
-    if (!fields[36].IsNull())
-        creatureTemplate.Movement.Random = static_cast<CreatureRandomMovementType>(fields[36].GetUInt8());
-
-    if (!fields[37].IsNull())
-        creatureTemplate.Movement.InteractionPauseTimer = fields[37].GetUInt32();
-
-    creatureTemplate.ModExperience          = fields[38].GetFloat();
-    creatureTemplate.RacialLeader           = fields[39].GetBool();
-    creatureTemplate.movementId             = fields[40].GetUInt32();
-    creatureTemplate.RegenHealth            = fields[41].GetBool();
-    creatureTemplate.CreatureImmunitiesId   = fields[42].GetInt32();
-    creatureTemplate.flags_extra            = fields[43].GetUInt32();
-    creatureTemplate.ScriptID               = GetScriptId(fields[44].GetString());
-    creatureTemplate.StringId               = fields[45].GetString();
+    creatureTemplate.ModExperience          = fields[35].GetFloat();
+    creatureTemplate.RacialLeader           = fields[36].GetBool();
+    creatureTemplate.movementId             = fields[37].GetUInt32();
+    creatureTemplate.RegenHealth            = fields[38].GetBool();
+    creatureTemplate.CreatureImmunitiesId   = fields[39].GetInt32();
+    creatureTemplate.flags_extra            = fields[40].GetUInt32();
+    creatureTemplate.ScriptID               = GetScriptId(fields[41].GetString());
+    creatureTemplate.StringId               = fields[42].GetString();
 }
 
 void ObjectMgr::LoadCreatureTemplateGossip()
@@ -1170,20 +1162,6 @@ void ObjectMgr::CheckCreatureTemplate(CreatureTemplate const* cInfo)
 
 void ObjectMgr::CheckCreatureMovement(char const* table, uint64 id, CreatureMovementData& creatureMovement)
 {
-    if (creatureMovement.Ground >= CreatureGroundMovementType::Max)
-    {
-        TC_LOG_ERROR("sql.sql", "`{}`.`Ground` wrong value ({}) for Id {}, setting to Run.",
-            table, uint32(creatureMovement.Ground), id);
-        creatureMovement.Ground = CreatureGroundMovementType::Run;
-    }
-
-    if (creatureMovement.Flight >= CreatureFlightMovementType::Max)
-    {
-        TC_LOG_ERROR("sql.sql", "`{}`.`Flight` wrong value ({}) for Id {}, setting to None.",
-            table, uint32(creatureMovement.Flight), id);
-        creatureMovement.Flight = CreatureFlightMovementType::None;
-    }
-
     if (creatureMovement.Chase >= CreatureChaseMovementType::Max)
     {
         TC_LOG_ERROR("sql.sql", "`{}`.`Chase` wrong value ({}) for Id {}, setting to Run.",
@@ -1580,10 +1558,7 @@ void ObjectMgr::LoadCreatureMovementOverrides()
     // Load the data from creature_movement_override and if NULL fallback to creature_template_movement
     QueryResult result = WorldDatabase.Query(
         "SELECT cmo.SpawnId,"
-        "COALESCE(cmo.Ground, ctm.Ground),"
-        "COALESCE(cmo.Swim, ctm.Swim),"
-        "COALESCE(cmo.Flight, ctm.Flight),"
-        "COALESCE(cmo.Rooted, ctm.Rooted),"
+        "COALESCE(cmo.HoverInitiallyEnabled, ctm.HoverInitiallyEnabled),"
         "COALESCE(cmo.Chase, ctm.Chase),"
         "COALESCE(cmo.Random, ctm.Random),"
         "COALESCE(cmo.InteractionPauseTimer, ctm.InteractionPauseTimer) "
@@ -1609,19 +1584,13 @@ void ObjectMgr::LoadCreatureMovementOverrides()
 
         CreatureMovementData& movement = _creatureMovementOverrides[spawnId];
         if (!fields[1].IsNull())
-            movement.Ground = static_cast<CreatureGroundMovementType>(fields[1].GetUInt8());
+            movement.HoverInitiallyEnabled = fields[1].GetBool();
         if (!fields[2].IsNull())
-            movement.Swim = fields[2].GetBool();
+            movement.Chase = static_cast<CreatureChaseMovementType>(fields[2].GetUInt8());
         if (!fields[3].IsNull())
-            movement.Flight = static_cast<CreatureFlightMovementType>(fields[3].GetUInt8());
+            movement.Random = static_cast<CreatureRandomMovementType>(fields[3].GetUInt8());
         if (!fields[4].IsNull())
-            movement.Rooted = fields[4].GetBool();
-        if (!fields[5].IsNull())
-            movement.Chase = static_cast<CreatureChaseMovementType>(fields[5].GetUInt8());
-        if (!fields[6].IsNull())
-            movement.Random = static_cast<CreatureRandomMovementType>(fields[6].GetUInt8());
-        if (!fields[7].IsNull())
-            movement.InteractionPauseTimer = fields[7].GetUInt32();
+            movement.InteractionPauseTimer = fields[4].GetUInt32();
 
         CheckCreatureMovement("creature_movement_override", spawnId, movement);
     }
@@ -1658,7 +1627,7 @@ CreatureModel const* ObjectMgr::ChooseDisplayId(CreatureTemplate const* cinfo, C
     return cinfo->GetFirstInvisibleModel();
 }
 
-void ObjectMgr::ChooseCreatureFlags(CreatureTemplate const* cInfo, uint64* npcFlags, uint32* unitFlags, uint32* unitFlags2, uint32* unitFlags3, CreatureData const* data /*= nullptr*/)
+void ObjectMgr::ChooseCreatureFlags(CreatureTemplate const* cInfo, uint64* npcFlags, uint32* unitFlags, uint32* unitFlags2, uint32* unitFlags3, CreatureStaticFlagsHolder const& staticFlags, CreatureData const* data /*= nullptr*/)
 {
 #define ChooseCreatureFlagSource(field) ((data && data->field.has_value()) ? *data->field : cInfo->field)
 
@@ -1666,10 +1635,21 @@ void ObjectMgr::ChooseCreatureFlags(CreatureTemplate const* cInfo, uint64* npcFl
         *npcFlags = ChooseCreatureFlagSource(npcflag);
 
     if (unitFlags)
+    {
         *unitFlags = ChooseCreatureFlagSource(unit_flags);
+        if (staticFlags.HasFlag(CREATURE_STATIC_FLAG_CAN_SWIM))
+            *unitFlags |= UNIT_FLAG_CAN_SWIM;
+
+        if (staticFlags.HasFlag(CREATURE_STATIC_FLAG_3_CANNOT_SWIM))
+            *unitFlags |= UNIT_FLAG_CANT_SWIM;
+    }
 
     if (unitFlags2)
+    {
         *unitFlags2 = ChooseCreatureFlagSource(unit_flags2);
+        if (staticFlags.HasFlag(CREATURE_STATIC_FLAG_3_CANNOT_TURN))
+            *unitFlags2 |= UNIT_FLAG2_CANNOT_TURN;
+    }
 
     if (unitFlags3)
         *unitFlags3 = ChooseCreatureFlagSource(unit_flags3);
