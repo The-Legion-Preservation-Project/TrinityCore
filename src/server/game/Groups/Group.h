@@ -169,6 +169,13 @@ struct RaidMarker
     }
 };
 
+enum class CountdownTimerType : int32
+{
+    Pvp             = 0,
+    ChallengeMode   = 1,
+    PlayerCountdown = 2
+};
+
 /** request member stats checken **/
 /// @todo uninvite people that not accepted invite
 class TC_GAME_API Group
@@ -186,6 +193,26 @@ class TC_GAME_API Group
         };
         typedef std::list<MemberSlot> MemberSlotList;
         typedef MemberSlotList::const_iterator member_citerator;
+
+        class CountdownInfo
+        {
+        public:
+            CountdownInfo() : _startTime(0), _endTime(0) { }
+
+            Seconds GetTimeLeft() const;
+
+            Seconds GetTotalTime() const
+            {
+                return Seconds(_endTime - _startTime);
+            }
+
+            void StartCountdown(Seconds duration, Optional<time_t> startTime = { });
+            bool IsRunning() const;
+
+        private:
+            time_t _startTime;
+            time_t _endTime;
+        };
 
     protected:
         typedef MemberSlotList::iterator member_witerator;
@@ -362,6 +389,9 @@ class TC_GAME_API Group
         // FG: evil hacks
         void BroadcastGroupUpdate(void);
 
+        void StartCountdown(CountdownTimerType timerType, Seconds duration, Optional<time_t> startTime = { });
+        CountdownInfo const* GetCountdownInfo(CountdownTimerType timerType) const;
+
     protected:
         bool _setMembersGroup(ObjectGuid guid, uint8 group);
         void _homebindIfInstance(Player* player);
@@ -405,5 +435,7 @@ class TC_GAME_API Group
         // Raid markers
         std::array<std::unique_ptr<RaidMarker>, RAID_MARKERS_COUNT> m_markers;
         uint32              m_activeMarkers;
+
+        std::array<std::unique_ptr<CountdownInfo>, 3> _countdowns;
 };
 #endif

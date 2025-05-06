@@ -23,12 +23,14 @@
 #include "DB2Stores.h"
 #include "Formulas.h"
 #include "GameObject.h"
+#include "GameTime.h"
 #include "GroupMgr.h"
 #include "Item.h"
 #include "LFGMgr.h"
 #include "Log.h"
 #include "Loot.h"
 #include "MapManager.h"
+#include "MiscPackets.h"
 #include "ObjectAccessor.h"
 #include "ObjectMgr.h"
 #include "PartyPackets.h"
@@ -37,6 +39,22 @@
 #include "UpdateData.h"
 #include "UpdateFieldFlags.h"
 #include "WorldSession.h"
+
+Seconds Group::CountdownInfo::GetTimeLeft() const
+{
+    return Seconds(std::max<time_t>(_endTime - GameTime::GetGameTime(), 0));
+}
+
+void Group::CountdownInfo::StartCountdown(Seconds duration, Optional<time_t> startTime)
+{
+    _startTime = startTime ? *startTime : GameTime::GetGameTime();
+    _endTime = _startTime + duration.count();
+}
+
+bool Group::CountdownInfo::IsRunning() const
+{
+    return _endTime > GameTime::GetGameTime();
+}
 
 Group::Group() : m_leaderGuid(), m_leaderName(""), m_groupFlags(GROUP_FLAG_NONE), m_groupCategory(GROUP_CATEGORY_HOME),
 m_dungeonDifficulty(DIFFICULTY_NORMAL), m_raidDifficulty(DIFFICULTY_NORMAL_RAID), m_legacyRaidDifficulty(DIFFICULTY_10_N),
@@ -49,6 +67,8 @@ m_readyCheckStarted(false), m_readyCheckTimer(Milliseconds::zero()), m_activeMar
 
     for (uint8 i = 0; i < RAID_MARKERS_COUNT; ++i)
         m_markers[i] = nullptr;
+
+    _countdowns = { nullptr, nullptr, nullptr };
 }
 
 Group::~Group()
@@ -1398,6 +1418,25 @@ void Group::BroadcastGroupUpdate(void)
             TC_LOG_DEBUG("misc", "-- Forced group value update for '{}'", pp->GetName());
         }
     }
+}
+
+void Group::StartCountdown(CountdownTimerType timerType, Seconds duration, Optional<time_t> startTime)
+{
+    if (AsUnderlyingType(timerType) < 0 || AsUnderlyingType(timerType) >= std::ssize(_countdowns))
+        return;
+
+    if (!_countdowns[AsUnderlyingType(timerType)])
+        _countdowns[AsUnderlyingType(timerType)] = std::make_unique<CountdownInfo>();
+
+    _countdowns[AsUnderlyingType(timerType)]->StartCountdown(duration, startTime);
+}
+
+Group::CountdownInfo const* Group::GetCountdownInfo(CountdownTimerType timerType) const
+{
+    if (AsUnderlyingType(timerType) < 0 || AsUnderlyingType(timerType) >= std::ssize(_countdowns))
+        return nullptr;
+
+    return _countdowns[AsUnderlyingType(timerType)].get();
 }
 
 void Group::SetLootMethod(LootMethod method)

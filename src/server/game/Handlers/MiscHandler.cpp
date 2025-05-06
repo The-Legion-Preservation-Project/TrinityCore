@@ -1159,3 +1159,21 @@ void WorldSession::HandleConversationLineStarted(WorldPackets::Misc::Conversatio
     if (Conversation* convo = ObjectAccessor::GetConversation(*_player, conversationLineStarted.ConversationGUID))
         sScriptMgr->OnConversationLineStarted(convo, conversationLineStarted.LineID, _player);
 }
+
+void WorldSession::HandleQueryCountdownTimer(WorldPackets::Misc::QueryCountdownTimer& queryCountdownTimer)
+{
+    Group const* group = _player->GetGroup();
+    if (!group)
+        return;
+
+    Group::CountdownInfo const* info = group->GetCountdownInfo(queryCountdownTimer.TimerType);
+    if (!info)
+        return;
+
+    WorldPackets::Misc::StartTimer startTimer;
+    startTimer.Type = queryCountdownTimer.TimerType;
+    startTimer.TimeLeft = info->GetTimeLeft();
+    startTimer.TotalTime = info->GetTotalTime();
+
+    _player->SendDirectMessage(startTimer.Write());
+}
