@@ -228,35 +228,7 @@ void BattlegroundAB::StartingEventOpenDoors()
     TriggerGameEvent(AB_EVENT_START_BATTLE);
 }
 
-void BattlegroundAB::HandleAreaTrigger(Player* player, uint32 trigger, bool entered)
-{
-    switch (trigger)
-    {
-        case 6635: // Horde Start
-        case 6634: // Alliance Start
-            if (GetStatus() == STATUS_WAIT_JOIN && !entered)
-                TeleportPlayerToExploitLocation(player);
-            break;
-        case 3948:                                          // Arathi Basin Alliance Exit.
-        case 3949:                                          // Arathi Basin Horde Exit.
-        case 3866:                                          // Stables
-        case 3869:                                          // Gold Mine
-        case 3867:                                          // Farm
-        case 3868:                                          // Lumber Mill
-        case 3870:                                          // Black Smith
-        case 4020:                                          // Unk1
-        case 4021:                                          // Unk2
-        case 4674:                                          // Unk3
-            //break;
-        default:
-            Battleground::HandleAreaTrigger(player, trigger, entered);
-            break;
-    }
-}
-
-/*  type: 0-neutral, 1-contested, 3-occupied
-    teamIndex: 0-ally, 1-horde                        */
-void BattlegroundAB::_CreateBanner(uint8 node, uint8 type, uint8 teamIndex, bool delay)
+void BattlegroundAB::_CalculateTeamNodes(uint8& alliance, uint8& horde)
 {
     // Just put it into the queue
     if (delay)
