@@ -43,6 +43,7 @@ EndScriptData */
 #include "Player.h"
 #include "RBAC.h"
 #include "SmartEnum.h"
+#include "SpellMgr.h"
 #include "Transport.h"
 #include "World.h"
 #include "WorldSession.h"
@@ -480,8 +481,10 @@ public:
         CreatureTemplate const* cInfo = target->GetCreatureTemplate();
 
         uint32 faction = target->GetFaction();
-        uint64 npcflags = target->GetUInt32Value(UNIT_NPC_FLAGS);
-        uint32 mechanicImmuneMask = cInfo->MechanicImmuneMask;
+        uint64 npcflags = target->GetUInt64Value(UNIT_NPC_FLAGS);
+        uint64 mechanicImmuneMask = 0;
+        if (CreatureImmunities const* immunities = SpellMgr::GetCreatureImmunities(cInfo->CreatureImmunitiesId))
+            mechanicImmuneMask = immunities->Mechanic.to_ullong();
         uint32 displayid = target->GetDisplayId();
         uint32 nativeid = target->GetNativeDisplayId();
         uint32 entry = target->GetEntry();
@@ -556,9 +559,9 @@ public:
             if (target->HasNpcFlag2(flag))
                 handler->PSendSysMessage("* %s (0x%X)", EnumUtils::ToTitle(flag), flag);
 
-        handler->PSendSysMessage(LANG_NPCINFO_MECHANIC_IMMUNE, mechanicImmuneMask);
+        handler->PSendSysMessage(LANG_NPCINFO_MECHANIC_IMMUNE, Trinity::StringFormat("0x{:X}", mechanicImmuneMask).c_str());
         for (Mechanics m : EnumUtils::Iterate<Mechanics>())
-            if (m && (mechanicImmuneMask & (1 << (m - 1))))
+            if (m && (mechanicImmuneMask & (UI64LIT(1) << m)))
                 handler->PSendSysMessage("%s (0x%X)", EnumUtils::ToTitle(m), m);
 
         return true;
