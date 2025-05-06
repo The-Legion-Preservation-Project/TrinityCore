@@ -1566,9 +1566,6 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
             }
 
             SendDirectMessage(transferPending.Write());
-
-            RemovePlayerLocalFlag(PLAYER_LOCAL_FLAG_OVERRIDE_TRANSPORT_SERVER_TIME);
-            SetTransportServerTime(0);
         }
 
         // remove from old map now
