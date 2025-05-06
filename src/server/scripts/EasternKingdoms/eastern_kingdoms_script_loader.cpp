@@ -23,7 +23,7 @@ void AddSC_boss_galvangar();
 void AddSC_boss_vanndar();
 void AddSC_boss_alizabal();                  //Baradin Hold
 void AddSC_boss_occuthar();
-void AddSC_boss_pit_lord_argaloth();
+void AddSC_boss_argaloth();
 void AddSC_instance_baradin_hold();
 void AddSC_instance_bastion_of_twilight();   //Bastion of Twilight
 void AddSC_boss_romogg_bonecrusher();        //Blackrock Caverns
@@ -217,7 +217,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_vanndar();
     AddSC_boss_alizabal();                  //Baradin Hold
     AddSC_boss_occuthar();
-    AddSC_boss_pit_lord_argaloth();
+    AddSC_boss_argaloth();
     AddSC_instance_baradin_hold();
     AddSC_instance_bastion_of_twilight();   //Bastion of Twilight
     AddSC_boss_romogg_bonecrusher();        //Blackrock Caverns
