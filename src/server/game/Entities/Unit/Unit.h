@@ -1141,6 +1141,8 @@ class TC_GAME_API Unit : public WorldObject
         void SetBattlePetCompanionGUID(ObjectGuid guid) { SetGuidValue(UNIT_FIELD_BATTLE_PET_COMPANION_GUID, guid); }
         ObjectGuid GetDemonCreatorGUID() const { return GetGuidValue(UNIT_FIELD_DEMON_CREATOR); }
         void SetDemonCreatorGUID(ObjectGuid guid) { SetGuidValue(UNIT_FIELD_DEMON_CREATOR, guid); }
+        Unit* GetDemonCreator() const;
+        Player* GetDemonCreatorPlayer() const;
 
         ObjectGuid GetCharmerGUID() const { return GetGuidValue(UNIT_FIELD_CHARMEDBY); }
         Unit* GetCharmer() const { return m_charmer; }
