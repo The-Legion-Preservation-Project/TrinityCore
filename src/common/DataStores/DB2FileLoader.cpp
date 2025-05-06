@@ -1543,7 +1543,7 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
         throw DB2FileLoadException(Trinity::StringFormat("Incorrect file signature in {}, expected 'WDC1', got {}{}{}{}", source->GetFileName(),
             char(_header.Signature & 0xFF), char((_header.Signature >> 8) & 0xFF), char((_header.Signature >> 16) & 0xFF), char((_header.Signature >> 24) & 0xFF)));
 
-    if (_header.LayoutHash != loadInfo->Meta->LayoutHash)
+    if (loadInfo && _header.LayoutHash != loadInfo->Meta->LayoutHash)
         throw DB2FileLoadException(Trinity::StringFormat("Incorrect layout hash in {}, expected 0x{:08X}, got 0x{:08X} (possibly wrong client version)",
             source->GetFileName(), loadInfo->Meta->LayoutHash, _header.LayoutHash));
 

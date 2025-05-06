@@ -1513,19 +1513,7 @@ bool CriteriaHandler::RequirementsSatisfied(Criteria const* criteria, uint64 mis
             bool matchFound = false;
             for (uint32 j : worldOverlayEntry->AreaID)
             {
-                AreaTableEntry const* area = sAreaTableStore.LookupEntry(j);
-                if (!area)
-                    break;
-
-                if (area->AreaBit < 0)
-                    continue;
-
-                uint16 playerIndexOffset = uint16(uint32(area->AreaBit) / PLAYER_EXPLORED_ZONES_BITS);
-                if (playerIndexOffset >= PLAYER_EXPLORED_ZONES_SIZE)
-                    continue;
-
-                uint32 mask = 1 << (uint32(area->AreaBit) % PLAYER_EXPLORED_ZONES_BITS);
-                if (referencePlayer->GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + playerIndexOffset) & mask)
+                if (referencePlayer->HasExploredZone(j))
                 {
                     matchFound = true;
                     break;
@@ -2273,15 +2261,7 @@ bool CriteriaHandler::ModifierSatisfied(ModifierTreeEntry const* modifier, uint6
         }
         case ModifierTreeType::PlayerHasExploredArea: // 113
         {
-            AreaTableEntry const* areaTable = sAreaTableStore.LookupEntry(reqValue);
-            if (!areaTable)
-                return false;
-            if (areaTable->AreaBit <= 0)
-                break; // success
-            uint32 playerIndexOffset = uint32(areaTable->AreaBit) / PLAYER_EXPLORED_ZONES_BITS;
-            if (playerIndexOffset >= PLAYER_EXPLORED_ZONES_SIZE)
-                break;
-            if (!(referencePlayer->GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + playerIndexOffset) & (1 << (areaTable->AreaBit % PLAYER_EXPLORED_ZONES_BITS))))
+            if (!referencePlayer->HasExploredZone(reqValue))
                 return false;
             break;
         }

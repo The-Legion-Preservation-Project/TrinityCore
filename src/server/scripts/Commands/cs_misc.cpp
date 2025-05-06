@@ -1113,13 +1113,6 @@ public:
         }
 
         uint16 offset = uint16(area->AreaBit / PLAYER_EXPLORED_ZONES_BITS);
-        if (offset >= PLAYER_EXPLORED_ZONES_SIZE)
-        {
-            handler->SendSysMessage(LANG_BAD_VALUE);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
         uint32 val = uint32((1 << (area->AreaBit % PLAYER_EXPLORED_ZONES_BITS)));
         playerTarget->AddExploredZones(offset, val);
 
@@ -1153,13 +1146,6 @@ public:
         }
 
         uint16 offset = uint16(area->AreaBit / PLAYER_EXPLORED_ZONES_BITS);
-        if (offset >= PLAYER_EXPLORED_ZONES_SIZE)
-        {
-            handler->SendSysMessage(LANG_BAD_VALUE);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
         uint32 val = uint32((1 << (area->AreaBit % PLAYER_EXPLORED_ZONES_BITS)));
         playerTarget->RemoveExploredZones(offset, val);
 

@@ -6097,20 +6097,12 @@ void Player::CheckAreaExploreAndOutdoor()
     }
 
     uint32 offset = areaEntry->AreaBit / PLAYER_EXPLORED_ZONES_BITS;
-
-    if (offset >= PLAYER_EXPLORED_ZONES_SIZE)
-    {
-        TC_LOG_ERROR("entities.player", "Player::CheckAreaExploreAndOutdoor: Wrong area flag {} in map data for (X: {} Y: {}) point to field PLAYER_EXPLORED_ZONES_1 + {} ( {} must be < {} ).",
-            areaId, GetPositionX(), GetPositionY(), offset, offset, PLAYER_EXPLORED_ZONES_SIZE);
-        return;
-    }
-
     uint32 val = (uint32)(1 << (areaEntry->AreaBit % PLAYER_EXPLORED_ZONES_BITS));
-    uint32 currFields = GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + offset);
 
-    if (!(currFields & val))
+    if (offset >= PLAYER_EXPLORED_ZONES_SIZE
+        || !(GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + offset) & val))
     {
-        SetUInt32Value(PLAYER_EXPLORED_ZONES_1 + offset, (uint32)(currFields | val));
+        AddExploredZones(offset, val);
 
         UpdateCriteria(CriteriaType::RevealWorldMapOverlay, GetAreaId());
 
@@ -6154,6 +6146,33 @@ void Player::CheckAreaExploreAndOutdoor()
             TC_LOG_DEBUG("entities.player", "Player '{}' ({}) discovered a new area: {}", GetName(),GetGUID().ToString(), areaId);
         }
     }
+}
+
+void Player::AddExploredZones(uint32 pos, uint32 mask)
+{
+    SetFlag(PLAYER_EXPLORED_ZONES_1 + pos, mask);
+}
+
+void Player::RemoveExploredZones(uint32 pos, uint32 mask)
+{
+    RemoveFlag(PLAYER_EXPLORED_ZONES_1 + pos, mask);
+}
+
+bool Player::HasExploredZone(uint32 areaId) const
+{
+    AreaTableEntry const* area = sAreaTableStore.LookupEntry(areaId);
+    if (!area)
+        return false;
+
+    if (area->AreaBit < 0)
+        return false;
+
+    uint16 playerIndexOffset = uint16(uint32(area->AreaBit) / PLAYER_EXPLORED_ZONES_BITS);
+    if (playerIndexOffset >= PLAYER_EXPLORED_ZONES_SIZE)
+        return false;
+
+    uint32 mask = 1 << (uint32(area->AreaBit) % PLAYER_EXPLORED_ZONES_BITS);
+    return GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + playerIndexOffset) & mask;
 }
 
 Team Player::TeamForRace(uint8 race)
@@ -17173,8 +17192,13 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     SetLevel(fields.level, false);
     SetXP(fields.xp);
 
-    _LoadIntoDataField(fields.exploredZones, PLAYER_EXPLORED_ZONES_1, PLAYER_EXPLORED_ZONES_SIZE);
-    _LoadIntoDataField(fields.knownTitles, PLAYER__FIELD_KNOWN_TITLES, KNOWN_TITLES_SIZE * 2);
+    std::vector<std::string_view> exploredZones = Trinity::Tokenize(fields.exploredZones, ' ', false);
+    for (std::size_t i = 0; i < exploredZones.size(); ++i)
+        AddExploredZones(i, Trinity::StringTo<uint32>(exploredZones[i]).value_or(0));
+
+    std::vector<std::string_view> knownTitles = Trinity::Tokenize(fields.knownTitles, ' ', false);
+    for (std::size_t i = 0; i < knownTitles.size(); ++i)
+        SetUInt32Value(PLAYER__FIELD_KNOWN_TITLES + i, Trinity::StringTo<uint32>(knownTitles[i]).value_or(0));
 
     SetObjectScale(1.0f);
 
@@ -18595,8 +18619,8 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
     ////                                                       0      1       2        3
     //QueryResult* result = CharacterDatabase.PQuery("SELECT quest, status, explored, timer WHERE guid = '{}' AND status <> 0", GetGUIDLow());
 
-    time_t lastDailyReset = sWorld->GetNextDailyQuestsResetTime() - DAY;
-    time_t lastWeeklyReset = sWorld->GetNextWeeklyQuestsResetTime() - WEEK;
+    //time_t lastDailyReset = sWorld->GetNextDailyQuestsResetTime() - DAY;
+    //time_t lastWeeklyReset = sWorld->GetNextWeeklyQuestsResetTime() - WEEK;
 
     if (result)
     {
