@@ -14,4 +14,6 @@ INSERT INTO `pvp_stat` (MapID, PVPStatID, Comment) VALUES
 (30, 63, 'Alterac Valley - Graveyards Assaulted'),
 (30, 64, 'Alterac Valley - Towers Defended'),
 (30, 65, 'Alterac Valley - Graveyards Defended'),
-(30, 82, 'Alterac Valley - Secondary Objectives');
+(30, 82, 'Alterac Valley - Secondary Objectives'),
+(607, 231, 'Strand of the Ancients - Gates Destroyed'),
+(607, 232, 'Strand of the Ancients - Demolishers Destroyed');
