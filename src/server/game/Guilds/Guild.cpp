@@ -2973,6 +2973,11 @@ bool Guild::_HasRankRight(Player const* player, uint32 right) const
     return false;
 }
 
+bool Guild::HasAnyRankRight(GuildRankId rankId, GuildRankRights rights) const
+{
+    return (_GetRankRights(rankId) & rights) != GR_RIGHT_NONE;
+}
+
 void Guild::_DeleteMemberFromDB(CharacterDatabaseTransaction trans, ObjectGuid::LowType lowguid)
 {
     CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GUILD_MEMBER);
