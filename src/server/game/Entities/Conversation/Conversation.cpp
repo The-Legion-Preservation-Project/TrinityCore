@@ -190,13 +190,17 @@ void Conversation::Create(ObjectGuid::LowType lowGuid, uint32 conversationEntry,
 
 bool Conversation::Start()
 {
-    for (uint16 actorIndex : _actorIndices)
+    ConversationTemplate const* conversationTemplate = sConversationDataStore->GetConversationTemplate(GetEntry()); // never null, already checked in ::Create / ::CreateConversation
+    if (!conversationTemplate->Flags.HasFlag(ConversationFlags::AllowWithoutSpawnedActor))
     {
-        ConversationDynamicFieldActor const* actor = GetDynamicStructuredValue<ConversationDynamicFieldActor>(CONVERSATION_DYNAMIC_FIELD_ACTORS, actorIndex);
-        if (!actor || actor->IsEmpty())
+        for (uint16 actorIndex : _actorIndices)
         {
-            TC_LOG_ERROR("entities.conversation", "Failed to create conversation (Id: {}) due to missing actor (Idx: {}).", GetEntry(), actorIndex);
-            return false;
+            ConversationDynamicFieldActor const* actor = GetDynamicStructuredValue<ConversationDynamicFieldActor>(CONVERSATION_DYNAMIC_FIELD_ACTORS, actorIndex);
+            if (!actor || actor->IsEmpty())
+            {
+                TC_LOG_ERROR("entities.conversation", "Failed to create conversation (Id: {}) due to missing actor (Idx: {}).", GetEntry(), actorIndex);
+                return false;
+            }
         }
     }
 
