@@ -1459,24 +1459,31 @@ void Item::SetGem(uint16 slot, ItemDynamicFieldGems const* gem, uint32 gemScalin
 
 bool Item::GemsFitSockets() const
 {
-    uint32 gemSlot = 0;
-    for (ItemDynamicFieldGems const& gemData : GetGems())
+    for (uint32 gemSlot = 0; gemSlot < MAX_ITEM_PROTO_SOCKETS; ++gemSlot)
     {
-        SocketColor color = GetTemplate()->GetSocketColor(gemSlot);
-        if (!color) // no socket slot
+        uint8 SocketColor = GetTemplate()->GetSocketColor(gemSlot);
+
+        if (!SocketColor) // no socket slot
             continue;
 
-        uint32 GemColor = 0;
+        if (gemSlot >= GetGems().size()) // no gems on this socket
+            return false;
 
-        ItemTemplate const* gemProto = sObjectMgr->GetItemTemplate(gemData.ItemId);
-        if (gemProto)
+        uint8 GemColor = 0;
+
+        uint32 gemid = GetGem(gemSlot)->ItemId;
+        if (gemid)
         {
-            GemPropertiesEntry const* gemProperty = sGemPropertiesStore.LookupEntry(gemProto->GetGemProperties());
-            if (gemProperty)
-                GemColor = gemProperty->Type;
+            ItemTemplate const* gemProto = sObjectMgr->GetItemTemplate(gemid);
+            if (gemProto)
+            {
+                GemPropertiesEntry const* gemProperty = sGemPropertiesStore.LookupEntry(gemProto->GetGemProperties());
+                if (gemProperty)
+                    GemColor = gemProperty->Type;
+            }
         }
 
-        if (!(GemColor & SocketColorToGemTypeMask[color])) // bad gem color on this socket
+        if (!(GemColor & SocketColorToGemTypeMask[SocketColor])) // bad gem color on this socket
             return false;
     }
     return true;
