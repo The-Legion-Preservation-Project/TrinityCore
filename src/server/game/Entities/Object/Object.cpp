@@ -498,7 +498,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         bool hasFacingCurveID       = createProperties && createProperties->FacingCurveId != 0;
         bool hasMoveCurveID         = createProperties && createProperties->MoveCurveId != 0;
         bool hasAnimation           = createProperties && createProperties->AnimId;
-        bool hasUnk3                = areaTriggerTemplate && areaTrigger->GetTemplate()->HasFlag(AREATRIGGER_FLAG_UNK3);
+        bool hasUnk3                = createProperties && createProperties->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::Unk3);
         bool hasAnimKitID           = createProperties && createProperties->AnimKitId;
         bool hasAreaTriggerSphere   = shape.IsSphere();
         bool hasAreaTriggerBox      = shape.IsBox();
