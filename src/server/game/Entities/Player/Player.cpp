@@ -28446,7 +28446,7 @@ bool Player::ProcessItemCast(SpellCastRequest& castRequest, SpellCastTargets con
         {
             if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(effect->SpellID, GetMap()->GetDifficultyID()))
             {
-                if (!spellInfo->CanBeUsedInCombat(this))
+                if (!spellInfo->CanBeUsedInCombat())
                 {
                     SendEquipError(EQUIP_ERR_NOT_IN_COMBAT, item, nullptr);
                     return false;
