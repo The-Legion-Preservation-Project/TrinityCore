@@ -368,7 +368,7 @@ void WorldSession::HandleCalendarInvite(WorldPackets::Calendar::CalendarInvite& 
     if (Player* player = ObjectAccessor::FindConnectedPlayerByName(calendarEventInvite.Name))
     {
         // Invitee is online
-        createInvite(player->GetGUID(), player->GetTeam(), player->GetGuildId(), player->GetSocial()->HasIgnore(playerGuid, GetAccountGUID()));
+        createInvite(player->GetGUID(), player->GetTeam(), player->GetGuildId(), player->GetSocial()->HasIgnore(playerGuid));
     }
     else
     {
