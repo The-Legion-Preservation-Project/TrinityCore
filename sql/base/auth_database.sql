@@ -1198,7 +1198,6 @@ INSERT INTO `rbac_linked_permissions` VALUES
 (196,702),
 (196,703),
 (196,704),
-(196,706),
 (196,707),
 (196,708),
 (196,709),
@@ -2045,7 +2044,6 @@ INSERT INTO `rbac_permissions` VALUES
 (702,'Command: reload spell_threats'),
 (703,'Command: reload spell_group_stack_rules'),
 (704,'Command: reload trinity_string'),
-(706,'Command: reload waypoint_scripts'),
 (707,'Command: reload waypoint_data'),
 (708,'Command: reload vehicle_accessory'),
 (709,'Command: reload vehicle_template_accessory'),
@@ -2480,7 +2478,8 @@ INSERT INTO `updates` VALUES
 ('2022_09_02_00_auth.sql','E2ED8B4B90829CFD283C9679AE265A9C9B2CF762','ARCHIVED','2022-09-02 15:52:22',0),
 ('2022_10_03_00_auth.sql','B956A37F71B42EB0289C2066A15D1F6C02F21E5A','ARCHIVED','2022-10-03 21:32:38',0),
 ('2022_12_22_00_auth.sql','BBF3CDD7927520F0381ECEF1F30152CBD5344D6A','RELEASED','2022-12-22 16:35:36',0),
-('2023_11_21_00_auth.sql','146E5E6EF94C5DB78343372A8FDB32B062B80040','RELEASED','2023-11-21 11:24:11',0);
+('2023_11_21_00_auth.sql','146E5E6EF94C5DB78343372A8FDB32B062B80040','RELEASED','2023-11-21 11:24:11',0),
+('2023_11_24_00_auth.sql','AC1B5136CC97264A21933BD1074D02E88D819488','RELEASED','2023-11-24 19:37:38',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 

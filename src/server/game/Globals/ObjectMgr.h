@@ -419,7 +419,6 @@ typedef std::multimap<uint32 /*spell id*/, std::pair<uint32 /*script id*/, bool 
 typedef std::pair<SpellScriptsContainer::iterator, SpellScriptsContainer::iterator> SpellScriptsBounds;
 TC_GAME_API extern ScriptMapMap sSpellScripts;
 TC_GAME_API extern ScriptMapMap sEventScripts;
-TC_GAME_API extern ScriptMapMap sWaypointScripts;
 
 std::string GetScriptsTableNameByType(ScriptsType type);
 ScriptMapMap* GetScriptsMapByType(ScriptsType type);
@@ -1234,7 +1233,6 @@ class TC_GAME_API ObjectMgr
 
         void LoadEventScripts();
         void LoadSpellScripts();
-        void LoadWaypointScripts();
 
         void LoadSpellScriptNames();
         void ValidateSpellScripts();
