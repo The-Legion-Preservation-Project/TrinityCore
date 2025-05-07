@@ -13709,12 +13709,21 @@ void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player 
             {
                 *data << uint32(m_floatValues[index]);
             }
-            // Gamemasters should be always able to select units - remove not selectable flag
             else if (index == UNIT_FIELD_FLAGS)
             {
                 uint32 appendValue = m_uint32Values[UNIT_FIELD_FLAGS];
+                // Gamemasters should be always able to select units - remove not selectable flag
                 if (target->IsGameMaster())
                     appendValue &= ~UNIT_FLAG_UNINTERACTIBLE;
+
+                *data << uint32(appendValue);
+            }
+            else if (index == UNIT_FIELD_FLAGS_2)
+            {
+                uint32 appendValue = m_uint32Values[UNIT_FIELD_FLAGS_2];
+                // Gamemasters should be always able to interact with units - remove uninteractible flag
+                if (target->IsGameMaster())
+                    appendValue &= ~UNIT_FLAG2_UNTARGETABLE_BY_CLIENT;
 
                 *data << uint32(appendValue);
             }
