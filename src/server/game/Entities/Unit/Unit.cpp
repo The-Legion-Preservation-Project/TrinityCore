@@ -14102,7 +14102,10 @@ SpellInfo const* Unit::GetCastSpellInfo(SpellInfo const* spellInfo, TriggerCastF
         return newInfo;
 
     if (SpellInfo const* newInfo = findMatchingAuraEffectIn(SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_TRIGGERED))
+    {
+        triggerFlag |= TRIGGERED_IGNORE_CAST_TIME;
         return newInfo;
+    }
 
     return spellInfo;
 }
