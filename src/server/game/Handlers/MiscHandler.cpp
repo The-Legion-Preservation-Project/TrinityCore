@@ -544,7 +544,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPackets::AreaTrigger::AreaTrigge
             }
 
             if (anyObjectiveChangedCompletionState)
-                player->UpdateVisibleGameobjectsOrSpellClicks();
+                player->UpdateVisibleObjectInteractions(true, false, false, true);
         }
     }
 

@@ -424,6 +424,8 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
 
         void HandleCustomTypeCommand(GameObjectTypeBase::CustomCommand const& command) const;
 
+        void BuildValuesUpdateWithMask(uint8 updatetype, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const;
+
     protected:
         void CreateModel();
         void UpdateModel();                                 // updates model in case displayId were changed
@@ -468,7 +470,6 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
         ObjectGuid m_linkedTrap;
 
     private:
-        void BuildValuesUpdateWithMask(uint8 updatetype, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const;
         void RemoveFromOwner();
         void SwitchDoorOrButton(bool activate, bool alternative = false);
         void UpdatePackedRotation();
