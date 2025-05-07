@@ -4359,9 +4359,6 @@ class spell_item_amalgams_seventh_spine : public AuraScript
             case CLASS_DRUID:
                 updateAuraIfInCorrectSpec(ChrSpecialization::DruidRestoration, SPELL_FRAGILE_ECHOES_DRUID);
                 break;
-            case CLASS_EVOKER:
-                updateAuraIfInCorrectSpec(ChrSpecialization::EvokerPreservation, SPELL_FRAGILE_ECHOES_EVOKER);
-                break;
             default:
                 break;
         }
