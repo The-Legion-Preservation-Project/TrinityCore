@@ -17000,7 +17000,8 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
 
     struct PlayerLoadData
     {
-        //"SELECT guid, account, name, race, class, gender, level, xp, money, skin, face, hairStyle, hairColor, facialStyle, customDisplay1, customDisplay2, customDisplay3, inventorySlots, bankSlots, restState, playerFlags, playerFlagsEx, "
+        //"SELECT c.guid, account, name, race, class, gender, level, xp, money, skin, face, hairStyle, hairColor, facialStyle, customDisplay1, customDisplay2, customDisplay3, inventorySlots, inventoryBagFlags, bagSlotFlags1, bagSlotFlags2, bagSlotFlags3, bagSlotFlags4, bagSlotFlags5, "
+        //"bankSlots, bankBagFlags, bankBagSlotFlags1, bankBagSlotFlags2, bankBagSlotFlags3, bankBagSlotFlags4, bankBagSlotFlags5, bankBagSlotFlags6, bankBagSlotFlags7, restState, playerFlags, playerFlagsEx, "
         //"position_x, position_y, position_z, map, orientation, taximask, createTime, cinematic, totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, "
         //"resettalents_time, primarySpecialization, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, summonedPetNumber, at_login, zone, online, death_expire_time, taxi_path, dungeonDifficulty, "
         //"totalKills, todayKills, yesterdayKills, chosenTitle, watchedFaction, drunk, "
@@ -17026,7 +17027,11 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
         uint8 customDisplay2;
         uint8 customDisplay3;
         uint8 inventorySlots;
+        EnumFlag<BagSlotFlags> inventoryBagFlags = BagSlotFlags::None;
+        std::array<BagSlotFlags, 5> bagSlotFlags;
         uint8 bankSlots;
+        EnumFlag<BagSlotFlags> bankBagFlags = BagSlotFlags::None;
+        std::array<BagSlotFlags, 7> bankBagSlotFlags;
         PlayerRestState restState;
         PlayerFlags playerFlags;
         PlayerFlagsEx playerFlagsEx;
@@ -17104,7 +17109,13 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
             customDisplay2 = fields[i++].GetUInt8();
             customDisplay3 = fields[i++].GetUInt8();
             inventorySlots = fields[i++].GetUInt8();
+            inventoryBagFlags = static_cast<BagSlotFlags>(fields[i++].GetUInt32());
+            for (BagSlotFlags& flags : bagSlotFlags)
+                flags = static_cast<BagSlotFlags>(fields[i++].GetUInt32());
             bankSlots = fields[i++].GetUInt8();
+            bankBagFlags = static_cast<BagSlotFlags>(fields[i++].GetUInt32());
+            for (BagSlotFlags& flags : bankBagSlotFlags)
+                flags = static_cast<BagSlotFlags>(fields[i++].GetUInt32());
             restState = PlayerRestState(fields[i++].GetUInt8());
             playerFlags = PlayerFlags(fields[i++].GetUInt32());
             playerFlagsEx = PlayerFlagsEx(fields[i++].GetUInt32());
@@ -17248,7 +17259,13 @@ bool Player::LoadFromDB(ObjectGuid guid, CharacterDatabaseQueryHolder const& hol
     for (uint32 i = 0; i < PLAYER_CUSTOM_DISPLAY_SIZE; ++i)
         SetCustomDisplayOption(i, customDisplay[i]);
     SetInventorySlotCount(fields.inventorySlots);
+    SetBackpackAutoSortDisabled(fields.inventoryBagFlags.HasFlag(BagSlotFlags::DisableAutoSort));
+    for (uint32 bagIndex = 0; bagIndex < fields.bagSlotFlags.size(); ++bagIndex)
+        ReplaceAllBagSlotFlags(bagIndex, fields.bagSlotFlags[bagIndex]);
     SetBankBagSlotCount(fields.bankSlots);
+    SetBankAutoSortDisabled(fields.bankBagFlags.HasFlag(BagSlotFlags::DisableAutoSort));
+    for (uint32 bagIndex = 0; bagIndex < fields.bankBagSlotFlags.size(); ++bagIndex)
+        ReplaceAllBankBagSlotFlags(bagIndex, fields.bankBagSlotFlags[bagIndex]);
     SetNativeGender(fields.gender);
     SetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_INEBRIATION, fields.drunk);
     ReplaceAllPlayerFlags(fields.playerFlags);
@@ -19384,7 +19401,25 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         for (uint32 i = 0; i < PLAYER_CUSTOM_DISPLAY_SIZE; ++i)
             stmt->setUInt8(index++, GetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_CUSTOM_DISPLAY_OPTION + i));
         stmt->setUInt8(index++, GetInventorySlotCount());
+        stmt->setUInt32(index++, [&]
+        {
+            BagSlotFlags inventoryFlags = BagSlotFlags::None;
+            if (IsBackpackAutoSortDisabled())
+                inventoryFlags |= BagSlotFlags::DisableAutoSort;
+            return AsUnderlyingType(inventoryFlags);
+        }());
+        for (uint32 bagSlot = 1; bagSlot < 6; bagSlot++)
+            stmt->setUInt32(index++, GetUInt32Value(PLAYER_FIELD_BAG_SLOT_FLAGS + bagSlot));
         stmt->setUInt8(index++, GetBankBagSlotCount());
+        stmt->setUInt32(index++, [&]
+        {
+            BagSlotFlags inventoryFlags = BagSlotFlags::None;
+            if (IsBankAutoSortDisabled())
+                inventoryFlags |= BagSlotFlags::DisableAutoSort;
+            return AsUnderlyingType(inventoryFlags);
+        }());
+        for (uint32 bankBagSlot = 1; bankBagSlot < 8; bankBagSlot++)
+            stmt->setUInt32(index++, GetUInt32Value(PLAYER_FIELD_BANK_BAG_SLOT_FLAGS + bankBagSlot));
         stmt->setUInt8(index++, uint8(GetUInt32Value(PLAYER_FIELD_REST_INFO + AsUnderlyingType(REST_STATE_XP))));
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_FLAGS));
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_FLAGS_EX));
@@ -19511,7 +19546,25 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         for (uint32 i = 0; i < PLAYER_CUSTOM_DISPLAY_SIZE; ++i)
             stmt->setUInt8(index++, GetByteValue(PLAYER_BYTES_2, PLAYER_BYTES_2_OFFSET_CUSTOM_DISPLAY_OPTION + i));
         stmt->setUInt8(index++, GetInventorySlotCount());
+        stmt->setUInt32(index++, [&]
+        {
+            BagSlotFlags inventoryFlags = BagSlotFlags::None;
+            if (IsBackpackAutoSortDisabled())
+                inventoryFlags |= BagSlotFlags::DisableAutoSort;
+            return AsUnderlyingType(inventoryFlags);
+        }());
+        for (uint32 bagSlot = 1; bagSlot < 6; bagSlot++)
+            stmt->setUInt32(index++, GetUInt32Value(PLAYER_FIELD_BAG_SLOT_FLAGS + bagSlot));
         stmt->setUInt8(index++, GetBankBagSlotCount());
+        stmt->setUInt32(index++, [&]
+        {
+            BagSlotFlags inventoryFlags = BagSlotFlags::None;
+            if (IsBankAutoSortDisabled())
+                inventoryFlags |= BagSlotFlags::DisableAutoSort;
+            return AsUnderlyingType(inventoryFlags);
+        }());
+        for (uint32 bankBagSlot = 1; bankBagSlot < 8; bankBagSlot++)
+            stmt->setUInt32(index++, GetUInt32Value(PLAYER_FIELD_BANK_BAG_SLOT_FLAGS + bankBagSlot));
         stmt->setUInt8(index++, uint8(GetUInt32Value(PLAYER_FIELD_REST_INFO + AsUnderlyingType(REST_STATE_XP))));
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_FLAGS));
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_FLAGS_EX));

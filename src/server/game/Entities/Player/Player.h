@@ -788,6 +788,17 @@ enum class ItemSearchCallbackResult
     Continue
 };
 
+enum class BagSlotFlags : uint32
+{
+    None                = 0x00,
+    DisableAutoSort     = 0x01,
+    PriorityEquipment   = 0x02,
+    PriorityConsumables = 0x04,
+    PriorityTradeGoods  = 0x08,
+};
+
+DEFINE_ENUM_FLAG(BagSlotFlags);
+
 enum NewWorldReason
 {
     NEW_WORLD_NORMAL    = 16,   // Normal map change
@@ -1388,6 +1399,21 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         void SetInventorySlotCount(uint8 slots);
         uint8 GetBankBagSlotCount() const { return GetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_BANK_BAG_SLOTS); }
         void SetBankBagSlotCount(uint8 count) { SetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_BANK_BAG_SLOTS, count); }
+
+        // TODO: TheLegionPreservationProject: find update field for these
+        bool IsBackpackAutoSortDisabled() const { return false; }
+        void SetBackpackAutoSortDisabled(bool /*disabled*/) { }
+        bool IsBankAutoSortDisabled() const { return false; }
+        void SetBankAutoSortDisabled(bool /*disabled*/) { }
+
+        EnumFlag<BagSlotFlags> GetBagSlotFlags(uint32 bagIndex) const { return static_cast<BagSlotFlags>(GetUInt32Value(PLAYER_FIELD_BAG_SLOT_FLAGS + bagIndex)); }
+        void SetBagSlotFlag(uint32 bagIndex, EnumFlag<BagSlotFlags> flags) { SetFlag(PLAYER_FIELD_BAG_SLOT_FLAGS + bagIndex, flags.AsUnderlyingType()); }
+        void RemoveBagSlotFlag(uint32 bagIndex, EnumFlag<BagSlotFlags> flags) { RemoveFlag(PLAYER_FIELD_BAG_SLOT_FLAGS + bagIndex, flags.AsUnderlyingType()); }
+        void ReplaceAllBagSlotFlags(uint32 bagIndex, EnumFlag<BagSlotFlags> flags) { SetUInt32Value(PLAYER_FIELD_BAG_SLOT_FLAGS + bagIndex, flags.AsUnderlyingType()); }
+        EnumFlag<BagSlotFlags> GetBankBagSlotFlags(uint32 bagIndex) const { return static_cast<BagSlotFlags>(GetUInt32Value(PLAYER_FIELD_BANK_BAG_SLOT_FLAGS + bagIndex)); }
+        void SetBankBagSlotFlag(uint32 bagIndex, EnumFlag<BagSlotFlags> flags) { SetFlag(PLAYER_FIELD_BANK_BAG_SLOT_FLAGS + bagIndex, flags.AsUnderlyingType()); }
+        void RemoveBankBagSlotFlag(uint32 bagIndex, EnumFlag<BagSlotFlags> flags) { RemoveFlag(PLAYER_FIELD_BANK_BAG_SLOT_FLAGS + bagIndex, flags.AsUnderlyingType()); }
+        void ReplaceAllBankBagSlotFlags(uint32 bagIndex, EnumFlag<BagSlotFlags> flags) { SetUInt32Value(PLAYER_FIELD_BANK_BAG_SLOT_FLAGS + bagIndex, flags.AsUnderlyingType()); }
         bool HasItemCount(uint32 item, uint32 count = 1, bool inBankAlso = false) const;
         bool HasItemFitToSpellRequirements(SpellInfo const* spellInfo, Item const* ignoreItem = nullptr) const;
         bool CanNoReagentCast(SpellInfo const* spellInfo) const;

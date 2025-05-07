@@ -653,7 +653,7 @@ enum OpcodeClient : uint16
     CMSG_SET_ASSISTANT_LEADER                         = 0x364F,
     CMSG_SET_BACKPACK_AUTOSORT_DISABLED               = 0x3314,
     CMSG_SET_BANK_AUTOSORT_DISABLED                   = 0x3315,
-    CMSG_SET_BANK_BAG_SLOT_FLAG                       = 0x3313,
+    CMSG_CHANGE_BANK_BAG_SLOT_FLAG                    = 0x3313,
     CMSG_SET_CONTACT_NOTES                            = 0x36D1,
     CMSG_SET_CURRENCY_FLAGS                           = 0x3169,
     CMSG_SET_DIFFICULTY_ID                            = 0x3218,

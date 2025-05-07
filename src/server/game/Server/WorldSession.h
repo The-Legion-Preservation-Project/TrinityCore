@@ -436,6 +436,10 @@ namespace WorldPackets
         class SortReagentBankBags;
         struct ItemInstance;
         class RemoveNewItem;
+        class ChangeBagSlotFlag;
+        class ChangeBankBagSlotFlag;
+        class SetBackpackAutosortDisabled;
+        class SetBankAutosortDisabled;
     }
 
     namespace LFG
@@ -1457,6 +1461,10 @@ class TC_GAME_API WorldSession
         void HandleWrapItem(WorldPackets::Item::WrapItem& packet);
         void HandleUseCritterItem(WorldPackets::Item::UseCritterItem& packet);
         void HandleUpgradeItem(WorldPackets::Item::UpgradeItem& packet);
+        void HandleChangeBagSlotFlag(WorldPackets::Item::ChangeBagSlotFlag const& changeBagSlotFlag);
+        void HandleChangeBankBagSlotFlag(WorldPackets::Item::ChangeBankBagSlotFlag const& changeBankBagSlotFlag);
+        void HandleSetBackpackAutosortDisabled(WorldPackets::Item::SetBackpackAutosortDisabled const& setBackpackAutosortDisabled);
+        void HandleSetBankAutosortDisabled(WorldPackets::Item::SetBankAutosortDisabled const& setBankAutosortDisabled);
 
         void HandleAttackSwingOpcode(WorldPackets::Combat::AttackSwing& packet);
         void HandleAttackStopOpcode(WorldPackets::Combat::AttackStop& packet);

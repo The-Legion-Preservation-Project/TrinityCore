@@ -1310,3 +1310,61 @@ void WorldSession::HandleRemoveNewItem(WorldPackets::Item::RemoveNewItem& remove
         item->SetState(ITEM_CHANGED, _player);
     }
 }
+
+void WorldSession::HandleChangeBagSlotFlag(WorldPackets::Item::ChangeBagSlotFlag const& changeBagSlotFlag)
+{
+    if (changeBagSlotFlag.BagIndex >= 6)
+        return;
+
+    if (changeBagSlotFlag.FlagToChange == BagSlotFlags::DisableAutoSort)
+    {
+        if (changeBagSlotFlag.On)
+            _player->SetBagSlotFlag(changeBagSlotFlag.BagIndex, changeBagSlotFlag.FlagToChange);
+        else
+            _player->RemoveBagSlotFlag(changeBagSlotFlag.BagIndex, changeBagSlotFlag.FlagToChange);
+    }
+    else
+    {
+        BagSlotFlags flags = _player->GetBagSlotFlags(changeBagSlotFlag.BagIndex) & BagSlotFlags(BagSlotFlags::DisableAutoSort);
+        if (changeBagSlotFlag.On)
+            flags |= changeBagSlotFlag.FlagToChange;
+        else
+            flags &= ~changeBagSlotFlag.FlagToChange;
+
+        _player->ReplaceAllBagSlotFlags(changeBagSlotFlag.BagIndex, flags);
+    }
+}
+
+void WorldSession::HandleChangeBankBagSlotFlag(WorldPackets::Item::ChangeBankBagSlotFlag const& changeBankBagSlotFlag)
+{
+    if (changeBankBagSlotFlag.BagIndex >= 8)
+        return;
+
+    if (changeBankBagSlotFlag.FlagToChange == BagSlotFlags::DisableAutoSort)
+    {
+        if (changeBankBagSlotFlag.On)
+            _player->SetBankBagSlotFlag(changeBankBagSlotFlag.BagIndex, changeBankBagSlotFlag.FlagToChange);
+        else
+            _player->RemoveBankBagSlotFlag(changeBankBagSlotFlag.BagIndex, changeBankBagSlotFlag.FlagToChange);
+    }
+    else
+    {
+        BagSlotFlags flags = _player->GetBagSlotFlags(changeBankBagSlotFlag.BagIndex) & BagSlotFlags(BagSlotFlags::DisableAutoSort);
+        if (changeBankBagSlotFlag.On)
+            flags |= changeBankBagSlotFlag.FlagToChange;
+        else
+            flags &= ~changeBankBagSlotFlag.FlagToChange;
+
+        _player->ReplaceAllBankBagSlotFlags(changeBankBagSlotFlag.BagIndex, flags);
+    }
+}
+
+void WorldSession::HandleSetBackpackAutosortDisabled(WorldPackets::Item::SetBackpackAutosortDisabled const& setBackpackAutosortDisabled)
+{
+    _player->SetBackpackAutoSortDisabled(setBackpackAutosortDisabled.Disable);
+}
+
+void WorldSession::HandleSetBankAutosortDisabled(WorldPackets::Item::SetBankAutosortDisabled const& setBankAutosortDisabled)
+{
+    _player->SetBankAutoSortDisabled(setBankAutosortDisabled.Disable);
+}
