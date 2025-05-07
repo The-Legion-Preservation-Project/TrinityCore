@@ -22,7 +22,6 @@
 
 enum MovementFlags : uint32;
 enum MovementFlags2 : uint32;
-enum MovementFlags3 : uint32;
 
 namespace G3D
 {
@@ -84,7 +83,6 @@ namespace Movement
     TC_GAME_API extern UInt32Counter splineIdGen;
     TC_GAME_API extern std::string MovementFlags_ToString(MovementFlags flags);
     TC_GAME_API extern std::string MovementFlags_ToString(MovementFlags2 flags);
-    TC_GAME_API extern std::string MovementFlags_ToString(MovementFlags3 flags);
 }
 
 #endif // TRINITYSERVER_TYPEDEFS_H

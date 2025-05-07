@@ -112,11 +112,4 @@ namespace Movement
         PrintFlags(flags, str);
         return str;
     }
-
-    std::string MovementFlags_ToString(MovementFlags3 flags)
-    {
-        std::string str;
-        PrintFlags(flags, str);
-        return str;
-    }
 }

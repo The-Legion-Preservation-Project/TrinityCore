@@ -20,6 +20,8 @@
 #include "SmartEnum.h"
 #include <stdexcept>
 
+using Movement::MoveSplineFlagEnum;
+
 namespace Trinity::Impl::EnumUtilsImpl
 {
 
