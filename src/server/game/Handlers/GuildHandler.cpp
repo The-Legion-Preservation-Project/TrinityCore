@@ -269,7 +269,7 @@ void WorldSession::HandleGuildBankQueryTab(WorldPackets::Guild::GuildBankQueryTa
 
 void WorldSession::HandleGuildBankDepositMoney(WorldPackets::Guild::GuildBankDepositMoney& packet)
 {
-    TC_LOG_DEBUG("guild", "CMSG_GUILD_BANK_DEPOSIT_MONEY [{}]: [{}], money: " UI64FMTD,
+    TC_LOG_DEBUG("guild", "CMSG_GUILD_BANK_DEPOSIT_MONEY [{}]: [{}], money: {}",
         GetPlayerInfo(), packet.Banker.ToString(), packet.Money);
 
     if (GetPlayer()->GetGameObjectIfCanInteractWith(packet.Banker, GAMEOBJECT_TYPE_GUILD_BANK))
@@ -280,7 +280,7 @@ void WorldSession::HandleGuildBankDepositMoney(WorldPackets::Guild::GuildBankDep
 
 void WorldSession::HandleGuildBankWithdrawMoney(WorldPackets::Guild::GuildBankWithdrawMoney& packet)
 {
-    TC_LOG_DEBUG("guild", "CMSG_GUILD_BANK_WITHDRAW_MONEY [{}]: [{}], money: " UI64FMTD,
+    TC_LOG_DEBUG("guild", "CMSG_GUILD_BANK_WITHDRAW_MONEY [{}]: [{}], money: {}",
         GetPlayerInfo(), packet.Banker.ToString(), packet.Money);
 
     if (packet.Money && GetPlayer()->GetGameObjectIfCanInteractWith(packet.Banker, GAMEOBJECT_TYPE_GUILD_BANK))
