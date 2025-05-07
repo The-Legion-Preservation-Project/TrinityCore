@@ -17,6 +17,8 @@
 
 #include "Map.h"
 #include "Battleground.h"
+#include "BattlegroundMgr.h"
+#include "BattlegroundScript.h"
 #include "CellImpl.h"
 #include "Containers.h"
 #include "Conversation.h"
@@ -3381,7 +3383,7 @@ TeamId InstanceMap::GetTeamIdInInstance() const
 /* ******* Battleground Instance Maps ******* */
 
 BattlegroundMap::BattlegroundMap(uint32 id, time_t expiry, uint32 InstanceId, Difficulty spawnMode)
-  : Map(id, expiry, InstanceId, spawnMode), m_bg(nullptr)
+  : Map(id, expiry, InstanceId, spawnMode), m_bg(nullptr), _battlegroundScript(nullptr), _scriptId(0)
 {
     //lets initialize visibility distance for BG/Arenas
     BattlegroundMap::InitVisibilityDistance();
@@ -3402,6 +3404,36 @@ void BattlegroundMap::InitVisibilityDistance()
     //init visibility distance for BG/Arenas
     m_VisibleDistance        = IsBattleArena() ? World::GetMaxVisibleDistanceInArenas() : World::GetMaxVisibleDistanceInBG();
     m_VisibilityNotifyPeriod = IsBattleArena() ? World::GetVisibilityNotifyPeriodInArenas() : World::GetVisibilityNotifyPeriodInBG();
+}
+
+std::string const& BattlegroundMap::GetScriptName() const
+{
+    return sObjectMgr->GetScriptName(_scriptId);
+}
+
+void BattlegroundMap::InitScriptData()
+{
+    if (_battlegroundScript)
+        return;
+
+    ASSERT(GetBG(), "Battleground not set yet!");
+
+    if (BattlegroundScriptTemplate const* scriptTemplate = sBattlegroundMgr->FindBattlegroundScriptTemplate(GetId(), GetBG()->GetTypeID()))
+    {
+        _scriptId = scriptTemplate->ScriptId;
+        _battlegroundScript.reset(sScriptMgr->CreateBattlegroundData(this));
+    }
+
+    // Make sure every battleground has a default script
+    if (!_battlegroundScript)
+    {
+        if (IsBattleArena())
+            _battlegroundScript = std::make_unique<ArenaScript>(this);
+        else
+            _battlegroundScript = std::make_unique<BattlegroundScript>(this);
+    }
+
+    _battlegroundScript->OnInit();
 }
 
 TransferAbortParams BattlegroundMap::CannotEnter(Player* player)
@@ -3445,6 +3477,12 @@ void BattlegroundMap::RemoveAllPlayers()
             if (Player* player = itr->GetSource())
                 if (!player->IsBeingTeleportedFar())
                     player->TeleportTo(player->GetBattlegroundEntryPoint());
+}
+
+void BattlegroundMap::Update(uint32 diff)
+{
+    Map::Update(diff);
+    _battlegroundScript->OnUpdate(diff);
 }
 
 AreaTrigger* Map::GetAreaTrigger(ObjectGuid const& guid)

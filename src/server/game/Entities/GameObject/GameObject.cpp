@@ -1073,11 +1073,9 @@ bool GameObject::Create(uint32 entry, Map* map, Position const& pos, QuaternionD
             m_goValue.Building.Health = m_goValue.Building.DestructibleHitpoint ? m_goValue.Building.DestructibleHitpoint->GetMaxHealth() : 0;
             SetGoAnimProgress(255);
 
-            // yes, even after the updatefield rewrite this garbage hack is still in client
-            QuaternionData reinterpretId;
-            memcpy(&reinterpretId.x, &m_goInfo->destructibleBuilding.DestructibleModelRec, sizeof(float));
-            SetUInt32Value(GAMEOBJECT_PARENTROTATION, reinterpretId);
+            SetUInt32Value(GAMEOBJECT_PARENTROTATION, m_goInfo->destructibleBuilding.DestructibleModelRec);
             break;
+        }
         case GAMEOBJECT_TYPE_TRANSPORT:
         {
             m_goTypeImpl = std::make_unique<GameObjectType::Transport>(*this);
@@ -2263,8 +2261,6 @@ bool GameObject::ActivateToQuest(Player const* target) const
                 || LootTemplates_Gameobject.HaveQuestLootForPlayer(GetGOInfo()->chest.chestPersonalLoot, target)
                 || LootTemplates_Gameobject.HaveQuestLootForPlayer(GetGOInfo()->chest.chestPushLoot, target))
             {
-                if (Battleground const* bg = target->GetBattleground())
-                    return bg->CanActivateGO(GetEntry(), bg->GetPlayerTeam(target->GetGUID()));
                 return true;
             }
             break;
@@ -2574,10 +2570,6 @@ void GameObject::Use(Unit* user)
             Player* player = user->ToPlayer();
             if (!player)
                 return;
-
-            if (Battleground* bg = player->GetBattleground())
-                if (!bg->CanActivateGO(GetEntry(), bg->GetPlayerTeam(user->GetGUID())))
-                    return;
 
             GameObjectTemplate const* info = GetGOInfo();
             if (!m_loot && info->GetLootId())
@@ -3114,24 +3106,11 @@ void GameObject::Use(Unit* user)
 
             if (player->CanUseBattlegroundObject(this))
             {
-                // in battleground check
-                Battleground* bg = player->GetBattleground();
-                if (!bg)
-                    return;
-
                 if (player->GetVehicle())
                     return;
 
                 player->RemoveAurasByType(SPELL_AURA_MOD_STEALTH);
                 player->RemoveAurasByType(SPELL_AURA_MOD_INVISIBILITY);
-                // BG flag click
-                // AB:
-                // 15001
-                // 15002
-                // 15003
-                // 15004
-                // 15005
-                bg->EventPlayerClickedOnFlag(player, this);
                 return;                                     //we don;t need to delete flag ... it is despawned!
             }
             break;
@@ -3162,11 +3141,6 @@ void GameObject::Use(Unit* user)
 
             if (player->CanUseBattlegroundObject(this))
             {
-                // in battleground check
-                Battleground* bg = player->GetBattleground();
-                if (!bg)
-                    return;
-
                 if (player->GetVehicle())
                     return;
 
@@ -3179,24 +3153,8 @@ void GameObject::Use(Unit* user)
                 // EotS:
                 // 184142 - Netherstorm Flag
                 GameObjectTemplate const* info = GetGOInfo();
-                if (info)
-                {
-                    switch (info->entry)
-                    {
-                        case 179785:                        // Silverwing Flag
-                        case 179786:                        // Warsong Flag
-                            if (bg->GetTypeID() == BATTLEGROUND_WS)
-                                bg->EventPlayerClickedOnFlag(player, this);
-                            break;
-                        case 184142:                        // Netherstorm Flag
-                            if (bg->GetTypeID() == BATTLEGROUND_EY)
-                                bg->EventPlayerClickedOnFlag(player, this);
-                            break;
-                    }
-
-                    if (info->flagDrop.eventID)
-                        GameEvents::Trigger(info->flagDrop.eventID, player, this);
-                }
+                if (info->flagDrop.eventID)
+                    GameEvents::Trigger(info->flagDrop.eventID, player, this);
                 //this cause to call return, all flags must be deleted here!!
                 spellId = 0;
                 Delete();
@@ -3676,10 +3634,6 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, WorldOb
             if (GetGOInfo()->destructibleBuilding.DestroyedEvent && attackerOrHealer)
                 GameEvents::Trigger(GetGOInfo()->destructibleBuilding.DestroyedEvent, attackerOrHealer, this);
             AI()->Destroyed(attackerOrHealer, m_goInfo->destructibleBuilding.DestroyedEvent);
-
-            if (Player* player = attackerOrHealer ? attackerOrHealer->GetCharmerOrOwnerPlayerOrPlayerItself() : nullptr)
-                if (Battleground* bg = player->GetBattleground())
-                    bg->DestroyGate(player, this);
 
             RemoveFlag(GO_FLAG_DAMAGED);
             SetFlag(GO_FLAG_DESTROYED);

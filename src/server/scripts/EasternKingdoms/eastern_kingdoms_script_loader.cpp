@@ -16,11 +16,6 @@
  */
 
 // This is where scripts' loading functions should be declared:
-void AddSC_alterac_valley();                 //Alterac Valley
-void AddSC_boss_balinda();
-void AddSC_boss_drekthar();
-void AddSC_boss_galvangar();
-void AddSC_boss_vanndar();
 void AddSC_boss_alizabal();                  //Baradin Hold
 void AddSC_boss_occuthar();
 void AddSC_boss_argaloth();
@@ -210,11 +205,6 @@ void AddSC_undercity();
 // void Add${NameOfDirectory}Scripts()
 void AddEasternKingdomsScripts()
 {
-    AddSC_alterac_valley();                 //Alterac Valley
-    AddSC_boss_balinda();
-    AddSC_boss_drekthar();
-    AddSC_boss_galvangar();
-    AddSC_boss_vanndar();
     AddSC_boss_alizabal();                  //Baradin Hold
     AddSC_boss_occuthar();
     AddSC_boss_argaloth();
