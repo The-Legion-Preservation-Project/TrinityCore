@@ -547,6 +547,8 @@ void CriteriaHandler::UpdateCriteria(CriteriaType type, uint64 miscValue1 /*= 0*
             case CriteriaType::Login:
             case CriteriaType::AnyoneTriggerGameEventScenario:
             case CriteriaType::DefeatDungeonEncounterWhileElegibleForLoot:
+            case CriteriaType::CompleteAnyScenario:
+            case CriteriaType::CompleteScenario:
             case CriteriaType::BattlePetReachLevel:
             case CriteriaType::ActivelyEarnPetLevel:
             case CriteriaType::DefeatDungeonEncounter:
@@ -801,8 +803,6 @@ void CriteriaHandler::UpdateCriteria(CriteriaType type, uint64 miscValue1 /*= 0*
             case CriteriaType::KickVoterInLFRDungeon:
             case CriteriaType::KickTargetInLFRDungeon:
             case CriteriaType::GroupedTankLeftEarlyInLFRDungeon:
-            case CriteriaType::CompleteAnyScenario:
-            case CriteriaType::CompleteScenario:
             case CriteriaType::AccountObtainPetThroughBattle:
             case CriteriaType::WinPetBattle:
             case CriteriaType::PlayerObtainPetThroughBattle:
@@ -1203,11 +1203,13 @@ bool CriteriaHandler::IsCompletedCriteria(Criteria const* criteria, uint64 requi
         case CriteriaType::CompletedLFGDungeonWithStrangers:
         case CriteriaType::DeliveredKillingBlow:
         case CriteriaType::CurrencyGained:
-        case CriteriaType::PlaceGarrisonBuilding:
+        case CriteriaType::CompleteAnyScenario:
+        case CriteriaType::CompleteScenario:
         case CriteriaType::UniquePetsOwned:
         case CriteriaType::BattlePetReachLevel:
         case CriteriaType::ActivelyEarnPetLevel:
         case CriteriaType::DefeatDungeonEncounter:
+        case CriteriaType::PlaceGarrisonBuilding:
         case CriteriaType::LearnHeirloom:
         case CriteriaType::LearnAnyHeirloom:
         case CriteriaType::EarnArtifactXP:
@@ -1389,6 +1391,7 @@ bool CriteriaHandler::RequirementsSatisfied(Criteria const* criteria, uint64 mis
         case CriteriaType::BuyItemsFromVendors:
         case CriteriaType::SellItemsToVendors:
         case CriteriaType::LearnAnyTransmog:
+        case CriteriaType::CompleteAnyScenario:
             if (!miscValue1)
                 return false;
             break;
@@ -1653,6 +1656,10 @@ bool CriteriaHandler::RequirementsSatisfied(Criteria const* criteria, uint64 mis
         case CriteriaType::PlayerTriggerGameEvent:
         case CriteriaType::AnyoneTriggerGameEventScenario:
             if (!miscValue1 || miscValue1 != uint32(criteria->Entry->Asset.EventID))
+                return false;
+            break;
+        case CriteriaType::CompleteScenario:
+            if (miscValue1 != uint32(criteria->Entry->Asset.ScenarioID))
                 return false;
             break;
         default:
