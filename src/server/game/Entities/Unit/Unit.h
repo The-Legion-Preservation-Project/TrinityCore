@@ -777,7 +777,8 @@ class TC_GAME_API Unit : public WorldObject
         virtual float GetArmorMultiplierForTarget(WorldObject const* /*target*/) const { return 1.0f; }
 
         Powers GetPowerType() const { return Powers(GetUInt32Value(UNIT_FIELD_DISPLAY_POWER)); }
-        void SetPowerType(Powers power, bool sendUpdate = true);
+        void SetPowerType(Powers power, bool sendUpdate = true, bool onInit = false);
+        void SetInitialPowerValue(Powers powerType);
         void SetOverrideDisplayPowerId(uint32 powerDisplayId) { SetUInt32Value(UNIT_FIELD_OVERRIDE_DISPLAY_POWER_ID, powerDisplayId); }
         Powers CalculateDisplayPowerType() const;
         void UpdateDisplayPower();
