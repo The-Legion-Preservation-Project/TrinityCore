@@ -324,16 +324,16 @@ INSERT INTO `areatrigger_template` (`Id`, `IsCustom`, `Flags`, `VerifiedBuild`) 
 (@ATID, 1, 1, 0);
 
 DELETE FROM `areatrigger_create_properties` WHERE `Id`=1725 AND `IsCustom`=0;
-INSERT INTO `areatrigger_create_properties` (`Id`, `IsCustom`, `AreaTriggerId`, `IsAreatriggerCustom`, `Flags`, `MoveCurveId`, `ScaleCurveId`, `MorphCurveId`, `FacingCurveId`, `AnimId`, `AnimKitId`, `DecalPropertiesId`, `SpellForVisuals`, `TimeToTarget`, `TimeToTargetScale`, `Shape`, `ShapeData0`, `ShapeData1`, `ShapeData2`, `ShapeData3`, `ShapeData4`, `ShapeData5`, `ShapeData6`, `ShapeData7`, `ScriptName`, `VerifiedBuild`) VALUES
-(1725, 0, @ATID, 1, 4, 0, 0, 0, 0, -1, 0, 0, NULL, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0, 0, '', 0);
+INSERT INTO `areatrigger_create_properties` (`Id`, `IsCustom`, `AreaTriggerId`, `IsAreatriggerCustom`, `Flags`, `MoveCurveId`, `ScaleCurveId`, `MorphCurveId`, `FacingCurveId`, `AnimId`, `AnimKitId`, `DecalPropertiesId`, `SpellForVisuals`, `TimeToTarget`, `TimeToTargetScale`, `Shape`, `ShapeData0`, `ShapeData1`, `ShapeData2`, `ShapeData3`, `ShapeData4`, `ShapeData5`, `ScriptName`, `VerifiedBuild`) VALUES
+(1725, 0, @ATID, 1, 4, 0, 0, 0, 0, -1, 0, 0, NULL, 0, 0, 0, 6, 6, 0, 0, 0, 0, '', 0);
 
 DELETE FROM `areatrigger_template` WHERE (`IsCustom`=0 AND `Id` = 6035);
 INSERT INTO `areatrigger_template` (`Id`, `IsCustom`, `Flags`, `VerifiedBuild`) VALUES
 (6035, 0, 0, 54904);
 
 DELETE FROM `areatrigger_create_properties` WHERE (`Id`=1569 AND `IsCustom`=0);
-INSERT INTO `areatrigger_create_properties` (`Id`, `IsCustom`, `AreaTriggerId`, `IsAreatriggerCustom`, `Flags`, `MoveCurveId`, `ScaleCurveId`, `MorphCurveId`, `FacingCurveId`, `AnimId`, `AnimKitId`, `DecalPropertiesId`, `TimeToTarget`, `TimeToTargetScale`, `Shape`, `ShapeData0`, `ShapeData1`, `ShapeData2`, `ShapeData3`, `ShapeData4`, `ShapeData5`, `ShapeData6`, `ShapeData7`, `VerifiedBuild`) VALUES
-(1569, 0, 6035, 0, 2, 470, 0, 469, 0, -1, 0, 0, 9446, 10000, 0, 0.75, 1.25, 0, 0, 0, 0, 0, 0, 54904); -- Spell: 154174 (Arcane Bomb)
+INSERT INTO `areatrigger_create_properties` (`Id`, `IsCustom`, `AreaTriggerId`, `IsAreatriggerCustom`, `Flags`, `MoveCurveId`, `ScaleCurveId`, `MorphCurveId`, `FacingCurveId`, `AnimId`, `AnimKitId`, `DecalPropertiesId`, `TimeToTarget`, `TimeToTargetScale`, `Shape`, `ShapeData0`, `ShapeData1`, `ShapeData2`, `ShapeData3`, `ShapeData4`, `ShapeData5`, `VerifiedBuild`) VALUES
+(1569, 0, 6035, 0, 2, 470, 0, 469, 0, -1, 0, 0, 9446, 10000, 0, 0.75, 1.25, 0, 0, 0, 0, 54904); -- Spell: 154174 (Arcane Bomb)
 
 -- Creature difficulties (Normal)
 DELETE FROM `creature_template_difficulty` WHERE (`Entry`IN (77130, 77132, 77133) AND `DifficultyID`=1);

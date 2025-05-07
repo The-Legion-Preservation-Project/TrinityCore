@@ -412,7 +412,7 @@ struct AreaTriggerActionSetMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_SHORT, 1, false },
+        { FT_SHORT, 1, true },
     };
 
     static constexpr DB2Meta Instance{ 1352378, -1, 1, 0x5DA480BD, Fields, -1 };
