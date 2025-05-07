@@ -54,7 +54,7 @@ struct Achievement_CategoryEntry
 
 struct AdventureJournalEntry
 {
-    int32 ID;
+    uint32 ID;
     LocalizedString Name;
     LocalizedString Description;
     LocalizedString ButtonText;
@@ -81,7 +81,7 @@ struct AdventureJournalEntry
 
 struct AdventureMapPOIEntry
 {
-    int32 ID;
+    uint32 ID;
     LocalizedString Title;
     LocalizedString Description;
     DBCPosition2D WorldPosition;
@@ -99,7 +99,7 @@ struct AdventureMapPOIEntry
 
 struct AnimationDataEntry
 {
-    int32 ID;
+    uint32 ID;
     int32 Flags;
     uint16 Fallback;
     uint16 BehaviorID;
@@ -535,7 +535,7 @@ struct ChatChannelsEntry
 
 struct ChrClassUIDisplayEntry
 {
-    int32 ID;
+    uint32 ID;
     uint8 ChrClassesID;
     int32 AdvGuidePlayerConditionID;
     int32 SplashPlayerConditionID;
@@ -2400,7 +2400,7 @@ struct MapDifficultyEntry
 
 struct MapDifficultyXConditionEntry
 {
-    int32 ID;
+    uint32 ID;
     LocalizedString FailureDescription;
     uint32 PlayerConditionID;
     int32 OrderIndex;
@@ -2717,7 +2717,7 @@ struct QuestFactionRewardEntry
 
 struct QuestInfoEntry
 {
-    int32 ID;
+    uint32 ID;
     LocalizedString InfoName;
     uint16 Profession;
     uint8 Type;

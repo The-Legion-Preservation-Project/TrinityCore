@@ -65,7 +65,7 @@ struct AdventureJournalLoadInfo
 {
     static constexpr DB2FieldMeta Fields[25] =
     {
-        { true, FT_INT, "ID" },
+        { false, FT_INT, "ID" },
         { false, FT_STRING, "Name" },
         { false, FT_STRING, "Description" },
         { false, FT_STRING, "ButtonText" },
@@ -99,7 +99,7 @@ struct AdventureMapPoiLoadInfo
 {
     static constexpr DB2FieldMeta Fields[15] =
     {
-        { true, FT_INT, "ID" },
+        { false, FT_INT, "ID" },
         { false, FT_STRING, "Title" },
         { false, FT_STRING, "Description" },
         { false, FT_FLOAT, "WorldPositionX" },
@@ -123,7 +123,7 @@ struct AnimationDataLoadInfo
 {
     static constexpr DB2FieldMeta Fields[5] =
     {
-        { true, FT_INT, "ID" },
+        { false, FT_INT, "ID" },
         { true, FT_INT, "Flags" },
         { false, FT_SHORT, "Fallback" },
         { false, FT_SHORT, "BehaviorID" },
@@ -788,7 +788,7 @@ struct ChrClassUiDisplayLoadInfo
 {
     static constexpr DB2FieldMeta Fields[4] =
     {
-        { true, FT_INT, "ID" },
+        { false, FT_INT, "ID" },
         { false, FT_BYTE, "ChrClassesID" },
         { true, FT_INT, "AdvGuidePlayerConditionID" },
         { true, FT_INT, "SplashPlayerConditionID" },
@@ -3164,7 +3164,7 @@ struct MapDifficultyXConditionLoadInfo
 {
     static constexpr DB2FieldMeta Fields[5] =
     {
-        { true, FT_INT, "ID" },
+        { false, FT_INT, "ID" },
         { false, FT_STRING, "FailureDescription" },
         { false, FT_INT, "PlayerConditionID" },
         { true, FT_INT, "OrderIndex" },
@@ -3677,7 +3677,7 @@ struct QuestInfoLoadInfo
 {
     static constexpr DB2FieldMeta Fields[5] =
     {
-        { true, FT_INT, "ID" },
+        { false, FT_INT, "ID" },
         { false, FT_STRING, "InfoName" },
         { false, FT_SHORT, "Profession" },
         { false, FT_BYTE, "Type" },
