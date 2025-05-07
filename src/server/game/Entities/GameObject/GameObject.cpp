@@ -2227,7 +2227,7 @@ bool GameObject::CanActivateForPlayer(Player const* target) const
     if (!MeetsInteractCondition(target))
         return false;
 
-    if (sObjectMgr->IsGameObjectForQuests(GetEntry()) && !ActivateToQuest(target))
+    if (!ActivateToQuest(target))
         return false;
 
     return true;
@@ -2239,7 +2239,7 @@ bool GameObject::ActivateToQuest(Player const* target) const
         return true;
 
     if (!sObjectMgr->IsGameObjectForQuests(GetEntry()))
-        return false;
+        return true;
 
     switch (GetGoType())
     {
@@ -3315,9 +3315,9 @@ void GameObject::Use(Unit* user)
                 return;
 
             Player* player = user->ToPlayer();
-            if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(info->artifactForge.conditionID1))
-                if (!sConditionMgr->IsPlayerMeetingCondition(player, playerCondition))
-                    return;
+
+            if (!MeetsInteractCondition(player))
+                return;
 
             Aura const* artifactAura = player->GetAura(ARTIFACTS_ALL_WEAPONS_GENERAL_WEAPON_EQUIPPED_PASSIVE);
             Item const* item = artifactAura ? player->GetItemByGuid(artifactAura->GetCastItemGUID()) : nullptr;
@@ -3994,25 +3994,27 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                 int16 pathProgress = -1;
                 switch (GetGoType())
                 {
+                    case GAMEOBJECT_TYPE_BUTTON:
+                    case GAMEOBJECT_TYPE_GOOBER:
+                        if (GetGOInfo()->GetQuestID() || GetGOInfo()->GetConditionID1())
+                        {
+                            if (CanActivateForPlayer(target))
+                            {
+                                dynFlags |= GO_DYNFLAG_LO_HIGHLIGHT;
+                                if (GetGoStateFor(target->GetGUID()) != GO_STATE_ACTIVE)
+                                    dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
+                            }
+                        }
+                        break;
                     case GAMEOBJECT_TYPE_QUESTGIVER:
-                        if (ActivateToQuest(target))
+                        if (CanActivateForPlayer(target))
                             dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
                         break;
                     case GAMEOBJECT_TYPE_CHEST:
-                        if (ActivateToQuest(target))
+                        if (CanActivateForPlayer(target))
                             dynFlags |= GO_DYNFLAG_LO_ACTIVATE | GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
                         else if (targetIsGM)
-                            dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
-                        break;
-                    case GAMEOBJECT_TYPE_GOOBER:
-                        if (ActivateToQuest(target))
-                        {
-                            dynFlags |= GO_DYNFLAG_LO_HIGHLIGHT;
-                            if (GetGoStateFor(target->GetGUID()) != GO_STATE_ACTIVE)
-                                dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
-                        }
-                        else if (target->IsGameMaster())
-                            dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
+                            dynFlags |= GO_DYNFLAG_LO_ACTIVATE | GO_DYNFLAG_LO_SPARKLE;
                         break;
                     case GAMEOBJECT_TYPE_GENERIC:
                     case GAMEOBJECT_TYPE_SPELL_FOCUS:
@@ -4034,7 +4036,7 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                             dynFlags &= ~GO_DYNFLAG_LO_NO_INTERACT;
                         break;
                     case GAMEOBJECT_TYPE_GATHERING_NODE:
-                        if (ActivateToQuest(target))
+                        if (CanActivateForPlayer(target))
                             dynFlags |= GO_DYNFLAG_LO_ACTIVATE | GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
                         if (GetGoStateFor(target->GetGUID()) == GO_STATE_ACTIVE)
                             dynFlags |= GO_DYNFLAG_LO_DEPLETED;
@@ -4471,14 +4473,7 @@ GuidUnorderedSet const* GameObject::GetInsidePlayers() const
 
 bool GameObject::MeetsInteractCondition(Player const* user) const
 {
-    if (!m_goInfo->GetConditionID1())
-        return true;
-
-    if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(m_goInfo->GetConditionID1()))
-        if (!ConditionMgr::IsPlayerMeetingCondition(user, playerCondition))
-            return false;
-
-    return true;
+    return ConditionMgr::IsPlayerMeetingCondition(user, m_goInfo->GetConditionID1());
 }
 
 std::unordered_map<ObjectGuid, GameObject::PerPlayerState>& GameObject::GetOrCreatePerPlayerStates()

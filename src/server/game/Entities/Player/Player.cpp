@@ -14776,9 +14776,8 @@ void Player::RewardQuest(Quest const* quest, LootItemType rewardType, uint32 rew
             if (!displaySpell.SpellId)
                 continue;
 
-            if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(displaySpell.PlayerConditionId))
-                if (!ConditionMgr::IsPlayerMeetingCondition(this, playerCondition))
-                    continue;
+            if (!ConditionMgr::IsPlayerMeetingCondition(this, displaySpell.PlayerConditionId))
+                continue;
 
             SpellInfo const* spellInfo = sSpellMgr->AssertSpellInfo(displaySpell.SpellId, GetMap()->GetDifficultyID());
             Unit* caster = this;
@@ -19090,7 +19089,7 @@ bool Player::Satisfy(AccessRequirement const* ar, uint32 target_map, TransferAbo
             {
                 for (auto&& itr : *mapDifficultyConditions)
                 {
-                    if (!ConditionMgr::IsPlayerMeetingCondition(this, itr.second))
+                    if (!ConditionMgr::IsPlayerMeetingCondition(this, itr.second->ID))
                     {
                         failedMapDifficultyXCondition = itr.first;
                         break;
@@ -22384,13 +22383,10 @@ bool Player::BuyItemFromVendorSlot(ObjectGuid vendorguid, uint32 vendorslot, uin
         return false;
     }
 
-    if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(crItem->PlayerConditionId))
+    if (!ConditionMgr::IsPlayerMeetingCondition(this, crItem->PlayerConditionId))
     {
-        if (!ConditionMgr::IsPlayerMeetingCondition(this, playerCondition))
-        {
-            SendEquipError(EQUIP_ERR_ITEM_LOCKED, nullptr, nullptr);
-            return false;
-        }
+        SendEquipError(EQUIP_ERR_ITEM_LOCKED, nullptr, nullptr);
+        return false;
     }
 
     // check current item amount if it limited
@@ -27837,11 +27833,7 @@ void Player::SendPlayerChoice(ObjectGuid sender, int32 choiceId)
 
 bool Player::MeetPlayerCondition(uint32 conditionId) const
 {
-    if (PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(conditionId))
-        if (!ConditionMgr::IsPlayerMeetingCondition(this, playerCondition))
-            return false;
-
-    return true;
+    return ConditionMgr::IsPlayerMeetingCondition(this, conditionId);
 }
 
 bool Player::IsInFriendlyArea() const
@@ -28340,8 +28332,7 @@ uint8 Player::GetItemLimitCategoryQuantity(ItemLimitCategoryEntry const* limitEn
     {
         for (ItemLimitCategoryConditionEntry const* limitCondition : *limitConditions)
         {
-            PlayerConditionEntry const* playerCondition = sPlayerConditionStore.LookupEntry(limitCondition->PlayerConditionID);
-            if (!playerCondition || ConditionMgr::IsPlayerMeetingCondition(this, playerCondition))
+            if (ConditionMgr::IsPlayerMeetingCondition(this, limitCondition->PlayerConditionID))
                 limit += limitCondition->AddQuantity;
         }
     }
