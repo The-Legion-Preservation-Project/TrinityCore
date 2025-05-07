@@ -73,7 +73,6 @@ struct PacketHeader
     uint16 Command;
 
     bool IsValidSize() const { return Size < 0x40000; }
-    bool IsValidOpcode() const;
 };
 
 #pragma pack(pop)

@@ -339,7 +339,7 @@ bool WorldSocket::ReadHeaderHandler()
     PacketHeader* header = reinterpret_cast<PacketHeader*>(_headerBuffer.GetReadPointer());
     header->Size -= 2;
 
-    if (!header->IsValidSize() || !header->IsValidOpcode())
+    if (!header->IsValidSize())
     {
         TC_LOG_ERROR("network", "WorldSocket::ReadHeaderHandler(): client {} sent malformed packet (size: {}, cmd: {})",
             GetRemoteIpAddress().to_string(), header->Size, header->Command);
@@ -354,6 +354,13 @@ WorldSocket::ReadDataHandlerResult WorldSocket::ReadDataHandler()
 {
     PacketHeader* header = reinterpret_cast<PacketHeader*>(_headerBuffer.GetReadPointer());
     OpcodeClient opcode = static_cast<OpcodeClient>(header->Command);
+
+    if (opcode < MIN_CMSG_OPCODE_NUMBER || opcode > MAX_CMSG_OPCODE_NUMBER)
+    {
+        TC_LOG_ERROR("network", "WorldSocket::ReadHeaderHandler(): client {} sent wrong opcode (opcode: {})",
+            GetRemoteIpAddress().to_string(), uint32(opcode));
+        return ReadDataHandlerResult::Error;
+    }
 
     WorldPacket packet(opcode, std::move(_packetBuffer), GetConnectionType());
 
@@ -468,7 +475,7 @@ WorldSocket::ReadDataHandlerResult WorldSocket::ReadDataHandler()
                 return ReadDataHandlerResult::Error;
             }
 
-            OpcodeHandler const* handler = opcodeTable[opcode];
+            ClientOpcodeHandler const* handler = opcodeTable[opcode];
             if (!handler)
             {
                 TC_LOG_ERROR("network.opcode", "No defined handler for opcode {} sent by {}", GetOpcodeNameForLogging(static_cast<OpcodeClient>(packet.GetOpcode())), _worldSession->GetPlayerInfo());
@@ -1040,9 +1047,4 @@ bool WorldSocket::HandlePing(WorldPackets::Auth::Ping& ping)
 
     SendPacketAndLogOpcode(*WorldPackets::Auth::Pong(ping.Serial).Write());
     return true;
-}
-
-bool PacketHeader::IsValidOpcode() const
-{
-    return Command < NUM_OPCODE_HANDLERS;
 }
