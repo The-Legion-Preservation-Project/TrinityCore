@@ -156,11 +156,16 @@ namespace
     }
 }
 
-CASC::Storage::Storage(HANDLE handle) : _handle(handle)
+namespace CASC
+{
+using CASCCharType = std::remove_const_t<std::remove_pointer_t<decltype(CASC_OPEN_STORAGE_ARGS::szLocalPath)>>;
+using CASCStringType = std::basic_string<CASCCharType>;
+
+Storage::Storage(HANDLE handle) : _handle(handle)
 {
 }
 
-bool CASC::Storage::LoadOnlineTactKeys()
+bool Storage::LoadOnlineTactKeys()
 {
     // attempt to download only once, not every storage opening
     static Optional<std::string> const tactKeys = DownloadFile("raw.githubusercontent.com", 443, "/wowdev/TACTKeys/master/WoW.txt");
@@ -168,21 +173,21 @@ bool CASC::Storage::LoadOnlineTactKeys()
     return tactKeys && CascImportKeysFromString(_handle, tactKeys->c_str());
 }
 
-CASC::Storage::~Storage()
+Storage::~Storage()
 {
     ::CascCloseStorage(_handle);
 }
 
-CASC::Storage* CASC::Storage::Open(boost::filesystem::path const& path, uint32 localeMask)
+Storage* Storage::Open(boost::filesystem::path const& path, uint32 localeMask)
 {
-    std::string strPath = path.string();
+    CASCStringType strPath = path.template string<CASCStringType>();
     CASC_OPEN_STORAGE_ARGS args = {};
     args.Size = sizeof(CASC_OPEN_STORAGE_ARGS);
     args.szLocalPath = strPath.c_str();
     args.szCodeName = "wow";
     args.dwLocaleMask = localeMask;
     HANDLE handle = nullptr;
-    if (!::CascOpenStorageEx(nullptr, &args, false, &handle))
+    if (!CascOpenStorageEx(nullptr, &args, false, &handle))
     {
         DWORD lastError = GetCascError(); // support checking error set by *Open* call, not the next *Close*
         printf("Error opening casc storage '%s': %s\n", path.string().c_str(), HumanReadableCASCError(lastError));
@@ -200,7 +205,7 @@ CASC::Storage* CASC::Storage::Open(boost::filesystem::path const& path, uint32 l
     return storage;
 }
 
-uint32 CASC::Storage::GetBuildNumber() const
+uint32 Storage::GetBuildNumber() const
 {
     CASC_STORAGE_PRODUCT product;
     if (GetStorageInfo(_handle, CascStorageProduct, &product))
@@ -209,7 +214,7 @@ uint32 CASC::Storage::GetBuildNumber() const
     return 0;
 }
 
-uint32 CASC::Storage::GetInstalledLocalesMask() const
+uint32 Storage::GetInstalledLocalesMask() const
 {
     DWORD locales;
     if (GetStorageInfo(_handle, CascStorageInstalledLocales, &locales))
@@ -218,12 +223,12 @@ uint32 CASC::Storage::GetInstalledLocalesMask() const
     return 0;
 }
 
-bool CASC::Storage::HasTactKey(uint64 keyLookup) const
+bool Storage::HasTactKey(uint64 keyLookup) const
 {
     return CascFindEncryptionKey(_handle, keyLookup) != nullptr;
 }
 
-CASC::File* CASC::Storage::OpenFile(char const* fileName, uint32 localeMask, bool printErrors /*= false*/, bool zerofillEncryptedParts /*= false*/) const
+File* Storage::OpenFile(char const* fileName, uint32 localeMask, bool printErrors /*= false*/, bool zerofillEncryptedParts /*= false*/) const
 {
     DWORD openFlags = CASC_OPEN_BY_NAME;
     if (zerofillEncryptedParts)
@@ -244,7 +249,7 @@ CASC::File* CASC::Storage::OpenFile(char const* fileName, uint32 localeMask, boo
     return new File(handle);
 }
 
-CASC::File* CASC::Storage::OpenFile(uint32 fileDataId, uint32 localeMask, bool printErrors /*= false*/, bool zerofillEncryptedParts /*= false*/) const
+File* Storage::OpenFile(uint32 fileDataId, uint32 localeMask, bool printErrors /*= false*/, bool zerofillEncryptedParts /*= false*/) const
 {
     DWORD openFlags = CASC_OPEN_BY_FILEID;
     if (zerofillEncryptedParts)
@@ -265,16 +270,16 @@ CASC::File* CASC::Storage::OpenFile(uint32 fileDataId, uint32 localeMask, bool p
     return new File(handle);
 }
 
-CASC::File::File(HANDLE handle) : _handle(handle)
+File::File(HANDLE handle) : _handle(handle)
 {
 }
 
-CASC::File::~File()
+File::~File()
 {
     ::CascCloseFile(_handle);
 }
 
-uint32 CASC::File::GetId() const
+uint32 File::GetId() const
 {
     CASC_FILE_FULL_INFO info;
     if (!::CascGetFileInfo(_handle, CascFileFullInfo, &info, sizeof(info), nullptr))
@@ -283,7 +288,7 @@ uint32 CASC::File::GetId() const
     return info.FileDataId;
 }
 
-int64 CASC::File::GetSize() const
+int64 File::GetSize() const
 {
     ULONGLONG size;
     if (!::CascGetFileSize64(_handle, &size))
@@ -292,7 +297,7 @@ int64 CASC::File::GetSize() const
     return int64(size);
 }
 
-int64 CASC::File::GetPointer() const
+int64 File::GetPointer() const
 {
     ULONGLONG position;
     if (!::CascSetFilePointer64(_handle, 0, &position, FILE_CURRENT))
@@ -301,14 +306,14 @@ int64 CASC::File::GetPointer() const
     return int64(position);
 }
 
-bool CASC::File::SetPointer(int64 position)
+bool File::SetPointer(int64 position)
 {
     LONG parts[2];
     memcpy(parts, &position, sizeof(parts));
     return ::CascSetFilePointer64(_handle, position, nullptr, FILE_BEGIN);
 }
 
-bool CASC::File::ReadFile(void* buffer, uint32 bytes, uint32* bytesRead)
+bool File::ReadFile(void* buffer, uint32 bytes, uint32* bytesRead)
 {
     DWORD bytesReadDWORD;
     if (!::CascReadFile(_handle, buffer, bytes, &bytesReadDWORD))
@@ -318,4 +323,5 @@ bool CASC::File::ReadFile(void* buffer, uint32 bytes, uint32* bytesRead)
         *bytesRead = bytesReadDWORD;
 
     return true;
+}
 }
