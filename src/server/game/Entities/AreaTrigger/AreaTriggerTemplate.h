@@ -187,6 +187,8 @@ public:
 
     AreaTriggerId Id;
     EnumFlag<AreaTriggerFlag> Flags;
+    uint32 ActionSetId;
+    EnumFlag<AreaTriggerActionSetFlag> ActionSetFlags;
     std::vector<AreaTriggerAction> Actions;
 };
 
