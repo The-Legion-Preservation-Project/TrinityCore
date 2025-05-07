@@ -8548,6 +8548,9 @@ void Unit::AtEnterCombat()
 
     RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags::EnteringCombat);
     Unit::ProcSkillsAndAuras(this, nullptr, PROC_FLAG_ENTER_COMBAT, PROC_FLAG_NONE, PROC_SPELL_TYPE_MASK_ALL, PROC_SPELL_PHASE_NONE, PROC_HIT_NONE, nullptr, nullptr, nullptr);
+
+    if (!IsInteractionAllowedInCombat())
+        UpdateNearbyPlayersInteractions();
 }
 
 void Unit::AtExitCombat()
@@ -8561,6 +8564,9 @@ void Unit::AtExitCombat()
     }
 
     RemoveAurasWithInterruptFlags(SpellAuraInterruptFlags::LeavingCombat);
+
+    if (!IsInteractionAllowedInCombat())
+        UpdateNearbyPlayersInteractions();
 }
 
 void Unit::AtTargetAttacked(Unit* target, bool canInitialAggro)
@@ -8597,6 +8603,36 @@ void Unit::UpdatePetCombatState()
         SetUnitFlag(UNIT_FLAG_PET_IN_COMBAT);
     else
         RemoveUnitFlag(UNIT_FLAG_PET_IN_COMBAT);
+}
+
+void Unit::SetInteractionAllowedWhileHostile(bool interactionAllowed)
+{
+    if (interactionAllowed)
+        SetUnitFlag2(UNIT_FLAG2_INTERACT_WHILE_HOSTILE);
+    else
+        RemoveUnitFlag2(UNIT_FLAG2_INTERACT_WHILE_HOSTILE);
+
+    UpdateNearbyPlayersInteractions();
+}
+
+void Unit::SetInteractionAllowedInCombat(bool interactionAllowed)
+{
+    if (interactionAllowed)
+        SetUnitFlag3(UNIT_FLAG3_ALLOW_INTERACTION_WHILE_IN_COMBAT);
+    else
+        RemoveUnitFlag3(UNIT_FLAG3_ALLOW_INTERACTION_WHILE_IN_COMBAT);
+
+    if (IsInCombat())
+        UpdateNearbyPlayersInteractions();
+}
+
+void Unit::UpdateNearbyPlayersInteractions()
+{
+    if (GetNpcFlags())
+        ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS);
+
+    if (GetNpcFlags2())
+        ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS + 1);
 }
 
 //======================================================================
@@ -13519,17 +13555,25 @@ void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player 
         {
             UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
 
-            if (index == UNIT_NPC_FLAGS)
+            if (index == UNIT_NPC_FLAGS || index == (UNIT_NPC_FLAGS + 1))
             {
-                uint32 appendValue = m_uint32Values[UNIT_NPC_FLAGS];
-
-                if (creature)
+                uint32 appendValue = m_uint32Values[index];
+                if (appendValue)
                 {
-                    if (!target->CanSeeGossipOn(creature))
-                        appendValue &= ~(UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
+                    if ((!IsInteractionAllowedInCombat() && IsInCombat())
+                        || (!IsInteractionAllowedWhileHostile() && IsHostileTo(target)))
+                        appendValue = 0;
+                    else if (creature)
+                    {
+                        if (index == UNIT_NPC_FLAGS)
+                        {
+                            if (!target->CanSeeGossipOn(creature))
+                                appendValue &= ~(UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
 
-                    if (!target->CanSeeSpellClickOn(creature))
-                        appendValue &= ~UNIT_NPC_FLAG_SPELLCLICK;
+                            if (!target->CanSeeSpellClickOn(creature))
+                                appendValue &= ~UNIT_NPC_FLAG_SPELLCLICK;
+                        }
+                    }
                 }
 
                 *data << uint32(appendValue);
