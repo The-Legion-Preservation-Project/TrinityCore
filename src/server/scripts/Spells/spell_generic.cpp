@@ -1081,7 +1081,7 @@ class spell_gen_create_lance : public SpellScript
         {
             if (target->GetTeam() == ALLIANCE)
                 GetCaster()->CastSpell(target, SPELL_CREATE_LANCE_ALLIANCE, true);
-            else
+            else if (target->GetTeam() == HORDE)
                 GetCaster()->CastSpell(target, SPELL_CREATE_LANCE_HORDE, true);
         }
     }
@@ -4643,7 +4643,7 @@ class spell_defender_of_azeroth_death_gate_selector : public SpellScript
         if (player->GetQuestStatus(QUEST_DEFENDER_OF_AZEROTH_ALLIANCE) == QUEST_STATUS_NONE && player->GetQuestStatus(QUEST_DEFENDER_OF_AZEROTH_HORDE) == QUEST_STATUS_NONE)
             return;
 
-        BindLocation bindLoc = player->GetTeam() == ALLIANCE ? StormwindInnLoc : OrgrimmarInnLoc;
+        BindLocation const& bindLoc = player->GetTeam() == ALLIANCE ? StormwindInnLoc : OrgrimmarInnLoc;
         player->SetHomebind(bindLoc.Loc, bindLoc.AreaId);
         player->SendBindPointUpdate();
         player->SendPlayerBound(player->GetGUID(), bindLoc.AreaId);

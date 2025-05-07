@@ -19,6 +19,7 @@
 
 #include "Define.h"
 #include "Hash.h"
+#include "SharedDefines.h"
 #include <string>
 #include <unordered_map>
 
@@ -32,7 +33,7 @@ class TC_GAME_API ChannelMgr
     typedef std::unordered_map<std::pair<uint32 /*channelId*/, uint32 /*zoneId*/>, Channel*> BuiltinChannelContainer; // identify builtin (DBC) channels by zoneId instead, since name changes by client locale
 
     protected:
-        explicit ChannelMgr(uint32 team) : _team(team) { }
+        explicit ChannelMgr(Team team) : _team(team) { }
         ~ChannelMgr();
 
     public:
@@ -42,7 +43,7 @@ class TC_GAME_API ChannelMgr
         ChannelMgr& operator=(ChannelMgr&& right) = delete;
 
         static void LoadFromDB();
-        static ChannelMgr* ForTeam(uint32 team);
+        static ChannelMgr* ForTeam(Team team);
         static Channel* GetChannelForPlayerByNamePart(std::string const& namePart, Player* playerSearcher);
         static AreaTableEntry const* SpecialLinkedArea;
 
@@ -56,7 +57,7 @@ class TC_GAME_API ChannelMgr
     private:
         CustomChannelContainer _customChannels;
         BuiltinChannelContainer _channels;
-        uint32 const _team;
+        Team const _team;
 
         static void SendNotOnChannelNotify(Player const* player, std::string const& name);
 };
