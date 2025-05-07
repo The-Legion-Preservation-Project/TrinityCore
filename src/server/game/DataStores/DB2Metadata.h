@@ -5703,9 +5703,9 @@ struct PathNodeMeta
     static constexpr DB2MetaField Fields[4] =
     {
         { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { FT_INT, 1, true },
         { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { FT_SHORT, 1, true },
     };
 
     static constexpr DB2Meta Instance{ 801733, 0, 4, 0x76615830, Fields, -1 };
