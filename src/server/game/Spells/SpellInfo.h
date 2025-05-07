@@ -482,6 +482,7 @@ class TC_GAME_API SpellInfo
 
         bool IsPassive() const;
         bool IsAutocastable() const;
+        bool IsAutocastEnabledByDefault() const;
         bool IsStackableWithRanks() const;
         bool IsPassiveStackableWithRanks() const;
         bool IsMultiSlotAura() const;

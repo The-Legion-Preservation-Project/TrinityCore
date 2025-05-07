@@ -1528,6 +1528,11 @@ bool SpellInfo::IsAutocastable() const
     return true;
 }
 
+bool SpellInfo::IsAutocastEnabledByDefault() const
+{
+    return !HasAttribute(SPELL_ATTR9_AUTOCAST_OFF_BY_DEFAULT);
+}
+
 bool SpellInfo::IsStackableWithRanks() const
 {
     if (IsPassive())
