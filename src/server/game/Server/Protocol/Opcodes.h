@@ -1803,7 +1803,7 @@ enum PacketProcessing
 class WorldPacket;
 class WorldSession;
 
-struct ClientOpcodeHandler final
+struct ClientOpcodeHandler
 {
     using HandlerFunction = void (*)(WorldSession* session, WorldPacket& packet);
 
@@ -1813,7 +1813,7 @@ struct ClientOpcodeHandler final
     PacketProcessing ProcessingPlace;
 };
 
-struct ServerOpcodeHandler final
+struct ServerOpcodeHandler
 {
     char const* Name;
     SessionStatus Status;

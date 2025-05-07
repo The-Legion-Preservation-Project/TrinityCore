@@ -128,21 +128,6 @@ void QueryPlayerName::Read()
     _worldPacket >> Player;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, PlayerGuidLookupHint const& lookupHint)
-{
-    data.WriteBit(lookupHint.VirtualRealmAddress.has_value());
-    data.WriteBit(lookupHint.NativeRealmAddress.has_value());
-    data.FlushBits();
-
-    if (lookupHint.VirtualRealmAddress)
-        data << uint32(*lookupHint.VirtualRealmAddress);
-
-    if (lookupHint.NativeRealmAddress)
-        data << uint32(*lookupHint.NativeRealmAddress);
-
-    return data;
-}
-
 bool PlayerGuidLookupData::Initialize(ObjectGuid const& guid, Player const* player /*= nullptr*/)
 {
     CharacterCacheEntry const* characterInfo = sCharacterCache->GetCharacterCacheByGuid(guid);

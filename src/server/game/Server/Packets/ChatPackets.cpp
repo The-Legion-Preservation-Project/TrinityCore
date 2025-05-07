@@ -129,8 +129,8 @@ void WorldPackets::Chat::Chat::Initialize(ChatMsg chatType, Language language, W
     SenderVirtualAddress = GetVirtualRealmAddress();
     TargetVirtualAddress = GetVirtualRealmAddress();
     AchievementID = achievementId;
-    _Channel = std::move(channelName);
-    Prefix = std::move(addonPrefix);
+    _Channel = channelName;
+    Prefix = addonPrefix;
     ChatText = message;
 }
 

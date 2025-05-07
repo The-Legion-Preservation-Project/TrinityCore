@@ -81,12 +81,6 @@ namespace WorldPackets
             uint32 CreatureID = 0;
         };
 
-        struct PlayerGuidLookupHint
-        {
-            Optional<uint32> VirtualRealmAddress; ///< current realm (?) (identifier made from the Index, BattleGroup and Region)
-            Optional<uint32> NativeRealmAddress; ///< original realm (?) (identifier made from the Index, BattleGroup and Region)
-        };
-
         class QueryPlayerName final : public ClientPacket
         {
         public:
@@ -407,7 +401,6 @@ namespace WorldPackets
             WorldPackets::Auth::VirtualRealmNameInfo NameInfo;
         };
 
-        ByteBuffer& operator<<(ByteBuffer& data, PlayerGuidLookupHint const& lookupHint);
         ByteBuffer& operator<<(ByteBuffer& data, PlayerGuidLookupData const& lookupData);
     }
 }
