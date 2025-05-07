@@ -3732,6 +3732,21 @@ struct VehicleSeatEntry
     inline bool IsEjectable() const { return HasFlag(VEHICLE_SEAT_FLAG_B_EJECTABLE); }
 };
 
+struct VignetteEntry
+{
+    uint32 ID;
+    LocalizedString Name;
+    float MaxHeight;
+    float MinHeight;
+    uint32 QuestFeedbackEffectID;
+    uint32 Flags;
+    uint32 PlayerConditionID;
+    uint32 VisibleTrackingQuestID;
+
+    EnumFlag<VignetteFlags> GetFlags() const { return static_cast<VignetteFlags>(Flags); }
+    bool IsInfiniteAOI() const { return GetFlags().HasFlag(VignetteFlags::InfiniteAOI | VignetteFlags::ZoneInfiniteAOI); }
+};
+
 struct WMOAreaTableEntry
 {
     LocalizedString AreaName;

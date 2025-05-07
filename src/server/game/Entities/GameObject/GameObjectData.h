@@ -529,11 +529,13 @@ struct GameObjectTemplate
             int32 ExclusiveCategory;                        // 10 Exclusive Category (BGs Only), int, Min value: -2147483648, Max value: 2147483647, Default value: 0
             uint32 worldState1;                             // 11 worldState1, References: WorldState, NoValue = 0
             uint32 ReturnonDefenderInteract;                // 12 Return on Defender Interact, enum { false, true, }; Default: false
+            uint32 SpawnVignette;                           // 13 Spawn Vignette, References: vignette, NoValue = 0
         } newflag;
         // 37 GAMEOBJECT_TYPE_NEW_FLAG_DROP
         struct
         {
             uint32 open;                                    // 0 open, References: Lock_, NoValue = 0
+            uint32 SpawnVignette;                           // 1 Spawn Vignette, References: vignette, NoValue = 0
         } newflagdrop;
         // 38 GAMEOBJECT_TYPE_GARRISON_BUILDING
         struct
@@ -659,6 +661,10 @@ struct GameObjectTemplate
             uint32 logloot;                                 // 19 log loot, enum { false, true, }; Default: false
             uint32 linkedTrap;                              // 20 linkedTrap, References: GameObjects, NoValue = 0
             uint32 PlayOpenAnimationonOpening;              // 21 Play Open Animation on Opening, enum { false, true, }; Default: false
+            uint32 turnpersonallootsecurityoff;             // 22 turn personal loot security off, enum { false, true, }; Default: false
+            uint32 ClearObjectVignetteonOpening;            // 23 Clear Object Vignette on Opening, enum { false, true, }; Default: false
+            uint32 InteractRadiusOverride;                  // 24 Interact Radius Override (in hundredths), int, Min value: 0, Max value: 2147483647, Default value: 0
+            uint32 Overrideminimaptrackingicon;             // 25 Override minimap tracking icon, References: UiTextureAtlasMember, NoValue = 0
         } gatheringNode;
         // 51 GAMEOBJECT_TYPE_CHALLENGE_MODE_REWARD
         struct
@@ -1047,6 +1053,29 @@ struct GameObjectTemplate
             case GAMEOBJECT_TYPE_SPELL_FOCUS: return spellFocus.serverOnly;
             case GAMEOBJECT_TYPE_AURA_GENERATOR: return auraGenerator.serverOnly;
             default: return 0;
+        }
+    }
+
+    uint32 GetSpawnVignette() const
+    {
+        switch (type)
+        {
+            case GAMEOBJECT_TYPE_CHEST:             return chest.SpawnVignette;
+            case GAMEOBJECT_TYPE_GOOBER:            return goober.SpawnVignette;
+            case GAMEOBJECT_TYPE_NEW_FLAG:          return newflag.SpawnVignette;
+            case GAMEOBJECT_TYPE_NEW_FLAG_DROP:     return newflagdrop.SpawnVignette;
+            case GAMEOBJECT_TYPE_CAPTURE_POINT:     return capturePoint.SpawnVignette;
+            case GAMEOBJECT_TYPE_GATHERING_NODE:    return gatheringNode.SpawnVignette;
+            default: return 0;
+        }
+    }
+
+    bool ClearObjectVignetteonOpening() const
+    {
+        switch (type)
+        {
+            case GAMEOBJECT_TYPE_GATHERING_NODE:    return gatheringNode.ClearObjectVignetteonOpening != 0;
+            default: return false;
         }
     }
 
