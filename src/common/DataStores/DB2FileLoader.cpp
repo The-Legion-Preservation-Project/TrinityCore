@@ -1696,20 +1696,26 @@ void DB2FileLoader::Load(DB2FileSource* source, DB2FileLoadInfo const* loadInfo)
     _impl->SetAdditionalData(std::move(fieldData), std::move(idTable), std::move(copyTable), std::move(columnMeta),
         std::move(palletValues), std::move(palletArrayValues), std::move(commonValues), std::move(parentIndexes));
 
-    uint32 fieldIndex = 0;
-    if (!loadInfo->Meta->HasIndexFieldInData())
+    if (loadInfo)
     {
-        //ASSERT(!loadInfo->Fields[0].IsSigned, "ID must be unsigned in %s", source->GetFileName());
-        ++fieldIndex;
-    }
-    for (uint32 f = 0; f < loadInfo->Meta->FieldCount; ++f)
-    {
-        ASSERT(loadInfo->Fields[fieldIndex].IsSigned == _impl->IsSignedField(f),
-            "Field %s in %s must be %s%s", loadInfo->Fields[fieldIndex].Name, source->GetFileName(), loadInfo->Fields[fieldIndex].IsSigned ? "signed" : "unsigned",
-            _impl->GetExpectedSignMismatchReason(f));
-        // using loadInfo->Fields[fieldIndex].IsSigned ? "signed" : "unsigned"
-        // because db2metadata.h was manually generated, not dumped
-        fieldIndex += loadInfo->Meta->Fields[f].ArraySize;
+        uint32 fieldIndex = 0;
+        std::string signValidationResult;
+        if (!loadInfo->Meta->HasIndexFieldInData())
+        {
+            if (loadInfo->Fields[0].IsSigned)
+                signValidationResult += Trinity::StringFormat("ID must be unsigned in {}", source->GetFileName());
+            ++fieldIndex;
+        }
+        for (uint32 f = 0; f < loadInfo->Meta->FieldCount; ++f)
+        {
+            if (loadInfo->Fields[fieldIndex].IsSigned != _impl->IsSignedField(f))
+                signValidationResult += Trinity::StringFormat("Field {} in {} must be {}{}", loadInfo->Fields[fieldIndex].Name,
+                    source->GetFileName(), _impl->IsSignedField(f) ? "signed" : "unsigned", _impl->GetExpectedSignMismatchReason(f));
+
+            fieldIndex += loadInfo->Meta->Fields[f].ArraySize;
+        }
+        if (!signValidationResult.empty())
+            throw DB2FileLoadException(std::move(signValidationResult));
     }
 }
 

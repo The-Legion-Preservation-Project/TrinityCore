@@ -509,7 +509,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         bool hasAnimKitID           = createProperties && createProperties->AnimKitId;
         bool hasAreaTriggerSphere   = shape.IsSphere();
         bool hasAreaTriggerBox      = shape.IsBox();
-        bool hasAreaTriggerPolygon  = createProperties && shape.IsPolygon();
+        bool hasAreaTriggerPolygon  = shape.IsPolygon();
         bool hasAreaTriggerCylinder = shape.IsCylinder();
         bool hasAreaTriggerSpline   = areaTrigger->HasSplines();
         bool hasOrbit               = areaTrigger->HasOrbit();
