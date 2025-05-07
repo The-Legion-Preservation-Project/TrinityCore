@@ -2225,6 +2225,20 @@ void GameObject::Respawn()
     }
 }
 
+bool GameObject::HasConditionalInteraction() const
+{
+    if (GetGOInfo()->GetQuestID())
+        return true;
+
+    if (GetGoType() != GAMEOBJECT_TYPE_AURA_GENERATOR && GetGOInfo()->GetConditionID1())
+        return true;
+
+    if (sObjectMgr->IsGameObjectForQuests(GetEntry()))
+        return true;
+
+    return false;
+}
+
 bool GameObject::CanActivateForPlayer(Player const* target) const
 {
     if (!MeetsInteractCondition(target))
@@ -2285,6 +2299,12 @@ bool GameObject::ActivateToQuest(Player const* target) const
         case GAMEOBJECT_TYPE_GOOBER:
         {
             if (target->GetQuestStatus(GetGOInfo()->goober.questID) == QUEST_STATUS_INCOMPLETE)
+                return true;
+            break;
+        }
+        case GAMEOBJECT_TYPE_GATHERING_NODE:
+        {
+            if (LootTemplates_Gameobject.HaveQuestLootForPlayer(GetGOInfo()->gatheringNode.chestLoot, target))
                 return true;
             break;
         }
@@ -3964,14 +3984,11 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                 {
                     case GAMEOBJECT_TYPE_BUTTON:
                     case GAMEOBJECT_TYPE_GOOBER:
-                        if (GetGOInfo()->GetQuestID() || GetGOInfo()->GetConditionID1())
+                        if (HasConditionalInteraction() && CanActivateForPlayer(target))
                         {
-                            if (CanActivateForPlayer(target))
-                            {
-                                dynFlags |= GO_DYNFLAG_LO_HIGHLIGHT;
-                                if (GetGoStateFor(target->GetGUID()) != GO_STATE_ACTIVE)
-                                    dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
-                            }
+                            dynFlags |= GO_DYNFLAG_LO_HIGHLIGHT;
+                            if (GetGoStateFor(target->GetGUID()) != GO_STATE_ACTIVE)
+                                dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
                         }
                         break;
                     case GAMEOBJECT_TYPE_QUESTGIVER:
@@ -3979,16 +3996,15 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                             dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
                         break;
                     case GAMEOBJECT_TYPE_CHEST:
-                        if (CanActivateForPlayer(target))
+                        if (HasConditionalInteraction() && CanActivateForPlayer(target))
                             dynFlags |= GO_DYNFLAG_LO_ACTIVATE | GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
                         else if (targetIsGM)
                             dynFlags |= GO_DYNFLAG_LO_ACTIVATE | GO_DYNFLAG_LO_SPARKLE;
                         break;
                     case GAMEOBJECT_TYPE_GENERIC:
                     case GAMEOBJECT_TYPE_SPELL_FOCUS:
-                        if (GetGOInfo()->GetQuestID() || GetGOInfo()->GetConditionID1())
-                            if (CanActivateForPlayer(target))
-                                dynFlags |= GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
+                        if (HasConditionalInteraction() && CanActivateForPlayer(target))
+                            dynFlags |= GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
                         break;
                     case GAMEOBJECT_TYPE_TRANSPORT:
                     case GAMEOBJECT_TYPE_MAP_OBJ_TRANSPORT:
@@ -4004,7 +4020,7 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                             dynFlags &= ~GO_DYNFLAG_LO_NO_INTERACT;
                         break;
                     case GAMEOBJECT_TYPE_GATHERING_NODE:
-                        if (GetGOInfo()->GetConditionID1() && CanActivateForPlayer(target))
+                        if (HasConditionalInteraction() && CanActivateForPlayer(target))
                             dynFlags |= GO_DYNFLAG_LO_ACTIVATE | GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
                         if (GetGoStateFor(target->GetGUID()) == GO_STATE_ACTIVE)
                             dynFlags |= GO_DYNFLAG_LO_DEPLETED;
