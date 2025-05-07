@@ -16,4 +16,13 @@ INSERT INTO `pvp_stat` (MapID, PVPStatID, Comment) VALUES
 (30, 65, 'Alterac Valley - Graveyards Defended'),
 (30, 82, 'Alterac Valley - Secondary Objectives'),
 (607, 231, 'Strand of the Ancients - Gates Destroyed'),
-(607, 232, 'Strand of the Ancients - Demolishers Destroyed');
+(607, 232, 'Strand of the Ancients - Demolishers Destroyed'),
+(726, 290, 'Twin Peaks - Flag Captures'),
+(726, 291, 'Twin Peaks - Flag Returns'),
+(489, 42, 'Warsong Gulch - Flag Captures'),
+(489, 44, 'Warsong Gulch - Flag Returns'),
+(628, 245, 'Isle of Conquest - Bases Assaulted'),
+(628, 246, 'Isle of Conquest - Bases Defended'),
+(566, 183, 'Eye of the Storm - Flag Captures'),
+(761, 370, 'The Battle for Gilneas - Bases Assaulted'),
+(761, 371, 'The Battle for Gilneas - Bases Defended');

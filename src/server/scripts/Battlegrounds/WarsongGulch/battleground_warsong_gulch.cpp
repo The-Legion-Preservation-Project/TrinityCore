@@ -64,8 +64,8 @@ struct battleground_warsong_gulch : BattlegroundScript
 
     enum PvpStats : uint32
     {
-        PVP_STAT_FLAG_CAPTURES                  = 928,
-        PVP_STAT_FLAG_RETURNS                   = 929
+        PVP_STAT_FLAG_CAPTURES                  = 42,
+        PVP_STAT_FLAG_RETURNS                   = 44
     };
 
     enum WorldStates : int32
