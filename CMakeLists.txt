@@ -18,6 +18,7 @@ set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 project(TrinityCore)
 
 # CMake policies (can not be handled elsewhere)
+<<<<<<< HEAD
 if(POLICY CMP0144)
   cmake_policy(SET CMP0144 NEW) # find_package() uses upper-case <PACKAGENAME>_ROOT variables
 endif()
@@ -25,6 +26,13 @@ endif()
 if(POLICY CMP0153)
   cmake_policy(SET CMP0153 NEW) # The exec_program() command should not be called
 endif()
+=======
+cmake_policy(SET CMP0005 NEW)
+cmake_policy(SET CMP0043 NEW) # Ignore COMPILE_DEFINITIONS_<Config> properties
+cmake_policy(SET CMP0054 NEW) # Only interpret if() arguments as variables or keywords when unquoted - prevents intepreting if(SOME_STRING_VARIABLE MATCHES "MSVC") as if(SOME_STRING_VARIABLE MATCHES "1")
+cmake_policy(SET CMP0067 NEW) # Honor language standard in try_compile() source-file signature
+cmake_policy(SET CMP0074 NEW) # find_package() uses <PackageName>_ROOT variables
+>>>>>>> 34308dd6decd7011ba7ff1196db49b961577c608
 
 if(POLICY CMP0144)
   cmake_policy(SET CMP0144 NEW) # find_package() uses upper-case <PACKAGENAME>_ROOT variables
