@@ -7322,22 +7322,6 @@ int32 Unit::SpellHealingBonusTaken(Unit* caster, SpellInfo const* spellProto, in
 
             return true;
         });
-
-        TakenTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_HEALING_TAKEN_FROM_CASTER, [caster, allowPositive, allowNegative](AuraEffect const* aurEff) -> bool
-        {
-            if (aurEff->GetCasterGUID() != caster->GetGUID())
-                return false;
-
-            if (aurEff->GetAmount() > 0)
-            {
-                if (!allowPositive)
-                    return false;
-            }
-            else if (!allowNegative)
-                return false;
-
-            return true;
-        });
     }
 
     float heal = healamount * TakenTotalMod;
