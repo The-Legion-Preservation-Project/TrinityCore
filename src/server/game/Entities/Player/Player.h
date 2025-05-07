@@ -1011,6 +1011,14 @@ enum class DisplayToastMethod : uint8
     CorruptedLoot           = 19
 };
 
+enum class AvgItemLevelCategory : uint32
+{
+    Base                        = 0,
+    EquippedBase                = 1,
+    EquippedEffective           = 2,
+    Pvp                         = 3
+};
+
 class Player;
 
 /// Holder for Battleground data
@@ -2740,8 +2748,7 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         void RemovePlayerFlagEx(PlayerFlagsEx flags) { RemoveFlag(PLAYER_FLAGS_EX, flags); }
         void ReplaceAllPlayerFlagsEx(PlayerFlagsEx flags) { SetUInt32Value(PLAYER_FLAGS_EX, flags); }
 
-        void SetAverageItemLevelTotal(float newItemLevel) { SetFloatValue(PLAYER_FIELD_AVG_ITEM_LEVEL + 0, newItemLevel); }
-        void SetAverageItemLevelEquipped(float newItemLevel) { SetFloatValue(PLAYER_FIELD_AVG_ITEM_LEVEL + 1, newItemLevel); }
+        void SetAverageItemLevel(float newItemLevel, AvgItemLevelCategory category) { SetUInt32Value(PLAYER_FIELD_AVG_ITEM_LEVEL + uint32(category), newItemLevel); }
 
         void SetSkinId(uint8 skinId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_SKIN_ID, skinId); }
         void SetFaceId(uint8 faceId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_FACE_ID, faceId); }

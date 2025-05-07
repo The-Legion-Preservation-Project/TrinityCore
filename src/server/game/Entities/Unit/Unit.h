@@ -733,6 +733,7 @@ class TC_GAME_API Unit : public WorldObject
         bool IsVehicle() const  { return (m_unitTypeMask & UNIT_MASK_VEHICLE) != 0; }
 
         uint8 GetLevel() const { return uint8(GetUInt32Value(UNIT_FIELD_LEVEL)); }
+        uint8 GetEffectiveLevel() const { return uint8(GetUInt32Value(UNIT_FIELD_EFFECTIVE_LEVEL) ? GetUInt32Value(UNIT_FIELD_EFFECTIVE_LEVEL) : GetUInt32Value(UNIT_FIELD_LEVEL)); }
         uint8 GetLevelForTarget(WorldObject const* /*target*/) const override { return GetLevel(); }
         void SetLevel(uint8 lvl, bool sendUpdate = true);
         uint8 GetRace() const { return GetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_RACE); }

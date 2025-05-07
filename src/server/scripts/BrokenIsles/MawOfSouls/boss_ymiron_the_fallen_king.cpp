@@ -345,7 +345,7 @@ public:
         if (!ymiron)
             return true;
 
-        _runecarver->SendPlaySpellVisual(ymiron->GetPosition(), SPELL_VISUAL_SOUL_SIPHON, 0, 0, _travelSpeed, false, 0.0f);
+        _runecarver->SendPlaySpellVisual(ymiron->GetPosition(), SPELL_VISUAL_SOUL_SIPHON, 0, 0, _travelSpeed, false);
 
         _runecarver->m_Events.AddEventAtOffset(this, 400ms);
         return false;
