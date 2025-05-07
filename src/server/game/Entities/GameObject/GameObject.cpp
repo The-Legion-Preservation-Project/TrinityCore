@@ -2218,6 +2218,17 @@ void GameObject::Respawn()
     }
 }
 
+bool GameObject::CanActivateForPlayer(Player const* target) const
+{
+    if (!MeetsInteractCondition(target))
+        return false;
+
+    if (sObjectMgr->IsGameObjectForQuests(GetEntry()) && !ActivateToQuest(target))
+        return false;
+
+    return true;
+}
+
 bool GameObject::ActivateToQuest(Player const* target) const
 {
     if (target->HasQuestForGO(GetEntry()))
@@ -2257,6 +2268,12 @@ bool GameObject::ActivateToQuest(Player const* target) const
         case GAMEOBJECT_TYPE_GENERIC:
         {
             if (target->GetQuestStatus(GetGOInfo()->generic.questID) == QUEST_STATUS_INCOMPLETE)
+                return true;
+            break;
+        }
+        case GAMEOBJECT_TYPE_SPELL_FOCUS:
+        {
+            if (target->GetQuestStatus(GetGOInfo()->spellFocus.questID) == QUEST_STATUS_INCOMPLETE)
                 return true;
             break;
         }
@@ -3994,8 +4011,10 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                             dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
                         break;
                     case GAMEOBJECT_TYPE_GENERIC:
-                        if (ActivateToQuest(target))
-                            dynFlags |= GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
+                    case GAMEOBJECT_TYPE_SPELL_FOCUS:
+                        if (GetGOInfo()->GetQuestID() || GetGOInfo()->GetConditionID1())
+                            if (CanActivateForPlayer(target))
+                                dynFlags |= GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
                         break;
                     case GAMEOBJECT_TYPE_TRANSPORT:
                     case GAMEOBJECT_TYPE_MAP_OBJ_TRANSPORT:
@@ -4020,7 +4039,7 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                         break;
                 }
 
-                if (!MeetsInteractCondition(target))
+                if (!target->IsGameMaster() && !MeetsInteractCondition(target))
                     dynFlags |= GO_DYNFLAG_LO_NO_INTERACT;
 
                 *data << ((uint32(pathProgress) << 16) | uint32(dynFlags));
