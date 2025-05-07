@@ -7840,6 +7840,7 @@ void Unit::Dismount()
     {
         player->EnablePetControlsOnDismount();
         player->ResummonPetTemporaryUnSummonedIfAny();
+        player->ResummonBattlePetTemporaryUnSummonedIfAny();
     }
 }
 
