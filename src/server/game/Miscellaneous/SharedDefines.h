@@ -4146,6 +4146,13 @@ enum class CreatureClassifications : uint32
     MinusMob                  = 6
 };
 
+enum class StringIdType : int32
+{
+    Template    = 0,
+    Spawn       = 1,
+    Script      = 2
+};
+
 // Holidays.db2 (7.3.5.26972)
 enum HolidayIds
 {
