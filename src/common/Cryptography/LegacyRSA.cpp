@@ -18,8 +18,13 @@ namespace
     };
 }
 
+#if TRINITY_COMPILER == TRINITY_COMPILER_GNU
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#else
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
 
 namespace Trinity::Crypto
 {
@@ -98,4 +103,8 @@ bool LegacyRSA::Sign(int32 hashType, uint8 const* dataHash, std::size_t dataHash
 }
 }
 
+#if TRINITY_COMPILER == TRINITY_COMPILER_GNU
 #pragma GCC diagnostic pop
+#else
+#pragma warning(pop)
+#endif
