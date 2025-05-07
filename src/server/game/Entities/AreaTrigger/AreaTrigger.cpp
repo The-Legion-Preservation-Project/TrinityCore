@@ -146,10 +146,6 @@ bool AreaTrigger::Create(AreaTriggerCreatePropertiesId areaTriggerCreateProperti
     if (spellInfo && !IsStaticSpawn())
         SetUInt32Value(AREATRIGGER_SPELLID, spellInfo->Id);
 
-    if (spellInfo)
-        SetUInt32Value(AREATRIGGER_SPELL_FOR_VISUALS, spellInfo->Id);
-    SetUInt32Value(AREATRIGGER_SPELL_X_SPELL_VISUAL_ID, spellVisual.SpellXSpellVisualID);
-
     SpellInfo const* spellForVisuals = spellInfo;
     if (GetCreateProperties()->SpellForVisuals)
     {
@@ -159,8 +155,9 @@ bool AreaTrigger::Create(AreaTriggerCreatePropertiesId areaTriggerCreateProperti
             spellVisual.SpellXSpellVisualID = spellForVisuals->GetSpellXSpellVisualId();
     }
     if (spellForVisuals)
-        SetUpdateFieldValue(areaTriggerData.ModifyValue(&UF::AreaTriggerData::SpellForVisuals), spellForVisuals->Id);
+        SetUInt32Value(AREATRIGGER_SPELL_FOR_VISUALS, spellForVisuals->Id);
 
+    SetUInt32Value(AREATRIGGER_SPELL_X_SPELL_VISUAL_ID, spellVisual.SpellXSpellVisualID);
     if (!IsStaticSpawn())
         SetUInt32Value(AREATRIGGER_TIME_TO_TARGET_SCALE, GetCreateProperties()->TimeToTargetScale != 0 ? GetCreateProperties()->TimeToTargetScale : GetUInt32Value(AREATRIGGER_DURATION));
     SetFloatValue(AREATRIGGER_BOUNDS_RADIUS_2D, GetCreateProperties()->Shape.GetMaxSearchRadius());

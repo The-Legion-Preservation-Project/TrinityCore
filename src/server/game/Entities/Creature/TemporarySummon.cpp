@@ -240,9 +240,9 @@ void TempSummon::InitStats(WorldObject* summoner, Milliseconds duration)
 
         if (!m_Properties->GetFlags().HasFlag(SummonPropertiesFlags::UseCreatureLevel))
         {
-            int32 minLevel = m_unitData->ScalingLevelMin + m_unitData->ScalingLevelDelta;
-            int32 maxLevel = m_unitData->ScalingLevelMax + m_unitData->ScalingLevelDelta;
-            uint8 level = std::clamp<int32>(unitSummoner->GetLevel(), minLevel, maxLevel);
+            uint32 minLevel = GetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MIN) + GetUInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA);
+            uint32 maxLevel = GetUInt32Value(UNIT_FIELD_SCALING_LEVEL_MAX) + GetUInt32Value(UNIT_FIELD_SCALING_LEVEL_DELTA);
+            uint8 level = std::clamp<uint32>(unitSummoner->GetLevel(), minLevel, maxLevel);
             SetLevel(level);
         }
     }
