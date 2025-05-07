@@ -23221,12 +23221,14 @@ void Player::UpdateTriggerVisibility()
         {
             Creature* creature = GetMap()->GetCreature(*itr);
             // Update fields of triggers, transformed units or uninteractible units (values dependent on GM state)
-            if (!creature || (!creature->IsTrigger() && !creature->HasAuraType(SPELL_AURA_TRANSFORM) && !creature->IsUninteractible()))
+            if (!creature || (!creature->IsTrigger() && !creature->HasAuraType(SPELL_AURA_TRANSFORM) && !creature->IsUninteractible() &&
+                !creature->HasUnitFlag2(UNIT_FLAG2_UNTARGETABLE_BY_CLIENT)))
                 continue;
 
-            creature->SetFieldNotifyFlag(UF_FLAG_PUBLIC);
+            creature->ForceValuesUpdateAtIndex(UNIT_FIELD_DISPLAYID);
+            creature->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
+            creature->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS_2);
             creature->BuildValuesUpdateBlockForPlayer(&udata, this);
-            creature->RemoveFieldNotifyFlag(UF_FLAG_PUBLIC);
         }
         else if (itr->IsAnyTypeGameObject())
         {
@@ -23234,9 +23236,8 @@ void Player::UpdateTriggerVisibility()
             if (!go)
                 continue;
 
-            go->SetFieldNotifyFlag(UF_FLAG_PUBLIC);
+            go->ForceValuesUpdateAtIndex(OBJECT_DYNAMIC_FLAGS);
             go->BuildValuesUpdateBlockForPlayer(&udata, this);
-            go->RemoveFieldNotifyFlag(UF_FLAG_PUBLIC);
         }
     }
 
