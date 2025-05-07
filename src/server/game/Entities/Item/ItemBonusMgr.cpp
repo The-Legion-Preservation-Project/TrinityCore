@@ -59,6 +59,9 @@ void Load()
 
 ItemContext GetContextForPlayer(MapDifficultyEntry const* mapDifficulty, Player const* player)
 {
+    if (!mapDifficulty)
+        return ItemContext::NONE;
+
     auto evalContext = [](ItemContext currentContext, ItemContext newContext)
     {
         if (newContext == ItemContext::NONE)
