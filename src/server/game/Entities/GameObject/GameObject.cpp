@@ -3990,7 +3990,7 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                             dynFlags &= ~GO_DYNFLAG_LO_NO_INTERACT;
                         break;
                     case GAMEOBJECT_TYPE_GATHERING_NODE:
-                        if (CanActivateForPlayer(target))
+                        if (GetGOInfo()->GetConditionID1() && CanActivateForPlayer(target))
                             dynFlags |= GO_DYNFLAG_LO_ACTIVATE | GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
                         if (GetGoStateFor(target->GetGUID()) == GO_STATE_ACTIVE)
                             dynFlags |= GO_DYNFLAG_LO_DEPLETED;
