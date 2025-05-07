@@ -2544,6 +2544,9 @@ void SpellInfo::_LoadAuraState()
                 break;
         }
 
+        if (Mechanic == MECHANIC_BANISH)
+            return AURA_STATE_BANISHED;
+
         return AURA_STATE_NONE;
     }();
 }
