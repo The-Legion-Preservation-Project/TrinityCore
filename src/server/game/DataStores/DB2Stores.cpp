@@ -214,6 +214,7 @@ DB2Storage<OverrideSpellDataEntry>              sOverrideSpellDataStore("Overrid
 DB2Storage<ParagonReputationEntry>              sParagonReputationStore("ParagonReputation.db2", &ParagonReputationLoadInfo::Instance);
 DB2Storage<PathEntry>                           sPathStore("Path.db2", &PathLoadInfo::Instance);
 DB2Storage<PathNodeEntry>                       sPathNodeStore("PathNode.db2", &PathNodeLoadInfo::Instance);
+DB2Storage<PathPropertyEntry>                   sPathPropertyStore("PathProperty.db2", &PathPropertyLoadInfo::Instance);
 DB2Storage<PhaseEntry>                          sPhaseStore("Phase.db2", &PhaseLoadInfo::Instance);
 DB2Storage<PhaseXPhaseGroupEntry>               sPhaseXPhaseGroupStore("PhaseXPhaseGroup.db2", &PhaseXPhaseGroupLoadInfo::Instance);
 DB2Storage<PlayerConditionEntry>                sPlayerConditionStore("PlayerCondition.db2", &PlayerConditionLoadInfo::Instance);
@@ -352,7 +353,6 @@ typedef std::unordered_map<uint32, DB2Manager::MountTypeXCapabilitySet> MountCap
 typedef std::unordered_map<uint32, DB2Manager::MountXDisplayContainer> MountDisplaysCointainer;
 typedef std::unordered_map<uint32, std::array<std::vector<NameGenEntry const*>, 2>> NameGenContainer;
 typedef std::array<std::vector<Trinity::wregex>, TOTAL_LOCALES + 1> NameValidationRegexContainer;
-typedef std::unordered_map<uint32 /*pathID*/, std::vector<DBCPosition3D>> PathNodesContainer;
 typedef std::unordered_map<uint32, std::vector<uint32>> PhaseGroupContainer;
 typedef std::array<PowerTypeEntry const*, MAX_POWERS> PowerTypesContainer;
 typedef std::vector<PvpTalentEntry const*> PvpTalentsByPosition[MAX_CLASSES][MAX_PVP_TALENT_TIERS][MAX_PVP_TALENT_COLUMNS];
@@ -413,7 +413,7 @@ namespace
     NameGenContainer _nameGenData;
     NameValidationRegexContainer _nameValidators;
     std::unordered_map<uint32, ParagonReputationEntry const*> _paragonReputations;
-    PathNodesContainer _pathNodes;
+    std::unordered_map<uint32 /*pathID*/, PathDb2> _paths;
     PhaseGroupContainer _phasesByGroup;
     PowerTypesContainer _powerTypes;
     std::unordered_map<uint32, uint8> _pvpItemBonus;
@@ -725,6 +725,7 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
     LOAD_DB2(sParagonReputationStore);
     LOAD_DB2(sPathStore);
     LOAD_DB2(sPathNodeStore);
+    LOAD_DB2(sPathPropertyStore);
     LOAD_DB2(sPhaseStore);
     LOAD_DB2(sPhaseXPhaseGroupStore);
     LOAD_DB2(sPlayerConditionStore);
@@ -1119,21 +1120,24 @@ uint32 DB2Manager::LoadStores(std::string const& dataPath, LocaleConstant defaul
     {
         std::unordered_map<uint32 /*pathID*/, std::vector<PathNodeEntry const*>> unsortedNodes;
         for (PathNodeEntry const* pathNode : sPathNodeStore)
-            if (sPathStore.LookupEntry(pathNode->PathID))
-                if (sLocationStore.LookupEntry(pathNode->LocationID))
-                    unsortedNodes[pathNode->PathID].push_back(pathNode);
+            if (sPathStore.HasRecord(pathNode->PathID) && sLocationStore.HasRecord(pathNode->LocationID))
+                unsortedNodes[pathNode->PathID].push_back(pathNode);
 
-        for (auto& [pathId, pathNodes] : unsortedNodes)
+        for (auto&& [pathId, pathNodes] : unsortedNodes)
         {
-            std::sort(pathNodes.begin(), pathNodes.end(), [](PathNodeEntry const* node1, PathNodeEntry const* node2) { return node1->Sequence < node2->Sequence; });
-            std::vector<DBCPosition3D>& nodes = _pathNodes[pathId];
-            nodes.resize(pathNodes.size());
-            std::transform(pathNodes.begin(), pathNodes.end(), nodes.begin(), [](PathNodeEntry const* node)
+            PathDb2& path = _paths[pathId];
+
+            path.Locations.resize(pathNodes.size());
+            std::ranges::sort(pathNodes, std::ranges::less(), &PathNodeEntry::Sequence);
+            std::ranges::transform(pathNodes, path.Locations.begin(), [](PathNodeEntry const* node)
             {
-                LocationEntry const* location = sLocationStore.AssertEntry(node->LocationID);
-                return location->Pos;
+                return sLocationStore.AssertEntry(node->LocationID)->Pos;
             });
         }
+
+        for (PathPropertyEntry const* pathProperty : sPathPropertyStore)
+            if (sPathStore.HasRecord(pathProperty->PathID))
+                _paths[pathProperty->PathID].Properties.push_back(pathProperty);
     }
 
     for (PhaseXPhaseGroupEntry const* group : sPhaseXPhaseGroupStore)
@@ -2004,9 +2008,9 @@ ParagonReputationEntry const* DB2Manager::GetParagonReputation(uint32 factionId)
     return Trinity::Containers::MapGetValuePtr(_paragonReputations, factionId);
 }
 
-std::vector<DBCPosition3D> const* DB2Manager::GetNodesForPath(uint32 pathId) const
+PathDb2 const* DB2Manager::GetPath(uint32 pathId) const
 {
-    return Trinity::Containers::MapGetValuePtr(_pathNodes, pathId);
+    return Trinity::Containers::MapGetValuePtr(_paths, pathId);
 }
 
 PVPDifficultyEntry const* DB2Manager::GetBattlegroundBracketByLevel(uint32 mapid, uint32 level)

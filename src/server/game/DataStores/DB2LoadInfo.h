@@ -3397,6 +3397,19 @@ struct PathNodeLoadInfo
     static constexpr DB2LoadInfo Instance{ Fields, 4, &PathNodeMeta::Instance, HOTFIX_SEL_PATH_NODE };
 };
 
+struct PathPropertyLoadInfo
+{
+    static constexpr DB2FieldMeta Fields[4] =
+    {
+        { true, FT_INT, "Value" },
+        { false, FT_SHORT, "PathID" },
+        { false, FT_BYTE, "PropertyIndex" },
+        { false, FT_INT, "ID" },
+    };
+
+    static constexpr DB2LoadInfo Instance{ Fields, 4, &PathPropertyMeta::Instance, HOTFIX_SEL_PATH_PROPERTY };
+};
+
 struct PhaseLoadInfo
 {
     static constexpr DB2FieldMeta Fields[2] =

@@ -5729,7 +5729,7 @@ struct PathPropertyMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
+        { FT_INT, 1, true },
         { FT_SHORT, 1, false },
         { FT_BYTE, 1, false },
         { FT_INT, 1, false },
