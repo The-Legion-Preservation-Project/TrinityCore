@@ -586,8 +586,12 @@ void WorldPackets::Party::PartyMemberFullState::Initialize(Player const* player)
     MemberStats.SpecID = AsUnderlyingType(player->GetPrimarySpecialization());
     MemberStats.PartyType[0] = player->GetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_PARTY_TYPE) & 0xF;
     MemberStats.PartyType[1] = player->GetByteValue(PLAYER_BYTES_3, PLAYER_BYTES_3_OFFSET_PARTY_TYPE) >> 4;
-    MemberStats.WmoGroupID = 0;
-    MemberStats.WmoDoodadPlacementID = 0;
+
+    if (WmoLocation const* wmoLocation = player->GetCurrentWmo())
+    {
+        MemberStats.WmoGroupID = wmoLocation->GroupId;
+        MemberStats.WmoDoodadPlacementID = wmoLocation->UniqueId;
+    }
 
     // Vehicle
     if (::Vehicle const* vehicle = player->GetVehicle())
