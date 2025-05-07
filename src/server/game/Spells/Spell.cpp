@@ -3527,8 +3527,9 @@ SpellCastResult Spell::prepare(SpellCastTargets const& targets, AuraEffect const
     uint32 cast_time_level = 0;
     if (m_caster->IsUnit())
         cast_time_level = m_caster->ToUnit()->GetLevel();
-
-    m_casttime = CallScriptCalcCastTimeHandlers(m_spellInfo->CalcCastTime(cast_time_level, this));
+    if (!(_triggeredCastFlags & TRIGGERED_IGNORE_CAST_TIME))
+        m_casttime = m_spellInfo->CalcCastTime(cast_time_level, this);
+    m_casttime = CallScriptCalcCastTimeHandlers(m_casttime);
 
     SpellCastResult movementResult = SPELL_CAST_OK;
     if (m_caster->IsUnit() && m_caster->ToUnit()->isMoving())
