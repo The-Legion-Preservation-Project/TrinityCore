@@ -295,17 +295,17 @@ void WorldPackets::Movement::CommonMovement::WriteCreateObjectSplineDataBlock(::
 
     if (hasSplineMove)                                                          // MovementSplineMove
     {
-        data << uint32(moveSpline.splineflags.raw());                           // SplineFlags
+        data << uint32(moveSpline.splineflags.Raw.AsUnderlyingType());          // SplineFlags
         data << int32(moveSpline.timePassed());                                 // Elapsed
         data << uint32(moveSpline.Duration());                                  // Duration
         data << float(1.0f);                                                    // DurationModifier
         data << float(1.0f);                                                    // NextDurationModifier
         data.WriteBits(moveSpline.facing.type, 2);                              // Face
-        bool HasJumpGravity = data.WriteBit(moveSpline.splineflags.parabolic || moveSpline.splineflags.animation);                 // HasJumpGravity
-        bool HasSpecialTime = data.WriteBit(moveSpline.splineflags.parabolic && moveSpline.effect_start_time < moveSpline.Duration()); // HasSpecialTime
+        bool HasJumpGravity = data.WriteBit(moveSpline.splineflags.Parabolic || moveSpline.splineflags.Animation);                 // HasJumpGravity
+        bool HasSpecialTime = data.WriteBit(moveSpline.splineflags.Parabolic && moveSpline.effect_start_time < moveSpline.Duration()); // HasSpecialTime
         data.WriteBits(moveSpline.getPath().size(), 16);
         data.WriteBits(uint8(moveSpline.spline.mode()), 2);                     // Mode
-        data.WriteBit(0);                                                       // HasSplineFilter
+        data.WriteBit(false);                                                   // HasSplineFilter
         data.WriteBit(moveSpline.spell_effect_extra.has_value());          // HasSpellEffectExtraData
         data.FlushBits();
 
@@ -410,7 +410,7 @@ void WorldPackets::Movement::MonsterMove::InitializeSplineData(::Movement::MoveS
     WorldPackets::Movement::MovementSpline& movementSpline = SplineData.Move;
 
     ::Movement::MoveSplineFlag splineFlags = moveSpline.splineflags;
-    movementSpline.Flags = uint32(splineFlags & uint32(~::Movement::MoveSplineFlag::Mask_No_Monster_Move));
+    movementSpline.Flags = uint32(splineFlags & ~::Movement::MoveSplineFlagEnum::Mask_No_Monster_Move);
     movementSpline.Face = moveSpline.facing.type;
     movementSpline.FaceDirection = moveSpline.facing.angle;
     movementSpline.FaceGUID = moveSpline.facing.target;
@@ -424,13 +424,13 @@ void WorldPackets::Movement::MonsterMove::InitializeSplineData(::Movement::MoveS
 
     movementSpline.MoveTime = moveSpline.Duration();
 
-    if (splineFlags.parabolic && (!moveSpline.spell_effect_extra || moveSpline.effect_start_time))
+    if (splineFlags.Parabolic && (!moveSpline.spell_effect_extra || moveSpline.effect_start_time))
     {
         movementSpline.JumpGravity = moveSpline.vertical_acceleration;
         movementSpline.SpecialTime = moveSpline.effect_start_time;
     }
 
-    if (splineFlags.fadeObject)
+    if (splineFlags.FadeObject)
         movementSpline.SpecialTime = moveSpline.effect_start_time;
 
     if (moveSpline.spell_effect_extra)
@@ -445,15 +445,15 @@ void WorldPackets::Movement::MonsterMove::InitializeSplineData(::Movement::MoveS
     ::Movement::Spline<int32> const& spline = moveSpline.spline;
     std::vector<G3D::Vector3> const& array = spline.getPoints();
 
-    if (splineFlags & ::Movement::MoveSplineFlag::UncompressedPath)
+    if (splineFlags.UncompressedPath)
     {
-        uint32 count = spline.getPointCount() - (splineFlags.cyclic ? 4 : 3);
+        uint32 count = spline.getPointCount() - (splineFlags.Cyclic ? 4 : 3);
         for (uint32 i = 0; i < count; ++i)
             movementSpline.Points.emplace_back(array[i + 2].x, array[i + 2].y, array[i + 2].z);
     }
     else
     {
-        uint32 lastIdx = spline.getPointCount() - (splineFlags.cyclic ? 4 : 3);
+        uint32 lastIdx = spline.getPointCount() - (splineFlags.Cyclic ? 4 : 3);
         G3D::Vector3 const* realPath = &array[1];
 
         movementSpline.Points.emplace_back(realPath[lastIdx].x, realPath[lastIdx].y, realPath[lastIdx].z);
