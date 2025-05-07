@@ -4190,7 +4190,7 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
     }
 }
 
-void WorldObject::PlayDistanceSound(uint32 soundId, Player* target /*= nullptr*/)
+void WorldObject::PlayDistanceSound(uint32 soundId, Player const* target /*= nullptr*/) const
 {
     if (target)
         target->SendDirectMessage(WorldPackets::Misc::PlaySpeakerbotSound(GetGUID(), soundId).Write());
@@ -4198,7 +4198,15 @@ void WorldObject::PlayDistanceSound(uint32 soundId, Player* target /*= nullptr*/
         SendMessageToSet(WorldPackets::Misc::PlaySpeakerbotSound(GetGUID(), soundId).Write(), true);
 }
 
-void WorldObject::PlayDirectSound(uint32 soundId, Player* target /*= nullptr*/)
+void WorldObject::StopDistanceSound(Player const* target /*= nullptr*/) const
+{
+    if (target)
+        target->SendDirectMessage(WorldPackets::Misc::StopSpeakerbotSound(GetGUID()).Write());
+    else
+        SendMessageToSet(WorldPackets::Misc::StopSpeakerbotSound(GetGUID()).Write(), true);
+}
+
+void WorldObject::PlayDirectSound(uint32 soundId, Player const* target /*= nullptr*/) const
 {
     if (target)
         target->SendDirectMessage(WorldPackets::Misc::PlaySound(GetGUID(), soundId).Write());
@@ -4206,7 +4214,7 @@ void WorldObject::PlayDirectSound(uint32 soundId, Player* target /*= nullptr*/)
         SendMessageToSet(WorldPackets::Misc::PlaySound(GetGUID(), soundId).Write(), true);
 }
 
-void WorldObject::PlayDirectMusic(uint32 musicId, Player* target /*= nullptr*/)
+void WorldObject::PlayDirectMusic(uint32 musicId, Player const* target /*= nullptr*/) const
 {
     if (target)
         target->SendDirectMessage(WorldPackets::Misc::PlayMusic(musicId).Write());
@@ -4214,7 +4222,7 @@ void WorldObject::PlayDirectMusic(uint32 musicId, Player* target /*= nullptr*/)
         SendMessageToSet(WorldPackets::Misc::PlayMusic(musicId).Write(), true);
 }
 
-void WorldObject::PlayObjectSound(int32 soundKitId, ObjectGuid targetObjectGUID, Player* target /*= nullptr*/)
+void WorldObject::PlayObjectSound(int32 soundKitId, ObjectGuid targetObjectGUID, Player const* target /*= nullptr*/) const
 {
     WorldPackets::Misc::PlayObjectSound pkt;
     pkt.TargetObjectGUID = targetObjectGUID;
