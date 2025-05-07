@@ -510,7 +510,12 @@ bool Quest::CanIncreaseRewardedQuestCounters() const
 void Quest::InitializeQueryData()
 {
     for (uint8 loc = LOCALE_enUS; loc < TOTAL_LOCALES; ++loc)
+    {
+        if (!sWorld->getBoolConfig(CONFIG_LOAD_LOCALES) && loc != DEFAULT_LOCALE)
+            continue;
+
         QueryData[loc] = BuildQueryData(static_cast<LocaleConstant>(loc), nullptr);
+    }
 }
 
 WorldPacket Quest::BuildQueryData(LocaleConstant loc, Player* player) const
