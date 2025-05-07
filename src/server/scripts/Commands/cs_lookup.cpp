@@ -681,14 +681,14 @@ public:
                             }
                         }
 
-                            if (handler->GetSession())
-                                handler->PSendSysMessage(LANG_QUEST_LIST_CHAT, questTemplatePair.first, questTemplatePair.first,
-                                    handler->GetSession()->GetPlayer()->GetQuestLevel(&questTemplatePair.second),
-                                    questTemplatePair.second.GetMinLevel(),
-                                    questTemplatePair.second.GetQuestMaxScalingLevel(),
-                                    title.c_str(), statusStr);
-                            else
-                                handler->PSendSysMessage(LANG_QUEST_LIST_CONSOLE, questTemplatePair.first, title.c_str(), statusStr);
+                        if (handler->GetSession())
+                            handler->PSendSysMessage(LANG_QUEST_LIST_CHAT, questTemplatePair.first, questTemplatePair.first,
+                                handler->GetSession()->GetPlayer()->GetQuestLevel(questTemplatePair.second.get()),
+                                questTemplatePair.second->GetMinLevel(),
+                                questTemplatePair.second->GetQuestMaxScalingLevel(),
+                                title.c_str(), statusStr);
+                        else
+                            handler->PSendSysMessage(LANG_QUEST_LIST_CONSOLE, questTemplatePair.first, title.c_str(), statusStr);
 
                         if (!found)
                             found = true;
@@ -698,7 +698,7 @@ public:
                 }
             }
 
-            std::string title = questTemplatePair.second.GetLogTitle();
+            std::string title = questTemplatePair.second->GetLogTitle();
             if (title.empty())
                 continue;
 
@@ -732,9 +732,9 @@ public:
 
                 if (handler->GetSession())
                     handler->PSendSysMessage(LANG_QUEST_LIST_CHAT, questTemplatePair.first, questTemplatePair.first,
-                        handler->GetSession()->GetPlayer()->GetQuestLevel(&questTemplatePair.second),
-                        questTemplatePair.second.GetMinLevel(),
-                        questTemplatePair.second.GetQuestMaxScalingLevel(),
+                        handler->GetSession()->GetPlayer()->GetQuestLevel(questTemplatePair.second.get()),
+                        questTemplatePair.second->GetMinLevel(),
+                        questTemplatePair.second->GetQuestMaxScalingLevel(),
                         title.c_str(), statusStr);
                 else
                     handler->PSendSysMessage(LANG_QUEST_LIST_CONSOLE, questTemplatePair.first, title.c_str(), statusStr);

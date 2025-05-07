@@ -25,6 +25,7 @@
 #include "Object.h"
 #include "SharedDefines.h"
 #include "Timer.h"
+#include "UniqueTrackablePtr.h"
 #include <map>
 
 class Battlefield;
@@ -392,6 +393,8 @@ class TC_GAME_API Group
         void StartCountdown(CountdownTimerType timerType, Seconds duration, Optional<time_t> startTime = { });
         CountdownInfo const* GetCountdownInfo(CountdownTimerType timerType) const;
 
+        Trinity::unique_weak_ptr<Group> GetWeakPtr() const { return m_scriptRef; }
+
     protected:
         bool _setMembersGroup(ObjectGuid guid, uint8 group);
         void _homebindIfInstance(Player* player);
@@ -437,5 +440,8 @@ class TC_GAME_API Group
         uint32              m_activeMarkers;
 
         std::array<std::unique_ptr<CountdownInfo>, 3> _countdowns;
+
+        struct NoopGroupDeleter { void operator()(Group*) const { /*noop - not managed*/ } };
+        Trinity::unique_trackable_ptr<Group> m_scriptRef;
 };
 #endif
