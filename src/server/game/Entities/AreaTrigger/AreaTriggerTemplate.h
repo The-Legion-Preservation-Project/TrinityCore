@@ -222,6 +222,8 @@ public:
 
     uint32 DecalPropertiesId;
 
+    Optional<int32> SpellForVisuals;
+
     uint32 TimeToTarget;
     uint32 TimeToTargetScale;
 
@@ -241,7 +243,6 @@ struct AreaTriggerSpawn : SpawnData
     AreaTriggerSpawn() : SpawnData(SPAWN_TYPE_AREATRIGGER) { }
 
     AreaTriggerCreatePropertiesId Id;
-    Optional<int32> SpellForVisuals;
 };
 
 #endif

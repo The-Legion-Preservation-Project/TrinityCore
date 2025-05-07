@@ -145,9 +145,22 @@ bool AreaTrigger::Create(AreaTriggerCreatePropertiesId areaTriggerCreateProperti
         SetGuidValue(AREATRIGGER_CREATING_EFFECT_GUID, spell->m_castId);
     if (spellInfo && !IsStaticSpawn())
         SetUInt32Value(AREATRIGGER_SPELLID, spellInfo->Id);
+
     if (spellInfo)
         SetUInt32Value(AREATRIGGER_SPELL_FOR_VISUALS, spellInfo->Id);
     SetUInt32Value(AREATRIGGER_SPELL_X_SPELL_VISUAL_ID, spellVisual.SpellXSpellVisualID);
+
+    SpellInfo const* spellForVisuals = spellInfo;
+    if (GetCreateProperties()->SpellForVisuals)
+    {
+        spellForVisuals = sSpellMgr->GetSpellInfo(*GetCreateProperties()->SpellForVisuals, DIFFICULTY_NONE);
+
+        if (spellForVisuals)
+            spellVisual.SpellXSpellVisualID = spellForVisuals->GetSpellXSpellVisualId();
+    }
+    if (spellForVisuals)
+        SetUpdateFieldValue(areaTriggerData.ModifyValue(&UF::AreaTriggerData::SpellForVisuals), spellForVisuals->Id);
+
     if (!IsStaticSpawn())
         SetUInt32Value(AREATRIGGER_TIME_TO_TARGET_SCALE, GetCreateProperties()->TimeToTargetScale != 0 ? GetCreateProperties()->TimeToTargetScale : GetUInt32Value(AREATRIGGER_DURATION));
     SetFloatValue(AREATRIGGER_BOUNDS_RADIUS_2D, GetCreateProperties()->Shape.GetMaxSearchRadius());
@@ -283,17 +296,7 @@ bool AreaTrigger::LoadFromDB(ObjectGuid::LowType spawnId, Map* map, bool /*addTo
     if (!createProperties)
         return false;
 
-    SpellInfo const* spellInfo = nullptr;
-    SpellCastVisual spellVisual;
-    if (spawnData->SpellForVisuals)
-    {
-        spellInfo = sSpellMgr->GetSpellInfo(*spawnData->SpellForVisuals, DIFFICULTY_NONE);
-
-        if (spellInfo)
-            spellVisual.SpellXSpellVisualID = spellInfo->GetSpellXSpellVisualId();
-    }
-
-    return Create(spawnData->Id, map, spawnData->spawnPoint, -1, spawnData, nullptr, nullptr, spellVisual, spellInfo);
+    return Create(spawnData->Id, map, spawnData->spawnPoint, -1, spawnData);
 }
 
 void AreaTrigger::Update(uint32 diff)
