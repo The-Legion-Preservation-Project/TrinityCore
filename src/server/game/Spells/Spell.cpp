@@ -509,6 +509,7 @@ m_spellValue(new SpellValue(m_spellInfo, caster)), _spellEvent(nullptr)
     m_referencedFromCurrentSpell = false;
     m_executedCurrently = false;
     m_delayStart = 0;
+    m_delayMoment = 0;
     m_delayAtDamageCount = 0;
 
     m_applyMultiplierMask = 0;
@@ -605,8 +606,6 @@ m_spellValue(new SpellValue(m_spellInfo, caster)), _spellEvent(nullptr)
         && ((m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MAGIC && !m_spellInfo->HasAttribute(SPELL_ATTR0_IS_ABILITY)) || m_spellInfo->HasAttribute(SPELL_ATTR7_ALLOW_SPELL_REFLECTION))
         && !m_spellInfo->HasAttribute(SPELL_ATTR1_NO_REFLECTION) && !m_spellInfo->HasAttribute(SPELL_ATTR0_NO_IMMUNITIES)
         && !m_spellInfo->IsPassive();
-
-    CleanupTargetList();
 
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         m_destTargets[i] = SpellDestination(*m_caster);
@@ -1529,7 +1528,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffectInfo const& spellEffectIn
             if (liquidLevel <= ground) // When there is no liquid Map::GetWaterOrGroundLevel returns ground level
             {
                 SendCastResult(SPELL_FAILED_NOT_HERE);
-                SendChannelUpdate(0);
+                SendChannelUpdate(0, SPELL_FAILED_NOT_HERE);
                 finish(SPELL_FAILED_NOT_HERE);
                 return;
             }
@@ -1537,7 +1536,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffectInfo const& spellEffectIn
             if (ground + 0.75 > liquidLevel)
             {
                 SendCastResult(SPELL_FAILED_TOO_SHALLOW);
-                SendChannelUpdate(0);
+                SendChannelUpdate(0, SPELL_FAILED_TOO_SHALLOW);
                 finish(SPELL_FAILED_TOO_SHALLOW);
                 return;
             }
@@ -3502,7 +3501,7 @@ SpellCastResult Spell::prepare(SpellCastTargets const& targets, AuraEffect const
         // a possible alternative sollution for those would be validating aura target on unit state change
         if (triggeredByAura && triggeredByAura->IsPeriodic() && !triggeredByAura->GetBase()->IsPassive())
         {
-            SendChannelUpdate(0);
+            SendChannelUpdate(0, result);
             triggeredByAura->GetBase()->SetDuration(0);
         }
 
@@ -3630,7 +3629,7 @@ void Spell::cancel()
                     if (Unit* unit = m_caster->GetGUID() == targetInfo.TargetGUID ? m_caster->ToUnit() : ObjectAccessor::GetUnit(*m_caster, targetInfo.TargetGUID))
                         unit->RemoveOwnedAura(m_spellInfo->Id, m_originalCasterGUID, 0, AURA_REMOVE_BY_CANCEL);
 
-            SendChannelUpdate(0);
+            SendChannelUpdate(0, SPELL_FAILED_INTERRUPTED);
             SendInterrupted(0);
             SendCastResult(SPELL_FAILED_INTERRUPTED);
 
@@ -3999,7 +3998,7 @@ void Spell::handle_immediate()
     if (m_spellInfo->IsChanneled())
     {
         int32 duration = m_spellInfo->GetDuration();
-        if (duration > 0 || m_spellValue->Duration)
+        if (duration > 0 || m_spellValue->Duration > 0)
         {
             if (!m_spellValue->Duration)
             {
@@ -4310,7 +4309,7 @@ void Spell::update(uint32 difftime)
 
             if (m_timer == 0)
             {
-                SendChannelUpdate(0);
+                SendChannelUpdate(0, SPELL_CAST_OK);
                 finish();
 
                 // We call the hook here instead of in Spell::finish because we only want to call it for completed channeling. Everything else is handled by interrupts
@@ -5210,7 +5209,7 @@ void Spell::SendInterrupted(uint8 result)
     m_caster->SendMessageToSet(failedPacket.Write(), true);
 }
 
-void Spell::SendChannelUpdate(uint32 time)
+void Spell::SendChannelUpdate(uint32 time, Optional<SpellCastResult> /*result*/)
 {
     // GameObjects don't channel
     Unit* unitCaster = m_caster->ToUnit();
@@ -5285,31 +5284,35 @@ void Spell::SendChannelStart(uint32 duration)
     unitCaster->SetChannelSpellId(m_spellInfo->Id);
     unitCaster->SetChannelSpellXSpellVisualId(m_SpellVisual);
 
+    auto setImmunitiesAndHealPrediction = [&](Optional<WorldPackets::Spells::SpellChannelStartInterruptImmunities>& interruptImmunities, Optional<WorldPackets::Spells::SpellTargetedHealPrediction>& healPrediction)
+    {
+        uint32 schoolImmunityMask = unitCaster->GetSchoolImmunityMask();
+        uint32 mechanicImmunityMask = unitCaster->GetMechanicImmunityMask();
+
+        if (schoolImmunityMask || mechanicImmunityMask)
+        {
+            interruptImmunities.emplace();
+            interruptImmunities->SchoolImmunities = schoolImmunityMask;
+            interruptImmunities->Immunities = mechanicImmunityMask;
+        }
+
+        if (m_spellInfo->HasAttribute(SPELL_ATTR8_HEAL_PREDICTION) && m_caster->IsUnit())
+        {
+            healPrediction.emplace();
+            auto const channelObjects = unitCaster->GetChannelObjects();
+            if (channelObjects.size() == 1 && channelObjects.begin()->IsUnit())
+                healPrediction->TargetGUID = *channelObjects.begin();
+
+            UpdateSpellHealPrediction(healPrediction->Predict, true);
+        }
+    };
+
     WorldPackets::Spells::SpellChannelStart spellChannelStart;
     spellChannelStart.CasterGUID = unitCaster->GetGUID();
     spellChannelStart.SpellID = m_spellInfo->Id;
     spellChannelStart.SpellXSpellVisualID = m_SpellVisual.SpellXSpellVisualID;
     spellChannelStart.ChannelDuration = duration;
-
-    uint32 schoolImmunityMask = unitCaster->GetSchoolImmunityMask();
-    uint32 mechanicImmunityMask = unitCaster->GetMechanicImmunityMask();
-
-    if (schoolImmunityMask || mechanicImmunityMask)
-    {
-        spellChannelStart.InterruptImmunities.emplace();
-        spellChannelStart.InterruptImmunities->SchoolImmunities = schoolImmunityMask;
-        spellChannelStart.InterruptImmunities->Immunities = mechanicImmunityMask;
-    }
-
-    if (m_spellInfo->HasAttribute(SPELL_ATTR8_HEAL_PREDICTION) && m_caster->IsUnit())
-    {
-        WorldPackets::Spells::SpellTargetedHealPrediction& healPrediction = spellChannelStart.HealPrediction.emplace();
-        auto const channelObjects = unitCaster->GetChannelObjects();
-        if (channelObjects.size() == 1 && channelObjects.begin()->IsUnit())
-            healPrediction.TargetGUID = *channelObjects.begin();
-
-        UpdateSpellHealPrediction(healPrediction.Predict, true);
-    }
+    setImmunitiesAndHealPrediction(spellChannelStart.InterruptImmunities, spellChannelStart.HealPrediction);
 
     unitCaster->SendMessageToSet(spellChannelStart.Write(), true);
 }

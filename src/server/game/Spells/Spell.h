@@ -539,7 +539,7 @@ class TC_GAME_API Spell
         void ExecuteLogEffectResurrect(SpellEffectName effect, Unit* target);
         void SendSpellInterruptLog(Unit* victim, uint32 spellId);
         void SendInterrupted(uint8 result);
-        void SendChannelUpdate(uint32 time);
+        void SendChannelUpdate(uint32 time, Optional<SpellCastResult> result = {});
         void SendChannelStart(uint32 duration);
         void SendResurrectRequest(Player* target);
 
