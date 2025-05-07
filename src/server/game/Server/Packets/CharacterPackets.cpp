@@ -32,7 +32,7 @@ EnumCharacters::EnumCharacters(WorldPacket&& packet) : ClientPacket(std::move(pa
     ASSERT(GetOpcode() == CMSG_ENUM_CHARACTERS || GetOpcode() == CMSG_ENUM_CHARACTERS_DELETED_BY_CLIENT);
 }
 
-EnumCharactersResult::CharacterInfo::CharacterInfo(Field* fields)
+EnumCharactersResult::CharacterInfo::CharacterInfo(Field const* fields)
 {
     //         0                1                2                3                 4                  5                6                7
     // "SELECT characters.guid, characters.name, characters.race, characters.class, characters.gender, characters.skin, characters.face, characters.hairStyle, "
@@ -175,10 +175,10 @@ ByteBuffer& operator<<(ByteBuffer& data, EnumCharactersResult::CharacterInfo con
     data << uint32(charInfo.Unknown703);
     data << uint32(charInfo.LastLoginVersion);
     data << uint32(charInfo.Flags4);
-    data.WriteBits(charInfo.Name.length(), 6);
-    data.WriteBit(charInfo.FirstLogin);
-    data.WriteBit(charInfo.BoostInProgress);
-    data.WriteBits(charInfo.unkWod61x, 5);
+    data << BitsSize<6>(charInfo.Name);
+    data << Bits<1>(charInfo.FirstLogin);
+    data << Bits<1>(charInfo.BoostInProgress);
+    data << Bits<5>(charInfo.unkWod61x);
     data.FlushBits();
 
     data.WriteString(charInfo.Name);
@@ -189,9 +189,9 @@ ByteBuffer& operator<<(ByteBuffer& data, EnumCharactersResult::CharacterInfo con
 ByteBuffer& operator<<(ByteBuffer& data, EnumCharactersResult::RaceUnlock const& raceUnlock)
 {
     data << int32(raceUnlock.RaceID);
-    data.WriteBit(raceUnlock.HasExpansion);
-    data.WriteBit(raceUnlock.HasAchievement);
-    data.WriteBit(raceUnlock.HasHeritageArmor);
+    data << Bits<1>(raceUnlock.HasExpansion);
+    data << Bits<1>(raceUnlock.HasAchievement);
+    data << Bits<1>(raceUnlock.HasHeritageArmor);
     data.FlushBits();
 
     return data;
@@ -201,13 +201,13 @@ WorldPacket const* EnumCharactersResult::Write()
 {
     _worldPacket.reserve(9 + Characters.size() * sizeof(CharacterInfo) + RaceUnlockData.size() * sizeof(RaceUnlock));
 
-    _worldPacket.WriteBit(Success);
-    _worldPacket.WriteBit(IsDeletedCharacters);
-    _worldPacket.WriteBit(IsTestDemonHunterCreationAllowed);
-    _worldPacket.WriteBit(HasDemonHunterOnRealm);
-    _worldPacket.WriteBit(IsDemonHunterCreationAllowed);
-    _worldPacket.WriteBit(DisabledClassesMask.has_value());
-    _worldPacket.WriteBit(IsAlliedRacesCreationAllowed);
+    _worldPacket << Bits<1>(Success);
+    _worldPacket << Bits<1>(IsDeletedCharacters);
+    _worldPacket << Bits<1>(IsTestDemonHunterCreationAllowed);
+    _worldPacket << Bits<1>(HasDemonHunterOnRealm);
+    _worldPacket << Bits<1>(IsDemonHunterCreationAllowed);
+    _worldPacket << Bits<1>(DisabledClassesMask.has_value());
+    _worldPacket << Bits<1>(IsAlliedRacesCreationAllowed);
     _worldPacket << uint32(Characters.size());
     _worldPacket << int32(MaxCharacterLevel);
     _worldPacket << uint32(RaceUnlockData.size());

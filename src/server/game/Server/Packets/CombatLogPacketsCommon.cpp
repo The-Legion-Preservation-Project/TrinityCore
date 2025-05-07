@@ -52,7 +52,7 @@ void SpellCastLogData::Initialize(Spell const* spell)
         }
 
         if (!primaryPowerAdded)
-            PowerData.insert(PowerData.begin(), SpellLogPowerData(int32(primaryPowerType), unitCaster->GetPower(primaryPowerType), 0));
+            PowerData.emplace(PowerData.begin(), int32(primaryPowerType), unitCaster->GetPower(primaryPowerType), 0);
     }
 }
 
@@ -152,7 +152,7 @@ ByteBuffer& operator<<(ByteBuffer& data, SpellCastLogData const& spellCastLogDat
     data << int64(spellCastLogData.Health);
     data << int32(spellCastLogData.AttackPower);
     data << int32(spellCastLogData.SpellPower);
-    data.WriteBits(spellCastLogData.PowerData.size(), 9);
+    data << BitsSize<9>(spellCastLogData.PowerData);
     data.FlushBits();
 
     for (SpellLogPowerData const& powerData : spellCastLogData.PowerData)

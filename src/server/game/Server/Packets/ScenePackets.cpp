@@ -16,6 +16,7 @@
  */
 
 #include "ScenePackets.h"
+#include "PacketUtilities.h"
 
 WorldPacket const* WorldPackets::Scenes::PlayScene::Write()
 {
@@ -24,7 +25,7 @@ WorldPacket const* WorldPackets::Scenes::PlayScene::Write()
     _worldPacket << int32(SceneInstanceID);
     _worldPacket << int32(SceneScriptPackageID);
     _worldPacket << TransportGUID;
-    _worldPacket << Location.PositionXYZOStream();
+    _worldPacket << Location;
 
     return &_worldPacket;
 }

@@ -31,10 +31,10 @@ ByteBuffer& operator<<(ByteBuffer& data, SavedThrottleObjectState const& throttl
 
 ByteBuffer& operator<<(ByteBuffer& data, EuropaTicketConfig const& europaTicketSystemStatus)
 {
-    data.WriteBit(europaTicketSystemStatus.TicketsEnabled);
-    data.WriteBit(europaTicketSystemStatus.BugsEnabled);
-    data.WriteBit(europaTicketSystemStatus.ComplaintsEnabled);
-    data.WriteBit(europaTicketSystemStatus.SuggestionsEnabled);
+    data << Bits<1>(europaTicketSystemStatus.TicketsEnabled);
+    data << Bits<1>(europaTicketSystemStatus.BugsEnabled);
+    data << Bits<1>(europaTicketSystemStatus.ComplaintsEnabled);
+    data << Bits<1>(europaTicketSystemStatus.SuggestionsEnabled);
     data << europaTicketSystemStatus.ThrottleState;
     return data;
 }
@@ -58,30 +58,30 @@ WorldPacket const* FeatureSystemStatus::Write()
 
     _worldPacket << uint32(BpayStoreProductDeliveryDelay);
 
-    _worldPacket.WriteBit(VoiceEnabled);
-    _worldPacket.WriteBit(EuropaTicketSystemStatus.has_value());
-    _worldPacket.WriteBit(ScrollOfResurrectionEnabled);
-    _worldPacket.WriteBit(BpayStoreEnabled);
-    _worldPacket.WriteBit(BpayStoreAvailable);
-    _worldPacket.WriteBit(BpayStoreDisabledByParentalControls);
-    _worldPacket.WriteBit(ItemRestorationButtonEnabled);
-    _worldPacket.WriteBit(BrowserEnabled);
+    _worldPacket << Bits<1>(VoiceEnabled);
+    _worldPacket << OptionalInit(EuropaTicketSystemStatus);
+    _worldPacket << Bits<1>(ScrollOfResurrectionEnabled);
+    _worldPacket << Bits<1>(BpayStoreEnabled);
+    _worldPacket << Bits<1>(BpayStoreAvailable);
+    _worldPacket << Bits<1>(BpayStoreDisabledByParentalControls);
+    _worldPacket << Bits<1>(ItemRestorationButtonEnabled);
+    _worldPacket << Bits<1>(BrowserEnabled);
 
-    _worldPacket.WriteBit(SessionAlert.has_value());
-    _worldPacket.WriteBit(RecruitAFriendSendingEnabled);
-    _worldPacket.WriteBit(CharUndeleteEnabled);
-    _worldPacket.WriteBit(RestrictedAccount);
-    _worldPacket.WriteBit(TutorialsEnabled);
-    _worldPacket.WriteBit(NPETutorialsEnabled);
-    _worldPacket.WriteBit(TwitterEnabled);
-    _worldPacket.WriteBit(CommerceSystemEnabled);
+    _worldPacket << OptionalInit(SessionAlert);
+    _worldPacket << Bits<1>(RecruitAFriendSendingEnabled);
+    _worldPacket << Bits<1>(CharUndeleteEnabled);
+    _worldPacket << Bits<1>(RestrictedAccount);
+    _worldPacket << Bits<1>(TutorialsEnabled);
+    _worldPacket << Bits<1>(NPETutorialsEnabled);
+    _worldPacket << Bits<1>(TwitterEnabled);
+    _worldPacket << Bits<1>(CommerceSystemEnabled);
 
-    _worldPacket.WriteBit(Unk67);
-    _worldPacket.WriteBit(WillKickFromWorld);
-    _worldPacket.WriteBit(KioskModeEnabled);
-    _worldPacket.WriteBit(CompetitiveModeEnabled);
-    _worldPacket.WriteBit(RaceClassExpansionLevels.has_value());
-    _worldPacket.WriteBit(TokenBalanceEnabled);
+    _worldPacket << Bits<1>(Unk67);
+    _worldPacket << Bits<1>(WillKickFromWorld);
+    _worldPacket << Bits<1>(KioskModeEnabled);
+    _worldPacket << Bits<1>(CompetitiveModeEnabled);
+    _worldPacket << OptionalInit(RaceClassExpansionLevels);
+    _worldPacket << Bits<1>(TokenBalanceEnabled);
 
     _worldPacket.FlushBits();
 
@@ -133,23 +133,23 @@ WorldPacket const* FeatureSystemStatus::Write()
 
 WorldPacket const* FeatureSystemStatusGlueScreen::Write()
 {
-    _worldPacket.WriteBit(BpayStoreEnabled);
-    _worldPacket.WriteBit(BpayStoreAvailable);
-    _worldPacket.WriteBit(BpayStoreDisabledByParentalControls);
-    _worldPacket.WriteBit(CharUndeleteEnabled);
-    _worldPacket.WriteBit(CommerceSystemEnabled);
-    _worldPacket.WriteBit(Unk14);
-    _worldPacket.WriteBit(WillKickFromWorld);
-    _worldPacket.WriteBit(IsExpansionPreorderInStore);
+    _worldPacket << Bits<1>(BpayStoreEnabled);
+    _worldPacket << Bits<1>(BpayStoreAvailable);
+    _worldPacket << Bits<1>(BpayStoreDisabledByParentalControls);
+    _worldPacket << Bits<1>(CharUndeleteEnabled);
+    _worldPacket << Bits<1>(CommerceSystemEnabled);
+    _worldPacket << Bits<1>(Unk14);
+    _worldPacket << Bits<1>(WillKickFromWorld);
+    _worldPacket << Bits<1>(IsExpansionPreorderInStore);
 
-    _worldPacket.WriteBit(KioskModeEnabled);
-    _worldPacket.WriteBit(CompetitiveModeEnabled);
+    _worldPacket << Bits<1>(KioskModeEnabled);
+    _worldPacket << Bits<1>(CompetitiveModeEnabled);
     _worldPacket.WriteBit(false); // not accessed in handler
-    _worldPacket.WriteBit(TrialBoostEnabled);
-    _worldPacket.WriteBit(TokenBalanceEnabled);
-    _worldPacket.WriteBit(LiveRegionCharacterListEnabled);
-    _worldPacket.WriteBit(LiveRegionCharacterCopyEnabled);
-    _worldPacket.WriteBit(LiveRegionAccountCopyEnabled);
+    _worldPacket << Bits<1>(TrialBoostEnabled);
+    _worldPacket << Bits<1>(TokenBalanceEnabled);
+    _worldPacket << Bits<1>(LiveRegionCharacterListEnabled);
+    _worldPacket << Bits<1>(LiveRegionCharacterCopyEnabled);
+    _worldPacket << Bits<1>(LiveRegionAccountCopyEnabled);
     _worldPacket.FlushBits();
 
     _worldPacket << int32(TokenPollTimeSeconds);
@@ -178,8 +178,8 @@ WorldPacket const* MOTD::Write()
 
 WorldPacket const* SetTimeZoneInformation::Write()
 {
-    _worldPacket.WriteBits(ServerTimeTZ.length(), 7);
-    _worldPacket.WriteBits(GameTimeTZ.length(), 7);
+    _worldPacket << BitsSize<7>(ServerTimeTZ);
+    _worldPacket << BitsSize<7>(GameTimeTZ);
     _worldPacket.FlushBits();
 
     _worldPacket.WriteString(ServerTimeTZ);

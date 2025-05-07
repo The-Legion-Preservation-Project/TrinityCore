@@ -25,8 +25,8 @@ ByteBuffer& operator<<(ByteBuffer& data, ClientGossipOptions const& gossipOption
     data << uint8(gossipOption.OptionNPC);
     data << int8(gossipOption.OptionFlags);
     data << int32(gossipOption.OptionCost);
-    data.WriteBits(gossipOption.Text.size(), 12);
-    data.WriteBits(gossipOption.Confirm.size(), 12);
+    data << BitsSize<12>(gossipOption.Text);
+    data << BitsSize<12>(gossipOption.Confirm);
     data.FlushBits();
 
     data.WriteString(gossipOption.Text);
@@ -44,8 +44,8 @@ ByteBuffer& operator<<(ByteBuffer& data, ClientGossipText const& gossipText)
     data << int32(gossipText.QuestFlags[0]);
     data << int32(gossipText.QuestFlags[1]);
 
-    data.WriteBit(gossipText.Repeatable);
-    data.WriteBits(gossipText.QuestTitle.size(), 9);
+    data << Bits<1>(gossipText.Repeatable);
+    data << BitsSize<9>(gossipText.QuestTitle);
     data.FlushBits();
 
     data.WriteString(gossipText.QuestTitle);

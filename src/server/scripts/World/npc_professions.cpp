@@ -65,6 +65,10 @@ enum EngineeringTrinkets
     SPELL_TO_TOSHLEY            = 36955,
 };
 
+#define GOSSIP_ITEM_ZAP         "This Dimensional Imploder sounds dangerous! How can I make one?"
+#define GOSSIP_ITEM_JHORDY      "I must build a beacon for this marvelous device!"
+#define GOSSIP_ITEM_KABLAM      "[PH] Unknown"
+
 class npc_engineering_tele_trinket : public CreatureScript
 {
 public:
@@ -91,7 +95,7 @@ public:
         bool OnGossipHello(Player* player) override
         {
             uint32 npcTextId = 0;
-            uint32 gossipItem;
+            std::string gossipItem;
             bool canLearn = false;
 
             if (player->HasSkill(SKILL_ENGINEERING))
@@ -99,24 +103,24 @@ public:
                 switch (me->GetEntry())
                 {
                     case NPC_ZAP:
-                        canLearn = CanLearn(player, 6092, 0, SKILL_CLASSIC_ENGINEERING, 260, S_GOBLIN, SPELL_TO_EVERLOOK, npcTextId);
+                        canLearn = CanLearn(player, 6092, 0, SKILL_ENGINEERING, 260, S_GOBLIN, SPELL_TO_EVERLOOK, npcTextId);
                         if (canLearn)
-                            gossipItem = GOSSIP_ZAP;
+                            gossipItem = GOSSIP_ITEM_ZAP;
                         break;
                     case NPC_JHORDY:
-                        canLearn = CanLearn(player, 7251, 7252, SKILL_CLASSIC_ENGINEERING, 260, S_GNOMISH, SPELL_TO_GADGET, npcTextId);
+                        canLearn = CanLearn(player, 7251, 7252, SKILL_ENGINEERING, 260, S_GNOMISH, SPELL_TO_GADGET, npcTextId);
                         if (canLearn)
-                            gossipItem = GOSSIP_JHORDY;
+                            gossipItem = GOSSIP_ITEM_JHORDY;
                         break;
                     case NPC_KABLAM:
-                        canLearn = CanLearn(player, 10365, 0, SKILL_OUTLAND_ENGINEERING, 50, S_GOBLIN, SPELL_TO_AREA52, npcTextId);
+                        canLearn = CanLearn(player, 10365, 0, SKILL_ENGINEERING, 350, S_GOBLIN, SPELL_TO_AREA52, npcTextId);
                         if (canLearn)
-                            gossipItem = GOSSIP_KABLAM;
+                            gossipItem = GOSSIP_ITEM_KABLAM;
                         break;
                     case NPC_SMILES:
-                        canLearn = CanLearn(player, 10363, 0, SKILL_OUTLAND_ENGINEERING, 50, S_GNOMISH, SPELL_TO_TOSHLEY, npcTextId);
+                        canLearn = CanLearn(player, 10363, 0, SKILL_ENGINEERING, 350, S_GNOMISH, SPELL_TO_TOSHLEY, npcTextId);
                         if (canLearn)
-                            gossipItem = GOSSIP_SMILES;
+                            gossipItem = GOSSIP_ITEM_KABLAM;
                         break;
                     default:
                         break;
@@ -124,7 +128,7 @@ public:
             }
 
             if (canLearn)
-                AddGossipItemFor(player, gossipItem, 2, me->GetEntry(), GOSSIP_ACTION_INFO_DEF + 1);
+                AddGossipItemFor(player, GossipOptionNpc::None, gossipItem, me->GetEntry(), GOSSIP_ACTION_INFO_DEF + 1);
 
             SendGossipMenuFor(player, npcTextId ? npcTextId : player->GetGossipTextId(me), me->GetGUID());
             return true;

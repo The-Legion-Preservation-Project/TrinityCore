@@ -119,7 +119,7 @@ namespace WorldPackets
                  *
                  * @param   fields         Field set of CharacterDatabaseStatements::CHAR_SEL_ENUM
                  */
-                CharacterInfo(Field* fields);
+                CharacterInfo(Field const* fields);
 
                 ObjectGuid Guid;
                 std::string Name;

@@ -65,7 +65,7 @@ namespace WorldPackets
             int32 QuestMaxScalingLevel = 0;
             bool Repeatable     = false;
             std::string QuestTitle;
-            int32 QuestFlags[2] = { };
+            std::array<int32, 2> QuestFlags = { };
         };
 
         ByteBuffer& operator<<(ByteBuffer& data, ClientGossipText const& gossipText);

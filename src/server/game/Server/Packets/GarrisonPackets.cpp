@@ -152,7 +152,7 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonInfo const& garrison)
     data << int32(garrison.NumFollowerActivationsRemaining);
     data << uint32(garrison.NumMissionsStartedToday);
 
-    for (GarrisonPlotInfo* plot : garrison.Plots)
+    for (GarrisonPlotInfo const* plot : garrison.Plots)
         data << *plot;
 
     for (GarrisonMission const* mission : garrison.Missions)

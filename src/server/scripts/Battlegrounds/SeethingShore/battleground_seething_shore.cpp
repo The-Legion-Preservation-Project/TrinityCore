@@ -694,7 +694,9 @@ struct transport_seething_shore : TransportScript
             if (bg->GetStatus() != STATUS_IN_PROGRESS)
             {
                 WorldSafeLocsEntry const* pos = bg->GetTeamStartPosition(Battleground::GetTeamIndexByTeamId(player->GetBGTeam()));
-                player->TeleportTo({ .Location = pos->Loc, .TransportGuid = pos->TransportSpawnId ? ObjectGuid::Create<HighGuid::Transport>(*pos->TransportSpawnId) : ObjectGuid::Empty });
+                // TODO: TheLegionPreservationProject: fix this
+                //player->TeleportTo({ .Location = pos->Loc, .TransportGuid = pos->TransportSpawnId ? ObjectGuid::Create<HighGuid::Transport>(*pos->TransportSpawnId) : ObjectGuid::Empty });
+                player->TeleportTo(pos);
                 return;
             }
 
@@ -829,7 +831,8 @@ struct at_bg_seething_shore_haste_rune_buff : AreaTriggerAI
 
     void OnCreate(Spell const* /*creatingSpell*/) override
     {
-        at->PlaySpellVisual(SeethingShore::SpellVisuals::HasteRuneBuff);
+        // TODO: TheLegionPreservationProject: fix this
+        //at->PlaySpellVisual(SeethingShore::SpellVisuals::HasteRuneBuff);
     }
 
     void OnUnitEnter(Unit* unit) override

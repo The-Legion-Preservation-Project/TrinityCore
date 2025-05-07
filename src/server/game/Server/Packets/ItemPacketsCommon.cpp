@@ -149,17 +149,16 @@ ByteBuffer& operator<<(ByteBuffer& data, ItemBonuses const& itemBonusInstanceDat
 
 ByteBuffer& operator>>(ByteBuffer& data, ItemBonuses& itemBonusInstanceData)
 {
-    uint32 bonusListIdSize;
-
     itemBonusInstanceData.Context = data.read<ItemContext>();
+    uint32 bonusListIdSize;
     data >> bonusListIdSize;
+    if (bonusListIdSize > 32)
+        throw PacketArrayMaxCapacityException(bonusListIdSize, 32);
 
-    for (uint32 i = 0u; i < bonusListIdSize; ++i)
-    {
-        uint32 bonusId;
-        data >> bonusId;
-        itemBonusInstanceData.BonusListIDs.push_back(bonusId);
-    }
+    itemBonusInstanceData.BonusListIDs.resize(bonusListIdSize);
+
+    for (int32& bonusListID : itemBonusInstanceData.BonusListIDs)
+        data >> bonusListID;
 
     return data;
 }

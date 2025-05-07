@@ -263,8 +263,8 @@ WorldPacket const* WorldPackets::Calendar::CalendarSendEvent::Write()
     _worldPacket << LockDate;
     _worldPacket << uint64(EventClubID);
     _worldPacket << uint32(Invites.size());
-    _worldPacket.WriteBits(EventName.size(), 8);
-    _worldPacket.WriteBits(Description.size(), 11);
+    _worldPacket << BitsSize<8>(EventName);
+    _worldPacket << BitsSize<11>(Description);
     _worldPacket.FlushBits();
 
     for (auto const& invite : Invites)
@@ -292,7 +292,7 @@ WorldPacket const* WorldPackets::Calendar::CalendarInviteAlert::Write()
     _worldPacket << InvitedByGuid;
     _worldPacket << OwnerGuid;
 
-    _worldPacket.WriteBits(EventName.size(), 8);
+    _worldPacket << BitsSize<8>(EventName);
     _worldPacket.FlushBits();
     _worldPacket.WriteString(EventName);
 
