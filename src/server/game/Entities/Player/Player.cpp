@@ -18457,7 +18457,7 @@ Item* Player::_LoadItem(CharacterDatabaseTransaction trans, uint32 zoneId, uint3
             }
             else if (item->IsRefundable())
             {
-                if (item->GetPlayedTime() > (2 * HOUR))
+                if (item->IsRefundExpired())
                 {
                     TC_LOG_DEBUG("entities.player.loading", "Player::_LoadInventory: player ({}, name: '{}') has item ({}) with expired refund time ({}). Deleting refund data and removing refundable flag.",
                         GetGUID().ToString(), GetName(), item->GetGUID().ToString(), item->GetPlayedTime());
@@ -19908,8 +19908,7 @@ void Player::_SaveInventory(CharacterDatabaseTransaction trans)
         i_next = itr;
         ++i_next;
 
-        Item* iPtr = GetItemByGuid(*itr);
-        if (iPtr)
+        if (Item* iPtr = GetItemByGuid(*itr))
         {
             iPtr->UpdatePlayedTime(this);
             continue;

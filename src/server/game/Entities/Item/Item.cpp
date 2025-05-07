@@ -1777,16 +1777,16 @@ void Item::UpdatePlayedTime(Player* owner)
     SetNotRefundable(owner);
 }
 
-uint32 Item::GetPlayedTime()
+uint32 Item::GetPlayedTime() const
 {
     time_t curtime = GameTime::GetGameTime();
     uint32 elapsed = uint32(curtime - m_lastPlayedTimeUpdate);
     return GetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME) + elapsed;
 }
 
-bool Item::IsRefundExpired()
+bool Item::IsRefundExpired() const
 {
-    return (GetPlayedTime() > 2*HOUR);
+    return GetPlayedTime() > 2 * HOUR;
 }
 
 void Item::SetSoulboundTradeable(GuidSet const& allowedLooters)
@@ -1812,7 +1812,7 @@ void Item::ClearSoulboundTradeable(Player* currentOwner)
 bool Item::CheckSoulboundTradeExpire()
 {
     // called from owner's update - GetOwner() MUST be valid
-    if (GetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME) + 2*HOUR < GetOwner()->GetTotalPlayedTime())
+    if (GetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME) + 2 * HOUR < GetOwner()->GetTotalPlayedTime())
     {
         ClearSoulboundTradeable(GetOwner());
         return true; // remove from tradeable list

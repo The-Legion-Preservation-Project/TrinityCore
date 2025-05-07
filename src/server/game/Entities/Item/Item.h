@@ -338,8 +338,8 @@ class TC_GAME_API Item : public Object
         uint32 GetPaidExtendedCost() const { return m_paidExtendedCost; }
 
         void UpdatePlayedTime(Player* owner);
-        uint32 GetPlayedTime();
-        bool IsRefundExpired();
+        uint32 GetPlayedTime() const;
+        bool IsRefundExpired() const;
 
         // Soulbound trade system
         void SetSoulboundTradeable(GuidSet const& allowedLooters);
