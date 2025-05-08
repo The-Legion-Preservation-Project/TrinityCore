@@ -54,7 +54,7 @@ struct AchievementCategoryLoadInfo
     {
         { false, FT_STRING, "Name" },
         { true, FT_SHORT, "Parent" },
-        { false, FT_BYTE, "UiOrder" },
+        { true, FT_BYTE, "UiOrder" },
         { false, FT_INT, "ID" },
     };
 
@@ -88,8 +88,8 @@ struct AdventureJournalLoadInfo
         { false, FT_BYTE, "BonusValue1" },
         { false, FT_BYTE, "BonusValue2" },
         { false, FT_BYTE, "CurrencyQuantity" },
-        { true, FT_INT, "PlayerConditionID" },
-        { true, FT_INT, "ItemQuantity" },
+        { false, FT_INT, "PlayerConditionID" },
+        { false, FT_INT, "ItemQuantity" },
     };
 
     static constexpr DB2LoadInfo Instance{ Fields, 25, &AdventureJournalMeta::Instance, HOTFIX_SEL_ADVENTURE_JOURNAL };
@@ -104,8 +104,8 @@ struct AdventureMapPoiLoadInfo
         { false, FT_STRING, "Description" },
         { false, FT_FLOAT, "WorldPositionX" },
         { false, FT_FLOAT, "WorldPositionY" },
-        { false, FT_INT, "RewardItemID" },
-        { false, FT_BYTE, "Type" },
+        { true, FT_INT, "RewardItemID" },
+        { true, FT_BYTE, "Type" },
         { false, FT_INT, "PlayerConditionID" },
         { false, FT_INT, "QuestID" },
         { false, FT_INT, "LfgDungeonID" },
@@ -801,8 +801,8 @@ struct ChrClassUiDisplayLoadInfo
     {
         { false, FT_INT, "ID" },
         { false, FT_BYTE, "ChrClassesID" },
-        { true, FT_INT, "AdvGuidePlayerConditionID" },
-        { true, FT_INT, "SplashPlayerConditionID" },
+        { false, FT_INT, "AdvGuidePlayerConditionID" },
+        { false, FT_INT, "SplashPlayerConditionID" },
     };
 
     static constexpr DB2LoadInfo Instance{ Fields, 4, &ChrClassUIDisplayMeta::Instance, HOTFIX_SEL_CHR_CLASS_UI_DISPLAY };
@@ -999,7 +999,7 @@ struct CreatureDisplayInfoLoadInfo
         { true, FT_INT, "PortraitCreatureDisplayInfoID" },
         { false, FT_BYTE, "BloodID" },
         { false, FT_SHORT, "ParticleColorID" },
-        { false, FT_INT, "CreatureGeosetData" },
+        { true, FT_INT, "CreatureGeosetData" },
         { false, FT_SHORT, "ObjectEffectPackageID" },
         { false, FT_SHORT, "AnimReplacementSetID" },
         { true, FT_BYTE, "UnarmedWeaponType" },
@@ -1388,10 +1388,10 @@ struct FactionLoadInfo
         { true, FT_INT, "ReputationMax3" },
         { true, FT_INT, "ReputationMax4" },
         { true, FT_SHORT, "ReputationIndex" },
-        { true, FT_SHORT, "ReputationClassMask1" },
-        { true, FT_SHORT, "ReputationClassMask2" },
-        { true, FT_SHORT, "ReputationClassMask3" },
-        { true, FT_SHORT, "ReputationClassMask4" },
+        { false, FT_SHORT, "ReputationClassMask1" },
+        { false, FT_SHORT, "ReputationClassMask2" },
+        { false, FT_SHORT, "ReputationClassMask3" },
+        { false, FT_SHORT, "ReputationClassMask4" },
         { false, FT_SHORT, "ReputationFlags1" },
         { false, FT_SHORT, "ReputationFlags2" },
         { false, FT_SHORT, "ReputationFlags3" },
@@ -1706,7 +1706,7 @@ struct GarrPlotLoadInfo
     static constexpr DB2FieldMeta Fields[9] =
     {
         { false, FT_INT, "ID" },
-        { false, FT_STRING, "Name" },
+        { false, FT_STRING_NOT_LOCALIZED, "Name" },
         { true, FT_INT, "AllianceConstructObjID" },
         { true, FT_INT, "HordeConstructObjID" },
         { false, FT_BYTE, "UiCategoryID" },
@@ -2458,8 +2458,8 @@ struct ItemModifiedAppearanceExtraLoadInfo
         { true, FT_INT, "IconFileDataID" },
         { true, FT_INT, "UnequippedIconFileDataID" },
         { false, FT_BYTE, "SheatheType" },
-        { false, FT_BYTE, "DisplayWeaponSubclassID" },
-        { false, FT_BYTE, "DisplayInventoryType" },
+        { true, FT_BYTE, "DisplayWeaponSubclassID" },
+        { true, FT_BYTE, "DisplayInventoryType" },
     };
 
     static constexpr DB2LoadInfo Instance{ Fields, 6, &ItemModifiedAppearanceExtraMeta::Instance, HOTFIX_SEL_ITEM_MODIFIED_APPEARANCE_EXTRA };
@@ -2906,7 +2906,7 @@ struct LanguageWordsLoadInfo
     {
         { false, FT_INT, "ID" },
         { false, FT_STRING_NOT_LOCALIZED, "Word" },
-        { false, FT_INT, "LanguageID" },
+        { false, FT_BYTE, "LanguageID" },
     };
 
     static constexpr DB2LoadInfo Instance{ Fields, 3, &LanguageWordsMeta::Instance, HOTFIX_SEL_LANGUAGE_WORDS };
@@ -2930,7 +2930,7 @@ struct LfgDungeonsLoadInfo
         { false, FT_INT, "ID" },
         { false, FT_STRING, "Name" },
         { false, FT_STRING, "Description" },
-        { true, FT_INT, "Flags" },
+        { false, FT_INT, "Flags" },
         { false, FT_FLOAT, "MinGear" },
         { false, FT_SHORT, "MaxLevel" },
         { false, FT_SHORT, "TargetLevelMax" },
@@ -4475,7 +4475,7 @@ struct SpellLabelLoadInfo
     {
         { false, FT_INT, "ID" },
         { false, FT_INT, "LabelID" },
-        { false, FT_INT, "SpellID" },
+        { true, FT_INT, "SpellID" },
     };
 
     static constexpr DB2LoadInfo Instance{ Fields, 3, &SpellLabelMeta::Instance, HOTFIX_SEL_SPELL_LABEL };

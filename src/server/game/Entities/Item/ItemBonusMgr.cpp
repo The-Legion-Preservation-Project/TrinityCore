@@ -30,7 +30,7 @@ struct ItemLevelSelectorQualityEntryComparator
 
 using ItemLevelSelectorQualities = std::set<ItemLevelSelectorQualityEntry const*, ItemLevelSelectorQualityEntryComparator>;
 
-std::unordered_map<uint32 /*itemBonusListId*/, std::vector<ItemBonusEntry const *>> _itemBonusLists;
+std::unordered_map<uint32 /*itemBonusListId*/, std::vector<ItemBonusEntry const*>> _itemBonusLists;
 std::unordered_map<int16 /*itemLevelDelta*/, uint32 /*itemBonusListId*/> _itemLevelDeltaToBonusListContainer;
 std::unordered_map<uint32 /*itemLevelSelectorQualitySetId*/, ItemLevelSelectorQualities> _itemLevelQualitySelectorQualities;
 std::unordered_map<uint32 /*itemBonusTreeId*/, std::set<ItemBonusTreeNodeEntry const*>> _itemBonusTrees;

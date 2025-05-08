@@ -48,7 +48,7 @@ struct Achievement_CategoryEntry
 {
     LocalizedString Name;
     int16 Parent;
-    uint8 UiOrder;
+    int8 UiOrder;
     uint32 ID;
 };
 
@@ -75,8 +75,8 @@ struct AdventureJournalEntry
     uint8 PriorityMax;
     std::array<uint8, 2> BonusValue;
     uint8 CurrencyQuantity;
-    int32 PlayerConditionID;
-    int32 ItemQuantity;
+    uint32 PlayerConditionID;
+    uint32 ItemQuantity;
 };
 
 struct AdventureMapPOIEntry
@@ -85,8 +85,8 @@ struct AdventureMapPOIEntry
     LocalizedString Title;
     LocalizedString Description;
     DBCPosition2D WorldPosition;
-    uint32 RewardItemID;
-    uint8 Type;
+    int32 RewardItemID;
+    int8 Type;
     uint32 PlayerConditionID;
     uint32 QuestID;
     uint32 LfgDungeonID;
@@ -547,8 +547,8 @@ struct ChrClassUIDisplayEntry
 {
     uint32 ID;
     uint8 ChrClassesID;
-    int32 AdvGuidePlayerConditionID;
-    int32 SplashPlayerConditionID;
+    uint32 AdvGuidePlayerConditionID;
+    uint32 SplashPlayerConditionID;
 };
 
 struct ChrClassesEntry
@@ -733,7 +733,7 @@ struct CreatureDisplayInfoEntry
     int32 PortraitCreatureDisplayInfoID;
     uint8 BloodID;
     uint16 ParticleColorID;
-    uint32 CreatureGeosetData;
+    int32 CreatureGeosetData;
     uint16 ObjectEffectPackageID;
     uint16 AnimReplacementSetID;
     int8 UnarmedWeaponType;
@@ -1240,7 +1240,7 @@ struct FactionEntry
     std::array<float, 2> ParentFactionMod;                        // Faction outputs rep * ParentFactionModOut as spillover reputation
     std::array<int32, 4> ReputationMax;
     int16 ReputationIndex;
-    std::array<int16, 4> ReputationClassMask;
+    std::array<uint16, 4> ReputationClassMask;
     std::array<uint16, 4> ReputationFlags;
     uint16 ParentFactionID;
     uint16 ParagonFactionID;
@@ -1505,7 +1505,7 @@ struct GarrMissionEntry
 struct GarrPlotEntry
 {
     uint32 ID;
-    LocalizedString Name;
+    char const* Name;
     int32 AllianceConstructObjID;
     int32 HordeConstructObjID;
     uint8 UiCategoryID;
@@ -1927,8 +1927,8 @@ struct ItemModifiedAppearanceExtraEntry
     int32 IconFileDataID;
     int32 UnequippedIconFileDataID;
     uint8 SheatheType;
-    uint8 DisplayWeaponSubclassID;
-    uint8 DisplayInventoryType;
+    int8 DisplayWeaponSubclassID;
+    int8 DisplayInventoryType;
 };
 
 struct ItemNameDescriptionEntry
@@ -2183,7 +2183,7 @@ struct LanguageWordsEntry
 {
     uint32 ID;
     char const* Word;
-    uint32 LanguageID;
+    uint8 LanguageID;
 };
 
 struct LanguagesEntry
@@ -2197,7 +2197,7 @@ struct LFGDungeonsEntry
     uint32 ID;
     LocalizedString Name;
     LocalizedString Description;
-    int32 Flags;
+    uint32 Flags;
     float MinGear;
     uint16 MaxLevel;
     uint16 TargetLevelMax;
@@ -3223,7 +3223,7 @@ struct SpellLabelEntry
 {
     uint32 ID;
     uint32 LabelID;
-    uint32 SpellID;
+    int32 SpellID;
 };
 
 struct SpellLearnSpellEntry
