@@ -2240,7 +2240,7 @@ Optional<uint32> Item::GetDisenchantLootId() const
         return _bonusData.DisenchantLootId;
 
     // ignore temporary item level scaling (pvp or timewalking)
-    uint32 itemLevel = GetItemLevel(GetTemplate(), _bonusData, _bonusData.RequiredLevel, GetModifier(ITEM_MODIFIER_TIMEWALKER_LEVEL), 0, 0, 0, false, 0);
+    uint32 itemLevel = GetItemLevel(GetTemplate(), _bonusData, _bonusData.RequiredLevel, GetModifier(ITEM_MODIFIER_SCALING_STAT_DISTRIBUTION_FIXED_LEVEL), 0, 0, 0, false, 0);
 
     ItemDisenchantLootEntry const* disenchantLoot = GetBaseDisenchantLoot(GetTemplate(), GetQuality(), itemLevel);
     if (!disenchantLoot)
@@ -2255,7 +2255,7 @@ Optional<uint16> Item::GetDisenchantSkillRequired() const
         return {};
 
     // ignore temporary item level scaling (pvp or timewalking)
-    uint32 itemLevel = GetItemLevel(GetTemplate(), _bonusData, _bonusData.RequiredLevel, GetModifier(ITEM_MODIFIER_TIMEWALKER_LEVEL), 0, 0, 0, false, 0);
+    uint32 itemLevel = GetItemLevel(GetTemplate(), _bonusData, _bonusData.RequiredLevel, GetModifier(ITEM_MODIFIER_SCALING_STAT_DISTRIBUTION_FIXED_LEVEL), 0, 0, 0, false, 0);
 
     ItemDisenchantLootEntry const* disenchantLoot = GetBaseDisenchantLoot(GetTemplate(), GetQuality(), itemLevel);
     if (!disenchantLoot)
