@@ -1747,7 +1747,7 @@ DROP TABLE IF EXISTS `characters`;
 CREATE TABLE `characters` (
   `guid` bigint unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `account` int unsigned NOT NULL DEFAULT '0' COMMENT 'Account Identifier',
-  `name` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `name` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `slot` tinyint unsigned NOT NULL DEFAULT '0',
   `race` tinyint unsigned NOT NULL DEFAULT '0',
   `class` tinyint unsigned NOT NULL DEFAULT '0',
@@ -1845,9 +1845,9 @@ CREATE TABLE `characters` (
   `honorRestBonus` float NOT NULL DEFAULT '0',
   `lastLoginBuild` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`),
+  UNIQUE KEY `idx_name` (`name`),
   KEY `idx_account` (`account`),
-  KEY `idx_online` (`online`),
-  KEY `idx_name` (`name`)
+  KEY `idx_online` (`online`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Player System';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3462,7 +3462,8 @@ INSERT INTO `updates` VALUES
 ('2023_09_30_00_characters.sql','4326C642870633873F163085D278DB9B7449D9C3','RELEASED','2023-09-30 16:34:19',0),
 ('2024_04_09_00_characters.sql','07AC79B4E489B1CD073852EC57D12939C2A1D4B1','RELEASED','2024-04-09 12:54:11',0),
 ('2024_04_28_00_characters.sql','F80F476704BE535B5DCB0BCEBDD56024FCFBBAA2','RELEASED','2024-04-28 19:26:58',0),
-('2024_08_26_00_characters.sql','68EEBE1D639D59B24F5121008C2D103CA67FFC9A','RELEASED','2024-08-26 00:49:08',0);
+('2024_08_26_00_characters.sql','68EEBE1D639D59B24F5121008C2D103CA67FFC9A','RELEASED','2024-08-26 00:49:08',0),
+('2024_10_03_00_characters.sql','408249A6992999A36EB94089D184972E8E0767A3','RELEASED','2024-10-03 11:10:18',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
