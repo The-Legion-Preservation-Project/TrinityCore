@@ -2294,8 +2294,9 @@ void WorldSession::HandleCharRaceOrFactionChangeCallback(std::shared_ptr<WorldPa
                     break;
                     stmt->setUInt16(1, 2776);
                     break;
-                case LANG_PANDAREN_ALLIANCE:
-                case LANG_PANDAREN_HORDE:
+                case RACE_PANDAREN_NEUTRAL:
+                case RACE_PANDAREN_ALLIANCE:
+                case RACE_PANDAREN_HORDE:
                     stmt->setUInt16(1, 905);
                     break;
                 default:
