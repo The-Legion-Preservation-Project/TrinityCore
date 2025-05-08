@@ -137,8 +137,6 @@
 #include <G3D/g3dmath.h>
 #include <sstream>
 
-#define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
-
 // corpse reclaim times
 #define DEATH_EXPIRE_STEP (5*MINUTE)
 #define MAX_DEATH_COUNT 3
@@ -185,7 +183,6 @@ Player::Player(WorldSession* session) : Unit(true), m_sceneMgr(this)
     m_weaponChangeTimer = 0;
 
     m_zoneUpdateId = uint32(-1);
-    m_zoneUpdateTimer = 0;
 
     m_areaUpdateId = 0;
     m_team = TEAM_OTHER;
@@ -1061,37 +1058,6 @@ void Player::Update(uint32 p_time)
             m_weaponChangeTimer -= p_time;
     }
 
-    if (m_zoneUpdateTimer > 0)
-    {
-        if (p_time >= m_zoneUpdateTimer)
-        {
-            // On zone update tick check if we are still in an inn if we are supposed to be in one
-            if (_restMgr->HasRestFlag(REST_FLAG_IN_TAVERN))
-            {
-                AreaTriggerEntry const* atEntry = sAreaTriggerStore.LookupEntry(_restMgr->GetInnTriggerID());
-                if (!atEntry || !IsInAreaTrigger(atEntry))
-                    _restMgr->RemoveRestFlag(REST_FLAG_IN_TAVERN);
-            }
-
-            uint32 newzone, newarea;
-            GetZoneAndAreaId(newzone, newarea);
-
-            if (m_zoneUpdateId != newzone)
-                UpdateZone(newzone, newarea);                // also update area
-            else
-            {
-                // use area updates as well
-                // needed for free far all arenas for example
-                if (m_areaUpdateId != newarea)
-                    UpdateArea(newarea);
-
-                m_zoneUpdateTimer = ZONE_UPDATE_INTERVAL;
-            }
-        }
-        else
-            m_zoneUpdateTimer -= p_time;
-    }
-
     if (IsAlive())
     {
         m_regenTimer += p_time;
@@ -1202,8 +1168,14 @@ void Player::Heartbeat()
     // Group update
     SendUpdateToOutOfRangeGroupMembers();
 
-    // Indoor/Outdoor aura requirements
-    CheckOutdoorsAuraRequirements();
+    // Updating Zone and AreaId. This will also trigger spell_area and phasing related updates
+    UpdateZoneAndAreaId();
+
+    // Updating auras which can only be used inside or outside (such as Mounts)
+    UpdateIndoorsOutdoorsAuras();
+
+    // Updating the resting state when entering resting places
+    UpdateTavernRestingState();
 }
 
 void Player::setDeathState(DeathState s)
@@ -6190,10 +6162,36 @@ bool Player::HasExploredZone(uint32 areaId) const
     return GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + playerIndexOffset) & mask;
 }
 
-void Player::CheckOutdoorsAuraRequirements()
+void Player::UpdateZoneAndAreaId()
+{
+    uint32 newzone = 0, newarea = 0;
+    GetZoneAndAreaId(newzone, newarea);
+
+    if (m_zoneUpdateId != newzone)
+        UpdateZone(newzone, newarea);                // also update area
+    else
+    {
+        // use area updates as well
+        // needed for free far all arenas for example
+        if (m_areaUpdateId != newarea)
+            UpdateArea(newarea);
+    }
+}
+
+void Player::UpdateIndoorsOutdoorsAuras()
 {
     if (sWorld->getBoolConfig(CONFIG_VMAP_INDOOR_CHECK))
         RemoveAurasWithAttribute(IsOutdoors() ? SPELL_ATTR0_ONLY_INDOORS : SPELL_ATTR0_ONLY_OUTDOORS);
+}
+
+void Player::UpdateTavernRestingState()
+{
+    AreaTriggerEntry const* atEntry = sAreaTriggerStore.LookupEntry(_restMgr->GetInnTriggerID());
+
+    if (_restMgr->HasRestFlag(REST_FLAG_IN_TAVERN) && (!atEntry || !IsInAreaTrigger(atEntry)))
+        _restMgr->RemoveRestFlag(REST_FLAG_IN_TAVERN);
+    else if (!_restMgr->HasRestFlag(REST_FLAG_IN_TAVERN) && IsInAreaTrigger(atEntry))
+        _restMgr->SetRestFlag(REST_FLAG_IN_TAVERN);
 }
 
 Team Player::TeamForRace(uint8 race)
@@ -7280,7 +7278,6 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
 
     uint32 const oldZone = m_zoneUpdateId;
     m_zoneUpdateId = newZone;
-    m_zoneUpdateTimer = ZONE_UPDATE_INTERVAL;
 
     GetMap()->UpdatePlayerZoneStats(oldZone, newZone);
 
