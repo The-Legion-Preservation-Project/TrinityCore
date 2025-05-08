@@ -486,8 +486,7 @@ void AuctionHouseMgr::LoadAuctions()
 void AuctionHouseMgr::AddAItem(Item* item)
 {
     ASSERT(item);
-    ASSERT(_itemsByGuid.count(item->GetGUID()) == 0);
-    _itemsByGuid[item->GetGUID()] = item;
+    ASSERT_WITH_SIDE_EFFECTS(_itemsByGuid.emplace(item->GetGUID(), item).second);
 }
 
 bool AuctionHouseMgr::RemoveAItem(ObjectGuid itemGuid, bool deleteItem /*= false*/, CharacterDatabaseTransaction* trans /*= nullptr*/)
@@ -752,7 +751,7 @@ void AuctionHouseObject::AddAuction(CharacterDatabaseTransaction trans, AuctionP
 
     WorldPackets::AuctionHouse::AuctionSortDef priceSort{ AuctionHouseSortOrder::Price, false };
     AuctionPosting::Sorter insertSorter(LOCALE_enUS, std::span(&priceSort, 1));
-    _auctions.insert(std::lower_bound(_auctions.begin(), _auctions.end(), addedAuction, std::cref(insertSorter)), addedAuction);
+    _auctions.insert(std::ranges::lower_bound(_auctions.begin(), _auctions.end(), addedAuction, std::cref(insertSorter)), addedAuction);
 
     sScriptMgr->OnAuctionAdd(this, addedAuction);
 }
@@ -760,7 +759,7 @@ void AuctionHouseObject::AddAuction(CharacterDatabaseTransaction trans, AuctionP
 std::map<uint32, AuctionPosting>::node_type AuctionHouseObject::RemoveAuction(CharacterDatabaseTransaction trans, AuctionPosting* auction,
     std::map<uint32, AuctionPosting>::iterator* auctionItr /*= nullptr*/)
 {
-    _auctions.erase(std::remove(_auctions.begin(), _auctions.end(), auction), _auctions.end());
+    std::erase(_auctions, auction);
 
     CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_AUCTION);
     stmt->setUInt32(0, auction->Id);
