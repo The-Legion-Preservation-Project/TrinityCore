@@ -4003,11 +4003,8 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                     case GAMEOBJECT_TYPE_BUTTON:
                     case GAMEOBJECT_TYPE_GOOBER:
                         if (HasConditionalInteraction() && CanActivateForPlayer(target))
-                        {
-                            dynFlags |= GO_DYNFLAG_LO_HIGHLIGHT;
                             if (GetGoStateFor(target->GetGUID()) != GO_STATE_ACTIVE)
-                                dynFlags |= GO_DYNFLAG_LO_ACTIVATE;
-                        }
+                                dynFlags |= GO_DYNFLAG_LO_ACTIVATE | GO_DYNFLAG_LO_HIGHLIGHT;
                         break;
                     case GAMEOBJECT_TYPE_QUESTGIVER:
                         if (CanActivateForPlayer(target))
@@ -4022,7 +4019,7 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                     case GAMEOBJECT_TYPE_GENERIC:
                     case GAMEOBJECT_TYPE_SPELL_FOCUS:
                         if (HasConditionalInteraction() && CanActivateForPlayer(target))
-                            dynFlags |= GO_DYNFLAG_LO_SPARKLE | GO_DYNFLAG_LO_HIGHLIGHT;
+                            dynFlags |= GO_DYNFLAG_LO_SPARKLE;
                         break;
                     case GAMEOBJECT_TYPE_TRANSPORT:
                     case GAMEOBJECT_TYPE_MAP_OBJ_TRANSPORT:
@@ -4047,8 +4044,17 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                         break;
                 }
 
-                if (!target->IsGameMaster() && !MeetsInteractCondition(target))
-                    dynFlags |= GO_DYNFLAG_LO_NO_INTERACT;
+                if (!target->IsGameMaster())
+                {
+                    // GO_DYNFLAG_LO_INTERACT_COND should be applied to GOs with conditional interaction (without GO_FLAG_INTERACT_COND) to disable interaction
+                    // (Ignore GAMEOBJECT_TYPE_GATHERING_NODE as some profession-related GOs may include quest loot and can always be interacted with)
+                    if (GetGoType() != GAMEOBJECT_TYPE_GATHERING_NODE)
+                        if (HasConditionalInteraction() && !HasFlag(GO_FLAG_INTERACT_COND))
+                            dynFlags |= GO_DYNFLAG_LO_INTERACT_COND;
+
+                    if (!MeetsInteractCondition(target))
+                        dynFlags |= GO_DYNFLAG_LO_NO_INTERACT;
+                }
 
                 *data << ((uint32(pathProgress) << 16) | uint32(dynFlags));
             }
