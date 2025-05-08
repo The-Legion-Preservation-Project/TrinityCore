@@ -307,7 +307,7 @@ void CollectionMgr::CheckHeirloomUpgrades(Item* item)
         if (newItemId)
         {
             std::vector<uint32> const& fields = player->GetDynamicValues(PLAYER_DYNAMIC_FIELD_HEIRLOOMS);
-            uint16 offset = uint16(std::find(fields.begin(), fields.end(), int32(itr->first)) - fields.begin());
+            uint16 offset = uint16(std::find(fields.begin(), fields.end(), itr->first) - fields.begin());
 
             player->SetHeirloom(offset, newItemId);
             player->SetHeirloomFlags(offset, 0);

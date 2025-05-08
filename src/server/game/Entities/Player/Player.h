@@ -1731,7 +1731,6 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         void SendQuestUpdateAddItem(ItemTemplate const* itemTemplate, QuestObjective const& obj, uint16 count) const;
         void SendQuestUpdateAddPlayer(Quest const* quest, uint16 newCount) const;
         void SendQuestGiverStatusMultiple();
-        void SendQuestGiverStatusMultiple(GuidUnorderedSet const& guids);
         void SendDisplayToast(uint32 entry, DisplayToastType type, bool isBonusRoll, uint32 quantity, DisplayToastMethod method, uint32 questId = 0, Item* item = nullptr) const;
 
         uint32 GetSharedQuestID() const { return m_sharedQuestId; }

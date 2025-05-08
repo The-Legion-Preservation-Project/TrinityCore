@@ -16626,14 +16626,9 @@ void Player::SendQuestUpdateAddPlayer(Quest const* quest, uint16 newCount) const
 
 void Player::SendQuestGiverStatusMultiple()
 {
-    SendQuestGiverStatusMultiple(m_clientGUIDs);
-}
-
-void Player::SendQuestGiverStatusMultiple(GuidUnorderedSet const& guids)
-{
     WorldPackets::Quest::QuestGiverStatusMultiple response;
 
-    for (auto itr = guids.begin(); itr != guids.end(); ++itr)
+    for (auto itr = m_clientGUIDs.begin(); itr != m_clientGUIDs.end(); ++itr)
     {
         if (itr->IsAnyTypeCreature())
         {
