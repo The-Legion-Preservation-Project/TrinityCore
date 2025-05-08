@@ -437,6 +437,8 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
 
         void BuildValuesUpdateWithMask(uint8 updatetype, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const;
 
+        TeamId GetControllingTeam() const;
+
     protected:
         void CreateModel();
         void UpdateModel();                                 // updates model in case displayId were changed

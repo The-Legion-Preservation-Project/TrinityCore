@@ -1371,6 +1371,7 @@ void Battleground::HandleKillPlayer(Player* victim, Player* killer)
 
         UpdatePlayerScore(killer, SCORE_HONORABLE_KILLS, 1);
         UpdatePlayerScore(killer, SCORE_KILLING_BLOWS, 1);
+        killer->UpdateCriteria(CriteriaType::KillPlayer, 1, 0, 0, victim);
 
         for (BattlegroundPlayerMap::const_iterator itr = m_Players.begin(); itr != m_Players.end(); ++itr)
         {
@@ -1379,7 +1380,10 @@ void Battleground::HandleKillPlayer(Player* victim, Player* killer)
                 continue;
 
             if (itr->second.Team == killerTeam && creditedPlayer->IsAtGroupRewardDistance(victim))
+            {
                 UpdatePlayerScore(creditedPlayer, SCORE_HONORABLE_KILLS, 1);
+                creditedPlayer->UpdateCriteria(CriteriaType::KillPlayer, 1, 0, 0, victim);
+            }
         }
     }
 
