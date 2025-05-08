@@ -4068,7 +4068,8 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                 {
                     // GO_DYNFLAG_LO_INTERACT_COND should be applied to GOs with conditional interaction (without GO_FLAG_INTERACT_COND) to disable interaction
                     // (Ignore GAMEOBJECT_TYPE_GATHERING_NODE as some profession-related GOs may include quest loot and can always be interacted with)
-                    if (GetGoType() != GAMEOBJECT_TYPE_GATHERING_NODE)
+                    // (Ignore GAMEOBJECT_TYPE_FLAGSTAND as interaction is handled by GO_DYNFLAG_LO_NO_INTERACT)
+                    if (GetGoType() != GAMEOBJECT_TYPE_FLAGSTAND && GetGoType() != GAMEOBJECT_TYPE_GATHERING_NODE)
                         if (HasConditionalInteraction() && !HasFlag(GO_FLAG_INTERACT_COND))
                             dynFlags |= GO_DYNFLAG_LO_INTERACT_COND;
 
