@@ -19472,7 +19472,7 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_ACTION_BAR_TOGGLES));
         stmt->setUInt32(index++, m_grantableLevels);
         if (std::shared_ptr<Realm const> currentRealm = sRealmList->GetCurrentRealm())
-            stmt->setUInt32(index++, sRealmList->GetMinorMajorBugfixVersionForBuild(currentRealm->Build));
+            stmt->setUInt32(index++, ClientBuild::GetMinorMajorBugfixVersionForBuild(currentRealm->Build));
         else
             stmt->setUInt32(index++, 0);
     }
@@ -19647,7 +19647,7 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         stmt->setUInt8(index++, uint8(GetUInt32Value(PLAYER_FIELD_REST_INFO + AsUnderlyingType(REST_STATE_HONOR))));
         stmt->setFloat(index++, finiteAlways(_restMgr->GetRestBonus(REST_TYPE_HONOR)));
         if (std::shared_ptr<Realm const> currentRealm = sRealmList->GetCurrentRealm())
-            stmt->setUInt32(index++, sRealmList->GetMinorMajorBugfixVersionForBuild(currentRealm->Build));
+            stmt->setUInt32(index++, ClientBuild::GetMinorMajorBugfixVersionForBuild(currentRealm->Build));
         else
             stmt->setUInt32(index++, 0);
 
