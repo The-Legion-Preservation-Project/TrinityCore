@@ -1690,7 +1690,7 @@ void Guild::HandleInviteMember(WorldSession* session, std::string_view name)
 
     WorldPackets::Guild::GuildInvite invite;
 
-    invite.InviterVirtualRealmAddress = GetVirtualRealmAddress();
+    invite.InviterVirtualRealmAddress = player->GetVirtualPlayerRealm();
     invite.GuildVirtualRealmAddress = GetVirtualRealmAddress();
     invite.GuildGUID = GetGUID();
 
@@ -2362,7 +2362,7 @@ void Guild::SendEventPresenceChanged(WorldSession* session, bool loggedOn, bool 
     WorldPackets::Guild::GuildEventPresenceChange eventPacket;
     eventPacket.Guid = player->GetGUID();
     eventPacket.Name = player->GetName();
-    eventPacket.VirtualRealmAddress = GetVirtualRealmAddress();
+    eventPacket.VirtualRealmAddress = player->GetVirtualPlayerRealm();
     eventPacket.LoggedOn = loggedOn;
     eventPacket.Mobile = false;
 
