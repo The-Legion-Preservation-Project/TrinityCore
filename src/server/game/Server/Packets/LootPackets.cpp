@@ -46,8 +46,8 @@ WorldPacket const* WorldPackets::Loot::LootResponse::Write()
     _worldPacket << uint32(Coins);
     _worldPacket << uint32(Items.size());
     _worldPacket << uint32(Currencies.size());
-    _worldPacket.WriteBit(Acquired);
-    _worldPacket.WriteBit(AELooting);
+    _worldPacket << Bits<1>(Acquired);
+    _worldPacket << Bits<1>(AELooting);
     _worldPacket.FlushBits();
 
     for (LootItemData const& item : Items)
