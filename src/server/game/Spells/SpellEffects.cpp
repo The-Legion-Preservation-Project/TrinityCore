@@ -3629,24 +3629,18 @@ void Spell::EffectQuestComplete()
         if (!quest)
             return;
 
-        uint16 logSlot = player->FindQuestSlot(questId);
-        if (logSlot < MAX_QUEST_LOG_SIZE)
-            player->AreaExploredOrEventHappens(questId);
-        else if (quest->HasFlag(QUEST_FLAGS_TRACKING_EVENT))  // Check if the quest is used as a serverside flag.
-        {
-            // transmog unlock quests should be immediately sent to client
-            if (sDB2Manager.IsTransmogUnlockQuest(questId))
-            {
-                if (player->GetQuestStatus(questId) == QuestStatus::QUEST_STATUS_NONE)
-                    player->SetQuestStatus(questId, QuestStatus::QUEST_STATUS_INCOMPLETE);
+        QuestStatus questStatus = player->GetQuestStatus(questId);
+        if (questStatus == QUEST_STATUS_REWARDED)
+            return;
 
+        if (quest->HasFlag(QUEST_FLAGS_COMPLETION_EVENT) || quest->HasFlag(QUEST_FLAGS_COMPLETION_AREA_TRIGGER))
+        {
+            if (questStatus == QUEST_STATUS_INCOMPLETE)
                 player->AreaExploredOrEventHappens(questId);
-            }
-            else
-            {
-                // Otherwise, set status to rewarded without broadcasting it to client.
-                player->SetRewardedQuest(questId);
-            }
+        }
+        else if (quest->HasFlag(QUEST_FLAGS_TRACKING_EVENT)) // Check if the quest is used as a serverside flag
+        {
+            player->CompleteQuest(questId);
         }
     }
 }
