@@ -22,7 +22,7 @@
 #include "DB2Stores.h"
 #include "Log.h"
 #include "Player.h"
-#include "Realm.h"
+#include "RealmList.h"
 #include "World.h"
 #include "WorldSession.h"
 

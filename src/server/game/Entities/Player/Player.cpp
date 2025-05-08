@@ -4105,12 +4105,12 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
 
             loginStmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_BATTLE_PET_DECLINED_NAME_BY_OWNER);
             loginStmt->setInt64(0, guid);
-            loginStmt->setInt32(1, realm.Id.Realm);
+            loginStmt->setInt32(1, sRealmList->GetCurrentRealmId().Realm);
             loginTransaction->Append(loginStmt);
 
             loginStmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_BATTLE_PETS_BY_OWNER);
             loginStmt->setInt64(0, guid);
-            loginStmt->setInt32(1, realm.Id.Realm);
+            loginStmt->setInt32(1, sRealmList->GetCurrentRealmId().Realm);
             loginTransaction->Append(loginStmt);
 
             Corpse::DeleteFromDB(playerguid, trans);
@@ -19421,7 +19421,10 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
 
         stmt->setUInt8(index++, GetByteValue(PLAYER_FIELD_BYTES, PLAYER_FIELD_BYTES_OFFSET_ACTION_BAR_TOGGLES));
         stmt->setUInt32(index++, m_grantableLevels);
-        stmt->setUInt32(index++, sRealmList->GetMinorMajorBugfixVersionForBuild(realm.Build));
+        if (std::shared_ptr<Realm const> currentRealm = sRealmList->GetCurrentRealm())
+            stmt->setUInt32(index++, sRealmList->GetMinorMajorBugfixVersionForBuild(currentRealm->Build));
+        else
+            stmt->setUInt32(index++, 0);
     }
     else
     {
@@ -19593,7 +19596,10 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
         stmt->setUInt32(index++, GetPrestigeLevel());
         stmt->setUInt8(index++, uint8(GetUInt32Value(PLAYER_FIELD_REST_INFO + AsUnderlyingType(REST_STATE_HONOR))));
         stmt->setFloat(index++, finiteAlways(_restMgr->GetRestBonus(REST_TYPE_HONOR)));
-        stmt->setUInt32(index++, sRealmList->GetMinorMajorBugfixVersionForBuild(realm.Build));
+        if (std::shared_ptr<Realm const> currentRealm = sRealmList->GetCurrentRealm())
+            stmt->setUInt32(index++, sRealmList->GetMinorMajorBugfixVersionForBuild(currentRealm->Build));
+        else
+            stmt->setUInt32(index++, 0);
 
         // Index
         stmt->setUInt64(index, GetGUID().GetCounter());
@@ -19652,17 +19658,19 @@ void Player::SaveToDB(LoginDatabaseTransaction loginTransaction, CharacterDataba
     GetSession()->GetCollectionMgr()->SaveAccountMounts(loginTransaction);
     GetSession()->GetCollectionMgr()->SaveAccountItemAppearances(loginTransaction);
 
+    Battlenet::RealmHandle currentRealmId = sRealmList->GetCurrentRealmId();
+
     LoginDatabasePreparedStatement* loginStmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_BNET_LAST_PLAYER_CHARACTERS);
     loginStmt->setUInt32(0, GetSession()->GetAccountId());
-    loginStmt->setUInt8(1, realm.Id.Region);
-    loginStmt->setUInt8(2, realm.Id.Site);
+    loginStmt->setUInt8(1, currentRealmId.Region);
+    loginStmt->setUInt8(2, currentRealmId.Site);
     loginTransaction->Append(loginStmt);
 
     loginStmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_BNET_LAST_PLAYER_CHARACTERS);
     loginStmt->setUInt32(0, GetSession()->GetAccountId());
-    loginStmt->setUInt8(1, realm.Id.Region);
-    loginStmt->setUInt8(2, realm.Id.Site);
-    loginStmt->setUInt32(3, realm.Id.Realm);
+    loginStmt->setUInt8(1, currentRealmId.Region);
+    loginStmt->setUInt8(2, currentRealmId.Site);
+    loginStmt->setUInt32(3, currentRealmId.Realm);
     loginStmt->setString(4, GetName());
     loginStmt->setUInt64(5, GetGUID().GetCounter());
     loginStmt->setUInt32(6, GameTime::GetGameTime());
