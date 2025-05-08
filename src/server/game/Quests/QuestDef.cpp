@@ -415,8 +415,8 @@ void Quest::BuildQuestRewards(WorldPackets::Quest::QuestRewards& rewards, Player
 
     for (uint32 i = 0; i < QUEST_REWARD_ITEM_COUNT; ++i)
     {
-        rewards.ItemID[i] = RewardItemId[i];
-        rewards.ItemQty[i] = RewardItemCount[i];
+        rewards.Items[i].ItemID = RewardItemId[i];
+        rewards.Items[i].ItemQty = RewardItemCount[i];
     }
 
     for (uint32 i = 0; i < QUEST_REWARD_REPUTATIONS_COUNT; ++i)
@@ -429,8 +429,8 @@ void Quest::BuildQuestRewards(WorldPackets::Quest::QuestRewards& rewards, Player
 
     for (uint32 i = 0; i < QUEST_REWARD_CURRENCY_COUNT; ++i)
     {
-        rewards.CurrencyID[i] = RewardCurrencyId[i];
-        rewards.CurrencyQty[i] = RewardCurrencyCount[i];
+        rewards.Currencies[i].CurrencyID = RewardCurrencyId[i];
+        rewards.Currencies[i].CurrencyQty = RewardCurrencyCount[i];
     }
 }
 

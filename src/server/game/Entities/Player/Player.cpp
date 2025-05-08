@@ -15556,12 +15556,17 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object const* questgiver) const
                 break;
         }
 
-        if (quest->IsTurnIn() && CanTakeQuest(quest, false) && quest->IsRepeatable() && !quest->IsDailyOrWeekly() && !quest->IsMonthly())
+        if (quest->IsTurnIn() && CanTakeQuest(quest, false))
         {
-            if (GetLevel() > (GetQuestLevel(quest) + sWorld->getIntConfig(CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF)))
-                result |= QuestGiverStatus::RepeatableTurnin;
+            if (quest->IsRepeatable())
+            {
+                if (GetLevel() > (GetQuestLevel(quest) + sWorld->getIntConfig(CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF)))
+                    result |= QuestGiverStatus::RepeatableTurnin;
+                else
+                    result |= QuestGiverStatus::TrivialRepeatableTurnin;
+            }
             else
-                result |= QuestGiverStatus::TrivialRepeatableTurnin;
+                result |= quest->HasFlag(QUEST_FLAGS_HIDE_REWARD_POI) ? QuestGiverStatus::RewardCompleteNoPOI : QuestGiverStatus::RewardCompletePOI;
         }
     }
 

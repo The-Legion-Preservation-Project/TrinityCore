@@ -8777,7 +8777,6 @@ void Unit::UpdateNearbyPlayersInteractions()
 {
     if (GetNpcFlags())
         ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS);
-
     if (GetNpcFlags2())
         ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS + 1);
 }
@@ -13380,6 +13379,40 @@ bool Unit::SetCollision(bool disable)
     return true;
 }
 
+bool Unit::SetEnableFullSpeedTurning(bool enable)
+{
+    if (GetTypeId() != TYPEID_PLAYER)
+        return false;
+
+    if (enable == HasExtraUnitMovementFlag(MOVEMENTFLAG2_FULL_SPEED_TURNING))
+        return false;
+
+    if (enable)
+        AddExtraUnitMovementFlag(MOVEMENTFLAG2_FULL_SPEED_TURNING);
+    else
+        RemoveExtraUnitMovementFlag(MOVEMENTFLAG2_FULL_SPEED_TURNING);
+
+//    static constexpr OpcodeServer fullSpeedTurningOpcodeTable[2] =
+//    {
+//        SMSG_MOVE_DISABLE_FULL_SPEED_TURNING,
+//        SMSG_MOVE_ENABLE_FULL_SPEED_TURNING
+//    };
+//
+//    if (Player* playerMover = Unit::ToPlayer(GetUnitBeingMoved()))
+//    {
+//        WorldPackets::Movement::MoveSetFlag packet(fullSpeedTurningOpcodeTable[enable]);
+//        packet.MoverGUID = GetGUID();
+//        packet.SequenceIndex = m_movementCounter++;
+//        playerMover->SendDirectMessage(packet.Write());
+//
+//        WorldPackets::Movement::MoveUpdate moveUpdate;
+//        moveUpdate.Status = &m_movementInfo;
+//        SendMessageToSet(moveUpdate.Write(), playerMover);
+//    }
+
+    return true;
+}
+
 bool Unit::SetCanTransitionBetweenSwimAndFly(bool enable)
 {
     if (GetTypeId() != TYPEID_PLAYER)
@@ -13709,7 +13742,7 @@ void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player 
         {
             UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
 
-            if (index == UNIT_NPC_FLAGS || index == (UNIT_NPC_FLAGS + 1))
+            if (index == UNIT_NPC_FLAGS)
             {
                 uint32 appendValue = m_uint32Values[index];
                 if (appendValue)
@@ -13719,15 +13752,24 @@ void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player 
                         appendValue = 0;
                     else if (creature)
                     {
-                        if (index == UNIT_NPC_FLAGS)
-                        {
-                            if (!target->CanSeeGossipOn(creature))
-                                appendValue &= ~(UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
+                        if (!target->CanSeeGossipOn(creature))
+                            appendValue &= ~(UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
 
-                            if (!target->CanSeeSpellClickOn(creature))
-                                appendValue &= ~UNIT_NPC_FLAG_SPELLCLICK;
-                        }
+                        if (!target->CanSeeSpellClickOn(creature))
+                            appendValue &= ~UNIT_NPC_FLAG_SPELLCLICK;
                     }
+                }
+
+                *data << uint32(appendValue);
+            }
+            else if (index == UNIT_NPC_FLAGS + 1)
+            {
+                uint32 appendValue = m_uint32Values[index];
+                if (appendValue)
+                {
+                    if ((!IsInteractionAllowedInCombat() && IsInCombat())
+                        || (!IsInteractionAllowedWhileHostile() && IsHostileTo(target)))
+                        appendValue = 0;
                 }
 
                 *data << uint32(appendValue);

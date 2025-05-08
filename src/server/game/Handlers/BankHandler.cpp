@@ -56,12 +56,12 @@ void WorldSession::HandleAutoBankItemOpcode(WorldPackets::Bank::AutoBankItem& pa
     _player->BankItem(dest, item, true);
 }
 
-void WorldSession::HandleBankerActivateOpcode(WorldPackets::NPC::Hello& packet)
+void WorldSession::HandleBankerActivateOpcode(WorldPackets::Bank::BankerActivate const& bankerActivate)
 {
-    Creature* unit = GetPlayer()->GetNPCIfCanInteractWith(packet.Unit, UNIT_NPC_FLAG_BANKER, UNIT_NPC_FLAG_2_NONE);
+    Creature* unit = GetPlayer()->GetNPCIfCanInteractWith(bankerActivate.Banker, UNIT_NPC_FLAG_ACCOUNT_BANKER | UNIT_NPC_FLAG_BANKER, UNIT_NPC_FLAG_2_NONE);
     if (!unit)
     {
-        TC_LOG_ERROR("network", "WORLD: HandleBankerActivateOpcode - {} not found or you can not interact with him.", packet.Unit.ToString());
+        TC_LOG_ERROR("network", "WORLD: HandleBankerActivateOpcode - {} not found or you can not interact with him.", bankerActivate.Banker);
         return;
     }
 
@@ -71,7 +71,7 @@ void WorldSession::HandleBankerActivateOpcode(WorldPackets::NPC::Hello& packet)
 
     // set currentBankerGUID for other bank action
 
-    SendShowBank(packet.Unit);
+    SendShowBank(bankerActivate.Banker);
 }
 
 void WorldSession::HandleAutoStoreBankItemOpcode(WorldPackets::Bank::AutoStoreBankItem& packet)

@@ -95,6 +95,16 @@ namespace WorldPackets
 
             ObjectGuid Banker;
         };
+
+        class BankerActivate final : public ClientPacket
+        {
+        public:
+            explicit BankerActivate(WorldPacket&& packet) : ClientPacket(CMSG_BANKER_ACTIVATE, std::move(packet)) { }
+
+            void Read() override;
+
+            ObjectGuid Banker;
+        };
     }
 }
 #endif // BankPackets_h__

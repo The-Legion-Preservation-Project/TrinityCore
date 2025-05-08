@@ -54,3 +54,8 @@ void WorldPackets::Bank::ReagentBank::Read()
 {
     _worldPacket >> Banker;
 }
+
+void WorldPackets::Bank::BankerActivate::Read()
+{
+    _worldPacket >> Banker;
+}

@@ -18,30 +18,43 @@
 #include "ReputationPackets.h"
 #include "PacketUtilities.h"
 
-WorldPacket const* WorldPackets::Reputation::InitializeFactions::Write()
+namespace WorldPackets::Reputation
 {
-    for (uint16 i = 0; i < FactionCount; ++i)
-    {
-        _worldPacket << uint8(FactionFlags[i]);
-        _worldPacket << int32(FactionStandings[i]);
-    }
+ByteBuffer& operator<<(ByteBuffer& data, FactionData const& factionData)
+{
+    data << uint8(factionData.Flags);
+    data << int32(factionData.Standing);
 
-    for (uint16 i = 0; i < FactionCount; ++i)
-        _worldPacket.WriteBit(FactionHasBonus[i]);
+    return data;
+}
+
+ByteBuffer& operator<<(ByteBuffer& data, FactionBonusData const& factionBonusData)
+{
+    data << Bits<1>(factionBonusData.FactionHasBonus);
+    return data;
+}
+
+WorldPacket const* InitializeFactions::Write()
+{
+    for (FactionData const& faction : Factions)
+        _worldPacket << faction;
+
+    for (FactionBonusData const& bonus : Bonuses)
+        _worldPacket << bonus;
 
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Reputation::ForcedReaction const& forcedReaction)
+ByteBuffer& operator<<(ByteBuffer& data, ForcedReaction const& forcedReaction)
 {
     data << int32(forcedReaction.Faction);
     data << int32(forcedReaction.Reaction);
     return data;
 }
 
-WorldPacket const* WorldPackets::Reputation::SetForcedReactions::Write()
+WorldPacket const* SetForcedReactions::Write()
 {
     _worldPacket << uint32(Reactions.size());
     for (ForcedReaction const& reaction : Reactions)
@@ -50,14 +63,14 @@ WorldPacket const* WorldPackets::Reputation::SetForcedReactions::Write()
     return &_worldPacket;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Reputation::FactionStandingData const& factionStanding)
+ByteBuffer& operator<<(ByteBuffer& data, FactionStandingData const& factionStanding)
 {
     data << int32(factionStanding.Index);
     data << int32(factionStanding.Standing);
     return data;
 }
 
-WorldPacket const* WorldPackets::Reputation::SetFactionStanding::Write()
+WorldPacket const* SetFactionStanding::Write()
 {
     _worldPacket << float(ReferAFriendBonus);
     _worldPacket << float(BonusFromAchievementSystem);
@@ -69,4 +82,5 @@ WorldPacket const* WorldPackets::Reputation::SetFactionStanding::Write()
     _worldPacket.FlushBits();
 
     return &_worldPacket;
+}
 }

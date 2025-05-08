@@ -30,7 +30,6 @@ namespace WorldPackets
 {
     namespace NPC
     {
-        // CMSG_BANKER_ACTIVATE
         // CMSG_BINDER_ACTIVATE
         // CMSG_BINDER_CONFIRM
         // CMSG_GOSSIP_HELLO
@@ -59,11 +58,11 @@ namespace WorldPackets
 
         struct ClientGossipText
         {
-            int32 QuestID       = 0;
-            int32 QuestType     = 0;
-            int32 QuestLevel    = 0;
+            int32 QuestID = 0;
+            int32 QuestType = 0;
+            int32 QuestLevel = 0;
             int32 QuestMaxScalingLevel = 0;
-            bool Repeatable     = false;
+            bool Repeatable = false;
             std::string QuestTitle;
             std::array<int32, 2> QuestFlags = { };
         };

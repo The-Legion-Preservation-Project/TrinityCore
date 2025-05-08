@@ -232,10 +232,22 @@ namespace WorldPackets
             uint16 Count = 0;
         };
 
+        struct QuestRewardItem
+        {
+            int32 ItemID = 0;
+            int32 ItemQty = 0;
+        };
+
         struct QuestChoiceItem
         {
             Item::ItemInstance Item;
             int32 Quantity  = 0;
+        };
+
+        struct QuestRewardCurrency
+        {
+            int32 CurrencyID = 0;
+            int32 CurrencyQty = 0;
         };
 
         struct QuestRewards
@@ -255,14 +267,12 @@ namespace WorldPackets
             int32 NumSkillUps               = 0;
             int32 TreasurePickerID          = 0;
             std::array<QuestChoiceItem, QUEST_REWARD_CHOICES_COUNT> ChoiceItems = { };
-            std::array<int32, QUEST_REWARD_ITEM_COUNT> ItemID = { };
-            std::array<int32, QUEST_REWARD_ITEM_COUNT> ItemQty = { };
+            std::array<QuestRewardItem, QUEST_REWARD_ITEM_COUNT> Items = { };
             std::array<int32, QUEST_REWARD_REPUTATIONS_COUNT> FactionID = { };
             std::array<int32, QUEST_REWARD_REPUTATIONS_COUNT> FactionValue = { };
             std::array<int32, QUEST_REWARD_REPUTATIONS_COUNT> FactionOverride = { };
             std::array<int32, QUEST_REWARD_REPUTATIONS_COUNT> FactionCapIn = { };
-            std::array<int32, QUEST_REWARD_CURRENCY_COUNT> CurrencyID = { };
-            std::array<int32, QUEST_REWARD_CURRENCY_COUNT> CurrencyQty = { };
+            std::array<QuestRewardCurrency, QUEST_REWARD_CURRENCY_COUNT> Currencies = { };
             bool IsBoostSpell = false;
         };
 

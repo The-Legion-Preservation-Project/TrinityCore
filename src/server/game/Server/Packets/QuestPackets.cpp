@@ -235,8 +235,8 @@ ByteBuffer& operator<<(ByteBuffer& data, QuestRewards const& questRewards)
 
     for (uint32 i = 0; i < QUEST_REWARD_ITEM_COUNT; ++i)
     {
-        data << int32(questRewards.ItemID[i]);
-        data << int32(questRewards.ItemQty[i]);
+        data << int32(questRewards.Items[i].ItemID);
+        data << int32(questRewards.Items[i].ItemQty);
     }
 
     data << int32(questRewards.Money);
@@ -262,8 +262,8 @@ ByteBuffer& operator<<(ByteBuffer& data, QuestRewards const& questRewards)
 
     for (uint32 i = 0; i < QUEST_REWARD_CURRENCY_COUNT; ++i)
     {
-        data << int32(questRewards.CurrencyID[i]);
-        data << int32(questRewards.CurrencyQty[i]);
+        data << int32(questRewards.Currencies[i].CurrencyID);
+        data << int32(questRewards.Currencies[i].CurrencyQty);
     }
 
     data << int32(questRewards.SkillLineID);

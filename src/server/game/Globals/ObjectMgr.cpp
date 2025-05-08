@@ -9677,19 +9677,22 @@ void ObjectMgr::LoadGossipMenuAddon()
         GossipMenuAddon& addon = _gossipMenuAddonStore[menuID];
         addon.FriendshipFactionID = fields[1].GetInt32();
 
-        if (FactionEntry const* faction = sFactionStore.LookupEntry(addon.FriendshipFactionID))
+        if (addon.FriendshipFactionID)
         {
-            if (!sFriendshipReputationStore.LookupEntry(faction->FriendshipRepID))
+            if (FactionEntry const* faction = sFactionStore.LookupEntry(addon.FriendshipFactionID))
             {
-                TC_LOG_ERROR("sql.sql", "Table gossip_menu_addon: ID {} is using FriendshipFactionID {} referencing non-existing FriendshipRepID {}",
-                    menuID, addon.FriendshipFactionID, faction->FriendshipRepID);
+                if (!sFriendshipReputationStore.LookupEntry(faction->FriendshipRepID))
+                {
+                    TC_LOG_ERROR("sql.sql", "Table gossip_menu_addon: ID {} is using FriendshipFactionID {} referencing non-existing FriendshipRepID {}",
+                        menuID, addon.FriendshipFactionID, faction->FriendshipRepID);
+                    addon.FriendshipFactionID = 0;
+                }
+            }
+            else
+            {
+                TC_LOG_ERROR("sql.sql", "Table gossip_menu_addon: ID {} is using non-existing FriendshipFactionID {}", menuID, addon.FriendshipFactionID);
                 addon.FriendshipFactionID = 0;
             }
-        }
-        else
-        {
-            TC_LOG_ERROR("sql.sql", "Table gossip_menu_addon: ID {} is using non-existing FriendshipFactionID {}", menuID, addon.FriendshipFactionID);
-            addon.FriendshipFactionID = 0;
         }
 
     } while (result->NextRow());

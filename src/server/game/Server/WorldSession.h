@@ -143,6 +143,7 @@ namespace WorldPackets
         class AutoBankReagent;
         class AutoStoreBankReagent;
         class ReagentBank;
+        class BankerActivate;
     }
 
     namespace Battleground
@@ -1382,7 +1383,7 @@ class TC_GAME_API WorldSession
         void HandleTaxiRequestEarlyLanding(WorldPackets::Taxi::TaxiRequestEarlyLanding& taxiRequestEarlyLanding);
 
         void HandleTabardVendorActivateOpcode(WorldPackets::NPC::Hello& packet);
-        void HandleBankerActivateOpcode(WorldPackets::NPC::Hello& packet);
+        void HandleBankerActivateOpcode(WorldPackets::Bank::BankerActivate const& bankerActivate);
         void HandleTrainerListOpcode(WorldPackets::NPC::Hello& packet);
         void HandleTrainerBuySpellOpcode(WorldPackets::NPC::TrainerBuySpell& packet);
         void HandlePetitionShowList(WorldPackets::Petition::PetitionShowList& packet);

@@ -1861,7 +1861,7 @@ void OpcodeTable::InitializeServerOpcodes()
     DEFINE_SERVER_OPCODE_HANDLER(SMSG_MULTIPLE_PACKETS,                        STATUS_UNHANDLED,    CONNECTION_TYPE_REALM);
 
 #undef DEFINE_SERVER_OPCODE_HANDLER
-};
+}
 
 template<std::size_t MIN_OPCODE, std::size_t MAX_OPCODE, typename T>
 inline std::string GetOpcodeNameForLoggingImpl(T id)
