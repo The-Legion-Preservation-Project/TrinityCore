@@ -6983,4 +6983,11 @@ enum WorldState : uint32
     WS_BATTLEFIELD_TB_EAST_DAMAGED_NEUTRAL   = 5452,
 };
 
+enum class SoundKitPlayType : uint8
+{
+    Normal      = 0,
+    ObjectSound = 1,
+    Max         = 2
+};
+
 #endif
