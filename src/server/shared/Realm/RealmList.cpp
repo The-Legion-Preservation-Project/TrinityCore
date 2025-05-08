@@ -81,14 +81,17 @@ void RealmList::Close()
 
 void RealmList::LoadBuildInfo()
 {
+    _builds.clear();
+
     //                                                              0             1              2              3      4              5              6
     if (QueryResult result = LoginDatabase.Query("SELECT majorVersion, minorVersion, bugfixVersion, hotfixVersion, build, win64AuthSeed, mac64AuthSeed FROM build_info ORDER BY build ASC"))
     {
         do
         {
+            using namespace ClientBuild;
+
             Field* fields = result->Fetch();
-            _builds.emplace_back();
-            RealmBuildInfo& build = _builds.back();
+            Info& build = _builds.emplace_back();
             build.MajorVersion = fields[0].GetUInt32();
             build.MinorVersion = fields[1].GetUInt32();
             build.BugfixVersion = fields[2].GetUInt32();
@@ -100,16 +103,20 @@ void RealmList::LoadBuildInfo()
 
             build.Build = fields[4].GetUInt32();
             std::string win64AuthSeedHexStr = fields[5].GetString();
-            if (win64AuthSeedHexStr.length() == build.Win64AuthSeed.size() * 2)
-                HexStrToByteArray(win64AuthSeedHexStr, build.Win64AuthSeed);
-            else
-                build.Win64AuthSeed = { };
+            if (win64AuthSeedHexStr.length() == AuthKey::Size * 2)
+            {
+                AuthKey& buildKey = build.AuthKeys.emplace_back();
+                buildKey.Variant = { .Platform = PlatformType::Windows, .Arch = Arch::x64, .Type = Type::Retail };
+                HexStrToByteArray(win64AuthSeedHexStr, buildKey.Key);
+            }
 
             std::string mac64AuthSeedHexStr = fields[6].GetString();
-            if (mac64AuthSeedHexStr.length() == build.Mac64AuthSeed.size() * 2)
-                HexStrToByteArray(mac64AuthSeedHexStr, build.Mac64AuthSeed);
-            else
-                build.Mac64AuthSeed = { };
+            if (mac64AuthSeedHexStr.length() == AuthKey::Size * 2)
+            {
+                AuthKey& buildKey = build.AuthKeys.emplace_back();
+                buildKey.Variant = { .Platform = PlatformType::macOS, .Arch = Arch::x64, .Type = Type::Retail };
+                HexStrToByteArray(mac64AuthSeedHexStr, buildKey.Key);
+            }
 
         } while (result->NextRow());
     }
@@ -254,15 +261,15 @@ std::shared_ptr<Realm const> RealmList::GetCurrentRealm() const
     return nullptr;
 }
 
-RealmBuildInfo const* RealmList::GetBuildInfo(uint32 build) const
+ClientBuild::Info const* RealmList::GetBuildInfo(uint32 build) const
 {
-    auto buildInfo = std::ranges::find(_builds, build, &RealmBuildInfo::Build);
+    auto buildInfo = std::ranges::find(_builds, build, &ClientBuild::Info::Build);
     return buildInfo != _builds.end() ? &*buildInfo : nullptr;
 }
 
 uint32 RealmList::GetMinorMajorBugfixVersionForBuild(uint32 build) const
 {
-    auto buildInfo = std::ranges::lower_bound(_builds, build, {}, &RealmBuildInfo::Build);
+    auto buildInfo = std::ranges::lower_bound(_builds, build, {}, &ClientBuild::Info::Build);
     return buildInfo != _builds.end() ? (buildInfo->MajorVersion * 10000 + buildInfo->MinorVersion * 100 + buildInfo->BugfixVersion) : 0;
 }
 
@@ -285,7 +292,7 @@ void RealmList::FillRealmEntry(Realm const& realm, uint32 clientBuild, AccountTy
     realmEntry->set_cfgcategoriesid(realm.Timezone);
 
     JSON::RealmList::ClientVersion* version = realmEntry->mutable_version();
-    if (RealmBuildInfo const* buildInfo = GetBuildInfo(realm.Build))
+    if (ClientBuild::Info const* buildInfo = GetBuildInfo(realm.Build))
     {
         version->set_versionmajor(buildInfo->MajorVersion);
         version->set_versionminor(buildInfo->MinorVersion);
@@ -361,9 +368,9 @@ std::vector<uint8> RealmList::GetRealmList(uint32 build, AccountTypes accountSec
     return compressed;
 }
 
-uint32 RealmList::JoinRealm(uint32 realmAddress, uint32 build, boost::asio::ip::address const& clientAddress, std::array<uint8, 32> const& clientSecret,
-    LocaleConstant locale, std::string const& os, Minutes timezoneOffset, std::string const& accountName, AccountTypes accountSecurityLevel,
-    bgs::protocol::game_utilities::v1::ClientResponse* response) const
+uint32 RealmList::JoinRealm(uint32 realmAddress, uint32 build, ClientBuild::VariantId const& buildVariant, boost::asio::ip::address const& clientAddress,
+    std::array<uint8, 32> const& clientSecret, LocaleConstant locale, std::string const& os, Minutes timezoneOffset, std::string const& accountName,
+    AccountTypes accountSecurityLevel, bgs::protocol::game_utilities::v1::ClientResponse* response) const
 {
     if (std::shared_ptr<Realm const> realm = GetRealm(realmAddress))
     {
@@ -401,9 +408,15 @@ uint32 RealmList::JoinRealm(uint32 realmAddress, uint32 build, boost::asio::ip::
         stmt->setString(6, accountName);
         LoginDatabase.DirectExecute(stmt);
 
+        JSON::RealmList::RealmJoinTicket joinTicket;
+        joinTicket.set_gameaccount(accountName);
+        joinTicket.set_platform(buildVariant.Platform);
+        joinTicket.set_clientarch(buildVariant.Arch);
+        joinTicket.set_type(buildVariant.Type);
+
         bgs::protocol::Attribute* attribute = response->add_attribute();
         attribute->set_name("Param_RealmJoinTicket");
-        attribute->mutable_value()->set_blob_value(accountName);
+        attribute->mutable_value()->set_blob_value(JSON::Serialize(joinTicket));
 
         attribute = response->add_attribute();
         attribute->set_name("Param_ServerAddresses");
