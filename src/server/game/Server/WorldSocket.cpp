@@ -726,7 +726,7 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<WorldPackets::Auth::
     Trinity::Crypto::HMAC_SHA256 hmac(digestKeyHash.GetDigest());
     hmac.UpdateData(authSession->LocalChallenge);
     hmac.UpdateData(_serverChallenge);
-    hmac.UpdateData(AuthCheckSeed, 16);
+    hmac.UpdateData(AuthCheckSeed);
     hmac.Finalize();
 
     // Check that Key and account name are the same on client and server
@@ -745,7 +745,7 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<WorldPackets::Auth::
     Trinity::Crypto::HMAC_SHA256 sessionKeyHmac(keyData.GetDigest());
     sessionKeyHmac.UpdateData(_serverChallenge);
     sessionKeyHmac.UpdateData(authSession->LocalChallenge);
-    sessionKeyHmac.UpdateData(SessionKeySeed, 16);
+    sessionKeyHmac.UpdateData(SessionKeySeed);
     sessionKeyHmac.Finalize();
 
     SessionKeyGenerator<Trinity::Crypto::SHA256> sessionKeyGenerator(sessionKeyHmac.GetDigest());
@@ -942,7 +942,7 @@ void WorldSocket::HandleAuthContinuedSessionCallback(std::shared_ptr<WorldPacket
     hmac.UpdateData(reinterpret_cast<uint8 const*>(&authSession->Key), sizeof(authSession->Key));
     hmac.UpdateData(authSession->LocalChallenge);
     hmac.UpdateData(_serverChallenge);
-    hmac.UpdateData(ContinuedSessionSeed, 16);
+    hmac.UpdateData(ContinuedSessionSeed);
     hmac.Finalize();
 
     if (memcmp(hmac.GetDigest().data(), authSession->Digest.data(), authSession->Digest.size()))

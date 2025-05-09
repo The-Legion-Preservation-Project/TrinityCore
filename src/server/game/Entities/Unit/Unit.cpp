@@ -2213,7 +2213,7 @@ void Unit::AttackerStateUpdate(Unit* victim, WeaponAttackType attType, bool extr
                 if (uint32 rageReward = CalcMeleeAttackRageGain(this, attType))
                 {
                     damageInfo.HitInfo |= HITINFO_RAGE_GAIN;
-                    damageInfo.RageGained = RewardRage(rageReward);
+                    damageInfo.RageGained = RewardRage(rageReward, true);
                 }
             }
 

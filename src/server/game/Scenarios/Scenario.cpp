@@ -25,6 +25,7 @@
 #include "WorldSession.h"
 
 Scenario::Scenario(Map* map, ScenarioData const* scenarioData) : _map(map), _data(scenarioData),
+    _guid(ObjectGuid::Create<HighGuid::Scenario>(map->GetId(), scenarioData->Entry->ID, map->GenerateLowGuid<HighGuid::Scenario>())),
     _currentstep(nullptr)
 {
     ASSERT(_data);

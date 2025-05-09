@@ -75,7 +75,7 @@ void VignetteData::FillPacket(WorldPackets::Vignette::VignetteDataSet& dataSet) 
     data.ZoneID = ZoneID;
     data.WMOGroupID = WMOGroupID;
     data.WMODoodadPlacementID = WMODoodadPlacementID;
-    data.HealthPercent = HealthPercent;
+    //data.HealthPercent = HealthPercent;
 }
 
 std::unique_ptr<VignetteData> Create(VignetteEntry const* vignetteData, WorldObject const* owner)

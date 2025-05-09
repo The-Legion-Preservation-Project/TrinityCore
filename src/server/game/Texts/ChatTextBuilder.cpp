@@ -57,8 +57,7 @@ ChatPacketSender::ChatPacketSender(ChatMsg chatType, ::Language language, WorldO
                 receiver ? receiver->GetGUID() : ObjectGuid::Empty,
                 sender ? sender->GetGUID() : ObjectGuid::Empty,
                 soundKitId,
-                receiver ? receiver->GetWorldLocation() : Position(0, 0, 0),
-                broadcastTextId
+                receiver ? receiver->GetWorldLocation() : Position(0, 0, 0)
             );
         }
         SoundPacket->Write();

@@ -387,8 +387,8 @@ INSERT INTO `gameobject` (`guid`, `id`, `map`, `zoneId`, `areaId`, `spawnDifficu
 
 -- Scenes
 DELETE FROM `scene_template` WHERE `SceneId`=90;
-INSERT INTO `scene_template` (`SceneId`, `Flags`, `ScriptPackageID`, `Encrypted`) VALUES
-(90, 0, 239, 0);
+INSERT INTO `scene_template` (`SceneId`, `Flags`, `ScriptPackageID`) VALUES
+(90, 0, 239);
 
 -- Phases
 DELETE FROM `phase_area` WHERE `AreaId`=6555 AND `PhaseId`=1686;
