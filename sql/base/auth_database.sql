@@ -2265,10 +2265,12 @@ DROP TABLE IF EXISTS `realmlist`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `realmlist` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '127.0.0.1',
-  `localAddress` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '127.0.0.1',
-  `localSubnetMask` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '255.255.255.0',
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '127.0.0.1',
+  `localAddress` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '127.0.0.1',
+  `address3` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address4` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `localSubnetMask` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '255.255.255.0',
   `port` smallint unsigned NOT NULL DEFAULT '8085',
   `icon` tinyint unsigned NOT NULL DEFAULT '0',
   `flag` tinyint unsigned NOT NULL DEFAULT '2',
@@ -2290,7 +2292,7 @@ CREATE TABLE `realmlist` (
 LOCK TABLES `realmlist` WRITE;
 /*!40000 ALTER TABLE `realmlist` DISABLE KEYS */;
 INSERT INTO `realmlist` VALUES
-(1,'Trinity','127.0.0.1','127.0.0.1','255.255.255.0',8085,0,0,1,0,0,26972,1,1);
+(1,'Trinity','127.0.0.1','127.0.0.1',NULL,NULL,'255.255.255.0',8085,0,0,1,0,0,26972,1,1);
 /*!40000 ALTER TABLE `realmlist` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2520,7 +2522,8 @@ INSERT INTO `updates` VALUES
 ('2024_08_18_00_auth.sql','5C1D0A3FE0245F4030FE446288AE533556EC6C9E','RELEASED','2024-08-17 23:01:21',0),
 ('2024_08_30_00_auth.sql','BD76942F1C29AAA2450E051E7CA552672B5E331B','RELEASED','2024-08-30 19:24:30',0),
 ('2024_09_26_00_auth.sql','E37C3997FD7851EA360774AC568912846C448272','RELEASED','2024-09-26 18:27:26',0),
-('2024_11_11_00_auth.sql','F47CDFB857DB4105306739AF4FBBB3C92CA43363','RELEASED','2024-11-11 13:34:09',0);
+('2024_11_11_00_auth.sql','F47CDFB857DB4105306739AF4FBBB3C92CA43363','RELEASED','2024-11-11 13:34:09',0),
+('2024_11_12_00_auth.sql','5A236A557291758C0F2C46FDEC02692E7C53F751','RELEASED','2024-11-12 11:42:13',0);
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
