@@ -611,7 +611,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         }
 
         if (hasOrbit)
-            *data << *areaTrigger->GetOrbit();
+            *data << areaTrigger->GetOrbit();
     }
 
     if (flags.GameObject)
