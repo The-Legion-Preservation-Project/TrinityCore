@@ -26,6 +26,7 @@
 #include "GameTime.h"
 #include "HMAC.h"
 #include "IPLocation.h"
+#include "IpBanCheckConnectionInitializer.h"
 #include "PacketLog.h"
 #include "ProtobufJSON.h"
 #include "RealmList.h"
@@ -33,6 +34,7 @@
 #include "RealmList.pb.h"
 #include "ScriptMgr.h"
 #include "SessionKeyGenerator.h"
+#include "SslStream.h"
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
@@ -49,8 +51,6 @@ struct CompressedWorldPacket
 
 #pragma pack(pop)
 
-std::string const WorldSocket::ServerConnectionInitialize("WORLD OF WARCRAFT CONNECTION - SERVER TO CLIENT");
-std::string const WorldSocket::ClientConnectionInitialize("WORLD OF WARCRAFT CONNECTION - CLIENT TO SERVER");
 uint32 const WorldSocket::MinSizeForCompression = 0x400;
 
 uint32 const SizeOfClientHeader = sizeof(uint32) + sizeof(uint16);
@@ -60,7 +60,7 @@ std::array<uint8, 16> const WorldSocket::AuthCheckSeed = { 0xC5, 0xC6, 0x98, 0x9
 std::array<uint8, 16> const WorldSocket::SessionKeySeed = { 0x58, 0xCB, 0xCF, 0x40, 0xFE, 0x2E, 0xCE, 0xA6, 0x5A, 0x90, 0xB8, 0x01, 0x68, 0x6C, 0x28, 0x0B };
 std::array<uint8, 16> const WorldSocket::ContinuedSessionSeed = { 0x16, 0xAD, 0x0C, 0xD4, 0x46, 0xF9, 0x4F, 0xB2, 0xEF, 0x7D, 0xEA, 0x2A, 0x17, 0x66, 0x4D, 0x2F };
 
-WorldSocket::WorldSocket(boost::asio::ip::tcp::socket&& socket) : Socket(std::move(socket)),
+WorldSocket::WorldSocket(Trinity::Net::IoContextTcpSocket&& socket) : BaseSocket(std::move(socket)),
     _type(CONNECTION_TYPE_REALM), _key(0), _serverChallenge(), _sessionKey(), _OverSpeedPings(0),
     _worldSession(nullptr), _authed(false), _headerBuffer(SizeOfClientHeader), _sendBufferSize(4096), _compressionStream(nullptr)
 {
@@ -75,127 +75,127 @@ WorldSocket::~WorldSocket()
     }
 }
 
+struct WorldSocketProtocolInitializer final : Trinity::Net::SocketConnectionInitializer
+{
+    static constexpr std::string_view ServerConnectionInitialize = "WORLD OF WARCRAFT CONNECTION - SERVER TO CLIENT";
+    static constexpr std::string_view ClientConnectionInitialize = "WORLD OF WARCRAFT CONNECTION - CLIENT TO SERVER";
+
+    explicit WorldSocketProtocolInitializer(WorldSocket* socket) : _socket(socket) { }
+
+    void Start() override
+    {
+        _packetBuffer.Resize(ClientConnectionInitialize.length());
+
+        AsyncRead();
+
+        MessageBuffer initializer;
+        initializer.Write(ServerConnectionInitialize.data(), ServerConnectionInitialize.length());
+
+        // - IoContext.run thread, safe.
+        _socket->QueuePacket(std::move(initializer));
+    }
+
+    void AsyncRead()
+    {
+        _socket->AsyncRead(
+            [socketRef = _socket->weak_from_this(), self = static_pointer_cast<WorldSocketProtocolInitializer>(this->shared_from_this())]
+            {
+                if (!socketRef.expired())
+                    return self->ReadHandler();
+
+                return Trinity::Net::SocketReadCallbackResult::Stop;
+            });
+    }
+
+    Trinity::Net::SocketReadCallbackResult ReadHandler();
+
+    void HandleDataReady();
+
+private:
+    WorldSocket* _socket;
+    MessageBuffer _packetBuffer;
+};
+
 void WorldSocket::Start()
 {
-    std::string ip_address = GetRemoteIpAddress().to_string();
-    LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_IP_INFO);
-    stmt->setString(0, ip_address);
+    // build initializer chain
+    std::array<std::shared_ptr<Trinity::Net::SocketConnectionInitializer>, 3> initializers =
+    { {
+        std::make_shared<Trinity::Net::IpBanCheckConnectionInitializer<WorldSocket>>(this),
+        std::make_shared<WorldSocketProtocolInitializer>(this),
+        std::make_shared<Trinity::Net::ReadConnectionInitializer<WorldSocket>>(this),
+    } };
 
-    _queryProcessor.AddCallback(LoginDatabase.AsyncQuery(stmt).WithPreparedCallback([self = shared_from_this()](PreparedQueryResult result)
-    {
-        self->CheckIpCallback(std::move(result));
-    }));
+    Trinity::Net::SocketConnectionInitializer::SetupChain(initializers)->Start();
 }
 
-void WorldSocket::CheckIpCallback(PreparedQueryResult result)
+Trinity::Net::SocketReadCallbackResult WorldSocketProtocolInitializer::ReadHandler()
 {
-    if (result)
+    MessageBuffer& packet = _socket->GetReadBuffer();
+    if (packet.GetActiveSize() > 0 && _packetBuffer.GetRemainingSpace() > 0)
     {
-        bool banned = false;
-        do
-        {
-            Field* fields = result->Fetch();
-            if (fields[0].GetUInt64() != 0)
-                banned = true;
+        // need to receive the header
+        std::size_t readHeaderSize = std::min(packet.GetActiveSize(), _packetBuffer.GetRemainingSpace());
+        _packetBuffer.Write(packet.GetReadPointer(), readHeaderSize);
+        packet.ReadCompleted(readHeaderSize);
 
-        } while (result->NextRow());
-
-        if (banned)
+        if (_packetBuffer.GetRemainingSpace() == 0)
         {
-            TC_LOG_ERROR("network", "WorldSocket::CheckIpCallback: Sent Auth Response (IP {} banned).", GetRemoteIpAddress().to_string());
-            DelayedCloseSocket();
+            HandleDataReady();
+            return Trinity::Net::SocketReadCallbackResult::Stop;
+        }
+
+        // Couldn't receive the whole header this time.
+        ASSERT(packet.GetActiveSize() == 0);
+    }
+
+    return Trinity::Net::SocketReadCallbackResult::KeepReading;
+}
+
+void WorldSocketProtocolInitializer::HandleDataReady()
+{
+    try
+    {
+        ByteBuffer buffer(std::move(_packetBuffer));
+        if (buffer.ReadString(ClientConnectionInitialize.length()) != ClientConnectionInitialize)
+        {
+            _socket->CloseSocket();
             return;
         }
     }
-
-    _packetBuffer.Resize(ClientConnectionInitialize.length() + 1);
-
-    AsyncReadWithCallback(&WorldSocket::InitializeHandler);
-
-    MessageBuffer initializer;
-    initializer.Write(ServerConnectionInitialize.c_str(), ServerConnectionInitialize.length());
-    initializer.Write("\n", 1);
-
-    // - IoContext.run thread, safe.
-    QueuePacket(std::move(initializer));
-}
-
-void WorldSocket::InitializeHandler(boost::system::error_code const& error, std::size_t transferedBytes)
-{
-    if (error)
+    catch (ByteBufferException const& ex)
     {
-        CloseSocket();
+        TC_LOG_ERROR("network", "WorldSocket::InitializeHandler ByteBufferException {} occured while parsing initial packet from {}",
+            ex.what(), _socket->GetRemoteIpAddress().to_string());
+        _socket->CloseSocket();
         return;
     }
 
-    GetReadBuffer().WriteCompleted(transferedBytes);
+    if (!_socket->InitializeCompression())
+        return;
 
-    MessageBuffer& packet = GetReadBuffer();
-    if (packet.GetActiveSize() > 0)
+    _socket->SendAuthSession();
+    if (next)
+        next->Start();
+}
+
+bool WorldSocket::InitializeCompression()
+{
+    _compressionStream = new z_stream();
+    _compressionStream->zalloc = (alloc_func)nullptr;
+    _compressionStream->zfree = (free_func)nullptr;
+    _compressionStream->opaque = (voidpf)nullptr;
+    _compressionStream->avail_in = 0;
+    _compressionStream->next_in = nullptr;
+    int32 z_res = deflateInit2(_compressionStream, sWorld->getIntConfig(CONFIG_COMPRESSION), Z_DEFLATED, -15, 8, Z_DEFAULT_STRATEGY);
+    if (z_res != Z_OK)
     {
-        if (_packetBuffer.GetRemainingSpace() > 0)
-        {
-            // need to receive the header
-            std::size_t readHeaderSize = std::min(packet.GetActiveSize(), _packetBuffer.GetRemainingSpace());
-            _packetBuffer.Write(packet.GetReadPointer(), readHeaderSize);
-            packet.ReadCompleted(readHeaderSize);
-
-            if (_packetBuffer.GetRemainingSpace() > 0)
-            {
-                // Couldn't receive the whole header this time.
-                ASSERT(packet.GetActiveSize() == 0);
-                AsyncReadWithCallback(&WorldSocket::InitializeHandler);
-                return;
-            }
-
-            try
-            {
-                ByteBuffer buffer(std::move(_packetBuffer));
-                std::string initializer(buffer.ReadString(ClientConnectionInitialize.length()));
-                if (initializer != ClientConnectionInitialize)
-                {
-                    CloseSocket();
-                    return;
-                }
-
-                uint8 terminator;
-                buffer >> terminator;
-                if (terminator != '\n')
-                {
-                    CloseSocket();
-                    return;
-                }
-            }
-            catch (ByteBufferException const& ex)
-            {
-                TC_LOG_ERROR("network", "WorldSocket::InitializeHandler ByteBufferException {} occured while parsing initial packet from {}",
-                    ex.what(), GetRemoteIpAddress().to_string());
-                CloseSocket();
-                return;
-            }
-
-            _compressionStream = new z_stream();
-            _compressionStream->zalloc = (alloc_func)nullptr;
-            _compressionStream->zfree = (free_func)nullptr;
-            _compressionStream->opaque = (voidpf)nullptr;
-            _compressionStream->avail_in = 0;
-            _compressionStream->next_in = nullptr;
-            int32 z_res = deflateInit2(_compressionStream, sWorld->getIntConfig(CONFIG_COMPRESSION), Z_DEFLATED, -15, 8, Z_DEFAULT_STRATEGY);
-            if (z_res != Z_OK)
-            {
-                CloseSocket();
-                TC_LOG_ERROR("network", "Can't initialize packet compression (zlib: deflateInit) Error code: {} ({})", z_res, zError(z_res));
-                return;
-            }
-
-            _packetBuffer.Reset();
-            HandleSendAuthSession();
-            AsyncRead();
-            return;
-        }
+        CloseSocket();
+        TC_LOG_ERROR("network", "Can't initialize packet compression (zlib: deflateInit) Error code: {} ({})", z_res, zError(z_res));
+        return false;
     }
 
-    AsyncReadWithCallback(&WorldSocket::InitializeHandler);
+    return true;
 }
 
 bool WorldSocket::Update()
@@ -204,7 +204,7 @@ bool WorldSocket::Update()
     MessageBuffer buffer(_sendBufferSize);
     while (_bufferQueue.Dequeue(queued))
     {
-        uint32 packetSize = queued->size() + 2 /*opcode*/;
+        uint32 packetSize = queued->size() + 4 /*opcode*/;
         if (packetSize > MinSizeForCompression && queued->NeedsEncryption())
             packetSize = deflateBound(_compressionStream, packetSize) + sizeof(CompressedWorldPacket);
 
@@ -238,7 +238,7 @@ bool WorldSocket::Update()
     return true;
 }
 
-void WorldSocket::HandleSendAuthSession()
+void WorldSocket::SendAuthSession()
 {
     Trinity::Crypto::GetRandomBytes(_serverChallenge);
 
@@ -262,11 +262,8 @@ void WorldSocket::OnClose()
     }
 }
 
-void WorldSocket::ReadHandler()
+Trinity::Net::SocketReadCallbackResult WorldSocket::ReadHandler()
 {
-    if (!IsOpen())
-        return;
-
     MessageBuffer& packet = GetReadBuffer();
     while (packet.GetActiveSize() > 0)
     {
@@ -288,7 +285,7 @@ void WorldSocket::ReadHandler()
             if (!ReadHeaderHandler())
             {
                 CloseSocket();
-                return;
+                return Trinity::Net::SocketReadCallbackResult::Stop;
             }
         }
 
@@ -316,11 +313,16 @@ void WorldSocket::ReadHandler()
             if (result != ReadDataHandlerResult::WaitingForQuery)
                 CloseSocket();
 
-            return;
+            return Trinity::Net::SocketReadCallbackResult::Stop;
         }
     }
 
-    AsyncRead();
+    return Trinity::Net::SocketReadCallbackResult::KeepReading;
+}
+
+void WorldSocket::QueueQuery(QueryCallback&& queryCallback)
+{
+    _queryProcessor.AddCallback(std::move(queryCallback));
 }
 
 void WorldSocket::SetWorldSession(WorldSession* session)
@@ -497,14 +499,13 @@ WorldSocket::ReadDataHandlerResult WorldSocket::ReadDataHandler()
 
 void WorldSocket::LogOpcodeText(OpcodeClient opcode, std::unique_lock<std::mutex> const& guard) const
 {
-    if (!guard)
+    if (!guard || !_worldSession)
     {
         TC_LOG_TRACE("network.opcode", "C->S: {} {}", GetRemoteIpAddress().to_string(), GetOpcodeNameForLogging(opcode));
     }
     else
     {
-        TC_LOG_TRACE("network.opcode", "C->S: {} {}", (_worldSession ? _worldSession->GetPlayerInfo() : GetRemoteIpAddress().to_string()),
-            GetOpcodeNameForLogging(opcode));
+        TC_LOG_TRACE("network.opcode", "C->S: {} {}", _worldSession->GetPlayerInfo(), GetOpcodeNameForLogging(opcode));
     }
 }
 
@@ -673,7 +674,7 @@ void WorldSocket::HandleAuthSession(std::shared_ptr<WorldPackets::Auth::AuthSess
     stmt->setInt32(0, int32(sRealmList->GetCurrentRealmId().Realm));
     stmt->setString(1, joinTicket->gameaccount());
 
-    _queryProcessor.AddCallback(LoginDatabase.AsyncQuery(stmt).WithPreparedCallback([this, authSession = std::move(authSession), joinTicket = std::move(joinTicket)](PreparedQueryResult result) mutable
+    QueueQuery(LoginDatabase.AsyncQuery(stmt).WithPreparedCallback([this, authSession = std::move(authSession), joinTicket = std::move(joinTicket)](PreparedQueryResult result) mutable
     {
         HandleAuthSessionCallback(std::move(authSession), std::move(joinTicket), std::move(result));
     }));
@@ -874,19 +875,20 @@ void WorldSocket::HandleAuthSessionCallback(std::shared_ptr<WorldPackets::Auth::
     sScriptMgr->OnAccountLogin(account.Game.Id);
 
     _authed = true;
-    _worldSession = new WorldSession(account.Game.Id, std::move(*joinTicket->mutable_gameaccount()), account.BattleNet.Id, shared_from_this(), account.Game.Security,
-        account.Game.Expansion, mutetime, account.Game.OS, account.Game.TimezoneOffset, account.Game.Build, buildVariant, account.Game.Locale,
+    _worldSession = new WorldSession(account.Game.Id, std::move(*joinTicket->mutable_gameaccount()), account.BattleNet.Id,
+        static_pointer_cast<WorldSocket>(shared_from_this()), account.Game.Security, account.Game.Expansion, mutetime,
+        account.Game.OS, account.Game.TimezoneOffset, account.Game.Build, buildVariant, account.Game.Locale,
         account.Game.Recruiter, account.Game.IsRectuiter);
 
     // Initialize Warden system only if it is enabled by config
     if (wardenActive)
         _worldSession->InitWarden(_sessionKey);
 
-    _queryProcessor.AddCallback(_worldSession->LoadPermissionsAsync().WithPreparedCallback([this](PreparedQueryResult result)
+    QueueQuery(_worldSession->LoadPermissionsAsync().WithPreparedCallback([this](PreparedQueryResult result)
     {
         LoadSessionPermissionsCallback(std::move(result));
     }));
-    AsyncRead();
+    AsyncRead(Trinity::Net::InvokeReadHandlerCallback<WorldSocket>{ .Socket = this });
 }
 
 void WorldSocket::LoadSessionPermissionsCallback(PreparedQueryResult result)
@@ -914,7 +916,7 @@ void WorldSocket::HandleAuthContinuedSession(std::shared_ptr<WorldPackets::Auth:
     LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_INFO_CONTINUED_SESSION);
     stmt->setUInt32(0, accountId);
 
-    _queryProcessor.AddCallback(LoginDatabase.AsyncQuery(stmt).WithPreparedCallback([this, authSession = std::move(authSession)](PreparedQueryResult result) mutable
+    QueueQuery(LoginDatabase.AsyncQuery(stmt).WithPreparedCallback([this, authSession = std::move(authSession)](PreparedQueryResult result) mutable
     {
         HandleAuthContinuedSessionCallback(std::move(authSession), std::move(result));
     }));
@@ -952,7 +954,7 @@ void WorldSocket::HandleAuthContinuedSessionCallback(std::shared_ptr<WorldPacket
     }
 
     SendPacketAndLogOpcode(*WorldPackets::Auth::EnterEncryptedMode().Write());
-    AsyncRead();
+    AsyncRead(Trinity::Net::InvokeReadHandlerCallback<WorldSocket>{ .Socket = this });
 }
 
 void WorldSocket::HandleConnectToFailed(WorldPackets::Auth::ConnectToFailed& connectToFailed)
@@ -1003,7 +1005,7 @@ void WorldSocket::HandleEnterEncryptedModeAck()
     else
     {
         _authCrypt.Init(_sessionKey, _encryptSeed, _decryptSeed);
-        sWorld->AddInstanceSocket(shared_from_this(), _key);
+        sWorld->AddInstanceSocket(static_pointer_cast<WorldSocket>(shared_from_this()), _key);
     }
 }
 

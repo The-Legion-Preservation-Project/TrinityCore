@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WORLDSOCKET_H__
-#define __WORLDSOCKET_H__
+#ifndef TRINITYCORE_WORLD_SOCKET_H
+#define TRINITYCORE_WORLD_SOCKET_H
 
 #include "AsyncCallbackProcessor.h"
 #include "AuthDefines.h"
@@ -82,24 +82,24 @@ struct PacketHeader
 
 #pragma pack(pop)
 
-class TC_GAME_API WorldSocket : public Socket<WorldSocket>
+class TC_GAME_API WorldSocket final : public Trinity::Net::Socket<>
 {
-    static std::string const ServerConnectionInitialize;
-    static std::string const ClientConnectionInitialize;
     static uint32 const MinSizeForCompression;
 
     static std::array<uint8, 16> const AuthCheckSeed;
     static std::array<uint8, 16> const SessionKeySeed;
     static std::array<uint8, 16> const ContinuedSessionSeed;
 
-    typedef Socket<WorldSocket> BaseSocket;
+    using BaseSocket = Socket;
 
 public:
-    WorldSocket(boost::asio::ip::tcp::socket&& socket);
+    WorldSocket(Trinity::Net::IoContextTcpSocket&& socket);
     ~WorldSocket();
 
     WorldSocket(WorldSocket const& right) = delete;
+    WorldSocket(WorldSocket&& right) = delete;
     WorldSocket& operator=(WorldSocket const& right) = delete;
+    WorldSocket& operator=(WorldSocket&& right) = delete;
 
     void Start() override;
     bool Update() override;
@@ -112,9 +112,15 @@ public:
     void SetWorldSession(WorldSession* session);
     void SetSendBufferSize(std::size_t sendBufferSize) { _sendBufferSize = sendBufferSize; }
 
-protected:
     void OnClose() override;
-    void ReadHandler() override;
+    Trinity::Net::SocketReadCallbackResult ReadHandler() override;
+
+    void QueueQuery(QueryCallback&& queryCallback);
+
+    void SendAuthSession();
+    bool InitializeCompression();
+
+protected:
     bool ReadHeaderHandler();
 
     enum class ReadDataHandlerResult
@@ -126,9 +132,6 @@ protected:
 
     ReadDataHandlerResult ReadDataHandler();
 private:
-    void CheckIpCallback(PreparedQueryResult result);
-    void InitializeHandler(boost::system::error_code const& error, std::size_t transferedBytes);
-
     /// writes network.opcode log
     /// accessing WorldSession is not threadsafe, only do it when holding _worldSessionLock
     void LogOpcodeText(OpcodeClient opcode, std::unique_lock<std::mutex> const& guard) const;
@@ -137,7 +140,6 @@ private:
     void WritePacketToBuffer(EncryptablePacket const& packet, MessageBuffer& buffer);
     uint32 CompressPacket(uint8* buffer, WorldPacket const& packet);
 
-    void HandleSendAuthSession();
     void HandleAuthSession(std::shared_ptr<WorldPackets::Auth::AuthSession> authSession);
     void HandleAuthSessionCallback(std::shared_ptr<WorldPackets::Auth::AuthSession> authSession,
         std::shared_ptr<JSON::RealmList::RealmJoinTicket> joinTicket, PreparedQueryResult result);
