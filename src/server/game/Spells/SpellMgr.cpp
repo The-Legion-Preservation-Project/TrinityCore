@@ -4829,12 +4829,6 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->AttributesEx4 |= SPELL_ATTR4_AURA_IS_BUFF;
     });
 
-    // Eye Beam
-    ApplySpellFix({ 198030 }, [](SpellInfo* spellInfo)
-    {
-        spellInfo->_LoadSqrtTargetLimit(5, 0, {}, {});
-    });
-
     // Collective Anguish channel hack (triggered by another channel)
     ApplySpellFix({ 391057, 393831 }, [](SpellInfo* spellInfo)
     {
@@ -4995,6 +4989,19 @@ void SpellMgr::LoadSpellInfoImmunities()
         const_cast<SpellInfo&>(spellInfo)._LoadImmunityInfo();
 
     TC_LOG_INFO("server.loading", ">> Loaded SpellInfo immunity infos in {} ms", GetMSTimeDiffToNow(oldMSTime));
+}
+
+void SpellMgr::LoadSpellInfoTargetCaps()
+{
+    uint32 oldMSTime = getMSTime();
+
+    // Eye Beam
+    ApplySpellFix({ 198030 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->_LoadSqrtTargetLimit(5, 0, 198013, EFFECT_4, {}, {});
+    });
+
+    TC_LOG_INFO("server.loading", ">> Loaded SpellInfo target caps in {} ms", GetMSTimeDiffToNow(oldMSTime));
 }
 
 void SpellMgr::LoadPetFamilySpellsStore()
