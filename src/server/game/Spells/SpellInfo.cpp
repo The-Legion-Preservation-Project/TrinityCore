@@ -543,7 +543,7 @@ int32 SpellEffectInfo::CalcValue(WorldObject const* caster /*= nullptr*/, int32 
 
     if (_spellInfo->HasAttribute(SPELL_ATTR8_MASTERY_AFFECTS_POINTS))
         if (Player const* playerCaster = Object::ToPlayer(caster))
-            value += *playerCaster->m_activePlayerData->Mastery * BonusCoefficient;
+            value += playerCaster->GetFloatValue(PLAYER_MASTERY) * BonusCoefficient;
 
     if (caster)
         value = caster->ApplyEffectModifiers(_spellInfo, EffectIndex, value);

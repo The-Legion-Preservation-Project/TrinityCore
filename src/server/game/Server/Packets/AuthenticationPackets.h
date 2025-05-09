@@ -288,6 +288,16 @@ namespace WorldPackets
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
+
+        class QueuedMessagesEnd final : public ClientPacket
+        {
+        public:
+            QueuedMessagesEnd(WorldPacket&& packet) : ClientPacket(CMSG_QUEUED_MESSAGES_END, std::move(packet)) { }
+
+            void Read() override;
+
+            uint32 Timestamp = 0;
+        };
     }
 }
 
