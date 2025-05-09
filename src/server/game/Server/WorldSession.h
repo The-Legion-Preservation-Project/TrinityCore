@@ -1081,9 +1081,9 @@ class TC_GAME_API WorldSession
          * @param   auctionId       The relevant auction id
          * @param   command         The action that was performed.
          * @param   errorCode       The resulting error code.
-         * @param   bidError        (Optional) the bid error.
+         * @param   bagResult       (Optional) InventoryResult.
          */
-        void SendAuctionCommandResult(AuctionPosting const* auction, AuctionCommand command, AuctionResult errorCode, InventoryResult bagError = InventoryResult(0));
+        void SendAuctionCommandResult(AuctionPosting const* auction, AuctionCommand command, AuctionResult errorCode, InventoryResult bagResult = InventoryResult(0));
         void SendAuctionClosedNotification(AuctionPosting const* auction, float mailDelay, bool sold);
         //void SendAuctionWonNotification(AuctionEntry const* auction, Item const* item);
         void SendAuctionOwnerBidNotification(AuctionPosting const* auction);

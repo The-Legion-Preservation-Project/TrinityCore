@@ -5595,6 +5595,7 @@ Powers Unit::CalculateDisplayPowerType() const
             displayPower = POWER_ENERGY;
             break;
         case FORM_BEAR_FORM:
+        case FORM_DIRE_BEAR_FORM:
             displayPower = POWER_RAGE;
             break;
         case FORM_TRAVEL_FORM:
@@ -12152,6 +12153,7 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
                 else
                     return 8571;
             case FORM_BEAR_FORM:
+            case FORM_DIRE_BEAR_FORM:
                 // Based on Hair color
                 if (GetRace() == RACE_NIGHTELF)
                 {

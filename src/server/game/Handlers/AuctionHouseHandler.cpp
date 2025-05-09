@@ -69,13 +69,13 @@ void WorldSession::SendAuctionHello(ObjectGuid guid, Unit const* unit)
     SendPacket(auctionHelloResponse.Write());
 }
 
-void WorldSession::SendAuctionCommandResult(AuctionPosting const* auction, AuctionCommand command, AuctionResult errorCode, InventoryResult bagError)
+void WorldSession::SendAuctionCommandResult(AuctionPosting const* auction, AuctionCommand command, AuctionResult errorCode, InventoryResult bagResult)
 {
     WorldPackets::AuctionHouse::AuctionCommandResult auctionCommandResult;
     auctionCommandResult.InitializeAuction(auction);
     auctionCommandResult.Command = AsUnderlyingType(command);
     auctionCommandResult.ErrorCode = AsUnderlyingType(errorCode);
-    auctionCommandResult.BagResult = AsUnderlyingType(bagError);
+    auctionCommandResult.BagResult = AsUnderlyingType(bagResult);
     SendPacket(auctionCommandResult.Write());
 }
 
