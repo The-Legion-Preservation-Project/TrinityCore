@@ -201,8 +201,9 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
         flags.ActivePlayer = true;
     }
 
-    if (WorldObject const* worldObject = dynamic_cast<WorldObject const*>(this))
+    if (IsWorldObject())
     {
+        WorldObject const* worldObject = static_cast<WorldObject const*>(this);
         if (!flags.MovementUpdate && !worldObject->m_movementInfo.transport.guid.IsEmpty())
             flags.MovementTransport = true;
 
