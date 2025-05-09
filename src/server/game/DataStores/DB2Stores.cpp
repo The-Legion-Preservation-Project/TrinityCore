@@ -15,9 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "DB2Stores.h"
 #include "Containers.h"
 #include "DB2LoadInfo.h"
-#include "DB2Stores.h"
 #include "DatabaseEnv.h"
 #include "Hash.h"
 #include "IteratorPair.h"
@@ -31,16 +31,10 @@
 #include <array>
 #include <bitset>
 #include <boost/filesystem/directory.hpp>
-#include <boost/filesystem/operations.hpp>
 #include <cctype>
 #include <cmath>
 #include <numeric>
 #include <sstream>
-
-// temporary hack until includes are sorted out (don't want to pull in Windows.h)
-#ifdef GetClassName
-#undef GetClassName
-#endif
 
 DB2Storage<AchievementEntry>                    sAchievementStore("Achievement.db2", &AchievementLoadInfo::Instance);
 DB2Storage<Achievement_CategoryEntry>           sAchievementCategoryStore("Achievement_Category.db2", &AchievementCategoryLoadInfo::Instance);
@@ -1538,7 +1532,7 @@ CharStartOutfitEntry const* DB2Manager::GetCharStartOutfitEntry(uint8 race, uint
     return itr->second;
 }
 
-char const* DB2Manager::GetClassName(uint8 class_, LocaleConstant locale /*= DEFAULT_LOCALE*/)
+char const* DB2Manager::GetChrClassName(uint8 class_, LocaleConstant locale /*= DEFAULT_LOCALE*/)
 {
     ChrClassesEntry const* classEntry = sChrClassesStore.LookupEntry(class_);
     if (!classEntry)
