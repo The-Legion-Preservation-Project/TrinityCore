@@ -1144,11 +1144,8 @@ void AuctionHouseObject::SendAuctionWon(AuctionPosting const* auction, Player* b
     else
     {
         // bidder doesn't exist, delete the item
-        for (Item* item : auction->Items)
-        {
-            item->FSetState(ITEM_REMOVED);
-            item->SaveToDB(trans);
-        }
+        auction->Item->FSetState(ITEM_REMOVED);
+        auction->Item->SaveToDB(trans);
     }
 }
 
@@ -1198,11 +1195,8 @@ void AuctionHouseObject::SendAuctionExpired(AuctionPosting const* auction, Chara
     else
     {
         // owner doesn't exist, delete the item
-        for (Item* item : auction->Items)
-        {
-            item->FSetState(ITEM_REMOVED);
-            item->SaveToDB(trans);
-        }
+        auction->Item->FSetState(ITEM_REMOVED);
+        auction->Item->SaveToDB(trans);
     }
 }
 

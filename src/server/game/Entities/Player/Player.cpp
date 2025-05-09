@@ -19264,7 +19264,7 @@ bool Player::_LoadHomeBind(PreparedQueryResult result)
 
         ASSERT(loc, "Missing fallback graveyard location for faction %u", uint32(GetTeamId()));
 
-        m_homebind.WorldRelocate(loc->MapID, loc->Loc.X, loc->Loc.Y, loc->Loc.Z);
+        m_homebind.WorldRelocate(loc->MapID, loc->Loc.X, loc->Loc.Y, loc->Loc.Z, loc->Facing);
         m_homebindAreaId = sTerrainMgr.GetAreaId(PhasingHandler::GetEmptyPhaseShift(), loc->MapID, loc->Loc.X, loc->Loc.Y, loc->Loc.Z);
 
         saveHomebindToDb();
