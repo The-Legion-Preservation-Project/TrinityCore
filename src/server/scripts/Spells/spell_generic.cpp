@@ -41,6 +41,7 @@
 #include "NPCPackets.h"
 #include "ObjectMgr.h"
 #include "Pet.h"
+#include "PhasingHandler.h"
 #include "ReputationMgr.h"
 #include "PathGenerator.h"
 #include "SkillDiscovery.h"
@@ -5402,6 +5403,25 @@ struct at_gen_spatial_rift : AreaTriggerAI
     }
 };
 
+class spell_gen_force_phase_update : public AuraScript
+{
+    void AfterApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/) const
+    {
+        PhasingHandler::OnConditionChange(GetTarget());
+    }
+
+    void AfterRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/) const
+    {
+        PhasingHandler::OnConditionChange(GetTarget());
+    }
+
+    void Register() override
+    {
+        AfterEffectApply += AuraEffectApplyFn(spell_gen_force_phase_update::AfterApply, EFFECT_FIRST_FOUND, SPELL_AURA_ANY, AURA_EFFECT_HANDLE_REAL);
+        AfterEffectRemove += AuraEffectRemoveFn(spell_gen_force_phase_update::AfterRemove, EFFECT_FIRST_FOUND, SPELL_AURA_ANY, AURA_EFFECT_HANDLE_REAL);
+    }
+};
+
 void AddSC_generic_spell_scripts()
 {
     RegisterSpellScript(spell_gen_absorb0_hitlimit1);
@@ -5579,4 +5599,5 @@ void AddSC_generic_spell_scripts()
     RegisterSpellAndAuraScriptPair(spell_bg_defending_cart_aura, spell_bg_defending_cart_aura_AuraScript);
     RegisterSpellScript(spell_gen_spatial_rift);
     RegisterAreaTriggerAI(at_gen_spatial_rift);
+    RegisterSpellScript(spell_gen_force_phase_update);
 }
