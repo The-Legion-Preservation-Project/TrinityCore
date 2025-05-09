@@ -562,6 +562,7 @@ void CriteriaHandler::UpdateCriteria(CriteriaType type, uint64 miscValue1 /*= 0*
             case CriteriaType::CompleteAnyReplayQuest:
             case CriteriaType::BuyItemsFromVendors:
             case CriteriaType::SellItemsToVendors:
+            case CriteriaType::ReachMaxLevel:
                 SetCriteriaProgress(criteria, 1, referencePlayer, PROGRESS_ACCUMULATE);
                 break;
             // std case: increment at miscValue1
@@ -1244,6 +1245,7 @@ bool CriteriaHandler::IsCompletedCriteria(Criteria const* criteria, uint64 requi
         case CriteriaType::PrestigeLevelIncrease:
         case CriteriaType::ActivelyReachLevel:
         case CriteriaType::CollectTransmogSetFromGroup:
+        case CriteriaType::ReachMaxLevel:
         case CriteriaType::EnterTopLevelArea:
         case CriteriaType::LeaveTopLevelArea:
             return progress->Counter >= 1;
@@ -4143,6 +4145,8 @@ inline bool IsCriteriaTypeStoredByAsset(CriteriaType type)
         case CriteriaType::LandTargetedSpellOnTarget:
         case CriteriaType::LearnTradeskillSkillLine:
         case CriteriaType::DefeatDungeonEncounter:
+        case CriteriaType::LearnToy:
+        case CriteriaType::LearnAnyTransmog:
             return true;
         default:
             break;
@@ -4512,4 +4516,65 @@ ModifierTreeNode const* CriteriaMgr::GetModifierTree(uint32 modifierTreeId) cons
         return itr->second;
 
     return nullptr;
+}
+
+std::span<CriteriaType const> CriteriaMgr::GetRetroactivelyUpdateableCriteriaTypes()
+{
+    static constexpr CriteriaType Types[] =
+    {
+        CriteriaType::CompleteResearchProject,
+        CriteriaType::CompleteAnyResearchProject,
+        CriteriaType::ReachLevel,
+        CriteriaType::SkillRaised,
+        CriteriaType::CompleteQuestsCount,
+        CriteriaType::CompleteAnyDailyQuestPerDay,
+        CriteriaType::CompleteQuestsInZone,
+        CriteriaType::CompleteQuest,
+        CriteriaType::LearnOrKnowSpell,
+        CriteriaType::AcquireItem,
+        CriteriaType::EarnPersonalArenaRating,
+        CriteriaType::AchieveSkillStep,
+        CriteriaType::RevealWorldMapOverlay,
+        //CriteriaType::EarnTitle,  /*NYI*/
+        CriteriaType::BankSlotsPurchased,
+        CriteriaType::ReputationGained,
+        CriteriaType::TotalExaltedFactions,
+        //CriteriaType::CompleteQuestsInSort,  /*NYI*/
+        CriteriaType::LearnSpellFromSkillLine,
+        CriteriaType::MostMoneyOwned,
+        CriteriaType::TotalReveredFactions,
+        CriteriaType::TotalHonoredFactions,
+        CriteriaType::TotalFactionsEncountered,
+        //CriteriaType::AccountKnownPet,  /*NYI*/
+        CriteriaType::LearnTradeskillSkillLine,
+        CriteriaType::HonorableKills,
+        //CriteriaType::GuildBankTabsPurchased, /*NYI*/
+        //CriteriaType::EarnGuildAchievementPoints, /*NYI*/
+        //CriteriaType::EarnBattlegroundRating, /*NYI*/
+        //CriteriaType::GuildTabardCreated, /*NYI*/
+        CriteriaType::LearnedNewPet,
+        CriteriaType::UniquePetsOwned,
+        //CriteriaType::UpgradeGarrison, /*NYI*/
+        //CriteriaType::AcquireGarrison, /*NYI*/
+        //CriteriaType::LearnGarrisonBlueprint, /*NYI*/
+        //CriteriaType::LearnGarrisonSpecialization, /*NYI*/
+        //CriteriaType::LearnToy, /*NYI*/ // Learn Toy "{Item}"
+        //CriteriaType::LearnAnyToy, /*NYI*/ // Learn Any Toy
+        //CriteriaType::LearnTransmog, /*NYI*/
+        CriteriaType::HonorLevelIncrease,
+        //CriteriaType::AccountHonorLevelReached, /*NYI*/
+        CriteriaType::ReachMaxLevel,
+        //CriteriaType::MemorizeSpell, /*NYI*/
+        //CriteriaType::LearnTransmogIllusion, /*NYI*/
+        //CriteriaType::MythicPlusRatingAttained, /*NYI*/
+        //CriteriaType::MythicPlusDisplaySeasonEnded, /*NYI*/
+        //CriteriaType::CompleteTrackingQuest, /*NYI*/
+        //CriteriaType::WarbandBankTabPurchased, /*NYI*/
+
+        CriteriaType::EarnAchievementPoints,
+        CriteriaType::BattlePetAchievementPointsEarned,
+        CriteriaType::EarnAchievement // criteria possibly completed by retroactive scan, must be last
+    };
+
+    return Types;
 }

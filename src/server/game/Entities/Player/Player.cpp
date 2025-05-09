@@ -2380,6 +2380,8 @@ void Player::GiveLevel(uint8 level)
     StartCriteria(CriteriaStartEvent::ReachLevel, level);
     UpdateCriteria(CriteriaType::ReachLevel);
     UpdateCriteria(CriteriaType::ActivelyReachLevel, level);
+    if (IsMaxLevel())
+        UpdateCriteria(CriteriaType::ReachMaxLevel);
 
     // Refer-A-Friend
     if (GetSession()->GetRecruiterId())
