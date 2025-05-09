@@ -77,8 +77,8 @@ WorldSocket::~WorldSocket()
 
 struct WorldSocketProtocolInitializer final : Trinity::Net::SocketConnectionInitializer
 {
-    static constexpr std::string_view ServerConnectionInitialize = "WORLD OF WARCRAFT CONNECTION - SERVER TO CLIENT";
-    static constexpr std::string_view ClientConnectionInitialize = "WORLD OF WARCRAFT CONNECTION - CLIENT TO SERVER";
+    static constexpr std::string_view ServerConnectionInitialize = "WORLD OF WARCRAFT CONNECTION - SERVER TO CLIENT\n";
+    static constexpr std::string_view ClientConnectionInitialize = "WORLD OF WARCRAFT CONNECTION - CLIENT TO SERVER\n";
 
     explicit WorldSocketProtocolInitializer(WorldSocket* socket) : _socket(socket) { }
 
