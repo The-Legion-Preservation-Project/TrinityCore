@@ -91,8 +91,8 @@ CollectionMgr::~CollectionMgr() = default;
 
 void CollectionMgr::LoadToys()
 {
-    for (auto const& [itemId, flags] : _toys)
-        _owner->GetPlayer()->AddToy(itemId, flags.AsUnderlyingType());
+    for (auto const& [itemId, _] : _toys)
+        _owner->GetPlayer()->AddToy(itemId);
 }
 
 bool CollectionMgr::AddToy(uint32 itemId, bool isFavourite /*= false*/)

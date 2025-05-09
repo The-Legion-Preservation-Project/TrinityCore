@@ -2600,7 +2600,7 @@ struct ItemSetSpellLoadInfo
 
 struct ItemSparseLoadInfo
 {
-    static constexpr DB2FieldMeta Fields[107] =
+    static constexpr DB2FieldMeta Fields[106] =
     {
         { .IsSigned = false, .Type = FT_INT, .Name = "ID" },
         { .IsSigned = true, .Type = FT_LONG, .Name = "AllowableRace" },
@@ -2613,7 +2613,6 @@ struct ItemSparseLoadInfo
         { .IsSigned = true, .Type = FT_INT, .Name = "Flags2" },
         { .IsSigned = true, .Type = FT_INT, .Name = "Flags3" },
         { .IsSigned = true, .Type = FT_INT, .Name = "Flags4" },
-        { .IsSigned = true, .Type = FT_INT, .Name = "Flags5" },
         { .IsSigned = false, .Type = FT_FLOAT, .Name = "PriceRandomValue" },
         { .IsSigned = false, .Type = FT_FLOAT, .Name = "PriceVariance" },
         { .IsSigned = false, .Type = FT_INT, .Name = "VendorStackCount" },
@@ -2711,7 +2710,7 @@ struct ItemSparseLoadInfo
         { .IsSigned = false, .Type = FT_BYTE, .Name = "ExpansionID" },
     };
 
-    static constexpr DB2LoadInfo Instance{ Fields, 107, &ItemSparseMeta::Instance, HOTFIX_SEL_ITEM_SPARSE };
+    static constexpr DB2LoadInfo Instance{ Fields, 106, &ItemSparseMeta::Instance, HOTFIX_SEL_ITEM_SPARSE };
 };
 
 struct ItemSpecLoadInfo
