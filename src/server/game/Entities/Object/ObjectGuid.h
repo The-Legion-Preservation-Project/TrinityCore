@@ -25,6 +25,7 @@
 #include <functional>
 #include <list>
 #include <set>
+#include <span>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -236,8 +237,6 @@ public:
     static ObjectGuid CreateClubFinder(uint32 realmId, uint8 type, uint32 clubFinderId, uint64 dbId);
 };
 
-#pragma pack(push, 1)
-
 class TC_GAME_API ObjectGuid
 {
     friend class ObjectGuidFactory;
@@ -250,13 +249,15 @@ class TC_GAME_API ObjectGuid
         static ObjectGuid const FromStringFailed;
         static ObjectGuid const TradeItem;
 
+        static constexpr std::size_t BytesSize = 16;
+
         using LowType = uint64;
 
         ObjectGuid() = default;
 
         uint64 GetRawValue(std::size_t i) const { return _data[i]; }
-        std::vector<uint8> GetRawValue() const;
-        void SetRawValue(std::vector<uint8> const& guid);
+        std::array<uint8, 16> GetRawValue() const;
+        void SetRawValue(std::span<uint8 const> rawBytes);
         void SetRawValue(uint64 high, uint64 low) { _data[0] = low; _data[1] = high; }
         void Clear() { _data = { }; }
 
@@ -355,8 +356,6 @@ class TC_GAME_API ObjectGuid
 
         std::array<uint64, 2> _data = { };
 };
-
-#pragma pack(pop)
 
 // Some Shared defines
 using GuidSet = std::set<ObjectGuid>;
