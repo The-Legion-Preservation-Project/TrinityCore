@@ -696,6 +696,7 @@ enum OpcodeClient : uint16
     CMSG_SORT_BAGS                                    = 0x3318,
     CMSG_SORT_BANK_BAGS                               = 0x3319,
     CMSG_SORT_REAGENT_BANK_BAGS                       = 0x331A,
+    CMSG_SPAWN_TRACKING_UPDATE                        = 0x9999, // TODO: TheLegionPreservationProject: does this exist?
     CMSG_SPELL_CLICK                                  = 0x3498,
     CMSG_SPIRIT_HEALER_ACTIVATE                       = 0x34B2,
     CMSG_SPLIT_GUILD_BANK_ITEM                        = 0x34C6,
@@ -1060,6 +1061,7 @@ enum OpcodeServer : uint16
     SMSG_FLIGHT_SPLINE_SYNC                           = 0x2DF7,
     SMSG_FORCE_ANIM                                   = 0x2794,
     SMSG_FORCE_OBJECT_RELINK                          = 0x2667,
+    SMSG_FORCE_SPAWN_TRACKING_UPDATE                  = 0x9997, // TODO: TheLegionPreservationProject: does this exist?
     SMSG_FORCED_DEATH_UPDATE                          = 0x2706,
     SMSG_FRIEND_STATUS                                = 0x27CB,
     SMSG_GAME_OBJECT_ACTIVATE_ANIM_KIT                = 0x25D6,
@@ -1510,6 +1512,7 @@ enum OpcodeServer : uint16
     SMSG_QUEST_LOG_FULL                               = 0x2A86,
     SMSG_QUEST_POI_CHANGED                            = 0x2A9F,
     SMSG_QUEST_POI_QUERY_RESPONSE                     = 0x2A9C,
+    SMSG_QUEST_POI_UPDATE_RESPONSE                    = 0x9998, // TODO: TheLegionPreservationProject: does this exist?
     SMSG_QUEST_PUSH_RESULT                            = 0x2A8F,
     SMSG_QUEST_SPAWN_TRACKING_UPDATE                  = 0x2A9E,
     SMSG_QUEST_UPDATE_ADD_CREDIT                      = 0x2A8B,

@@ -14010,6 +14010,47 @@ void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player 
 
                 *data << entryId;
             }
+            else if (index == UNIT_FIELD_STATE_WORLD_EFFECT_ID)
+            {
+                uint32 stateWorldEffectId = m_uint32Values[index];
+
+                // TODO: TheLegionPreservationProject: multiple world effects?
+                if (IsCreature())
+                    if (SpawnTrackingStateData const* spawnTrackingStateData = GetSpawnTrackingStateDataForPlayer(target))
+                        stateWorldEffectId = spawnTrackingStateData->StateWorldEffects.empty() ? 0 : spawnTrackingStateData->StateWorldEffects[0];
+
+                *data << stateWorldEffectId;
+            }
+            else if (index == UNIT_FIELD_STATE_SPELL_VISUAL_ID)
+            {
+                uint32 stateSpellVisualId = m_uint32Values[index];
+
+                if (IsCreature())
+                    if (SpawnTrackingStateData const* spawnTrackingStateData = GetSpawnTrackingStateDataForPlayer(target))
+                        stateSpellVisualId = spawnTrackingStateData->StateSpellVisualId.value_or(0);
+
+                *data << stateSpellVisualId;
+            }
+            else if (index == UNIT_FIELD_STATE_ANIM_ID)
+            {
+                uint32 stateAnimId = m_uint32Values[index];
+
+                if (IsCreature())
+                    if (SpawnTrackingStateData const* spawnTrackingStateData = GetSpawnTrackingStateDataForPlayer(target))
+                        stateAnimId = spawnTrackingStateData->StateAnimId.value_or(stateAnimId);
+
+                *data << stateAnimId;
+            }
+            else if (index == UNIT_FIELD_STATE_ANIM_KIT_ID)
+            {
+                uint32 stateAnimKitId = m_uint32Values[index];
+
+                if (IsCreature())
+                    if (SpawnTrackingStateData const* spawnTrackingStateData = GetSpawnTrackingStateDataForPlayer(target))
+                        stateAnimKitId = spawnTrackingStateData->StateAnimKitId.value_or(0);
+
+                *data << stateAnimKitId;
+            }
             else
             {
                 // send in current format (float as float, uint32 as uint32)

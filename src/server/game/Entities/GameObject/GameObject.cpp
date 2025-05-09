@@ -1083,8 +1083,6 @@ bool GameObject::Create(uint32 entry, Map* map, Position const& pos, QuaternionD
     SetGoState(goState);
     SetGoArtKit(artKit);
 
-    SetUInt32Value(GAMEOBJECT_STATE_ANIM_ID, sDB2Manager.GetEmptyAnimStateID());
-
     switch (goInfo->type)
     {
         case GAMEOBJECT_TYPE_FISHINGHOLE:
@@ -1961,6 +1959,9 @@ bool GameObject::LoadFromDB(ObjectGuid::LowType spawnId, Map* map, bool addToMap
 
     PhasingHandler::InitDbPhaseShift(GetPhaseShift(), data->phaseUseFlags, data->phaseId, data->phaseGroup);
     PhasingHandler::InitDbVisibleMapId(GetPhaseShift(), data->terrainSwapMap);
+
+    // TODO: TheLegionPreservationProject: ??
+    //SetUpdateFieldValue(m_values.ModifyValue(&GameObject::m_gameObjectData).ModifyValue(&UF::GameObjectData::StateWorldEffectsQuestObjectiveID), data ? data->spawnTrackingQuestObjectiveId : 0);
 
     if (data->spawntimesecs >= 0)
     {
@@ -3533,6 +3534,23 @@ void GameObject::SetScriptStringId(std::string id)
     }
 }
 
+SpawnTrackingStateData const* GameObject::GetSpawnTrackingStateDataForPlayer(Player const* player) const
+{
+    if (!player)
+        return nullptr;
+
+    if (SpawnMetadata const* data = sObjectMgr->GetSpawnMetadata(SPAWN_TYPE_GAMEOBJECT, GetSpawnId()))
+    {
+        if (data->spawnTrackingQuestObjectiveId && data->spawnTrackingData)
+        {
+            SpawnTrackingState state = player->GetSpawnTrackingStateByObjective(data->spawnTrackingData->SpawnTrackingId, data->spawnTrackingQuestObjectiveId);
+            return &data->spawnTrackingStates[AsUnderlyingType(state)];
+        }
+    }
+
+    return nullptr;
+}
+
 // overwrite WorldObject function for proper name localization
 std::string GameObject::GetNameForLocaleIdx(LocaleConstant locale) const
 {
@@ -4068,6 +4086,11 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
 
                     if (!MeetsInteractCondition(target))
                         dynFlags |= GO_DYNFLAG_LO_NO_INTERACT;
+
+                    if (SpawnMetadata const* data = sObjectMgr->GetSpawnMetadata(SPAWN_TYPE_GAMEOBJECT, GetSpawnId()))
+                        if (data->spawnTrackingQuestObjectiveId && data->spawnTrackingData)
+                            if (target->GetSpawnTrackingStateByObjective(data->spawnTrackingData->SpawnTrackingId, data->spawnTrackingQuestObjectiveId) != SpawnTrackingState::Active)
+                                dynFlags &= ~GO_DYNFLAG_LO_ACTIVATE;
                 }
 
                 *data << ((uint32(pathProgress) << 16) | uint32(dynFlags));
@@ -4089,6 +4112,47 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
                 bytes1 |= GetGoStateFor(target->GetGUID());
 
                 *data << bytes1;
+            }
+            else if (index == GAMEOBJECT_STATE_WORLD_EFFECT_ID)
+            {
+                uint32 stateWorldEffectId = m_uint32Values[index];
+
+                // TODO: TheLegionPreservationProject: multiple world effects?
+                if (IsCreature())
+                    if (SpawnTrackingStateData const* spawnTrackingStateData = GetSpawnTrackingStateDataForPlayer(target))
+                        stateWorldEffectId = spawnTrackingStateData->StateWorldEffects.empty() ? 0 : spawnTrackingStateData->StateWorldEffects[0];
+
+                *data << stateWorldEffectId;
+            }
+            else if (index == GAMEOBJECT_STATE_SPELL_VISUAL_ID)
+            {
+                uint32 stateSpellVisualId = m_uint32Values[index];
+
+                if (IsCreature())
+                    if (SpawnTrackingStateData const* spawnTrackingStateData = GetSpawnTrackingStateDataForPlayer(target))
+                        stateSpellVisualId = spawnTrackingStateData->StateSpellVisualId.value_or(0);
+
+                *data << stateSpellVisualId;
+            }
+            else if (index == GAMEOBJECT_STATE_ANIM_ID)
+            {
+                uint32 stateAnimId = m_uint32Values[index];
+
+                if (IsCreature())
+                    if (SpawnTrackingStateData const* spawnTrackingStateData = GetSpawnTrackingStateDataForPlayer(target))
+                        stateAnimId = spawnTrackingStateData->StateAnimId.value_or(stateAnimId);
+
+                *data << stateAnimId;
+            }
+            else if (index == GAMEOBJECT_STATE_ANIM_KIT_ID)
+            {
+                uint32 stateAnimKitId = m_uint32Values[index];
+
+                if (IsCreature())
+                    if (SpawnTrackingStateData const* spawnTrackingStateData = GetSpawnTrackingStateDataForPlayer(target))
+                        stateAnimKitId = spawnTrackingStateData->StateAnimKitId.value_or(0);
+
+                *data << stateAnimKitId;
             }
             // else if (index == GAMEOBJECT_LEVEL)
             // {

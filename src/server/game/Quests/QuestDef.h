@@ -29,6 +29,7 @@
 #include "UniqueTrackablePtr.h"
 #include "WorldPacket.h"
 #include <bitset>
+#include <unordered_set>
 #include <vector>
 
 class Player;
@@ -757,6 +758,7 @@ struct QuestStatusData
     QuestStatus Status = QUEST_STATUS_NONE;
     uint32 Timer = 0;
     bool Explored = false;
+    std::unordered_set<std::pair<int8, uint32>> SpawnTrackingList;
 };
 
 #endif
