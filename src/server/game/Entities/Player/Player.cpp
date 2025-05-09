@@ -27588,7 +27588,7 @@ void Player::SetPetSlot(uint32 petNumber, PetSaveMode dstPetSlot)
             Pet* oldPet = GetPet();
             if (oldPet && !oldPet->IsAlive())
             {
-                sess->SendPetStableResult(StableResult::InternalError);
+                sess->SendPetStableResult(StableResult::NoPet);
                 return;
             }
 
@@ -27616,7 +27616,7 @@ void Player::SetPetSlot(uint32 petNumber, PetSaveMode dstPetSlot)
             Pet* oldPet = GetPet();
             if (oldPet && !oldPet->IsAlive())
             {
-                sess->SendPetStableResult(StableResult::InternalError);
+                sess->SendPetStableResult(StableResult::NoPet);
                 return;
             }
 

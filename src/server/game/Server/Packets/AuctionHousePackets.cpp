@@ -222,7 +222,7 @@ WorldPacket const* AuctionListItemsResult::Write()
     _worldPacket << int32(Items.size());
     _worldPacket << int32(TotalCount);
     _worldPacket << int32(DesiredDelay);
-    _worldPacket.WriteBit(OnlyUsable);
+    _worldPacket << Bits<1>(OnlyUsable);
     _worldPacket.FlushBits();
 
     for (AuctionItem const& item : Items)

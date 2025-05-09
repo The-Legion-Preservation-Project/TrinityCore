@@ -170,8 +170,8 @@ WorldPacket const* WorldPackets::Battleground::BattlefieldStatusActive::Write()
     _worldPacket << uint32(Mapid);
     _worldPacket << uint32(ShutdownTimer);
     _worldPacket << uint32(StartTimer);
-    _worldPacket.WriteBit(ArenaFaction != 0);
-    _worldPacket.WriteBit(LeftEarly);
+    _worldPacket << Bits<1>(ArenaFaction != 0);
+    _worldPacket << Bits<1>(LeftEarly);
     _worldPacket.FlushBits();
     return &_worldPacket;
 }

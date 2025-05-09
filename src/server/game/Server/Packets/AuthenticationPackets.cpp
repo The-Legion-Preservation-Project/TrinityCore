@@ -105,7 +105,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Auth::AuthWaitInfo const&
 {
     data << uint32(waitInfo.WaitCount);
     data << uint32(waitInfo.WaitTime);
-    data.WriteBit(waitInfo.HasFCM);
+    data << WorldPackets::Bits<1>(waitInfo.HasFCM);
     data.FlushBits();
 
     return data;

@@ -1013,6 +1013,17 @@ enum ItemBonusType
     ITEM_BONUS_OVERRIDE_REQUIRED_LEVEL          = 18
 };
 
+enum class ItemCollectionType : uint8
+{
+    None                        = 0,
+    Toy                         = 1,
+    Heirloom                    = 2,
+    Transmog                    = 3,
+    TransmogSetFavorite         = 4,
+    RuneforgeLegendaryAbility   = 5,
+    TransmogIllusion            = 6,
+};
+
 enum class ItemContext : uint8
 {
     NONE                                = 0,

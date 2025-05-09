@@ -21,5 +21,5 @@ void WorldPackets::Collections::CollectionItemSetFavorite::Read()
 {
     Type = _worldPacket.read<CollectionType>();
     ID = _worldPacket.read<uint32>();
-    IsFavorite = _worldPacket.ReadBit();
+    _worldPacket >> Bits<1>(IsFavorite);
 }

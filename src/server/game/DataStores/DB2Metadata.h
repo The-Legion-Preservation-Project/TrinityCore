@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DB2Metadata_h__
-#define DB2Metadata_h__
+#ifndef TRINITYCORE_DB2_METADATA_H
+#define TRINITYCORE_DB2_METADATA_H
 
 #include "DB2Meta.h"
 
@@ -24,9333 +24,14221 @@ struct AchievementMeta
 {
     static constexpr DB2MetaField Fields[15] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1260179, 12, 15, 0x2C4BE18C, Fields, 7 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1260179,
+        .IndexField       = 12,
+        .ParentIndexField = 7,
+        .FieldCount       = 15,
+        .LayoutHash       = 0x2C4BE18C,
+        .Fields           = Fields,
+    };
 };
 
 struct Achievement_CategoryMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1324299, 3, 4, 0xED226BC9, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1324299,
+        .IndexField       = 3,
+        .ParentIndexField = 2,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xED226BC9,
+        .Fields           = Fields,
+    };
 };
 
 struct AdventureJournalMeta
 {
     static constexpr DB2MetaField Fields[22] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 2, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 2, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1115949, -1, 22, 0xB2FFA8DD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1115949,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 22,
+        .LayoutHash       = 0xB2FFA8DD,
+        .Fields           = Fields,
+    };
 };
 
 struct AdventureMapPOIMeta
 {
     static constexpr DB2MetaField Fields[13] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267070, -1, 13, 0x0C288A82, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267070,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 13,
+        .LayoutHash       = 0x0C288A82,
+        .Fields           = Fields,
+    };
 };
 
 struct AlliedRaceMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1710672, 1, 8, 0xB13ABE04, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1710672,
+        .IndexField       = 1,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xB13ABE04,
+        .Fields           = Fields,
+    };
 };
 
 struct AlliedRaceRacialAbilityMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1720145, -1, 5, 0x9EBF9B09, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1720145,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x9EBF9B09,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimKitMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1304323, -1, 3, 0x81D6D250, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1304323,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x81D6D250,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimKitBoneSetMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1375433, -1, 5, 0xFE4B9B1F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375433,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xFE4B9B1F,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimKitBoneSetAliasMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1266937, -1, 2, 0xEA8B67BC, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266937,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xEA8B67BC,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimKitConfigMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1300872, -1, 1, 0x8A70ED4C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1300872,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x8A70ED4C,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimKitConfigBoneSetMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1300873, -1, 3, 0x3D9B3BA7, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1300873,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x3D9B3BA7,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimKitPriorityMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1266540, -1, 1, 0x5E93C107, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266540,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x5E93C107,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimKitReplacementMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1559807, 3, 5, 0x0735DB83, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1559807,
+        .IndexField       = 3,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x0735DB83,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimKitSegmentMeta
 {
     static constexpr DB2MetaField Fields[18] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1304324, -1, 18, 0x08F09B89, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1304324,
+        .IndexField       = -1,
+        .ParentIndexField = 5,
+        .FieldCount       = 18,
+        .LayoutHash       = 0x08F09B89,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimReplacementMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1301100, 3, 5, 0x2C8B0F35, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1301100,
+        .IndexField       = 3,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x2C8B0F35,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimReplacementSetMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1284817, -1, 1, 0x3761247A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1284817,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x3761247A,
+        .Fields           = Fields,
+    };
 };
 
 struct AnimationDataMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1375431, -1, 4, 0x03182786, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375431,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x03182786,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaFarClipOverrideMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1537162, 4, 5, 0xEB5921CC, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1537162,
+        .IndexField       = 4,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xEB5921CC,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaGroupMemberMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1093406, -1, 2, 0x50AA43EE, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1093406,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x50AA43EE,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaPOIMeta
 {
     static constexpr DB2MetaField Fields[16] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1000630, -1, 16, 0xB161EE90, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1000630,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 16,
+        .LayoutHash       = 0xB161EE90,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaPOIStateMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1000631, -1, 5, 0x673BDA80, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1000631,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x673BDA80,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaTableMeta
 {
     static constexpr DB2MetaField Fields[23] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 2, true },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 4, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1353545, -1, 23, 0x0CA01129, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1353545,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 23,
+        .LayoutHash       = 0x0CA01129,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaTriggerMeta
 {
     static constexpr DB2MetaField Fields[15] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1354401, 14, 15, 0x378573E8, Fields, 6 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1354401,
+        .IndexField       = 14,
+        .ParentIndexField = 6,
+        .FieldCount       = 15,
+        .LayoutHash       = 0x378573E8,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaTriggerActionSetMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_SHORT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1352378, -1, 1, 0x5DA480BD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1352378,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x5DA480BD,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaTriggerBoxMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_FLOAT, 3, false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1332554, -1, 1, 0x602CFDA6, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1332554,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x602CFDA6,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaTriggerCylinderMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121943, -1, 3, 0x26D4052D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121943,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x26D4052D,
+        .Fields           = Fields,
+    };
 };
 
 struct AreaTriggerSphereMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1315630, -1, 1, 0x9141AC7F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1315630,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x9141AC7F,
+        .Fields           = Fields,
+    };
 };
 
 struct ArmorLocationMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1284818, -1, 5, 0xCCFBD16E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1284818,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xCCFBD16E,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1007934, -1, 10, 0x76CF31A8, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1007934,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x76CF31A8,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactAppearanceMeta
 {
     static constexpr DB2MetaField Fields[15] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1116407, 11, 15, 0xAEED7395, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1116407,
+        .IndexField       = 11,
+        .ParentIndexField = 5,
+        .FieldCount       = 15,
+        .LayoutHash       = 0xAEED7395,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactAppearanceSetMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1116408, 7, 9, 0x53DFED74, Fields, 8 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1116408,
+        .IndexField       = 7,
+        .ParentIndexField = 8,
+        .FieldCount       = 9,
+        .LayoutHash       = 0x53DFED74,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactCategoryMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1376210, -1, 2, 0x21328475, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1376210,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x21328475,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactPowerMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1007937, 5, 7, 0x45240818, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1007937,
+        .IndexField       = 5,
+        .ParentIndexField = 1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x45240818,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactPowerLinkMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1133731, -1, 2, 0xE179618C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1133731,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xE179618C,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactPowerPickerMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1597467, -1, 1, 0x2D6AF006, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1597467,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x2D6AF006,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactPowerRankMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1261405, -1, 5, 0xA87EACC4, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1261405,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xA87EACC4,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactQuestXPMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 10, false },
+        { .Type = FT_INT,    .ArraySize = 10, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1036203, -1, 1, 0x86397302, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1036203,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x86397302,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactTierMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1600114, -1, 5, 0x1A5A50B9, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1600114,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x1A5A50B9,
+        .Fields           = Fields,
+    };
 };
 
 struct ArtifactUnlockMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1094540, -1, 5, 0x52839A77, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1094540,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x52839A77,
+        .Fields           = Fields,
+    };
 };
 
 struct AuctionHouseMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237439, -1, 4, 0x51CFEEFF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237439,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x51CFEEFF,
+        .Fields           = Fields,
+    };
 };
 
 struct BankBagSlotPricesMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1284819, -1, 1, 0xEA0AC2AA, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1284819,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xEA0AC2AA,
+        .Fields           = Fields,
+    };
 };
 
 struct BannedAddonsMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1373459, -1, 3, 0xF779B6E5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1373459,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xF779B6E5,
+        .Fields           = Fields,
+    };
 };
 
 struct BarberShopStyleMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1237437, 7, 8, 0x670C71AE, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237437,
+        .IndexField       = 7,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x670C71AE,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetAbilityMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 841610, -1, 7, 0x0F29944D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 841610,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x0F29944D,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetAbilityEffectMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 6, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 6, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 801575, 6, 7, 0x5D30EBC5, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801575,
+        .IndexField       = 6,
+        .ParentIndexField = 0,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x5D30EBC5,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetAbilityStateMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801576, -1, 3, 0x0E40A884, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801576,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x0E40A884,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetAbilityTurnMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 801577, 5, 6, 0xCB063F4F, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801577,
+        .IndexField       = 5,
+        .ParentIndexField = 0,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xCB063F4F,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetBreedQualityMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801578, -1, 2, 0xBDE74E1D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801578,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xBDE74E1D,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetBreedStateMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801579, -1, 3, 0x68D5C999, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801579,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x68D5C999,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetDisplayOverrideMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1802988, -1, 4, 0xDE5129EA, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1802988,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xDE5129EA,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetEffectPropertiesMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 6, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 6, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 6, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 6, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801580, -1, 3, 0x56070751, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801580,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x56070751,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetNPCTeamMemberMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 841648, -1, 1, 0x4423F004, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 841648,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x4423F004,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetSpeciesMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 841622, 8, 11, 0x8A3D97A4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 841622,
+        .IndexField       = 8,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0x8A3D97A4,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetSpeciesStateMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801581, -1, 3, 0x8F958D5C, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801581,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x8F958D5C,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetSpeciesXAbilityMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801582, -1, 4, 0x9EE27D6A, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801582,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x9EE27D6A,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetStateMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801583, -1, 3, 0x1797AB4A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801583,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x1797AB4A,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlePetVisualMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801584, -1, 7, 0x097E0F6C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801584,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x097E0F6C,
+        .Fields           = Fields,
+    };
 };
 
 struct BattlemasterListMeta
 {
     static constexpr DB2MetaField Fields[17] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 16, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 16, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1360265, -1, 17, 0xD8AAA088, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1360265,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 17,
+        .LayoutHash       = 0xD8AAA088,
+        .Fields           = Fields,
+    };
 };
 
 struct BeamEffectMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1525607, -1, 10, 0x42C18603, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1525607,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x42C18603,
+        .Fields           = Fields,
+    };
 };
 
 struct BoneWindModifierModelMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1467254, -1, 2, 0x577A0772, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1467254,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x577A0772,
+        .Fields           = Fields,
+    };
 };
 
 struct BoneWindModifiersMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1416756, -1, 2, 0xB4E7449E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1416756,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xB4E7449E,
+        .Fields           = Fields,
+    };
 };
 
 struct BountyMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1367866, -1, 5, 0xE76E716C, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1367866,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xE76E716C,
+        .Fields           = Fields,
+    };
 };
 
 struct BountySetMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1367865, -1, 2, 0x96B908A5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1367865,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x96B908A5,
+        .Fields           = Fields,
+    };
 };
 
 struct BroadcastTextMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_SHORT, 3, false },
-        { FT_SHORT, 3, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 2, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 841604, -1, 9, 0x51BF0C33, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 841604,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0x51BF0C33,
+        .Fields           = Fields,
+    };
 };
 
 struct CameraEffectMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1117695, -1, 1, 0xF6AB4622, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1117695,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xF6AB4622,
+        .Fields           = Fields,
+    };
 };
 
 struct CameraEffectEntryMeta
 {
     static constexpr DB2MetaField Fields[16] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1117696, -1, 16, 0xC5105557, Fields, 15 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1117696,
+        .IndexField       = -1,
+        .ParentIndexField = 15,
+        .FieldCount       = 16,
+        .LayoutHash       = 0xC5105557,
+        .Fields           = Fields,
+    };
 };
 
 struct CameraModeMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1343308, -1, 11, 0xCDB6BC2F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343308,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0xCDB6BC2F,
+        .Fields           = Fields,
+    };
 };
 
 struct CastableRaidBuffsMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1283018, -1, 2, 0x5BDD4028, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1283018,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x5BDD4028,
+        .Fields           = Fields,
+    };
 };
 
 struct CelestialBodyMeta
 {
     static constexpr DB2MetaField Fields[15] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 2, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 2, true },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1592470, 14, 15, 0xD09BE31C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1592470,
+        .IndexField       = 14,
+        .ParentIndexField = -1,
+        .FieldCount       = 15,
+        .LayoutHash       = 0xD09BE31C,
+        .Fields           = Fields,
+    };
 };
 
 struct Cfg_CategoriesMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1068162, -1, 5, 0x705B82C8, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1068162,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x705B82C8,
+        .Fields           = Fields,
+    };
 };
 
 struct Cfg_ConfigsMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1080949, -1, 4, 0xC618392F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1080949,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xC618392F,
+        .Fields           = Fields,
+    };
 };
 
 struct Cfg_RegionsMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1082876, -1, 5, 0x9F4272BF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1082876,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x9F4272BF,
+        .Fields           = Fields,
+    };
 };
 
 struct CharBaseInfoMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1343386, -1, 2, 0x9E9939B8, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343386,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x9E9939B8,
+        .Fields           = Fields,
+    };
 };
 
 struct CharBaseSectionMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1375798, -1, 3, 0x4F08B5F3, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375798,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x4F08B5F3,
+        .Fields           = Fields,
+    };
 };
 
 struct CharComponentTextureLayoutsMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1360262, -1, 2, 0x0F515E34, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1360262,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x0F515E34,
+        .Fields           = Fields,
+    };
 };
 
 struct CharComponentTextureSectionsMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1360263, -1, 7, 0xCE76000F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1360263,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0xCE76000F,
+        .Fields           = Fields,
+    };
 };
 
 struct CharHairGeosetsMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1256914, -1, 10, 0x33EB32D2, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1256914,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x33EB32D2,
+        .Fields           = Fields,
+    };
 };
 
 struct CharSectionsMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 3, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1365366, -1, 7, 0xE349E55B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1365366,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0xE349E55B,
+        .Fields           = Fields,
+    };
 };
 
 struct CharShipmentMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 972425, -1, 9, 0xE6D3C7C1, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 972425,
+        .IndexField       = -1,
+        .ParentIndexField = 5,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xE6D3C7C1,
+        .Fields           = Fields,
+    };
 };
 
 struct CharShipmentContainerMeta
 {
     static constexpr DB2MetaField Fields[16] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 972405, -1, 16, 0x194896E3, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 972405,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 16,
+        .LayoutHash       = 0x194896E3,
+        .Fields           = Fields,
+    };
 };
 
 struct CharStartOutfitMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 24, true },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 24, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237591, -1, 7, 0x0EEBEE24, Fields, 6 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237591,
+        .IndexField       = -1,
+        .ParentIndexField = 6,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x0EEBEE24,
+        .Fields           = Fields,
+    };
 };
 
 struct CharTitlesMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1349054, -1, 4, 0x7A58AA5F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1349054,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x7A58AA5F,
+        .Fields           = Fields,
+    };
 };
 
 struct CharacterFaceBoneSetMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1028733, -1, 5, 0x1C634076, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1028733,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x1C634076,
+        .Fields           = Fields,
+    };
 };
 
 struct CharacterFacialHairStylesMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 5, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 5, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1369752, -1, 4, 0x47D79688, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1369752,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x47D79688,
+        .Fields           = Fields,
+    };
 };
 
 struct CharacterLoadoutMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_LONG, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1344281, -1, 3, 0x87B51673, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1344281,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x87B51673,
+        .Fields           = Fields,
+    };
 };
 
 struct CharacterLoadoutItemMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1302846, -1, 2, 0x3C3D40B9, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302846,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x3C3D40B9,
+        .Fields           = Fields,
+    };
 };
 
 struct CharacterServiceInfoMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1815417, -1, 11, 0xADE120EF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1815417,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0xADE120EF,
+        .Fields           = Fields,
+    };
 };
 
 struct ChatChannelsMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1345278, -1, 4, 0x1A325E80, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1345278,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x1A325E80,
+        .Fields           = Fields,
+    };
 };
 
 struct ChatProfanityMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1117084, -1, 2, 0x328E1FE6, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1117084,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x328E1FE6,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrClassRaceSexMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1306188, -1, 6, 0x5E29DFA1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1306188,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x5E29DFA1,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrClassTitleMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267497, -1, 3, 0xC155DB2C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267497,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xC155DB2C,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrClassUIDisplayMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1316515, -1, 3, 0x59A95A73, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1316515,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x59A95A73,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrClassVillainMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267498, -1, 3, 0xA6AC18CD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267498,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xA6AC18CD,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrClassesMeta
 {
     static constexpr DB2MetaField Fields[20] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1361031, 19, 20, 0x6F7AB8E7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1361031,
+        .IndexField       = 19,
+        .ParentIndexField = -1,
+        .FieldCount       = 20,
+        .LayoutHash       = 0x6F7AB8E7,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrClassesXPowerTypesMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121420, -1, 2, 0xAF977B23, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121420,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xAF977B23,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrCustomizationMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 3, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1611874, -1, 6, 0x71833CE5, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1611874,
+        .IndexField       = -1,
+        .ParentIndexField = 5,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x71833CE5,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrRacesMeta
 {
     static constexpr DB2MetaField Fields[38] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 3, false },
-        { FT_INT, 3, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1305311, 30, 38, 0x51C511F9, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1305311,
+        .IndexField       = 30,
+        .ParentIndexField = -1,
+        .FieldCount       = 38,
+        .LayoutHash       = 0x51C511F9,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrSpecializationMeta
 {
     static constexpr DB2MetaField Fields[13] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 2, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1343390, 9, 13, 0x3D86B8F7, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343390,
+        .IndexField       = 9,
+        .ParentIndexField = 4,
+        .FieldCount       = 13,
+        .LayoutHash       = 0x3D86B8F7,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrUpgradeBucketMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 984529, 1, 3, 0xACF64A80, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 984529,
+        .IndexField       = 1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xACF64A80,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrUpgradeBucketSpellMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 984528, -1, 2, 0xDF939031, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 984528,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xDF939031,
+        .Fields           = Fields,
+    };
 };
 
 struct ChrUpgradeTierMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 984530, 3, 4, 0x2C87937D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 984530,
+        .IndexField       = 3,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x2C87937D,
+        .Fields           = Fields,
+    };
 };
 
 struct CinematicCameraMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1294214, -1, 4, 0x0062B0F4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1294214,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x0062B0F4,
+        .Fields           = Fields,
+    };
 };
 
 struct CinematicSequencesMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 8, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 8, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1134583, -1, 2, 0x470FDA8C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134583,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x470FDA8C,
+        .Fields           = Fields,
+    };
 };
 
 struct CloakDampeningMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_FLOAT, 5, false },
-        { FT_FLOAT, 5, false },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1465903, -1, 7, 0xB2DF7F2A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1465903,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0xB2DF7F2A,
+        .Fields           = Fields,
+    };
 };
 
 struct CombatConditionMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 2, false },
-        { FT_SHORT, 2, false },
-        { FT_BYTE, 2, false },
-        { FT_BYTE, 2, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 2, false },
-        { FT_BYTE, 2, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1120958, -1, 11, 0x28D253C6, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1120958,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0x28D253C6,
+        .Fields           = Fields,
+    };
 };
 
 struct CommentatorStartLocationMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1664251, -1, 2, 0xEFD540EF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1664251,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xEFD540EF,
+        .Fields           = Fields,
+    };
 };
 
 struct CommentatorTrackedCooldownMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1661584, -1, 4, 0x84985168, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1661584,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x84985168,
+        .Fields           = Fields,
+    };
 };
 
 struct ComponentModelFileDataMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1349053, -1, 4, 0x25BB55A7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1349053,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x25BB55A7,
+        .Fields           = Fields,
+    };
 };
 
 struct ComponentTextureFileDataMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1278239, -1, 3, 0x50C58D4F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1278239,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x50C58D4F,
+        .Fields           = Fields,
+    };
 };
 
 struct ConfigurationWarningMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1709409, -1, 2, 0x0B350390, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1709409,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x0B350390,
+        .Fields           = Fields,
+    };
 };
 
 struct ContributionMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 4, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1587153, 2, 6, 0x8EDF6090, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1587153,
+        .IndexField       = 2,
+        .ParentIndexField = 3,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x8EDF6090,
+        .Fields           = Fields,
+    };
 };
 
 struct ConversationLineMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1260801, -1, 8, 0x032B137B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1260801,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x032B137B,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 3, true },
-        { FT_INT, 1, true },
-        { FT_INT, 4, true },
-        { FT_FLOAT, 4, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 841631, -1, 12, 0xCFB508A9, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 841631,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 12,
+        .LayoutHash       = 0xCFB508A9,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureDifficultyMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 7, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 7, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 879282, -1, 6, 0x4291EEC6, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 879282,
+        .IndexField       = -1,
+        .ParentIndexField = 5,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x4291EEC6,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureDispXUiCameraMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1146692, -1, 2, 0x6E0E7C15, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1146692,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x6E0E7C15,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureDisplayInfoMeta
 {
     static constexpr DB2MetaField Fields[23] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 3, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1108759, 0, 23, 0x406268DF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1108759,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 23,
+        .LayoutHash       = 0x406268DF,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureDisplayInfoCondMeta
 {
     static constexpr DB2MetaField Fields[15] =
     {
-        { FT_LONG, 1, true },
-        { FT_INT, 2, true },
-        { FT_INT, 2, true },
-        { FT_INT, 2, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 3, true },
-        { FT_INT, 1, true },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1332686, -1, 15, 0x26CD44AB, Fields, 14 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1332686,
+        .IndexField       = -1,
+        .ParentIndexField = 14,
+        .FieldCount       = 15,
+        .LayoutHash       = 0x26CD44AB,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureDisplayInfoEvtMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1586882, -1, 4, 0x3FEF69BB, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1586882,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x3FEF69BB,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureDisplayInfoExtraMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 3, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1264997, -1, 12, 0x6DF98EF6, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1264997,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 12,
+        .LayoutHash       = 0x6DF98EF6,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureDisplayInfoTrnMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1146698, -1, 6, 0x8E687740, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1146698,
+        .IndexField       = -1,
+        .ParentIndexField = 5,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x8E687740,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureFamilyMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 2, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1351351, -1, 9, 0xE2DC5126, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1351351,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xE2DC5126,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureImmunitiesMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_INT, 2, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 8, false },
-        { FT_INT, 16, false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 8, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 16, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1131322, -1, 9, 0x2D20050B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1131322,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0x2D20050B,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureModelDataMeta
 {
     static constexpr DB2MetaField Fields[28] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 6, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 6, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1365368, -1, 28, 0x983BD312, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1365368,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 28,
+        .LayoutHash       = 0x983BD312,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureMovementInfoMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1125666, -1, 1, 0x39F710E3, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1125666,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x39F710E3,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureSoundDataMeta
 {
     static constexpr DB2MetaField Fields[37] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 5, false },
-        { FT_INT, 4, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1344466, -1, 37, 0x7C3C39B9, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1344466,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 37,
+        .LayoutHash       = 0x7C3C39B9,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureTypeMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1131315, -1, 2, 0x7BA9D2F8, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1131315,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x7BA9D2F8,
+        .Fields           = Fields,
+    };
 };
 
 struct CreatureXContributionMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1587158, 0, 3, 0x3448DF58, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1587158,
+        .IndexField       = 0,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x3448DF58,
+        .Fields           = Fields,
+    };
 };
 
 struct CriteriaMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1263817, -1, 11, 0xA87A5BB9, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1263817,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0xA87A5BB9,
+        .Fields           = Fields,
+    };
 };
 
 struct CriteriaTreeMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1263818, -1, 7, 0x0A1B99C2, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1263818,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x0A1B99C2,
+        .Fields           = Fields,
+    };
 };
 
 struct CriteriaTreeXEffectMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1345969, -1, 2, 0x929D9B0C, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1345969,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x929D9B0C,
+        .Fields           = Fields,
+    };
 };
 
 struct CurrencyCategoryMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1125667, -1, 3, 0xC3735D76, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1125667,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xC3735D76,
+        .Fields           = Fields,
+    };
 };
 
 struct CurrencyTypesMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1095531, -1, 10, 0x6CC25CBF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1095531,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x6CC25CBF,
+        .Fields           = Fields,
+    };
 };
 
 struct CurveMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 892585, -1, 2, 0x17EA5154, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 892585,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x17EA5154,
+        .Fields           = Fields,
+    };
 };
 
 struct CurvePointMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 892586, -1, 3, 0xF36752EB, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 892586,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xF36752EB,
+        .Fields           = Fields,
+    };
 };
 
 struct DeathThudLookupsMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1279415, -1, 4, 0xD469085C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1279415,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xD469085C,
+        .Fields           = Fields,
+    };
 };
 
 struct DecalPropertiesMeta
 {
     static constexpr DB2MetaField Fields[17] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1278176, 0, 17, 0xDD48C72A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1278176,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 17,
+        .LayoutHash       = 0xDD48C72A,
+        .Fields           = Fields,
+    };
 };
 
 struct DeclinedWordMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1279100, 1, 2, 0x3FF5EC3E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1279100,
+        .IndexField       = 1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x3FF5EC3E,
+        .Fields           = Fields,
+    };
 };
 
 struct DeclinedWordCasesMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1279099, -1, 3, 0x821A20A9, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1279099,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x821A20A9,
+        .Fields           = Fields,
+    };
 };
 
 struct DestructibleModelDataMeta
 {
     static constexpr DB2MetaField Fields[22] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1122116, -1, 22, 0x1092C9AF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1122116,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 22,
+        .LayoutHash       = 0x1092C9AF,
+        .Fields           = Fields,
+    };
 };
 
 struct DeviceBlacklistMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 922722, -1, 2, 0xD956413D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 922722,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xD956413D,
+        .Fields           = Fields,
+    };
 };
 
 struct DeviceDefaultSettingsMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 925422, -1, 3, 0x90CFEC8C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 925422,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x90CFEC8C,
+        .Fields           = Fields,
+    };
 };
 
 struct DifficultyMeta
 {
     static constexpr DB2MetaField Fields[13] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1352127, -1, 13, 0x92302BB8, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1352127,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 13,
+        .LayoutHash       = 0x92302BB8,
+        .Fields           = Fields,
+    };
 };
 
 struct DissolveEffectMeta
 {
     static constexpr DB2MetaField Fields[14] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1304325, -1, 14, 0x566413E7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1304325,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 14,
+        .LayoutHash       = 0x566413E7,
+        .Fields           = Fields,
+    };
 };
 
 struct DriverBlacklistMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 922720, -1, 7, 0x1466ACAD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 922720,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x1466ACAD,
+        .Fields           = Fields,
+    };
 };
 
 struct DungeonEncounterMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1347279, 6, 9, 0xB04A2596, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1347279,
+        .IndexField       = 6,
+        .ParentIndexField = 2,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xB04A2596,
+        .Fields           = Fields,
+    };
 };
 
 struct DungeonMapMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1347271, 7, 8, 0xB5A245F4, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1347271,
+        .IndexField       = 7,
+        .ParentIndexField = 2,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xB5A245F4,
+        .Fields           = Fields,
+    };
 };
 
 struct DungeonMapChunkMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1294215, -1, 5, 0x7927A3A7, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1294215,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x7927A3A7,
+        .Fields           = Fields,
+    };
 };
 
 struct DurabilityCostsMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 21, false },
-        { FT_SHORT, 8, false },
+        { .Type = FT_SHORT,  .ArraySize = 21, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 8, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1283019, -1, 2, 0x8447966A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1283019,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x8447966A,
+        .Fields           = Fields,
+    };
 };
 
 struct DurabilityQualityMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1130268, -1, 1, 0x6F64793D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1130268,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x6F64793D,
+        .Fields           = Fields,
+    };
 };
 
 struct EdgeGlowEffectMeta
 {
     static constexpr DB2MetaField Fields[13] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1387381, -1, 13, 0x083BF2C4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1387381,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 13,
+        .LayoutHash       = 0x083BF2C4,
+        .Fields           = Fields,
+    };
 };
 
 struct EmotesMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_LONG, 1, true },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1343602, -1, 9, 0x14467F27, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343602,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0x14467F27,
+        .Fields           = Fields,
+    };
 };
 
 struct EmotesTextMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1347273, -1, 2, 0xE85AFA10, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1347273,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xE85AFA10,
+        .Fields           = Fields,
+    };
 };
 
 struct EmotesTextDataMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1283024, -1, 3, 0x0E19BCF1, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1283024,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x0E19BCF1,
+        .Fields           = Fields,
+    };
 };
 
 struct EmotesTextSoundMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1286524, -1, 5, 0x6DFAF9BC, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1286524,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x6DFAF9BC,
+        .Fields           = Fields,
+    };
 };
 
 struct EnvironmentalDamageMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1278398, -1, 2, 0xC4552C14, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1278398,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC4552C14,
+        .Fields           = Fields,
+    };
 };
 
 struct ExhaustionMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1343313, 7, 8, 0xE6E16045, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343313,
+        .IndexField       = 7,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xE6E16045,
+        .Fields           = Fields,
+    };
 };
 
 struct FactionMeta
 {
     static constexpr DB2MetaField Fields[16] =
     {
-        { FT_LONG, 4, true },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 4, true },
-        { FT_FLOAT, 2, false },
-        { FT_INT, 4, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 4, false },
-        { FT_SHORT, 4, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 2, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_LONG,   .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1361972, 3, 16, 0x6BFE8737, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1361972,
+        .IndexField       = 3,
+        .ParentIndexField = -1,
+        .FieldCount       = 16,
+        .LayoutHash       = 0x6BFE8737,
+        .Fields           = Fields,
+    };
 };
 
 struct FactionGroupMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1343595, 2, 6, 0x7A7F9A51, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343595,
+        .IndexField       = 2,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x7A7F9A51,
+        .Fields           = Fields,
+    };
 };
 
 struct FactionTemplateMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 4, false },
-        { FT_SHORT, 4, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1361579, -1, 7, 0x6F1D2135, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1361579,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x6F1D2135,
+        .Fields           = Fields,
+    };
 };
 
 struct FootprintTexturesMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1308056, -1, 3, 0xFD6FF285, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1308056,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xFD6FF285,
+        .Fields           = Fields,
+    };
 };
 
 struct FootstepTerrainLookupMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267647, -1, 4, 0x454895AE, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267647,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x454895AE,
+        .Fields           = Fields,
+    };
 };
 
 struct FriendshipRepReactionMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237638, -1, 3, 0x9C412E5B, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237638,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x9C412E5B,
+        .Fields           = Fields,
+    };
 };
 
 struct FriendshipReputationMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237639, 3, 4, 0x406EE0AB, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237639,
+        .IndexField       = 3,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x406EE0AB,
+        .Fields           = Fields,
+    };
 };
 
 struct FullScreenEffectMeta
 {
     static constexpr DB2MetaField Fields[27] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1348282, -1, 27, 0x5CBF1D1B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1348282,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 27,
+        .LayoutHash       = 0x5CBF1D1B,
+        .Fields           = Fields,
+    };
 };
 
 struct GMSurveyAnswersMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1283025, -1, 3, 0x422747F6, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1283025,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x422747F6,
+        .Fields           = Fields,
+    };
 };
 
 struct GMSurveyCurrentSurveyMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1278177, -1, 1, 0x617205BF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1278177,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x617205BF,
+        .Fields           = Fields,
+    };
 };
 
 struct GMSurveyQuestionsMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1278178, -1, 1, 0x9D852FDC, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1278178,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x9D852FDC,
+        .Fields           = Fields,
+    };
 };
 
 struct GMSurveySurveysMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_BYTE, 15, false },
+        { .Type = FT_BYTE,   .ArraySize = 15, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1283020, -1, 1, 0x17FEF812, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1283020,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x17FEF812,
+        .Fields           = Fields,
+    };
 };
 
 struct GameObjectArtKitMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 3, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1266737, -1, 2, 0x6F65BC41, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266737,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x6F65BC41,
+        .Fields           = Fields,
+    };
 };
 
 struct GameObjectDiffAnimMapMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1302847, -1, 4, 0x89A617CF, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302847,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x89A617CF,
+        .Fields           = Fields,
+    };
 };
 
 struct GameObjectDisplayInfoMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 6, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 6, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1266277, -1, 5, 0x9F2098D1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266277,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x9F2098D1,
+        .Fields           = Fields,
+    };
 };
 
 struct GameObjectDisplayInfoXSoundKitMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1345272, -1, 3, 0x4BBA66F2, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1345272,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x4BBA66F2,
+        .Fields           = Fields,
+    };
 };
 
 struct GameObjectsMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 4, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 8, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 8, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 841620, 11, 12, 0x597E8643, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 841620,
+        .IndexField       = 11,
+        .ParentIndexField = 5,
+        .FieldCount       = 12,
+        .LayoutHash       = 0x597E8643,
+        .Fields           = Fields,
+    };
 };
 
 struct GameTipsMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1368021, -1, 4, 0x547E3F0F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1368021,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x547E3F0F,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrAbilityMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 966238, 7, 8, 0x5DF95DBD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 966238,
+        .IndexField       = 7,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x5DF95DBD,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrAbilityCategoryMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1020248, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1020248,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrAbilityEffectMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 966241, 11, 12, 0xE6A6CB99, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 966241,
+        .IndexField       = 11,
+        .ParentIndexField = 4,
+        .FieldCount       = 12,
+        .LayoutHash       = 0xE6A6CB99,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrBuildingMeta
 {
     static constexpr DB2MetaField Fields[24] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 929747, -1, 24, 0x200F9858, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 929747,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 24,
+        .LayoutHash       = 0x200F9858,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrBuildingDoodadSetMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 943937, -1, 5, 0x2A861C7F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 943937,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x2A861C7F,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrBuildingPlotInstMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 983298, 4, 5, 0xF45B6227, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 983298,
+        .IndexField       = 4,
+        .ParentIndexField = 3,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xF45B6227,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrClassSpecMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 981570, 7, 8, 0x194CD478, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 981570,
+        .IndexField       = 7,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x194CD478,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrClassSpecPlayerCondMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1380674, -1, 6, 0x06936172, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1380674,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x06936172,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrEncounterMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 975304, 5, 7, 0x63EF121A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 975304,
+        .IndexField       = 5,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x63EF121A,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrEncounterSetXEncounterMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1354772, 0, 3, 0x3AA64423, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1354772,
+        .IndexField       = 0,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x3AA64423,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrEncounterXMechanicMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 967961, -1, 3, 0x97080E17, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 967961,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x97080E17,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrFollItemSetMemberMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 981569, -1, 4, 0xCA1C4CBF, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 981569,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xCA1C4CBF,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrFollSupportSpellMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1345970, -1, 4, 0xB7DBA2D1, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1345970,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xB7DBA2D1,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrFollowerMeta
 {
     static constexpr DB2MetaField Fields[32] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 949906, 31, 32, 0xAAB75E04, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 949906,
+        .IndexField       = 31,
+        .ParentIndexField = -1,
+        .FieldCount       = 32,
+        .LayoutHash       = 0xAAB75E04,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrFollowerLevelXPMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 970979, -1, 4, 0x1ED485E2, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 970979,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x1ED485E2,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrFollowerQualityMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1027793, -1, 7, 0xAFF4CF7E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1027793,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0xAFF4CF7E,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrFollowerSetXFollowerMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1361029, -1, 2, 0xDB0E0A17, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1361029,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xDB0E0A17,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrFollowerTypeMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1118784, -1, 7, 0xD676FBC0, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1118784,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0xD676FBC0,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrFollowerUICreatureMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1412636, -1, 6, 0x7E275E96, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1412636,
+        .IndexField       = -1,
+        .ParentIndexField = 5,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x7E275E96,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrFollowerXAbilityMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 968468, -1, 3, 0x996447F1, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 968468,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x996447F1,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrItemLevelUpgradeDataMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1572314, 0, 5, 0x069F44E5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1572314,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x069F44E5,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrMechanicMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 967963, -1, 3, 0xAB49DA61, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 967963,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xAB49DA61,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrMechanicSetXMechanicMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1391531, 1, 3, 0x59514F7B, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1391531,
+        .IndexField       = 1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x59514F7B,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrMechanicTypeMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 967964, 4, 5, 0x6FEA569F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 967964,
+        .IndexField       = 4,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x6FEA569F,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrMissionMeta
 {
     static constexpr DB2MetaField Fields[29] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 967962, 19, 29, 0xDDD70490, Fields, 28 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 967962,
+        .IndexField       = 19,
+        .ParentIndexField = 28,
+        .FieldCount       = 29,
+        .LayoutHash       = 0xDDD70490,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrMissionTextureMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1125220, -1, 2, 0x3071301C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1125220,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x3071301C,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrMissionTypeMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 984174, -1, 3, 0xA289655E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 984174,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xA289655E,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrMissionXEncounterMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 967960, 1, 5, 0xBCB016C6, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 967960,
+        .IndexField       = 1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xBCB016C6,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrMissionXFollowerMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1359096, -1, 3, 0x1EBABA29, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1359096,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x1EBABA29,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrMssnBonusAbilityMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1138458, -1, 5, 0x35F5AE92, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1138458,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x35F5AE92,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrPlotMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 2, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 937634, -1, 7, 0xE12049E0, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 937634,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0xE12049E0,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrPlotBuildingMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 929743, -1, 2, 0x3F77A6FA, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 929743,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x3F77A6FA,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrPlotInstanceMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 929742, -1, 2, 0xB708BB37, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 929742,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xB708BB37,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrPlotUICategoryMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 937635, -1, 2, 0xA94645EE, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 937635,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xA94645EE,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrSiteLevelMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 939295, -1, 9, 0xD3979C38, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 939295,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xD3979C38,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrSiteLevelPlotInstMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 940404, -1, 4, 0xC4E74201, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 940404,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xC4E74201,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrSpecializationMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 2, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 937647, -1, 7, 0x797A0F2F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 937647,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x797A0F2F,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrStringMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1416758, -1, 1, 0xE1C08C0C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1416758,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xE1C08C0C,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrTalentMeta
 {
     static constexpr DB2MetaField Fields[20] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1361032, 7, 20, 0x53D5FD16, Fields, 8 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1361032,
+        .IndexField       = 7,
+        .ParentIndexField = 8,
+        .FieldCount       = 20,
+        .LayoutHash       = 0x53D5FD16,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrTalentTreeMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1361030, -1, 5, 0x676CBC04, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1361030,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x676CBC04,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrTypeMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 2, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1333161, -1, 5, 0x7C52F3B7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1333161,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x7C52F3B7,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrUiAnimClassInfoMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 976037, -1, 6, 0xDBF4633D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 976037,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xDBF4633D,
+        .Fields           = Fields,
+    };
 };
 
 struct GarrUiAnimRaceInfoMeta
 {
     static constexpr DB2MetaField Fields[13] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 976035, -1, 13, 0x44B9C1DE, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 976035,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 13,
+        .LayoutHash       = 0x44B9C1DE,
+        .Fields           = Fields,
+    };
 };
 
 struct GemPropertiesMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1343604, -1, 3, 0x84558CAB, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343604,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x84558CAB,
+        .Fields           = Fields,
+    };
 };
 
 struct GlobalStringsMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1394440, -1, 3, 0x2CA3EA1E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1394440,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x2CA3EA1E,
+        .Fields           = Fields,
+    };
 };
 
 struct GlyphBindableSpellMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1270147, -1, 2, 0xEA228DFA, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1270147,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xEA228DFA,
+        .Fields           = Fields,
+    };
 };
 
 struct GlyphExclusiveCategoryMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 948546, -1, 1, 0xFE598FCD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 948546,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xFE598FCD,
+        .Fields           = Fields,
+    };
 };
 
 struct GlyphPropertiesMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1345274, -1, 4, 0xD0046829, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1345274,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xD0046829,
+        .Fields           = Fields,
+    };
 };
 
 struct GlyphRequiredSpecMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 948496, -1, 2, 0xDD6481CE, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 948496,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xDD6481CE,
+        .Fields           = Fields,
+    };
 };
 
 struct GroundEffectDoodadMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1308057, -1, 4, 0x0376B2D6, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1308057,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x0376B2D6,
+        .Fields           = Fields,
+    };
 };
 
 struct GroundEffectTextureMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_SHORT, 4, false },
-        { FT_BYTE, 4, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1308499, -1, 4, 0x84549F0A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1308499,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x84549F0A,
+        .Fields           = Fields,
+    };
 };
 
 struct GroupFinderActivityMeta
 {
     static constexpr DB2MetaField Fields[14] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 974813, -1, 14, 0x3EF2F3BD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 974813,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 14,
+        .LayoutHash       = 0x3EF2F3BD,
+        .Fields           = Fields,
+    };
 };
 
 struct GroupFinderActivityGrpMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 974814, -1, 2, 0xC9458196, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 974814,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC9458196,
+        .Fields           = Fields,
+    };
 };
 
 struct GroupFinderCategoryMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 974812, -1, 3, 0x9213552F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 974812,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x9213552F,
+        .Fields           = Fields,
+    };
 };
 
 struct GuildColorBackgroundMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1286526, -1, 3, 0xCC0CEFF1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1286526,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xCC0CEFF1,
+        .Fields           = Fields,
+    };
 };
 
 struct GuildColorBorderMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1286527, -1, 3, 0xCC0CEFF1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1286527,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xCC0CEFF1,
+        .Fields           = Fields,
+    };
 };
 
 struct GuildColorEmblemMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1286525, -1, 3, 0xCC0CEFF1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1286525,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xCC0CEFF1,
+        .Fields           = Fields,
+    };
 };
 
 struct GuildPerkSpellsMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1135238, -1, 1, 0xC15D6E9F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1135238,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xC15D6E9F,
+        .Fields           = Fields,
+    };
 };
 
 struct HeirloomMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 3, true },
-        { FT_SHORT, 3, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1097696, 9, 10, 0x36887C6F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1097696,
+        .IndexField       = 9,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x36887C6F,
+        .Fields           = Fields,
+    };
 };
 
 struct HelmetAnimScalingMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1348283, -1, 3, 0xB9EC1058, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1348283,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xB9EC1058,
+        .Fields           = Fields,
+    };
 };
 
 struct HelmetGeosetVisDataMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 9, true },
+        { .Type = FT_INT,    .ArraySize = 9, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1294216, -1, 1, 0x3B38D999, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1294216,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x3B38D999,
+        .Fields           = Fields,
+    };
 };
 
 struct HighlightColorMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 996358, -1, 5, 0x5FADC5D3, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 996358,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x5FADC5D3,
+        .Fields           = Fields,
+    };
 };
 
 struct HolidayDescriptionsMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 996360, -1, 1, 0x92A95550, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 996360,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x92A95550,
+        .Fields           = Fields,
+    };
 };
 
 struct HolidayNamesMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 996359, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 996359,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct HolidaysMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 16, false },
-        { FT_SHORT, 10, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 10, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 3, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 16, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 10, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 10, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 996357, 0, 12, 0x7C3E60FC, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 996357,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 12,
+        .LayoutHash       = 0x7C3E60FC,
+        .Fields           = Fields,
+    };
 };
 
 struct HotfixMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1590224, -1, 3, 0x3747930B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1590224,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x3747930B,
+        .Fields           = Fields,
+    };
 };
 
 struct ImportPriceArmorMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121229, -1, 4, 0x1F7A850F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121229,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x1F7A850F,
+        .Fields           = Fields,
+    };
 };
 
 struct ImportPriceQualityMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121228, -1, 1, 0x6F64793D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121228,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x6F64793D,
+        .Fields           = Fields,
+    };
 };
 
 struct ImportPriceShieldMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121227, -1, 1, 0x6F64793D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121227,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x6F64793D,
+        .Fields           = Fields,
+    };
 };
 
 struct ImportPriceWeaponMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121230, -1, 1, 0x6F64793D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121230,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x6F64793D,
+        .Fields           = Fields,
+    };
 };
 
 struct InvasionClientDataMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1336651, 2, 10, 0x4C93379F, Fields, 9 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1336651,
+        .IndexField       = 2,
+        .ParentIndexField = 9,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x4C93379F,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 841626, -1, 8, 0x0DFCC83D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 841626,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x0DFCC83D,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemAppearanceMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 982462, -1, 4, 0x06D35A59, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 982462,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x06D35A59,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemAppearanceXUiCameraMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1248126, -1, 2, 0x67747E15, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1248126,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x67747E15,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemArmorQualityMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 7, false },
-        { FT_SHORT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 7, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1283021, -1, 2, 0x85642CC0, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1283021,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x85642CC0,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemArmorShieldMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 7, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 7, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1277741, -1, 2, 0xC2186F95, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1277741,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC2186F95,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemArmorTotalMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1283022, -1, 5, 0x45C396DD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1283022,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x45C396DD,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemBagFamilyMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1278179, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1278179,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemBonusMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 3, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 959070, -1, 4, 0xE12FB1A0, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 959070,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xE12FB1A0,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemBonusListLevelDeltaMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1320358, 1, 2, 0xDFBF5AC9, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1320358,
+        .IndexField       = 1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xDFBF5AC9,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemBonusTreeNodeMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 987134, -1, 5, 0x84FE93B7, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 987134,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x84FE93B7,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemChildEquipmentMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1247926, -1, 3, 0xB6940674, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1247926,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xB6940674,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemClassMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1140189, -1, 4, 0xA1E4663C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140189,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xA1E4663C,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemContextPickerEntryMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1405665, -1, 6, 0x4A6DF90B, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1405665,
+        .IndexField       = -1,
+        .ParentIndexField = 5,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x4A6DF90B,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemCurrencyCostMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 801670, -1, 1, 0xE2FF5688, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801670,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xE2FF5688,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemDamageAmmoMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 7, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 7, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1277740, -1, 2, 0xC2186F95, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1277740,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC2186F95,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemDamageOneHandMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 7, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 7, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1277743, -1, 2, 0xC2186F95, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1277743,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC2186F95,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemDamageOneHandCasterMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 7, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 7, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1277739, -1, 2, 0xC2186F95, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1277739,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC2186F95,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemDamageTwoHandMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 7, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 7, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1277738, -1, 2, 0xC2186F95, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1277738,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC2186F95,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemDamageTwoHandCasterMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 7, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 7, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1277742, -1, 2, 0xC2186F95, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1277742,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC2186F95,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemDisenchantLootMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1134087, -1, 7, 0xC0D926CC, Fields, 6 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134087,
+        .IndexField       = -1,
+        .ParentIndexField = 6,
+        .FieldCount       = 7,
+        .LayoutHash       = 0xC0D926CC,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemDisplayInfoMeta
 {
     static constexpr DB2MetaField Fields[15] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 2, false },
-        { FT_INT, 2, true },
-        { FT_INT, 4, true },
-        { FT_INT, 4, true },
-        { FT_INT, 2, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1266429, -1, 15, 0x99606089, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266429,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 15,
+        .LayoutHash       = 0x99606089,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemDisplayInfoMaterialResMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1280614, -1, 3, 0xDEE4ED7B, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1280614,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xDEE4ED7B,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemDisplayXUiCameraMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1146690, -1, 2, 0xE57737B2, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1146690,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xE57737B2,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemEffectMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 969941, -1, 9, 0xA390FA40, Fields, 8 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 969941,
+        .IndexField       = -1,
+        .ParentIndexField = 8,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xA390FA40,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemExtendedCostMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_INT, 5, true },
-        { FT_INT, 5, false },
-        { FT_SHORT, 5, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 5, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 5, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801681, -1, 10, 0xC31F4DEF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801681,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0xC31F4DEF,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemGroupSoundsMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 4, false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1283023, -1, 1, 0xDC2EE466, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1283023,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xDC2EE466,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemLevelSelectorMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1588911, -1, 2, 0x8143060E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1588911,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x8143060E,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemLevelSelectorQualityMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_SHORT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1624937, -1, 3, 0xB7174A51, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1624937,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xB7174A51,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemLevelSelectorQualitySetMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1624933, -1, 2, 0x20055BA8, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1624933,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x20055BA8,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemLimitCategoryMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237440, -1, 3, 0xB6BB188D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237440,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xB6BB188D,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemLimitCategoryConditionMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1378590, -1, 3, 0xDE8EAD49, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1378590,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xDE8EAD49,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemModifiedAppearanceMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 982457, 1, 6, 0xE64FD18B, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 982457,
+        .IndexField       = 1,
+        .ParentIndexField = 0,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xE64FD18B,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemModifiedAppearanceExtraMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1278399, -1, 5, 0x77212236, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1278399,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x77212236,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemNameDescriptionMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1332559, -1, 2, 0x16760BD4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1332559,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x16760BD4,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemPetFoodMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1302240, -1, 1, 0xE4923C1F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302240,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xE4923C1F,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemPriceBaseMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121231, -1, 3, 0x4BD234D7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121231,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x4BD234D7,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemRandomPropertiesMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 5, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 5, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237441, -1, 2, 0xB67375F8, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237441,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xB67375F8,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemRandomSuffixMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 5, false },
-        { FT_SHORT, 5, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 5, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237592, -1, 3, 0x95CAB825, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237592,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x95CAB825,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemRangedDisplayInfoMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1270315, -1, 4, 0x687A28D1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1270315,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x687A28D1,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemSearchNameMeta
 {
     static constexpr DB2MetaField Fields[14] =
     {
-        { FT_LONG, 1, true },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 3, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1273408, 2, 14, 0x2D4B72FA, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1273408,
+        .IndexField       = 2,
+        .ParentIndexField = -1,
+        .FieldCount       = 14,
+        .LayoutHash       = 0x2D4B72FA,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemSetMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 17, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 17, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1343609, -1, 5, 0x847FF58A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343609,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x847FF58A,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemSetSpellMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1314689, -1, 4, 0xF65D0AF8, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1314689,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xF65D0AF8,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemSparseMeta
 {
     static constexpr DB2MetaField Fields[64] =
     {
-        { FT_LONG, 1, true },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 4, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 10, true },
-        { FT_FLOAT, 10, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 10, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 10, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 3, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 10, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 10, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 10, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 10, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1572924, -1, 64, 0x4007DE16, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1572924,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 64,
+        .LayoutHash       = 0x4007DE16,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemSpecMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1135120, -1, 6, 0xB17B7986, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1135120,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xB17B7986,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemSpecOverrideMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1134576, -1, 2, 0xE499CD2A, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134576,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xE499CD2A,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemSubClassMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1261604, -1, 10, 0xDAD92A67, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1261604,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 10,
+        .LayoutHash       = 0xDAD92A67,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemSubClassMaskMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1302852, -1, 3, 0xFC1DA850, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302852,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xFC1DA850,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemUpgradeMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801687, -1, 5, 0x8F3A4137, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801687,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x8F3A4137,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemVisualsMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 5, true },
+        { .Type = FT_INT,    .ArraySize = 5, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1343605, -1, 1, 0x485EA782, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343605,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x485EA782,
+        .Fields           = Fields,
+    };
 };
 
 struct ItemXBonusTreeMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 987133, -1, 2, 0x87C4B605, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 987133,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x87C4B605,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalEncounterMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1240336, -1, 11, 0x2935A0FD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1240336,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0x2935A0FD,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalEncounterCreatureMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1301155, 7, 8, 0x22C79A42, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1301155,
+        .IndexField       = 7,
+        .ParentIndexField = 5,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x22C79A42,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalEncounterItemMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1344467, 5, 6, 0x39230FF9, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1344467,
+        .IndexField       = 5,
+        .ParentIndexField = 1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x39230FF9,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalEncounterSectionMeta
 {
     static constexpr DB2MetaField Fields[15] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1134413, -1, 15, 0x13E56B12, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134413,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 15,
+        .LayoutHash       = 0x13E56B12,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalEncounterXDifficultyMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121901, -1, 2, 0x321FD542, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121901,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x321FD542,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalEncounterXMapLocMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1722928, -1, 6, 0x430540E4, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1722928,
+        .IndexField       = -1,
+        .ParentIndexField = 5,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x430540E4,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalInstanceMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1237438, 10, 11, 0x1691CC3D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237438,
+        .IndexField       = 10,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0x1691CC3D,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalItemXDifficultyMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1277744, -1, 2, 0x60D9CA15, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1277744,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x60D9CA15,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalSectionXDifficultyMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121900, -1, 2, 0x243822A7, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121900,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x243822A7,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalTierMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1349056, -1, 1, 0x8046B23F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1349056,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x8046B23F,
+        .Fields           = Fields,
+    };
 };
 
 struct JournalTierXInstanceMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1285009, -1, 2, 0x9C4F4D2A, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1285009,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x9C4F4D2A,
+        .Fields           = Fields,
+    };
 };
 
 struct KeychainMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_BYTE, 32, false },
+        { .Type = FT_BYTE,   .ArraySize = 32, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801693, -1, 1, 0x5B214E82, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801693,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x5B214E82,
+        .Fields           = Fields,
+    };
 };
 
 struct KeystoneAffixMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1344761, -1, 3, 0x1BCB46AA, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1344761,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x1BCB46AA,
+        .Fields           = Fields,
+    };
 };
 
 struct LFGDungeonExpansionMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1343606, -1, 7, 0xB41DEA61, Fields, 6 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343606,
+        .IndexField       = -1,
+        .ParentIndexField = 6,
+        .FieldCount       = 7,
+        .LayoutHash       = 0xB41DEA61,
+        .Fields           = Fields,
+    };
 };
 
 struct LFGDungeonGroupMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1135058, -1, 4, 0x724D58E7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1135058,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x724D58E7,
+        .Fields           = Fields,
+    };
 };
 
 struct LFGDungeonsMeta
 {
     static constexpr DB2MetaField Fields[33] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1361033, -1, 33, 0xF02081A0, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1361033,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 33,
+        .LayoutHash       = 0xF02081A0,
+        .Fields           = Fields,
+    };
 };
 
 struct LFGRoleRequirementMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 982805, -1, 3, 0x7EB8A359, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 982805,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x7EB8A359,
+        .Fields           = Fields,
+    };
 };
 
 struct LanguageWordsMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 984702, -1, 2, 0xC15912BD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 984702,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC15912BD,
+        .Fields           = Fields,
+    };
 };
 
 struct LanguagesMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1135325, 1, 2, 0x6FA5D0C4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1135325,
+        .IndexField       = 1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x6FA5D0C4,
+        .Fields           = Fields,
+    };
 };
 
 struct LfgDungeonsGroupingMapMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1339818, -1, 3, 0x8CB35C50, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1339818,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x8CB35C50,
+        .Fields           = Fields,
+    };
 };
 
 struct LightMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 8, false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 8, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1375579, -1, 5, 0x25025A13, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375579,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x25025A13,
+        .Fields           = Fields,
+    };
 };
 
 struct LightDataMeta
 {
     static constexpr DB2MetaField Fields[35] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1375580, -1, 35, 0x2D2BA7FA, Fields, 34 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375580,
+        .IndexField       = -1,
+        .ParentIndexField = 34,
+        .FieldCount       = 35,
+        .LayoutHash       = 0x2D2BA7FA,
+        .Fields           = Fields,
+    };
 };
 
 struct LightParamsMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1334669, 10, 11, 0xF67DE2AF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1334669,
+        .IndexField       = 10,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0xF67DE2AF,
+        .Fields           = Fields,
+    };
 };
 
 struct LightSkyboxMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1308501, -1, 4, 0x8817C02C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1308501,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x8817C02C,
+        .Fields           = Fields,
+    };
 };
 
 struct LiquidMaterialMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1132538, -1, 2, 0x62BE0340, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1132538,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x62BE0340,
+        .Fields           = Fields,
+    };
 };
 
 struct LiquidObjectMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1308058, -1, 5, 0xACC168A6, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1308058,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xACC168A6,
+        .Fields           = Fields,
+    };
 };
 
 struct LiquidTypeMeta
 {
     static constexpr DB2MetaField Fields[19] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 6, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 2, true },
-        { FT_FLOAT, 18, false },
-        { FT_INT, 4, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 6, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 6, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 18, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 6, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1371380, -1, 19, 0x3313BBF3, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1371380,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 19,
+        .LayoutHash       = 0x3313BBF3,
+        .Fields           = Fields,
+    };
 };
 
 struct LoadingScreenTaxiSplinesMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 10, false },
-        { FT_FLOAT, 10, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 10, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 10, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1302239, -1, 5, 0x4D6292C3, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302239,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x4D6292C3,
+        .Fields           = Fields,
+    };
 };
 
 struct LoadingScreensMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1266541, -1, 3, 0x99C0EB78, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266541,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x99C0EB78,
+        .Fields           = Fields,
+    };
 };
 
 struct LocaleMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801706, -1, 4, 0x592AE13B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801706,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x592AE13B,
+        .Fields           = Fields,
+    };
 };
 
 struct LocationMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801707, -1, 2, 0xBBC1BE7A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801707,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xBBC1BE7A,
+        .Fields           = Fields,
+    };
 };
 
 struct LockMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 8, true },
-        { FT_SHORT, 8, false },
-        { FT_BYTE, 8, false },
-        { FT_BYTE, 8, false },
+        { .Type = FT_INT,    .ArraySize = 8, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 8, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 8, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 8, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1343608, -1, 4, 0xDAC7F42F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343608,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xDAC7F42F,
+        .Fields           = Fields,
+    };
 };
 
 struct LockTypeMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1284823, 4, 5, 0xCD5E1D2F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1284823,
+        .IndexField       = 4,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xCD5E1D2F,
+        .Fields           = Fields,
+    };
 };
 
 struct LookAtControllerMeta
 {
     static constexpr DB2MetaField Fields[18] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1098785, -1, 18, 0x543C0D56, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1098785,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 18,
+        .LayoutHash       = 0x543C0D56,
+        .Fields           = Fields,
+    };
 };
 
 struct MailTemplateMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1240344, -1, 1, 0x25C8D6CC, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1240344,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x25C8D6CC,
+        .Fields           = Fields,
+    };
 };
 
 struct ManagedWorldStateMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1587159, 9, 10, 0xBA06FC33, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1587159,
+        .IndexField       = 9,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0xBA06FC33,
+        .Fields           = Fields,
+    };
 };
 
 struct ManagedWorldStateBuffMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1587155, -1, 4, 0x6D201DC7, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1587155,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x6D201DC7,
+        .Fields           = Fields,
+    };
 };
 
 struct ManagedWorldStateInputMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1587151, -1, 3, 0x0FC1A9B0, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1587151,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x0FC1A9B0,
+        .Fields           = Fields,
+    };
 };
 
 struct ManifestInterfaceActionIconMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1375803, 0, 1, 0x6A529F37, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375803,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x6A529F37,
+        .Fields           = Fields,
+    };
 };
 
 struct ManifestInterfaceDataMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1375801, -1, 2, 0x9E5F4C99, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375801,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x9E5F4C99,
+        .Fields           = Fields,
+    };
 };
 
 struct ManifestInterfaceItemIconMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1375804, 0, 1, 0x6A529F37, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375804,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x6A529F37,
+        .Fields           = Fields,
+    };
 };
 
 struct ManifestInterfaceTOCDataMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267335, -1, 1, 0x6F7D397D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267335,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x6F7D397D,
+        .Fields           = Fields,
+    };
 };
 
 struct ManifestMP3Meta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1375802, 0, 1, 0x6A529F37, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375802,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x6A529F37,
+        .Fields           = Fields,
+    };
 };
 
 struct MapMeta
 {
     static constexpr DB2MetaField Fields[21] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 2, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1349477, -1, 21, 0xF568DF12, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1349477,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 21,
+        .LayoutHash       = 0xF568DF12,
+        .Fields           = Fields,
+    };
 };
 
 struct MapCelestialBodyMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, true },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1597466, -1, 3, 0xBDE1C11C, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1597466,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xBDE1C11C,
+        .Fields           = Fields,
+    };
 };
 
 struct MapChallengeModeMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 3, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801709, 1, 5, 0xC5261662, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801709,
+        .IndexField       = 1,
+        .ParentIndexField = 2,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xC5261662,
+        .Fields           = Fields,
+    };
 };
 
 struct MapDifficultyMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1367868, -1, 9, 0x2B3B759E, Fields, 8 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1367868,
+        .IndexField       = -1,
+        .ParentIndexField = 8,
+        .FieldCount       = 9,
+        .LayoutHash       = 0x2B3B759E,
+        .Fields           = Fields,
+    };
 };
 
 struct MapDifficultyXConditionMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1375435, -1, 4, 0x5F5D7102, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375435,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x5F5D7102,
+        .Fields           = Fields,
+    };
 };
 
 struct MapLoadingScreenMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 2, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1719707, -1, 5, 0xBBE57FE4, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1719707,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xBBE57FE4,
+        .Fields           = Fields,
+    };
 };
 
 struct MarketingPromotionsXLocaleMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 801710, -1, 7, 0x80362F57, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801710,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x80362F57,
+        .Fields           = Fields,
+    };
 };
 
 struct MaterialMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1294217, -1, 4, 0x0BC8C134, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1294217,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x0BC8C134,
+        .Fields           = Fields,
+    };
 };
 
 struct MinorTalentMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1347274, -1, 3, 0xAAEF0DF8, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1347274,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xAAEF0DF8,
+        .Fields           = Fields,
+    };
 };
 
 struct MissileTargetingMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 2, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1710117, -1, 12, 0x2305491E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1710117,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 12,
+        .LayoutHash       = 0x2305491E,
+        .Fields           = Fields,
+    };
 };
 
 struct ModelAnimCloakDampeningMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1465904, -1, 3, 0x839B4263, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1465904,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x839B4263,
+        .Fields           = Fields,
+    };
 };
 
 struct ModelFileDataMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1337833, 1, 3, 0xA395EB50, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1337833,
+        .IndexField       = 1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xA395EB50,
+        .Fields           = Fields,
+    };
 };
 
 struct ModelRibbonQualityMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1399953, -1, 2, 0x38F764D9, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1399953,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x38F764D9,
+        .Fields           = Fields,
+    };
 };
 
 struct ModifierTreeMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1267645, -1, 7, 0x7718AFC2, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267645,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x7718AFC2,
+        .Fields           = Fields,
+    };
 };
 
 struct MountMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 921760, 8, 11, 0x4D812F19, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 921760,
+        .IndexField       = 8,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0x4D812F19,
+        .Fields           = Fields,
+    };
 };
 
 struct MountCapabilityMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1114709, 6, 8, 0xB0D11D52, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1114709,
+        .IndexField       = 6,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xB0D11D52,
+        .Fields           = Fields,
+    };
 };
 
 struct MountTypeXCapabilityMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1114715, -1, 3, 0xA34A8445, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1114715,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xA34A8445,
+        .Fields           = Fields,
+    };
 };
 
 struct MountXDisplayMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1576117, -1, 3, 0xD59B9FE4, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1576117,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xD59B9FE4,
+        .Fields           = Fields,
+    };
 };
 
 struct MovieMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1332556, -1, 4, 0xF3E9AE3B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1332556,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xF3E9AE3B,
+        .Fields           = Fields,
+    };
 };
 
 struct MovieFileDataMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1301154, -1, 1, 0xAA16D59F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1301154,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xAA16D59F,
+        .Fields           = Fields,
+    };
 };
 
 struct MovieVariationMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1339819, -1, 3, 0x3BFD250E, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1339819,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x3BFD250E,
+        .Fields           = Fields,
+    };
 };
 
 struct NPCModelItemSlotDisplayInfoMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1340661, -1, 3, 0x11D16204, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1340661,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x11D16204,
+        .Fields           = Fields,
+    };
 };
 
 struct NPCSoundsMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 4, false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1282621, -1, 1, 0x672E1A6B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1282621,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x672E1A6B,
+        .Fields           = Fields,
+    };
 };
 
 struct NameGenMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1122117, -1, 3, 0x2EF936CD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1122117,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x2EF936CD,
+        .Fields           = Fields,
+    };
 };
 
 struct NamesProfanityMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1117086, -1, 2, 0xDFB56E0E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1117086,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xDFB56E0E,
+        .Fields           = Fields,
+    };
 };
 
 struct NamesReservedMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1117085, -1, 1, 0xE4923C1F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1117085,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xE4923C1F,
+        .Fields           = Fields,
+    };
 };
 
 struct NamesReservedLocaleMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1117087, -1, 2, 0xC1403093, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1117087,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC1403093,
+        .Fields           = Fields,
+    };
 };
 
 struct ObjectEffectMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1090577, -1, 8, 0x6A0CF743, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1090577,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x6A0CF743,
+        .Fields           = Fields,
+    };
 };
 
 struct ObjectEffectModifierMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 4, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1090575, -1, 4, 0xA482B053, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1090575,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xA482B053,
+        .Fields           = Fields,
+    };
 };
 
 struct ObjectEffectPackageElemMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1090578, -1, 3, 0x8CF043E5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1090578,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x8CF043E5,
+        .Fields           = Fields,
+    };
 };
 
 struct OutlineEffectMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1279739, -1, 6, 0x466B2BC4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1279739,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x466B2BC4,
+        .Fields           = Fields,
+    };
 };
 
 struct OverrideSpellDataMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 10, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 10, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1002186, -1, 3, 0x9417628C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1002186,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x9417628C,
+        .Fields           = Fields,
+    };
 };
 
 struct PVPBracketTypesMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, true },
-        { FT_INT, 4, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1394275, -1, 2, 0x7C55E5BB, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1394275,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x7C55E5BB,
+        .Fields           = Fields,
+    };
 };
 
 struct PVPDifficultyMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1339820, -1, 4, 0x970B5E15, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1339820,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x970B5E15,
+        .Fields           = Fields,
+    };
 };
 
 struct PVPItemMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 972287, -1, 2, 0xBD449801, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 972287,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xBD449801,
+        .Fields           = Fields,
+    };
 };
 
 struct PageTextMaterialMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1271600, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1271600,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct PaperDollItemFrameMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1252503, -1, 3, 0x66B0597E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1252503,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x66B0597E,
+        .Fields           = Fields,
+    };
 };
 
 struct ParagonReputationMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1581183, -1, 3, 0xD7712F98, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1581183,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xD7712F98,
+        .Fields           = Fields,
+    };
 };
 
 struct ParticleColorMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 3, true },
-        { FT_INT, 3, true },
-        { FT_INT, 3, true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1284820, -1, 3, 0x1576D1E1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1284820,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x1576D1E1,
+        .Fields           = Fields,
+    };
 };
 
 struct PathMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801732, -1, 7, 0x5017579F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801732,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x5017579F,
+        .Fields           = Fields,
+    };
 };
 
 struct PathNodeMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 801733, 0, 4, 0x76615830, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801733,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x76615830,
+        .Fields           = Fields,
+    };
 };
 
 struct PathNodePropertyMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 801734, 3, 5, 0x92C03009, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801734,
+        .IndexField       = 3,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x92C03009,
+        .Fields           = Fields,
+    };
 };
 
 struct PathPropertyMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 801735, 3, 4, 0x3D29C266, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801735,
+        .IndexField       = 3,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x3D29C266,
+        .Fields           = Fields,
+    };
 };
 
 struct PhaseMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1348558, -1, 1, 0x0043219C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1348558,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x0043219C,
+        .Fields           = Fields,
+    };
 };
 
 struct PhaseShiftZoneSoundsMeta
 {
     static constexpr DB2MetaField Fields[13] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267336, -1, 13, 0x85ACB830, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267336,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 13,
+        .LayoutHash       = 0x85ACB830,
+        .Fields           = Fields,
+    };
 };
 
 struct PhaseXPhaseGroupMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 987581, -1, 2, 0x66517AF6, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 987581,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x66517AF6,
+        .Fields           = Fields,
+    };
 };
 
 struct PlayerConditionMeta
 {
     static constexpr DB2MetaField Fields[81] =
     {
-        { FT_LONG, 1, true },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 4, false },
-        { FT_SHORT, 4, false },
-        { FT_SHORT, 4, false },
-        { FT_INT, 3, false },
-        { FT_BYTE, 3, false },
-        { FT_SHORT, 4, false },
-        { FT_SHORT, 4, false },
-        { FT_SHORT, 4, false },
-        { FT_INT, 4, true },
-        { FT_INT, 4, true },
-        { FT_INT, 4, false },
-        { FT_SHORT, 2, false },
-        { FT_INT, 2, false },
-        { FT_INT, 4, true },
-        { FT_BYTE, 4, false },
-        { FT_SHORT, 4, false },
-        { FT_BYTE, 4, false },
-        { FT_BYTE, 4, false },
-        { FT_INT, 4, false },
-        { FT_SHORT, 4, false },
-        { FT_INT, 4, false },
-        { FT_INT, 4, false },
-        { FT_INT, 6, false },
-        { FT_INT, 2, true },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 6, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1045411, 2, 81, 0x5B3DA113, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1045411,
+        .IndexField       = 2,
+        .ParentIndexField = -1,
+        .FieldCount       = 81,
+        .LayoutHash       = 0x5B3DA113,
+        .Fields           = Fields,
+    };
 };
 
 struct PositionerMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1251523, -1, 4, 0xE830F1B1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1251523,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xE830F1B1,
+        .Fields           = Fields,
+    };
 };
 
 struct PositionerStateMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1251506, -1, 8, 0x6C975DF4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1251506,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x6C975DF4,
+        .Fields           = Fields,
+    };
 };
 
 struct PositionerStateEntryMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1251533, -1, 11, 0x667ED965, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1251533,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0x667ED965,
+        .Fields           = Fields,
+    };
 };
 
 struct PowerDisplayMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1332557, -1, 5, 0xFD152E5B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1332557,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xFD152E5B,
+        .Fields           = Fields,
+    };
 };
 
 struct PowerTypeMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1266022, -1, 12, 0x0C3844E1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266022,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 12,
+        .LayoutHash       = 0x0C3844E1,
+        .Fields           = Fields,
+    };
 };
 
 struct PrestigeLevelInfoMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1275869, -1, 4, 0xA7B2D559, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1275869,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xA7B2D559,
+        .Fields           = Fields,
+    };
 };
 
 struct PvpRewardMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1307154, -1, 3, 0x72F4C016, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1307154,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x72F4C016,
+        .Fields           = Fields,
+    };
 };
 
 struct PvpScalingEffectMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1591100, -1, 3, 0x52121A41, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1591100,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x52121A41,
+        .Fields           = Fields,
+    };
 };
 
 struct PvpScalingEffectTypeMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1591098, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1591098,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct PvpTalentMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1302853, -1, 10, 0x6EB51740, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302853,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x6EB51740,
+        .Fields           = Fields,
+    };
 };
 
 struct PvpTalentUnlockMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1302848, -1, 3, 0x465C83BC, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302848,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x465C83BC,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestFactionRewardMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_SHORT, 10, true },
+        { .Type = FT_SHORT,  .ArraySize = 10, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1282622, -1, 1, 0xB0E02541, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1282622,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xB0E02541,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestFeedbackEffectMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1343388, -1, 6, 0x89D55A27, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343388,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x89D55A27,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestInfoMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1120960, -1, 4, 0x4F45F445, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1120960,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x4F45F445,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestLineMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 973430, -1, 1, 0x8046B23F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 973430,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x8046B23F,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestLineXQuestMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 973441, -1, 3, 0x8FA4A9C7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 973441,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x8FA4A9C7,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestMoneyRewardMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 10, false },
+        { .Type = FT_INT,    .ArraySize = 10, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1139047, -1, 1, 0x86397302, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139047,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x86397302,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestObjectiveMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1251960, -1, 8, 0xDD995180, Fields, 7 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1251960,
+        .IndexField       = -1,
+        .ParentIndexField = 7,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xDD995180,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestPOIBlobMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1251882, 0, 8, 0xEC15976E, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1251882,
+        .IndexField       = 0,
+        .ParentIndexField = 2,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xEC15976E,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestPOIPointMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1251883, 0, 4, 0x8CF2B119, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1251883,
+        .IndexField       = 0,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x8CF2B119,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestPackageItemMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801743, -1, 4, 0xCF9401CF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801743,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xCF9401CF,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestSortMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1134585, -1, 2, 0xAD7072C6, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134585,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xAD7072C6,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestV2Meta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1139443, -1, 1, 0x70495C9B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139443,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x70495C9B,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestV2CliTaskMeta
 {
     static constexpr DB2MetaField Fields[24] =
     {
-        { FT_LONG, 1, true },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 3, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1028735, 20, 24, 0x3F026A14, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1028735,
+        .IndexField       = 20,
+        .ParentIndexField = -1,
+        .FieldCount       = 24,
+        .LayoutHash       = 0x3F026A14,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestXGroupActivityMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1573634, -1, 2, 0x06CC45D3, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1573634,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x06CC45D3,
+        .Fields           = Fields,
+    };
 };
 
 struct QuestXPMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_SHORT, 10, false },
+        { .Type = FT_SHORT,  .ArraySize = 10, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1139378, -1, 1, 0xCB76B4C0, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139378,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xCB76B4C0,
+        .Fields           = Fields,
+    };
 };
 
 struct RandPropPointsMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 5, false },
-        { FT_INT, 5, false },
-        { FT_INT, 5, false },
+        { .Type = FT_INT,    .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 5, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1310245, -1, 3, 0x4E2C0BCC, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310245,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x4E2C0BCC,
+        .Fields           = Fields,
+    };
 };
 
 struct RelicSlotTierRequirementMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1716803, -1, 3, 0x129FCC09, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1716803,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x129FCC09,
+        .Fields           = Fields,
+    };
 };
 
 struct RelicTalentMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1671256, -1, 5, 0x7A5963FD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1671256,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x7A5963FD,
+        .Fields           = Fields,
+    };
 };
 
 struct ResearchBranchMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1133729, -1, 6, 0x58A3876E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1133729,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x58A3876E,
+        .Fields           = Fields,
+    };
 };
 
 struct ResearchFieldMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1133711, 2, 3, 0x85868B9F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1133711,
+        .IndexField       = 2,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x85868B9F,
+        .Fields           = Fields,
+    };
 };
 
 struct ResearchProjectMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1134090, 6, 9, 0xB1CAB80B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134090,
+        .IndexField       = 6,
+        .ParentIndexField = -1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xB1CAB80B,
+        .Fields           = Fields,
+    };
 };
 
 struct ResearchSiteMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1134091, -1, 4, 0x25F7DCC7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134091,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x25F7DCC7,
+        .Fields           = Fields,
+    };
 };
 
 struct ResistancesMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1135072, -1, 3, 0xA3EAE5AE, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1135072,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xA3EAE5AE,
+        .Fields           = Fields,
+    };
 };
 
 struct RewardPackMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1307156, -1, 6, 0xDB6CC0AB, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1307156,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xDB6CC0AB,
+        .Fields           = Fields,
+    };
 };
 
 struct RewardPackXCurrencyTypeMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1307153, -1, 3, 0x217E6712, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1307153,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x217E6712,
+        .Fields           = Fields,
+    };
 };
 
 struct RewardPackXItemMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1307155, -1, 3, 0x74F6B9BD, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1307155,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x74F6B9BD,
+        .Fields           = Fields,
+    };
 };
 
 struct RibbonQualityMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1398908, -1, 5, 0xC75DAEA8, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1398908,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xC75DAEA8,
+        .Fields           = Fields,
+    };
 };
 
 struct RulesetItemUpgradeMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801749, -1, 2, 0xFB641AE0, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801749,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xFB641AE0,
+        .Fields           = Fields,
+    };
 };
 
 struct SDReplacementModelMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1712172, -1, 1, 0xE1F906C2, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1712172,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xE1F906C2,
+        .Fields           = Fields,
+    };
 };
 
 struct SandboxScalingMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1776833, -1, 3, 0x5200B7F5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1776833,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x5200B7F5,
+        .Fields           = Fields,
+    };
 };
 
 struct ScalingStatDistributionMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1141728, -1, 3, 0xDED48286, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1141728,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xDED48286,
+        .Fields           = Fields,
+    };
 };
 
 struct ScenarioMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1139062, -1, 4, 0xD052232A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139062,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xD052232A,
+        .Fields           = Fields,
+    };
 };
 
 struct ScenarioEventEntryMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1141065, -1, 2, 0x02E80455, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1141065,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x02E80455,
+        .Fields           = Fields,
+    };
 };
 
 struct ScenarioStepMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1132761, -1, 9, 0x201B0EFC, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1132761,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 9,
+        .LayoutHash       = 0x201B0EFC,
+        .Fields           = Fields,
+    };
 };
 
 struct SceneScriptMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801754, -1, 2, 0xC694B81E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801754,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xC694B81E,
+        .Fields           = Fields,
+    };
 };
 
 struct SceneScriptGlobalTextMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1758036, -1, 2, 0xB9F8FDF1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1758036,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xB9F8FDF1,
+        .Fields           = Fields,
+    };
 };
 
 struct SceneScriptPackageMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801755, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801755,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct SceneScriptPackageMemberMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 801756, -1, 4, 0x787A715F, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 801756,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x787A715F,
+        .Fields           = Fields,
+    };
 };
 
 struct SceneScriptTextMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1758037, -1, 2, 0xB9F8FDF1, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1758037,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xB9F8FDF1,
+        .Fields           = Fields,
+    };
 };
 
 struct ScheduledIntervalMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1327082, -1, 5, 0x5DD2FF46, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1327082,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x5DD2FF46,
+        .Fields           = Fields,
+    };
 };
 
 struct ScheduledWorldStateMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1327083, -1, 8, 0xFCB13A6A, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1327083,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xFCB13A6A,
+        .Fields           = Fields,
+    };
 };
 
 struct ScheduledWorldStateGroupMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1327084, -1, 5, 0x21F6EE03, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1327084,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x21F6EE03,
+        .Fields           = Fields,
+    };
 };
 
 struct ScheduledWorldStateXUniqCatMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1388724, 0, 3, 0x7EFF57FD, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1388724,
+        .IndexField       = 0,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x7EFF57FD,
+        .Fields           = Fields,
+    };
 };
 
 struct ScreenEffectMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 4, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1302849, -1, 12, 0x4D5B91C5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302849,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 12,
+        .LayoutHash       = 0x4D5B91C5,
+        .Fields           = Fields,
+    };
 };
 
 struct ScreenLocationMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1279416, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1279416,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct SeamlessSiteMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1328719, -1, 1, 0xBFE7B9D3, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1328719,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xBFE7B9D3,
+        .Fields           = Fields,
+    };
 };
 
 struct ServerMessagesMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1301141, -1, 1, 0x1C7A1347, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1301141,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x1C7A1347,
+        .Fields           = Fields,
+    };
 };
 
 struct ShadowyEffectMeta
 {
     static constexpr DB2MetaField Fields[13] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1239844, -1, 13, 0xE909BB18, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1239844,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 13,
+        .LayoutHash       = 0xE909BB18,
+        .Fields           = Fields,
+    };
 };
 
 struct SkillLineMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1240935, -1, 8, 0x3F7E88AF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1240935,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x3F7E88AF,
+        .Fields           = Fields,
+    };
 };
 
 struct SkillLineAbilityMeta
 {
     static constexpr DB2MetaField Fields[14] =
     {
-        { FT_LONG, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1266278, 1, 14, 0x97B5A653, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266278,
+        .IndexField       = 1,
+        .ParentIndexField = 4,
+        .FieldCount       = 14,
+        .LayoutHash       = 0x97B5A653,
+        .Fields           = Fields,
+    };
 };
 
 struct SkillRaceClassInfoMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_LONG, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1240406, -1, 7, 0x9752C2CE, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1240406,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x9752C2CE,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundAmbienceMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 2, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1310628, -1, 4, 0xB073D4B5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310628,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xB073D4B5,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundAmbienceFlavorMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267065, -1, 3, 0x2C58D929, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267065,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x2C58D929,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundBusMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1310246, 6, 8, 0xB2ACDE2A, Fields, 7 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310246,
+        .IndexField       = 6,
+        .ParentIndexField = 7,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xB2ACDE2A,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundBusOverrideMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1598732, 0, 7, 0x6D887F48, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1598732,
+        .IndexField       = 0,
+        .ParentIndexField = 5,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x6D887F48,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundEmitterPillPointsMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1092317, -1, 2, 0x41FCF15B, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1092317,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x41FCF15B,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundEmittersMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1092316, 8, 12, 0x55A3B17E, Fields, 11 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1092316,
+        .IndexField       = 8,
+        .ParentIndexField = 11,
+        .FieldCount       = 12,
+        .LayoutHash       = 0x55A3B17E,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundEnvelopeMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1693131, -1, 7, 0x5B78031C, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1693131,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x5B78031C,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundFilterMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1271601, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1271601,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundFilterElemMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_FLOAT, 9, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 9, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1267066, -1, 3, 0xE17AC589, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267066,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xE17AC589,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundKitMeta
 {
     static constexpr DB2MetaField Fields[16] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237434, 0, 16, 0x0E9CB7AE, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237434,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 16,
+        .LayoutHash       = 0x0E9CB7AE,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundKitAdvancedMeta
 {
     static constexpr DB2MetaField Fields[40] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237436, 0, 40, 0x73F6F023, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237436,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 40,
+        .LayoutHash       = 0x73F6F023,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundKitChildMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1307289, -1, 2, 0x2827A3B5, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1307289,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x2827A3B5,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundKitEntryMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_FLOAT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237435, -1, 4, 0x6ED6E26F, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237435,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x6ED6E26F,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundKitFallbackMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1307288, -1, 2, 0xB1A5106F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1307288,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xB1A5106F,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundKitNameMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1665033, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1665033,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundOverrideMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1266542, -1, 4, 0xFB7643F6, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266542,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xFB7643F6,
+        .Fields           = Fields,
+    };
 };
 
 struct SoundProviderPreferencesMeta
 {
     static constexpr DB2MetaField Fields[23] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1279417, -1, 23, 0x85F218A4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1279417,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 23,
+        .LayoutHash       = 0x85F218A4,
+        .Fields           = Fields,
+    };
 };
 
 struct SourceInfoMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1313612, -1, 4, 0x7C214135, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1313612,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x7C214135,
+        .Fields           = Fields,
+    };
 };
 
 struct SpamMessagesMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1117088, -1, 1, 0x0D4BA7E7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1117088,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x0D4BA7E7,
+        .Fields           = Fields,
+    };
 };
 
 struct SpecializationSpellsMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1240335, 5, 6, 0xAE3436F3, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1240335,
+        .IndexField       = 5,
+        .ParentIndexField = 3,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xAE3436F3,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1140089, -1, 4, 0x2273DFFF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140089,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x2273DFFF,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellActionBarPrefMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1019373, -1, 2, 0x1EF80B2B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1019373,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x1EF80B2B,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellActivationOverlayMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 4, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1261603, -1, 8, 0x23568FC7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1261603,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x23568FC7,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellAuraOptionsMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1139952, -1, 8, 0xE05BE94F, Fields, 7 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139952,
+        .IndexField       = -1,
+        .ParentIndexField = 7,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xE05BE94F,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellAuraRestrictionsMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 981566, -1, 10, 0x7CDF3311, Fields, 9 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 981566,
+        .IndexField       = -1,
+        .ParentIndexField = 9,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x7CDF3311,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellAuraVisXChrSpecMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1280615, -1, 2, 0xA65B6A4A, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1280615,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xA65B6A4A,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellAuraVisibilityMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1280616, 2, 4, 0xA549F79C, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1280616,
+        .IndexField       = 2,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xA549F79C,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellCastTimesMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1134089, -1, 3, 0x4129C6A4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134089,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x4129C6A4,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellCastingRequirementsMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1002166, -1, 7, 0xD8B56E5D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1002166,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0xD8B56E5D,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellCategoriesMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1139939, -1, 9, 0x14E916CC, Fields, 8 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139939,
+        .IndexField       = -1,
+        .ParentIndexField = 8,
+        .FieldCount       = 9,
+        .LayoutHash       = 0x14E916CC,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellCategoryMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1280619, -1, 6, 0xEA60E384, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1280619,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xEA60E384,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellChainEffectsMeta
 {
     static constexpr DB2MetaField Fields[60] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 11, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 3, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 11, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1343310, -1, 60, 0x4E8FF369, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343310,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 60,
+        .LayoutHash       = 0x4E8FF369,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellClassOptionsMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 4, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 979663, -1, 4, 0x80FBD67A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 979663,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x80FBD67A,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellCooldownsMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1139924, -1, 5, 0xCA8D8B3C, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139924,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xCA8D8B3C,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellDescriptionVariablesMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1140004, -1, 1, 0xA8EDE75B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140004,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xA8EDE75B,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellDispelTypeMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1137829, -1, 4, 0xE9DDA799, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1137829,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xE9DDA799,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellDurationMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1137828, -1, 3, 0x0D6C9082, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1137828,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x0D6C9082,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellEffectMeta
 {
     static constexpr DB2MetaField Fields[30] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 4, true },
-        { FT_INT, 2, true },
-        { FT_INT, 2, false },
-        { FT_INT, 2, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1140088, 0, 30, 0x3244098B, Fields, 29 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140088,
+        .IndexField       = 0,
+        .ParentIndexField = 29,
+        .FieldCount       = 30,
+        .LayoutHash       = 0x3244098B,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellEffectEmissionMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1310248, -1, 4, 0xC6E61A9B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310248,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xC6E61A9B,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellEquippedItemsMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1140011, -1, 4, 0xCE628176, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140011,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xCE628176,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellFlyoutMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_LONG, 1, true },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_LONG,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1146819, -1, 6, 0x437671BD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1146819,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x437671BD,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellFlyoutItemMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1134085, -1, 3, 0xF86ADE09, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134085,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xF86ADE09,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellFocusObjectMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1280620, -1, 1, 0x96663ABF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1280620,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x96663ABF,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellInterruptsMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_INT, 2, true },
-        { FT_INT, 2, true },
-        { FT_INT, 1, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1139906, -1, 5, 0x2FA8EA94, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139906,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x2FA8EA94,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellItemEnchantmentMeta
 {
     static constexpr DB2MetaField Fields[19] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 3, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 3, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1362771, -1, 19, 0x80DEA734, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1362771,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 19,
+        .LayoutHash       = 0x80DEA734,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellItemEnchantmentConditionMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 5, false },
-        { FT_BYTE, 5, false },
-        { FT_BYTE, 5, false },
-        { FT_BYTE, 5, false },
-        { FT_BYTE, 5, false },
-        { FT_BYTE, 5, false },
+        { .Type = FT_INT,    .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 5, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 5, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121834, -1, 6, 0xB9C16961, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121834,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xB9C16961,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellKeyboundOverrideMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1127327, -1, 3, 0x6ECA16FC, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1127327,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x6ECA16FC,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellLabelMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1347275, -1, 2, 0x68E44736, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1347275,
+        .IndexField       = -1,
+        .ParentIndexField = 1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x68E44736,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellLearnSpellMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1001907, -1, 3, 0x153EBA26, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1001907,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x153EBA26,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellLevelsMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1140079, -1, 6, 0x9E7D1CCD, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140079,
+        .IndexField       = -1,
+        .ParentIndexField = 5,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x9E7D1CCD,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellMechanicMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1014438, -1, 1, 0xF2075D8C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1014438,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xF2075D8C,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellMiscMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 14, true },
-        { FT_INT, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 14, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1003144, -1, 11, 0xCDC114D5, Fields, 10 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1003144,
+        .IndexField       = -1,
+        .ParentIndexField = 10,
+        .FieldCount       = 11,
+        .LayoutHash       = 0xCDC114D5,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellMissileMeta
 {
     static constexpr DB2MetaField Fields[15] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 897956, -1, 15, 0x1D35645E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897956,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 15,
+        .LayoutHash       = 0x1D35645E,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellMissileMotionMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 897955, -1, 4, 0x6B78A45B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897955,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x6B78A45B,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellPowerMeta
 {
     static constexpr DB2MetaField Fields[14] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 982806, 7, 14, 0x8E5E46EC, Fields, 13 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 982806,
+        .IndexField       = 7,
+        .ParentIndexField = 13,
+        .FieldCount       = 14,
+        .LayoutHash       = 0x8E5E46EC,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellPowerDifficultyMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 982804, 2, 3, 0x74714FF7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 982804,
+        .IndexField       = 2,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x74714FF7,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellProceduralEffectMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_FLOAT, 4, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1140477, 2, 3, 0x3E47F4EF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140477,
+        .IndexField       = 2,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x3E47F4EF,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellProcsPerMinuteMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1133526, -1, 2, 0x4BC1931B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1133526,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x4BC1931B,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellProcsPerMinuteModMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1133525, -1, 4, 0x2503C18B, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1133525,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x2503C18B,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellRadiusMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1134584, -1, 4, 0xC12E5C90, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134584,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xC12E5C90,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellRangeMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 2, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1146820, -1, 5, 0xDE2E3F8E, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1146820,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xDE2E3F8E,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellReagentsMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 8, true },
-        { FT_SHORT, 8, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 8, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 8, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 841946, -1, 3, 0x0463C688, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 841946,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x0463C688,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellReagentsCurrencyMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1135239, -1, 3, 0x90A5E5D2, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1135239,
+        .IndexField       = -1,
+        .ParentIndexField = 0,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x90A5E5D2,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellScalingMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1139940, -1, 5, 0xF67A5719, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139940,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xF67A5719,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellShapeshiftMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 2, true },
-        { FT_INT, 2, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1139929, -1, 4, 0xA461C24D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139929,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xA461C24D,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellShapeshiftFormMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 4, false },
-        { FT_INT, 8, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 8, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1280618, -1, 10, 0x130819AF, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1280618,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x130819AF,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellSpecialUnitEffectMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1268903, -1, 2, 0x76989615, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1268903,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x76989615,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellTargetRestrictionsMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1139993, -1, 8, 0x7B330026, Fields, 7 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1139993,
+        .IndexField       = -1,
+        .ParentIndexField = 7,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x7B330026,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellTotemsMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 2, true },
-        { FT_SHORT, 2, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 2, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1002162, -1, 3, 0xEC0C4866, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1002162,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xEC0C4866,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualMeta
 {
     static constexpr DB2MetaField Fields[14] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 897952, -1, 14, 0x1C1301D2, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897952,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 14,
+        .LayoutHash       = 0x1C1301D2,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualAnimMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1140479, -1, 3, 0x0ABD7A19, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140479,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x0ABD7A19,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualColorEffectMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1094006, -1, 11, 0x7E5B2E66, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1094006,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0x7E5B2E66,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualEffectNameMeta
 {
     static constexpr DB2MetaField Fields[13] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 897948, -1, 13, 0xB930A934, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897948,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 13,
+        .LayoutHash       = 0xB930A934,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualEventMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1685317, -1, 9, 0xAE75BC3C, Fields, 8 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1685317,
+        .IndexField       = -1,
+        .ParentIndexField = 8,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xAE75BC3C,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualKitMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 897949, -1, 5, 0xDC04F488, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897949,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xDC04F488,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualKitAreaModelMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 897951, -1, 6, 0xBE76E593, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897951,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xBE76E593,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualKitEffectMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1140480, -1, 3, 0xB78084B7, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140480,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xB78084B7,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualKitModelAttachMeta
 {
     static constexpr DB2MetaField Fields[22] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 897953, 2, 22, 0xBCE18649, Fields, 21 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897953,
+        .IndexField       = 2,
+        .ParentIndexField = 21,
+        .FieldCount       = 22,
+        .LayoutHash       = 0xBCE18649,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellVisualMissileMeta
 {
     static constexpr DB2MetaField Fields[16] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 897954, 12, 16, 0x00BA67A5, Fields, 15 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897954,
+        .IndexField       = 12,
+        .ParentIndexField = 15,
+        .FieldCount       = 16,
+        .LayoutHash       = 0x00BA67A5,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellXDescriptionVariablesMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1724949, -1, 2, 0xB08E6876, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1724949,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xB08E6876,
+        .Fields           = Fields,
+    };
 };
 
 struct SpellXSpellVisualMeta
 {
     static constexpr DB2MetaField Fields[13] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1101657, 1, 13, 0x4F4B8A2A, Fields, 12 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1101657,
+        .IndexField       = 1,
+        .ParentIndexField = 12,
+        .FieldCount       = 13,
+        .LayoutHash       = 0x4F4B8A2A,
+        .Fields           = Fields,
+    };
 };
 
 struct StartupFilesMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1604265, -1, 3, 0x51FEBBB5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1604265,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x51FEBBB5,
+        .Fields           = Fields,
+    };
 };
 
 struct Startup_StringsMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1375805, -1, 2, 0xF8CDDEE7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1375805,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xF8CDDEE7,
+        .Fields           = Fields,
+    };
 };
 
 struct StationeryMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 2, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1140758, -1, 3, 0x20F6BABD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140758,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x20F6BABD,
+        .Fields           = Fields,
+    };
 };
 
 struct SummonPropertiesMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1345276, -1, 5, 0xFB8338FC, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1345276,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xFB8338FC,
+        .Fields           = Fields,
+    };
 };
 
 struct TactKeyMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_BYTE, 16, false },
+        { .Type = FT_BYTE,   .ArraySize = 16, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1302850, -1, 1, 0xF0F98B62, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302850,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xF0F98B62,
+        .Fields           = Fields,
+    };
 };
 
 struct TactKeyLookupMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_BYTE, 8, false },
+        { .Type = FT_BYTE,   .ArraySize = 8, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1302851, -1, 1, 0x3C1AC92A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1302851,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x3C1AC92A,
+        .Fields           = Fields,
+    };
 };
 
 struct TalentMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 2, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1369062, -1, 9, 0xE8850B48, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1369062,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xE8850B48,
+        .Fields           = Fields,
+    };
 };
 
 struct TaxiNodesMeta
 {
     static constexpr DB2MetaField Fields[12] =
     {
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_INT, 2, true },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1068100, -1, 12, 0xB46C6A8B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1068100,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 12,
+        .LayoutHash       = 0xB46C6A8B,
+        .Fields           = Fields,
+    };
 };
 
 struct TaxiPathMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1067802, 2, 4, 0xF44E2BF5, Fields, 0 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1067802,
+        .IndexField       = 2,
+        .ParentIndexField = 0,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xF44E2BF5,
+        .Fields           = Fields,
+    };
 };
 
 struct TaxiPathNodeMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1000437, 4, 9, 0xD38E8C01, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1000437,
+        .IndexField       = 4,
+        .ParentIndexField = 1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xD38E8C01,
+        .Fields           = Fields,
+    };
 };
 
 struct TerrainMaterialMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1307290, -1, 3, 0x19D9496F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1307290,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x19D9496F,
+        .Fields           = Fields,
+    };
 };
 
 struct TerrainTypeMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1310249, -1, 5, 0x4FE20345, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310249,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x4FE20345,
+        .Fields           = Fields,
+    };
 };
 
 struct TerrainTypeSoundsMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1284822, -1, 1, 0xE4923C1F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1284822,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xE4923C1F,
+        .Fields           = Fields,
+    };
 };
 
 struct TextureBlendSetMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_INT, 3, true },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 4, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1328721, -1, 10, 0xA2323E0C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1328721,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0xA2323E0C,
+        .Fields           = Fields,
+    };
 };
 
 struct TextureFileDataMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 982459, 0, 3, 0xE0790D00, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 982459,
+        .IndexField       = 0,
+        .ParentIndexField = 1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xE0790D00,
+        .Fields           = Fields,
+    };
 };
 
 struct TotemCategoryMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1134586, -1, 3, 0x20B9177A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134586,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x20B9177A,
+        .Fields           = Fields,
+    };
 };
 
 struct ToyMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 988200, 4, 5, 0x5409C5EA, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 988200,
+        .IndexField       = 4,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x5409C5EA,
+        .Fields           = Fields,
+    };
 };
 
 struct TradeSkillCategoryMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1301101, -1, 5, 0x5D3ADD4D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1301101,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x5D3ADD4D,
+        .Fields           = Fields,
+    };
 };
 
 struct TradeSkillItemMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1329070, -1, 2, 0xFDE283DA, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1329070,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xFDE283DA,
+        .Fields           = Fields,
+    };
 };
 
 struct TransformMatrixMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1338702, -1, 5, 0xB6A2C431, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1338702,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xB6A2C431,
+        .Fields           = Fields,
+    };
 };
 
 struct TransmogHolidayMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1589454, 0, 2, 0xB420EB18, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1589454,
+        .IndexField       = 0,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xB420EB18,
+        .Fields           = Fields,
+    };
 };
 
 struct TransmogSetMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1376213, 4, 10, 0xBEDFD7D1, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1376213,
+        .IndexField       = 4,
+        .ParentIndexField = 1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0xBEDFD7D1,
+        .Fields           = Fields,
+    };
 };
 
 struct TransmogSetGroupMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1576116, 1, 2, 0xCD072FE5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1576116,
+        .IndexField       = 1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xCD072FE5,
+        .Fields           = Fields,
+    };
 };
 
 struct TransmogSetItemMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1376212, 0, 4, 0x0E96B3A2, Fields, 1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1376212,
+        .IndexField       = 0,
+        .ParentIndexField = 1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x0E96B3A2,
+        .Fields           = Fields,
+    };
 };
 
 struct TransportAnimationMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1140686, -1, 4, 0x099987ED, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140686,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x099987ED,
+        .Fields           = Fields,
+    };
 };
 
 struct TransportPhysicsMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1121973, -1, 10, 0x2C1FB208, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1121973,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x2C1FB208,
+        .Fields           = Fields,
+    };
 };
 
 struct TransportRotationMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, false },
-        { FT_FLOAT, 4, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 4, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1140687, -1, 3, 0x72035AA9, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1140687,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x72035AA9,
+        .Fields           = Fields,
+    };
 };
 
 struct TrophyMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 975024, -1, 4, 0xE16151C5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 975024,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xE16151C5,
+        .Fields           = Fields,
+    };
 };
 
 struct UIExpansionDisplayInfoMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1729547, -1, 3, 0x73DFDEC5, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1729547,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x73DFDEC5,
+        .Fields           = Fields,
+    };
 };
 
 struct UIExpansionDisplayInfoIconMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1729546, -1, 3, 0x331022F2, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1729546,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x331022F2,
+        .Fields           = Fields,
+    };
 };
 
 struct UiCamFbackTransmogChrRaceMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1261406, -1, 5, 0x9FB4CC78, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1261406,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x9FB4CC78,
+        .Fields           = Fields,
+    };
 };
 
 struct UiCamFbackTransmogWeaponMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1261407, -1, 4, 0x020890B7, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1261407,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x020890B7,
+        .Fields           = Fields,
+    };
 };
 
 struct UiCameraMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1120287, -1, 9, 0xCA6C98D4, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1120287,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0xCA6C98D4,
+        .Fields           = Fields,
+    };
 };
 
 struct UiCameraTypeMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1120288, -1, 3, 0x644732AE, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1120288,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x644732AE,
+        .Fields           = Fields,
+    };
 };
 
 struct UiMapPOIMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 3, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1445708, 6, 7, 0x559E1F11, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1445708,
+        .IndexField       = 6,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x559E1F11,
+        .Fields           = Fields,
+    };
 };
 
 struct UiModelSceneMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1548215, -1, 2, 0xA7D62B8A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1548215,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xA7D62B8A,
+        .Fields           = Fields,
+    };
 };
 
 struct UiModelSceneActorMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1548214, 7, 10, 0x679AC95F, Fields, 9 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1548214,
+        .IndexField       = 7,
+        .ParentIndexField = 9,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x679AC95F,
+        .Fields           = Fields,
+    };
 };
 
 struct UiModelSceneActorDisplayMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1548216, -1, 5, 0x6137F4BE, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1548216,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x6137F4BE,
+        .Fields           = Fields,
+    };
 };
 
 struct UiModelSceneCameraMeta
 {
     static constexpr DB2MetaField Fields[16] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1548213, 14, 16, 0xC58AA5EC, Fields, 15 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1548213,
+        .IndexField       = 14,
+        .ParentIndexField = 15,
+        .FieldCount       = 16,
+        .LayoutHash       = 0xC58AA5EC,
+        .Fields           = Fields,
+    };
 };
 
 struct UiTextureAtlasMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 897470, -1, 3, 0x9879592A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897470,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x9879592A,
+        .Fields           = Fields,
+    };
 };
 
 struct UiTextureAtlasMemberMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 897532, 1, 8, 0x81E2055F, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 897532,
+        .IndexField       = 1,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0x81E2055F,
+        .Fields           = Fields,
+    };
 };
 
 struct UiTextureKitMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 939159, -1, 1, 0x2C7E0372, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 939159,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x2C7E0372,
+        .Fields           = Fields,
+    };
 };
 
 struct UnitBloodMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1284821, -1, 6, 0x4689A9A0, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1284821,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x4689A9A0,
+        .Fields           = Fields,
+    };
 };
 
 struct UnitBloodLevelsMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_BYTE, 3, false },
+        { .Type = FT_BYTE,   .ArraySize = 3, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1268904, -1, 1, 0x31A6BD58, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1268904,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x31A6BD58,
+        .Fields           = Fields,
+    };
 };
 
 struct UnitConditionMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 8, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 8, false },
-        { FT_BYTE, 8, true },
+        { .Type = FT_INT,    .ArraySize = 8, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 8, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 8, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1120959, -1, 4, 0x62802D9C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1120959,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x62802D9C,
+        .Fields           = Fields,
+    };
 };
 
 struct UnitPowerBarMeta
 {
     static constexpr DB2MetaField Fields[16] =
     {
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 6, true },
-        { FT_INT, 6, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 6, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 6, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1237753, -1, 16, 0x626C94CD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1237753,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 16,
+        .LayoutHash       = 0x626C94CD,
+        .Fields           = Fields,
+    };
 };
 
 struct VehicleMeta
 {
     static constexpr DB2MetaField Fields[18] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 8, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 3, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 8, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1368621, -1, 18, 0x1606C582, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1368621,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 18,
+        .LayoutHash       = 0x1606C582,
+        .Fields           = Fields,
+    };
 };
 
 struct VehicleSeatMeta
 {
     static constexpr DB2MetaField Fields[61] =
     {
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_BYTE, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1345447, -1, 61, 0x242E0ECD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1345447,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 61,
+        .LayoutHash       = 0x242E0ECD,
+        .Fields           = Fields,
+    };
 };
 
 struct VehicleUIIndSeatMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1279741, -1, 4, 0x5F688502, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1279741,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x5F688502,
+        .Fields           = Fields,
+    };
 };
 
 struct VehicleUIIndicatorMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_INT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1279740, -1, 1, 0x68486100, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1279740,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0x68486100,
+        .Fields           = Fields,
+    };
 };
 
 struct VignetteMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 892861, -1, 7, 0x52E3B381, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 892861,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x52E3B381,
+        .Fields           = Fields,
+    };
 };
 
 struct VirtualAttachmentMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_SHORT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1634482, -1, 2, 0xEC767C57, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1634482,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0xEC767C57,
+        .Fields           = Fields,
+    };
 };
 
 struct VirtualAttachmentCustomizationMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1634480, -1, 3, 0xC354C931, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1634480,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xC354C931,
+        .Fields           = Fields,
+    };
 };
 
 struct VocalUISoundsMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 2, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267067, -1, 4, 0xED48CFA9, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267067,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xED48CFA9,
+        .Fields           = Fields,
+    };
 };
 
 struct WMOAreaTableMeta
 {
     static constexpr DB2MetaField Fields[15] =
     {
-        { FT_STRING, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1355528, 12, 15, 0x4616C893, Fields, 14 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1355528,
+        .IndexField       = 12,
+        .ParentIndexField = 14,
+        .FieldCount       = 15,
+        .LayoutHash       = 0x4616C893,
+        .Fields           = Fields,
+    };
 };
 
 struct WMOMinimapTextureMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1323241, -1, 5, 0x8F4AE3C0, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1323241,
+        .IndexField       = -1,
+        .ParentIndexField = 4,
+        .FieldCount       = 5,
+        .LayoutHash       = 0x8F4AE3C0,
+        .Fields           = Fields,
+    };
 };
 
 struct WbAccessControlListMeta
 {
     static constexpr DB2MetaField Fields[5] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 879634, -1, 5, 0xBE044710, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 879634,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 5,
+        .LayoutHash       = 0xBE044710,
+        .Fields           = Fields,
+    };
 };
 
 struct WbCertWhitelistMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 879591, -1, 4, 0x01D13030, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 879591,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x01D13030,
+        .Fields           = Fields,
+    };
 };
 
 struct WeaponImpactSoundsMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 11, false },
-        { FT_INT, 11, false },
-        { FT_INT, 11, false },
-        { FT_INT, 11, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 11, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 11, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 11, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 11, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267648, -1, 7, 0x774C043A, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267648,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x774C043A,
+        .Fields           = Fields,
+    };
 };
 
 struct WeaponSwingSounds2Meta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267068, -1, 3, 0xD45347C3, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267068,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xD45347C3,
+        .Fields           = Fields,
+    };
 };
 
 struct WeaponTrailMeta
 {
     static constexpr DB2MetaField Fields[9] =
     {
-        { FT_INT, 1, true },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 3, true },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 3, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 3, .IsSigned = true },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 982461, -1, 9, 0x49754C60, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 982461,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 9,
+        .LayoutHash       = 0x49754C60,
+        .Fields           = Fields,
+    };
 };
 
 struct WeaponTrailModelDefMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1239843, -1, 3, 0x7DE7C508, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1239843,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x7DE7C508,
+        .Fields           = Fields,
+    };
 };
 
 struct WeaponTrailParamMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1239842, -1, 10, 0x9B0F7200, Fields, 9 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1239842,
+        .IndexField       = -1,
+        .ParentIndexField = 9,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x9B0F7200,
+        .Fields           = Fields,
+    };
 };
 
 struct WeatherMeta
 {
     static constexpr DB2MetaField Fields[14] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1343311, -1, 14, 0x7C160B07, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343311,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 14,
+        .LayoutHash       = 0x7C160B07,
+        .Fields           = Fields,
+    };
 };
 
 struct WindSettingsMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 943871, -1, 10, 0x5308550C, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 943871,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x5308550C,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldBossLockoutMeta
 {
     static constexpr DB2MetaField Fields[2] =
     {
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 975279, -1, 2, 0x4D7103A0, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 975279,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 2,
+        .LayoutHash       = 0x4D7103A0,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldChunkSoundsMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1267069, -1, 6, 0xD06AA126, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1267069,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0xD06AA126,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldEffectMeta
 {
     static constexpr DB2MetaField Fields[6] =
     {
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1343312, -1, 6, 0x2E9B9BFD, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343312,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 6,
+        .LayoutHash       = 0x2E9B9BFD,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldElapsedTimerMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1135240, -1, 3, 0x6C026FDE, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1135240,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x6C026FDE,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldMapAreaMeta
 {
     static constexpr DB2MetaField Fields[17] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 1, false },
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1374382, 15, 17, 0xC7E90019, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1374382,
+        .IndexField       = 15,
+        .ParentIndexField = -1,
+        .FieldCount       = 17,
+        .LayoutHash       = 0xC7E90019,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldMapContinentMeta
 {
     static constexpr DB2MetaField Fields[11] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 1, false },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 2, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1343594, -1, 11, 0x8F75E077, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343594,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 11,
+        .LayoutHash       = 0x8F75E077,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldMapOverlayMeta
 {
     static constexpr DB2MetaField Fields[14] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_INT, 4, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 4, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1134579, 1, 14, 0xDC4B6AF3, Fields, 4 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1134579,
+        .IndexField       = 1,
+        .ParentIndexField = 4,
+        .FieldCount       = 14,
+        .LayoutHash       = 0xDC4B6AF3,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldMapTransformsMeta
 {
     static constexpr DB2MetaField Fields[10] =
     {
-        { FT_FLOAT, 6, false },
-        { FT_FLOAT, 2, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
+        { .Type = FT_FLOAT,  .ArraySize = 6, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1310630, -1, 10, 0x99FB4B71, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310630,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 10,
+        .LayoutHash       = 0x99FB4B71,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldSafeLocsMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING, 1, false },
-        { FT_FLOAT, 3, false },
-        { FT_FLOAT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_FLOAT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1369425, -1, 4, 0x605EA8A6, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1369425,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x605EA8A6,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldStateExpressionMeta
 {
     static constexpr DB2MetaField Fields[1] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1332558, -1, 1, 0xA69C9812, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1332558,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 1,
+        .LayoutHash       = 0xA69C9812,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldStateUIMeta
 {
     static constexpr DB2MetaField Fields[17] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_STRING, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 3, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
-        { FT_INT, 1, true },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_STRING, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 3, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = true },
     };
 
-    static constexpr DB2Meta Instance{ 1343596, 14, 17, 0x70808977, Fields, 5 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1343596,
+        .IndexField       = 14,
+        .ParentIndexField = 5,
+        .FieldCount       = 17,
+        .LayoutHash       = 0x70808977,
+        .Fields           = Fields,
+    };
 };
 
 struct WorldStateZoneSoundsMeta
 {
     static constexpr DB2MetaField Fields[8] =
     {
-        { FT_INT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1266941, -1, 8, 0xB9572D3D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1266941,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 8,
+        .LayoutHash       = 0xB9572D3D,
+        .Fields           = Fields,
+    };
 };
 
 struct World_PVP_AreaMeta
 {
     static constexpr DB2MetaField Fields[7] =
     {
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, true },
-        { FT_BYTE, 1, false },
-        { FT_BYTE, 1, false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = true },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1310255, -1, 7, 0x6FBBF76B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310255,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 7,
+        .LayoutHash       = 0x6FBBF76B,
+        .Fields           = Fields,
+    };
 };
 
 struct ZoneIntroMusicTableMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1310251, -1, 4, 0x1F8417ED, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310251,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x1F8417ED,
+        .Fields           = Fields,
+    };
 };
 
 struct ZoneLightMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_SHORT, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1310253, -1, 3, 0x3C11F38B, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310253,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 3,
+        .LayoutHash       = 0x3C11F38B,
+        .Fields           = Fields,
+    };
 };
 
 struct ZoneLightPointMeta
 {
     static constexpr DB2MetaField Fields[3] =
     {
-        { FT_FLOAT, 2, false },
-        { FT_BYTE, 1, false },
-        { FT_SHORT, 1, false },
+        { .Type = FT_FLOAT,  .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_SHORT,  .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1310256, -1, 3, 0xEF93DC50, Fields, 2 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310256,
+        .IndexField       = -1,
+        .ParentIndexField = 2,
+        .FieldCount       = 3,
+        .LayoutHash       = 0xEF93DC50,
+        .Fields           = Fields,
+    };
 };
 
 struct ZoneMusicMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_STRING_NOT_LOCALIZED, 1, false },
-        { FT_INT, 2, false },
-        { FT_INT, 2, false },
-        { FT_INT, 2, false },
+        { .Type = FT_STRING_NOT_LOCALIZED, .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 2, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1310254, -1, 4, 0x9E2B332D, Fields, -1 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1310254,
+        .IndexField       = -1,
+        .ParentIndexField = -1,
+        .FieldCount       = 4,
+        .LayoutHash       = 0x9E2B332D,
+        .Fields           = Fields,
+    };
 };
 
 struct ZoneStoryMeta
 {
     static constexpr DB2MetaField Fields[4] =
     {
-        { FT_INT, 1, false },
-        { FT_INT, 1, false },
-        { FT_BYTE, 1, false },
-        { FT_INT, 1, false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_BYTE,   .ArraySize = 1, .IsSigned = false },
+        { .Type = FT_INT,    .ArraySize = 1, .IsSigned = false },
     };
 
-    static constexpr DB2Meta Instance{ 1797864, -1, 4, 0xEE16D6F3, Fields, 3 };
+    static constexpr DB2Meta Instance
+    {
+        .FileDataId       = 1797864,
+        .IndexField       = -1,
+        .ParentIndexField = 3,
+        .FieldCount       = 4,
+        .LayoutHash       = 0xEE16D6F3,
+        .Fields           = Fields,
+    };
 };
 
 #endif // DB2Metadata_h__

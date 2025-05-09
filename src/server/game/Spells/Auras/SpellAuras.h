@@ -65,7 +65,7 @@ class TC_GAME_API AuraApplication
         AuraRemoveMode _removeMode:8;                  // Store info for know remove aura reason
         uint8 _slot;                                   // Aura slot on unit
         uint8 _flags;                                  // Aura info flag
-        uint32 _effectsToApply;                         // Used only at spell hit to determine which effect should be applied
+        uint32 _effectsToApply;                        // Used only at spell hit to determine which effect should be applied
         bool _needClientUpdate:1;
         uint32 _effectMask;
 
