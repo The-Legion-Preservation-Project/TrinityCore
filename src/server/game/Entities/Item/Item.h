@@ -315,7 +315,7 @@ class TC_GAME_API Item : public Object
         int32 GetRequiredLevel() const;
         int32 GetItemStatType(uint32 index) const { ASSERT(index < MAX_ITEM_PROTO_STATS); return _bonusData.ItemStatType[index]; }
         int32 GetItemStatValue(uint32 index, Player const* owner) const;
-        SocketColor GetSocketColor(uint32 index) const { ASSERT(index < MAX_ITEM_PROTO_SOCKETS); return SocketColor(_bonusData.SocketColor[index]); }
+        uint32 GetSocketColor(uint32 index) const { ASSERT(index < MAX_ITEM_PROTO_SOCKETS); return _bonusData.SocketColor[index]; }
         uint32 GetAppearanceModId() const { return GetUInt32Value(ITEM_FIELD_APPEARANCE_MOD_ID); }
         void SetAppearanceModId(uint32 appearanceModId) { SetUInt32Value(ITEM_FIELD_APPEARANCE_MOD_ID, appearanceModId); }
         uint32 GetDisplayId(Player const* owner) const;

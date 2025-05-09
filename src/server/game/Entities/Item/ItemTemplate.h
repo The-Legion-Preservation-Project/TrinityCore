@@ -307,24 +307,23 @@ enum BAG_FAMILY_MASK
 
 enum SocketColor
 {
-    SOCKET_COLOR_META                           = 0x00001,
-    SOCKET_COLOR_RED                            = 0x00002,
-    SOCKET_COLOR_YELLOW                         = 0x00004,
-    SOCKET_COLOR_BLUE                           = 0x00008,
-    SOCKET_COLOR_HYDRAULIC                      = 0x00010, // not used
-    SOCKET_COLOR_COGWHEEL                       = 0x00020,
-    SOCKET_COLOR_PRISMATIC                      = 0x0000E,
-    SOCKET_COLOR_RELIC_IRON                     = 0x00040,
-    SOCKET_COLOR_RELIC_BLOOD                    = 0x00080,
-    SOCKET_COLOR_RELIC_SHADOW                   = 0x00100,
-    SOCKET_COLOR_RELIC_FEL                      = 0x00200,
-    SOCKET_COLOR_RELIC_ARCANE                   = 0x00400,
-    SOCKET_COLOR_RELIC_FROST                    = 0x00800,
-    SOCKET_COLOR_RELIC_FIRE                     = 0x01000,
-    SOCKET_COLOR_RELIC_WATER                    = 0x02000,
-    SOCKET_COLOR_RELIC_LIFE                     = 0x04000,
-    SOCKET_COLOR_RELIC_WIND                     = 0x08000,
-    SOCKET_COLOR_RELIC_HOLY                     = 0x10000
+    SOCKET_COLOR_META                           = 0x00000001,
+    SOCKET_COLOR_RED                            = 0x00000002,
+    SOCKET_COLOR_YELLOW                         = 0x00000004,
+    SOCKET_COLOR_BLUE                           = 0x00000008,
+    SOCKET_COLOR_HYDRAULIC                      = 0x00000010,
+    SOCKET_COLOR_COGWHEEL                       = 0x00000020,
+    SOCKET_COLOR_RELIC_IRON                     = 0x00000040,
+    SOCKET_COLOR_RELIC_BLOOD                    = 0x00000080,
+    SOCKET_COLOR_RELIC_SHADOW                   = 0x00000100,
+    SOCKET_COLOR_RELIC_FEL                      = 0x00000200,
+    SOCKET_COLOR_RELIC_ARCANE                   = 0x00000400,
+    SOCKET_COLOR_RELIC_FROST                    = 0x00000800,
+    SOCKET_COLOR_RELIC_FIRE                     = 0x00001000,
+    SOCKET_COLOR_RELIC_WATER                    = 0x00002000,
+    SOCKET_COLOR_RELIC_LIFE                     = 0x00004000,
+    SOCKET_COLOR_RELIC_WIND                     = 0x00008000,
+    SOCKET_COLOR_RELIC_HOLY                     = 0x00010000,
 };
 
 extern uint32 const SocketColorToGemTypeMask[19];
