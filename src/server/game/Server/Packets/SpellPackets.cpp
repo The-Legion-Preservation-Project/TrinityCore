@@ -603,13 +603,13 @@ ByteBuffer& operator<<(ByteBuffer& data, SpellHistoryEntry const& historyEntry)
     data << int32(historyEntry.RecoveryTime);
     data << int32(historyEntry.CategoryRecoveryTime);
     data << float(historyEntry.ModRate);
-    data.WriteBit(historyEntry.unused622_1.has_value());
-    data.WriteBit(historyEntry.unused622_2.has_value());
+    data.WriteBit(historyEntry.RecoveryTimeStartOffset.has_value());
+    data.WriteBit(historyEntry.CategoryRecoveryTimeStartOffset.has_value());
     data.WriteBit(historyEntry.OnHold);
-    if (historyEntry.unused622_1)
-        data << uint32(*historyEntry.unused622_1);
-    if (historyEntry.unused622_2)
-        data << uint32(*historyEntry.unused622_2);
+    if (historyEntry.RecoveryTimeStartOffset)
+        data << uint32(*historyEntry.RecoveryTimeStartOffset);
+    if (historyEntry.CategoryRecoveryTimeStartOffset)
+        data << uint32(*historyEntry.CategoryRecoveryTimeStartOffset);
     data.FlushBits();
 
     return data;
