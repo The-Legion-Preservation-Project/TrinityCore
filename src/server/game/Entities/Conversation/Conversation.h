@@ -22,6 +22,7 @@
 #include "GridObject.h"
 #include "Hash.h"
 
+class ConversationAI;
 class Unit;
 class SpellInfo;
 enum class ConversationActorType : uint32;
@@ -99,6 +100,10 @@ class TC_GAME_API Conversation final : public WorldObject, public GridObject<Con
         Unit* GetActorUnit(uint32 actorIdx) const;
         Creature* GetActorCreature(uint32 actorIdx) const;
 
+        void AI_Initialize();
+        void AI_Destroy();
+
+        ConversationAI* AI() { return _ai.get(); }
         uint32 GetScriptId() const;
 
     private:
@@ -107,6 +112,8 @@ class TC_GAME_API Conversation final : public WorldObject, public GridObject<Con
         Milliseconds _duration;
         uint32 _textureKitId;
         std::set<uint16> _actorIndices;
+
+        std::unique_ptr<ConversationAI> _ai;
 };
 
 #endif // TRINITYCORE_CONVERSATION_H
