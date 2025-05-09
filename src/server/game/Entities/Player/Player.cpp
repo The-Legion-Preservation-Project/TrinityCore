@@ -18230,7 +18230,8 @@ void Player::_LoadAuras(PreparedQueryResult auraResult, PreparedQueryResult effe
             createInfo
                 .SetCasterGUID(casterGuid)
                 .SetBaseAmount(info.BaseAmounts.data())
-                .SetCastItem(itemGuid, castItemId, castItemLevel);
+                .SetCastItem(itemGuid, castItemId, castItemLevel)
+                .SetStackAmount(stackCount);
 
             if (Aura* aura = Aura::TryCreate(createInfo))
             {
@@ -18240,7 +18241,7 @@ void Player::_LoadAuras(PreparedQueryResult auraResult, PreparedQueryResult effe
                     continue;
                 }
 
-                aura->SetLoadedState(maxDuration, remainTime, remainCharges, stackCount, recalculateMask, info.Amounts.data());
+                aura->SetLoadedState(maxDuration, remainTime, remainCharges, recalculateMask, info.Amounts.data());
                 aura->ApplyForTargets();
                 TC_LOG_DEBUG("entities.player", "Player::_LoadAuras: Added aura (SpellID: {}, EffectMask: {}) to player '{} ({})",
                     spellInfo->Id, key.EffectMask, GetName(), GetGUID().ToString());
