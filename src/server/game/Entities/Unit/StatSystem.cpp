@@ -557,9 +557,6 @@ void Player::UpdateMastery()
         {
             for (AuraEffect* auraEff : aura->GetAuraEffects())
             {
-                if (!auraEff)
-                    continue;
-
                 float mult = auraEff->GetSpellEffectInfo().BonusCoefficient;
                 if (G3D::fuzzyEq(mult, 0.0f))
                     continue;
