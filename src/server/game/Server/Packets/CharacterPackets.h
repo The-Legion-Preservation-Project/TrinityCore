@@ -143,10 +143,10 @@ namespace WorldPackets
                 uint32 Flags3            = 0; ///< Character flags 3 @todo research
                 uint32 Flags4            = 0;
                 bool FirstLogin      = false;
-                uint8 unkWod61x          = 0;
-                Timestamp<> LastPlayedTime;
+                uint8 CantLoginReason    = 0;
+                Timestamp<> LastActiveTime;
                 uint16 SpecID            = 0;
-                uint32 Unknown703        = 0;
+                uint32 SaveVersion       = 0;
                 uint32 LastLoginVersion  = 0;
 
                 uint32 PetCreatureDisplayID = 0;
@@ -168,10 +168,10 @@ namespace WorldPackets
 
             struct RaceUnlock
             {
-                int32 RaceID          = 0;
-                bool HasExpansion     = false;
-                bool HasAchievement   = false;
-                bool HasHeritageArmor = false;
+                int32 RaceID = 0;
+                bool HasUnlockedLicense = false;
+                bool HasUnlockedAchievement = false;
+                bool HasHeritageArmorUnlockAchievement = false;
             };
 
             EnumCharactersResult() : ServerPacket(SMSG_ENUM_CHARACTERS_RESULT) { }
@@ -180,13 +180,13 @@ namespace WorldPackets
 
             bool Success                          = false; ///<
             bool IsDeletedCharacters              = false; ///< used for character undelete list
-            bool IsTestDemonHunterCreationAllowed = false; ///< allows client to skip 1 per realm and level 70 requirements
+            bool IgnoreNewPlayerRestrictions      = false; ///< allows client to skip new player restrictions
             bool HasDemonHunterOnRealm            = false;
             bool IsDemonHunterCreationAllowed     = false; ///< used for demon hunter early access
             bool IsAlliedRacesCreationAllowed     = false;
 
             int32 MaxCharacterLevel     = 1;
-            Optional<uint32> DisabledClassesMask;
+            Optional<uint32> ClassDisableMask;
 
             std::vector<CharacterInfo> Characters; ///< all characters on the list
             std::vector<RaceUnlock> RaceUnlockData; ///<

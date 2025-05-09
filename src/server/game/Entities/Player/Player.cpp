@@ -13358,7 +13358,7 @@ void Player::SendNewItem(Item* item, uint32 quantity, bool pushed, bool created,
 
     packet.Item.Initialize(item);
 
-    packet.QuestLogItemID = item->GetTemplate()->QuestLogItemId;
+    packet.ProxyItemID = item->GetTemplate()->QuestLogItemId;
     packet.Quantity = quantity;
     packet.QuantityInInventory = GetItemCount(item->GetEntry());
     packet.BattlePetSpeciesID = item->GetModifier(ITEM_MODIFIER_BATTLE_PET_SPECIES_ID);
@@ -13369,15 +13369,15 @@ void Player::SendNewItem(Item* item, uint32 quantity, bool pushed, bool created,
     packet.ItemGUID = item->GetGUID();
 
     packet.Pushed = pushed;
-    packet.DisplayText = WorldPackets::Item::ItemPushResult::DISPLAY_TYPE_NORMAL;
+    packet.ChatNotifyType = WorldPackets::Item::ItemPushResult::DISPLAY_TYPE_NORMAL;
     packet.Created = created;
     //packet.IsBonusRoll;
 
     if (dungeonEncounterId)
     {
-        packet.DisplayText = WorldPackets::Item::ItemPushResult::DISPLAY_TYPE_ENCOUNTER_LOOT;
-        packet.DungeonEncounterID = dungeonEncounterId;
-        packet.IsEncounterLoot = true;
+        packet.ChatNotifyType = WorldPackets::Item::ItemPushResult::DISPLAY_TYPE_ENCOUNTER_LOOT;
+        packet.EncounterID = dungeonEncounterId;
+        packet.IsPersonalLoot = true;
     }
 
     if (broadcast && GetGroup() && !item->GetTemplate()->HasFlag(ITEM_FLAG3_DONT_REPORT_LOOT_LOG_TO_PARTY))
@@ -16651,10 +16651,10 @@ void Player::SendQuestUpdateAddItem(ItemTemplate const* itemTemplate, QuestObjec
     packet.Slot = INVENTORY_SLOT_BAG_0;
     packet.SlotInBag = 0;
     packet.Item.ItemID = itemTemplate->GetId();
-    packet.QuestLogItemID = itemTemplate->QuestLogItemId;
+    packet.ProxyItemID = itemTemplate->QuestLogItemId;
     packet.Quantity = count;
     packet.QuantityInInventory = GetQuestObjectiveData(obj);
-    packet.DisplayText = static_cast<WorldPackets::Item::ItemPushResult::DisplayType>(3);
+    packet.ChatNotifyType = static_cast<WorldPackets::Item::ItemPushResult::DisplayType>(3);
 
     if (GetGroup() && !itemTemplate->HasFlag(ITEM_FLAG3_DONT_REPORT_LOOT_LOG_TO_PARTY))
         GetGroup()->BroadcastPacket(packet.Write(), true);

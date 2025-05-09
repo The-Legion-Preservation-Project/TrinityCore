@@ -154,24 +154,24 @@ ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportT
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketLFGListSearchResult>& lfgListSearchResult)
+ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportTicketLFGListEntryInfo>& lfgListSearchResult)
 {
     lfgListSearchResult.emplace();
 
-    data >> lfgListSearchResult->RideTicket;
-    data >> lfgListSearchResult->GroupFinderActivityID;
-    data >> lfgListSearchResult->LastTitleAuthorGuid;
-    data >> lfgListSearchResult->LastDescriptionAuthorGuid;
-    data >> lfgListSearchResult->LastVoiceChatAuthorGuid;
-    data >> lfgListSearchResult->ListingCreatorGuid;
-    data >> lfgListSearchResult->Unknown735;
+    data >> lfgListSearchResult->Ticket;
+    data >> lfgListSearchResult->ActivityID;
+    data >> lfgListSearchResult->LastTouchedName;
+    data >> lfgListSearchResult->LastTouchedComment;
+    data >> lfgListSearchResult->LastTouchedVoiceChat;
+    data >> lfgListSearchResult->LastTouchedAny;
+    data >> lfgListSearchResult->PartyGuid;
 
     uint32 titleLength = data.ReadBits(8);
     uint32 descriptionLength = data.ReadBits(11);
     uint32 voiceChatLength = data.ReadBits(8);
 
-    lfgListSearchResult->Title = data.ReadString(titleLength);
-    lfgListSearchResult->Description = data.ReadString(descriptionLength);
+    lfgListSearchResult->Name = data.ReadString(titleLength);
+    lfgListSearchResult->Comment = data.ReadString(descriptionLength);
     lfgListSearchResult->VoiceChat = data.ReadString(voiceChatLength);
 
     return data;
@@ -181,7 +181,7 @@ ByteBuffer& operator>>(ByteBuffer& data, Optional<WorldPackets::Ticket::SupportT
 {
     lfgListApplicant.emplace();
 
-    data >> lfgListApplicant->RideTicket;
+    data >> lfgListApplicant->Ticket;
     lfgListApplicant->Comment = data.ReadString(data.ReadBits(9));
 
     return data;
@@ -219,10 +219,10 @@ void WorldPackets::Ticket::SupportTicketSubmitComplaint::Read()
         _worldPacket >> GuildInfo;
 
     if (hasLFGListSearchResult)
-        _worldPacket >> LFGListSearchResult;
+        _worldPacket >> LfgListEntryInfo;
 
     if (hasLFGListApplicant)
-        _worldPacket >> LFGListApplicant;
+        _worldPacket >> LfgListAppInfo;
 }
 
 ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Ticket::Complaint::ComplaintOffender& complaintOffender)

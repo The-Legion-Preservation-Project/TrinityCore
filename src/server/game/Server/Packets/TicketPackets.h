@@ -155,23 +155,23 @@ namespace WorldPackets
             std::string GuildName;
         };
 
-        struct SupportTicketLFGListSearchResult
+        struct SupportTicketLFGListEntryInfo
         {
-            WorldPackets::LFG::RideTicket RideTicket;
-            uint32 GroupFinderActivityID = 0;
-            ObjectGuid LastTitleAuthorGuid;
-            ObjectGuid LastDescriptionAuthorGuid;
-            ObjectGuid LastVoiceChatAuthorGuid;
-            ObjectGuid ListingCreatorGuid;
-            ObjectGuid Unknown735;
-            std::string Title;
-            std::string Description;
+            WorldPackets::LFG::RideTicket Ticket;
+            uint32 ActivityID = 0;
+            ObjectGuid LastTouchedName;
+            ObjectGuid LastTouchedComment;
+            ObjectGuid LastTouchedVoiceChat;
+            ObjectGuid LastTouchedAny;
+            ObjectGuid PartyGuid;
+            std::string Name;
+            std::string Comment;
             std::string VoiceChat;
         };
 
         struct SupportTicketLFGListApplicant
         {
-            WorldPackets::LFG::RideTicket RideTicket;
+            WorldPackets::LFG::RideTicket Ticket;
             std::string Comment;
         };
 
@@ -191,8 +191,8 @@ namespace WorldPackets
             Optional<SupportTicketCalendarEventInfo> CalenderInfo;
             Optional<SupportTicketPetInfo> PetInfo;
             Optional<SupportTicketGuildInfo> GuildInfo;
-            Optional<SupportTicketLFGListSearchResult> LFGListSearchResult;
-            Optional<SupportTicketLFGListApplicant> LFGListApplicant;
+            Optional<SupportTicketLFGListEntryInfo> LfgListEntryInfo;
+            Optional<SupportTicketLFGListApplicant> LfgListAppInfo;
 
         };
 

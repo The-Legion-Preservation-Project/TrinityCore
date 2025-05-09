@@ -115,7 +115,7 @@ EnumCharactersResult::CharacterInfo::CharacterInfo(Field const* fields)
 
     std::vector<std::string_view> equipment = Trinity::Tokenize(fields[25].GetStringView(), ' ', false);
     ListPosition = fields[27].GetUInt8();
-    LastPlayedTime = fields[28].GetInt64();
+    LastActiveTime = fields[28].GetInt64();
     if (ChrSpecializationEntry const* spec = sDB2Manager.GetChrSpecializationByIndex(ClassID, fields[29].GetUInt8()))
         SpecID = spec->ID;
 
@@ -170,15 +170,15 @@ ByteBuffer& operator<<(ByteBuffer& data, EnumCharactersResult::CharacterInfo con
     for (EnumCharactersResult::CharacterInfo::VisualItemInfo const& visualItem : charInfo.VisualItems)
         data << visualItem;
 
-    data << charInfo.LastPlayedTime;
+    data << charInfo.LastActiveTime;
     data << uint16(charInfo.SpecID);
-    data << uint32(charInfo.Unknown703);
+    data << uint32(charInfo.SaveVersion);
     data << uint32(charInfo.LastLoginVersion);
     data << uint32(charInfo.Flags4);
     data << BitsSize<6>(charInfo.Name);
     data << Bits<1>(charInfo.FirstLogin);
     data << Bits<1>(charInfo.BoostInProgress);
-    data << Bits<5>(charInfo.unkWod61x);
+    data << Bits<5>(charInfo.CantLoginReason);
     data.FlushBits();
 
     data.WriteString(charInfo.Name);
@@ -189,9 +189,9 @@ ByteBuffer& operator<<(ByteBuffer& data, EnumCharactersResult::CharacterInfo con
 ByteBuffer& operator<<(ByteBuffer& data, EnumCharactersResult::RaceUnlock const& raceUnlock)
 {
     data << int32(raceUnlock.RaceID);
-    data << Bits<1>(raceUnlock.HasExpansion);
-    data << Bits<1>(raceUnlock.HasAchievement);
-    data << Bits<1>(raceUnlock.HasHeritageArmor);
+    data << Bits<1>(raceUnlock.HasUnlockedLicense);
+    data << Bits<1>(raceUnlock.HasUnlockedAchievement);
+    data << Bits<1>(raceUnlock.HasHeritageArmorUnlockAchievement);
     data.FlushBits();
 
     return data;
@@ -203,17 +203,17 @@ WorldPacket const* EnumCharactersResult::Write()
 
     _worldPacket << Bits<1>(Success);
     _worldPacket << Bits<1>(IsDeletedCharacters);
-    _worldPacket << Bits<1>(IsTestDemonHunterCreationAllowed);
+    _worldPacket << Bits<1>(IgnoreNewPlayerRestrictions);
     _worldPacket << Bits<1>(HasDemonHunterOnRealm);
     _worldPacket << Bits<1>(IsDemonHunterCreationAllowed);
-    _worldPacket << Bits<1>(DisabledClassesMask.has_value());
+    _worldPacket << Bits<1>(ClassDisableMask.has_value());
     _worldPacket << Bits<1>(IsAlliedRacesCreationAllowed);
     _worldPacket << uint32(Characters.size());
     _worldPacket << int32(MaxCharacterLevel);
     _worldPacket << uint32(RaceUnlockData.size());
 
-    if (DisabledClassesMask)
-        _worldPacket << uint32(*DisabledClassesMask);
+    if (ClassDisableMask)
+        _worldPacket << uint32(*ClassDisableMask);
 
     for (CharacterInfo const& charInfo : Characters)
         _worldPacket << charInfo;

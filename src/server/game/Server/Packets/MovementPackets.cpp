@@ -271,7 +271,7 @@ ByteBuffer& WorldPackets::operator<<(ByteBuffer& data, Movement::MovementMonster
     data << movementMonsterSpline.ID;
     data << movementMonsterSpline.Destination;
     data.WriteBit(movementMonsterSpline.CrzTeleport);
-    data.WriteBits(movementMonsterSpline.StopDistanceTolerance, 3);
+    data.WriteBits(movementMonsterSpline.StopSplineStyle, 3);
 
     data << movementMonsterSpline.Move;
 

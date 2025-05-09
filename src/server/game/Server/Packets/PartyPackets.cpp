@@ -75,7 +75,7 @@ WorldPacket const* WorldPackets::Party::PartyInvite::Write()
 
     _worldPacket << InviterGUID;
     _worldPacket << InviterBNetAccountId;
-    _worldPacket << uint16(Unk1);
+    _worldPacket << uint16(InviterCfgRealmID);
     _worldPacket << uint32(ProposedRoles);
     _worldPacket << uint32(LfgSlots.size());
     _worldPacket << uint32(LfgCompletedMask);

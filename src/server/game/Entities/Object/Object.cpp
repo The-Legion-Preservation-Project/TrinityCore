@@ -499,14 +499,14 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         bool hasAttached            = createProperties && createProperties->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::HasAttached);
         bool hasFaceMovementDir     = createProperties && createProperties->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::HasFaceMovementDir);
         bool hasFollowsTerrain      = createProperties && createProperties->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::HasFollowsTerrain);
-        bool hasUnk1                = createProperties && createProperties->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::Unk1);
+        bool hasAlwaysExterior      = createProperties && createProperties->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::AlwaysExterior);
         bool hasTargetRollPitchYaw  = createProperties && createProperties->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::HasTargetRollPitchYaw);
         bool hasScaleCurveID        = createProperties && createProperties->ScaleCurveId != 0;
         bool hasMorphCurveID        = createProperties && createProperties->MorphCurveId != 0;
         bool hasFacingCurveID       = createProperties && createProperties->FacingCurveId != 0;
         bool hasMoveCurveID         = createProperties && createProperties->MoveCurveId != 0;
         bool hasAnimation           = createProperties && createProperties->AnimId;
-        bool hasUnk3                = createProperties && createProperties->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::Unk3);
+        bool hasVisualAnimIsDecay   = createProperties && createProperties->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::VisualAnimIsDecay);
         bool hasAnimKitID           = createProperties && createProperties->AnimKitId;
         bool hasAreaTriggerSphere   = shape.IsSphere();
         bool hasAreaTriggerBox      = shape.IsBox();
@@ -520,14 +520,14 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         data->WriteBit(hasAttached);
         data->WriteBit(hasFaceMovementDir);
         data->WriteBit(hasFollowsTerrain);
-        data->WriteBit(hasUnk1);
+        data->WriteBit(hasAlwaysExterior);
         data->WriteBit(hasTargetRollPitchYaw);
         data->WriteBit(hasScaleCurveID);
         data->WriteBit(hasMorphCurveID);
         data->WriteBit(hasFacingCurveID);
         data->WriteBit(hasMoveCurveID);
         data->WriteBit(hasAnimation);
-        data->WriteBit(hasUnk3);
+        data->WriteBit(hasVisualAnimIsDecay);
         data->WriteBit(hasAnimKitID);
         data->WriteBit(hasAreaTriggerSphere);
         data->WriteBit(hasAreaTriggerBox);
@@ -536,7 +536,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         data->WriteBit(hasAreaTriggerSpline);
         data->WriteBit(hasOrbit);
 
-        if (hasUnk3)
+        if (hasVisualAnimIsDecay)
             data->WriteBit(false);
 
         data->FlushBits();

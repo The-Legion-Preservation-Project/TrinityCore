@@ -472,7 +472,7 @@ void WorldSession::SendLfgUpdateProposal(lfg::LfgProposal const& proposal)
     lfgProposalUpdate.CompletedMask = proposal.encounters;
     lfgProposalUpdate.ValidCompletedMask = true;
     lfgProposalUpdate.ProposalSilent = silent;
-    lfgProposalUpdate.IsRequeue = !proposal.isNew;
+    lfgProposalUpdate.FailedByMyParty = !proposal.isNew;
 
     for (auto const& player : proposal.players)
     {

@@ -509,7 +509,7 @@ WorldPacket const* WorldPackets::Guild::GuildPartyState::Write()
 ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Guild::GuildRewardItem const& rewardItem)
 {
     data << uint32(rewardItem.ItemID);
-    data << uint32(rewardItem.Unk4);
+    data << uint32(rewardItem.AchievementLogic);
     data << uint32(rewardItem.AchievementsRequired.size());
     data << uint64(rewardItem.RaceMask.RawValue);
     data << int32(rewardItem.MinGuildLevel);

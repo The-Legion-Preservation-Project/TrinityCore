@@ -422,15 +422,15 @@ namespace WorldPackets
                 int32 Ranking = 0;
                 int32 SeasonPlayed = 0;
                 int32 SeasonWon = 0;
-                int32 Unused1 = 0;
-                int32 Unused2 = 0;
+                int32 SeasonFactionPlayed = 0;
+                int32 SeasonFactionWon = 0;
                 int32 WeeklyPlayed = 0;
                 int32 WeeklyWon = 0;
                 int32 BestWeeklyRating = 0;
                 int32 LastWeeksBestRating = 0;
                 int32 BestSeasonRating = 0;
                 int32 PvpTierID = 0;
-                int32 Unused3 = 0;
+                int32 SeasonPvpTier = 0;
                 bool Disqualified = false;
             } Bracket[6];
         };

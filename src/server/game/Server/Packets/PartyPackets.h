@@ -69,7 +69,7 @@ namespace WorldPackets
             bool MustBeBNetFriend = false;
             bool AllowMultipleRoles = false;
             bool QuestSessionActive = false;
-            uint16 Unk1 = 0;
+            uint16 InviterCfgRealmID = 0;
 
             bool CanAccept = false;
 

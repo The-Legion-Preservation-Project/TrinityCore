@@ -100,24 +100,24 @@ namespace WorldPackets
             int32 CfgRealmRecID                          = 0;
             uint32 TwitterPostThrottleLimit              = 0; ///< Number of twitter posts the client can send before they start being throttled
             uint32 TwitterPostThrottleCooldown           = 0; ///< Time in seconds the client has to wait before posting again after hitting post limit
-            uint32 TokenPollTimeSeconds                  = 0;
+            uint32 CommercePricePollTimeSeconds          = 0;
             uint32 TokenRedeemIndex                      = 0;
-            int64 TokenBalanceAmount                     = 0;
-            uint32 BpayStoreProductDeliveryDelay         = 0;
+            int64 RedeemForBalanceAmount                 = 0;
+            uint32 BpayStorePurchaseTimeout              = 0;
             bool ItemRestorationButtonEnabled        = false;
             bool CharUndeleteEnabled                 = false; ///< Implemented
             bool BpayStoreDisabledByParentalControls = false;
             bool TwitterEnabled                      = false;
-            bool CommerceSystemEnabled               = false;
-            bool Unk67                               = false;
-            bool WillKickFromWorld                   = false;
+            bool CommerceServerEnabled               = false;
+            bool VeteranTokenRedeemWillKick          = false;
+            bool WorldTokenRedeemWillKick            = false;
 
             bool RestrictedAccount                   = false;
-            bool TutorialsEnabled                    = false;
+            bool TutorialEnabled                    = false;
             bool NPETutorialsEnabled                 = false;
             bool KioskModeEnabled                    = false;
             bool CompetitiveModeEnabled              = false;
-            bool TokenBalanceEnabled                 = false;
+            bool RedeemForBalanceAvailable           = false;
 
             Optional<std::vector<uint8>> RaceClassExpansionLevels;
             SocialQueueConfig QuickJoinConfig;
@@ -134,21 +134,21 @@ namespace WorldPackets
             bool BpayStoreDisabledByParentalControls = false; // NYI
             bool CharUndeleteEnabled                 = false;
             bool BpayStoreEnabled                    = false; // NYI
-            bool CommerceSystemEnabled               = false; // NYI
-            bool Unk14                               = false; // NYI
-            bool WillKickFromWorld                   = false; // NYI
-            bool IsExpansionPreorderInStore          = false; // NYI
+            bool CommerceServerEnabled               = false; // NYI
+            bool VeteranTokenRedeemWillKick          = false; // NYI
+            bool WorldTokenRedeemWillKick            = false; // NYI
+            bool ExpansionPreorderInStore            = false; // NYI
             bool KioskModeEnabled                    = false; // NYI
             bool CompetitiveModeEnabled              = false; // NYI
-            bool TrialBoostEnabled                   = false; // NYI
-            bool TokenBalanceEnabled                 = false; // NYI
+            bool BoostEnabled                        = false; // NYI
+            bool RedeemForBalanceAvailable           = false; // NYI
             bool LiveRegionCharacterListEnabled      = false; // NYI
             bool LiveRegionCharacterCopyEnabled      = false; // NYI
             bool LiveRegionAccountCopyEnabled        = false; // NYI
-            int32 TokenPollTimeSeconds               = 0;     // NYI
+            int32 CommercePricePollTimeSeconds       = 0;     // NYI
             int32 TokenRedeemIndex                   = 0;     // NYI
-            int64 TokenBalanceAmount                 = 0;     // NYI
-            uint32 BpayStoreProductDeliveryDelay     = 0;     // NYI
+            int64 RedeemForBalanceAmount             = 0;     // NYI
+            uint32 BpayStorePurchaseTimeout          = 0;     // NYI
         };
 
         class MOTD final : public ServerPacket

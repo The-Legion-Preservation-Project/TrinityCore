@@ -20,7 +20,7 @@
 void WorldPackets::LFG::DFJoin::Read()
 {
     QueueAsGroup = _worldPacket.ReadBit();
-    Unknown = _worldPacket.ReadBit();
+    Mercenary = _worldPacket.ReadBit();
     _worldPacket >> PartyIndex;
     _worldPacket >> Roles;
     Slots.resize(_worldPacket.read<uint32>());
@@ -121,19 +121,19 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::LFG::LfgPlayerQuestReward
         data << bonusCurrency;
 
     data.WriteBit(playerQuestReward.RewardSpellID.has_value());
-    data.WriteBit(playerQuestReward.Unused1.has_value());
-    data.WriteBit(playerQuestReward.Unused2.has_value());
+    data.WriteBit(playerQuestReward.ArtifactXPCategory.has_value());
+    data.WriteBit(playerQuestReward.ArtifactXP.has_value());
     data.WriteBit(playerQuestReward.Honor.has_value());
     data.FlushBits();
 
     if (playerQuestReward.RewardSpellID)
         data << int32(*playerQuestReward.RewardSpellID);
 
-    if (playerQuestReward.Unused1)
-        data << int32(*playerQuestReward.Unused1);
+    if (playerQuestReward.ArtifactXPCategory)
+        data << int32(*playerQuestReward.ArtifactXPCategory);
 
-    if (playerQuestReward.Unused2)
-        data << uint64(*playerQuestReward.Unused2);
+    if (playerQuestReward.ArtifactXP)
+        data << uint64(*playerQuestReward.ArtifactXP);
 
     if (playerQuestReward.Honor)
         data << int32(*playerQuestReward.Honor);
@@ -209,7 +209,7 @@ WorldPacket const* WorldPackets::LFG::LFGUpdateStatus::Write()
     _worldPacket.WriteBit(Joined);
     _worldPacket.WriteBit(LfgJoined);
     _worldPacket.WriteBit(Queued);
-    _worldPacket.WriteBit(Unused);
+    _worldPacket.WriteBit(Brawl);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
@@ -359,10 +359,10 @@ WorldPacket const* WorldPackets::LFG::LFGProposalUpdate::Write()
     _worldPacket << uint32(CompletedMask);
     _worldPacket << uint32(EncounterMask);
     _worldPacket << uint32(Players.size());
-    _worldPacket << uint8(Unused);
+    _worldPacket << uint8(PromisedShortageRolePriority);
     _worldPacket.WriteBit(ValidCompletedMask);
     _worldPacket.WriteBit(ProposalSilent);
-    _worldPacket.WriteBit(IsRequeue);
+    _worldPacket.WriteBit(FailedByMyParty);
     _worldPacket.FlushBits();
 
     for (LFGProposalUpdatePlayer const& player : Players)

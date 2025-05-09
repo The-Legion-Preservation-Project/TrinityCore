@@ -52,11 +52,11 @@ WorldPacket const* FeatureSystemStatus::Write()
     _worldPacket << uint32(TwitterPostThrottleLimit);
     _worldPacket << uint32(TwitterPostThrottleCooldown);
 
-    _worldPacket << uint32(TokenPollTimeSeconds);
+    _worldPacket << uint32(CommercePricePollTimeSeconds);
     _worldPacket << uint32(TokenRedeemIndex);
-    _worldPacket << int64(TokenBalanceAmount);
+    _worldPacket << int64(RedeemForBalanceAmount);
 
-    _worldPacket << uint32(BpayStoreProductDeliveryDelay);
+    _worldPacket << uint32(BpayStorePurchaseTimeout);
 
     _worldPacket << Bits<1>(VoiceEnabled);
     _worldPacket << OptionalInit(EuropaTicketSystemStatus);
@@ -71,17 +71,17 @@ WorldPacket const* FeatureSystemStatus::Write()
     _worldPacket << Bits<1>(RecruitAFriendSendingEnabled);
     _worldPacket << Bits<1>(CharUndeleteEnabled);
     _worldPacket << Bits<1>(RestrictedAccount);
-    _worldPacket << Bits<1>(TutorialsEnabled);
+    _worldPacket << Bits<1>(TutorialEnabled);
     _worldPacket << Bits<1>(NPETutorialsEnabled);
     _worldPacket << Bits<1>(TwitterEnabled);
-    _worldPacket << Bits<1>(CommerceSystemEnabled);
+    _worldPacket << Bits<1>(CommerceServerEnabled);
 
-    _worldPacket << Bits<1>(Unk67);
-    _worldPacket << Bits<1>(WillKickFromWorld);
+    _worldPacket << Bits<1>(VeteranTokenRedeemWillKick);
+    _worldPacket << Bits<1>(WorldTokenRedeemWillKick);
     _worldPacket << Bits<1>(KioskModeEnabled);
     _worldPacket << Bits<1>(CompetitiveModeEnabled);
     _worldPacket << OptionalInit(RaceClassExpansionLevels);
-    _worldPacket << Bits<1>(TokenBalanceEnabled);
+    _worldPacket << Bits<1>(RedeemForBalanceAvailable);
 
     _worldPacket.FlushBits();
 
@@ -137,25 +137,25 @@ WorldPacket const* FeatureSystemStatusGlueScreen::Write()
     _worldPacket << Bits<1>(BpayStoreAvailable);
     _worldPacket << Bits<1>(BpayStoreDisabledByParentalControls);
     _worldPacket << Bits<1>(CharUndeleteEnabled);
-    _worldPacket << Bits<1>(CommerceSystemEnabled);
-    _worldPacket << Bits<1>(Unk14);
-    _worldPacket << Bits<1>(WillKickFromWorld);
-    _worldPacket << Bits<1>(IsExpansionPreorderInStore);
+    _worldPacket << Bits<1>(CommerceServerEnabled);
+    _worldPacket << Bits<1>(VeteranTokenRedeemWillKick);
+    _worldPacket << Bits<1>(WorldTokenRedeemWillKick);
+    _worldPacket << Bits<1>(ExpansionPreorderInStore);
 
     _worldPacket << Bits<1>(KioskModeEnabled);
     _worldPacket << Bits<1>(CompetitiveModeEnabled);
     _worldPacket.WriteBit(false); // not accessed in handler
-    _worldPacket << Bits<1>(TrialBoostEnabled);
-    _worldPacket << Bits<1>(TokenBalanceEnabled);
+    _worldPacket << Bits<1>(BoostEnabled);
+    _worldPacket << Bits<1>(RedeemForBalanceAvailable);
     _worldPacket << Bits<1>(LiveRegionCharacterListEnabled);
     _worldPacket << Bits<1>(LiveRegionCharacterCopyEnabled);
     _worldPacket << Bits<1>(LiveRegionAccountCopyEnabled);
     _worldPacket.FlushBits();
 
-    _worldPacket << int32(TokenPollTimeSeconds);
+    _worldPacket << int32(CommercePricePollTimeSeconds);
     _worldPacket << int32(TokenRedeemIndex);
-    _worldPacket << int64(TokenBalanceAmount);
-    _worldPacket << uint32(BpayStoreProductDeliveryDelay);
+    _worldPacket << int64(RedeemForBalanceAmount);
+    _worldPacket << uint32(BpayStorePurchaseTimeout);
 
     return &_worldPacket;
 }

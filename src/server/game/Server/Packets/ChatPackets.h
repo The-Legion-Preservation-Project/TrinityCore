@@ -165,7 +165,7 @@ namespace WorldPackets
             uint32 _Language = LANG_UNIVERSAL;
             ObjectGuid SenderGUID;
             ObjectGuid SenderGuildGUID;
-            ObjectGuid SenderAccountGUID;
+            ObjectGuid SenderWowAccount;
             ObjectGuid TargetGUID;
             ObjectGuid PartyGUID;
             uint32 SenderVirtualAddress = 0;

@@ -249,10 +249,10 @@ WorldPacket const* WorldPackets::Item::ItemPushResult::Write()
     _worldPacket << PlayerGUID;
     _worldPacket << uint8(Slot);
     _worldPacket << int32(SlotInBag);
-    _worldPacket << int32(QuestLogItemID);
+    _worldPacket << int32(ProxyItemID);
     _worldPacket << int32(Quantity);
     _worldPacket << int32(QuantityInInventory);
-    _worldPacket << int32(DungeonEncounterID);
+    _worldPacket << int32(EncounterID);
     _worldPacket << int32(BattlePetSpeciesID);
     _worldPacket << int32(BattlePetBreedID);
     _worldPacket << uint32(BattlePetBreedQuality);
@@ -260,9 +260,9 @@ WorldPacket const* WorldPackets::Item::ItemPushResult::Write()
     _worldPacket << ItemGUID;
     _worldPacket << Bits<1>(Pushed);
     _worldPacket << Bits<1>(Created);
-    _worldPacket << Bits<3>(DisplayText);
+    _worldPacket << Bits<3>(ChatNotifyType);
     _worldPacket << Bits<1>(IsBonusRoll);
-    _worldPacket << Bits<1>(IsEncounterLoot);
+    _worldPacket << Bits<1>(IsPersonalLoot);
     _worldPacket.FlushBits();
     _worldPacket << Item;
 

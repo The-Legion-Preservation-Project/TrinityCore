@@ -88,8 +88,8 @@ public:
     WorldPacket const* Write() override;
 
     int32 ScenarioID = 0;
-    int32 Unk1 = 0;
-    uint8 Unk2 = 0;
+    int32 TimeRemain = 0;
+    uint8 Reason = 0;
 };
 
 class QueryScenarioPOI final : public ClientPacket
