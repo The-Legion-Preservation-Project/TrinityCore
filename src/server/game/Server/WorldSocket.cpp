@@ -61,12 +61,9 @@ std::array<uint8, 16> const WorldSocket::SessionKeySeed = { 0x58, 0xCB, 0xCF, 0x
 std::array<uint8, 16> const WorldSocket::ContinuedSessionSeed = { 0x16, 0xAD, 0x0C, 0xD4, 0x46, 0xF9, 0x4F, 0xB2, 0xEF, 0x7D, 0xEA, 0x2A, 0x17, 0x66, 0x4D, 0x2F };
 
 WorldSocket::WorldSocket(boost::asio::ip::tcp::socket&& socket) : Socket(std::move(socket)),
-    _type(CONNECTION_TYPE_REALM), _key(0), _OverSpeedPings(0),
-    _worldSession(nullptr), _authed(false), _sendBufferSize(4096), _compressionStream(nullptr)
+    _type(CONNECTION_TYPE_REALM), _key(0), _serverChallenge(), _sessionKey(), _OverSpeedPings(0),
+    _worldSession(nullptr), _authed(false), _headerBuffer(SizeOfClientHeader), _sendBufferSize(4096), _compressionStream(nullptr)
 {
-    Trinity::Crypto::GetRandomBytes(_serverChallenge);
-    _sessionKey.fill(0);
-    _headerBuffer.Resize(SizeOfClientHeader);
 }
 
 WorldSocket::~WorldSocket()
@@ -243,6 +240,8 @@ bool WorldSocket::Update()
 
 void WorldSocket::HandleSendAuthSession()
 {
+    Trinity::Crypto::GetRandomBytes(_serverChallenge);
+
     Trinity::Crypto::GetRandomBytes(_encryptSeed);
     Trinity::Crypto::GetRandomBytes(_decryptSeed);
 
