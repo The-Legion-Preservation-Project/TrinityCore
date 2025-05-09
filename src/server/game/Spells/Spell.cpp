@@ -3262,6 +3262,12 @@ void Spell::DoSpellEffectHit(Unit* unit, SpellEffectInfo const& spellEffectInfo,
                                 if (!hitInfo.AuraDuration)
                                     hitInfo.AuraDuration = int32(origDuration * m_originalCaster->GetFloatValue(UNIT_MOD_CAST_SPEED));
                             }
+
+                            if (refresh && m_spellInfo->HasAttribute(SPELL_ATTR13_PERIODIC_REFRESH_EXTENDS_DURATION))
+                            {
+                                int32 newDuration = hitInfo.AuraDuration + hitInfo.HitAura->GetDuration();
+                                hitInfo.AuraDuration = std::min(newDuration, CalculatePct(hitInfo.AuraDuration, 130));
+                            }
                         }
                     }
                     else
