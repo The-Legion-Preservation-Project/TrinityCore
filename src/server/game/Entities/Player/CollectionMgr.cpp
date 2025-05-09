@@ -20,6 +20,7 @@
 #include "DB2Stores.h"
 #include "Item.h"
 #include "Log.h"
+#include "MapUtils.h"
 #include "MiscPackets.h"
 #include "ObjectMgr.h"
 #include "Player.h"
@@ -86,14 +87,12 @@ CollectionMgr::CollectionMgr(WorldSession* owner) : _owner(owner), _appearances(
 {
 }
 
-CollectionMgr::~CollectionMgr()
-{
-}
+CollectionMgr::~CollectionMgr() = default;
 
 void CollectionMgr::LoadToys()
 {
-    for (auto const& t : _toys)
-        _owner->GetPlayer()->AddToy(t.first);
+    for (auto const& [itemId, flags] : _toys)
+        _owner->GetPlayer()->AddToy(itemId, flags.AsUnderlyingType());
 }
 
 bool CollectionMgr::AddToy(uint32 itemId, bool isFavourite /*= false*/)
@@ -266,8 +265,8 @@ void CollectionMgr::UpgradeHeirloom(uint32 itemId, int32 castItem)
         item->AddBonuses(bonusId);
 
     // Get heirloom offset to update only one part of dynamic field
-    std::vector<uint32> const& fields = player->GetDynamicValues(PLAYER_DYNAMIC_FIELD_HEIRLOOMS);
-    uint16 offset = uint16(std::find(fields.begin(), fields.end(), itemId) - fields.begin());
+    auto const& heirlooms = player->GetDynamicValues(PLAYER_DYNAMIC_FIELD_HEIRLOOMS);
+    uint16 offset = uint16(std::ranges::distance(heirlooms.begin(), std::ranges::find(heirlooms, itemId)));
 
     player->SetHeirloomFlags(offset, flags);
     itr->second.flags = flags;
@@ -306,8 +305,8 @@ void CollectionMgr::CheckHeirloomUpgrades(Item* item)
 
         if (newItemId)
         {
-            std::vector<uint32> const& fields = player->GetDynamicValues(PLAYER_DYNAMIC_FIELD_HEIRLOOMS);
-            uint16 offset = uint16(std::find(fields.begin(), fields.end(), itr->first) - fields.begin());
+            auto const& heirlooms = player->GetDynamicValues(PLAYER_DYNAMIC_FIELD_HEIRLOOMS);
+            uint16 offset = uint16(std::ranges::distance(heirlooms.begin(), std::ranges::find(heirlooms, int32(itr->first))));
 
             player->SetHeirloom(offset, newItemId);
             player->SetHeirloomFlags(offset, 0);
@@ -329,7 +328,7 @@ void CollectionMgr::CheckHeirloomUpgrades(Item* item)
             }
         }
 
-        if (std::find(bonusListIDs.begin(), bonusListIDs.end(), int32(itr->second.bonusId)) == bonusListIDs.end())
+        if (!advstd::ranges::contains(bonusListIDs, int32(itr->second.bonusId)))
             item->AddBonuses(itr->second.bonusId);
     }
 }
@@ -450,6 +449,7 @@ void CollectionMgr::SendSingleMountUpdate(std::pair<uint32, MountStatusFlags> mo
     player->SendDirectMessage(mountUpdate.Write());
 }
 
+template <std::invocable<uint32> OutputAction>
 struct DynamicBitsetBlockOutputIterator
 {
     using iterator_category = std::output_iterator_tag;
@@ -458,11 +458,11 @@ struct DynamicBitsetBlockOutputIterator
     using pointer = void;
     using reference = void;
 
-    explicit DynamicBitsetBlockOutputIterator(std::function<void(uint32)>&& action) : _action(std::forward<std::function<void(uint32)>>(action)) { }
+    explicit DynamicBitsetBlockOutputIterator(OutputAction const& action) : _action(&action) { }
 
     DynamicBitsetBlockOutputIterator& operator=(uint32 value)
     {
-        _action(value);
+        std::invoke(*_action, value);
         return *this;
     }
 
@@ -471,7 +471,7 @@ struct DynamicBitsetBlockOutputIterator
     DynamicBitsetBlockOutputIterator operator++(int) { return *this; }
 
 private:
-    std::function<void(uint32)> _action;
+    OutputAction const* _action;
 };
 
 void CollectionMgr::LoadItemAppearances()
@@ -482,8 +482,8 @@ void CollectionMgr::LoadItemAppearances()
         owner->AddTransmogBlock(blockValue);
     }));
 
-    for (auto itr = _temporaryAppearances.begin(); itr != _temporaryAppearances.end(); ++itr)
-        owner->AddConditionalTransmog(itr->first);
+    for (auto const& [itemModifiedAppearanceId, _] : _temporaryAppearances)
+        owner->AddConditionalTransmog(itemModifiedAppearanceId);
 }
 
 void CollectionMgr::LoadAccountItemAppearances(PreparedQueryResult knownAppearances, PreparedQueryResult favoriteAppearances)
@@ -509,7 +509,7 @@ void CollectionMgr::LoadAccountItemAppearances(PreparedQueryResult knownAppearan
     {
         do
         {
-            _favoriteAppearances[favoriteAppearances->Fetch()[0].GetUInt32()] = FavoriteAppearanceState::Unchanged;
+            _favoriteAppearances[favoriteAppearances->Fetch()[0].GetUInt32()] = CollectionItemState::Unchanged;
         } while (favoriteAppearances->NextRow());
     }
 
@@ -538,7 +538,7 @@ void CollectionMgr::LoadAccountItemAppearances(PreparedQueryResult knownAppearan
 void CollectionMgr::SaveAccountItemAppearances(LoginDatabaseTransaction trans)
 {
     uint16 blockIndex = 0;
-    boost::to_block_range(*_appearances, DynamicBitsetBlockOutputIterator([this, &blockIndex, trans](uint32 blockValue)
+    boost::to_block_range(*_appearances, DynamicBitsetBlockOutputIterator([this, &blockIndex, trans = trans.get()](uint32 blockValue)
     {
         if (blockValue) // this table is only appended/bits are set (never cleared) so don't save empty blocks
         {
@@ -557,29 +557,30 @@ void CollectionMgr::SaveAccountItemAppearances(LoginDatabaseTransaction trans)
     {
         switch (itr->second)
         {
-            case FavoriteAppearanceState::New:
+            case CollectionItemState::New:
                 stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_BNET_ITEM_FAVORITE_APPEARANCE);
                 stmt->setUInt32(0, _owner->GetBattlenetAccountId());
                 stmt->setUInt32(1, itr->first);
                 trans->Append(stmt);
-                itr->second = FavoriteAppearanceState::Unchanged;
+                itr->second = CollectionItemState::Unchanged;
                 ++itr;
                 break;
-            case FavoriteAppearanceState::Removed:
+            case CollectionItemState::Removed:
                 stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_BNET_ITEM_FAVORITE_APPEARANCE);
                 stmt->setUInt32(0, _owner->GetBattlenetAccountId());
                 stmt->setUInt32(1, itr->first);
                 trans->Append(stmt);
                 itr = _favoriteAppearances.erase(itr);
                 break;
-            case FavoriteAppearanceState::Unchanged:
+            case CollectionItemState::Unchanged:
+            case CollectionItemState::Changed:
                 ++itr;
                 break;
         }
     }
 }
 
-uint32 const PlayerClassByArmorSubclass[MAX_ITEM_SUBCLASS_ARMOR] =
+constexpr uint32 PlayerClassByArmorSubclass[MAX_ITEM_SUBCLASS_ARMOR] =
 {
     CLASSMASK_ALL_PLAYABLE,                                                                                                 //ITEM_SUBCLASS_ARMOR_MISCELLANEOUS
     (1 << (CLASS_PRIEST - 1)) | (1 << (CLASS_MAGE - 1)) | (1 << (CLASS_WARLOCK - 1)),                                       //ITEM_SUBCLASS_ARMOR_CLOTH
@@ -667,7 +668,7 @@ bool CollectionMgr::IsSetCompleted(uint32 transmogSetId) const
         knownPieces[transmogSlot] = (hasAppearance && !isTemporary) ? 1 : 0;
     }
 
-    return std::find(knownPieces.begin(), knownPieces.end(), 0) == knownPieces.end();
+    return !advstd::ranges::contains(knownPieces, 0);
 }
 
 bool CollectionMgr::CanAddAppearance(ItemModifiedAppearanceEntry const* itemModifiedAppearance) const
@@ -821,12 +822,12 @@ void CollectionMgr::RemoveTemporaryAppearance(Item* item)
 std::pair<bool, bool> CollectionMgr::HasItemAppearance(uint32 itemModifiedAppearanceId) const
 {
     if (itemModifiedAppearanceId < _appearances->size() && _appearances->test(itemModifiedAppearanceId))
-        return{ true, false };
+        return { true, false };
 
-    if (_temporaryAppearances.find(itemModifiedAppearanceId) != _temporaryAppearances.end())
-        return{ true,true };
+    if (_temporaryAppearances.contains(itemModifiedAppearanceId))
+        return { true, true };
 
-    return{ false,false };
+    return { false, false };
 }
 
 std::unordered_set<ObjectGuid> CollectionMgr::GetItemsProvidingTemporaryAppearance(uint32 itemModifiedAppearanceId) const
@@ -857,18 +858,18 @@ void CollectionMgr::SetAppearanceIsFavorite(uint32 itemModifiedAppearanceId, boo
     if (apply)
     {
         if (itr == _favoriteAppearances.end())
-            _favoriteAppearances[itemModifiedAppearanceId] = FavoriteAppearanceState::New;
-        else if (itr->second == FavoriteAppearanceState::Removed)
-            itr->second = FavoriteAppearanceState::Unchanged;
+            _favoriteAppearances[itemModifiedAppearanceId] = CollectionItemState::New;
+        else if (itr->second == CollectionItemState::Removed)
+            itr->second = CollectionItemState::Unchanged;
         else
             return;
     }
     else if (itr != _favoriteAppearances.end())
     {
-        if (itr->second == FavoriteAppearanceState::New)
+        if (itr->second == CollectionItemState::New)
             _favoriteAppearances.erase(itemModifiedAppearanceId);
         else
-            itr->second = FavoriteAppearanceState::Removed;
+            itr->second = CollectionItemState::Removed;
     }
     else
         return;
@@ -886,9 +887,9 @@ void CollectionMgr::SendFavoriteAppearances() const
     WorldPackets::Transmogrification::AccountTransmogUpdate accountTransmogUpdate;
     accountTransmogUpdate.IsFullUpdate = true;
     accountTransmogUpdate.FavoriteAppearances.reserve(_favoriteAppearances.size());
-    for (auto itr = _favoriteAppearances.begin(); itr != _favoriteAppearances.end(); ++itr)
-        if (itr->second != FavoriteAppearanceState::Removed)
-            accountTransmogUpdate.FavoriteAppearances.push_back(itr->first);
+    for (auto [itemModifiedAppearanceId, state] : _favoriteAppearances)
+        if (state != CollectionItemState::Removed)
+            accountTransmogUpdate.FavoriteAppearances.push_back(itemModifiedAppearanceId);
 
     _owner->SendPacket(accountTransmogUpdate.Write());
 }

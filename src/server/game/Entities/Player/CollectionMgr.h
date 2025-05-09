@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CollectionMgr_h__
-#define CollectionMgr_h__
+#ifndef TRINITYCORE_COLLECTION_MGR_H
+#define TRINITYCORE_COLLECTION_MGR_H
 
 #include "Define.h"
 #include "DatabaseEnvFwd.h"
@@ -30,6 +30,14 @@
 class Item;
 class WorldSession;
 struct ItemModifiedAppearanceEntry;
+
+enum class CollectionItemState : uint8
+{
+    Unchanged,
+    New,
+    Changed,
+    Removed
+};
 
 enum HeirloomPlayerFlags
 {
@@ -79,6 +87,10 @@ class TC_GAME_API CollectionMgr
 {
 public:
     explicit CollectionMgr(WorldSession* owner);
+    CollectionMgr(CollectionMgr const&) = delete;
+    CollectionMgr(CollectionMgr&&) = delete;
+    CollectionMgr& operator=(CollectionMgr const&) = delete;
+    CollectionMgr& operator=(CollectionMgr&&) = delete;
     ~CollectionMgr();
 
     static void LoadMountDefinitions();
@@ -89,9 +101,9 @@ public:
     void SaveAccountToys(LoginDatabaseTransaction trans);
     void ToySetFavorite(uint32 itemId, bool favorite);
 
-    bool AddToy(uint32 itemId, bool isFavourite /*= false*/);
-    bool UpdateAccountToys(uint32 itemId, bool isFavourite /*= false*/);
-    bool HasToy(uint32 itemId) const { return _toys.count(itemId) > 0; }
+    bool AddToy(uint32 itemId, bool isFavourite);
+    bool UpdateAccountToys(uint32 itemId, bool isFavourite);
+    bool HasToy(uint32 itemId) const { return _toys.contains(itemId); }
 
     ToyBoxContainer const& GetAccountToys() const { return _toys; }
 
@@ -135,13 +147,6 @@ public:
     // returns ItemAppearance::ID, not ItemModifiedAppearance::ID
     std::unordered_set<uint32> GetAppearanceIds() const;
 
-    enum class FavoriteAppearanceState
-    {
-        New,
-        Removed,
-        Unchanged
-    };
-
     void SetAppearanceIsFavorite(uint32 itemModifiedAppearanceId, bool apply);
     void SendFavoriteAppearances() const;
 
@@ -157,7 +162,7 @@ private:
     MountContainer _mounts;
     std::unique_ptr<boost::dynamic_bitset<uint32>> _appearances;
     std::unordered_map<uint32, std::unordered_set<ObjectGuid>> _temporaryAppearances;
-    std::unordered_map<uint32, FavoriteAppearanceState> _favoriteAppearances;
+    std::unordered_map<uint32, CollectionItemState> _favoriteAppearances;
 };
 
-#endif // CollectionMgr_h__
+#endif // TRINITYCORE_COLLECTION_MGR_H
