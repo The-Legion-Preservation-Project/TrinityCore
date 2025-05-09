@@ -4839,6 +4839,15 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->AttributesEx4 |= SPELL_ATTR4_AURA_IS_BUFF;
     });
 
+    // Sigil of Flame
+    ApplySpellFix({ 204598 }, [](SpellInfo* spellInfo)
+    {
+        ApplySpellEffectFix(spellInfo, EFFECT_2, [](SpellEffectInfo* spellEffectInfo)
+        {
+            spellEffectInfo->Effect = SPELL_EFFECT_NONE;
+        });
+    });
+
     // Collective Anguish channel hack (triggered by another channel)
     ApplySpellFix({ 391057, 393831 }, [](SpellInfo* spellInfo)
     {
