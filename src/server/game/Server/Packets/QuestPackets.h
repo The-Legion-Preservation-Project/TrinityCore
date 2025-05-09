@@ -441,7 +441,7 @@ namespace WorldPackets
             std::vector<QuestObjectiveCollect> Collect;
             std::vector<QuestCurrency> Currency;
             int32 StatusFlags           = 0;
-            uint32 QuestFlags[2]        = { };
+            std::array<uint32, 2> QuestFlags = { };
             std::string QuestTitle;
             std::string CompletionText;
         };
@@ -707,7 +707,7 @@ namespace WorldPackets
             int32 UiTextureKitID = 0;
             std::string_view Question;
             std::vector<PlayerChoiceResponse> Responses;
-            bool CloseChoiceFrame = false;
+            bool InfiniteRange = false;
             bool HideWarboardHeader = false;
         };
 

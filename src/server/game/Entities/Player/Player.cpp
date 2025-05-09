@@ -28103,7 +28103,7 @@ void Player::SendPlayerChoice(ObjectGuid sender, int32 choiceId)
         ObjectMgr::GetLocaleString(playerChoiceLocale->Question, locale, displayPlayerChoice.Question);
 
     displayPlayerChoice.Responses.resize(playerChoice->Responses.size());
-    displayPlayerChoice.CloseChoiceFrame = false;
+    displayPlayerChoice.InfiniteRange = false;
     displayPlayerChoice.HideWarboardHeader = playerChoice->HideWarboardHeader;
 
     for (std::size_t i = 0; i < playerChoice->Responses.size(); ++i)

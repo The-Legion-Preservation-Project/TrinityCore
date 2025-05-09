@@ -484,7 +484,7 @@ void WorldSession::HandleMirrorImageDataRequest(WorldPackets::Spells::GetMirrorI
 
         mirrorImageComponentedData.ItemDisplayID.reserve(11);
 
-        static EquipmentSlots const itemSlots[] =
+        static constexpr EquipmentSlots itemSlots[] =
         {
             EQUIPMENT_SLOT_HEAD,
             EQUIPMENT_SLOT_SHOULDERS,

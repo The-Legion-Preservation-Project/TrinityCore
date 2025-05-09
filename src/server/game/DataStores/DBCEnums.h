@@ -417,7 +417,7 @@ enum class ContentTuningCalcType : int32
 enum class ContentTuningFlag : int32
 {
     DisabledForItem = 0x04,
-    Horde           = 0x8,
+    Horde           = 0x08,
     Alliance        = 0x10
 };
 
