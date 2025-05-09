@@ -88,9 +88,9 @@ class TC_GAME_API WorldSocket : public Socket<WorldSocket>
     static std::string const ClientConnectionInitialize;
     static uint32 const MinSizeForCompression;
 
-    static uint8 const AuthCheckSeed[16];
-    static uint8 const SessionKeySeed[16];
-    static uint8 const ContinuedSessionSeed[16];
+    static std::array<uint8, 16> const AuthCheckSeed;
+    static std::array<uint8, 16> const SessionKeySeed;
+    static std::array<uint8, 16> const ContinuedSessionSeed;
 
     typedef Socket<WorldSocket> BaseSocket;
 

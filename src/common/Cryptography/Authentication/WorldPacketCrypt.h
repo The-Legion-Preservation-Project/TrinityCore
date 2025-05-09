@@ -23,11 +23,13 @@
 
 class TC_COMMON_API WorldPacketCrypt
 {
-    public:
-        WorldPacketCrypt();
+public:
+    using Key = std::array<uint8, 40>;
 
-        void Init(std::array<uint8, 40> const& K);
-        void Init(std::array<uint8, 40> const& K, std::array<uint8, 16> serverKey, std::array<uint8, 16> clientKey);
+    WorldPacketCrypt();
+
+        void Init(Key const& key);
+        void Init(Key const& key, std::array<uint8, 16> serverKey, std::array<uint8, 16> clientKey);
         void DecryptRecv(uint8* data, size_t length);
         void EncryptSend(uint8* data, size_t length);
 

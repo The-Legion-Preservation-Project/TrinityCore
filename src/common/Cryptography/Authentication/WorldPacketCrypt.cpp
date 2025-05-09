@@ -26,17 +26,17 @@ WorldPacketCrypt::WorldPacketCrypt()
 {
 }
 
-void WorldPacketCrypt::Init(std::array<uint8, 40> const& K)
+void WorldPacketCrypt::Init(Key const& key)
 {
     std::array<uint8, 16> ServerEncryptionKey = { 0x08, 0xF1, 0x95, 0x9F, 0x47, 0xE5, 0xD2, 0xDB, 0xA1, 0x3D, 0x77, 0x8F, 0x3F, 0x3E, 0xE7, 0x00 };
     std::array<uint8, 16> ServerDecryptionKey = { 0x40, 0xAA, 0xD3, 0x92, 0x26, 0x71, 0x43, 0x47, 0x3A, 0x31, 0x08, 0xA6, 0xE7, 0xDC, 0x98, 0x2A };
-    Init(K, ServerEncryptionKey, ServerDecryptionKey);
+    Init(key, ServerEncryptionKey, ServerDecryptionKey);
 }
 
-void WorldPacketCrypt::Init(std::array<uint8, 40> const& K, std::array<uint8, 16> serverKey, std::array<uint8, 16> clientKey)
+void WorldPacketCrypt::Init(Key const& key, std::array<uint8, 16> serverKey, std::array<uint8, 16> clientKey)
 {
-    _serverEncrypt.Init(Trinity::Crypto::HMAC_SHA1::GetDigestOf(serverKey, K));
-    _clientDecrypt.Init(Trinity::Crypto::HMAC_SHA1::GetDigestOf(clientKey, K));
+    _serverEncrypt.Init(Trinity::Crypto::HMAC_SHA1::GetDigestOf(serverKey, key));
+    _clientDecrypt.Init(Trinity::Crypto::HMAC_SHA1::GetDigestOf(clientKey, key));
 
     // Drop first 1024 bytes, as WoW uses ARC4-drop1024.
     std::array<uint8, 1024> syncBuf;
