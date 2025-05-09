@@ -1002,10 +1002,10 @@ void AreaTrigger::InitSplineOffsets(std::vector<Position> const& offsets, uint32
         rotatedPoints.emplace_back(x, y, z);
     }
 
-    InitSplines(std::move(rotatedPoints), timeToTarget);
+    InitSplines(rotatedPoints, timeToTarget);
 }
 
-void AreaTrigger::InitSplines(std::vector<G3D::Vector3> splinePoints, uint32 timeToTarget)
+void AreaTrigger::InitSplines(std::vector<G3D::Vector3> const& splinePoints, uint32 timeToTarget)
 {
     if (splinePoints.size() < 2)
         return;
@@ -1013,14 +1013,10 @@ void AreaTrigger::InitSplines(std::vector<G3D::Vector3> splinePoints, uint32 tim
     _movementTime = 0;
 
     _spline = std::make_unique<::Movement::Spline<int32>>();
-    _spline->init_spline(&splinePoints[0], splinePoints.size(), ::Movement::SplineBase::ModeLinear);
+    _spline->init_spline(splinePoints.data(), splinePoints.size(), ::Movement::SplineBase::ModeLinear);
     _spline->initLengths();
 
-    // should be sent in object create packets only
-    DoWithSuppressingObjectUpdates([&]()
-    {
-        m_uint32Values[AREATRIGGER_TIME_TO_TARGET] = timeToTarget;
-    });
+    m_uint32Values[AREATRIGGER_TIME_TO_TARGET] = timeToTarget;
 
     if (IsInWorld())
     {
