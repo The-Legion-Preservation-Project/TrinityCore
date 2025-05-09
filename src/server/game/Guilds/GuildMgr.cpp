@@ -496,7 +496,7 @@ void GuildMgr::LoadGuildRewards()
 
     if (!result)
     {
-        TC_LOG_ERROR("server.loading", ">> Loaded 0 guild reward definitions. DB table `guild_rewards` is empty.");
+        TC_LOG_INFO("server.loading", ">> Loaded 0 guild reward definitions. DB table `guild_rewards` is empty.");
         return;
     }
 
@@ -513,13 +513,13 @@ void GuildMgr::LoadGuildRewards()
 
         if (!sObjectMgr->GetItemTemplate(reward.ItemID))
         {
-            TC_LOG_ERROR("server.loading", "Guild rewards constains not existing item entry {}", reward.ItemID);
+            TC_LOG_ERROR("sql.sql", "Guild rewards constains not existing item entry {}", reward.ItemID);
             continue;
         }
 
         if (reward.MinGuildRep >= MAX_REPUTATION_RANK)
         {
-            TC_LOG_ERROR("server.loading", "Guild rewards contains wrong reputation standing {}, max is {}", uint32(reward.MinGuildRep), MAX_REPUTATION_RANK - 1);
+            TC_LOG_ERROR("sql.sql", "Guild rewards contains wrong reputation standing {}, max is {}", uint32(reward.MinGuildRep), MAX_REPUTATION_RANK - 1);
             continue;
         }
 
@@ -536,7 +536,7 @@ void GuildMgr::LoadGuildRewards()
 
                 if (!sAchievementStore.LookupEntry(requiredAchievementId))
                 {
-                    TC_LOG_ERROR("server.loading", "Guild rewards constains not existing achievement entry {}", requiredAchievementId);
+                    TC_LOG_ERROR("sql.sql", "Guild rewards constains not existing achievement entry {}", requiredAchievementId);
                     continue;
                 }
 
