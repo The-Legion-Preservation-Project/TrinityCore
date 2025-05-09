@@ -15,9 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Conversation.h"
 #include "ConditionMgr.h"
-#include "Containers.h"
+#include "Conversation.h"
 #include "ConversationAI.h"
 #include "ConversationDataStore.h"
 #include "Creature.h"
@@ -28,7 +27,6 @@
 #include "Map.h"
 #include "ObjectAccessor.h"
 #include "PhasingHandler.h"
-#include "ScriptMgr.h"
 #include "Unit.h"
 #include "UpdateData.h"
 

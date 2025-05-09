@@ -15,26 +15,27 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "DB2Stores.h"
 #include "Containers.h"
-#include "DatabaseEnv.h"
 #include "DB2LoadInfo.h"
+#include "DB2Stores.h"
+#include "DatabaseEnv.h"
 #include "Hash.h"
 #include "IteratorPair.h"
 #include "Log.h"
+#include "MapUtils.h"
 #include "ObjectDefines.h"
 #include "Regex.h"
 #include "Timer.h"
 #include "Util.h"
 #include "World.h"
-#include <boost/filesystem/directory.hpp>
-#include <boost/filesystem/operations.hpp>
 #include <array>
 #include <bitset>
-#include <numeric>
-#include <sstream>
+#include <boost/filesystem/directory.hpp>
+#include <boost/filesystem/operations.hpp>
 #include <cctype>
 #include <cmath>
+#include <numeric>
+#include <sstream>
 
 // temporary hack until includes are sorted out (don't want to pull in Windows.h)
 #ifdef GetClassName

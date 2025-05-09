@@ -16,11 +16,9 @@
  */
 
 #include "Map.h"
-#include "Battleground.h"
 #include "BattlegroundMgr.h"
 #include "BattlegroundScript.h"
 #include "CellImpl.h"
-#include "Containers.h"
 #include "Conversation.h"
 #include "DB2Stores.h"
 #include "DatabaseEnv.h"
@@ -28,7 +26,6 @@
 #include "GameObjectModel.h"
 #include "GameTime.h"
 #include "GridNotifiers.h"
-#include "GridNotifiersImpl.h"
 #include "GridStates.h"
 #include "Group.h"
 #include "InstanceLockMgr.h"
@@ -37,6 +34,7 @@
 #include "InstanceScript.h"
 #include "Log.h"
 #include "MapManager.h"
+#include "MapUtils.h"
 #include "Metric.h"
 #include "MiscPackets.h"
 #include "MotionMaster.h"

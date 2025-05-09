@@ -15,14 +15,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "WorldSession.h"
-#include "Containers.h"
 #include "DB2Stores.h"
 #include "GameTime.h"
 #include "HotfixPackets.h"
 #include "Log.h"
+#include "MapUtils.h"
 #include "ObjectDefines.h"
 #include "World.h"
+#include "WorldSession.h"
 
 void WorldSession::HandleDBQueryBulk(WorldPackets::Hotfix::DBQueryBulk& dbQuery)
 {

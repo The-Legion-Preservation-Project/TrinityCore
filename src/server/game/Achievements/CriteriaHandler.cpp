@@ -15,16 +15,15 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "CriteriaHandler.h"
 #include "ArenaTeamMgr.h"
+#include "BattlePetMgr.h"
 #include "BattlefieldMgr.h"
 #include "Battleground.h"
-#include "BattlePetMgr.h"
 #include "CollectionMgr.h"
-#include "Containers.h"
 #include "Creature.h"
-#include "DatabaseEnv.h"
+#include "CriteriaHandler.h"
 #include "DB2Stores.h"
+#include "DatabaseEnv.h"
 #include "DisableMgr.h"
 #include "GameEventMgr.h"
 #include "GameTime.h"
@@ -37,6 +36,7 @@
 #include "Log.h"
 #include "Map.h"
 #include "MapManager.h"
+#include "MapUtils.h"
 #include "ObjectMgr.h"
 #include "PhasingHandler.h"
 #include "Player.h"
