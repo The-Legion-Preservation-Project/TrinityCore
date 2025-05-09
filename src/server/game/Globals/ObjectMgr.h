@@ -635,7 +635,7 @@ typedef std::vector<PlayerCreateInfoItem> PlayerCreateInfoItems;
 
 struct PlayerLevelInfo
 {
-    uint16 stats[MAX_STATS] = { };
+    int32 stats[MAX_STATS] = { };
 };
 
 typedef std::vector<uint32> PlayerCreateInfoSpells;
