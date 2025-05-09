@@ -2958,6 +2958,9 @@ struct SkillLineAbilityEntry
     int16 MinSkillLineRank;
     int8 AcquireMethod;
     int8 Flags;
+
+    SkillLineAbilityAcquireMethod GetAcquireMethod() const { return static_cast<SkillLineAbilityAcquireMethod>(AcquireMethod); }
+    EnumFlag<SkillLineAbilityFlags> GetFlags() const { return static_cast<SkillLineAbilityFlags>(Flags); }
 };
 
 struct SkillRaceClassInfoEntry
