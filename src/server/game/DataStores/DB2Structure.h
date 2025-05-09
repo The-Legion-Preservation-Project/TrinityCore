@@ -2450,7 +2450,7 @@ struct MountEntry
     uint32 PlayerConditionID;
     int32 UiModelSceneID;
 
-    bool IsSelfMount() const { return (Flags & MOUNT_FLAG_SELF_MOUNT) != 0; }
+    EnumFlag<MountFlags> GetFlags() const { return static_cast<MountFlags>(Flags); }
 };
 
 struct MountCapabilityEntry
