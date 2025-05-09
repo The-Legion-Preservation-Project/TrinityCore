@@ -245,6 +245,22 @@ void Conversation::AddActor(int32 actorId, uint32 actorIdx, ConversationActorTyp
     SetDynamicStructuredValue(CONVERSATION_DYNAMIC_FIELD_ACTORS, actorIdx, &actorField);
 }
 
+Milliseconds Conversation::GetLastLineEndTime(LocaleConstant /*locale*/) const
+{
+    Milliseconds lastLineEndTime(0);
+
+    // TODO: TheLegionPreservationProject: locale?
+    if (ConversationTemplate const* conversationTemplate = sConversationDataStore->GetConversationTemplate(GetEntry()))
+    {
+        lastLineEndTime = Milliseconds(conversationTemplate->LastLineEndTime);
+    }
+
+    if (lastLineEndTime.count() == 0)
+        TC_LOG_ERROR("entities.conversation", "Conversation::GetLastLineEndTime: Missing last line end time for conversation (Conversation ID: {}).", GetEntry());
+
+    return lastLineEndTime;
+}
+
 LocaleConstant Conversation::GetPrivateObjectOwnerLocale() const
 {
     LocaleConstant privateOwnerLocale = LOCALE_enUS;

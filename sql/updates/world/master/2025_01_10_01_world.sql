@@ -52,19 +52,19 @@ UPDATE `creature_template` SET `faction`=1665, `npcflag`=2, `BaseAttackTime`=200
 UPDATE `creature_template` SET `speed_run`=1, `BaseAttackTime`=2000, `unit_flags`=0x300, `unit_flags2`=0x4000800, `unit_flags3`=0x41000000 WHERE `entry`=130877; -- Rift to Telogrus
 
 DELETE FROM `gameobject_template` WHERE `entry` IN (279718,278922,278923,280641,278906,279040,278910,278903,278904,278911,278905,278908);
-INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `size`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `Data6`, `Data7`, `Data8`, `Data9`, `Data10`, `Data11`, `Data12`, `Data13`, `Data14`, `Data15`, `Data16`, `Data17`, `Data18`, `Data19`, `Data20`, `Data21`, `Data22`, `Data23`, `Data24`, `Data25`, `Data26`, `Data27`, `Data28`, `Data29`, `Data30`, `Data31`, `Data32`, `Data33`, `Data34`, `ContentTuningId`, `VerifiedBuild`) VALUES
-(279718, 22, 42710, 'Rift to Ghostlands', '', '', '', 0.150000005960464477, 259553, -1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 58238), -- Rift to Ghostlands
-(278922, 10, 15260, 'Umbric\'s Notes - Sanctum of the Moon', 'questinteract', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 7489, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 700, 58238), -- Umbric's Notes - Sanctum of the Moon
-(278923, 10, 18306, 'Umbric\'s Notes - Andilien Estate', 'questinteract', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 7490, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 700, 58238), -- Umbric's Notes - Andilien Estate
-(280641, 10, 22454, 'Umbric\'s Notes - Dawnstar Spire', 'questinteract', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 7512, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 700, 58238), -- Umbric's Notes - Dawnstar Spire
-(278906, 5, 46622, 'Collector Tubes', '', '', '', 0.119999997317790985, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 58238), -- Collector Tubes
-(279040, 22, 7076, 'Teleportation Console', '', '', '', 0.150000005960464477, 258928, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 58238), -- Teleportation Console
-(278910, 5, 25334, 'Amethyst Crystal', '', '', '', 0.150000005960464477, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 58238), -- Amethyst Crystal
-(278903, 5, 46619, 'DR Cable Medium', '', '', '', 1.5, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 58238), -- DR Cable Medium
-(278904, 5, 46620, 'DR Cable Wide', '', '', '', 1.5, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 58238), -- DR Cable Wide
-(278911, 22, 7076, 'Teleportation Console', '', '', '', 0.150000005960464477, 258927, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 58238), -- Teleportation Console
-(278905, 5, 46621, 'Wide Hang Banner', '', '', '', 0.059999998658895492, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 58238), -- Wide Hang Banner
-(278908, 5, 24812, 'Collector Tubes Short', '', '', '', 0.109999999403953552, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 293, 58238); -- Collector Tubes Short
+INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `size`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `Data6`, `Data7`, `Data8`, `Data9`, `Data10`, `Data11`, `Data12`, `Data13`, `Data14`, `Data15`, `Data16`, `Data17`, `Data18`, `Data19`, `Data20`, `Data21`, `Data22`, `Data23`, `Data24`, `Data25`, `Data26`, `Data27`, `Data28`, `Data29`, `Data30`, `Data31`, `Data32`, `Data33`, `VerifiedBuild`)VALUES
+(279718, 22, 42710, 'Rift to Ghostlands', '', '', '', 0.150000005960464477, 259553, -1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),           -- Rift to Ghostlands
+(278922, 10, 15260, 'Umbric\'s Notes - Sanctum of the Moon', 'questinteract', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 7489, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238), -- Umbric's Notes - Sanctum of the Moon
+(278923, 10, 18306, 'Umbric\'s Notes - Andilien Estate', 'questinteract', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 7490, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),     -- Umbric's Notes - Andilien Estate
+(280641, 10, 22454, 'Umbric\'s Notes - Dawnstar Spire', 'questinteract', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 7512, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),      -- Umbric's Notes - Dawnstar Spire
+(278906, 5, 46622, 'Collector Tubes', '', '', '', 0.119999997317790985, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),                     -- Collector Tubes
+(279040, 22, 7076, 'Teleportation Console', '', '', '', 0.150000005960464477, 258928, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),         -- Teleportation Console
+(278910, 5, 25334, 'Amethyst Crystal', '', '', '', 0.150000005960464477, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),                    -- Amethyst Crystal
+(278903, 5, 46619, 'DR Cable Medium', '', '', '', 1.5, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),                                      -- DR Cable Medium
+(278904, 5, 46620, 'DR Cable Wide', '', '', '', 1.5, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),                                        -- DR Cable Wide
+(278911, 22, 7076, 'Teleportation Console', '', '', '', 0.150000005960464477, 258927, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),         -- Teleportation Console
+(278905, 5, 46621, 'Wide Hang Banner', '', '', '', 0.059999998658895492, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238),                    -- Wide Hang Banner
+(278908, 5, 24812, 'Collector Tubes Short', '', '', '', 0.109999999403953552, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58238); -- Collector Tubes Short
 
 -- Difficulty
 UPDATE `creature_template_difficulty` SET `ContentTuningID`=293, `StaticFlags1`=0x10000000, `StaticFlags3`=0x40000, `VerifiedBuild`=58238 WHERE (`Entry`=130919 AND `DifficultyID`=0); -- 130919 (High Elf Ranger) - CanSwim - AllowInteractionWhileInCombat
@@ -122,18 +122,18 @@ INSERT INTO `npc_spellclick_spells` (`npc_entry`, `spell_id`, `cast_flags`, `use
 
 -- Conversation
 DELETE FROM `conversation_template` WHERE `Id` IN (6468, 6634, 6478, 6467, 6469, 6479, 6635, 6470, 6637, 6471, 6636);
-INSERT INTO `conversation_template` (`Id`, `FirstLineID`, `TextureKitId`, `VerifiedBuild`) VALUES
-(6468, 15107, 0, 58238),
-(6634, 15111, 0, 58238),
-(6478, 15115, 5126, 58238),
-(6467, 14641, 0, 58238),
-(6469, 14643, 0, 58238),
-(6479, 15123, 0, 58238),
-(6635, 15119, 5126, 58238),
-(6470, 14644, 0, 58238),
-(6637, 15130, 0, 58238),
-(6471, 15129, 0, 58238),
-(6636, 15124, 5126, 58238);
+INSERT INTO `conversation_template` (`Id`, `FirstLineID`, LastLineEndTime, `VerifiedBuild`)VALUES
+(6468, 15107, 0, -1),
+(6634, 15111, 0, -1),
+(6478, 15115, 0, -1),
+(6467, 14641, 0, -1),
+(6469, 14643, 0, -1),
+(6479, 15123, 0, -1),
+(6635, 15119, 0, -1),
+(6470, 14644, 0, -1),
+(6637, 15130, 0, -1),
+(6471, 15129, 0, -1),
+(6636, 15124, 0, -1);
 
 UPDATE `conversation_template` SET `ScriptName` = 'conversation_high_elf_ranger_to_ghostlands' WHERE `Id` IN (6468, 6467, 6634, 6479, 6469, 6470, 6471, 6637);
 UPDATE `conversation_template` SET `ScriptName` = 'conversation_sanctum_of_the_moon_to_ghostlands' WHERE `Id` = 6478;
@@ -158,28 +158,28 @@ INSERT INTO `conversation_actors` (`ConversationId`, `ConversationActorId`, `Idx
 (6471, 61831, 0, 0, 0, 0, 0, 58238); -- Full: 0x203AE842407FD9C000004500007AF9D2 Creature/0 R3770/S69 Map: 530 (Outland) Entry: 130919 (High Elf Ranger) Low: 8059346
 
 DELETE FROM `conversation_line_template` WHERE `Id` IN (14642, 15107, 15111, 14641, 15118, 15117, 15116, 15115, 14643, 14655, 15123, 15122, 15121, 15120, 15119, 14644, 15130, 15126, 15125, 15124, 15129);
-INSERT INTO `conversation_line_template` (`Id`, `UiCameraID`, `ActorIdx`, `Flags`, `ChatType`, `VerifiedBuild`) VALUES
-(14642, 0, 0, 0, 0, 58238),
-(15107, 0, 0, 0, 0, 58238),
-(15111, 0, 0, 0, 0, 58238),
-(14641, 0, 0, 0, 0, 58238),
-(15118, 0, 1, 1, 0, 58238),
-(15117, 119, 0, 0, 0, 58238),
-(15116, 119, 0, 0, 0, 58238),
-(15115, 119, 0, 0, 0, 58238),
-(14643, 0, 0, 0, 0, 58238),
-(14655, 0, 0, 0, 0, 58238),
-(15123, 0, 0, 0, 0, 58238),
-(15122, 0, 1, 1, 0, 58238),
-(15121, 119, 0, 0, 0, 58238),
-(15120, 119, 0, 0, 0, 58238),
-(15119, 119, 0, 0, 0, 58238),
-(14644, 0, 0, 0, 0, 58238),
-(15130, 0, 0, 0, 0, 58238),
-(15126, 119, 0, 0, 0, 58238),
-(15125, 119, 0, 0, 0, 58238),
-(15124, 119, 0, 0, 0, 58238),
-(15129, 0, 0, 0, 0, 58238);
+INSERT INTO `conversation_line_template` (`Id`, `UiCameraID`, `ActorIdx`, `Flags`, `VerifiedBuild`)VALUES
+(14642, 0, 0, 0, 58238),
+(15107, 0, 0, 0, 58238),
+(15111, 0, 0, 0, 58238),
+(14641, 0, 0, 0, 58238),
+(15118, 0, 1, 1, 58238),
+(15117, 119, 0, 0, 58238),
+(15116, 119, 0, 0, 58238),
+(15115, 119, 0, 0, 58238),
+(14643, 0, 0, 0, 58238),
+(14655, 0, 0, 0, 58238),
+(15123, 0, 0, 0, 58238),
+(15122, 0, 1, 1, 58238),
+(15121, 119, 0, 0, 58238),
+(15120, 119, 0, 0, 58238),
+(15119, 119, 0, 0, 58238),
+(14644, 0, 0, 0, 58238),
+(15130, 0, 0, 0, 58238),
+(15126, 119, 0, 0, 58238),
+(15125, 119, 0, 0, 58238),
+(15124, 119, 0, 0, 58238),
+(15129, 0, 0, 0, 58238);
 
 -- Spell target
 DELETE FROM `spell_target_position` WHERE (`ID`=259553 AND `EffectIndex`=0) OR (`ID`=258927 AND `EffectIndex`=0) OR (`ID`=258928 AND `EffectIndex`=0);

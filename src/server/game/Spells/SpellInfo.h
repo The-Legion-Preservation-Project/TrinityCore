@@ -338,6 +338,7 @@ class TC_GAME_API SpellInfo
         uint32 AttributesEx12 = 0;
         uint32 AttributesEx13 = 0;
         uint32 AttributesEx14 = 0;
+        uint32 AttributesEx15 = 0;
         uint32 AttributesCu = 0;
         std::bitset<MAX_SPELL_EFFECTS> NegativeEffects;
         uint64 Stances = 0;

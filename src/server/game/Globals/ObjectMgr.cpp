@@ -3360,13 +3360,13 @@ void ObjectMgr::LoadItemTemplates()
     }
 
     // Load item effects (spells)
-    for (ItemEffectEntry const* effectEntry : sItemEffectStore)
+    for (ItemEffectEntry const* effect : sItemEffectStore)
     {
-        auto itemItr = _itemTemplateStore.find(effectEntry->ParentItemID);
-        if (itemItr == _itemTemplateStore.end())
-            continue;
-
-        itemItr->second.Effects.push_back(effectEntry);
+        if (ItemTemplate* item = Trinity::Containers::MapGetValuePtr(_itemTemplateStore, effect->ParentItemID))
+        {
+            auto itr = std::ranges::lower_bound(item->Effects, effect->LegacySlotIndex, {}, &ItemEffectEntry::LegacySlotIndex);
+            item->Effects.insert(itr, effect);
+        }
     }
 
     // Check if item templates for DBC referenced character start outfit are present

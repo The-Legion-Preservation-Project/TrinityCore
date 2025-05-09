@@ -360,12 +360,11 @@ bool Item::Create(ObjectGuid::LowType guidlow, uint32 itemId, ItemContext contex
     SetUInt32Value(ITEM_FIELD_MAXDURABILITY, itemProto->MaxDurability);
     SetDurability(itemProto->MaxDurability);
 
-    for (std::size_t i = 0; i < itemProto->Effects.size(); ++i)
+    for (ItemEffectEntry const* effect : GetEffects())
     {
-        if (itemProto->Effects[i]->LegacySlotIndex < 5)
-            SetSpellCharges(itemProto->Effects[i]->LegacySlotIndex, itemProto->Effects[i]->Charges);
+        SetSpellCharges(effect, effect->Charges);
 
-        if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itemProto->Effects[i]->SpellID, DIFFICULTY_NONE))
+        if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(effect->SpellID, DIFFICULTY_NONE))
             if (owner && spellInfo->HasEffect(SPELL_EFFECT_GIVE_ARTIFACT_POWER))
                 if (uint32 artifactKnowledgeLevel = sWorld->getIntConfig(CONFIG_CURRENCY_START_ARTIFACT_KNOWLEDGE))
                     SetModifier(ITEM_MODIFIER_ARTIFACT_KNOWLEDGE_LEVEL, artifactKnowledgeLevel + 1);
@@ -437,6 +436,41 @@ void Item::UpdateDuration(Player* owner, uint32 diff)
     SetState(ITEM_CHANGED, owner);                          // save new time in database
 }
 
+static uint32 FindSpellChargesSlot(BonusData const& bonusData, ItemEffectEntry const* effect)
+{
+    if (!effect)
+    {
+        // return first effect that has charges
+        for (uint32 i = 0; i < bonusData.EffectCount && i < MAX_ITEM_SPELLS; ++i)
+            if (bonusData.Effects[i] && bonusData.Effects[i]->Charges != 0)
+                return i;
+
+        return MAX_ITEM_SPELLS;
+    }
+
+    for (uint32 i = 0; i < bonusData.EffectCount && i < MAX_ITEM_SPELLS; ++i)
+        if (bonusData.Effects[i] == effect)
+            return i;
+
+    return MAX_ITEM_SPELLS;
+}
+
+int32 Item::GetSpellCharges(ItemEffectEntry const* effect /*= nullptr*/) const
+{
+    uint32 slot = FindSpellChargesSlot(_bonusData, effect);
+    if (slot < MAX_ITEM_SPELLS)
+        return GetInt32Value(ITEM_FIELD_SPELL_CHARGES + slot);
+
+    return 0;
+}
+
+void Item::SetSpellCharges(ItemEffectEntry const* effect, int32 value)
+{
+    uint32 slot = FindSpellChargesSlot(_bonusData, effect);
+    if (slot < MAX_ITEM_SPELLS)
+        SetInt32Value(ITEM_FIELD_SPELL_CHARGES + slot, value);
+}
+
 void Item::SaveToDB(CharacterDatabaseTransaction trans)
 {
     bool isInTransaction = bool(trans);
@@ -460,7 +494,7 @@ void Item::SaveToDB(CharacterDatabaseTransaction trans)
             std::ostringstream ssSpells;
             if (ItemTemplate const* itemProto = sObjectMgr->GetItemTemplate(GetEntry()))
                 for (uint8 i = 0; i < itemProto->Effects.size() && i < _bonusData.EffectCount; ++i)
-                    ssSpells << GetSpellCharges(i) << ' ';
+                    ssSpells << GetInt32Value(ITEM_FIELD_SPELL_CHARGES + i) << ' ';
             stmt->setString(++index, ssSpells.str());
 
             stmt->setUInt32(++index, GetUInt32Value(ITEM_FIELD_FLAGS));
@@ -799,9 +833,10 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
 
     // load charges after bonuses, they can add more item effects
     std::vector<std::string_view> tokens = Trinity::Tokenize(fields[6].GetStringView(), ' ', false);
+    //for (uint8 i = 0; i < MAX_ITEM_SPELLS && i < _bonusData.EffectCount && i < tokens.size(); ++i)
     if (tokens.size() == proto->Effects.size())
         for (uint8 i = 0; i < proto->Effects.size(); ++i)
-            SetSpellCharges(i, Trinity::StringTo<int32>(tokens[i]).value_or(0));
+            SetInt32Value(ITEM_FIELD_SPELL_CHARGES + i, Trinity::StringTo<int32>(tokens[i]).value_or(0));
 
     SetModifier(ITEM_MODIFIER_TRANSMOG_APPEARANCE_ALL_SPECS, fields[21].GetUInt32());
     SetModifier(ITEM_MODIFIER_TRANSMOG_APPEARANCE_SPEC_1, fields[22].GetUInt32());

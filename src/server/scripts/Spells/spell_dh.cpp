@@ -946,7 +946,7 @@ struct at_dh_glaive_tempest : AreaTriggerAI
             FloatMilliseconds period = 500ms; // 500ms, affected by haste
             if (Unit* caster = at->GetCaster())
             {
-                period *= *caster->m_unitData->ModHaste;
+                period *= caster->GetFloatValue(UNIT_FIELD_MOD_HASTE);
                 caster->CastSpell(at->GetPosition(), SPELL_DH_GLAIVE_TEMPEST, TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR);
                 caster->CastSpell(at->GetPosition(), SPELL_DH_GLAIVE_TEMPEST, TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR);
             }

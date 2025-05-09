@@ -59,7 +59,7 @@ void AuctionPosting::BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* a
     auctionItem->Owner = Owner;
 
     auctionItem->Item.Initialize(Item);
-    auctionItem->Charges = std::max({ Item->GetSpellCharges(0), Item->GetSpellCharges(1), Item->GetSpellCharges(2), Item->GetSpellCharges(3), Item->GetSpellCharges(4) });
+    auctionItem->Charges = Item->GetSpellCharges();
     for (uint8 i = 0; i < MAX_INSPECTED_ENCHANTMENT_SLOT; i++)
     {
         uint32 enchantId = Item->GetEnchantmentId(EnchantmentSlot(i));
