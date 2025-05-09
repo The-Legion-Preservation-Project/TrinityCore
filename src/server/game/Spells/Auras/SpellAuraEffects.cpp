@@ -606,6 +606,8 @@ void AuraEffect::GetApplicationList(Container& applicationContainer) const
 
 int32 AuraEffect::CalculateAmount(Unit* caster)
 {
+    Unit* unitOwner = GetBase()->GetOwner()->ToUnit();
+
     // default amount calculation
     int32 amount = 0;
 
@@ -667,7 +669,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             m_canBeRecalculated = false;
             if (!m_spellInfo->ProcFlags)
                 break;
-            amount = int32(GetBase()->GetUnitOwner()->CountPctFromMaxHealth(10));
+            amount = int32(unitOwner->CountPctFromMaxHealth(10));
             break;
         case SPELL_AURA_SCHOOL_ABSORB:
         case SPELL_AURA_MANA_SHIELD:
@@ -679,7 +681,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             if (MountEntry const* mountEntry = sDB2Manager.GetMount(GetId()))
                 mountType = mountEntry->MountTypeID;
 
-            if (MountCapabilityEntry const* mountCapability = GetBase()->GetUnitOwner()->GetMountCapability(mountType))
+            if (MountCapabilityEntry const* mountCapability = unitOwner->GetMountCapability(mountType))
                 amount = mountCapability->ID;
             break;
         }
@@ -694,7 +696,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
 
     if (GetSpellInfo()->HasAttribute(SPELL_ATTR10_ROLLING_PERIODIC))
     {
-        Unit::AuraEffectList const& periodicAuras = GetBase()->GetUnitOwner()->GetAuraEffectsByType(GetAuraType());
+        Unit::AuraEffectList const& periodicAuras = unitOwner->GetAuraEffectsByType(GetAuraType());
         if (uint32 totalTicks = GetTotalTicks())
         {
             amount = std::accumulate(std::begin(periodicAuras), std::end(periodicAuras), amount, [&](int32 val, AuraEffect const* aurEff)
