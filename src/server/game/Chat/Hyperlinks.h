@@ -484,29 +484,24 @@ namespace Trinity::Hyperlinks
 
     struct HyperlinkColor
     {
-        HyperlinkColor(uint32 c) : r(c >> 16), g(c >> 8), b(c), a(c >> 24) {}
-        uint8 const r, g, b, a;
+        HyperlinkColor() = default;
+        HyperlinkColor(std::string_view c) : data(c) {}
+        std::string_view data;
         bool operator==(uint32 c) const
         {
-            if ((c & 0xff) ^ b)
-                return false;
-            if (((c >>= 8) & 0xff) ^ g)
-                return false;
-            if (((c >>= 8) & 0xff) ^ r)
-                return false;
-            if ((c >>= 8) ^ a)
-                return false;
-            return true;
+            return Trinity::StringTo<uint32>(data, 16) == c;
         }
+
+        bool operator==(ItemQualities q) const;
     };
 
     struct HyperlinkInfo
     {
-        HyperlinkInfo() : ok(false), color(0) {}
-        HyperlinkInfo(std::string_view t, uint32 c, std::string_view ta, std::string_view d, std::string_view te) :
+        HyperlinkInfo() : ok(false) {}
+        HyperlinkInfo(std::string_view t, std::string_view c, std::string_view ta, std::string_view d, std::string_view te) :
             ok(true), tail(t), color(c), tag(ta), data(d), text(te) {}
 
-        explicit operator bool() { return ok; }
+        explicit operator bool() const { return ok; }
         bool const ok;
         std::string_view const tail;
         HyperlinkColor const color;
