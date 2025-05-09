@@ -4763,25 +4763,7 @@ void SpellMgr::LoadSpellInfoCorrections()
         });
     });
 
-    // Summon Amberleaf Troublemaker
-    ApplySpellFix({ 114698 }, [](SpellInfo* spellInfo)
-    {
-        ApplySpellEffectFix(spellInfo, EFFECT_0, [](SpellEffectInfo* spellEffectInfo)
-        {
-            spellEffectInfo->TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
-        });
-    });
-
-    // Summon Living Air
-    ApplySpellFix({ 102207 }, [](SpellInfo* spellInfo)
-    {
-        ApplySpellEffectFix(spellInfo, EFFECT_0, [](SpellEffectInfo* spellEffectInfo)
-        {
-            spellEffectInfo->TargetA = SpellImplicitTargetInfo(TARGET_DEST_TARGET_RANDOM);
-        });
-    });
-
-    // END OF THE WANDERING ISLE SPELLS
+    // ENDOF THE WANDERING ISLE SPELLS
     //
 
     // Earthquake
