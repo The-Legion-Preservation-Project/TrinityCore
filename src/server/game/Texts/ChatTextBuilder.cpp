@@ -27,7 +27,7 @@
 namespace Trinity
 {
 ChatPacketSender::ChatPacketSender(ChatMsg chatType, ::Language language, WorldObject const* sender, WorldObject const* receiver,
-    std::string message, uint32 achievementId /*= 0*/, LocaleConstant locale /*= LOCALE_enUS*/, uint32 broadcastTextId /*= 0*/, uint16 emoteId /*= 0*/, uint32 soundKitId /*= 0*/, SoundKitPlayType soundKitPlayType /*= SoundKitPlayType::Normal*/, uint32 playerConditionId /*= 0*/)
+    std::string message, uint32 achievementId /*= 0*/, LocaleConstant locale /*= LOCALE_enUS*/, uint16 emoteId /*= 0*/, uint32 soundKitId /*= 0*/, SoundKitPlayType soundKitPlayType /*= SoundKitPlayType::Normal*/, uint32 playerConditionId /*= 0*/)
     : Type(chatType), Language(language), Sender(sender), Receiver(receiver), Text(std::move(message)), AchievementId(achievementId), Locale(locale), PlayerConditionID(playerConditionId)
 {
     UntranslatedPacket.Initialize(Type, Language, Sender, Receiver, Text, AchievementId, "", Locale);
@@ -106,7 +106,6 @@ ChatPacketSender* BroadcastTextBuilder::operator()(LocaleConstant locale) const
         bct ? DB2Manager::GetBroadcastTextValue(bct, locale, _gender) : "",
         _achievementId,
         locale,
-        bct ? bct->ID : 0,
         bct ? bct->EmotesID : 0,
         soundKitId,
         SoundKitPlayType::Normal,
@@ -143,6 +142,6 @@ ChatPacketSender* TrinityStringChatBuilder::operator()(LocaleConstant locale) co
 ChatPacketSender* CreatureTextTextBuilder::operator()(LocaleConstant locale) const
 {
     return new ChatPacketSender(_msgType, _language, _talker, _target, sCreatureTextMgr->GetLocalizedChatString(_source->GetEntry(), _gender, _textGroup, _textId, locale), 0, locale,
-        _broadcastTextId, _emoteId, _soundKitId, _soundKitPlayType, _playerConditionId);
+        _emoteId, _soundKitId, _soundKitPlayType, _playerConditionId);
 }
 }

@@ -165,7 +165,7 @@ int main(int argc, char** argv)
             return 0;
         }
 
-        std::string const binary_path(std::move(vm["path"].as<std::string>()));
+        std::string const binary_path(vm["path"].as<std::string>());
         std::string renamed_binary_path(binary_path);
         std::wstring appDataPath;
 
