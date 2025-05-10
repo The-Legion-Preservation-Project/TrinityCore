@@ -20,7 +20,6 @@
 
 #include "Object.h"
 #include "GridObject.h"
-#include "Hash.h"
 
 class ConversationAI;
 class Unit;

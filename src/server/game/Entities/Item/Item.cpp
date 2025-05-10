@@ -45,7 +45,15 @@
 #include "UpdateData.h"
 #include "World.h"
 #include "WorldSession.h"
+#include <algorithm>
 #include <sstream>
+
+struct ItemSetEffect
+{
+    uint32 ItemSetID;
+    uint32 EquippedItemCount;
+    std::unordered_set<ItemSetSpellEntry const*> SetBonuses;
+};
 
 void AddItemsSetItem(Player* player, Item* item)
 {
@@ -173,6 +181,34 @@ void RemoveItemsSetItem(Player* player, ItemTemplate const* proto)
         delete eff;
         player->ItemSetEff[setindex] = nullptr;
     }
+}
+
+void UpdateItemSetAuras(Player* player, bool formChange /*= false*/)
+{
+    // item set bonuses not dependent from item broken state
+    for (ItemSetEffect* eff : player->ItemSetEff)
+    {
+        if (!eff)
+            continue;
+
+        for (ItemSetSpellEntry const* itemSetSpell : eff->SetBonuses)
+        {
+            SpellInfo const* spellInfo = sSpellMgr->AssertSpellInfo(itemSetSpell->SpellID, DIFFICULTY_NONE);
+
+            if (itemSetSpell->ChrSpecID && ChrSpecialization(itemSetSpell->ChrSpecID) != player->GetPrimarySpecialization())
+                player->ApplyEquipSpell(spellInfo, nullptr, false, false);  // item set aura is not for current spec
+            else
+            {
+                player->ApplyEquipSpell(spellInfo, nullptr, false, formChange); // remove spells that not fit to form - removal is skipped if shapeshift condition is satisfied
+                player->ApplyEquipSpell(spellInfo, nullptr, true, formChange);  // add spells that fit form but not active
+            }
+        }
+    }
+}
+
+void DeleteItemSetEffects(ItemSetEffect* itemSetEffect)
+{
+    delete itemSetEffect;
 }
 
 bool ItemCanGoIntoBag(ItemTemplate const* pProto, ItemTemplate const* pBagProto)
@@ -903,6 +939,13 @@ bool Item::LoadFromDB(ObjectGuid::LowType guid, ObjectGuid ownerGuid, Field* fie
     }
 
     return true;
+}
+
+void Item::LoadAdditionalDataFromDB(const Player *owner, ItemAdditionalLoadInfo *addionalData)
+{
+    if (GetTemplate()->GetArtifactID() && addionalData->Artifact)
+        LoadArtifactData(owner, addionalData->Artifact->Xp, addionalData->Artifact->ArtifactAppearanceId,
+            addionalData->Artifact->ArtifactTierId, addionalData->Artifact->ArtifactPowers);
 }
 
 void Item::LoadArtifactData(Player const* owner, uint64 xp, uint32 artifactAppearanceId, uint32 artifactTier, std::vector<ItemDynamicFieldArtifactPowers>& powers)
@@ -2459,41 +2502,54 @@ bool Item::IsArtifactDisabled() const
     // return true;
 }
 
+int32 Item::GetArtifactPowerIndex(uint32 artifactPowerId) const
+{
+    auto const& artifactPowers = GetDynamicStructuredValues<ItemDynamicFieldArtifactPowers>(ITEM_DYNAMIC_FIELD_ARTIFACT_POWERS);
+    auto itr = std::find_if(artifactPowers.begin(), artifactPowers.end(), [artifactPowerId](ItemDynamicFieldArtifactPowers const& artifactPower)
+    {
+        return uint32(artifactPower.ArtifactPowerId) == artifactPowerId;
+    });
+    if (itr != artifactPowers.end())
+        return int32(std::distance(artifactPowers.begin(), itr));
+
+    return -1;
+}
+
 ItemDynamicFieldArtifactPowers const* Item::GetArtifactPower(uint32 artifactPowerId) const
 {
-    auto indexItr = m_artifactPowerIdToIndex.find(artifactPowerId);
-    if (indexItr != m_artifactPowerIdToIndex.end())
-        return GetDynamicStructuredValue<ItemDynamicFieldArtifactPowers>(ITEM_DYNAMIC_FIELD_ARTIFACT_POWERS, indexItr->second);
+    int32 index = GetArtifactPowerIndex(artifactPowerId);
+    if (index >= 0)
+        return GetDynamicStructuredValue<ItemDynamicFieldArtifactPowers>(ITEM_DYNAMIC_FIELD_ARTIFACT_POWERS, index);
 
     return nullptr;
 }
 
 void Item::SetArtifactPower(ItemDynamicFieldArtifactPowers const* artifactPower, bool createIfMissing /*= false*/)
 {
-    auto indexItr = m_artifactPowerIdToIndex.find(artifactPower->ArtifactPowerId);
-    uint16 index;
-    if (indexItr != m_artifactPowerIdToIndex.end())
-        index = indexItr->second;
+    int32 index = GetArtifactPowerIndex(artifactPower->ArtifactPowerId);
+    if (index >= 0)
+        SetDynamicStructuredValue(ITEM_DYNAMIC_FIELD_ARTIFACT_POWERS, index, artifactPower);
     else
     {
         if (!createIfMissing)
             return;
 
-        index = uint16(m_artifactPowerIdToIndex.size());
-        m_artifactPowerIdToIndex[artifactPower->ArtifactPowerId] = index;
+        AddDynamicStructuredValue(ITEM_DYNAMIC_FIELD_ARTIFACT_POWERS, artifactPower);
     }
-
-    SetDynamicStructuredValue(ITEM_DYNAMIC_FIELD_ARTIFACT_POWERS, index, artifactPower);
 }
 
 void Item::InitArtifactPowers(uint8 artifactId, uint8 artifactTier)
 {
+    std::unordered_set<uint32> knownPowers;
+    for (ItemDynamicFieldArtifactPowers const& artifactPower : GetDynamicStructuredValues<ItemDynamicFieldArtifactPowers>(ITEM_DYNAMIC_FIELD_ARTIFACT_POWERS))
+        knownPowers.insert(artifactPower.ArtifactPowerId);
+
     for (ArtifactPowerEntry const* artifactPower : sDB2Manager.GetArtifactPowers(artifactId))
     {
         if (artifactPower->Tier != artifactTier)
             continue;
 
-        if (m_artifactPowerIdToIndex.find(artifactPower->ID) != m_artifactPowerIdToIndex.end())
+        if (knownPowers.contains(artifactPower->ID))
             continue;
 
         ItemDynamicFieldArtifactPowers powerData;

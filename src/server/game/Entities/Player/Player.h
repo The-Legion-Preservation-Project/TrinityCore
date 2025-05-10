@@ -2385,7 +2385,6 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         void ApplyItemEquipSpell(Item* item, bool apply, bool formChange = false);
         void ApplyEquipSpell(SpellInfo const* spellInfo, Item* item, bool apply, bool formChange = false);
         void UpdateEquipSpellsAtFormChange();
-        void UpdateItemSetAuras(bool formChange = false);
         void ApplyArtifactPowers(Item* item, bool apply);
         void ApplyArtifactPowerRank(Item* artifact, ArtifactPowerRankEntry const* artifactPowerRank, bool apply);
 
@@ -3220,5 +3219,7 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
 
 TC_GAME_API void AddItemsSetItem(Player* player, Item* item);
 TC_GAME_API void RemoveItemsSetItem(Player* player, ItemTemplate const* proto);
+TC_GAME_API void UpdateItemSetAuras(Player* player, bool formChange);
+TC_GAME_API void DeleteItemSetEffects(ItemSetEffect* itemSetEffect);
 
 #endif
