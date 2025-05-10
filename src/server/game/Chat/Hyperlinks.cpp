@@ -30,6 +30,11 @@
 
 using namespace Trinity::Hyperlinks;
 
+bool HyperlinkColor::operator==(ItemQualities q) const
+{
+    return data.starts_with("IQ") && q < MAX_ITEM_QUALITY && Trinity::StringTo<uint32>(data.substr(2)) == uint32(q);
+}
+
 // Validates a single hyperlink
 HyperlinkInfo Trinity::Hyperlinks::ParseSingleHyperlink(std::string_view str)
 {
@@ -391,35 +396,19 @@ struct LinkValidator<LinkTags::item>
         if (!data.Item->HasFlag(ITEM_FLAG3_HIDE_NAME_SUFFIX) && data.Suffix)
             suffixStrings = &data.Suffix->Description;
 
-        Optional<int32> craftingQualityId;
-        auto craftingQualityIdItr = std::ranges::find(data.Modifiers, ITEM_MODIFIER_CRAFTING_QUALITY_ID, &ItemLinkData::Modifier::Type);
-        if (craftingQualityIdItr != data.Modifiers.end())
-            craftingQualityId = craftingQualityIdItr->Value;
-
-        return IsTextValid(data.Item, suffixStrings, craftingQualityId, text);
+        return IsTextValid(data.Item, suffixStrings, text);
     }
 
-    static bool IsTextValid(ItemTemplate const* itemTemplate, LocalizedString const* suffixStrings, Optional<int32> craftingQualityId, std::string_view text)
+    static bool IsTextValid(ItemTemplate const* itemTemplate, LocalizedString const* suffixStrings, std::string_view text)
     {
-        // default icon
-        if (!craftingQualityId)
-            if (ModifiedCraftingItemEntry const* modifiedCraftingItemEntry = sModifiedCraftingItemStore.LookupEntry(itemTemplate->GetId()))
-                craftingQualityId = modifiedCraftingItemEntry->CraftingQualityID;
-
-        std::string_view craftingQualityIcon = CRAFTING_QUALITY_ICON[0];
-        if (craftingQualityId)
-            if (CraftingQualityEntry const* craftingQualityEntry = sCraftingQualityStore.LookupEntry(*craftingQualityId))
-                if (craftingQualityEntry->QualityTier < std::ranges::ssize(CRAFTING_QUALITY_ICON))
-                    craftingQualityIcon = CRAFTING_QUALITY_ICON[craftingQualityEntry->QualityTier];
-
         for (LocaleConstant i = LOCALE_enUS; i < TOTAL_LOCALES; i = LocaleConstant(i + 1))
-            if (IsTextValid(text, itemTemplate->GetName(i), suffixStrings ? Optional<std::string_view>((*suffixStrings)[i]) : std::nullopt, craftingQualityIcon))
+            if (IsTextValid(text, itemTemplate->GetName(i), suffixStrings ? Optional<std::string_view>((*suffixStrings)[i]) : std::nullopt))
                 return true;
 
         return false;
     }
 
-    static bool IsTextValid(std::string_view toValidate, std::string_view name, Optional<std::string_view> suffix, std::string_view craftingQualityIcon)
+    static bool IsTextValid(std::string_view toValidate, std::string_view name, Optional<std::string_view> suffix)
     {
         if (name.empty())
             return false;
@@ -443,10 +432,6 @@ struct LinkValidator<LinkTags::item>
             toValidate.remove_prefix(suffix->length());
         }
 
-        if (!toValidate.starts_with(craftingQualityIcon))
-            return false;
-
-        toValidate.remove_prefix(craftingQualityIcon.length());
         return toValidate.empty();
     }
 
@@ -542,23 +527,6 @@ struct LinkValidator<LinkTags::outfit>
 };
 
 template <>
-struct LinkValidator<LinkTags::perksactivity>
-{
-    static bool IsTextValid(PerksActivityEntry const* perksActivity, std::string_view text)
-    {
-        for (LocaleConstant i = LOCALE_enUS; i < TOTAL_LOCALES; i = LocaleConstant(i + 1))
-            if (perksActivity->ActivityName[i] == text)
-                return true;
-        return false;
-    }
-
-    static bool IsColorValid(PerksActivityEntry const*, HyperlinkColor c)
-    {
-        return c == CHAT_LINK_COLOR_NEUTRAL;
-    }
-};
-
-template <>
 struct LinkValidator<LinkTags::pvptal>
 {
     static bool IsTextValid(PvpTalentEntry const* pvpTalent, std::string_view text)
@@ -647,7 +615,7 @@ struct LinkValidator<LinkTags::transmogappearance>
     static bool IsTextValid(ItemModifiedAppearanceEntry const* enchantment, std::string_view text)
     {
         if (ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(enchantment->ItemID))
-            return LinkValidator<LinkTags::item>::IsTextValid(itemTemplate, nullptr, {}, text);
+            return LinkValidator<LinkTags::item>::IsTextValid(itemTemplate, nullptr, text);
         return false;
     }
 

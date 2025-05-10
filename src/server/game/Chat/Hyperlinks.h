@@ -36,6 +36,7 @@ struct GarrMissionEntry;
 struct GlyphPropertiesEntry;
 struct ItemModifiedAppearanceEntry;
 struct ItemNameDescriptionEntry;
+enum ItemQualities : uint8;
 struct ItemTemplate;
 struct LocalizedString;
 struct MapEntry;

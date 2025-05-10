@@ -671,7 +671,7 @@ WorldPacket const* DisplayPlayerChoice::Write()
     _worldPacket << SenderGUID;
     _worldPacket << int32(UiTextureKitID);
     _worldPacket.WriteBits(Question.length(), 8);
-    _worldPacket.WriteBit(CloseChoiceFrame);
+    _worldPacket.WriteBit(InfiniteRange);
     _worldPacket.WriteBit(HideWarboardHeader);
     _worldPacket.FlushBits();
 

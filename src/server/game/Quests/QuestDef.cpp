@@ -31,7 +31,7 @@
 #include "World.h"
 #include "WorldSession.h"
 
-#define QUEST_TEMPLATE_FIELDS (ID)(QuestType)(QuestLevel)(QuestMaxScalingLevel)(QuestPackageID)(QuestMinLevel)(QuestSortID)(QuestInfoID)(SuggestedGroupNum)(RewardNextQuest)(RewardXPDifficulty)\
+#define QUEST_TEMPLATE_FIELDS (ID)(QuestType)(QuestLevel)(MaxScalingLevel)(QuestPackageID)(MinLevel)(QuestSortID)(QuestInfoID)(SuggestedGroupNum)(RewardNextQuest)(RewardXPDifficulty)\
     (RewardXPMultiplier)(RewardMoneyDifficulty)(RewardMoneyMultiplier)(RewardBonusMoney)(RewardSpell)(RewardHonor)(RewardKillHonor)(StartItem)\
     (RewardArtifactXPDifficulty)(RewardArtifactXPMultiplier)(RewardArtifactCategoryID)(Flags)(FlagsEx)\
     (RewardItem1)(RewardAmount1)(ItemDrop1)(ItemDropQuantity1)(RewardItem2)(RewardAmount2)(ItemDrop2)(ItemDropQuantity2)\
@@ -39,7 +39,7 @@
     (RewardChoiceItemID1)(RewardChoiceItemQuantity1)(RewardChoiceItemDisplayID1)(RewardChoiceItemID2)(RewardChoiceItemQuantity2)(RewardChoiceItemDisplayID2)\
     (RewardChoiceItemID3)(RewardChoiceItemQuantity3)(RewardChoiceItemDisplayID3)(RewardChoiceItemID4)(RewardChoiceItemQuantity4)(RewardChoiceItemDisplayID4)\
     (RewardChoiceItemID5)(RewardChoiceItemQuantity5)(RewardChoiceItemDisplayID5)(RewardChoiceItemID6)(RewardChoiceItemQuantity6)(RewardChoiceItemDisplayID6)\
-    (POIContinent)(POIx)(POIy)(POIPriority)(RewardTitle)(RewardArenaPoints)(RewardSkillID)(RewardNumSkillUps)\
+    (POIContinent)(POIx)(POIy)(POIPriority)(RewardTitle)(RewardArenaPoints)(RewardSkillLineID)(RewardNumSkillUps)\
     (PortraitGiver)(PortraitTurnIn)(RewardFactionID1)(RewardFactionValue1)(RewardFactionOverride1)(RewardFactionCapIn1)\
     (RewardFactionID2)(RewardFactionValue2)(RewardFactionOverride2)(RewardFactionCapIn2)(RewardFactionID3)(RewardFactionValue3)(RewardFactionOverride3)(RewardFactionCapIn3)\
     (RewardFactionID4)(RewardFactionValue4)(RewardFactionOverride4)(RewardFactionCapIn4)(RewardFactionID5)(RewardFactionValue5)(RewardFactionOverride5)(RewardFactionCapIn5)\
@@ -89,9 +89,9 @@ Quest::Quest(QuestTemplateQueryResult const& questRecord) :
     _id(questRecord.ID().GetUInt32()),
     _type(questRecord.QuestType().GetUInt8()),
     _level(questRecord.QuestLevel().GetInt32()),
-    _maxScalingLevel(questRecord.QuestMaxScalingLevel().GetInt32()),
+    _maxScalingLevel(questRecord.MaxScalingLevel().GetInt32()),
     _packageID(questRecord.QuestPackageID().GetUInt32()),
-    _minLevel(questRecord.QuestMinLevel().GetInt32()),
+    _minLevel(questRecord.MinLevel().GetInt32()),
     _questSortID(questRecord.QuestSortID().GetInt16()),
     _questInfoID(questRecord.QuestInfoID().GetUInt16()),
     _suggestedPlayers(questRecord.SuggestedGroupNum().GetUInt8()),
@@ -116,7 +116,7 @@ Quest::Quest(QuestTemplateQueryResult const& questRecord) :
     _poiPriority(questRecord.POIPriority().GetUInt32()),
     _rewardTitleId(questRecord.RewardTitle().GetUInt32()),
     _rewardArenaPoints(questRecord.RewardArenaPoints().GetUInt32()),
-    _rewardSkillId(questRecord.RewardSkillID().GetUInt32()),
+    _rewardSkillId(questRecord.RewardSkillLineID().GetUInt32()),
     _rewardSkillPoints(questRecord.RewardNumSkillUps().GetUInt32()),
     _questGiverPortrait(questRecord.PortraitGiver().GetUInt32()),
     _questTurnInPortrait(questRecord.PortraitTurnIn().GetUInt32()),
