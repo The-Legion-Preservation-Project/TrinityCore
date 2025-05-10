@@ -3334,7 +3334,7 @@ void SpellInfo::_LoadImmunityInfo()
                         if (miscVal < 1)
                             break;
 
-                        mechanicImmunityMask |= 1 << miscVal;
+                        mechanicImmunityMask |= UI64LIT(1) << miscVal;
                         break;
                 }
                 break;

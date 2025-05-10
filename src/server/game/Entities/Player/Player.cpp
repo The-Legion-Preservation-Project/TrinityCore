@@ -15841,7 +15841,7 @@ bool Player::IsQuestCompletedBitSet(uint32 questId) const
     if (fieldOffset >= QUESTS_COMPLETED_BITS_SIZE)
         return false;
 
-    uint64 flag = 1 << ((questBit - 1) % QUESTS_COMPLETED_BITS_PER_BLOCK);
+    uint32 flag = 1 << ((questBit - 1) % QUESTS_COMPLETED_BITS_PER_BLOCK);
     return (GetUInt32Value(PLAYER_FIELD_QUEST_COMPLETED + fieldOffset) & flag) != 0;
 }
 

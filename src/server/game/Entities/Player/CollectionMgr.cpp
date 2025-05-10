@@ -306,7 +306,7 @@ void CollectionMgr::CheckHeirloomUpgrades(Item* item)
         if (newItemId)
         {
             auto const& heirlooms = player->GetDynamicValues(PLAYER_DYNAMIC_FIELD_HEIRLOOMS);
-            uint16 offset = uint16(std::ranges::distance(heirlooms.begin(), std::ranges::find(heirlooms, int32(itr->first))));
+            uint16 offset = uint16(std::ranges::distance(heirlooms.begin(), std::ranges::find(heirlooms, itr->first)));
 
             player->SetHeirloom(offset, newItemId);
             player->SetHeirloomFlags(offset, 0);
@@ -328,7 +328,7 @@ void CollectionMgr::CheckHeirloomUpgrades(Item* item)
             }
         }
 
-        if (!advstd::ranges::contains(bonusListIDs, int32(itr->second.bonusId)))
+        if (!advstd::ranges::contains(bonusListIDs, itr->second.bonusId))
             item->AddBonuses(itr->second.bonusId);
     }
 }
