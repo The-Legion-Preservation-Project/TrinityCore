@@ -24231,6 +24231,10 @@ void Player::LearnSkillRewardedSpells(uint32 skillId, uint32 skillValue, Races r
                 continue;
         }
 
+        // AcquireMethod == 2 && NumSkillUps == 1 --> automatically learn riding skill spell, else we skip it (client shows riding in spellbook as trainable).
+        if (skillId == SKILL_RIDING && (ability->GetAcquireMethod() != SkillLineAbilityAcquireMethod::AutomaticCharLevel || ability->NumSkillUps != 1))
+            continue;
+
         // Check race if set
         if (!ability->RaceMask.IsEmpty() && !ability->RaceMask.HasRace(race))
             continue;
