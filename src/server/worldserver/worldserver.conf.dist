@@ -825,12 +825,12 @@ CharactersPerAccount = 50
 CharactersPerRealm = 16
 
 #
-#    DemonHuntersPerRealm
+#    CharacterCreating.DemonHuntersPerRealm
 #        Description: Limit number of demon hunter characters per account on this realm.
 #        Range:       1-16
 #        Default:     1
 
-DemonHuntersPerRealm = 1
+CharacterCreating.DemonHuntersPerRealm = 1
 
 #
 #    CharacterCreating.MinLevelForDemonHunter

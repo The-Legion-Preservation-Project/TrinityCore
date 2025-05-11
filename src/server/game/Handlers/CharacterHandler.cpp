@@ -416,7 +416,7 @@ void WorldSession::HandleCharEnum(CharacterDatabaseQueryHolder const& holder)
             if (charInfo.ClassID == CLASS_DEMON_HUNTER)
                 demonHunterCount++;
 
-            if (demonHunterCount >= sWorld->getIntConfig(CONFIG_DEMON_HUNTERS_PER_REALM) && !canAlwaysCreateDemonHunter)
+            if (demonHunterCount >= sWorld->getIntConfig(CONFIG_CHARACTER_CREATING_DEMON_HUNTERS_PER_REALM) && !canAlwaysCreateDemonHunter)
                 charEnum.HasDemonHunterOnRealm = true;
             else
                 charEnum.HasDemonHunterOnRealm = false;
@@ -807,7 +807,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPackets::Character::CreateCharact
             if (result)
             {
                 uint32 team = Player::TeamForRace(createInfo->Race);
-                uint32 freeDemonHunterSlots = sWorld->getIntConfig(CONFIG_DEMON_HUNTERS_PER_REALM);
+                uint32 freeDemonHunterSlots = sWorld->getIntConfig(CONFIG_CHARACTER_CREATING_DEMON_HUNTERS_PER_REALM);
 
                 Field* field = result->Fetch();
                 uint8 accRace = field[1].GetUInt8();
