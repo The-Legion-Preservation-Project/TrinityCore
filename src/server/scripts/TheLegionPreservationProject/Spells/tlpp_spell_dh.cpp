@@ -76,7 +76,7 @@ class tlpp_spell_dh_fel_rush_air : public AuraScript
         }
     }
 
-    void CalcSpeed(AuraEffect const* aurEff, int32& amount, bool& /*canBeRecalculated*/)
+    void CalcSpeed(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
     {
         amount = 1400;
     }
