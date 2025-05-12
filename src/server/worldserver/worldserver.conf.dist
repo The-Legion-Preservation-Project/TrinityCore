@@ -1490,7 +1490,7 @@ Updates.CleanDeadRefMaxCount = 3
 ###################################################################################################
 # HOTSWAP SETTINGS
 #
-#    HotSwap.Enabled (Requires compilation with DYNAMIC_LINKING=1)
+#    HotSwap.Enabled (Requires compilation with WITH_DYNAMIC_LINKING=1)
 #        Description: Enables dynamic script hotswapping.
 #                     Reloads scripts on changes.
 #        Default:     1 - (Enabled)
