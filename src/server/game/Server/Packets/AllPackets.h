@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AllPackets_h__
-#define AllPackets_h__
+#ifndef TRINITYCORE_ALL_PACKETS_H
+#define TRINITYCORE_ALL_PACKETS_H
 
 #include "AchievementPackets.h"
 #include "AdventureJournalPackets.h"
@@ -26,10 +26,10 @@
 #include "AuctionHousePackets.h"
 #include "AuthenticationPackets.h"
 #include "BankPackets.h"
-#include "BlackMarketPackets.h"
+#include "BattlePetPackets.h"
 #include "BattlegroundPackets.h"
 #include "BattlenetPackets.h"
-#include "BattlePetPackets.h"
+#include "BlackMarketPackets.h"
 #include "BlackMarketPackets.h"
 #include "CalendarPackets.h"
 #include "ChannelPackets.h"
@@ -58,8 +58,8 @@
 #include "PacketUtilities.h"
 #include "PartyPackets.h"
 #include "PetPackets.h"
-#include "PetitionPackets.h"
 #include "PetPackets.h"
+#include "PetitionPackets.h"
 #include "QueryPackets.h"
 #include "QuestPackets.h"
 #include "ReferAFriendPackets.h"
@@ -83,4 +83,4 @@
 #include "WhoPackets.h"
 #include "WorldStatePackets.h"
 
-#endif // AllPackets_h__
+#endif // TRINITYCORE_ALL_PACKETS_H

@@ -15,10 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ItemBonusMgr.h"
 #include "ConditionMgr.h"
 #include "DB2Stores.h"
-#include "ItemBonusMgr.h"
 #include "MapUtils.h"
+#include "ObjectMgr.h"
 
 namespace
 {

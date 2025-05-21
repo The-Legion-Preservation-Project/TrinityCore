@@ -19,7 +19,14 @@
 #define TRINITY_ITEM_BONUS_MGR_H
 
 #include "Define.h"
+#include "Optional.h"
 #include <span>
+#include <vector>
+
+class Player;
+struct ItemBonusEntry;
+struct MapDifficultyEntry;
+enum class ItemContext: uint8;
 
 namespace ItemBonusMgr
 {

@@ -30,6 +30,7 @@
 #include "Optional.h"
 #include "PhaseShift.h"
 #include "Position.h"
+#include "QuaternionData.h"
 #include "SharedDefines.h"
 #include "SpellDefines.h"
 #include "UniqueTrackablePtr.h"
@@ -67,7 +68,6 @@ class WorldPacket;
 class ZoneScript;
 struct FactionTemplateEntry;
 struct Loot;
-struct QuaternionData;
 struct SpawnTrackingStateData;
 struct SpellPowerCost;
 

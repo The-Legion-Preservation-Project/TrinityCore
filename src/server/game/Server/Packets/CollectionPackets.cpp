@@ -16,6 +16,7 @@
  */
 
 #include "CollectionPackets.h"
+#include "PacketUtilities.h"
 
 void WorldPackets::Collections::CollectionItemSetFavorite::Read()
 {

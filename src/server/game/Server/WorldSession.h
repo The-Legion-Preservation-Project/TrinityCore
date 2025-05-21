@@ -27,6 +27,7 @@
 #include "AuthDefines.h"
 #include "ClientBuildInfo.h"
 #include "DatabaseEnvFwd.h"
+#include "Duration.h"
 #include "LockedQueue.h"
 #include "ObjectGuid.h"
 #include "Opcodes.h"

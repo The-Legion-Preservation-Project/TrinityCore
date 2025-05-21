@@ -15,13 +15,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AuthenticationPacketsWorld_h__
-#define AuthenticationPacketsWorld_h__
+#ifndef TRINITYCORE_AUTHENTICATION_PACKETS_H
+#define TRINITYCORE_AUTHENTICATION_PACKETS_H
 
 #include "Packet.h"
 #include "Define.h"
 #include "Optional.h"
 #include "PacketUtilities.h"
+#include "Util.h"
 #include <array>
 #include <unordered_map>
 
@@ -31,30 +32,42 @@ namespace WorldPackets
 {
     namespace Auth
     {
+        template <typename Derived>
         class EarlyProcessClientPacket : public ClientPacket
         {
-        public:
-            EarlyProcessClientPacket(OpcodeClient opcode, WorldPacket&& packet) : ClientPacket(opcode, std::move(packet)) { }
+            explicit EarlyProcessClientPacket(OpcodeClient opcode, WorldPacket&& packet) : ClientPacket(opcode, std::move(packet)) { }
 
-            bool ReadNoThrow();
+        public:
+            bool ReadNoThrow() try
+            {
+                static_cast<Derived*>(this)->Read();
+                return true;
+            }
+            catch (ByteBufferException const& /*ex*/)
+            {
+                return false;
+            }
+
+            friend Derived;
         };
 
-        class Ping final : public EarlyProcessClientPacket
+        class Ping final : public EarlyProcessClientPacket<Ping>
         {
         public:
-            Ping(WorldPacket&& packet) : EarlyProcessClientPacket(CMSG_PING, std::move(packet)) { }
+            explicit Ping(WorldPacket&& packet) : EarlyProcessClientPacket(CMSG_PING, std::move(packet)) { }
 
             uint32 Serial = 0;
             uint32 Latency = 0;
 
         private:
-            void Read();
+            friend EarlyProcessClientPacket;
+            void Read() override;
         };
 
         class Pong final : public ServerPacket
         {
         public:
-            Pong(uint32 serial) : ServerPacket(SMSG_PONG, 4), Serial(serial) { }
+            explicit Pong(uint32 serial) : ServerPacket(SMSG_PONG, 4), Serial(serial) { }
 
             WorldPacket const* Write() override;
 
@@ -64,7 +77,7 @@ namespace WorldPackets
         class AuthChallenge final : public ServerPacket
         {
         public:
-            AuthChallenge() : ServerPacket(SMSG_AUTH_CHALLENGE, 16 + 4 * 8 + 1) { }
+            explicit AuthChallenge() : ServerPacket(SMSG_AUTH_CHALLENGE, 16 + 4 * 8 + 1) { }
 
             WorldPacket const* Write() override;
 
@@ -73,12 +86,12 @@ namespace WorldPackets
             uint8 DosZeroBits = 0;
         };
 
-        class AuthSession final : public EarlyProcessClientPacket
+        class AuthSession final : public EarlyProcessClientPacket<AuthSession>
         {
         public:
-            static uint32 const DigestLength = 24;
+            static constexpr uint32 DigestLength = 24;
 
-            AuthSession(WorldPacket&& packet) : EarlyProcessClientPacket(CMSG_AUTH_SESSION, std::move(packet))
+            explicit AuthSession(WorldPacket&& packet) : EarlyProcessClientPacket(CMSG_AUTH_SESSION, std::move(packet))
             {
                 LocalChallenge.fill(0);
                 Digest.fill(0);
@@ -96,6 +109,7 @@ namespace WorldPackets
             bool UseIPv6 = false;
 
         private:
+            friend EarlyProcessClientPacket;
             void Read() override;
         };
 
@@ -167,7 +181,7 @@ namespace WorldPackets
                 Optional<uint16> NumPlayersAlliance; ///< number of alliance players in this realm. @todo implement
             };
 
-            AuthResponse();
+            explicit AuthResponse() : ServerPacket(SMSG_AUTH_RESPONSE, 132) { }
 
             WorldPacket const* Write() override;
 
@@ -179,7 +193,7 @@ namespace WorldPackets
         class WaitQueueUpdate final : public ServerPacket
         {
         public:
-            WaitQueueUpdate() : ServerPacket(SMSG_WAIT_QUEUE_UPDATE, 4 + 4 + 1) { }
+            explicit WaitQueueUpdate() : ServerPacket(SMSG_WAIT_QUEUE_UPDATE, 4 + 4 + 1) { }
 
             WorldPacket const* Write() override;
 
@@ -189,7 +203,7 @@ namespace WorldPackets
         class WaitQueueFinish final : public ServerPacket
         {
         public:
-            WaitQueueFinish() : ServerPacket(SMSG_WAIT_QUEUE_FINISH, 0) { }
+            explicit WaitQueueFinish() : ServerPacket(SMSG_WAIT_QUEUE_FINISH, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
@@ -231,7 +245,12 @@ namespace WorldPackets
                 std::array<uint8, 32> PanamaKey = { };
             };
 
-            ConnectTo();
+            explicit ConnectTo() : ServerPacket(SMSG_CONNECT_TO, 8 + 4 + 256 + 1)
+            {
+                Payload.Where.fill(0);
+                Trinity::Impl::HexStrToByteArray("F41DCB2D728CF3337A4FF338FA89DB01BBBE9C3B65E9DA96268687353E48B94C", Payload.PanamaKey.data(), 32);
+                Payload.Adler32 = 0xA0A66C10;
+            }
 
             WorldPacket const* Write() override;
 
@@ -241,12 +260,12 @@ namespace WorldPackets
             uint8 Con = 0;
         };
 
-        class AuthContinuedSession final : public EarlyProcessClientPacket
+        class AuthContinuedSession final : public EarlyProcessClientPacket<AuthContinuedSession>
         {
         public:
-            static uint32 const DigestLength = 24;
+            static constexpr uint32 DigestLength = 24;
 
-            AuthContinuedSession(WorldPacket&& packet) : EarlyProcessClientPacket(CMSG_AUTH_CONTINUED_SESSION, std::move(packet))
+            explicit AuthContinuedSession(WorldPacket&& packet) : EarlyProcessClientPacket(CMSG_AUTH_CONTINUED_SESSION, std::move(packet))
             {
                 LocalChallenge.fill(0);
                 Digest.fill(0);
@@ -258,33 +277,35 @@ namespace WorldPackets
             std::array<uint8, DigestLength> Digest;
 
         private:
+            friend EarlyProcessClientPacket;
             void Read() override;
         };
 
         class ResumeComms final : public ServerPacket
         {
         public:
-            ResumeComms(ConnectionType connection) : ServerPacket(SMSG_RESUME_COMMS, 0, connection) { }
+            explicit ResumeComms(ConnectionType connection) : ServerPacket(SMSG_RESUME_COMMS, 0, connection) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
 
-        class ConnectToFailed final : public EarlyProcessClientPacket
+        class ConnectToFailed final : public EarlyProcessClientPacket<ConnectToFailed>
         {
         public:
-            ConnectToFailed(WorldPacket&& packet) : EarlyProcessClientPacket(CMSG_CONNECT_TO_FAILED, std::move(packet)) { }
+            explicit ConnectToFailed(WorldPacket&& packet) : EarlyProcessClientPacket(CMSG_CONNECT_TO_FAILED, std::move(packet)) { }
 
             ConnectToSerial Serial = ConnectToSerial::None;
             uint8 Con = 0;
 
         private:
+            friend EarlyProcessClientPacket;
             void Read() override;
         };
 
         class TC_GAME_API EnterEncryptedMode final : public ServerPacket
         {
         public:
-            EnterEncryptedMode() : ServerPacket(SMSG_ENTER_ENCRYPTED_MODE, 0) { }
+            explicit EnterEncryptedMode() : ServerPacket(SMSG_ENTER_ENCRYPTED_MODE, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
@@ -292,16 +313,16 @@ namespace WorldPackets
         class QueuedMessagesEnd final : public ClientPacket
         {
         public:
-            QueuedMessagesEnd(WorldPacket&& packet) : ClientPacket(CMSG_QUEUED_MESSAGES_END, std::move(packet)) { }
+            explicit QueuedMessagesEnd(WorldPacket&& packet) : ClientPacket(CMSG_QUEUED_MESSAGES_END, std::move(packet)) { }
 
             void Read() override;
 
             uint32 Timestamp = 0;
         };
+
+        ByteBuffer& operator<<(ByteBuffer& data, VirtualRealmInfo const& realmInfo);
+        ByteBuffer& operator<<(ByteBuffer& data, VirtualRealmNameInfo const& realmInfo);
     }
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Auth::VirtualRealmInfo const& realmInfo);
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Auth::VirtualRealmNameInfo const& realmInfo);
-
-#endif // AuthenticationPacketsWorld_h__
+#endif // TRINITYCORE_AUTHENTICATION_PACKETS_H

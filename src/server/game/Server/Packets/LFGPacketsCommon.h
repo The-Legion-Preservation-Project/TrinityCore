@@ -39,10 +39,10 @@ namespace WorldPackets
             RideType Type = RideType::None;
             Timestamp<> Time;
         };
+
+        ByteBuffer& operator>>(ByteBuffer& data, RideTicket& ticket);
+        ByteBuffer& operator<<(ByteBuffer& data, RideTicket const& ticket);
     }
 }
-
-ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::LFG::RideTicket& ticket);
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::LFG::RideTicket const& ticket);
 
 #endif // LFGPacketsCommon_h__

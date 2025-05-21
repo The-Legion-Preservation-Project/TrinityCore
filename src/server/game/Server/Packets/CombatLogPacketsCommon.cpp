@@ -18,6 +18,7 @@
 #include "CombatLogPacketsCommon.h"
 #include "Creature.h"
 #include "Map.h"
+#include "PacketUtilities.h"
 #include "Player.h"
 #include "Spell.h"
 #include "SpellInfo.h"

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AreaTriggerPackets_h__
-#define AreaTriggerPackets_h__
+#ifndef TRINITYCORE_AREA_TRIGGER_PACKETS_H
+#define TRINITYCORE_AREA_TRIGGER_PACKETS_H
 
 #include "Packet.h"
 #include "AreaTriggerTemplate.h"
@@ -37,7 +37,7 @@ namespace WorldPackets
         class AreaTrigger final : public ClientPacket
         {
         public:
-            AreaTrigger(WorldPacket&& packet) : ClientPacket(CMSG_AREA_TRIGGER, std::move(packet)) { }
+            explicit AreaTrigger(WorldPacket&& packet) : ClientPacket(CMSG_AREA_TRIGGER, std::move(packet)) { }
 
             void Read() override;
 
@@ -49,7 +49,7 @@ namespace WorldPackets
         class AreaTriggerDenied final : public ServerPacket
         {
         public:
-            AreaTriggerDenied() : ServerPacket(SMSG_AREA_TRIGGER_DENIED, 5) { }
+            explicit AreaTriggerDenied() : ServerPacket(SMSG_AREA_TRIGGER_DENIED, 5) { }
 
             int32 AreaTriggerID = 0;
             bool Entered = false;
@@ -60,7 +60,7 @@ namespace WorldPackets
         class AreaTriggerNoCorpse final : public ServerPacket
         {
         public:
-            AreaTriggerNoCorpse() : ServerPacket(SMSG_AREA_TRIGGER_NO_CORPSE, 0) { }
+            explicit AreaTriggerNoCorpse() : ServerPacket(SMSG_AREA_TRIGGER_NO_CORPSE, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
@@ -69,7 +69,7 @@ namespace WorldPackets
         {
         public:
             // TODO: not sure if this should be SMSG_AREA_TRIGGER_RE_SHAPE - opcode was changed in TC BFA
-            AreaTriggerRePath() : ServerPacket(SMSG_AREA_TRIGGER_RE_PATH, 17) { }
+            explicit AreaTriggerRePath() : ServerPacket(SMSG_AREA_TRIGGER_RE_PATH, 17) { }
 
             WorldPacket const* Write() override;
 
@@ -77,9 +77,9 @@ namespace WorldPackets
             Optional<AreaTriggerOrbitInfo> AreaTriggerOrbit;
             ObjectGuid TriggerGUID;
         };
+
+        ByteBuffer& operator<<(ByteBuffer& data, AreaTriggerOrbitInfo const& areaTriggerCircularMovement);
     }
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, AreaTriggerOrbitInfo const& areaTriggerCircularMovement);
-
-#endif // AreaTriggerPackets_h__
+#endif // TRINITYCORE_AREA_TRIGGER_PACKETS_H

@@ -1864,7 +1864,7 @@ void OpcodeTable::InitializeServerOpcodes()
 }
 
 template<std::size_t MIN_OPCODE, std::size_t MAX_OPCODE, typename T>
-inline std::string GetOpcodeNameForLoggingImpl(T id)
+static inline std::string GetOpcodeNameForLoggingImpl(T id)
 {
     uint32 opcode = uint32(id);
     char const* name = nullptr;

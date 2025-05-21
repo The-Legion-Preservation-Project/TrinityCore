@@ -23,6 +23,7 @@
 #include "CreatureData.h"
 #include "DatabaseEnvFwd.h"
 #include "GameObjectData.h"
+#include "Hash.h"
 #include "ItemTemplate.h"
 #include "IteratorPair.h"
 #include "MovementDefines.h"

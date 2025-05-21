@@ -149,7 +149,7 @@ ByteBuffer& operator<<(ByteBuffer& data, ItemBonuses const& itemBonusInstanceDat
 
 ByteBuffer& operator>>(ByteBuffer& data, ItemBonuses& itemBonusInstanceData)
 {
-    itemBonusInstanceData.Context = data.read<ItemContext>();
+    data >> As<uint8>(itemBonusInstanceData.Context);
     uint32 bonusListIdSize;
     data >> bonusListIdSize;
     if (bonusListIdSize > 32)

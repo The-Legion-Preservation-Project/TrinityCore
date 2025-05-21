@@ -27,8 +27,10 @@
 #include "Map.h"
 #include "ObjectAccessor.h"
 #include "PhasingHandler.h"
+#include "Player.h"
 #include "Unit.h"
 #include "UpdateData.h"
+#include "WorldSession.h"
 
 Conversation::Conversation() : WorldObject(false), _duration(0)
 {

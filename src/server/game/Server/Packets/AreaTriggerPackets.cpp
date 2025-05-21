@@ -16,13 +16,16 @@
  */
 
 #include "AreaTriggerPackets.h"
+#include "PacketUtilities.h"
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::AreaTrigger::AreaTriggerSplineInfo const& areaTriggerSpline)
+namespace WorldPackets::AreaTrigger
+{
+ByteBuffer& operator<<(ByteBuffer& data, AreaTriggerSplineInfo const& areaTriggerSpline)
 {
     data << uint32(areaTriggerSpline.TimeToTarget);
     data << uint32(areaTriggerSpline.ElapsedTimeForMovement);
 
-    data.WriteBits(areaTriggerSpline.Points.size(), 16);
+    data << BitsSize<16>(areaTriggerSpline.Points);
     data.FlushBits();
 
     for (TaggedPosition<Position::XYZ> const& point : areaTriggerSpline.Points)
@@ -33,10 +36,10 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::AreaTrigger::AreaTriggerS
 
 ByteBuffer& operator<<(ByteBuffer& data, AreaTriggerOrbitInfo const& areaTriggerCircularMovement)
 {
-    data.WriteBit(areaTriggerCircularMovement.PathTarget.has_value());
-    data.WriteBit(areaTriggerCircularMovement.Center.has_value());
-    data.WriteBit(areaTriggerCircularMovement.CounterClockwise);
-    data.WriteBit(areaTriggerCircularMovement.CanLoop);
+    data << OptionalInit(areaTriggerCircularMovement.PathTarget);
+    data << OptionalInit(areaTriggerCircularMovement.Center);
+    data << Bits<1>(areaTriggerCircularMovement.CounterClockwise);
+    data << Bits<1>(areaTriggerCircularMovement.CanLoop);
 
     data << uint32(areaTriggerCircularMovement.TimeToTarget);
     data << int32(areaTriggerCircularMovement.ElapsedTimeForMovement);
@@ -55,28 +58,28 @@ ByteBuffer& operator<<(ByteBuffer& data, AreaTriggerOrbitInfo const& areaTrigger
     return data;
 }
 
-void WorldPackets::AreaTrigger::AreaTrigger::Read()
+void AreaTrigger::Read()
 {
     _worldPacket >> AreaTriggerID;
-    Entered = _worldPacket.ReadBit();
-    FromClient = _worldPacket.ReadBit();
+    _worldPacket >> Bits<1>(Entered);
+    _worldPacket >> Bits<1>(FromClient);
 }
 
-WorldPacket const* WorldPackets::AreaTrigger::AreaTriggerDenied::Write()
+WorldPacket const* AreaTriggerDenied::Write()
 {
     _worldPacket << int32(AreaTriggerID);
-    _worldPacket.WriteBit(Entered);
+    _worldPacket << Bits<1>(Entered);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::AreaTrigger::AreaTriggerRePath::Write()
+WorldPacket const* AreaTriggerRePath::Write()
 {
     _worldPacket << TriggerGUID;
 
-    _worldPacket.WriteBit(AreaTriggerSpline.has_value());
-    _worldPacket.WriteBit(AreaTriggerOrbit.has_value());
+    _worldPacket << OptionalInit(AreaTriggerSpline);
+    _worldPacket << OptionalInit(AreaTriggerOrbit);
     _worldPacket.FlushBits();
 
     if (AreaTriggerSpline)
@@ -86,4 +89,5 @@ WorldPacket const* WorldPackets::AreaTrigger::AreaTriggerRePath::Write()
         _worldPacket << *AreaTriggerOrbit;
 
     return &_worldPacket;
+}
 }

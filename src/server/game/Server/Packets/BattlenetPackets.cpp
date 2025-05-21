@@ -18,23 +18,27 @@
 #include "BattlenetPackets.h"
 #include "PacketUtilities.h"
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Battlenet::MethodCall const& method)
+namespace WorldPackets::Battlenet
+{
+ByteBuffer& operator<<(ByteBuffer& data, MethodCall const& method)
 {
     data << uint64(method.Type);
     data << uint64(method.ObjectId);
     data << uint32(method.Token);
+
     return data;
 }
 
-ByteBuffer& operator>>(ByteBuffer& data, WorldPackets::Battlenet::MethodCall& method)
+ByteBuffer& operator>>(ByteBuffer& data, MethodCall& method)
 {
     data >> method.Type;
     data >> method.ObjectId;
     data >> method.Token;
+
     return data;
 }
 
-WorldPacket const* WorldPackets::Battlenet::Notification::Write()
+WorldPacket const* Notification::Write()
 {
     _worldPacket << Method;
     _worldPacket << uint32(Data.size());
@@ -43,7 +47,7 @@ WorldPacket const* WorldPackets::Battlenet::Notification::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Battlenet::Response::Write()
+WorldPacket const* Response::Write()
 {
     _worldPacket << uint32(BnetStatus);
     _worldPacket << Method;
@@ -53,25 +57,25 @@ WorldPacket const* WorldPackets::Battlenet::Response::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Battlenet::ConnectionStatus::Write()
+WorldPacket const* ConnectionStatus::Write()
 {
-    _worldPacket.WriteBits(State, 2);
+    _worldPacket << Bits<2>(State);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Battlenet::ChangeRealmTicketResponse::Write()
+WorldPacket const* ChangeRealmTicketResponse::Write()
 {
     _worldPacket << uint32(Token);
-    _worldPacket.WriteBit(Allow);
+    _worldPacket << Bits<1>(Allow);
     _worldPacket << uint32(Ticket.size());
     _worldPacket.append(Ticket);
 
     return &_worldPacket;
 }
 
-void WorldPackets::Battlenet::Request::Read()
+void Request::Read()
 {
     uint32 protoSize;
 
@@ -89,8 +93,9 @@ void WorldPackets::Battlenet::Request::Read()
     }
 }
 
-void WorldPackets::Battlenet::ChangeRealmTicket::Read()
+void ChangeRealmTicket::Read()
 {
     _worldPacket >> Token;
     _worldPacket.read(Secret.data(), Secret.size());
+}
 }

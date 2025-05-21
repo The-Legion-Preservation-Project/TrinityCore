@@ -194,7 +194,7 @@ void WorldPackets::Ticket::SupportTicketSubmitComplaint::Read()
     _worldPacket >> ChatLog;
     ComplaintType = _worldPacket.ReadBits(5);
 
-    uint32 noteLength = _worldPacket.ReadBits(10);
+    _worldPacket >> SizedCString::BitsSize<10>(Note);
     bool hasMailInfo = _worldPacket.ReadBit();
     bool hasCalendarInfo = _worldPacket.ReadBit();
     bool hasPetInfo = _worldPacket.ReadBit();
@@ -207,7 +207,7 @@ void WorldPackets::Ticket::SupportTicketSubmitComplaint::Read()
     if (hasMailInfo)
         _worldPacket >> MailInfo;
 
-    Note = _worldPacket.ReadString(noteLength);
+    _worldPacket >> SizedCString::Data(Note);
 
     if (hasCalendarInfo)
         _worldPacket >> CalenderInfo;
