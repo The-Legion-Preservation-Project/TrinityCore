@@ -927,7 +927,7 @@ void UpdateMissileTrajectory::Read()
 void UpdateAuraVisual::Read()
 {
     _worldPacket >> SpellID;
-    _worldPacket >> Visual;
+    _worldPacket >> Visual.SpellXSpellVisualID;
     _worldPacket >> TargetGUID;
 }
 
