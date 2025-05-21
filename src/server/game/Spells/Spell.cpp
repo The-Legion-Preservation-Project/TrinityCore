@@ -1245,7 +1245,7 @@ void Spell::SelectImplicitNearbyTargets(SpellEffectInfo const& spellEffectInfo, 
 
 void Spell::SelectImplicitConeTargets(SpellEffectInfo const& spellEffectInfo, SpellImplicitTargetInfo const& targetType, SpellTargetIndex targetIndex, uint32 effMask)
 {
-    Position coneSrc(*m_caster);
+    Position coneSrc = m_caster->GetPosition();
     float coneAngle = m_spellInfo->ConeAngle;
     switch (targetType.GetReferenceType())
     {
@@ -1549,7 +1549,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffectInfo const& spellEffectIn
                 }();
             }
 
-            Position pos = dest._position;
+            Position pos = dest._position.GetPosition();
 
             MovePosition(pos, unitCaster, dist, angle);
             dest.Relocate(pos);
@@ -1616,7 +1616,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffectInfo const& spellEffectIn
             if (dist < objSize)
                 dist = objSize;
 
-            Position pos = dest._position;
+            Position pos = dest._position.GetPosition();
             MovePosition(pos, m_caster, dist, angle);
 
             dest.Relocate(pos);
@@ -1653,7 +1653,7 @@ void Spell::SelectImplicitTargetDestTargets(SpellEffectInfo const& spellEffectIn
             float angle = targetType.CalcDirectionAngle();
             float dist = spellEffectInfo.CalcRadius(nullptr, targetIndex);
 
-            Position pos = dest._position;
+            Position pos = dest._position.GetPosition();
             MovePosition(pos, target, dist, angle);
 
             dest.Relocate(pos);
@@ -1691,7 +1691,7 @@ void Spell::SelectImplicitDestDestTargets(SpellEffectInfo const& spellEffectInfo
         case TARGET_DEST_DEST_TARGET_TOWARDS_CASTER:
         {
             float dist = spellEffectInfo.CalcRadius(m_caster, targetIndex);
-            Position pos = dest._position;
+            Position pos = dest._position.GetPosition();
             float angle = pos.GetAbsoluteAngle(m_caster) - m_caster->GetOrientation();
 
             MovePosition(pos, m_caster, dist, angle);
@@ -1705,7 +1705,7 @@ void Spell::SelectImplicitDestDestTargets(SpellEffectInfo const& spellEffectInfo
             float angle = targetType.CalcDirectionAngle();
             float dist = spellEffectInfo.CalcRadius(m_caster, targetIndex);
 
-            Position pos = dest._position;
+            Position pos = dest._position.GetPosition();
             MovePosition(pos, m_caster, dist, angle);
 
             dest.Relocate(pos);
