@@ -226,7 +226,7 @@ namespace WorldPackets
             bool JoinAsGroup = false;
             uint8 Roles = 0;
             uint64 QueueID = 0;
-            int32 BlacklistMap[2] = { };
+            std::array<int32, 2> BlacklistMap = { };
         };
 
         class BattlemasterJoinArena final : public ClientPacket

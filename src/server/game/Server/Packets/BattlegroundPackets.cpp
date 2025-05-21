@@ -133,7 +133,8 @@ void BattlemasterJoin::Read()
 {
     _worldPacket >> QueueID;
     _worldPacket >> Roles;
-    _worldPacket >> BlacklistMap[0] >> BlacklistMap[1];
+    for (int32& blacklistMap : BlacklistMap)
+        _worldPacket >> blacklistMap;
     _worldPacket >> Bits<1>(JoinAsGroup);
 }
 
