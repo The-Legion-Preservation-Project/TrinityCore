@@ -1707,7 +1707,7 @@ void Item::BuildDynamicValuesUpdate(uint8 updateType, ByteBuffer* data, Player c
         if (_fieldNotifyFlags & flags[index] ||
             ((updateType == UPDATETYPE_VALUES ? _dynamicChangesMask[index] != UpdateMask::UNCHANGED : !values.empty()) && (flags[index] & visibleFlag)))
         {
-            UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
+            UpdateMask::SetUpdateBit(data->data() + maskPos, index);
 
             std::size_t arrayBlockCount = UpdateMask::GetBlockCount(values.size());
             *data << DynamicFieldChangeTypeUT(UpdateMask::EncodeDynamicFieldChangeType(arrayBlockCount, _dynamicChangesMask[index], updateType));
@@ -1722,7 +1722,7 @@ void Item::BuildDynamicValuesUpdate(uint8 updateType, ByteBuffer* data, Player c
                 {
                     if (updateType != UPDATETYPE_VALUES || _dynamicChangesArrayMask[index][v])
                     {
-                        UpdateMask::SetUpdateBit(data->contents() + arrayMaskPos, v);
+                        UpdateMask::SetUpdateBit(data->data() + arrayMaskPos, v);
                         *data << uint32(values[v]);
                     }
                 }
@@ -1745,7 +1745,7 @@ void Item::BuildDynamicValuesUpdate(uint8 updateType, ByteBuffer* data, Player c
                 {
                     if (values[v])
                     {
-                        UpdateMask::SetUpdateBit(data->contents() + arrayMaskPos, m++);
+                        UpdateMask::SetUpdateBit(data->data() + arrayMaskPos, m++);
                         *data << uint32(values[v]);
                     }
                 }

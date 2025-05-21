@@ -539,7 +539,7 @@ void WorldSocket::WritePacketToBuffer(EncryptablePacket const& packet, MessageBu
     {
         CompressedWorldPacket cmp;
         cmp.UncompressedSize = packetSize + 2;
-        cmp.UncompressedAdler = adler32(adler32(0x9827D8F1, (Bytef*)&opcode, 2), packet.contents(), packetSize);
+        cmp.UncompressedAdler = adler32(adler32(0x9827D8F1, (Bytef*)&opcode, 2), packet.data(), packetSize);
 
         // Reserve space for compression info - uncompressed size and checksums
         uint8* compressionInfo = buffer.GetWritePointer();
@@ -556,7 +556,7 @@ void WorldSocket::WritePacketToBuffer(EncryptablePacket const& packet, MessageBu
         opcode = SMSG_COMPRESSED_PACKET;
     }
     else if (!packet.empty())
-        buffer.Write(packet.contents(), packet.size());
+        buffer.Write(packet.data(), packet.size());
 
     packetSize += 2 /*opcode*/;
 
@@ -585,7 +585,7 @@ uint32 WorldSocket::CompressPacket(uint8* buffer, WorldPacket const& packet)
         return 0;
     }
 
-    _compressionStream->next_in = (Bytef*)packet.contents();
+    _compressionStream->next_in = (Bytef*)packet.data();
     _compressionStream->avail_in = packet.size();
 
     z_res = deflate(_compressionStream, Z_SYNC_FLUSH);

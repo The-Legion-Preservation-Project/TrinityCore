@@ -4020,7 +4020,7 @@ void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, P
 
         if (shouldUpdate)
         {
-            UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
+            UpdateMask::SetUpdateBit(data->data() + maskPos, index);
 
             if (index == OBJECT_DYNAMIC_FLAGS)
             {

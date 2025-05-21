@@ -315,8 +315,8 @@ WorldPacket const* WorldPackets::Auth::ConnectTo::Write()
     _worldPacket.resize(_worldPacket.size() + rsaSize);
     _worldPacket << uint8(Con);
 
-    ConnectToRSA->Encrypt(payload.contents(), payload.size(),
-        _worldPacket.contents() + encryptedPayloadPos,
+    ConnectToRSA->Encrypt(payload.data(), payload.size(),
+        _worldPacket.data() + encryptedPayloadPos,
         Trinity::Crypto::LegacyRSA::NoPadding{});
 
     return &_worldPacket;

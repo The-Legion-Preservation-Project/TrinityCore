@@ -13851,7 +13851,7 @@ void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player 
 
         if (shouldUpdate)
         {
-            UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
+            UpdateMask::SetUpdateBit(data->data() + maskPos, index);
 
             if (index == UNIT_NPC_FLAGS)
             {
