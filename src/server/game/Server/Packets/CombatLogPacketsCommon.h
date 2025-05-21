@@ -71,6 +71,12 @@ namespace WorldPackets
             bool GenerateDataForUnits(T* attacker, U* target);
         };
 
+        struct SpellCastVisual
+        {
+            int32 SpellXSpellVisualID = 0;
+            int32 ScriptVisualID = 0;
+        };
+
         ByteBuffer& operator<<(ByteBuffer& data, SpellCastLogData const& spellCastLogData);
         ByteBuffer& operator<<(ByteBuffer& data, SandboxScalingData const& sandboxScalingData);
     }
