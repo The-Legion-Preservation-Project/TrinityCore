@@ -545,6 +545,10 @@ void WaypointMovementGenerator<Creature>::StartMove(Creature* owner, bool relaun
 
     Movement::MoveSplineInit init(owner);
 
+    // // because steering flag can cause position on client to not be perfectly accurate, dont do it in combat
+    // if (!owner->IsInCombat())
+    //     init.SetSteering();
+
     //! If creature is on transport, we assume waypoints set in DB are already transport offsets
     if (transportPath)
         init.DisableTransportPathTransformations();
