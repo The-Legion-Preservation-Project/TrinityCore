@@ -587,8 +587,6 @@ void Item::SaveToDB(CharacterDatabaseTransaction trans)
 
             if (GetGems().size())
             {
-                using namespace std::string_view_literals;
-
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_ITEM_INSTANCE_GEMS);
                 stmt->setUInt64(0, GetGUID().GetCounter());
                 uint32 i = 0;
