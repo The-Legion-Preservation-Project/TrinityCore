@@ -67,6 +67,7 @@ ByteBuffer& operator<<(ByteBuffer& data, FactionStandingData const& factionStand
 {
     data << int32(factionStanding.Index);
     data << int32(factionStanding.Standing);
+
     return data;
 }
 
@@ -78,7 +79,7 @@ WorldPacket const* SetFactionStanding::Write()
     for (FactionStandingData const& factionStanding : Faction)
         _worldPacket << factionStanding;
 
-    _worldPacket.WriteBit(ShowVisual);
+    _worldPacket << Bits<1>(ShowVisual);
     _worldPacket.FlushBits();
 
     return &_worldPacket;

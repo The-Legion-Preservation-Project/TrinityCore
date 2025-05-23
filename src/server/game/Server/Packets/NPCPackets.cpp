@@ -25,12 +25,12 @@ ByteBuffer& operator<<(ByteBuffer& data, ClientGossipOptions const& gossipOption
     data << uint8(gossipOption.OptionNPC);
     data << int8(gossipOption.OptionFlags);
     data << int32(gossipOption.OptionCost);
-    data << BitsSize<12>(gossipOption.Text);
-    data << BitsSize<12>(gossipOption.Confirm);
+    data << SizedString::BitsSize<12>(gossipOption.Text);
+    data << SizedString::BitsSize<12>(gossipOption.Confirm);
     data.FlushBits();
 
-    data.WriteString(gossipOption.Text);
-    data.WriteString(gossipOption.Confirm);
+    data << SizedString::Data(gossipOption.Text);
+    data << SizedString::Data(gossipOption.Confirm);
 
     return data;
 }
@@ -45,10 +45,10 @@ ByteBuffer& operator<<(ByteBuffer& data, ClientGossipText const& gossipText)
     data << int32(gossipText.QuestFlags[1]);
 
     data << Bits<1>(gossipText.Repeatable);
-    data << BitsSize<9>(gossipText.QuestTitle);
+    data << SizedString::BitsSize<9>(gossipText.QuestTitle);
     data.FlushBits();
 
-    data.WriteString(gossipText.QuestTitle);
+    data << SizedString::Data(gossipText.QuestTitle);
 
     return data;
 }
@@ -87,7 +87,7 @@ ByteBuffer& operator<<(ByteBuffer& data, VendorItem const &item)
     data << int32(item.ExtendedCostID);
     data << int32(item.PlayerConditionFailed);
     data << item.Item;
-    data.WriteBit(item.DoNotFilterOnVendor);
+    data << Bits<1>(item.DoNotFilterOnVendor);
     data.FlushBits();
 
     return data;
@@ -122,9 +122,10 @@ WorldPacket const* TrainerList::Write()
         _worldPacket << uint8(spell.ReqLevel);
     }
 
-    _worldPacket.WriteBits(Greeting.length(), 11);
+    _worldPacket << SizedString::BitsSize<11>(Greeting);
     _worldPacket.FlushBits();
-    _worldPacket.WriteString(Greeting);
+
+    _worldPacket << SizedString::Data(Greeting);
 
     return &_worldPacket;
 }
@@ -142,8 +143,8 @@ void GossipSelectOption::Read()
     _worldPacket >> GossipID;
     _worldPacket >> GossipIndex;
 
-    uint32 length = _worldPacket.ReadBits(8);
-    PromotionCode = _worldPacket.ReadString(length);
+    _worldPacket >> SizedString::BitsSize<8>(PromotionCode);
+    _worldPacket >> SizedString::Data(PromotionCode);
 }
 
 WorldPacket const* PlayerTabardVendorActivate::Write()
@@ -155,12 +156,12 @@ WorldPacket const* PlayerTabardVendorActivate::Write()
 
 WorldPacket const* GossipPOI::Write()
 {
-    _worldPacket.WriteBits(Flags, 14);
-    _worldPacket.WriteBits(Name.length(), 6);
+    _worldPacket << Bits<14>(Flags);
+    _worldPacket << SizedString::BitsSize<6>(Name);
     _worldPacket << Pos;
     _worldPacket << int32(Icon);
     _worldPacket << int32(Importance);
-    _worldPacket.WriteString(Name);
+    _worldPacket << SizedString::Data(Name);
 
     return &_worldPacket;
 }

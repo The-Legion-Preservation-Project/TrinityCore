@@ -29,6 +29,7 @@ static ByteBuffer& operator<<(ByteBuffer& data, LootItemData const& lootItem)
     data << uint32(lootItem.Quantity);
     data << uint8(lootItem.LootItemType);
     data << uint8(lootItem.LootListID);
+
     return data;
 }
 
@@ -39,6 +40,7 @@ static ByteBuffer& operator<<(ByteBuffer& data, LootCurrency const& lootCurrency
     data << uint8(lootCurrency.LootListID);
     data << Bits<3>(lootCurrency.UIType);
     data.FlushBits();
+
     return data;
 }
 
@@ -73,28 +75,24 @@ WorldPacket const* LootResponse::Write()
 
 void LootItem::Read()
 {
-    uint32 Count;
-    _worldPacket >> Count;
+    _worldPacket >> Size<uint32>(Loot);
 
-    Loot.resize(Count);
-    for (uint32 i = 0; i < Count; ++i)
+    for (LootRequest& lootRequest : Loot)
     {
-        _worldPacket >> Loot[i].Object;
-        _worldPacket >> Loot[i].LootListID;
+        _worldPacket >> lootRequest.Object;
+        _worldPacket >> lootRequest.LootListID;
     }
 }
 
 void MasterLootItem::Read()
 {
-    uint32 Count;
-    _worldPacket >> Count;
+    _worldPacket >> Size<uint32>(Loot);
     _worldPacket >> Target;
 
-    Loot.resize(Count);
-    for (uint32 i = 0; i < Count; ++i)
+    for (LootRequest& lootRequest : Loot)
     {
-        _worldPacket >> Loot[i].Object;
-        _worldPacket >> Loot[i].LootListID;
+        _worldPacket >> lootRequest.Object;
+        _worldPacket >> lootRequest.LootListID;
     }
 }
 

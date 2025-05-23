@@ -15,11 +15,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ReputationPackets_h__
-#define ReputationPackets_h__
+#ifndef TRINITYCORE_REPUTATION_PACKETS_H
+#define TRINITYCORE_REPUTATION_PACKETS_H
 
 #include "Packet.h"
-#include <array>
 
 namespace WorldPackets
 {
@@ -43,7 +42,7 @@ namespace WorldPackets
         class InitializeFactions final : public ServerPacket
         {
         public:
-            InitializeFactions() : ServerPacket(SMSG_INITIALIZE_FACTIONS, 0x300) { }
+            explicit InitializeFactions() : ServerPacket(SMSG_INITIALIZE_FACTIONS, 0x300) { }
 
             WorldPacket const* Write() override;
 
@@ -54,7 +53,7 @@ namespace WorldPackets
         class RequestForcedReactions final : public ClientPacket
         {
         public:
-            RequestForcedReactions(WorldPacket&& packet) : ClientPacket(CMSG_REQUEST_FORCED_REACTIONS, std::move(packet)) { }
+            explicit RequestForcedReactions(WorldPacket&& packet) : ClientPacket(CMSG_REQUEST_FORCED_REACTIONS, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -68,7 +67,7 @@ namespace WorldPackets
         class SetForcedReactions final : public ServerPacket
         {
         public:
-            SetForcedReactions() : ServerPacket(SMSG_SET_FORCED_REACTIONS) { }
+            explicit SetForcedReactions() : ServerPacket(SMSG_SET_FORCED_REACTIONS) { }
 
             WorldPacket const* Write() override;
 
@@ -87,7 +86,7 @@ namespace WorldPackets
         class SetFactionStanding final : public ServerPacket
         {
         public:
-            SetFactionStanding() : ServerPacket(SMSG_SET_FACTION_STANDING) { }
+            explicit SetFactionStanding() : ServerPacket(SMSG_SET_FACTION_STANDING) { }
 
             WorldPacket const* Write() override;
 
@@ -99,4 +98,4 @@ namespace WorldPackets
     }
 }
 
-#endif // ReputationPackets_h__
+#endif // TRINITYCORE_REPUTATION_PACKETS_H

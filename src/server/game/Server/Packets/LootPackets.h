@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LootPackets_h__
-#define LootPackets_h__
+#ifndef TRINITYCORE_LOOT_PACKETS_H
+#define TRINITYCORE_LOOT_PACKETS_H
 
 #include "ItemPacketsCommon.h"
 #include "LootItemType.h"
@@ -30,7 +30,7 @@ namespace WorldPackets
         class LootUnit final : public ClientPacket
         {
         public:
-            LootUnit(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_UNIT, std::move(packet)) { }
+            explicit LootUnit(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_UNIT, std::move(packet)) { }
 
             void Read() override;
 
@@ -59,7 +59,7 @@ namespace WorldPackets
         class LootResponse final : public ServerPacket
         {
         public:
-            LootResponse() : ServerPacket(SMSG_LOOT_RESPONSE, 100) { }
+            explicit LootResponse() : ServerPacket(SMSG_LOOT_RESPONSE, 100) { }
 
             WorldPacket const* Write() override;
 
@@ -86,7 +86,7 @@ namespace WorldPackets
         class LootItem final : public ClientPacket
         {
         public:
-            LootItem(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_ITEM, std::move(packet)) { }
+            explicit LootItem(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_ITEM, std::move(packet)) { }
 
             void Read() override;
 
@@ -96,7 +96,7 @@ namespace WorldPackets
         class MasterLootItem final : public ClientPacket
         {
         public:
-            MasterLootItem(WorldPacket&& packet) : ClientPacket(CMSG_MASTER_LOOT_ITEM, std::move(packet)) { }
+            explicit MasterLootItem(WorldPacket&& packet) : ClientPacket(CMSG_MASTER_LOOT_ITEM, std::move(packet)) { }
 
             void Read() override;
 
@@ -107,7 +107,7 @@ namespace WorldPackets
         class LootRemoved final : public ServerPacket
         {
         public:
-            LootRemoved() : ServerPacket(SMSG_LOOT_REMOVED, 30) { }
+            explicit LootRemoved() : ServerPacket(SMSG_LOOT_REMOVED, 30) { }
 
             WorldPacket const* Write() override;
 
@@ -119,7 +119,7 @@ namespace WorldPackets
         class LootRelease final : public ClientPacket
         {
         public:
-            LootRelease(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_RELEASE, std::move(packet)) { }
+            explicit LootRelease(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_RELEASE, std::move(packet)) { }
 
             void Read() override;
 
@@ -129,7 +129,7 @@ namespace WorldPackets
         class LootMoney final : public ClientPacket
         {
         public:
-            LootMoney(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_MONEY, std::move(packet)) { }
+            explicit LootMoney(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_MONEY, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -137,7 +137,7 @@ namespace WorldPackets
         class LootMoneyNotify final : public ServerPacket
         {
         public:
-            LootMoneyNotify() : ServerPacket(SMSG_LOOT_MONEY_NOTIFY, 5) { }
+            explicit LootMoneyNotify() : ServerPacket(SMSG_LOOT_MONEY_NOTIFY, 5) { }
 
             WorldPacket const* Write() override;
 
@@ -148,7 +148,7 @@ namespace WorldPackets
         class CoinRemoved final : public ServerPacket
         {
         public:
-            CoinRemoved() : ServerPacket(SMSG_COIN_REMOVED, 9) { }
+            explicit CoinRemoved() : ServerPacket(SMSG_COIN_REMOVED, 9) { }
 
             WorldPacket const* Write() override;
 
@@ -158,7 +158,7 @@ namespace WorldPackets
         class LootRoll final : public ClientPacket
         {
         public:
-            LootRoll(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_ROLL, std::move(packet)) { }
+            explicit LootRoll(WorldPacket&& packet) : ClientPacket(CMSG_LOOT_ROLL, std::move(packet)) { }
 
             void Read() override;
 
@@ -170,7 +170,7 @@ namespace WorldPackets
         class LootReleaseResponse final : public ServerPacket
         {
         public:
-            LootReleaseResponse() : ServerPacket(SMSG_LOOT_RELEASE, 32) { }
+            explicit LootReleaseResponse() : ServerPacket(SMSG_LOOT_RELEASE, 32) { }
 
             WorldPacket const* Write() override;
 
@@ -181,7 +181,7 @@ namespace WorldPackets
         class LootReleaseAll final : public ServerPacket
         {
         public:
-            LootReleaseAll() : ServerPacket(SMSG_LOOT_RELEASE_ALL, 0) { }
+            explicit LootReleaseAll() : ServerPacket(SMSG_LOOT_RELEASE_ALL, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
@@ -189,7 +189,7 @@ namespace WorldPackets
         class LootList final : public ServerPacket
         {
         public:
-            LootList() : ServerPacket(SMSG_LOOT_LIST, 3 * 16) { }
+            explicit LootList() : ServerPacket(SMSG_LOOT_LIST, 3 * 16) { }
 
             WorldPacket const* Write() override;
 
@@ -202,7 +202,7 @@ namespace WorldPackets
         class SetLootSpecialization final : public ClientPacket
         {
         public:
-            SetLootSpecialization(WorldPacket&& packet) : ClientPacket(CMSG_SET_LOOT_SPECIALIZATION, std::move(packet)) { }
+            explicit SetLootSpecialization(WorldPacket&& packet) : ClientPacket(CMSG_SET_LOOT_SPECIALIZATION, std::move(packet)) { }
 
             void Read() override;
 
@@ -212,7 +212,7 @@ namespace WorldPackets
         class StartLootRoll final : public ServerPacket
         {
         public:
-            StartLootRoll() : ServerPacket(SMSG_START_LOOT_ROLL) { }
+            explicit StartLootRoll() : ServerPacket(SMSG_START_LOOT_ROLL) { }
 
             WorldPacket const* Write() override;
 
@@ -227,7 +227,7 @@ namespace WorldPackets
         class LootRollBroadcast final : public ServerPacket
         {
         public:
-            LootRollBroadcast() : ServerPacket(SMSG_LOOT_ROLL) { }
+            explicit LootRollBroadcast() : ServerPacket(SMSG_LOOT_ROLL) { }
 
             WorldPacket const* Write() override;
 
@@ -242,7 +242,7 @@ namespace WorldPackets
         class LootRollWon final : public ServerPacket
         {
         public:
-            LootRollWon() : ServerPacket(SMSG_LOOT_ROLL_WON) { }
+            explicit LootRollWon() : ServerPacket(SMSG_LOOT_ROLL_WON) { }
 
             WorldPacket const* Write() override;
 
@@ -257,7 +257,7 @@ namespace WorldPackets
         class LootAllPassed final : public ServerPacket
         {
         public:
-            LootAllPassed() : ServerPacket(SMSG_LOOT_ALL_PASSED) { }
+            explicit LootAllPassed() : ServerPacket(SMSG_LOOT_ALL_PASSED) { }
 
             WorldPacket const* Write() override;
 
@@ -268,7 +268,7 @@ namespace WorldPackets
         class LootRollsComplete final : public ServerPacket
         {
         public:
-            LootRollsComplete() : ServerPacket(SMSG_LOOT_ROLLS_COMPLETE, 16 + 1) { }
+            explicit LootRollsComplete() : ServerPacket(SMSG_LOOT_ROLLS_COMPLETE, 16 + 1) { }
 
             WorldPacket const* Write() override;
 
@@ -279,7 +279,7 @@ namespace WorldPackets
         class MasterLootCandidateList final : public ServerPacket
         {
         public:
-            MasterLootCandidateList() : ServerPacket(SMSG_MASTER_LOOT_CANDIDATE_LIST, 18 + 40 * 18) { }
+            explicit MasterLootCandidateList() : ServerPacket(SMSG_MASTER_LOOT_CANDIDATE_LIST, 18 + 40 * 18) { }
 
             WorldPacket const* Write() override;
 
@@ -290,7 +290,7 @@ namespace WorldPackets
         class AELootTargets final : public ServerPacket
         {
         public:
-            AELootTargets(uint32 count) : ServerPacket(SMSG_AE_LOOT_TARGETS, 4), Count(count) { }
+            explicit AELootTargets(uint32 count) : ServerPacket(SMSG_AE_LOOT_TARGETS, 4), Count(count) { }
 
             WorldPacket const* Write() override;
 
@@ -300,11 +300,11 @@ namespace WorldPackets
         class AELootTargetsAck final : public ServerPacket
         {
         public:
-            AELootTargetsAck() : ServerPacket(SMSG_AE_LOOT_TARGET_ACK, 0) { }
+            explicit AELootTargetsAck() : ServerPacket(SMSG_AE_LOOT_TARGET_ACK, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
     }
 }
 
-#endif // LootPackets_h__
+#endif // TRINITYCORE_LOOT_PACKETS_H
