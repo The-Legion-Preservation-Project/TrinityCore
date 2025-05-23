@@ -113,7 +113,7 @@ WorldPacket const* PVPMatchStatistics::Write()
 
     _worldPacket << OptionalInit(Ratings);
     _worldPacket << OptionalInit(Winner);
-    _worldPacket << uint32(Players.size());
+    _worldPacket << Size<uint32>(Players);
     for (std::size_t i = 0; i < 2; ++i)
         _worldPacket << int8(PlayerCount[i]);
 
@@ -229,7 +229,7 @@ WorldPacket const* BattlefieldList::Write()
     _worldPacket << int32(BattlemasterListID);
     _worldPacket << uint8(MinLevel);
     _worldPacket << uint8(MaxLevel);
-    _worldPacket << uint32(Battlefields.size());
+    _worldPacket << Size<uint32>(Battlefields);
     if (!Battlefields.empty())
         _worldPacket.append(Battlefields.data(), Battlefields.size());
 
@@ -280,7 +280,7 @@ ByteBuffer& operator<<(ByteBuffer& data, BattlegroundPlayerPosition const& playe
 
 WorldPacket const* BattlegroundPlayerPositions::Write()
 {
-    _worldPacket << uint32(FlagCarriers.size());
+    _worldPacket << Size<uint32>(FlagCarriers);
     for (BattlegroundPlayerPosition const& pos : FlagCarriers)
         _worldPacket << pos;
 

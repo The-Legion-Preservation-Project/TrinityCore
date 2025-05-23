@@ -105,13 +105,13 @@ WorldPacket const* AuthResponse::Write()
     if (SuccessInfo)
     {
         _worldPacket << uint32(SuccessInfo->VirtualRealmAddress);
-        _worldPacket << uint32(SuccessInfo->VirtualRealms.size());
+        _worldPacket << Size<uint32>(SuccessInfo->VirtualRealms);
         _worldPacket << uint32(SuccessInfo->TimeRested);
         _worldPacket << uint8(SuccessInfo->ActiveExpansionLevel);
         _worldPacket << uint8(SuccessInfo->AccountExpansionLevel);
         _worldPacket << uint32(SuccessInfo->TimeSecondsUntilPCKick);
-        _worldPacket << uint32(SuccessInfo->AvailableClasses->size());
-        _worldPacket << uint32(SuccessInfo->Templates.size());
+        _worldPacket << Size<uint32>(*SuccessInfo->AvailableClasses);
+        _worldPacket << Size<uint32>(SuccessInfo->Templates);
         _worldPacket << uint32(SuccessInfo->CurrencyID);
         _worldPacket << SuccessInfo->Time;
 
@@ -149,7 +149,7 @@ WorldPacket const* AuthResponse::Write()
         for (CharacterTemplate const* characterTemplate : SuccessInfo->Templates)
         {
             _worldPacket << uint32(characterTemplate->TemplateSetId);
-            _worldPacket << uint32(characterTemplate->Classes.size());
+            _worldPacket << Size<uint32>(characterTemplate->Classes);
             for (CharacterTemplateClass const& templateClass : characterTemplate->Classes)
             {
                 _worldPacket << uint8(templateClass.ClassID);

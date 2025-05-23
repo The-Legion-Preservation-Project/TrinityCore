@@ -77,7 +77,7 @@ WorldPacket const* WorldPackets::Party::PartyInvite::Write()
     _worldPacket << InviterBNetAccountId;
     _worldPacket << uint16(InviterCfgRealmID);
     _worldPacket << uint32(ProposedRoles);
-    _worldPacket << uint32(LfgSlots.size());
+    _worldPacket << Size<uint32>(LfgSlots);
     _worldPacket << uint32(LfgCompletedMask);
 
     _worldPacket.WriteString(InviterName);
@@ -313,7 +313,7 @@ WorldPacket const* WorldPackets::Party::SendRaidTargetUpdateSingle::Write()
 WorldPacket const* WorldPackets::Party::SendRaidTargetUpdateAll::Write()
 {
     _worldPacket << uint8(PartyIndex);
-    _worldPacket << uint32(TargetIcons.size());
+    _worldPacket << Size<uint32>(TargetIcons);
 
     for (auto itr = TargetIcons.begin(); itr != TargetIcons.end(); ++itr)
     {
@@ -468,7 +468,7 @@ WorldPacket const* WorldPackets::Party::PartyUpdate::Write()
     _worldPacket << PartyGUID;
     _worldPacket << uint32(SequenceNum);
     _worldPacket << LeaderGUID;
-    _worldPacket << uint32(PlayerList.size());
+    _worldPacket << Size<uint32>(PlayerList);
     _worldPacket.WriteBit(LfgInfos.has_value());
     _worldPacket.WriteBit(LootSettings.has_value());
     _worldPacket.WriteBit(DifficultySettings.has_value());

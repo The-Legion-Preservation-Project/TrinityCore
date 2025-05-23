@@ -40,7 +40,7 @@ WorldPacket const* WorldPackets::Transmogrification::AccountTransmogUpdate::Writ
 {
     _worldPacket.WriteBit(IsFullUpdate);
     _worldPacket.WriteBit(IsSetFavorite);
-    _worldPacket << uint32(FavoriteAppearances.size());
+    _worldPacket << Size<uint32>(FavoriteAppearances);
     if (!FavoriteAppearances.empty())
         _worldPacket.append(FavoriteAppearances.data(), FavoriteAppearances.size());
 

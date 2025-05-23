@@ -943,7 +943,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Movement::MoveSetCompound
 WorldPacket const* WorldPackets::Movement::MoveSetCompoundState::Write()
 {
     _worldPacket << MoverGUID;
-    _worldPacket << uint32(StateChanges.size());
+    _worldPacket << Size<uint32>(StateChanges);
     for (MoveStateChange const& stateChange : StateChanges)
         _worldPacket << stateChange;
 

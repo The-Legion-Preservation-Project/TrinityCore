@@ -16,6 +16,7 @@
  */
 
 #include "VignettePackets.h"
+#include "PacketUtilities.h"
 
 namespace WorldPackets::Vignette
 {
@@ -49,7 +50,7 @@ WorldPacket const* VignetteUpdate::Write()
     _worldPacket.WriteBit(ForceUpdate);
     _worldPacket.FlushBits();
 
-    _worldPacket << uint32(Removed.size());
+    _worldPacket << Size<uint32>(Removed);
     for (ObjectGuid const& removed : Removed)
         _worldPacket << removed;
 

@@ -47,7 +47,7 @@ WorldPacket const* CategoryCooldown::Write()
 {
     _worldPacket.reserve(4 + 8 * CategoryCooldowns.size());
 
-    _worldPacket << uint32(CategoryCooldowns.size());
+    _worldPacket << Size<uint32>(CategoryCooldowns);
 
     for (CategoryCooldownInfo const& cooldown : CategoryCooldowns)
     {
@@ -63,8 +63,8 @@ WorldPacket const* SendKnownSpells::Write()
     _worldPacket.reserve(1 + 4 * KnownSpells.size() + 4 * FavoriteSpells.size());
 
     _worldPacket.WriteBit(InitialLogin);
-    _worldPacket << uint32(KnownSpells.size());
-    _worldPacket << uint32(FavoriteSpells.size());
+    _worldPacket << Size<uint32>(KnownSpells);
+    _worldPacket << Size<uint32>(FavoriteSpells);
 
     for (uint32 spellId : KnownSpells)
         _worldPacket << uint32(spellId);
@@ -91,7 +91,7 @@ void SetActionButton::Read()
 
 WorldPacket const* SendUnlearnSpells::Write()
 {
-    _worldPacket << uint32(Spells.size());
+    _worldPacket << Size<uint32>(Spells);
     for (uint32 spellId : Spells)
         _worldPacket << uint32(spellId);
 
@@ -418,8 +418,8 @@ WorldPacket const* SpellGo::Write()
 
 WorldPacket const* LearnedSpells::Write()
 {
-    _worldPacket << uint32(SpellID.size());
-    _worldPacket << uint32(FavoriteSpellID.size());
+    _worldPacket << Size<uint32>(SpellID);
+    _worldPacket << Size<uint32>(FavoriteSpellID);
     for (int32 spell : SpellID)
         _worldPacket << spell;
 
@@ -434,9 +434,9 @@ WorldPacket const* LearnedSpells::Write()
 
 WorldPacket const* SupercededSpells::Write()
 {
-    _worldPacket << uint32(SpellID.size());
-    _worldPacket << uint32(Superceded.size());
-    _worldPacket << uint32(FavoriteSpellID.size());
+    _worldPacket << Size<uint32>(SpellID);
+    _worldPacket << Size<uint32>(Superceded);
+    _worldPacket << Size<uint32>(FavoriteSpellID);
 
     if (!SpellID.empty())
         _worldPacket.append(SpellID.data(), SpellID.size());
@@ -515,7 +515,7 @@ ByteBuffer& operator<<(ByteBuffer& data, SpellModifier const& spellModifier)
 
 WorldPacket const* SetSpellModifier::Write()
 {
-    _worldPacket << uint32(Modifiers.size());
+    _worldPacket << Size<uint32>(Modifiers);
     for (SpellModifier const& spellMod : Modifiers)
         _worldPacket << spellMod;
 
@@ -524,7 +524,7 @@ WorldPacket const* SetSpellModifier::Write()
 
 WorldPacket const* UnlearnedSpells::Write()
 {
-    _worldPacket << uint32(SpellID.size());
+    _worldPacket << Size<uint32>(SpellID);
     for (uint32 spellId : SpellID)
         _worldPacket << uint32(spellId);
 
@@ -545,7 +545,7 @@ WorldPacket const* CooldownEvent::Write()
 
 WorldPacket const* ClearCooldowns::Write()
 {
-    _worldPacket << uint32(SpellID.size());
+    _worldPacket << Size<uint32>(SpellID);
     if (!SpellID.empty())
         _worldPacket.append(SpellID.data(), SpellID.size());
 
@@ -588,7 +588,7 @@ WorldPacket const* SpellCooldown::Write()
 {
     _worldPacket << Caster;
     _worldPacket << uint8(Flags);
-    _worldPacket << uint32(SpellCooldowns.size());
+    _worldPacket << Size<uint32>(SpellCooldowns);
     for (SpellCooldownStruct const& cooldown : SpellCooldowns)
         _worldPacket << cooldown;
 
@@ -617,7 +617,7 @@ ByteBuffer& operator<<(ByteBuffer& data, SpellHistoryEntry const& historyEntry)
 
 WorldPacket const* SendSpellHistory::Write()
 {
-    _worldPacket << uint32(Entries.size());
+    _worldPacket << Size<uint32>(Entries);
     for (SpellHistoryEntry const& historyEntry : Entries)
         _worldPacket << historyEntry;
 
@@ -664,7 +664,7 @@ ByteBuffer& operator<<(ByteBuffer& data, SpellChargeEntry const& chargeEntry)
 
 WorldPacket const* SendSpellCharges::Write()
 {
-    _worldPacket << uint32(Entries.size());
+    _worldPacket << Size<uint32>(Entries);
     for (SpellChargeEntry const& chargeEntry : Entries)
         _worldPacket << chargeEntry;
 
@@ -855,7 +855,7 @@ WorldPacket const* MirrorImageComponentedData::Write()
     _worldPacket << uint8(BeardVariation);
     _worldPacket.append(CustomDisplay.data(), CustomDisplay.size());
     _worldPacket << GuildGUID;
-    _worldPacket << uint32(ItemDisplayID.size());
+    _worldPacket << Size<uint32>(ItemDisplayID);
 
     for (int32 itemDisplayId : ItemDisplayID)
         _worldPacket << int32(itemDisplayId);
@@ -944,7 +944,7 @@ WorldPacket const* DispelFailed::Write()
     _worldPacket << CasterGUID;
     _worldPacket << VictimGUID;
     _worldPacket << uint32(SpellID);
-    _worldPacket << uint32(FailedSpells.size());
+    _worldPacket << Size<uint32>(FailedSpells);
     if (!FailedSpells.empty())
         _worldPacket.append(FailedSpells.data(), FailedSpells.size());
 

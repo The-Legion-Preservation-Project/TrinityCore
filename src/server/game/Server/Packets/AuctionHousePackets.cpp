@@ -288,7 +288,7 @@ void AuctionListOwnedItems::Read()
 
 WorldPacket const* AuctionListPendingSalesResult::Write()
 {
-    _worldPacket << uint32(Mails.size());
+    _worldPacket << Size<uint32>(Mails);
     _worldPacket << int32(TotalNumRecords);
 
     for (auto const& mail : Mails)
@@ -339,7 +339,7 @@ WorldPacket const* AuctionReplicateResponse::Write()
     _worldPacket << uint32(ChangeNumberGlobal);
     _worldPacket << uint32(ChangeNumberCursor);
     _worldPacket << uint32(ChangeNumberTombstone);
-    _worldPacket << uint32(Items.size());
+    _worldPacket << Size<uint32>(Items);
 
     for (auto const& item : Items)
         _worldPacket << item;

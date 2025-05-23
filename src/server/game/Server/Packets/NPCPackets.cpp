@@ -64,8 +64,8 @@ WorldPacket const* GossipMessage::Write()
     _worldPacket << int32(GossipID);
     _worldPacket << int32(FriendshipFactionID);
     _worldPacket << int32(TextID);
-    _worldPacket << uint32(GossipOptions.size());
-    _worldPacket << uint32(GossipText.size());
+    _worldPacket << Size<uint32>(GossipOptions);
+    _worldPacket << Size<uint32>(GossipText);
 
     for (ClientGossipOptions const& options : GossipOptions)
         _worldPacket << options;
@@ -97,7 +97,7 @@ WorldPacket const* VendorInventory::Write()
 {
     _worldPacket << Vendor;
     _worldPacket << uint8(Reason);
-    _worldPacket << uint32(Items.size());
+    _worldPacket << Size<uint32>(Items);
     for (VendorItem const& item : Items)
         _worldPacket << item;
 
@@ -110,7 +110,7 @@ WorldPacket const* TrainerList::Write()
     _worldPacket << uint32(TrainerType);
     _worldPacket << uint32(TrainerID);
 
-    _worldPacket << uint32(Spells.size());
+    _worldPacket << Size<uint32>(Spells);
     for (TrainerListSpell const& spell : Spells)
     {
         _worldPacket << int32(spell.SpellID);

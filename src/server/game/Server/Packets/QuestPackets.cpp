@@ -141,7 +141,7 @@ WorldPacket const* QueryQuestInfoResponse::Write()
         _worldPacket << int32(Info.AreaGroupID);
         _worldPacket << int32(Info.TimeAllowed);
 
-        _worldPacket << uint32(Info.Objectives.size());
+        _worldPacket << Size<uint32>(Info.Objectives);
         _worldPacket << uint64(Info.AllowableRaces.RawValue);
         _worldPacket << int32(Info.TreasurePickerID);
         _worldPacket << int32(Info.Expansion);
@@ -371,9 +371,9 @@ WorldPacket const* QuestGiverQuestDetails::Write()
     _worldPacket << uint32(QuestFlags[0]); // Flags
     _worldPacket << uint32(QuestFlags[1]); // FlagsEx
     _worldPacket << int32(SuggestedPartyMembers);
-    _worldPacket << uint32(LearnSpells.size());
-    _worldPacket << uint32(DescEmotes.size());
-    _worldPacket << uint32(Objectives.size());
+    _worldPacket << Size<uint32>(LearnSpells);
+    _worldPacket << Size<uint32>(DescEmotes);
+    _worldPacket << Size<uint32>(Objectives);
     _worldPacket << int32(QuestStartItemID);
 
     for (int32 spell : LearnSpells)
@@ -488,7 +488,7 @@ WorldPacket const* QuestGiverQuestListMessage::Write()
     _worldPacket << QuestGiverGUID;
     _worldPacket << uint32(GreetEmoteDelay);
     _worldPacket << uint32(GreetEmoteType);
-    _worldPacket << uint32(QuestDataText.size());
+    _worldPacket << Size<uint32>(QuestDataText);
     _worldPacket.WriteBits(Greeting.size(), 11);
     _worldPacket.FlushBits();
 
@@ -591,7 +591,7 @@ WorldPacket const* QuestForceRemoved::Write()
 
 WorldPacket const* WorldQuestUpdateResponse::Write()
 {
-    _worldPacket << uint32(WorldQuestUpdates.size());
+    _worldPacket << Size<uint32>(WorldQuestUpdates);
 
     for (WorldQuestUpdateInfo const& worldQuestUpdate : WorldQuestUpdates)
     {
@@ -667,7 +667,7 @@ ByteBuffer& operator<<(ByteBuffer& data, PlayerChoiceResponse const& playerChoic
 WorldPacket const* DisplayPlayerChoice::Write()
 {
     _worldPacket << int32(ChoiceID);
-    _worldPacket << uint32(Responses.size());
+    _worldPacket << Size<uint32>(Responses);
     _worldPacket << SenderGUID;
     _worldPacket << int32(UiTextureKitID);
     _worldPacket.WriteBits(Question.length(), 8);
@@ -719,7 +719,7 @@ ByteBuffer& operator<<(ByteBuffer& data, SpawnTrackingResponseInfo const& spawnT
 
 WorldPacket const* QuestPOIUpdateResponse::Write()
 {
-    _worldPacket << uint32(SpawnTrackingResponses.size());
+    _worldPacket << Size<uint32>(SpawnTrackingResponses);
 
     for (SpawnTrackingResponseInfo const& spawnTrackingResponseInfo : SpawnTrackingResponses)
         _worldPacket << spawnTrackingResponseInfo;

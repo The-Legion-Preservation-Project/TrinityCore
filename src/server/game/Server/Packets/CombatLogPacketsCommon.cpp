@@ -24,9 +24,7 @@
 #include "SpellInfo.h"
 #include "Unit.h"
 
-namespace WorldPackets
-{
-namespace Spells
+namespace WorldPackets::Spells
 {
 void SpellCastLogData::Initialize(Unit const* unit)
 {
@@ -168,7 +166,7 @@ ByteBuffer& operator<<(ByteBuffer& data, SpellCastLogData const& spellCastLogDat
 
 ByteBuffer& operator<<(ByteBuffer& data, SandboxScalingData const& sandboxScalingData)
 {
-    data.WriteBits(sandboxScalingData.Type, 4);
+    data << Bits<4>(sandboxScalingData.Type);
     data << int16(sandboxScalingData.PlayerLevelDelta);
     data << uint16(sandboxScalingData.PlayerItemLevel);
     data << uint8(sandboxScalingData.TargetLevel);
@@ -177,12 +175,15 @@ ByteBuffer& operator<<(ByteBuffer& data, SandboxScalingData const& sandboxScalin
     data << uint8(sandboxScalingData.TargetMinScalingLevel);
     data << uint8(sandboxScalingData.TargetMaxScalingLevel);
     data << int8(sandboxScalingData.TargetScalingLevelDelta);
+
     return data;
 }
 }
-}
 
-ByteBuffer& WorldPackets::CombatLog::CombatLogServerPacket::WriteLogData()
+namespace WorldPackets::CombatLog
+{
+ByteBuffer& CombatLogServerPacket::WriteLogData()
 {
     return _fullLogPacket << LogData;
+}
 }

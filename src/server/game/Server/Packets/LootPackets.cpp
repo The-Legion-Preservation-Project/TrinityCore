@@ -56,8 +56,8 @@ WorldPacket const* LootResponse::Write()
     _worldPacket << uint8(_LootMethod);
     _worldPacket << uint8(Threshold);
     _worldPacket << uint32(Coins);
-    _worldPacket << uint32(Items.size());
-    _worldPacket << uint32(Currencies.size());
+    _worldPacket << Size<uint32>(Items);
+    _worldPacket << Size<uint32>(Currencies);
     _worldPacket << Bits<1>(Acquired);
     _worldPacket << Bits<1>(AELooting);
     _worldPacket.FlushBits();
@@ -224,7 +224,7 @@ WorldPacket const* LootRollsComplete::Write()
 WorldPacket const* MasterLootCandidateList::Write()
 {
     _worldPacket << LootObj;
-    _worldPacket << uint32(Players.size());
+    _worldPacket << Size<uint32>(Players);
     for (ObjectGuid const& player : Players)
         _worldPacket << player;
 

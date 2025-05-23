@@ -17,7 +17,13 @@
 
 #include "CalendarPackets.h"
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Calendar::CalendarSendCalendarEventInfo const& eventInfo)
+#include <boost/beast/http/field.hpp>
+
+#include "Hyperlinks.h"
+
+namespace WorldPackets::Calendar
+{
+ByteBuffer& operator<<(ByteBuffer& data, CalendarSendCalendarEventInfo const& eventInfo)
 {
     data << uint64(eventInfo.EventID);
     data << uint8(eventInfo.EventType);
@@ -27,14 +33,15 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Calendar::CalendarSendCal
     data << uint64(eventInfo.EventClubID);
     data << eventInfo.OwnerGuid;
 
-    data.WriteBits(eventInfo.EventName.size(), 8);
+    data << SizedString::BitsSize<8>(eventInfo.EventName);
     data.FlushBits();
-    data.WriteString(eventInfo.EventName);
+
+    data << SizedString::Data(eventInfo.EventName);
 
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Calendar::CalendarSendCalendarRaidLockoutInfo const& lockoutInfo)
+ByteBuffer& operator<<(ByteBuffer& data, CalendarSendCalendarRaidLockoutInfo const& lockoutInfo)
 {
     data << uint64(lockoutInfo.InstanceID);
     data << int32(lockoutInfo.MapID);
@@ -44,7 +51,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Calendar::CalendarSendCal
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Calendar::CalendarSendCalendarInviteInfo const& inviteInfo)
+ByteBuffer& operator<<(ByteBuffer& data, CalendarSendCalendarInviteInfo const& inviteInfo)
 {
     data << uint64(inviteInfo.EventID);
     data << uint64(inviteInfo.InviteID);
@@ -56,7 +63,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Calendar::CalendarSendCal
     return data;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Calendar::CalendarEventInviteInfo const& inviteInfo)
+ByteBuffer& operator<<(ByteBuffer& data, CalendarEventInviteInfo const& inviteInfo)
 {
     data << inviteInfo.Guid;
     data << uint64(inviteInfo.InviteID);
@@ -67,26 +74,27 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Calendar::CalendarEventIn
     data << uint8(inviteInfo.InviteType);
     data << inviteInfo.ResponseTime;
 
-    data.WriteBits(inviteInfo.Notes.size(), 8);
+    data << SizedString::BitsSize<8>(inviteInfo.Notes);
     data.FlushBits();
-    data.WriteString(inviteInfo.Notes);
+
+    data << SizedString::Data(inviteInfo.Notes);
 
     return data;
 }
 
-void WorldPackets::Calendar::CalendarGetEvent::Read()
+void CalendarGetEvent::Read()
 {
     _worldPacket >> EventID;
 }
 
-void WorldPackets::Calendar::CalendarCommunityInviteRequest::Read()
+void CalendarCommunityInviteRequest::Read()
 {
     _worldPacket >> MinLevel;
     _worldPacket >> MaxLevel;
     _worldPacket >> MaxRankOrder;
 }
 
-ByteBuffer& operator>>(ByteBuffer& buffer, WorldPackets::Calendar::CalendarAddEventInviteInfo& invite)
+ByteBuffer& operator>>(ByteBuffer& buffer, CalendarAddEventInviteInfo& invite)
 {
     buffer >> invite.Guid;
     buffer >> invite.Status;
@@ -94,33 +102,33 @@ ByteBuffer& operator>>(ByteBuffer& buffer, WorldPackets::Calendar::CalendarAddEv
     return buffer;
 }
 
-ByteBuffer& operator>>(ByteBuffer& buffer, WorldPackets::Calendar::CalendarAddEventInfo& addEventInfo)
+ByteBuffer& operator>>(ByteBuffer& buffer, CalendarAddEventInfo& addEventInfo)
 {
-    uint8 titleLength = buffer.ReadBits(8);
-    uint16 descriptionLength = buffer.ReadBits(11);
+    buffer >> SizedString::BitsSize<8>(addEventInfo.Title);
+    buffer >> SizedString::BitsSize<11>(addEventInfo.Description);
 
     buffer >> addEventInfo.EventType;
     buffer >> addEventInfo.TextureID;
     buffer >> addEventInfo.Time;
     buffer >> addEventInfo.Flags;
-    addEventInfo.Invites.resize(buffer.read<uint32>());
+    buffer >> Size<uint32>(addEventInfo.Invites);
 
-    addEventInfo.Title = buffer.ReadString(titleLength);
-    addEventInfo.Description = buffer.ReadString(descriptionLength);
+    buffer >> SizedString::Data(addEventInfo.Title);
+    buffer >> SizedString::Data(addEventInfo.Description);
 
-    for (WorldPackets::Calendar::CalendarAddEventInviteInfo& invite : addEventInfo.Invites)
+    for (CalendarAddEventInviteInfo& invite : addEventInfo.Invites)
         buffer >> invite;
 
     return buffer;
 }
 
-void WorldPackets::Calendar::CalendarAddEvent::Read()
+void CalendarAddEvent::Read()
 {
     _worldPacket >> EventInfo;
     _worldPacket >> MaxSize;
 }
 
-ByteBuffer& operator>>(ByteBuffer& buffer, WorldPackets::Calendar::CalendarUpdateEventInfo& updateEventInfo)
+ByteBuffer& operator>>(ByteBuffer& buffer, CalendarUpdateEventInfo& updateEventInfo)
 {
     buffer >> updateEventInfo.EventID;
     buffer >> updateEventInfo.ModeratorID;
@@ -129,61 +137,61 @@ ByteBuffer& operator>>(ByteBuffer& buffer, WorldPackets::Calendar::CalendarUpdat
     buffer >> updateEventInfo.Time;
     buffer >> updateEventInfo.Flags;
 
-    uint8 titleLen = buffer.ReadBits(8);
-    uint16 descLen = buffer.ReadBits(11);
+    buffer >> SizedString::BitsSize<8>(updateEventInfo.Title);
+    buffer >> SizedString::BitsSize<11>(updateEventInfo.Description);
 
-    updateEventInfo.Title = buffer.ReadString(titleLen);
-    updateEventInfo.Description = buffer.ReadString(descLen);
+    buffer >> SizedString::Data(updateEventInfo.Title);
+    buffer >> SizedString::Data(updateEventInfo.Description);
 
     return buffer;
 }
 
-void WorldPackets::Calendar::CalendarUpdateEvent::Read()
+void CalendarUpdateEvent::Read()
 {
     _worldPacket >> EventInfo;
     _worldPacket >> MaxSize;
 }
 
-void WorldPackets::Calendar::CalendarRemoveEvent::Read()
+void CalendarRemoveEvent::Read()
 {
     _worldPacket >> EventID;
     _worldPacket >> ModeratorID;
     _worldPacket >> Flags;
 }
 
-void WorldPackets::Calendar::CalendarCopyEvent::Read()
+void CalendarCopyEvent::Read()
 {
     _worldPacket >> EventID;
     _worldPacket >> ModeratorID;
     _worldPacket >> Date;
 }
 
-void WorldPackets::Calendar::CalendarRSVP::Read()
+void CalendarRSVP::Read()
 {
     _worldPacket >> EventID;
     _worldPacket >> InviteID;
     _worldPacket >> Status;
 }
 
-void WorldPackets::Calendar::CalendarInvite::Read()
+void CalendarInvite::Read()
 {
     _worldPacket >> EventID;
     _worldPacket >> ModeratorID;
 
-    uint16 nameLen = _worldPacket.ReadBits(9);
-    Creating = _worldPacket.ReadBit();
-    IsSignUp = _worldPacket.ReadBit();
+    _worldPacket >> SizedString::BitsSize<9>(Name);
+    _worldPacket >> Bits<1>(Creating);
+    _worldPacket >> Bits<1>(IsSignUp);
 
-    Name = _worldPacket.ReadString(nameLen);
+    _worldPacket >> SizedString::Data(Name);
 }
 
-void WorldPackets::Calendar::CalendarEventSignUp::Read()
+void CalendarEventSignUp::Read()
 {
     _worldPacket >> EventID;
-    Tentative = _worldPacket.ReadBit();
+    _worldPacket >> Bits<1>(Tentative);
 }
 
-void WorldPackets::Calendar::CalendarRemoveInvite::Read()
+void CalendarRemoveInvite::Read()
 {
     _worldPacket >> Guid;
     _worldPacket >> InviteID;
@@ -191,7 +199,7 @@ void WorldPackets::Calendar::CalendarRemoveInvite::Read()
     _worldPacket >> EventID;
 }
 
-void WorldPackets::Calendar::CalendarStatus::Read()
+void CalendarStatus::Read()
 {
     _worldPacket >> Guid;
     _worldPacket >> EventID;
@@ -200,14 +208,14 @@ void WorldPackets::Calendar::CalendarStatus::Read()
     _worldPacket >> Status;
 }
 
-void WorldPackets::Calendar::SetSavedInstanceExtend::Read()
+void SetSavedInstanceExtend::Read()
 {
     _worldPacket >> MapID;
     _worldPacket >> DifficultyID;
-    Extend = _worldPacket.ReadBit();
+    _worldPacket >> Bits<1>(Extend);
 }
 
-void WorldPackets::Calendar::CalendarModeratorStatusQuery::Read()
+void CalendarModeratorStatusQuery::Read()
 {
     _worldPacket >> Guid;
     _worldPacket >> EventID;
@@ -216,7 +224,7 @@ void WorldPackets::Calendar::CalendarModeratorStatusQuery::Read()
     _worldPacket >> Status;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarInviteAdded::Write()
+WorldPacket const* CalendarInviteAdded::Write()
 {
     _worldPacket << InviteGuid;
     _worldPacket << uint64(EventID);
@@ -226,18 +234,18 @@ WorldPacket const* WorldPackets::Calendar::CalendarInviteAdded::Write()
     _worldPacket << uint8(Type);
     _worldPacket << ResponseTime;
 
-    _worldPacket.WriteBit(ClearPending);
+    _worldPacket << Bits<1>(ClearPending);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarSendCalendar::Write()
+WorldPacket const* CalendarSendCalendar::Write()
 {
     _worldPacket << ServerTime;
-    _worldPacket << uint32(Invites.size());
-    _worldPacket << uint32(Events.size());
-    _worldPacket << uint32(RaidLockouts.size());
+    _worldPacket << Size<uint32>(Invites);
+    _worldPacket << Size<uint32>(Events);
+    _worldPacket << Size<uint32>(RaidLockouts);
 
     for (CalendarSendCalendarInviteInfo const& invite : Invites)
         _worldPacket << invite;
@@ -251,7 +259,7 @@ WorldPacket const* WorldPackets::Calendar::CalendarSendCalendar::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarSendEvent::Write()
+WorldPacket const* CalendarSendEvent::Write()
 {
     _worldPacket << uint8(EventType);
     _worldPacket << OwnerGuid;
@@ -262,21 +270,21 @@ WorldPacket const* WorldPackets::Calendar::CalendarSendEvent::Write()
     _worldPacket << Date;
     _worldPacket << LockDate;
     _worldPacket << uint64(EventClubID);
-    _worldPacket << uint32(Invites.size());
-    _worldPacket << BitsSize<8>(EventName);
-    _worldPacket << BitsSize<11>(Description);
+    _worldPacket << Size<uint32>(Invites);
+    _worldPacket << SizedString::BitsSize<8>(EventName);
+    _worldPacket << SizedString::BitsSize<11>(Description);
     _worldPacket.FlushBits();
 
-    for (auto const& invite : Invites)
+    for (CalendarEventInviteInfo const& invite : Invites)
         _worldPacket << invite;
 
-    _worldPacket.WriteString(EventName);
-    _worldPacket.WriteString(Description);
+    _worldPacket << SizedString::Data(EventName);
+    _worldPacket << SizedString::Data(Description);
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarInviteAlert::Write()
+WorldPacket const* CalendarInviteAlert::Write()
 {
     _worldPacket << uint64(EventID);
     _worldPacket << Date;
@@ -292,14 +300,15 @@ WorldPacket const* WorldPackets::Calendar::CalendarInviteAlert::Write()
     _worldPacket << InvitedByGuid;
     _worldPacket << OwnerGuid;
 
-    _worldPacket << BitsSize<8>(EventName);
+    _worldPacket << SizedString::BitsSize<8>(EventName);
     _worldPacket.FlushBits();
-    _worldPacket.WriteString(EventName);
+
+    _worldPacket << SizedString::Data(EventName);
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarInviteStatus::Write()
+WorldPacket const* CalendarInviteStatus::Write()
 {
     _worldPacket << InviteGuid;
     _worldPacket << uint64(EventID);
@@ -308,37 +317,37 @@ WorldPacket const* WorldPackets::Calendar::CalendarInviteStatus::Write()
     _worldPacket << uint8(Status);
     _worldPacket << ResponseTime;
 
-    _worldPacket.WriteBit(ClearPending);
+    _worldPacket << Bits<1>(ClearPending);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarInviteRemoved::Write()
+WorldPacket const* CalendarInviteRemoved::Write()
 {
     _worldPacket << InviteGuid;
     _worldPacket << uint64(EventID);
     _worldPacket << uint32(Flags);
 
-    _worldPacket.WriteBit(ClearPending);
+    _worldPacket << Bits<1>(ClearPending);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarModeratorStatus::Write()
+WorldPacket const* CalendarModeratorStatus::Write()
 {
     _worldPacket << InviteGuid;
     _worldPacket << uint64(EventID);
     _worldPacket << uint8(Status);
 
-    _worldPacket.WriteBit(ClearPending);
+    _worldPacket << Bits<1>(ClearPending);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarInviteRemovedAlert::Write()
+WorldPacket const* CalendarInviteRemovedAlert::Write()
 {
     _worldPacket << uint64(EventID);
     _worldPacket << Date;
@@ -348,7 +357,7 @@ WorldPacket const* WorldPackets::Calendar::CalendarInviteRemovedAlert::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarEventUpdatedAlert::Write()
+WorldPacket const* CalendarEventUpdatedAlert::Write()
 {
     _worldPacket << uint64(EventID);
 
@@ -359,47 +368,49 @@ WorldPacket const* WorldPackets::Calendar::CalendarEventUpdatedAlert::Write()
     _worldPacket << uint32(TextureID);
     _worldPacket << uint8(EventType);
 
-    _worldPacket.WriteBits(EventName.size(), 8);
-    _worldPacket.WriteBits(Description.size(), 11);
-    _worldPacket.WriteBit(ClearPending);
+    _worldPacket << SizedString::BitsSize<8>(EventName);
+    _worldPacket << SizedString::BitsSize<11>(Description);
+    _worldPacket << Bits<1>(ClearPending);
     _worldPacket.FlushBits();
 
-    _worldPacket.WriteString(EventName);
-    _worldPacket.WriteString(Description);
+    _worldPacket << SizedString::Data(EventName);
+    _worldPacket << SizedString::Data(Description);
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarEventRemovedAlert::Write()
+WorldPacket const* CalendarEventRemovedAlert::Write()
 {
     _worldPacket << uint64(EventID);
     _worldPacket << Date;
 
-    _worldPacket.WriteBit(ClearPending);
+    _worldPacket << Bits<1>(ClearPending);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarSendNumPending::Write()
+WorldPacket const* CalendarSendNumPending::Write()
 {
     _worldPacket << uint32(NumPending);
+
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarCommandResult::Write()
+WorldPacket const* CalendarCommandResult::Write()
 {
     _worldPacket << uint8(Command);
     _worldPacket << uint8(Result);
 
-    _worldPacket.WriteBits(Name.size(), 9);
+    _worldPacket << SizedString::BitsSize<9>(Name);
     _worldPacket.FlushBits();
-    _worldPacket.WriteString(Name);
+
+    _worldPacket << SizedString::Data(Name);
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarRaidLockoutAdded::Write()
+WorldPacket const* CalendarRaidLockoutAdded::Write()
 {
     _worldPacket << uint64(InstanceID);
     _worldPacket << ServerTime;
@@ -410,7 +421,7 @@ WorldPacket const* WorldPackets::Calendar::CalendarRaidLockoutAdded::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarRaidLockoutRemoved::Write()
+WorldPacket const* CalendarRaidLockoutRemoved::Write()
 {
     _worldPacket << uint64(InstanceID);
     _worldPacket << int32(MapID);
@@ -419,7 +430,7 @@ WorldPacket const* WorldPackets::Calendar::CalendarRaidLockoutRemoved::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarRaidLockoutUpdated::Write()
+WorldPacket const* CalendarRaidLockoutUpdated::Write()
 {
     _worldPacket << ServerTime;
     _worldPacket << int32(MapID);
@@ -430,10 +441,10 @@ WorldPacket const* WorldPackets::Calendar::CalendarRaidLockoutUpdated::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarCommunityInvite::Write()
+WorldPacket const* CalendarCommunityInvite::Write()
 {
-    _worldPacket << uint32(Invites.size());
-    for (auto const& invite : Invites)
+    _worldPacket << Size<uint32>(Invites);
+    for (CalendarEventInitialInviteInfo const& invite : Invites)
     {
         _worldPacket << invite.InviteGuid;
         _worldPacket << uint8(invite.Level);
@@ -442,7 +453,7 @@ WorldPacket const* WorldPackets::Calendar::CalendarCommunityInvite::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarInviteStatusAlert::Write()
+WorldPacket const* CalendarInviteStatusAlert::Write()
 {
     _worldPacket << uint64(EventID);
     _worldPacket << Date;
@@ -452,33 +463,36 @@ WorldPacket const* WorldPackets::Calendar::CalendarInviteStatusAlert::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarInviteNotesAlert::Write()
+WorldPacket const* CalendarInviteNotesAlert::Write()
 {
     _worldPacket << uint64(EventID);
 
-    _worldPacket.WriteBits(Notes.size(), 8);
+    _worldPacket << SizedString::BitsSize<8>(Notes);
     _worldPacket.FlushBits();
-    _worldPacket.WriteString(Notes);
+
+    _worldPacket << SizedString::Data(Notes);
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::Calendar::CalendarInviteNotes::Write()
+WorldPacket const* CalendarInviteNotes::Write()
 {
     _worldPacket << InviteGuid;
     _worldPacket << uint64(EventID);
 
-    _worldPacket.WriteBits(Notes.size(), 8);
-    _worldPacket.WriteBit(ClearPending);
+    _worldPacket << SizedString::BitsSize<8>(Notes);
+    _worldPacket << Bits<1>(ClearPending);
     _worldPacket.FlushBits();
-    _worldPacket.WriteString(Notes);
+
+    _worldPacket << SizedString::Data(Notes);
 
     return &_worldPacket;
 }
 
-void WorldPackets::Calendar::CalendarComplain::Read()
+void CalendarComplain::Read()
 {
     _worldPacket >> InvitedByGUID;
     _worldPacket >> EventID;
     _worldPacket >> InviteID;
+}
 }

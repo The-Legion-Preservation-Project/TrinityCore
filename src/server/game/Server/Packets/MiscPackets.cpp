@@ -239,7 +239,7 @@ WorldPacket const* WorldPackets::Misc::RequestCemeteryListResponse::Write()
     _worldPacket.WriteBit(IsGossipTriggered);
     _worldPacket.FlushBits();
 
-    _worldPacket << uint32(CemeteryID.size());
+    _worldPacket << Size<uint32>(CemeteryID);
     for (uint32 cemetery : CemeteryID)
         _worldPacket << cemetery;
 
@@ -525,7 +525,7 @@ void WorldPackets::Misc::SaveCUFProfiles::Read()
 
 WorldPacket const* WorldPackets::Misc::LoadCUFProfiles::Write()
 {
-    _worldPacket << uint32(CUFProfiles.size());
+    _worldPacket << Size<uint32>(CUFProfiles);
 
     for (CUFProfile const* cufProfile : CUFProfiles)
     {
@@ -670,7 +670,7 @@ WorldPacket const* WorldPackets::Misc::DisplayGameError::Write()
 WorldPacket const* WorldPackets::Misc::AccountMountUpdate::Write()
 {
     _worldPacket.WriteBit(IsFullUpdate);
-    _worldPacket << uint32(Mounts->size());
+    _worldPacket << Size<uint32>(*Mounts);
 
     for (auto [spellId, flags] : *Mounts)
     {

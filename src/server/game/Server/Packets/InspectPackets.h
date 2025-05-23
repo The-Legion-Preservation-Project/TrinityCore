@@ -15,7 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef TRINITYCORE_INSPECT_PACKETS_H
+#define TRINITYCORE_INSPECT_PACKETS_H
 
 #include "Packet.h"
 #include "DBCEnums.h"
@@ -33,7 +34,7 @@ namespace WorldPackets
         class Inspect final : public ClientPacket
         {
         public:
-            Inspect(WorldPacket&& packet) : ClientPacket(CMSG_INSPECT, std::move(packet)) { }
+            explicit Inspect(WorldPacket&& packet) : ClientPacket(CMSG_INSPECT, std::move(packet)) { }
 
             void Read() override;
 
@@ -70,7 +71,7 @@ namespace WorldPackets
         class InspectResult final : public ServerPacket
         {
         public:
-            InspectResult() : ServerPacket(SMSG_INSPECT_RESULT, 45) { }
+            explicit InspectResult() : ServerPacket(SMSG_INSPECT_RESULT, 45) { }
 
             WorldPacket const* Write() override;
 
@@ -88,7 +89,7 @@ namespace WorldPackets
         class RequestHonorStats final : public ClientPacket
         {
         public:
-            RequestHonorStats(WorldPacket&& packet) : ClientPacket(CMSG_REQUEST_HONOR_STATS, std::move(packet)) { }
+            explicit RequestHonorStats(WorldPacket&& packet) : ClientPacket(CMSG_REQUEST_HONOR_STATS, std::move(packet)) { }
 
             void Read() override;
 
@@ -98,7 +99,7 @@ namespace WorldPackets
         class InspectHonorStats final : public ServerPacket
         {
         public:
-            InspectHonorStats() : ServerPacket(SMSG_INSPECT_HONOR_STATS, 25) { }
+            explicit InspectHonorStats() : ServerPacket(SMSG_INSPECT_HONOR_STATS, 25) { }
 
             WorldPacket const* Write() override;
 
@@ -112,7 +113,7 @@ namespace WorldPackets
         class InspectPVPRequest final : public ClientPacket
         {
         public:
-            InspectPVPRequest(WorldPacket&& packet) : ClientPacket(CMSG_INSPECT_PVP, std::move(packet)) { }
+            explicit InspectPVPRequest(WorldPacket&& packet) : ClientPacket(CMSG_INSPECT_PVP, std::move(packet)) { }
 
             void Read() override;
 
@@ -136,7 +137,7 @@ namespace WorldPackets
         class InspectPVPResponse final : public ServerPacket
         {
         public:
-            InspectPVPResponse() : ServerPacket(SMSG_INSPECT_PVP, 17) { }
+            explicit InspectPVPResponse() : ServerPacket(SMSG_INSPECT_PVP, 17) { }
 
             WorldPacket const* Write() override;
 
@@ -147,7 +148,7 @@ namespace WorldPackets
         class QueryInspectAchievements final : public ClientPacket
         {
         public:
-            QueryInspectAchievements(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_INSPECT_ACHIEVEMENTS, std::move(packet)) { }
+            explicit QueryInspectAchievements(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_INSPECT_ACHIEVEMENTS, std::move(packet)) { }
 
             void Read() override;
 
@@ -157,3 +158,5 @@ namespace WorldPackets
         /// RespondInspectAchievements in AchievementPackets
     }
 }
+
+#endif // TRINITYCORE_INSPECT_PACKETS_H

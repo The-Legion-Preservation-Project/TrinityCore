@@ -27,10 +27,7 @@ bool ItemBonuses::operator==(ItemBonuses const& r) const
     if (Context != r.Context)
         return false;
 
-    if (BonusListIDs.size() != r.BonusListIDs.size())
-        return false;
-
-    return std::is_permutation(BonusListIDs.begin(), BonusListIDs.end(), r.BonusListIDs.begin());
+    return std::ranges::is_permutation(BonusListIDs, r.BonusListIDs);
 }
 
 void ItemInstance::Initialize(::Item const* item)
@@ -117,30 +114,10 @@ void ItemInstance::Initialize(::VoidStorageItem const* voidItem)
     }
 }
 
-bool ItemInstance::operator==(ItemInstance const& r) const
-{
-    if (ItemID != r.ItemID)
-        return false;
-
-    if (RandomPropertiesSeed != r.RandomPropertiesSeed)
-        return false;
-
-    if (RandomPropertiesID != r.RandomPropertiesID)
-        return false;
-
-    if (ItemBonus != r.ItemBonus)
-        return false;
-
-    if (Modifications != r.Modifications)
-        return false;
-
-    return true;
-}
-
 ByteBuffer& operator<<(ByteBuffer& data, ItemBonuses const& itemBonusInstanceData)
 {
     data << uint8(itemBonusInstanceData.Context);
-    data << uint32(itemBonusInstanceData.BonusListIDs.size());
+    data << Size<uint32>(itemBonusInstanceData.BonusListIDs);
     for (uint32 bonusID : itemBonusInstanceData.BonusListIDs)
         data << uint32(bonusID);
 
@@ -169,8 +146,8 @@ ByteBuffer& operator<<(ByteBuffer& data, ItemInstance const& itemInstance)
     data << int32(itemInstance.RandomPropertiesSeed);
     data << int32(itemInstance.RandomPropertiesID);
 
-    data.WriteBit(itemInstance.ItemBonus.has_value());
-    data.WriteBit(itemInstance.Modifications.has_value());
+    data << OptionalInit(itemInstance.ItemBonus);
+    data << OptionalInit(itemInstance.Modifications);
     data.FlushBits();
 
     if (itemInstance.ItemBonus)
@@ -188,21 +165,15 @@ ByteBuffer& operator>>(ByteBuffer& data, ItemInstance& itemInstance)
     data >> itemInstance.RandomPropertiesSeed;
     data >> itemInstance.RandomPropertiesID;
 
-    bool hasItemBonus = data.ReadBit();
-    bool hasModifications = data.ReadBit();
+    data >> OptionalInit(itemInstance.ItemBonus);
+    data >> OptionalInit(itemInstance.Modifications);
     data.ResetBitPos();
 
-    if (hasItemBonus)
-    {
-        itemInstance.ItemBonus.emplace();
+    if (itemInstance.ItemBonus)
         data >> *itemInstance.ItemBonus;
-    }
 
-    if (hasModifications)
-    {
-        itemInstance.Modifications.emplace();
+    if (itemInstance.Modifications)
         data >> *itemInstance.Modifications;
-    }
 
     return data;
 }
@@ -232,7 +203,7 @@ ByteBuffer& operator>>(ByteBuffer& data, ItemGemData& itemGemData)
 
 ByteBuffer& operator>>(ByteBuffer& data, InvUpdate& invUpdate)
 {
-    invUpdate.Items.resize(data.ReadBits(2));
+    data >> BitsSize<2>(invUpdate.Items);
     data.ResetBitPos();
     for (InvUpdate::InvItem& item : invUpdate.Items)
     {

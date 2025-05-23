@@ -26,7 +26,7 @@ WorldPacket const* WorldPackets::Token::CommerceTokenGetLogResponse::Write()
 {
     _worldPacket << ClientToken;
     _worldPacket << Result;
-    _worldPacket << uint32(AuctionableTokens.size());
+    _worldPacket << Size<uint32>(AuctionableTokens);
     for (AuctionableTokenInfo const& auctionableTokenAuctionable : AuctionableTokens)
     {
         _worldPacket << auctionableTokenAuctionable.Id;

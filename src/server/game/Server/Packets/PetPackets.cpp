@@ -16,6 +16,7 @@
  */
 
 #include "PetPackets.h"
+#include "PacketUtilities.h"
 
 WorldPacket const* WorldPackets::Pet::PetSpells::Write()
 {
@@ -26,9 +27,9 @@ WorldPacket const* WorldPackets::Pet::PetSpells::Write()
     _worldPacket << uint16(CommandState | (Flag << 16));
     _worldPacket << uint8(ReactState);
     _worldPacket.append(ActionButtons.data(), ActionButtons.size());
-    _worldPacket << uint32(Actions.size());
-    _worldPacket << uint32(Cooldowns.size());
-    _worldPacket << uint32(SpellHistory.size());
+    _worldPacket << Size<uint32>(Actions);
+    _worldPacket << Size<uint32>(Cooldowns);
+    _worldPacket << Size<uint32>(SpellHistory);
 
     for (uint32 action : Actions)
         _worldPacket << uint32(action);
@@ -57,7 +58,7 @@ WorldPacket const* WorldPackets::Pet::PetStableList::Write()
 {
     _worldPacket << StableMaster;
 
-    _worldPacket << uint32(Pets.size());
+    _worldPacket << Size<uint32>(Pets);
     for (PetStableInfo const& pet : Pets)
     {
         _worldPacket << int32(pet.PetSlot);
@@ -82,7 +83,7 @@ WorldPacket const* WorldPackets::Pet::PetStableResult::Write()
 
 WorldPacket const* WorldPackets::Pet::PetLearnedSpells::Write()
 {
-    _worldPacket << uint32(Spells.size());
+    _worldPacket << Size<uint32>(Spells);
     for (uint32 spell : Spells)
         _worldPacket << int32(spell);
     return &_worldPacket;
@@ -90,7 +91,7 @@ WorldPacket const* WorldPackets::Pet::PetLearnedSpells::Write()
 
 WorldPacket const* WorldPackets::Pet::PetUnlearnedSpells::Write()
 {
-    _worldPacket << uint32(Spells.size());
+    _worldPacket << Size<uint32>(Spells);
     for (uint32 spell : Spells)
         _worldPacket << int32(spell);
     return &_worldPacket;

@@ -21,13 +21,13 @@ WorldPacket const* WorldPackets::Talent::UpdateTalentData::Write()
 {
     _worldPacket << uint8(Info.ActiveGroup);
     _worldPacket << uint32(Info.PrimarySpecialization);
-    _worldPacket << uint32(Info.TalentGroups.size());
+    _worldPacket << Size<uint32>(Info.TalentGroups);
 
     for (auto& talentGroupInfo : Info.TalentGroups)
     {
         _worldPacket << uint32(talentGroupInfo.SpecID);
-        _worldPacket << uint32(talentGroupInfo.TalentIDs.size());
-        _worldPacket << uint32(talentGroupInfo.PvPTalentIDs.size());
+        _worldPacket << Size<uint32>(talentGroupInfo.TalentIDs);
+        _worldPacket << Size<uint32>(talentGroupInfo.PvPTalentIDs);
 
         for (uint16 talentID : talentGroupInfo.TalentIDs)
             _worldPacket << uint16(talentID);
@@ -64,7 +64,7 @@ WorldPacket const* WorldPackets::Talent::LearnTalentFailed::Write()
 {
     _worldPacket.WriteBits(Reason, 4);
     _worldPacket << int32(SpellID);
-    _worldPacket << uint32(Talents.size());
+    _worldPacket << Size<uint32>(Talents);
     if (!Talents.empty())
         _worldPacket.append(Talents.data(), Talents.size());
 
@@ -80,7 +80,7 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::Talent::GlyphBinding cons
 
 WorldPacket const* WorldPackets::Talent::ActiveGlyphs::Write()
 {
-    _worldPacket << uint32(Glyphs.size());
+    _worldPacket << Size<uint32>(Glyphs);
     for (GlyphBinding const& glyph : Glyphs)
         _worldPacket << glyph;
 
@@ -101,7 +101,7 @@ WorldPacket const* WorldPackets::Talent::LearnPvpTalentFailed::Write()
 {
     _worldPacket.WriteBits(Reason, 4);
     _worldPacket << int32(SpellID);
-    _worldPacket << uint32(Talents.size());
+    _worldPacket << Size<uint32>(Talents);
     if (!Talents.empty())
         _worldPacket.append(Talents.data(), Talents.size());
 

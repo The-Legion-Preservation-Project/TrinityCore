@@ -174,7 +174,7 @@ ByteBuffer& operator<<(ByteBuffer& data, LfgPlayerDungeonInfo const& playerDunge
 
 WorldPacket const* LfgPlayerInfo::Write()
 {
-    _worldPacket << uint32(Dungeon.size());
+    _worldPacket << Size<uint32>(Dungeon);
     _worldPacket << BlackList;
     for (LfgPlayerDungeonInfo const& playerDungeonInfo : Dungeon)
         _worldPacket << playerDungeonInfo;
@@ -184,7 +184,7 @@ WorldPacket const* LfgPlayerInfo::Write()
 
 WorldPacket const* LfgPartyInfo::Write()
 {
-    _worldPacket << uint32(Player.size());
+    _worldPacket << Size<uint32>(Player);
     for (LFGBlackList const& player : Player)
         _worldPacket << player;
 
@@ -196,9 +196,9 @@ WorldPacket const* LFGUpdateStatus::Write()
     _worldPacket << Ticket;
     _worldPacket << uint8(SubType);
     _worldPacket << uint8(Reason);
-    _worldPacket << uint32(Slots.size());
+    _worldPacket << Size<uint32>(Slots);
     _worldPacket << uint32(RequestedRoles);
-    _worldPacket << uint32(SuspendedPlayers.size());
+    _worldPacket << Size<uint32>(SuspendedPlayers);
 
     for (uint32 slot : Slots)
         _worldPacket << uint32(slot);
@@ -242,10 +242,10 @@ WorldPacket const* LFGRoleCheckUpdate::Write()
 {
     _worldPacket << uint8(PartyIndex);
     _worldPacket << uint8(RoleCheckStatus);
-    _worldPacket << uint32(JoinSlots.size());
+    _worldPacket << Size<uint32>(JoinSlots);
     _worldPacket << uint64(BgQueueID);
     _worldPacket << int32(GroupFinderActivityID);
-    _worldPacket << uint32(Members.size());
+    _worldPacket << Size<uint32>(Members);
 
     for (uint32 slot : JoinSlots)
         _worldPacket << uint32(slot);
@@ -265,7 +265,7 @@ WorldPacket const* LFGJoinResult::Write()
     _worldPacket << Ticket;
     _worldPacket << uint8(Result);
     _worldPacket << uint8(ResultDetail);
-    _worldPacket << uint32(BlackList.size());
+    _worldPacket << Size<uint32>(BlackList);
 
     for (LFGBlackList const& blackList : BlackList)
         _worldPacket << blackList;
@@ -306,7 +306,7 @@ WorldPacket const* LFGPlayerReward::Write()
     _worldPacket << uint32(ActualSlot);
     _worldPacket << int32(RewardMoney);
     _worldPacket << int32(AddedXP);
-    _worldPacket << uint32(Rewards.size());
+    _worldPacket << Size<uint32>(Rewards);
 
     for (LFGPlayerRewards const& reward : Rewards)
         _worldPacket << reward;
@@ -360,7 +360,7 @@ WorldPacket const* LFGProposalUpdate::Write()
     _worldPacket << int8(State);
     _worldPacket << uint32(CompletedMask);
     _worldPacket << uint32(EncounterMask);
-    _worldPacket << uint32(Players.size());
+    _worldPacket << Size<uint32>(Players);
     _worldPacket << uint8(PromisedShortageRolePriority);
     _worldPacket.WriteBit(ValidCompletedMask);
     _worldPacket.WriteBit(ProposalSilent);

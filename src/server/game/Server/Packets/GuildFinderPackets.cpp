@@ -18,16 +18,19 @@
 #include "GuildFinderPackets.h"
 #include "PacketUtilities.h"
 
-void WorldPackets::GuildFinder::LFGuildAddRecruit::Read()
+namespace WorldPackets::GuildFinder
+{
+void LFGuildAddRecruit::Read()
 {
     _worldPacket >> GuildGUID;
     _worldPacket >> PlayStyle;
     _worldPacket >> Availability;
     _worldPacket >> ClassRoles;
-    Comment = _worldPacket.ReadString(_worldPacket.ReadBits(10));
+    _worldPacket >> SizedString::BitsSize<10>(Comment);
+    _worldPacket >> SizedString::Data(Comment);
 }
 
-void WorldPackets::GuildFinder::LFGuildBrowse::Read()
+void LFGuildBrowse::Read()
 {
     _worldPacket >> PlayStyle;
     _worldPacket >> Availability;
@@ -35,10 +38,10 @@ void WorldPackets::GuildFinder::LFGuildBrowse::Read()
     _worldPacket >> CharacterLevel;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::GuildFinder::LFGuildBrowseData const& guildData)
+ByteBuffer& operator<<(ByteBuffer& data, LFGuildBrowseData const& guildData)
 {
-    data.WriteBits(guildData.GuildName.length(), 7);
-    data.WriteBits(guildData.Comment.length(), 10);
+    data << SizedString::BitsSize<7>(guildData.GuildName);
+    data << SizedString::BitsSize<10>(guildData.Comment);
     data << guildData.GuildGUID;
     data << uint32(guildData.GuildVirtualRealm);
     data << int32(guildData.GuildMembers);
@@ -54,26 +57,26 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::GuildFinder::LFGuildBrows
     data << int32(guildData.Background);
     data << int8(guildData.Cached);
     data << int8(guildData.MembershipRequested);
-    data.WriteString(guildData.GuildName);
-    data.WriteString(guildData.Comment);
+    data << SizedString::Data(guildData.GuildName);
+    data << SizedString::Data(guildData.Comment);
     return data;
 }
 
-WorldPacket const* WorldPackets::GuildFinder::LFGuildBrowseResult::Write()
+WorldPacket const* LFGuildBrowseResult::Write()
 {
-    _worldPacket << uint32(Post.size());
+    _worldPacket << Size<uint32>(Post);
     for (LFGuildBrowseData const& guildData : Post)
         _worldPacket << guildData;
 
     return &_worldPacket;
 }
 
-void WorldPackets::GuildFinder::LFGuildDeclineRecruit::Read()
+void LFGuildDeclineRecruit::Read()
 {
     _worldPacket >> RecruitGUID;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::GuildFinder::LFGuildApplicationData const& application)
+ByteBuffer& operator<<(ByteBuffer& data, LFGuildApplicationData const& application)
 {
     data << application.GuildGUID;
     data << uint32(application.GuildVirtualRealm);
@@ -82,40 +85,43 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::GuildFinder::LFGuildAppli
     data << int32(application.Availability);
     data << uint32(application.SecondsSinceCreated);
     data << uint32(application.SecondsUntilExpiration);
-    data.WriteBits(application.GuildName.length(), 7);
-    data.WriteBits(application.Comment.length(), 10);
+    data << SizedString::BitsSize<7>(application.GuildName);
+    data << SizedString::BitsSize<10>(application.Comment);
     data.FlushBits();
-    data.WriteString(application.GuildName);
-    data.WriteString(application.Comment);
+
+    data << SizedString::Data(application.GuildName);
+    data << SizedString::Data(application.Comment);
+
     return data;
 }
 
-WorldPacket const* WorldPackets::GuildFinder::LFGuildApplications::Write()
+WorldPacket const* LFGuildApplications::Write()
 {
     _worldPacket << int32(NumRemaining);
-    _worldPacket << uint32(Application.size());
+    _worldPacket << Size<uint32>(Application);
     for (LFGuildApplicationData const& application : Application)
         _worldPacket << application;
 
     return &_worldPacket;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::GuildFinder::GuildPostData const& post)
+ByteBuffer& operator<<(ByteBuffer& data, GuildPostData const& post)
 {
-    data.WriteBit(post.Active);
-    data.WriteBits(post.Comment.length(), 10);
+    data << Bits<1>(post.Active);
+    data << SizedString::BitsSize<10>(post.Comment);
     data << int32(post.PlayStyle);
     data << int32(post.Availability);
     data << int32(post.ClassRoles);
     data << int32(post.LevelRange);
     data << post.SecondsRemaining;
-    data.WriteString(post.Comment);
+    data << SizedString::Data(post.Comment);
+
     return data;
 }
 
-WorldPacket const* WorldPackets::GuildFinder::LFGuildPost::Write()
+WorldPacket const* LFGuildPost::Write()
 {
-    _worldPacket.WriteBit(Post.has_value());
+    _worldPacket << OptionalInit(Post);
     _worldPacket.FlushBits();
     if (Post)
         _worldPacket << *Post;
@@ -123,12 +129,12 @@ WorldPacket const* WorldPackets::GuildFinder::LFGuildPost::Write()
     return &_worldPacket;
 }
 
-void WorldPackets::GuildFinder::LFGuildGetRecruits::Read()
+void LFGuildGetRecruits::Read()
 {
     _worldPacket >> LastUpdate;
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::GuildFinder::LFGuildRecruitData const& recruit)
+ByteBuffer& operator<<(ByteBuffer& data, LFGuildRecruitData const& recruit)
 {
     data << recruit.RecruitGUID;
     data << uint32(recruit.RecruitVirtualRealm);
@@ -140,17 +146,19 @@ ByteBuffer& operator<<(ByteBuffer& data, WorldPackets::GuildFinder::LFGuildRecru
     data << int32(recruit.Availability);
     data << uint32(recruit.SecondsSinceCreated);
     data << uint32(recruit.SecondsUntilExpiration);
-    data.WriteBits(recruit.Name.length(), 6);
-    data.WriteBits(recruit.Comment.length(), 10);
+    data << SizedString::BitsSize<6>(recruit.Name);
+    data << SizedString::BitsSize<10>(recruit.Comment);
     data.FlushBits();
-    data.WriteString(recruit.Name);
-    data.WriteString(recruit.Comment);
+
+    data << SizedString::Data(recruit.Name);
+    data << SizedString::Data(recruit.Comment);
+
     return data;
 }
 
-WorldPacket const* WorldPackets::GuildFinder::LFGuildRecruits::Write()
+WorldPacket const* LFGuildRecruits::Write()
 {
-    _worldPacket << uint32(Recruits.size());
+    _worldPacket << Size<uint32>(Recruits);
     _worldPacket << UpdateTime;
     for (LFGuildRecruitData const& recruit : Recruits)
         _worldPacket << recruit;
@@ -158,17 +166,19 @@ WorldPacket const* WorldPackets::GuildFinder::LFGuildRecruits::Write()
     return &_worldPacket;
 }
 
-void WorldPackets::GuildFinder::LFGuildRemoveRecruit::Read()
+void LFGuildRemoveRecruit::Read()
 {
     _worldPacket >> GuildGUID;
 }
 
-void WorldPackets::GuildFinder::LFGuildSetGuildPost::Read()
+void LFGuildSetGuildPost::Read()
 {
     _worldPacket >> PlayStyle;
     _worldPacket >> Availability;
     _worldPacket >> ClassRoles;
     _worldPacket >> LevelRange;
-    Active = _worldPacket.ReadBit();
-    Comment = _worldPacket.ReadString(_worldPacket.ReadBits(10));
+    _worldPacket >> Bits<1>(Active);
+    _worldPacket >> SizedString::BitsSize<10>(Comment);
+    _worldPacket >> SizedString::Data(Comment);
+}
 }

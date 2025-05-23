@@ -101,7 +101,7 @@ WorldPacket const* QueryCreatureResponse::Write()
         _worldPacket.append(Stats.CreatureDisplayID.data(), Stats.CreatureDisplayID.size());
         _worldPacket << float(Stats.HpMulti);
         _worldPacket << float(Stats.EnergyMulti);
-        _worldPacket << uint32(Stats.QuestItems.size());
+        _worldPacket << Size<uint32>(Stats.QuestItems);
         _worldPacket << int32(Stats.CreatureMovementInfoID);
         _worldPacket << int32(Stats.HealthScalingExpansion);
         _worldPacket << int32(Stats.RequiredExpansion);
@@ -234,7 +234,7 @@ WorldPacket const* QueryPageTextResponse::Write()
 
     if (Allow)
     {
-        _worldPacket << uint32(Pages.size());
+        _worldPacket << Size<uint32>(Pages);
         for (PageTextInfo const& pageText : Pages)
             _worldPacket << pageText;
     }
@@ -301,7 +301,7 @@ WorldPacket const* QueryGameObjectResponse::Write()
         statsData << int32(Stats.RequiredLevel);
     }
 
-    _worldPacket << uint32(statsData.size());
+    _worldPacket << Size<uint32>(statsData);
     if (!statsData.empty())
         _worldPacket.append(statsData);
 
@@ -384,11 +384,11 @@ void QueryQuestCompletionNPCs::Read()
 
 WorldPacket const* QuestCompletionNPCResponse::Write()
 {
-    _worldPacket << uint32(QuestCompletionNPCs.size());
+    _worldPacket << Size<uint32>(QuestCompletionNPCs);
     for (auto& quest : QuestCompletionNPCs)
     {
         _worldPacket << int32(quest.QuestID);
-        _worldPacket << uint32(quest.NPCs.size());
+        _worldPacket << Size<uint32>(quest.NPCs);
         if (!quest.NPCs.empty())
             _worldPacket.append(quest.NPCs.data(), quest.NPCs.size());
     }

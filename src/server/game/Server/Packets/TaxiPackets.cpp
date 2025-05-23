@@ -16,6 +16,7 @@
 */
 
 #include "TaxiPackets.h"
+#include "PacketUtilities.h"
 
 void WorldPackets::Taxi::TaxiNodeStatusQuery::Read()
 {
@@ -36,8 +37,8 @@ WorldPacket const* WorldPackets::Taxi::ShowTaxiNodes::Write()
     _worldPacket.WriteBit(WindowInfo.has_value());
     _worldPacket.FlushBits();
 
-    _worldPacket << uint32(CanLandNodes.size());
-    _worldPacket << uint32(CanUseNodes.size());
+    _worldPacket << Size<uint32>(CanLandNodes);
+    _worldPacket << Size<uint32>(CanUseNodes);
 
     if (WindowInfo.has_value())
     {

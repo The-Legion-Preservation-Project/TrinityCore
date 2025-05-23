@@ -121,7 +121,7 @@ WorldPacket const* FeatureSystemStatus::Write()
 
     if (RaceClassExpansionLevels)
     {
-        _worldPacket << uint32(RaceClassExpansionLevels->size());
+        _worldPacket << Size<uint32>(*RaceClassExpansionLevels);
         if (!RaceClassExpansionLevels->empty())
             _worldPacket.append(RaceClassExpansionLevels->data(), RaceClassExpansionLevels->size());
     }

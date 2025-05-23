@@ -53,7 +53,7 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonBuildingInfo const& buildingInf
     data << buildingInfo.TimeBuilt;
     data << uint32(buildingInfo.CurrentGarSpecID);
     data << buildingInfo.TimeSpecCooldown;
-    data.WriteBit(buildingInfo.Active);
+    data << Bits<1>(buildingInfo.Active);
     data.FlushBits();
 
     return data;
@@ -71,15 +71,16 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonFollower const& follower)
     data << uint32(follower.Durability);
     data << uint32(follower.CurrentBuildingID);
     data << uint32(follower.CurrentMissionID);
-    data << uint32(follower.AbilityID.size());
+    data << Size<uint32>(follower.AbilityID);
     data << uint32(follower.ZoneSupportSpellID);
     data << uint32(follower.FollowerStatus);
     for (GarrAbilityEntry const* ability : follower.AbilityID)
         data << uint32(ability->ID);
 
-    data.WriteBits(follower.CustomName.length(), 7);
+    data << SizedString::BitsSize<7>(follower.CustomName);
     data.FlushBits();
-    data.WriteString(follower.CustomName);
+
+    data << SizedString::Data(follower.CustomName);
 
     return data;
 }
@@ -139,16 +140,16 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonInfo const& garrison)
     data << int32(garrison.GarrTypeID);
     data << int32(garrison.GarrSiteID);
     data << int32(garrison.GarrSiteLevelID);
-    data << uint32(garrison.Buildings.size());
-    data << uint32(garrison.Plots.size());
-    data << uint32(garrison.Followers.size());
-    data << uint32(garrison.Missions.size());
-    data << uint32(garrison.MissionRewards.size());
-    data << uint32(garrison.MissionOvermaxRewards.size());
-    data << uint32(garrison.MissionAreaBonuses.size());
-    data << uint32(garrison.Talents.size());
-    data << uint32(garrison.CanStartMission.size());
-    data << uint32(garrison.ArchivedMissions.size());
+    data << Size<uint32>(garrison.Buildings);
+    data << Size<uint32>(garrison.Plots);
+    data << Size<uint32>(garrison.Followers);
+    data << Size<uint32>(garrison.Missions);
+    data << Size<uint32>(garrison.MissionRewards);
+    data << Size<uint32>(garrison.MissionOvermaxRewards);
+    data << Size<uint32>(garrison.MissionAreaBonuses);
+    data << Size<uint32>(garrison.Talents);
+    data << Size<uint32>(garrison.CanStartMission);
+    data << Size<uint32>(garrison.ArchivedMissions);
     data << int32(garrison.NumFollowerActivationsRemaining);
     data << uint32(garrison.NumMissionsStartedToday);
 
@@ -159,14 +160,14 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonInfo const& garrison)
         data << *mission;
 
     for (std::vector<GarrisonMissionReward> const& missionReward : garrison.MissionRewards)
-        data << uint32(missionReward.size());
+        data << Size<uint32>(missionReward);
 
     for (std::vector<GarrisonMissionReward> const& missionReward : garrison.MissionRewards)
         for (GarrisonMissionReward const& missionRewardItem : missionReward)
             data << missionRewardItem;
 
     for (std::vector<GarrisonMissionReward> const& missionReward : garrison.MissionOvermaxRewards)
-        data << uint32(missionReward.size());
+        data << Size<uint32>(missionReward);
 
     for (std::vector<GarrisonMissionReward> const& missionReward : garrison.MissionOvermaxRewards)
         for (GarrisonMissionReward const& missionRewardItem : missionReward)
@@ -185,7 +186,7 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonInfo const& garrison)
         data << *building;
 
     for (bool canStartMission : garrison.CanStartMission)
-        data.WriteBit(canStartMission);
+        data << Bits<1>(canStartMission);
 
     data.FlushBits();
 
@@ -205,8 +206,8 @@ ByteBuffer& operator<<(ByteBuffer& data, FollowerSoftCapInfo const& followerSoft
 WorldPacket const* GetGarrisonInfoResult::Write()
 {
     _worldPacket << int32(FactionIndex);
-    _worldPacket << uint32(Garrisons.size());
-    _worldPacket << uint32(FollowerSoftCaps.size());
+    _worldPacket << Size<uint32>(Garrisons);
+    _worldPacket << Size<uint32>(FollowerSoftCaps);
     for (FollowerSoftCapInfo const& followerSoftCapInfo : FollowerSoftCaps)
         _worldPacket << followerSoftCapInfo;
 
@@ -227,7 +228,7 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonRemoteBuildingInfo const& build
 ByteBuffer& operator<<(ByteBuffer& data, GarrisonRemoteSiteInfo const& site)
 {
     data << uint32(site.GarrSiteLevelID);
-    data << uint32(site.Buildings.size());
+    data << Size<uint32>(site.Buildings);
     for (GarrisonRemoteBuildingInfo const& building : site.Buildings)
         data << building;
 
@@ -236,7 +237,7 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonRemoteSiteInfo const& site)
 
 WorldPacket const* GarrisonRemoteInfo::Write()
 {
-    _worldPacket << uint32(Sites.size());
+    _worldPacket << Size<uint32>(Sites);
     for (GarrisonRemoteSiteInfo const& site : Sites)
         _worldPacket << site;
 
@@ -255,7 +256,7 @@ WorldPacket const* GarrisonPlaceBuildingResult::Write()
     _worldPacket << int32(GarrTypeID);
     _worldPacket << uint32(Result);
     _worldPacket << BuildingInfo;
-    _worldPacket.WriteBit(PlayActivationCinematic);
+    _worldPacket << Bits<1>(PlayActivationCinematic);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
@@ -321,7 +322,7 @@ ByteBuffer& operator<<(ByteBuffer& data, GarrisonBuildingMapData& building)
 
 WorldPacket const* GarrisonMapDataResponse::Write()
 {
-    _worldPacket << uint32(Buildings.size());
+    _worldPacket << Size<uint32>(Buildings);
     for (GarrisonBuildingMapData& building : Buildings)
         _worldPacket << building;
 

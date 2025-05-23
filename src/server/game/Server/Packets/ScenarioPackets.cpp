@@ -44,10 +44,10 @@ WorldPacket const* ScenarioState::Write()
     _worldPacket << uint32(WaveCurrent);
     _worldPacket << uint32(WaveMax);
     _worldPacket << uint32(TimerDuration);
-    _worldPacket << uint32(CriteriaProgress.size());
-    _worldPacket << uint32(BonusObjectives.size());
-    _worldPacket << uint32(PickedSteps.size());
-    _worldPacket << uint32(Spells.size());
+    _worldPacket << Size<uint32>(CriteriaProgress);
+    _worldPacket << Size<uint32>(BonusObjectives);
+    _worldPacket << Size<uint32>(PickedSteps);
+    _worldPacket << Size<uint32>(Spells);
 
     if (!PickedSteps.empty())
         _worldPacket.append(PickedSteps.data(), PickedSteps.size());
@@ -100,12 +100,12 @@ void QueryScenarioPOI::Read()
 
 WorldPacket const* ScenarioPOIs::Write()
 {
-    _worldPacket << uint32(ScenarioPOIDataStats.size());
+    _worldPacket << Size<uint32>(ScenarioPOIDataStats);
 
     for (ScenarioPOIData const& scenarioPOIData : ScenarioPOIDataStats)
     {
         _worldPacket << int32(scenarioPOIData.CriteriaTreeID);
-        _worldPacket << uint32(scenarioPOIData.ScenarioPOIs->size());
+        _worldPacket << Size<uint32>(*scenarioPOIData.ScenarioPOIs);
 
         for (ScenarioPOI const& scenarioPOI : *scenarioPOIData.ScenarioPOIs)
         {
@@ -117,7 +117,7 @@ WorldPacket const* ScenarioPOIs::Write()
             _worldPacket << int32(scenarioPOI.Flags);
             _worldPacket << int32(scenarioPOI.WorldEffectID);
             _worldPacket << int32(scenarioPOI.PlayerConditionID);
-            _worldPacket << uint32(scenarioPOI.Points.size());
+            _worldPacket << Size<uint32>(scenarioPOI.Points);
 
             for (ScenarioPOIPoint const& scenarioPOIBlobPoint : scenarioPOI.Points)
             {

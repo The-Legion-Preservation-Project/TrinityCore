@@ -16,6 +16,7 @@
  */
 
 #include "WorldStatePackets.h"
+#include "PacketUtilities.h"
 
 WorldPackets::WorldState::InitWorldStates::InitWorldStates()
     : ServerPacket(SMSG_INIT_WORLD_STATES, 16) { }
@@ -28,7 +29,7 @@ WorldPacket const* WorldPackets::WorldState::InitWorldStates::Write()
     _worldPacket << int32(AreaID);
     _worldPacket << int32(SubareaID);
 
-    _worldPacket << uint32(Worldstates.size());
+    _worldPacket << Size<uint32>(Worldstates);
     for (WorldStateInfo const& wsi : Worldstates)
     {
         _worldPacket << int32(wsi.VariableID);

@@ -41,7 +41,7 @@ ByteBuffer& operator>>(ByteBuffer& data, MethodCall& method)
 WorldPacket const* Notification::Write()
 {
     _worldPacket << Method;
-    _worldPacket << uint32(Data.size());
+    _worldPacket << Size<uint32>(Data);
     _worldPacket.append(Data);
 
     return &_worldPacket;
@@ -51,7 +51,7 @@ WorldPacket const* Response::Write()
 {
     _worldPacket << uint32(BnetStatus);
     _worldPacket << Method;
-    _worldPacket << uint32(Data.size());
+    _worldPacket << Size<uint32>(Data);
     _worldPacket.append(Data);
 
     return &_worldPacket;
@@ -69,7 +69,7 @@ WorldPacket const* ChangeRealmTicketResponse::Write()
 {
     _worldPacket << uint32(Token);
     _worldPacket << Bits<1>(Allow);
-    _worldPacket << uint32(Ticket.size());
+    _worldPacket << Size<uint32>(Ticket);
     _worldPacket.append(Ticket);
 
     return &_worldPacket;

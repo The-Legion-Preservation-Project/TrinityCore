@@ -124,7 +124,7 @@ WorldPacket const* WorldPackets::Trade::TradeUpdated::Write()
     _worldPacket << int32(CurrencyType);
     _worldPacket << int32(CurrencyQuantity);
     _worldPacket << int32(ProposedEnchantment);
-    _worldPacket << uint32(Items.size());
+    _worldPacket << Size<uint32>(Items);
 
     for (TradeItem const& item : Items)
         _worldPacket << item;
