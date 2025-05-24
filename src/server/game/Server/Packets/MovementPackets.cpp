@@ -19,8 +19,8 @@
 #include "MoveSpline.h"
 #include "MoveSplineFlag.h"
 #include "MovementTypedefs.h"
-#include "PacketUtilities.h"
-#include "Unit.h"
+#include "PacketOperators.h"
+#include "UnitDefines.h"
 #include "Util.h"
 
 ByteBuffer& operator<<(ByteBuffer& data, MovementInfo::TransportInfo const& transportInfo)

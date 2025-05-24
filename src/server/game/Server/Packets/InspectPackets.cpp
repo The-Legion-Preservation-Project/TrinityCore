@@ -17,7 +17,7 @@
 
 #include "InspectPackets.h"
 #include "Item.h"
-#include "PacketUtilities.h"
+#include "PacketOperators.h"
 
 namespace WorldPackets::Inspect
 {

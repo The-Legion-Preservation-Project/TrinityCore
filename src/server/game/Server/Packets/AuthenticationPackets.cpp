@@ -19,6 +19,7 @@
 #include "BigNumber.h"
 #include "CharacterTemplateDataStore.h"
 #include "HMAC.h"
+#include "PacketOperators.h"
 #include "LegacyRSA.h"
 
 namespace WorldPackets::Auth

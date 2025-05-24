@@ -20,7 +20,7 @@
 #include "DB2Stores.h"
 #include "ObjectGuid.h"
 #include "MailPackets.h"
-#include "PacketUtilities.h"
+#include "PacketOperators.h"
 
 namespace WorldPackets::AuctionHouse
 {

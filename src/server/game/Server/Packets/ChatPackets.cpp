@@ -18,7 +18,7 @@
 #include "ChatPackets.h"
 #include "Creature.h"
 #include "Group.h"
-#include "notification_types.pb.h"
+#include "PacketOperators.h"
 #include "Player.h"
 #include "World.h"
 #include "WorldSession.h"

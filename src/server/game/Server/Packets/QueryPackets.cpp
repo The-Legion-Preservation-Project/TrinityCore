@@ -19,6 +19,7 @@
 #include "BattlenetAccountMgr.h"
 #include "CharacterCache.h"
 #include "ObjectMgr.h"
+#include "PacketOperators.h"
 #include "Player.h"
 #include "World.h"
 #include "WorldSession.h"

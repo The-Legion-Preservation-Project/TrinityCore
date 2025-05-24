@@ -16,6 +16,7 @@
  */
 
 #include "CalendarPackets.h"
+#include "PacketOperators.h"
 
 #include <boost/beast/http/field.hpp>
 

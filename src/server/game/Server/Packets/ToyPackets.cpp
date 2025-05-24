@@ -16,7 +16,7 @@
  */
 
 #include "ToyPackets.h"
-#include "PacketUtilities.h"
+#include "PacketOperators.h"
 
 namespace WorldPackets::Toy
 {

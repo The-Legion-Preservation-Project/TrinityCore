@@ -17,7 +17,7 @@
 
 #include "SystemPackets.h"
 #include "Errors.h"
-#include "PacketUtilities.h"
+#include "PacketOperators.h"
 
 namespace WorldPackets::System
 {
