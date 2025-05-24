@@ -58,7 +58,7 @@ void HotfixRequest::Read()
 {
     _worldPacket >> Size<uint32>(Hotfixes);
     if (Hotfixes.size() > sDB2Manager.GetHotfixData().size())
-        throw PacketArrayMaxCapacityException(Hotfixes.size(), sDB2Manager.GetHotfixData().size());
+        OnInvalidArraySize(Hotfixes.size(), sDB2Manager.GetHotfixData().size());
 
     for (uint64& hotfixId : Hotfixes)
         _worldPacket >> hotfixId;
