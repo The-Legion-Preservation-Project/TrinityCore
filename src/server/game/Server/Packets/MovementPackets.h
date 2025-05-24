@@ -616,37 +616,37 @@ namespace WorldPackets
             uint32 Reason = 1;
         };
 
+        struct CollisionHeightInfo
+        {
+            float Height = 0.0f;
+            float Scale = 0.0f;
+            UpdateCollisionHeightReason Reason = UpdateCollisionHeightReason::Scale;
+        };
+
+        struct KnockBackInfo
+        {
+            float HorzSpeed = 0.0f;
+            TaggedPosition<Position::XY> Direction;
+            float InitVertSpeed = 0.0f;
+        };
+
+        struct MoveStateChange
+        {
+            MoveStateChange(OpcodeServer messageId, uint32 sequenceIndex) : MessageID(messageId), SequenceIndex(sequenceIndex) { }
+
+            uint16 MessageID = 0;
+            uint32 SequenceIndex = 0;
+            Optional<float> Speed;
+            Optional<KnockBackInfo> KnockBack;
+            Optional<int32> VehicleRecID;
+            Optional<CollisionHeightInfo> CollisionHeight;
+            Optional<MovementForce> MovementForce_;
+            Optional<ObjectGuid> MovementForceGUID;
+        };
+
         class MoveSetCompoundState final : public ServerPacket
         {
         public:
-            struct CollisionHeightInfo
-            {
-                float Height = 0.0f;
-                float Scale = 0.0f;
-                UpdateCollisionHeightReason Reason = UpdateCollisionHeightReason::Scale;
-            };
-
-            struct KnockBackInfo
-            {
-                float HorzSpeed = 0.0f;
-                TaggedPosition<Position::XY> Direction;
-                float InitVertSpeed = 0.0f;
-            };
-
-            struct MoveStateChange
-            {
-                MoveStateChange(OpcodeServer messageId, uint32 sequenceIndex) : MessageID(messageId), SequenceIndex(sequenceIndex) { }
-
-                uint16 MessageID = 0;
-                uint32 SequenceIndex = 0;
-                Optional<float> Speed;
-                Optional<KnockBackInfo> KnockBack;
-                Optional<int32> VehicleRecID;
-                Optional<CollisionHeightInfo> CollisionHeight;
-                Optional<MovementForce> MovementForce_;
-                Optional<ObjectGuid> MovementForceGUID;
-            };
-
             explicit MoveSetCompoundState() : ServerPacket(SMSG_MOVE_SET_COMPOUND_STATE, 4 + 1) { }
 
             WorldPacket const* Write() override;

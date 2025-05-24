@@ -255,7 +255,7 @@ void AuctionListItems::Read()
     _worldPacket >> MinLevel;
     _worldPacket >> MaxLevel;
     _worldPacket >> Quality;
-    _worldPacket >> As<uint8>(DataSort);
+    _worldPacket >> Size<uint8>(DataSort);
 
     uint32 knownPetsSize = _worldPacket.read<uint32>();
     uint32 const sizeLimit = sBattlePetSpeciesStore.GetNumRows() / (sizeof(decltype(KnownPets)::value_type) * 8) + 1;

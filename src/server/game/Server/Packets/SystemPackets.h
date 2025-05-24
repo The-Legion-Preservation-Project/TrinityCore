@@ -26,6 +26,40 @@ namespace WorldPackets
 {
     namespace System
     {
+        struct SocialQueueConfig
+        {
+            bool ToastsDisabled = false;
+            float ToastDuration = 0.0f;
+            float DelayDuration = 0.0f;
+            float QueueMultiplier = 0.0f;
+            float PlayerMultiplier = 0.0f;
+            float PlayerFriendValue = 0.0f;
+            float PlayerGuildValue = 0.0f;
+            float ThrottleInitialThreshold = 0.0f;
+            float ThrottleDecayTime = 0.0f;
+            float ThrottlePrioritySpike = 0.0f;
+            float ThrottleMinThreshold = 0.0f;
+            float ThrottlePvPPriorityNormal = 0.0f;
+            float ThrottlePvPPriorityLow = 0.0f;
+            float ThrottlePvPHonorThreshold = 0.0f;
+            float ThrottleLfgListPriorityDefault = 0.0f;
+            float ThrottleLfgListPriorityAbove = 0.0f;
+            float ThrottleLfgListPriorityBelow = 0.0f;
+            float ThrottleLfgListIlvlScalingAbove = 0.0f;
+            float ThrottleLfgListIlvlScalingBelow = 0.0f;
+            float ThrottleRfPriorityAbove = 0.0f;
+            float ThrottleRfIlvlScalingAbove = 0.0f;
+            float ThrottleDfMaxItemLevel = 0.0f;
+            float ThrottleDfBestPriority = 0.0f;
+        };
+
+        struct SessionAlertConfig
+        {
+            int32 Delay       = 0;
+            int32 Period      = 0;
+            int32 DisplayTime = 0;
+        };
+
         struct SavedThrottleObjectState
         {
             uint32 MaxTries               = 0;
@@ -47,40 +81,6 @@ namespace WorldPackets
         class FeatureSystemStatus final : public ServerPacket
         {
         public:
-            struct SessionAlertConfig
-            {
-                int32 Delay       = 0;
-                int32 Period      = 0;
-                int32 DisplayTime = 0;
-            };
-
-            struct SocialQueueConfig
-            {
-                bool ToastsDisabled = false;
-                float ToastDuration = 0.0f;
-                float DelayDuration = 0.0f;
-                float QueueMultiplier = 0.0f;
-                float PlayerMultiplier = 0.0f;
-                float PlayerFriendValue = 0.0f;
-                float PlayerGuildValue = 0.0f;
-                float ThrottleInitialThreshold = 0.0f;
-                float ThrottleDecayTime = 0.0f;
-                float ThrottlePrioritySpike = 0.0f;
-                float ThrottleMinThreshold = 0.0f;
-                float ThrottlePvPPriorityNormal = 0.0f;
-                float ThrottlePvPPriorityLow = 0.0f;
-                float ThrottlePvPHonorThreshold = 0.0f;
-                float ThrottleLfgListPriorityDefault = 0.0f;
-                float ThrottleLfgListPriorityAbove = 0.0f;
-                float ThrottleLfgListPriorityBelow = 0.0f;
-                float ThrottleLfgListIlvlScalingAbove = 0.0f;
-                float ThrottleLfgListIlvlScalingBelow = 0.0f;
-                float ThrottleRfPriorityAbove = 0.0f;
-                float ThrottleRfIlvlScalingAbove = 0.0f;
-                float ThrottleDfMaxItemLevel = 0.0f;
-                float ThrottleDfBestPriority = 0.0f;
-            };
-
             explicit FeatureSystemStatus() : ServerPacket(SMSG_FEATURE_SYSTEM_STATUS, 48) { }
 
             WorldPacket const* Write() override;

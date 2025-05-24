@@ -97,28 +97,28 @@ namespace WorldPackets
             Optional<Spells::SandboxScalingData> SandboxScaling;
         };
 
+        struct PeriodicalAuraLogEffectDebugInfo
+        {
+            float CritRollMade = 0.0f;
+            float CritRollNeeded = 0.0f;
+        };
+
+        struct PeriodicAuraLogEffect
+        {
+            int32 Effect              = 0;
+            int32 Amount              = 0;
+            int32 OverHealOrKill      = 0;
+            int32 SchoolMaskOrPower   = 0;
+            int32 AbsorbedOrAmplitude = 0;
+            int32 Resisted            = 0;
+            bool Crit                 = false;
+            Optional<PeriodicalAuraLogEffectDebugInfo> DebugInfo;
+            Optional<Spells::SandboxScalingData> SandboxScaling;
+        };
+
         class SpellPeriodicAuraLog final : public CombatLogServerPacket
         {
         public:
-            struct PeriodicalAuraLogEffectDebugInfo
-            {
-                float CritRollMade = 0.0f;
-                float CritRollNeeded = 0.0f;
-            };
-
-            struct SpellLogEffect
-            {
-                int32 Effect              = 0;
-                int32 Amount              = 0;
-                int32 OverHealOrKill      = 0;
-                int32 SchoolMaskOrPower   = 0;
-                int32 AbsorbedOrAmplitude = 0;
-                int32 Resisted            = 0;
-                bool Crit                 = false;
-                Optional<PeriodicalAuraLogEffectDebugInfo> DebugInfo;
-                Optional<Spells::SandboxScalingData> SandboxScaling;
-            };
-
             explicit SpellPeriodicAuraLog() : CombatLogServerPacket(SMSG_SPELL_PERIODIC_AURA_LOG, 16 + 16 + 4 + 4 + 1) { }
 
             WorldPacket const* Write() override;
@@ -126,7 +126,7 @@ namespace WorldPackets
             ObjectGuid TargetGUID;
             ObjectGuid CasterGUID;
             int32 SpellID = 0;
-            std::vector<SpellLogEffect> Effects;
+            std::vector<PeriodicAuraLogEffect> Effects;
         };
 
         class SpellInterruptLog final : public ServerPacket
