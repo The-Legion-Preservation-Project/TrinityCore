@@ -27,6 +27,7 @@ ByteBuffer& operator<<(ByteBuffer& data, SavedThrottleObjectState const& throttl
     data << uint32(throttleState.PerMilliseconds);
     data << uint32(throttleState.TryCount);
     data << uint32(throttleState.LastResetTimeBeforeNow);
+
     return data;
 }
 
@@ -37,6 +38,7 @@ ByteBuffer& operator<<(ByteBuffer& data, EuropaTicketConfig const& europaTicketS
     data << Bits<1>(europaTicketSystemStatus.ComplaintsEnabled);
     data << Bits<1>(europaTicketSystemStatus.SuggestionsEnabled);
     data << europaTicketSystemStatus.ThrottleState;
+
     return data;
 }
 
@@ -87,7 +89,7 @@ WorldPacket const* FeatureSystemStatus::Write()
     _worldPacket.FlushBits();
 
     {
-        _worldPacket.WriteBit(QuickJoinConfig.ToastsDisabled);
+        _worldPacket << Bits<1>(QuickJoinConfig.ToastsDisabled);
         _worldPacket << float(QuickJoinConfig.ToastDuration);
         _worldPacket << float(QuickJoinConfig.DelayDuration);
         _worldPacket << float(QuickJoinConfig.QueueMultiplier);
@@ -145,7 +147,7 @@ WorldPacket const* FeatureSystemStatusGlueScreen::Write()
 
     _worldPacket << Bits<1>(KioskModeEnabled);
     _worldPacket << Bits<1>(CompetitiveModeEnabled);
-    _worldPacket.WriteBit(false); // not accessed in handler
+    _worldPacket << Bits<1>(false); // not accessed in handler
     _worldPacket << Bits<1>(BoostEnabled);
     _worldPacket << Bits<1>(RedeemForBalanceAvailable);
     _worldPacket << Bits<1>(LiveRegionCharacterListEnabled);
@@ -164,14 +166,15 @@ WorldPacket const* FeatureSystemStatusGlueScreen::Write()
 WorldPacket const* MOTD::Write()
 {
     ASSERT(Text);
-    _worldPacket.WriteBits(Text->size(), 4);
+    _worldPacket << BitsSize<4>(*Text);
     _worldPacket.FlushBits();
 
     for (std::string const& line : *Text)
     {
-        _worldPacket.WriteBits(line.length(), 7);
+        _worldPacket << SizedString::BitsSize<7>(line);
         _worldPacket.FlushBits();
-        _worldPacket.WriteString(line);
+
+        _worldPacket << SizedString::Data(line);
     }
 
     return &_worldPacket;
@@ -179,12 +182,12 @@ WorldPacket const* MOTD::Write()
 
 WorldPacket const* SetTimeZoneInformation::Write()
 {
-    _worldPacket << BitsSize<7>(ServerTimeTZ);
-    _worldPacket << BitsSize<7>(GameTimeTZ);
+    _worldPacket << SizedString::BitsSize<7>(ServerTimeTZ);
+    _worldPacket << SizedString::BitsSize<7>(GameTimeTZ);
     _worldPacket.FlushBits();
 
-    _worldPacket.WriteString(ServerTimeTZ);
-    _worldPacket.WriteString(GameTimeTZ);
+    _worldPacket << SizedString::Data(ServerTimeTZ);
+    _worldPacket << SizedString::Data(GameTimeTZ);
 
     return &_worldPacket;
 }

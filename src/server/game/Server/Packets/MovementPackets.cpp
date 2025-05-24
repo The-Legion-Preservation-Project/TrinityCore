@@ -210,7 +210,8 @@ ByteBuffer& operator<<(ByteBuffer& data, MonsterSplineFilter const& monsterSplin
     data << int16(monsterSplineFilter.AddedToStart);
     for (MonsterSplineFilterKey const& filterKey : monsterSplineFilter.FilterKeys)
         data << filterKey;
-    data.WriteBits(monsterSplineFilter.FilterFlags, 2);
+
+    data << Bits<2>(monsterSplineFilter.FilterFlags);
     data.FlushBits();
 
     return data;

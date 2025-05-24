@@ -16,33 +16,37 @@
  */
 
 #include "ToyPackets.h"
+#include "PacketUtilities.h"
 
-void WorldPackets::Toy::AddToy::Read()
+namespace WorldPackets::Toy
+{
+void AddToy::Read()
 {
     _worldPacket >> Guid;
 }
 
-void WorldPackets::Toy::UseToy::Read()
+void UseToy::Read()
 {
     _worldPacket >> Cast;
 }
 
-WorldPacket const* WorldPackets::Toy::AccountToyUpdate::Write()
+WorldPacket const* AccountToyUpdate::Write()
 {
-    _worldPacket.WriteBit(IsFullUpdate);
+    _worldPacket << Bits<1>(IsFullUpdate);
     _worldPacket.FlushBits();
 
     // both lists have to have the same size
-    _worldPacket << int32(Toys->size());
-    _worldPacket << int32(Toys->size());
+    _worldPacket << Size<int32>(*Toys); // ids
+    _worldPacket << Size<int32>(*Toys); // favorites
 
-    for (auto const& toy : *Toys)
-        _worldPacket << uint32(toy.first);
+    for (auto const& [itemId, _] : *Toys)
+        _worldPacket << uint32(itemId);
 
-    for (auto const& toy : *Toys)
-        _worldPacket.WriteBit(toy.second.HasFlag(ToyFlags::Favorite));
+    for (auto const& [_, flags] : *Toys)
+        _worldPacket << Bits<1>(flags.HasFlag(ToyFlags::Favorite));
 
     _worldPacket.FlushBits();
 
     return &_worldPacket;
+}
 }

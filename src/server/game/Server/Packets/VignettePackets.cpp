@@ -34,11 +34,11 @@ ByteBuffer& operator<<(ByteBuffer& data, VignetteData const& vignetteData)
 
 ByteBuffer& operator<<(ByteBuffer& data, VignetteDataSet const& vignetteDataSet)
 {
-    data << uint32(vignetteDataSet.IDs.size());
+    data << Size<uint32>(vignetteDataSet.IDs);
     for (ObjectGuid const& id : vignetteDataSet.IDs)
         data << id;
 
-    data << uint32(vignetteDataSet.Data.size());
+    data << Size<uint32>(vignetteDataSet.Data);
     for (VignetteData const& vignetteData : vignetteDataSet.Data)
         data << vignetteData;
 
@@ -47,7 +47,7 @@ ByteBuffer& operator<<(ByteBuffer& data, VignetteDataSet const& vignetteDataSet)
 
 WorldPacket const* VignetteUpdate::Write()
 {
-    _worldPacket.WriteBit(ForceUpdate);
+    _worldPacket << Bits<1>(ForceUpdate);
     _worldPacket.FlushBits();
 
     _worldPacket << Size<uint32>(Removed);

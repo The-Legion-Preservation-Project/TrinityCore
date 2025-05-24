@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SystemPackets_h__
-#define SystemPackets_h__
+#ifndef TRINITYCORE_SYSTEM_PACKETS_H
+#define TRINITYCORE_SYSTEM_PACKETS_H
 
 #include "Packet.h"
 #include "ObjectGuid.h"
@@ -81,7 +81,7 @@ namespace WorldPackets
                 float ThrottleDfBestPriority = 0.0f;
             };
 
-            FeatureSystemStatus() : ServerPacket(SMSG_FEATURE_SYSTEM_STATUS, 48) { }
+            explicit FeatureSystemStatus() : ServerPacket(SMSG_FEATURE_SYSTEM_STATUS, 48) { }
 
             WorldPacket const* Write() override;
 
@@ -126,7 +126,7 @@ namespace WorldPackets
         class FeatureSystemStatusGlueScreen final : public ServerPacket
         {
         public:
-            FeatureSystemStatusGlueScreen() : ServerPacket(SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, 1) { }
+            explicit FeatureSystemStatusGlueScreen() : ServerPacket(SMSG_FEATURE_SYSTEM_STATUS_GLUE_SCREEN, 1) { }
 
             WorldPacket const* Write() override;
 
@@ -154,7 +154,7 @@ namespace WorldPackets
         class MOTD final : public ServerPacket
         {
         public:
-            MOTD() : ServerPacket(SMSG_MOTD) { }
+            explicit MOTD() : ServerPacket(SMSG_MOTD) { }
 
             WorldPacket const* Write() override;
 
@@ -164,7 +164,7 @@ namespace WorldPackets
         class SetTimeZoneInformation final : public ServerPacket
         {
         public:
-            SetTimeZoneInformation() : ServerPacket(SMSG_SET_TIME_ZONE_INFORMATION) { }
+            explicit SetTimeZoneInformation() : ServerPacket(SMSG_SET_TIME_ZONE_INFORMATION) { }
 
             WorldPacket const* Write() override;
 
@@ -174,4 +174,4 @@ namespace WorldPackets
     }
 }
 
-#endif // SystemPackets_h__
+#endif // TRINITYCORE_SYSTEM_PACKETS_H

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TicketPackets_h__
-#define TicketPackets_h__
+#ifndef TRINITYCORE_TICKET_PACKETS_H
+#define TRINITYCORE_TICKET_PACKETS_H
 
 #include "Packet.h"
 #include "LFGPacketsCommon.h"
@@ -37,7 +37,7 @@ namespace WorldPackets
         class GMTicketGetSystemStatus final : public ClientPacket
         {
         public:
-            GMTicketGetSystemStatus(WorldPacket&& packet) : ClientPacket(CMSG_GM_TICKET_GET_SYSTEM_STATUS, std::move(packet)) { }
+            explicit GMTicketGetSystemStatus(WorldPacket&& packet) : ClientPacket(CMSG_GM_TICKET_GET_SYSTEM_STATUS, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -45,7 +45,7 @@ namespace WorldPackets
         class GMTicketSystemStatus final : public ServerPacket
         {
         public:
-            GMTicketSystemStatus() : ServerPacket(SMSG_GM_TICKET_SYSTEM_STATUS, 4) { }
+            explicit GMTicketSystemStatus() : ServerPacket(SMSG_GM_TICKET_SYSTEM_STATUS, 4) { }
 
             WorldPacket const* Write() override;
 
@@ -55,7 +55,7 @@ namespace WorldPackets
         class GMTicketGetCaseStatus final : public ClientPacket
         {
         public:
-            GMTicketGetCaseStatus(WorldPacket&& packet) : ClientPacket(CMSG_GM_TICKET_GET_CASE_STATUS, std::move(packet)) { }
+            explicit GMTicketGetCaseStatus(WorldPacket&& packet) : ClientPacket(CMSG_GM_TICKET_GET_CASE_STATUS, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -75,7 +75,7 @@ namespace WorldPackets
                 std::string WaitTimeOverrideMessage;
             };
 
-            GMTicketCaseStatus() : ServerPacket(SMSG_GM_TICKET_CASE_STATUS, 12) { }
+            explicit GMTicketCaseStatus() : ServerPacket(SMSG_GM_TICKET_CASE_STATUS, 12) { }
 
             WorldPacket const* Write() override;
 
@@ -85,7 +85,7 @@ namespace WorldPackets
         class GMTicketAcknowledgeSurvey final : public ClientPacket
         {
         public:
-            GMTicketAcknowledgeSurvey(WorldPacket&& packet) : ClientPacket(CMSG_GM_TICKET_ACKNOWLEDGE_SURVEY, std::move(packet)) { }
+            explicit GMTicketAcknowledgeSurvey(WorldPacket&& packet) : ClientPacket(CMSG_GM_TICKET_ACKNOWLEDGE_SURVEY, std::move(packet)) { }
 
             void Read() override;
 
@@ -95,7 +95,7 @@ namespace WorldPackets
         class SupportTicketSubmitBug final : public ClientPacket
         {
         public:
-            SupportTicketSubmitBug(WorldPacket&& packet) : ClientPacket(CMSG_SUPPORT_TICKET_SUBMIT_BUG, std::move(packet)) { }
+            explicit SupportTicketSubmitBug(WorldPacket&& packet) : ClientPacket(CMSG_SUPPORT_TICKET_SUBMIT_BUG, std::move(packet)) { }
 
             void Read() override;
 
@@ -106,7 +106,7 @@ namespace WorldPackets
         class SupportTicketSubmitSuggestion final : public ClientPacket
         {
         public:
-            SupportTicketSubmitSuggestion(WorldPacket&& packet) : ClientPacket(CMSG_SUPPORT_TICKET_SUBMIT_SUGGESTION, std::move(packet)) { }
+            explicit SupportTicketSubmitSuggestion(WorldPacket&& packet) : ClientPacket(CMSG_SUPPORT_TICKET_SUBMIT_SUGGESTION, std::move(packet)) { }
 
             void Read() override;
 
@@ -116,8 +116,8 @@ namespace WorldPackets
 
         struct SupportTicketChatLine
         {
-            SupportTicketChatLine(ByteBuffer& data);
-            SupportTicketChatLine(time_t timestamp, std::string const& text);
+            SupportTicketChatLine() { }
+            SupportTicketChatLine(time_t timestamp, std::string_view text);
 
             WorldPackets::Timestamp<> Timestamp;
             std::string Text;
@@ -178,7 +178,7 @@ namespace WorldPackets
         class SupportTicketSubmitComplaint final : public ClientPacket
         {
         public:
-            SupportTicketSubmitComplaint(WorldPacket&& packet) : ClientPacket(CMSG_SUPPORT_TICKET_SUBMIT_COMPLAINT, std::move(packet)) { }
+            explicit SupportTicketSubmitComplaint(WorldPacket&& packet) : ClientPacket(CMSG_SUPPORT_TICKET_SUBMIT_COMPLAINT, std::move(packet)) { }
 
             void Read() override;
 
@@ -213,7 +213,7 @@ namespace WorldPackets
                 std::string MessageLog;
             };
 
-            Complaint(WorldPacket&& packet) : ClientPacket(CMSG_COMPLAINT, std::move(packet)) { }
+            explicit Complaint(WorldPacket&& packet) : ClientPacket(CMSG_COMPLAINT, std::move(packet)) { }
 
             void Read() override;
 
@@ -228,7 +228,7 @@ namespace WorldPackets
         class ComplaintResult final : public ServerPacket
         {
         public:
-            ComplaintResult() : ServerPacket(SMSG_COMPLAINT_RESULT, 9) { }
+            explicit ComplaintResult() : ServerPacket(SMSG_COMPLAINT_RESULT, 9) { }
 
             WorldPacket const* Write() override;
 
@@ -239,7 +239,7 @@ namespace WorldPackets
         class BugReport final : public ClientPacket
         {
         public:
-            BugReport(WorldPacket&& packet) : ClientPacket(CMSG_BUG_REPORT, std::move(packet)) { }
+            explicit BugReport(WorldPacket&& packet) : ClientPacket(CMSG_BUG_REPORT, std::move(packet)) { }
 
             void Read() override;
 
@@ -250,4 +250,4 @@ namespace WorldPackets
     }
 }
 
-#endif // TicketPackets_h__
+#endif // TRINITYCORE_TICKET_PACKETS_H

@@ -18,10 +18,9 @@
 #include "WorldStatePackets.h"
 #include "PacketUtilities.h"
 
-WorldPackets::WorldState::InitWorldStates::InitWorldStates()
-    : ServerPacket(SMSG_INIT_WORLD_STATES, 16) { }
-
-WorldPacket const* WorldPackets::WorldState::InitWorldStates::Write()
+namespace WorldPackets::WorldState
+{
+WorldPacket const* InitWorldStates::Write()
 {
     _worldPacket.reserve(16 + Worldstates.size() * 8);
 
@@ -39,15 +38,13 @@ WorldPacket const* WorldPackets::WorldState::InitWorldStates::Write()
     return &_worldPacket;
 }
 
-WorldPackets::WorldState::UpdateWorldState::UpdateWorldState()
-    : ServerPacket(SMSG_UPDATE_WORLD_STATE, 9) { }
-
-WorldPacket const* WorldPackets::WorldState::UpdateWorldState::Write()
+WorldPacket const* UpdateWorldState::Write()
 {
     _worldPacket << uint32(VariableID);
     _worldPacket << int32(Value);
-    _worldPacket.WriteBit(Hidden);
+    _worldPacket << Bits<1>(Hidden);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
+}
 }

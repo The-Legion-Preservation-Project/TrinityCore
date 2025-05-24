@@ -493,7 +493,7 @@ WorldPacket const* Dismount::Write()
 
 void SaveCUFProfiles::Read()
 {
-    CUFProfiles.resize(_worldPacket.read<uint32>());
+    _worldPacket >> Size<uint32>(CUFProfiles);
     for (std::unique_ptr<CUFProfile>& cufProfile : CUFProfiles)
     {
         cufProfile = std::make_unique<CUFProfile>();
