@@ -156,7 +156,7 @@ void WorldSocketProtocolInitializer::HandleDataReady()
 {
     try
     {
-        ByteBuffer buffer(std::move(_packetBuffer));
+        ByteBuffer buffer(std::move(_packetBuffer).Release());
         if (buffer.ReadString(ClientConnectionInitialize.length()) != ClientConnectionInitialize)
         {
             _socket->CloseSocket();
@@ -365,7 +365,7 @@ WorldSocket::ReadDataHandlerResult WorldSocket::ReadDataHandler()
         return ReadDataHandlerResult::Error;
     }
 
-    WorldPacket packet(opcode, std::move(_packetBuffer), GetConnectionType());
+    WorldPacket packet(opcode, std::move(_packetBuffer).Release(), GetConnectionType());
 
     if (sPacketLog->CanLogPacket())
         sPacketLog->LogPacket(packet, CLIENT_TO_SERVER, GetRemoteIpAddress(), GetRemotePort(), GetConnectionType());
