@@ -972,15 +972,15 @@ namespace WorldPackets
             WorldPacket const* Write() override;
 
             uint64 Quantity = 0;
+            uint32 QuestID = 0;
             ::DisplayToastMethod DisplayToastMethod = { };
             bool Mailed = false;
             DisplayToastType Type = { };
-            uint32 QuestID = 0;
             bool IsSecondaryResult = false;
             Item::ItemInstance Item;
-            bool BonusRoll = false;
             int32 LootSpec = 0;
             uint32 ItemQuantity = 0;
+            bool BonusRoll = false;
             uint32 CurrencyID = 0;
         };
     }
