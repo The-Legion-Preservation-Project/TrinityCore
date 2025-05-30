@@ -334,7 +334,7 @@ void AreaTrigger::Update(uint32 diff)
                 {
                     float orientation = sDB2Manager.GetCurveValueAt(createProperties->FacingCurveId, GetProgress());
                     if (!GetCreateProperties() || !GetCreateProperties()->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::HasAbsoluteOrientation))
-                        orientation += GetStationaryO();
+                        orientation += _stationaryPosition.GetOrientation();
 
                     SetOrientation(orientation);
                 }
@@ -1014,8 +1014,8 @@ void AreaTrigger::InitSplines(std::vector<G3D::Vector3> const& splinePoints, Opt
 
     _movementTime = 0;
 
-    std::unique_ptr<Movement::Spline<int32>> spline = std::make_unique<::Movement::Spline<int32>>();
-    spline->init_spline(splinePoints.data(), splinePoints.size(), ::Movement::SplineBase::ModeLinear, GetStationaryO());
+    std::unique_ptr<Movement::Spline<float>> spline = std::make_unique<::Movement::Spline<float>>();
+    spline->init_spline(splinePoints.data(), splinePoints.size(), ::Movement::SplineBase::ModeLinear, _stationaryPosition.GetOrientation());
     spline->initLengths();
 
     float speed = overrideSpeed.value_or(GetCreateProperties()->Speed);
@@ -1051,7 +1051,7 @@ void AreaTrigger::InitSplines(std::vector<G3D::Vector3> const& splinePoints, Opt
 
 bool AreaTrigger::HasSplines() const
 {
-    return std::holds_alternative<std::unique_ptr<::Movement::Spline<int32>>>(_movement);
+    return std::holds_alternative<std::unique_ptr<::Movement::Spline<float>>>(_movement);
 }
 
 void AreaTrigger::InitOrbit(AreaTriggerOrbitInfo const& orbit, Optional<float> overrideSpeed)
@@ -1179,7 +1179,7 @@ void AreaTrigger::UpdateSplinePosition(uint32 diff)
 
     _movementTime += diff;
 
-    Movement::Spline<int32>& spline = *std::get<std::unique_ptr<::Movement::Spline<int32>>>(_movement);
+    Movement::Spline<float>& spline = **std::get_if<std::unique_ptr<::Movement::Spline<float>>>(&_movement);
 
     if (_movementTime >= GetTimeToTarget())
     {
@@ -1222,7 +1222,7 @@ void AreaTrigger::UpdateSplinePosition(uint32 diff)
     G3D::Vector3 currentPosition;
     spline.evaluate_percent(lastPositionIndex, percentFromLastPoint, currentPosition);
 
-    float orientation = GetStationaryO();
+    float orientation = _stationaryPosition.GetOrientation();
     if (createProperties && createProperties->FacingCurveId)
         orientation += sDB2Manager.GetCurveValueAt(createProperties->FacingCurveId, GetProgress());
 
