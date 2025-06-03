@@ -530,7 +530,7 @@ void WorldSession::HandleAuctionListItems(WorldPackets::AuctionHouse::AuctionLis
         }
     }
 
-    auctionHouse->BuildListAuctionItems(result, _player, wsearchedname, listItems.MinLevel, listItems.MaxLevel, listItems.OnlyUsable, filters, listItems.Quality, listItems.Offset, listItems.DataSort);
+    auctionHouse->BuildListAuctionItems(result, _player, wsearchedname, listItems.MinLevel, listItems.MaxLevel, listItems.ExactMatch, listItems.OnlyUsable, filters, listItems.Quality, listItems.Offset, listItems.DataSort);
 
     result.DesiredDelay = uint32(throttle.DelayUntilNext.count());
     result.OnlyUsable = listItems.OnlyUsable;

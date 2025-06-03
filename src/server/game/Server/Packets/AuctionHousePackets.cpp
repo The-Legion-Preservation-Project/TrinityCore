@@ -21,6 +21,7 @@
 #include "ObjectGuid.h"
 #include "MailPackets.h"
 #include "PacketOperators.h"
+#include "Log.h"
 
 namespace WorldPackets::AuctionHouse
 {
@@ -44,9 +45,8 @@ ByteBuffer& operator>>(ByteBuffer& data, AuctionListFilterClass& filterClass)
 
 ByteBuffer& operator>>(ByteBuffer& data, AuctionSortDef& sortDef)
 {
-    data.ResetBitPos();
     data >> As<uint8>(sortDef.SortOrder);
-    data >> Bits<1>(sortDef.ReverseSort);
+    data >> sortDef.ReverseSort;
 
     return data;
 }
@@ -268,6 +268,7 @@ void AuctionListItems::Read()
         _worldPacket >> knownPetMask;
 
     _worldPacket >> SizedString::BitsSize<8>(Name);
+    _worldPacket >> SizedString::Data(Name);
     _worldPacket >> BitsSize<3>(ClassFilters);
     _worldPacket >> Bits<1>(OnlyUsable);
     _worldPacket >> Bits<1>(ExactMatch);
@@ -277,7 +278,10 @@ void AuctionListItems::Read()
 
     _worldPacket.read_skip<uint32>(); // DataSize = (SortCount * 2)
     for (AuctionSortDef& sort : DataSort)
+    {
         _worldPacket >> sort;
+        TC_LOG_ERROR("server.loading", "Requested data sort {} - reverse: {}", sort.SortOrder, sort.ReverseSort ? "true" : "false");
+    }
 }
 
 void AuctionListOwnedItems::Read()

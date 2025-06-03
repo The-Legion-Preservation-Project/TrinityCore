@@ -46,7 +46,7 @@ namespace WorldPackets
         struct AuctionSortDef
         {
             AuctionHouseSortOrder SortOrder = AuctionHouseSortOrder(0);
-            bool ReverseSort = false;
+            uint8 ReverseSort = 0;
         };
 
         struct AuctionItemForSale
