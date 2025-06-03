@@ -153,7 +153,7 @@ namespace SeethingShore
 
     namespace SpellVisuals
     {
-        static constexpr uint32 HasteRuneBuff = 85696;
+        //static constexpr uint32 HasteRuneBuff = 85696;
         static constexpr uint32 AzeriteBirth = 74145;
     }
 

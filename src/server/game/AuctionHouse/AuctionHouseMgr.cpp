@@ -127,7 +127,7 @@ public:
         {
             int64 ordering = CompareColumns(sort.SortOrder, left, right);
             if (ordering != 0)
-                return (ordering < 0) == sort.ReverseSort <= 0;
+                return (ordering < 0) == (sort.ReverseSort <= 0);
         }
 
         // Auctions are processed in LIFO order
