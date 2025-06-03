@@ -913,13 +913,11 @@ char* DB2FileLoaderSparseImpl::AutoProduceData(uint32& indexTableSize, char**& i
 
     uint32 offsetCount = _header->MaxId - _header->MinId + 1;
     uint32 records = 0;
-    uint32 expandedDataSize = 0;
     for (uint32 i = 0; i < offsetCount; ++i)
     {
         if (_catalog[i].FileOffset && _catalog[i].RecordSize)
         {
             ++records;
-            expandedDataSize += _catalog[i].RecordSize;
         }
     }
 
