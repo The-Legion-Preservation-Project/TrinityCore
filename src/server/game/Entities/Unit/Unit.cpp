@@ -6022,7 +6022,7 @@ void Unit::SetOwnerGUID(ObjectGuid owner)
 
     UpdateData udata(GetMapId());
     WorldPacket packet;
-    BuildValuesUpdateBlockForPlayer(&udata, player);
+    BuildValuesUpdateBlockForPlayerWithMask(&udata, player, {});
     udata.BuildPacket(&packet);
     player->SendDirectMessage(&packet);
 
@@ -13804,11 +13804,6 @@ void Unit::CalculateHoverHeight()
 bool Unit::IsSplineEnabled() const
 {
     return movespline->Initialized() && !movespline->Finalized();
-}
-
-void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const
-{
-    BuildValuesUpdateWithMask(updateType, data, target, {});
 }
 
 void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const

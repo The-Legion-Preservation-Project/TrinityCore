@@ -228,7 +228,7 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
     buf << uint8(m_objectTypeId);
 
     BuildMovementUpdate(&buf, flags, target);
-    BuildValuesUpdate(updateType, &buf, target);
+    BuildValuesUpdateWithMask(updateType, &buf, target, {});
     BuildDynamicValuesUpdate(updateType, &buf, target);
     data->AddUpdateBlock();
 }
@@ -240,21 +240,21 @@ void Object::SendUpdateToPlayer(Player* player)
     WorldPacket packet;
 
     if (player->HaveAtClient(this))
-        BuildValuesUpdateBlockForPlayer(&upd, player);
+        BuildValuesUpdateBlockForPlayerWithMask(&upd, player, {});
     else
         BuildCreateUpdateBlockForPlayer(&upd, player);
     upd.BuildPacket(&packet);
     player->SendDirectMessage(&packet);
 }
 
-void Object::BuildValuesUpdateBlockForPlayer(UpdateData* data, Player const* target) const
+void Object::BuildValuesUpdateBlockForPlayerWithMask(UpdateData* data, Player const* target, std::unordered_set<uint32> indexes) const
 {
     ByteBuffer& buf = data->GetBuffer();
 
     buf << uint8(UPDATETYPE_VALUES);
     buf << GetGUID();
 
-    BuildValuesUpdate(UPDATETYPE_VALUES, &buf, target);
+    BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &buf, target, indexes);
     BuildDynamicValuesUpdate(UPDATETYPE_VALUES, &buf, target);
 
     data->AddUpdateBlock();
@@ -786,7 +786,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
     }
 }
 
-void Object::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const
+void Object::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> /*indexes*/) const
 {
     if (!target)
         return;
@@ -889,7 +889,7 @@ void Object::BuildFieldsUpdate(Player* player, UpdateDataMapType& data_map) cons
         iter = p.first;
     }
 
-    BuildValuesUpdateBlockForPlayer(&iter->second, iter->first);
+    BuildValuesUpdateBlockForPlayerWithMask(&iter->second, iter->first, {});
 }
 
 uint32 Object::GetUpdateFieldData(Player const* target, uint32*& flags) const

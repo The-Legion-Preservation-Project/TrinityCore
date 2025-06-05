@@ -531,7 +531,7 @@ bool Group::AddMember(Player* player)
                 if (player->HaveAtClient(existingMember))
                 {
                     existingMember->SetFieldNotifyFlag(UF_FLAG_PARTY_MEMBER);
-                    existingMember->BuildValuesUpdateBlockForPlayer(&groupData, player);
+                    existingMember->BuildValuesUpdateBlockForPlayerWithMask(&groupData, player, {});
                     existingMember->RemoveFieldNotifyFlag(UF_FLAG_PARTY_MEMBER);
                 }
 
@@ -539,7 +539,7 @@ bool Group::AddMember(Player* player)
                 {
                     UpdateData newData(player->GetMapId());
                     WorldPacket newDataPacket;
-                    player->BuildValuesUpdateBlockForPlayer(&newData, existingMember);
+                    player->BuildValuesUpdateBlockForPlayerWithMask(&newData, existingMember, {});
                     if (newData.HasData())
                     {
                         newData.BuildPacket(&newDataPacket);

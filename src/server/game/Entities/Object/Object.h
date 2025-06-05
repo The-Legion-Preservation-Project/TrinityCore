@@ -198,7 +198,7 @@ class TC_GAME_API Object
         virtual void BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const;
         void SendUpdateToPlayer(Player* player);
 
-        void BuildValuesUpdateBlockForPlayer(UpdateData* data, Player const* target) const;
+        void BuildValuesUpdateBlockForPlayerWithMask(UpdateData* data, Player const* target, std::unordered_set<uint32> indexes) const;
         void BuildDestroyUpdateBlock(UpdateData* data) const;
         void BuildOutOfRangeUpdateBlock(UpdateData* data) const;
 
@@ -423,7 +423,7 @@ class TC_GAME_API Object
         }
 
         void BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Player* target) const;
-        virtual void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const;
+        virtual void BuildValuesUpdateWithMask(uint8 updatetype, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const;
         virtual void BuildDynamicValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const;
 
         void ApplyPercentModFloatVar(float& var, float val, bool apply);

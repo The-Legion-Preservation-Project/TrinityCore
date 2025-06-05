@@ -3987,11 +3987,6 @@ GameObject* GameObject::GetLinkedTrap()
     return ObjectAccessor::GetGameObject(*this, m_linkedTrap);
 }
 
-void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const
-{
-    BuildValuesUpdateWithMask(updateType, data, target, {});
-}
-
 void GameObject::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const
 {
     if (!target)

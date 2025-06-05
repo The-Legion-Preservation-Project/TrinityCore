@@ -169,7 +169,7 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
         ~GameObject();
 
     protected:
-        void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const override;
+        void BuildValuesUpdateWithMask(uint8 updatetype, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const override;
 
     public:
         void AddToWorld() override;
@@ -435,8 +435,6 @@ class TC_GAME_API GameObject : public WorldObject, public GridObject<GameObject>
         void UpdateDynamicFlagsForNearbyPlayers();
 
         void HandleCustomTypeCommand(GameObjectTypeBase::CustomCommand const& command) const;
-
-        void BuildValuesUpdateWithMask(uint8 updatetype, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const;
 
         TeamId GetControllingTeam() const;
 

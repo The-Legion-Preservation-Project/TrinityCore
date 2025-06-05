@@ -23525,7 +23525,7 @@ void Player::UpdateTriggerVisibility()
             creature->ForceValuesUpdateAtIndex(UNIT_FIELD_DISPLAYID);
             creature->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
             creature->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS_2);
-            creature->BuildValuesUpdateBlockForPlayer(&udata, this);
+            creature->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, {});
         }
         else if (itr->IsAnyTypeGameObject())
         {
@@ -23534,7 +23534,7 @@ void Player::UpdateTriggerVisibility()
                 continue;
 
             go->ForceValuesUpdateAtIndex(OBJECT_DYNAMIC_FLAGS);
-            go->BuildValuesUpdateBlockForPlayer(&udata, this);
+            go->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, {});
         }
     }
 
@@ -24773,7 +24773,7 @@ void Player::UpdateVisibleObjectInteractions(bool allUnits, bool onlySpellClicks
                 }
 
                 if (!indexes.empty())
-                    gameObject->BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &udata.GetBuffer(), this, indexes);
+                    gameObject->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, indexes);
             }
         }
         else if (visibleObjectGuid.IsCreatureOrVehicle() && (allUnits || onlySpellClicks))
@@ -24803,7 +24803,7 @@ void Player::UpdateVisibleObjectInteractions(bool allUnits, bool onlySpellClicks
                     indexes.insert(UNIT_NPC_FLAGS + 1);
 
                 if (!indexes.empty())
-                    creature->BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &udata.GetBuffer(), this, indexes);
+                    creature->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, indexes);
 
                 if (creature->IsQuestGiver())
                     giverStatusMultiple.QuestGiver.emplace_back(visibleObjectGuid, GetQuestDialogStatus(creature));
@@ -24820,7 +24820,7 @@ void Player::UpdateVisibleObjectInteractions(bool allUnits, bool onlySpellClicks
                     if (sConditionMgr->HasConditionsForSpellClickEvent(creature->GetEntry(), clickPair.second.spellId))
                     {
                         // NpcFlags[0] (UNIT_NPC_FLAGS) has UNIT_NPC_FLAG_SPELLCLICK
-                        creature->BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &udata.GetBuffer(), this, { UNIT_NPC_FLAGS });
+                        creature->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, { UNIT_NPC_FLAGS });
                         break;
                     }
                 }
