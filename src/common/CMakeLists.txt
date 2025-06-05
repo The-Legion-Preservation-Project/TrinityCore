@@ -72,7 +72,6 @@ target_link_libraries(common
     valgrind
     threads
     jemalloc
-    openssl_ed25519
     short_alloc)
 
 set_target_properties(common
