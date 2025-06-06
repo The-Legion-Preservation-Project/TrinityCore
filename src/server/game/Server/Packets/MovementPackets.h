@@ -24,8 +24,6 @@
 
 namespace Movement
 {
-    template<class index_type>
-    class Spline;
     class MoveSpline;
 }
 
@@ -119,7 +117,6 @@ namespace WorldPackets
         {
         public:
             static void WriteCreateObjectSplineDataBlock(::Movement::MoveSpline const& moveSpline, ByteBuffer& data);
-            static void WriteCreateObjectAreaTriggerSpline(::Movement::Spline<float> const& spline, ByteBuffer& data);
 
             static void WriteMovementForceWithDirection(MovementForce const& movementForce, ByteBuffer& data, Position const* objectPosition = nullptr);
         };

@@ -305,7 +305,7 @@ void AreaTrigger::Update(uint32 diff)
         // "If" order matter here, Orbit > Attached > Splines
         if (HasOrbit())
         {
-            UpdateOrbitPosition(diff);
+            UpdateOrbitPosition(*std::get<std::unique_ptr<AreaTriggerOrbitInfo>>(_movement), diff);
         }
         else if (GetCreateProperties() && GetCreateProperties()->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::HasAttached))
         {
@@ -324,7 +324,7 @@ void AreaTrigger::Update(uint32 diff)
         }
         else if (HasSplines())
         {
-            UpdateSplinePosition(diff);
+            UpdateSplinePosition(*std::get<std::unique_ptr<::Movement::Spline<float>>>(_movement), diff);
         }
         else
         {
@@ -806,11 +806,6 @@ void AreaTrigger::HandleUnitEnterExit(std::vector<Unit*> const& newTargetList)
 //        std::ranges::count_if(_insideUnits, [](ObjectGuid const& guid) { return guid.IsPlayer(); }));
 }
 
-AreaTriggerTemplate const* AreaTrigger::GetTemplate() const
-{
-    return _areaTriggerTemplate;
-}
-
 uint32 AreaTrigger::GetScriptId() const
 {
     if (_spawnId)
@@ -1039,19 +1034,13 @@ void AreaTrigger::InitSplines(std::vector<G3D::Vector3> const& splinePoints, Opt
         reshape.AreaTriggerSpline.emplace();
         reshape.AreaTriggerSpline->ElapsedTimeForMovement = GetElapsedTimeForMovement();
         reshape.AreaTriggerSpline->TimeToTarget = timeToTarget;
-        for (G3D::Vector3 const& vec : spline->getPoints())
-            reshape.AreaTriggerSpline->Points.emplace_back(vec.x, vec.y, vec.z);
+        reshape.AreaTriggerSpline->Points = spline.get();
 
         SendMessageToSet(reshape.Write(), true);
     }
 
     _reachedDestination = false;
     _movement = std::move(spline);
-}
-
-bool AreaTrigger::HasSplines() const
-{
-    return std::holds_alternative<std::unique_ptr<::Movement::Spline<float>>>(_movement);
 }
 
 void AreaTrigger::InitOrbit(AreaTriggerOrbitInfo const& orbit, Optional<float> overrideSpeed)
@@ -1083,11 +1072,6 @@ void AreaTrigger::InitOrbit(AreaTriggerOrbitInfo const& orbit, Optional<float> o
     }
 
     _movement = std::move(movementOrbit);
-}
-
-bool AreaTrigger::HasOrbit() const
-{
-    return std::holds_alternative<std::unique_ptr<AreaTriggerOrbitInfo>>(_movement);
 }
 
 Position const* AreaTrigger::GetOrbitCenterPosition() const
@@ -1156,9 +1140,8 @@ Position AreaTrigger::CalculateOrbitPosition() const
     return { x, y, z, orientation };
 }
 
-void AreaTrigger::UpdateOrbitPosition(uint32 /*diff*/)
+void AreaTrigger::UpdateOrbitPosition(AreaTriggerOrbitInfo& orbit, uint32 /*diff*/)
 {
-    AreaTriggerOrbitInfo& orbit = *std::get<std::unique_ptr<AreaTriggerOrbitInfo>>(_movement);
     if (orbit.StartDelay > GetElapsedTimeForMovement())
         return;
 
@@ -1172,14 +1155,12 @@ void AreaTrigger::UpdateOrbitPosition(uint32 /*diff*/)
 #endif
 }
 
-void AreaTrigger::UpdateSplinePosition(uint32 diff)
+void AreaTrigger::UpdateSplinePosition(Movement::Spline<float>& spline, uint32 diff)
 {
     if (_reachedDestination)
         return;
 
     _movementTime += diff;
-
-    Movement::Spline<float>& spline = **std::get_if<std::unique_ptr<::Movement::Spline<float>>>(&_movement);
 
     if (_movementTime >= GetTimeToTarget())
     {

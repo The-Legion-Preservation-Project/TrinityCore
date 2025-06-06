@@ -487,7 +487,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
 
     if (flags.AreaTrigger)
     {
-        AreaTrigger const* areaTrigger = ToAreaTrigger();
+        AreaTrigger const* areaTrigger = static_cast<AreaTrigger const*>(this);
         AreaTriggerCreateProperties const* createProperties = areaTrigger->GetCreateProperties();
         AreaTriggerShapeInfo const& shape = areaTrigger->GetShape();
 
@@ -513,8 +513,6 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         bool hasAreaTriggerBox      = shape.IsBox();
         bool hasAreaTriggerPolygon  = shape.IsPolygon();
         bool hasAreaTriggerCylinder = shape.IsCylinder();
-        bool hasAreaTriggerSpline   = areaTrigger->HasSplines();
-        bool hasOrbit               = areaTrigger->HasOrbit();
 
         data->WriteBit(hasAbsoluteOrientation);
         data->WriteBit(hasDynamicShape);
@@ -534,21 +532,16 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         data->WriteBit(hasAreaTriggerBox);
         data->WriteBit(hasAreaTriggerPolygon);
         data->WriteBit(hasAreaTriggerCylinder);
-        data->WriteBit(hasAreaTriggerSpline);
-        data->WriteBit(hasOrbit);
+        data->WriteBit(areaTrigger->HasSplines());
+        data->WriteBit(areaTrigger->HasOrbit());
 
         if (hasVisualAnimIsDecay)
             data->WriteBit(false);
 
         data->FlushBits();
 
-        if (hasAreaTriggerSpline)
-        {
-            *data << uint32(areaTrigger->GetTimeToTarget());
-            *data << uint32(areaTrigger->GetElapsedTimeForMovement());
-
-            WorldPackets::Movement::CommonMovement::WriteCreateObjectAreaTriggerSpline(areaTrigger->GetSpline(), *data);
-        }
+        if (areaTrigger->HasSplines())
+            WorldPackets::AreaTrigger::WriteAreaTriggerSpline(*data, areaTrigger->GetTimeToTarget(), areaTrigger->GetElapsedTimeForMovement(), areaTrigger->GetSpline());
 
         if (hasTargetRollPitchYaw)
             *data << areaTrigger->GetTargetRollPitchYaw().PositionXYZStream();
@@ -611,7 +604,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
             *data << float(shape.CylinderDatas.LocationZOffsetTarget);
         }
 
-        if (hasOrbit)
+        if (areaTrigger->HasOrbit())
         {
             using WorldPackets::AreaTrigger::operator<<;
             *data << areaTrigger->GetOrbit();

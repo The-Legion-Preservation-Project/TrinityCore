@@ -23,6 +23,12 @@
 #include "ObjectGuid.h"
 #include "Optional.h"
 
+namespace Movement
+{
+template<class index_type>
+class Spline;
+}
+
 namespace WorldPackets
 {
     namespace AreaTrigger
@@ -31,7 +37,7 @@ namespace WorldPackets
         {
             uint32 TimeToTarget = 0;
             uint32 ElapsedTimeForMovement = 0;
-            std::vector<TaggedPosition<Position::XYZ>> Points;
+            ::Movement::Spline<float>* Points = nullptr;
         };
 
         class AreaTrigger final : public ClientPacket
@@ -78,6 +84,7 @@ namespace WorldPackets
             ObjectGuid TriggerGUID;
         };
 
+        void WriteAreaTriggerSpline(ByteBuffer& data, uint32 timeToTarget, uint32 elapsedTimeForMovement, ::Movement::Spline<float> const& areaTriggerSpline);
         ByteBuffer& operator<<(ByteBuffer& data, AreaTriggerOrbitInfo const& areaTriggerCircularMovement);
     }
 }
