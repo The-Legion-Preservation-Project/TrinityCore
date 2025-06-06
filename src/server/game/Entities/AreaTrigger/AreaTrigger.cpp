@@ -153,12 +153,12 @@ bool AreaTrigger::Create(AreaTriggerCreatePropertiesId areaTriggerCreateProperti
         spellForVisuals = sSpellMgr->GetSpellInfo(*GetCreateProperties()->SpellForVisuals, DIFFICULTY_NONE);
 
         if (spellForVisuals)
-            spellVisual.SpellXSpellVisualID = spellForVisuals->GetSpellXSpellVisualId();
+            spellVisual.SpellXSpellVisualID = caster ? caster->GetCastSpellXSpellVisualId(spellForVisuals) : spellForVisuals->GetSpellXSpellVisualId();
     }
     if (spellForVisuals)
         SetUInt32Value(AREATRIGGER_SPELL_FOR_VISUALS, spellForVisuals->Id);
 
-    SetUInt32Value(AREATRIGGER_SPELL_X_SPELL_VISUAL_ID, spellVisual.SpellXSpellVisualID);
+    SetSpellVisual(spellVisual);
     if (!IsStaticSpawn())
         SetUInt32Value(AREATRIGGER_TIME_TO_TARGET_SCALE, GetCreateProperties()->TimeToTargetScale != 0 ? GetCreateProperties()->TimeToTargetScale : GetUInt32Value(AREATRIGGER_DURATION));
     SetFloatValue(AREATRIGGER_BOUNDS_RADIUS_2D, GetCreateProperties()->Shape.GetMaxSearchRadius());
@@ -396,6 +396,11 @@ void AreaTrigger::SetExtraScaleCurve(std::array<DBCPosition2D, 2> const& points,
 void AreaTrigger::ClearExtraScaleCurve()
 {
     ClearScaleCurve(AREATRIGGER_EXTRA_SCALE_CURVE);
+}
+
+void AreaTrigger::SetSpellVisual(SpellCastVisual const& visual)
+{
+    SetUInt32Value(AREATRIGGER_SPELL_X_SPELL_VISUAL_ID, visual.SpellXSpellVisualID);
 }
 
 void AreaTrigger::SetDuration(int32 newDuration)
@@ -986,17 +991,16 @@ void AreaTrigger::InitSplineOffsets(std::vector<Position> const& offsets, Option
 
     // This is needed to rotate the spline, following caster orientation
     std::vector<G3D::Vector3> rotatedPoints;
-    rotatedPoints.reserve(offsets.size());
-    for (Position const& offset : offsets)
+    rotatedPoints.resize(offsets.size());
+    for (std::size_t i = 0; i < offsets.size(); ++i)
     {
-        float x = GetPositionX() + (offset.GetPositionX() * angleCos - offset.GetPositionY() * angleSin);
-        float y = GetPositionY() + (offset.GetPositionY() * angleCos + offset.GetPositionX() * angleSin);
-        float z = GetPositionZ();
+        Position const& offset = offsets[i];
+        rotatedPoints[i].x = GetPositionX() + (offset.GetPositionX() * angleCos - offset.GetPositionY() * angleSin);
+        rotatedPoints[i].y = GetPositionY() + (offset.GetPositionY() * angleCos + offset.GetPositionX() * angleSin);
+        rotatedPoints[i].z = GetPositionZ();
 
-        UpdateAllowedPositionZ(x, y, z);
-        z += offset.GetPositionZ();
-
-        rotatedPoints.emplace_back(x, y, z);
+        UpdateAllowedPositionZ(rotatedPoints[i].x, rotatedPoints[i].y, rotatedPoints[i].z);
+        rotatedPoints[i].z += offset.GetPositionZ();
     }
 
     InitSplines(rotatedPoints, overrideSpeed);

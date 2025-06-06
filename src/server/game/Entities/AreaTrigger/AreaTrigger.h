@@ -109,6 +109,8 @@ class TC_GAME_API AreaTrigger final : public WorldObject, public GridObject<Area
         uint32 GetTimeToTargetExtraScale() const { return GetUInt32Value(AREATRIGGER_TIME_TO_TARGET_EXTRA_SCALE); }
         void SetTimeToTargetExtraScale(uint32 timeToTargetExtraScale) { SetUInt32Value(AREATRIGGER_TIME_TO_TARGET_EXTRA_SCALE, timeToTargetExtraScale); }
 
+        void SetSpellVisual(SpellCastVisual const& visual);
+
         int32 GetDuration() const { return _duration; }
 
         int32 GetTotalDuration() const { return _totalDuration; }

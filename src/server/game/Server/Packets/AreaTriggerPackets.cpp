@@ -92,4 +92,12 @@ WorldPacket const* AreaTriggerRePath::Write()
 
     return &_worldPacket;
 }
+
+void UpdateAreaTriggerVisual::Read()
+{
+    // TheLegionPreservationProject - TODO: test this
+    _worldPacket >> SpellID;
+    _worldPacket >> Visual.SpellXSpellVisualID;
+    _worldPacket >> TargetGUID;
+}
 }
