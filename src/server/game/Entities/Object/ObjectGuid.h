@@ -384,27 +384,30 @@ struct fmt::formatter<ObjectGuid, char, void> : Trinity::NoArgFormatterBase
 
 namespace Trinity
 {
-    namespace Legacy
+    namespace Future
     {
         enum class TypeID
         {
-            Object          = 0,
-            Item            = 1,
-            Container       = 2,
-            Unit            = 3,
-            Player          = 4,
-            GameObject      = 5,
-            DynamicObject   = 6,
-            Corpse          = 7,
-            AreaTrigger     = 8,
-            SceneObject     = 9,
-            Conversation    = 10,
+            Object               = 0,
+            Item                 = 1,
+            Container            = 2,
+            AzeriteEmpoweredItem = 3, // not supported
+            AzeriteItem          = 4, // not supported
+            Unit                 = 5,
+            Player               = 6,
+            ActivePlayer         = 7, // not supported
+            GameObject           = 8,
+            DynamicObject        = 9,
+            Corpse               = 10,
+            AreaTrigger          = 11,
+            SceneObject          = 12,
+            Conversation         = 13,
             Max
         };
 
-        constexpr inline ::TypeID ConvertLegacyTypeID(TypeID legacyTypeID)
+        constexpr inline ::TypeID ConvertFutureTypeID(TypeID futureTypeID)
         {
-            switch (legacyTypeID)
+            switch (futureTypeID)
             {
                 case TypeID::Object:
                     return TYPEID_OBJECT;
@@ -433,12 +436,12 @@ namespace Trinity
             }
         }
 
-        constexpr inline TypeMask ConvertLegacyTypeMask(uint32 legacyTypeMask)
+        constexpr inline TypeMask ConvertFutureTypeMask(uint32 futureTypeMask)
         {
             uint32 typeMask = 0;
             for (TypeID i = TypeID::Object; i < TypeID::Max; i = TypeID(uint32(i) + 1))
-                if (legacyTypeMask & (1 << uint32(i)))
-                    typeMask |= 1u << ConvertLegacyTypeID(i);
+                if (futureTypeMask & (1 << uint32(i)))
+                    typeMask |= 1u << ConvertFutureTypeID(i);
 
             return TypeMask(typeMask);
         }
