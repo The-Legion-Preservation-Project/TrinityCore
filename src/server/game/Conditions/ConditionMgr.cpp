@@ -763,7 +763,7 @@ uint32 Condition::GetSearcherTypeMaskForCondition() const
         case CONDITION_NEAR_GAMEOBJECT:
             mask |= GRID_MAP_TYPE_MASK_ALL;
             break;
-        case CONDITION_OBJECT_ENTRY_GUID_LEGACY:
+        case CONDITION_OBJECT_ENTRY_GUID:
             switch (ConditionValue1)
             {
                 case TYPEID_UNIT:
@@ -785,7 +785,7 @@ uint32 Condition::GetSearcherTypeMaskForCondition() const
                     break;
             }
             break;
-        case CONDITION_TYPE_MASK_LEGACY:
+        case CONDITION_TYPE_MASK:
             if (ConditionValue1 & TYPEMASK_UNIT)
                 mask |= GRID_MAP_TYPE_MASK_CREATURE | GRID_MAP_TYPE_MASK_PLAYER;
             if (ConditionValue1 & TYPEMASK_PLAYER)
@@ -2320,13 +2320,13 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond) const
             }
             break;
         }
-        // TheLegionPreservationProject: Legacy GUIDs are still used; convert future GUIDs to legacy
-        case CONDITION_OBJECT_ENTRY_GUID:
-            cond->ConditionType = CONDITION_OBJECT_ENTRY_GUID_LEGACY;
+        // TheLegionPreservationProject: Convert future GUIDs to legacy
+        case CONDITION_OBJECT_ENTRY_GUID_FUTURE:
+            cond->ConditionType = CONDITION_OBJECT_ENTRY_GUID;
             cond->ConditionValue1 = Trinity::Future::ConvertFutureTypeID(Trinity::Future::TypeID(cond->ConditionValue1));
             [[fallthrough]];
         // TheLegionPreservationProject: Legacy GUIDs are still used
-        case CONDITION_OBJECT_ENTRY_GUID_LEGACY:
+        case CONDITION_OBJECT_ENTRY_GUID:
         {
             switch (cond->ConditionValue1)
             {
@@ -2390,12 +2390,12 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond) const
             break;
         }
         // TheLegionPreservationProject: Legacy type masks are still used; convert future type masks to legacy
-        case CONDITION_TYPE_MASK:
-            cond->ConditionType = CONDITION_TYPE_MASK_LEGACY;
+        case CONDITION_TYPE_MASK_FUTURE:
+            cond->ConditionType = CONDITION_TYPE_MASK;
             cond->ConditionValue1 = Trinity::Future::ConvertFutureTypeMask(cond->ConditionValue1);
             [[fallthrough]];
         // TheLegionPreservationProject: Legacy type masks are still used
-        case CONDITION_TYPE_MASK_LEGACY:
+        case CONDITION_TYPE_MASK:
         {
             if (!cond->ConditionValue1 || (cond->ConditionValue1 & ~(TYPEMASK_UNIT | TYPEMASK_PLAYER | TYPEMASK_GAMEOBJECT | TYPEMASK_CORPSE)))
             {

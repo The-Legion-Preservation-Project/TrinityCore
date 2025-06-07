@@ -89,8 +89,8 @@ enum ConditionTypes
     CONDITION_QUEST_COMPLETE           = 28,                   // quest_id               0              0                  true if player has quest_id with all objectives complete, but not yet rewarded
     CONDITION_NEAR_CREATURE            = 29,                   // creature entry         distance       dead (0/1)         true if there is a creature of entry in range
     CONDITION_NEAR_GAMEOBJECT          = 30,                   // gameobject entry       distance       0                  true if there is a gameobject of entry in range
-    CONDITION_OBJECT_ENTRY_GUID_LEGACY = 31,                   // LEGACY_TypeID          entry          guid               true if object is type TypeID and the entry is 0 or matches entry of the object or matches guid of the object
-    CONDITION_TYPE_MASK_LEGACY         = 32,                   // LEGACY_TypeMask        0              0                  true if object is type object's TypeMask matches provided TypeMask
+    CONDITION_OBJECT_ENTRY_GUID        = 31,                   // LEGACY_TypeID          entry          guid               true if object is type TypeID and the entry is 0 or matches entry of the object or matches guid of the object
+    CONDITION_TYPE_MASK                = 32,                   // LEGACY_TypeMask        0              0                  true if object is type object's TypeMask matches provided TypeMask
     CONDITION_RELATION_TO              = 33,                   // ConditionTarget        RelationType   0                  true if object is in given relation with object specified by ConditionTarget
     CONDITION_REACTION_TO              = 34,                   // ConditionTarget        rankMask       0                  true if object's reaction matches rankMask object specified by ConditionTarget
     CONDITION_DISTANCE_TO              = 35,                   // ConditionTarget        distance       ComparisonType     true if object and ConditionTarget are within distance given by parameters
@@ -109,8 +109,8 @@ enum ConditionTypes
     CONDITION_QUEST_OBJECTIVE_PROGRESS = 48,                   // ID                     0              progressValue      true if player has ID objective progress equal to ConditionValue3 (and quest is in quest log)
     CONDITION_DIFFICULTY_ID            = 49,                   // Difficulty             0              0                  true is map has difficulty id
     CONDITION_GAMEMASTER               = 50,                   // canBeGM                0              0                  true if player is gamemaster (or can be gamemaster)
-    CONDITION_OBJECT_ENTRY_GUID        = 51,                   // TypeID                 entry          guid               true if object is type TypeID and the entry is 0 or matches entry of the object or matches guid of the object
-    CONDITION_TYPE_MASK                = 52,                   // TypeMask               0              0                  true if object is type object's TypeMask matches provided TypeMask
+    CONDITION_OBJECT_ENTRY_GUID_FUTURE = 51,                   // TypeID                 entry          guid               true if object is type TypeID and the entry is 0 or matches entry of the object or matches guid of the object
+    CONDITION_TYPE_MASK_FUTURE         = 52,                   // TypeMask               0              0                  true if object is type object's TypeMask matches provided TypeMask
     CONDITION_BATTLE_PET_COUNT         = 53,                   // SpecieId               count          ComparisonType     true if player has `count` of battle pet species
     CONDITION_SCENARIO_STEP            = 54,                   // ScenarioStepId         0              0                  true if player is at scenario with current step equal to ScenarioStepID
     CONDITION_SCENE_IN_PROGRESS        = 55,                   // SceneScriptPackageId   0              0                  true if player is playing a scene with ScriptPackageId equal to given value
