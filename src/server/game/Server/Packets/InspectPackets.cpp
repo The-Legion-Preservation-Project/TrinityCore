@@ -17,6 +17,7 @@
 
 #include "InspectPackets.h"
 #include "Item.h"
+#include "PacketOperators.h"
 
 namespace WorldPackets::Inspect
 {
@@ -38,9 +39,9 @@ ByteBuffer& operator<<(ByteBuffer& data, InspectItemData const& itemData)
     data << itemData.CreatorGUID;
     data << uint8(itemData.Index);
     data << itemData.Item;
-    data.WriteBit(itemData.Usable);
-    data.WriteBits(itemData.Enchants.size(), 4);
-    data.WriteBits(itemData.Gems.size(), 2);
+    data << Bits<1>(itemData.Usable);
+    data << BitsSize<4>(itemData.Enchants);
+    data << BitsSize<2>(itemData.Gems);
     data.FlushBits();
 
     for (Item::ItemGemData const& gem : itemData.Gems)
@@ -91,10 +92,10 @@ InspectItemData::InspectItemData(::Item const* item, uint8 index)
 WorldPacket const* InspectResult::Write()
 {
     _worldPacket << InspecteeGUID;
-    _worldPacket << uint32(Items.size());
-    _worldPacket << uint32(Glyphs.size());
-    _worldPacket << uint32(Talents.size());
-    _worldPacket << uint32(PvpTalents.size());
+    _worldPacket << Size<uint32>(Items);
+    _worldPacket << Size<uint32>(Glyphs);
+    _worldPacket << Size<uint32>(Talents);
+    _worldPacket << Size<uint32>(PvpTalents);
     _worldPacket << int32(ClassID);
     _worldPacket << int32(SpecializationID);
     _worldPacket << int32(GenderID);
@@ -105,7 +106,7 @@ WorldPacket const* InspectResult::Write()
     if (!PvpTalents.empty())
         _worldPacket.append(PvpTalents.data(), PvpTalents.size());
 
-    _worldPacket.WriteBit(GuildData.has_value());
+    _worldPacket << OptionalInit(GuildData);
     _worldPacket.FlushBits();
 
     for (size_t i = 0; i < Items.size(); ++i)
@@ -158,7 +159,7 @@ WorldPacket const* InspectPVPResponse::Write()
 {
     _worldPacket << ClientGUID;
 
-    _worldPacket.WriteBits(Bracket.size(), 3);
+    _worldPacket << BitsSize<3>(Bracket);
     _worldPacket.FlushBits();
 
     for (size_t i = 0; i < Bracket.size(); ++i)

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QuestPackets_h__
-#define QuestPackets_h__
+#ifndef TRINITYCORE_QUEST_PACKETS_H
+#define TRINITYCORE_QUEST_PACKETS_H
 
 #include "Packet.h"
 #include "ItemPacketsCommon.h"
@@ -24,6 +24,7 @@
 #include "NPCPackets.h"
 #include "ObjectGuid.h"
 #include "QuestDef.h"
+#include "RaceMask.h"
 #include <array>
 
 namespace WorldPackets
@@ -33,7 +34,7 @@ namespace WorldPackets
         class QuestGiverStatusQuery final : public ClientPacket
         {
         public:
-            QuestGiverStatusQuery(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_STATUS_QUERY, std::move(packet)) { }
+            explicit QuestGiverStatusQuery(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_STATUS_QUERY, std::move(packet)) { }
 
             void Read() override;
 
@@ -44,7 +45,7 @@ namespace WorldPackets
         class QuestGiverStatusMultipleQuery final : public ClientPacket
         {
         public:
-            QuestGiverStatusMultipleQuery(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_STATUS_MULTIPLE_QUERY, std::move(packet)) { }
+            explicit QuestGiverStatusMultipleQuery(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_STATUS_MULTIPLE_QUERY, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -62,7 +63,7 @@ namespace WorldPackets
         class QuestGiverStatus final : public ServerPacket
         {
         public:
-            QuestGiverStatus() : ServerPacket(SMSG_QUEST_GIVER_STATUS, 22) { }
+            explicit QuestGiverStatus() : ServerPacket(SMSG_QUEST_GIVER_STATUS, 22) { }
 
             WorldPacket const* Write() override;
 
@@ -72,7 +73,7 @@ namespace WorldPackets
         class QuestGiverStatusMultiple final : public ServerPacket
         {
         public:
-            QuestGiverStatusMultiple() : ServerPacket(SMSG_QUEST_GIVER_STATUS_MULTIPLE, 24) { }
+            explicit QuestGiverStatusMultiple() : ServerPacket(SMSG_QUEST_GIVER_STATUS_MULTIPLE, 24) { }
 
             WorldPacket const* Write() override;
 
@@ -82,7 +83,7 @@ namespace WorldPackets
         class QuestGiverHello final : public ClientPacket
         {
         public:
-            QuestGiverHello(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_HELLO, std::move(packet)) { }
+            explicit QuestGiverHello(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_HELLO, std::move(packet)) { }
 
             void Read() override;
 
@@ -92,7 +93,7 @@ namespace WorldPackets
         class QueryQuestInfo final : public ClientPacket
         {
         public:
-            QueryQuestInfo(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_QUEST_INFO, std::move(packet)) { }
+            explicit QueryQuestInfo(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_QUEST_INFO, std::move(packet)) { }
 
             void Read() override;
 
@@ -185,7 +186,7 @@ namespace WorldPackets
         class QueryQuestInfoResponse final : public ServerPacket
         {
         public:
-            QueryQuestInfoResponse() : ServerPacket(SMSG_QUERY_QUEST_INFO_RESPONSE, 1200) { }
+            explicit QueryQuestInfoResponse() : ServerPacket(SMSG_QUERY_QUEST_INFO_RESPONSE, 1200) { }
 
             WorldPacket const* Write() override;
 
@@ -197,7 +198,7 @@ namespace WorldPackets
         class QuestUpdateAddCredit final : public ServerPacket
         {
         public:
-            QuestUpdateAddCredit() : ServerPacket(SMSG_QUEST_UPDATE_ADD_CREDIT, 16 + 4 + 4 + 2 + 2 + 1) { }
+            explicit QuestUpdateAddCredit() : ServerPacket(SMSG_QUEST_UPDATE_ADD_CREDIT, 16 + 4 + 4 + 2 + 2 + 1) { }
 
             WorldPacket const* Write() override;
 
@@ -212,7 +213,7 @@ namespace WorldPackets
         class QuestUpdateAddCreditSimple final : public ServerPacket
         {
         public:
-            QuestUpdateAddCreditSimple() : ServerPacket(SMSG_QUEST_UPDATE_ADD_CREDIT_SIMPLE, 4 + 4 + 1) { }
+            explicit QuestUpdateAddCreditSimple() : ServerPacket(SMSG_QUEST_UPDATE_ADD_CREDIT_SIMPLE, 4 + 4 + 1) { }
 
             WorldPacket const* Write() override;
 
@@ -224,7 +225,7 @@ namespace WorldPackets
         class QuestUpdateAddPvPCredit final : public ServerPacket
         {
         public:
-            QuestUpdateAddPvPCredit() : ServerPacket(SMSG_QUEST_UPDATE_ADD_PVP_CREDIT, 4 + 2) { }
+            explicit QuestUpdateAddPvPCredit() : ServerPacket(SMSG_QUEST_UPDATE_ADD_PVP_CREDIT, 4 + 2) { }
 
             WorldPacket const* Write() override;
 
@@ -298,7 +299,7 @@ namespace WorldPackets
         class QuestGiverOfferRewardMessage final : public ServerPacket
         {
         public:
-            QuestGiverOfferRewardMessage() : ServerPacket(SMSG_QUEST_GIVER_OFFER_REWARD_MESSAGE, 600) { }
+            explicit QuestGiverOfferRewardMessage() : ServerPacket(SMSG_QUEST_GIVER_OFFER_REWARD_MESSAGE, 600) { }
 
             WorldPacket const* Write() override;
 
@@ -317,7 +318,7 @@ namespace WorldPackets
         class QuestGiverChooseReward final : public ClientPacket
         {
         public:
-            QuestGiverChooseReward(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_CHOOSE_REWARD, std::move(packet)) { }
+            explicit QuestGiverChooseReward(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_CHOOSE_REWARD, std::move(packet)) { }
 
             void Read() override;
 
@@ -330,7 +331,7 @@ namespace WorldPackets
         class QuestGiverQuestComplete final : public ServerPacket
         {
         public:
-            QuestGiverQuestComplete() : ServerPacket(SMSG_QUEST_GIVER_QUEST_COMPLETE, 40) { }
+            explicit QuestGiverQuestComplete() : ServerPacket(SMSG_QUEST_GIVER_QUEST_COMPLETE, 40) { }
 
             WorldPacket const* Write() override;
 
@@ -349,7 +350,7 @@ namespace WorldPackets
         class QuestGiverCompleteQuest final : public ClientPacket
         {
         public:
-            QuestGiverCompleteQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_COMPLETE_QUEST, std::move(packet)) { }
+            explicit QuestGiverCompleteQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_COMPLETE_QUEST, std::move(packet)) { }
 
             void Read() override;
 
@@ -361,7 +362,7 @@ namespace WorldPackets
         class QuestGiverCloseQuest final : public ClientPacket
         {
         public:
-            QuestGiverCloseQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_CLOSE_QUEST, std::move(packet)) { }
+            explicit QuestGiverCloseQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_CLOSE_QUEST, std::move(packet)) { }
 
             void Read() override;
 
@@ -379,7 +380,7 @@ namespace WorldPackets
         class QuestGiverQuestDetails final : public ServerPacket
         {
         public:
-            QuestGiverQuestDetails() : ServerPacket(SMSG_QUEST_GIVER_QUEST_DETAILS, 1000) { }
+            explicit QuestGiverQuestDetails() : ServerPacket(SMSG_QUEST_GIVER_QUEST_DETAILS, 1000) { }
 
             WorldPacket const* Write() override;
 
@@ -410,7 +411,7 @@ namespace WorldPackets
 
         struct QuestObjectiveCollect
         {
-            QuestObjectiveCollect(int32 objectID = 0, int32 amount = 0, uint32 flags = 0) : ObjectID(objectID), Amount(amount), Flags(flags) { }
+            explicit QuestObjectiveCollect(int32 objectID = 0, int32 amount = 0, uint32 flags = 0) : ObjectID(objectID), Amount(amount), Flags(flags) { }
             int32 ObjectID;
             int32 Amount;
             uint32 Flags;
@@ -418,7 +419,7 @@ namespace WorldPackets
 
         struct QuestCurrency
         {
-            QuestCurrency(int32 currencyID = 0, int32 amount = 0) : CurrencyID(currencyID), Amount(amount) { }
+            explicit QuestCurrency(int32 currencyID = 0, int32 amount = 0) : CurrencyID(currencyID), Amount(amount) { }
             int32 CurrencyID;
             int32 Amount;
         };
@@ -426,7 +427,7 @@ namespace WorldPackets
         class QuestGiverRequestItems final : public ServerPacket
         {
         public:
-            QuestGiverRequestItems() : ServerPacket(SMSG_QUEST_GIVER_REQUEST_ITEMS, 300) { }
+            explicit QuestGiverRequestItems() : ServerPacket(SMSG_QUEST_GIVER_REQUEST_ITEMS, 300) { }
 
             WorldPacket const* Write() override;
 
@@ -449,7 +450,7 @@ namespace WorldPackets
         class QuestGiverRequestReward final : public ClientPacket
         {
         public:
-            QuestGiverRequestReward(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_REQUEST_REWARD, std::move(packet)) { }
+            explicit QuestGiverRequestReward(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_REQUEST_REWARD, std::move(packet)) { }
 
             void Read() override;
 
@@ -460,7 +461,7 @@ namespace WorldPackets
         class QuestGiverQueryQuest final : public ClientPacket
         {
         public:
-            QuestGiverQueryQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_QUERY_QUEST, std::move(packet)) { }
+            explicit QuestGiverQueryQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_QUERY_QUEST, std::move(packet)) { }
 
             void Read() override;
 
@@ -472,7 +473,7 @@ namespace WorldPackets
         class QuestGiverAcceptQuest final : public ClientPacket
         {
         public:
-            QuestGiverAcceptQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_ACCEPT_QUEST, std::move(packet)) { }
+            explicit QuestGiverAcceptQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_GIVER_ACCEPT_QUEST, std::move(packet)) { }
 
             void Read() override;
 
@@ -484,7 +485,7 @@ namespace WorldPackets
         class QuestLogRemoveQuest final : public ClientPacket
         {
         public:
-            QuestLogRemoveQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_LOG_REMOVE_QUEST, std::move(packet)) { }
+            explicit QuestLogRemoveQuest(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_LOG_REMOVE_QUEST, std::move(packet)) { }
 
             void Read() override;
 
@@ -494,7 +495,7 @@ namespace WorldPackets
         class QuestGiverQuestListMessage final : public ServerPacket
         {
         public:
-            QuestGiverQuestListMessage() : ServerPacket(SMSG_QUEST_GIVER_QUEST_LIST_MESSAGE, 100) { }
+            explicit QuestGiverQuestListMessage() : ServerPacket(SMSG_QUEST_GIVER_QUEST_LIST_MESSAGE, 100) { }
 
             WorldPacket const* Write() override;
 
@@ -508,7 +509,7 @@ namespace WorldPackets
         class QuestUpdateComplete final : public ServerPacket
         {
         public:
-            QuestUpdateComplete() : ServerPacket(SMSG_QUEST_UPDATE_COMPLETE, 4) { }
+            explicit QuestUpdateComplete() : ServerPacket(SMSG_QUEST_UPDATE_COMPLETE, 4) { }
 
             WorldPacket const* Write() override;
 
@@ -518,7 +519,7 @@ namespace WorldPackets
         class QuestConfirmAcceptResponse final : public ServerPacket
         {
         public:
-            QuestConfirmAcceptResponse() : ServerPacket(SMSG_QUEST_CONFIRM_ACCEPT, 21) { }
+            explicit QuestConfirmAcceptResponse() : ServerPacket(SMSG_QUEST_CONFIRM_ACCEPT, 21) { }
 
             WorldPacket const* Write() override;
 
@@ -530,7 +531,7 @@ namespace WorldPackets
         class QuestConfirmAccept final : public ClientPacket
         {
         public:
-            QuestConfirmAccept(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_CONFIRM_ACCEPT, std::move(packet)) { }
+            explicit QuestConfirmAccept(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_CONFIRM_ACCEPT, std::move(packet)) { }
 
             void Read() override;
 
@@ -540,7 +541,7 @@ namespace WorldPackets
         class QuestPushResultResponse final : public ServerPacket
         {
         public:
-            QuestPushResultResponse() : ServerPacket(SMSG_QUEST_PUSH_RESULT, 16 + 1) { }
+            explicit QuestPushResultResponse() : ServerPacket(SMSG_QUEST_PUSH_RESULT, 16 + 1) { }
 
             WorldPacket const* Write() override;
 
@@ -551,7 +552,7 @@ namespace WorldPackets
         class QuestLogFull final : public ServerPacket
         {
         public:
-            QuestLogFull() : ServerPacket(SMSG_QUEST_LOG_FULL, 0) { }
+            explicit QuestLogFull() : ServerPacket(SMSG_QUEST_LOG_FULL, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
@@ -559,7 +560,7 @@ namespace WorldPackets
         class QuestPushResult final : public ClientPacket
         {
         public:
-            QuestPushResult(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_PUSH_RESULT, std::move(packet)) { }
+            explicit QuestPushResult(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_PUSH_RESULT, std::move(packet)) { }
 
             void Read() override;
 
@@ -571,7 +572,7 @@ namespace WorldPackets
         class QuestGiverInvalidQuest final : public ServerPacket
         {
         public:
-            QuestGiverInvalidQuest() : ServerPacket(SMSG_QUEST_GIVER_INVALID_QUEST, 6) { }
+            explicit QuestGiverInvalidQuest() : ServerPacket(SMSG_QUEST_GIVER_INVALID_QUEST, 6) { }
 
             WorldPacket const* Write() override;
 
@@ -584,7 +585,7 @@ namespace WorldPackets
         class QuestUpdateFailedTimer final : public ServerPacket
         {
         public:
-            QuestUpdateFailedTimer() : ServerPacket(SMSG_QUEST_UPDATE_FAILED_TIMER, 4) { }
+            explicit QuestUpdateFailedTimer() : ServerPacket(SMSG_QUEST_UPDATE_FAILED_TIMER, 4) { }
 
             WorldPacket const* Write() override;
 
@@ -594,7 +595,7 @@ namespace WorldPackets
         class QuestGiverQuestFailed final : public ServerPacket
         {
         public:
-            QuestGiverQuestFailed() : ServerPacket(SMSG_QUEST_GIVER_QUEST_FAILED, 8) { }
+            explicit QuestGiverQuestFailed() : ServerPacket(SMSG_QUEST_GIVER_QUEST_FAILED, 8) { }
 
             WorldPacket const* Write() override;
 
@@ -605,7 +606,7 @@ namespace WorldPackets
         class PushQuestToParty final : public ClientPacket
         {
         public:
-            PushQuestToParty(WorldPacket&& packet) : ClientPacket(CMSG_PUSH_QUEST_TO_PARTY, std::move(packet)) { }
+            explicit PushQuestToParty(WorldPacket&& packet) : ClientPacket(CMSG_PUSH_QUEST_TO_PARTY, std::move(packet)) { }
 
             void Read() override;
 
@@ -615,7 +616,7 @@ namespace WorldPackets
         class DailyQuestsReset final : public ServerPacket
         {
         public:
-            DailyQuestsReset() : ServerPacket(SMSG_DAILY_QUESTS_RESET, 4) { }
+            explicit DailyQuestsReset() : ServerPacket(SMSG_DAILY_QUESTS_RESET, 4) { }
 
             WorldPacket const* Write() override;
 
@@ -635,7 +636,7 @@ namespace WorldPackets
         class RequestWorldQuestUpdate final : public ClientPacket
         {
         public:
-            RequestWorldQuestUpdate(WorldPacket&& packet) : ClientPacket(CMSG_REQUEST_WORLD_QUEST_UPDATE, std::move(packet)) { }
+            explicit RequestWorldQuestUpdate(WorldPacket&& packet) : ClientPacket(CMSG_REQUEST_WORLD_QUEST_UPDATE, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -655,7 +656,7 @@ namespace WorldPackets
         class WorldQuestUpdateResponse final : public ServerPacket
         {
         public:
-            WorldQuestUpdateResponse() : ServerPacket(SMSG_WORLD_QUEST_UPDATE_RESPONSE, 100) { }
+            explicit WorldQuestUpdateResponse() : ServerPacket(SMSG_WORLD_QUEST_UPDATE_RESPONSE, 100) { }
 
             WorldPacket const* Write() override;
 
@@ -698,7 +699,7 @@ namespace WorldPackets
         class DisplayPlayerChoice final : public ServerPacket
         {
         public:
-            DisplayPlayerChoice() : ServerPacket(SMSG_DISPLAY_PLAYER_CHOICE) { }
+            explicit DisplayPlayerChoice() : ServerPacket(SMSG_DISPLAY_PLAYER_CHOICE) { }
 
             WorldPacket const* Write() override;
 
@@ -714,7 +715,7 @@ namespace WorldPackets
         class ChoiceResponse final : public ClientPacket
         {
         public:
-            ChoiceResponse(WorldPacket&& packet) : ClientPacket(CMSG_CHOICE_RESPONSE, std::move(packet)) { }
+            explicit ChoiceResponse(WorldPacket&& packet) : ClientPacket(CMSG_CHOICE_RESPONSE, std::move(packet)) { }
 
             void Read() override;
 
@@ -732,7 +733,7 @@ namespace WorldPackets
         class SpawnTrackingUpdate final : public ClientPacket
         {
         public:
-            SpawnTrackingUpdate(WorldPacket&& packet) : ClientPacket(CMSG_SPAWN_TRACKING_UPDATE, std::move(packet)) { }
+            explicit SpawnTrackingUpdate(WorldPacket&& packet) : ClientPacket(CMSG_SPAWN_TRACKING_UPDATE, std::move(packet)) { }
 
             void Read() override;
 
@@ -752,7 +753,7 @@ namespace WorldPackets
         class QuestPOIUpdateResponse final : public ServerPacket
         {
         public:
-            QuestPOIUpdateResponse() : ServerPacket(SMSG_QUEST_POI_UPDATE_RESPONSE, 21) { }
+            explicit QuestPOIUpdateResponse() : ServerPacket(SMSG_QUEST_POI_UPDATE_RESPONSE, 21) { }
 
             WorldPacket const* Write() override;
 
@@ -762,7 +763,7 @@ namespace WorldPackets
         class ForceSpawnTrackingUpdate final : public ServerPacket
         {
         public:
-            ForceSpawnTrackingUpdate() : ServerPacket(SMSG_FORCE_SPAWN_TRACKING_UPDATE, 4) { }
+            explicit ForceSpawnTrackingUpdate() : ServerPacket(SMSG_FORCE_SPAWN_TRACKING_UPDATE, 4) { }
 
             WorldPacket const* Write() override;
 
@@ -771,4 +772,4 @@ namespace WorldPackets
     }
 }
 
-#endif // QuestPackets_h__
+#endif // TRINITYCORE_QUEST_PACKETS_H

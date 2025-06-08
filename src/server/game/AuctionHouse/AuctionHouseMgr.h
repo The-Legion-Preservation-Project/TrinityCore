@@ -92,19 +92,19 @@ enum class AuctionHouseResultLimits : std::size_t
 
 enum class AuctionHouseSortOrder : uint8
 {
-    Level     = 0,
-    Quality   = 1,
-    Unknown2  = 2,
-    Duration  = 3,
-    Unknown4  = 4,
-    Unknown5  = 5,
-    Unknown6  = 6,
-    Seller    = 7,
-    Unknown8  = 8,
-    Unknown9  = 9,
-    Unknown10 = 10,
-    Unknown11 = 11,
-    Price     = 12
+    Level            = 0,
+    Quality          = 1,
+    Unknown2         = 2,
+    TimeRemaining    = 3,
+    Unknown4         = 4,
+    Name_Unconfirmed = 5, // AUCTION_SORT_ITEM in azerothcore
+    Unknown6         = 6,
+    Seller           = 7,
+    Unknown8         = 8,
+    Unknown9         = 9,
+    Unknown10        = 10,
+    Unknown11        = 11,
+    Price            = 12
 };
 
 struct AuctionSearchClassFilters
@@ -149,6 +149,15 @@ struct AuctionPosting
     SystemTimePoint StartTime = SystemTimePoint::min();
     SystemTimePoint EndTime = SystemTimePoint::min();
     EnumFlag<AuctionPostingServerFlag> ServerFlags = AuctionPostingServerFlag::None;
+
+    // filter helpers
+    uint8 ItemClass = 0;
+    uint8 ItemSubClass = 0;
+    uint8 InventoryType = 0;
+    uint8 Quality = 0;
+    uint8 RequiredLevel = 0;
+    uint16 SortLevel = 0;
+    std::array<std::wstring, TOTAL_LOCALES> FullName = { };
 
     void BuildAuctionItem(WorldPackets::AuctionHouse::AuctionItem* auctionItem, bool censorServerInfo, bool censorBidInfo) const;
     static uint64 CalculateMinIncrement(uint64 bidAmount);
@@ -203,7 +212,7 @@ public:
     void BuildListBiddedItems(WorldPackets::AuctionHouse::AuctionListBiddedItemsResult& listBiddedItemsResult, Player const* player, uint32 /*offset*/) const;
     void BuildListOwnedItems(WorldPackets::AuctionHouse::AuctionListOwnedItemsResult& listOwnedItemsResult, Player const* player, uint32 /*offset*/) const;
     void BuildListAuctionItems(WorldPackets::AuctionHouse::AuctionListItemsResult& listItemsResult, Player const* player,
-        std::wstring const& searchedName, uint8 minLevel, uint8 maxLevel, bool onlyUsable, Optional<AuctionSearchClassFilters> const& filters, uint32 quality, uint32 offset, std::span<WorldPackets::AuctionHouse::AuctionSortDef const> sorts) const;
+        std::wstring const& searchedName, uint8 minLevel, uint8 maxLevel, bool exactMatch, bool onlyUsable, Optional<AuctionSearchClassFilters> const& filters, uint32 quality, uint32 offset, std::span<WorldPackets::AuctionHouse::AuctionSortDef const> sorts) const;
     void BuildReplicate(WorldPackets::AuctionHouse::AuctionReplicateResponse& auctionReplicateResult, Player* player,
         uint32 global, uint32 cursor, uint32 tombstone, uint32 count);
 

@@ -30,6 +30,7 @@
 #include "Optional.h"
 #include "PhaseShift.h"
 #include "Position.h"
+#include "QuaternionData.h"
 #include "SharedDefines.h"
 #include "SpellDefines.h"
 #include "UniqueTrackablePtr.h"
@@ -67,7 +68,6 @@ class WorldPacket;
 class ZoneScript;
 struct FactionTemplateEntry;
 struct Loot;
-struct QuaternionData;
 struct SpawnTrackingStateData;
 struct SpellPowerCost;
 
@@ -198,7 +198,7 @@ class TC_GAME_API Object
         virtual void BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const;
         void SendUpdateToPlayer(Player* player);
 
-        void BuildValuesUpdateBlockForPlayer(UpdateData* data, Player const* target) const;
+        void BuildValuesUpdateBlockForPlayerWithMask(UpdateData* data, Player const* target, std::unordered_set<uint32> indexes) const;
         void BuildDestroyUpdateBlock(UpdateData* data) const;
         void BuildOutOfRangeUpdateBlock(UpdateData* data) const;
 
@@ -423,7 +423,7 @@ class TC_GAME_API Object
         }
 
         void BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Player* target) const;
-        virtual void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const;
+        virtual void BuildValuesUpdateWithMask(uint8 updatetype, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const;
         virtual void BuildDynamicValuesUpdate(uint8 updatetype, ByteBuffer* data, Player const* target) const;
 
         void ApplyPercentModFloatVar(float& var, float val, bool apply);
@@ -550,6 +550,17 @@ struct FindGameObjectOptions
     Optional<GameobjectTypes> GameObjectType;
 };
 
+struct CanSeeOrDetectExtraArgs
+{
+    bool ImplicitDetection = false;
+    bool IgnorePhaseShift = false;
+    bool IncludeHiddenBySpawnTracking = false;
+    bool IncludeAnyPrivateObject = false;
+
+    bool DistanceCheck = false;
+    bool AlertCheck = false;
+};
+
 class TC_GAME_API WorldObject : public Object, public WorldLocation
 {
     protected:
@@ -669,7 +680,7 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
         float GetGridActivationRange() const;
         float GetVisibilityRange() const;
         float GetSightRange(WorldObject const* target = nullptr) const;
-        bool CanSeeOrDetect(WorldObject const* obj, bool implicitDetect = false, bool distanceCheck = false, bool checkAlert = false) const;
+        bool CanSeeOrDetect(WorldObject const* obj, CanSeeOrDetectExtraArgs const& args = { }) const;
 
         FlaggedValuesArray32<int32, uint32, StealthType, TOTAL_STEALTH_TYPES> m_stealth;
         FlaggedValuesArray32<int32, uint32, StealthType, TOTAL_STEALTH_TYPES> m_stealthDetect;
@@ -879,7 +890,7 @@ class TC_GAME_API WorldObject : public Object, public WorldLocation
         void SetLocationMapId(uint32 _mapId) { m_mapId = _mapId; }
         void SetLocationInstanceId(uint32 _instanceId) { m_InstanceId = _instanceId; }
 
-        virtual bool CanNeverSee(WorldObject const* obj) const;
+        virtual bool CanNeverSee(WorldObject const* obj, bool ignorePhaseShift = false) const;
         virtual bool CanAlwaysSee([[maybe_unused]] WorldObject const* /*obj*/) const { return false; }
         virtual bool IsNeverVisibleFor([[maybe_unused]] WorldObject const* seer, [[maybe_unused]] bool allowServersideObjects = false) const { return !IsInWorld() || IsDestroyedObject(); }
         virtual bool IsAlwaysVisibleFor([[maybe_unused]] WorldObject const* seer) const { return false; }

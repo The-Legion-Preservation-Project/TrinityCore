@@ -153,12 +153,12 @@ bool AreaTrigger::Create(AreaTriggerCreatePropertiesId areaTriggerCreateProperti
         spellForVisuals = sSpellMgr->GetSpellInfo(*GetCreateProperties()->SpellForVisuals, DIFFICULTY_NONE);
 
         if (spellForVisuals)
-            spellVisual.SpellXSpellVisualID = spellForVisuals->GetSpellXSpellVisualId();
+            spellVisual.SpellXSpellVisualID = caster ? caster->GetCastSpellXSpellVisualId(spellForVisuals) : spellForVisuals->GetSpellXSpellVisualId();
     }
     if (spellForVisuals)
         SetUInt32Value(AREATRIGGER_SPELL_FOR_VISUALS, spellForVisuals->Id);
 
-    SetUInt32Value(AREATRIGGER_SPELL_X_SPELL_VISUAL_ID, spellVisual.SpellXSpellVisualID);
+    SetSpellVisual(spellVisual);
     if (!IsStaticSpawn())
         SetUInt32Value(AREATRIGGER_TIME_TO_TARGET_SCALE, GetCreateProperties()->TimeToTargetScale != 0 ? GetCreateProperties()->TimeToTargetScale : GetUInt32Value(AREATRIGGER_DURATION));
     SetFloatValue(AREATRIGGER_BOUNDS_RADIUS_2D, GetCreateProperties()->Shape.GetMaxSearchRadius());
@@ -305,7 +305,7 @@ void AreaTrigger::Update(uint32 diff)
         // "If" order matter here, Orbit > Attached > Splines
         if (HasOrbit())
         {
-            UpdateOrbitPosition(diff);
+            UpdateOrbitPosition(*std::get<std::unique_ptr<AreaTriggerOrbitInfo>>(_movement), diff);
         }
         else if (GetCreateProperties() && GetCreateProperties()->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::HasAttached))
         {
@@ -324,7 +324,7 @@ void AreaTrigger::Update(uint32 diff)
         }
         else if (HasSplines())
         {
-            UpdateSplinePosition(diff);
+            UpdateSplinePosition(*std::get<std::unique_ptr<::Movement::Spline<float>>>(_movement), diff);
         }
         else
         {
@@ -334,7 +334,7 @@ void AreaTrigger::Update(uint32 diff)
                 {
                     float orientation = sDB2Manager.GetCurveValueAt(createProperties->FacingCurveId, GetProgress());
                     if (!GetCreateProperties() || !GetCreateProperties()->Flags.HasFlag(AreaTriggerCreatePropertiesFlag::HasAbsoluteOrientation))
-                        orientation += GetStationaryO();
+                        orientation += _stationaryPosition.GetOrientation();
 
                     SetOrientation(orientation);
                 }
@@ -396,6 +396,11 @@ void AreaTrigger::SetExtraScaleCurve(std::array<DBCPosition2D, 2> const& points,
 void AreaTrigger::ClearExtraScaleCurve()
 {
     ClearScaleCurve(AREATRIGGER_EXTRA_SCALE_CURVE);
+}
+
+void AreaTrigger::SetSpellVisual(SpellCastVisual const& visual)
+{
+    SetUInt32Value(AREATRIGGER_SPELL_X_SPELL_VISUAL_ID, visual.SpellXSpellVisualID);
 }
 
 void AreaTrigger::SetDuration(int32 newDuration)
@@ -806,11 +811,6 @@ void AreaTrigger::HandleUnitEnterExit(std::vector<Unit*> const& newTargetList)
 //        std::ranges::count_if(_insideUnits, [](ObjectGuid const& guid) { return guid.IsPlayer(); }));
 }
 
-AreaTriggerTemplate const* AreaTrigger::GetTemplate() const
-{
-    return _areaTriggerTemplate;
-}
-
 uint32 AreaTrigger::GetScriptId() const
 {
     if (_spawnId)
@@ -991,17 +991,16 @@ void AreaTrigger::InitSplineOffsets(std::vector<Position> const& offsets, Option
 
     // This is needed to rotate the spline, following caster orientation
     std::vector<G3D::Vector3> rotatedPoints;
-    rotatedPoints.reserve(offsets.size());
-    for (Position const& offset : offsets)
+    rotatedPoints.resize(offsets.size());
+    for (std::size_t i = 0; i < offsets.size(); ++i)
     {
-        float x = GetPositionX() + (offset.GetPositionX() * angleCos - offset.GetPositionY() * angleSin);
-        float y = GetPositionY() + (offset.GetPositionY() * angleCos + offset.GetPositionX() * angleSin);
-        float z = GetPositionZ();
+        Position const& offset = offsets[i];
+        rotatedPoints[i].x = GetPositionX() + (offset.GetPositionX() * angleCos - offset.GetPositionY() * angleSin);
+        rotatedPoints[i].y = GetPositionY() + (offset.GetPositionY() * angleCos + offset.GetPositionX() * angleSin);
+        rotatedPoints[i].z = GetPositionZ();
 
-        UpdateAllowedPositionZ(x, y, z);
-        z += offset.GetPositionZ();
-
-        rotatedPoints.emplace_back(x, y, z);
+        UpdateAllowedPositionZ(rotatedPoints[i].x, rotatedPoints[i].y, rotatedPoints[i].z);
+        rotatedPoints[i].z += offset.GetPositionZ();
     }
 
     InitSplines(rotatedPoints, overrideSpeed);
@@ -1014,8 +1013,8 @@ void AreaTrigger::InitSplines(std::vector<G3D::Vector3> const& splinePoints, Opt
 
     _movementTime = 0;
 
-    std::unique_ptr<Movement::Spline<int32>> spline = std::make_unique<::Movement::Spline<int32>>();
-    spline->init_spline(splinePoints.data(), splinePoints.size(), ::Movement::SplineBase::ModeLinear, GetStationaryO());
+    std::unique_ptr<Movement::Spline<float>> spline = std::make_unique<::Movement::Spline<float>>();
+    spline->init_spline(splinePoints.data(), splinePoints.size(), ::Movement::SplineBase::ModeLinear, _stationaryPosition.GetOrientation());
     spline->initLengths();
 
     float speed = overrideSpeed.value_or(GetCreateProperties()->Speed);
@@ -1039,19 +1038,13 @@ void AreaTrigger::InitSplines(std::vector<G3D::Vector3> const& splinePoints, Opt
         reshape.AreaTriggerSpline.emplace();
         reshape.AreaTriggerSpline->ElapsedTimeForMovement = GetElapsedTimeForMovement();
         reshape.AreaTriggerSpline->TimeToTarget = timeToTarget;
-        for (G3D::Vector3 const& vec : spline->getPoints())
-            reshape.AreaTriggerSpline->Points.emplace_back(vec.x, vec.y, vec.z);
+        reshape.AreaTriggerSpline->Points = spline.get();
 
         SendMessageToSet(reshape.Write(), true);
     }
 
     _reachedDestination = false;
     _movement = std::move(spline);
-}
-
-bool AreaTrigger::HasSplines() const
-{
-    return std::holds_alternative<std::unique_ptr<::Movement::Spline<int32>>>(_movement);
 }
 
 void AreaTrigger::InitOrbit(AreaTriggerOrbitInfo const& orbit, Optional<float> overrideSpeed)
@@ -1083,11 +1076,6 @@ void AreaTrigger::InitOrbit(AreaTriggerOrbitInfo const& orbit, Optional<float> o
     }
 
     _movement = std::move(movementOrbit);
-}
-
-bool AreaTrigger::HasOrbit() const
-{
-    return std::holds_alternative<std::unique_ptr<AreaTriggerOrbitInfo>>(_movement);
 }
 
 Position const* AreaTrigger::GetOrbitCenterPosition() const
@@ -1156,9 +1144,8 @@ Position AreaTrigger::CalculateOrbitPosition() const
     return { x, y, z, orientation };
 }
 
-void AreaTrigger::UpdateOrbitPosition(uint32 /*diff*/)
+void AreaTrigger::UpdateOrbitPosition(AreaTriggerOrbitInfo& orbit, uint32 /*diff*/)
 {
-    AreaTriggerOrbitInfo& orbit = *std::get<std::unique_ptr<AreaTriggerOrbitInfo>>(_movement);
     if (orbit.StartDelay > GetElapsedTimeForMovement())
         return;
 
@@ -1172,14 +1159,12 @@ void AreaTrigger::UpdateOrbitPosition(uint32 /*diff*/)
 #endif
 }
 
-void AreaTrigger::UpdateSplinePosition(uint32 diff)
+void AreaTrigger::UpdateSplinePosition(Movement::Spline<float>& spline, uint32 diff)
 {
     if (_reachedDestination)
         return;
 
     _movementTime += diff;
-
-    Movement::Spline<int32>& spline = *std::get<std::unique_ptr<::Movement::Spline<int32>>>(_movement);
 
     if (_movementTime >= GetTimeToTarget())
     {
@@ -1222,7 +1207,7 @@ void AreaTrigger::UpdateSplinePosition(uint32 diff)
     G3D::Vector3 currentPosition;
     spline.evaluate_percent(lastPositionIndex, percentFromLastPoint, currentPosition);
 
-    float orientation = GetStationaryO();
+    float orientation = _stationaryPosition.GetOrientation();
     if (createProperties && createProperties->FacingCurveId)
         orientation += sDB2Manager.GetCurveValueAt(createProperties->FacingCurveId, GetProgress());
 

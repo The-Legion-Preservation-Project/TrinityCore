@@ -17,15 +17,55 @@
 
 #include "SystemPackets.h"
 #include "Errors.h"
+#include "PacketOperators.h"
 
 namespace WorldPackets::System
 {
+ByteBuffer& operator<<(ByteBuffer& data, SocialQueueConfig const& socialQueueConfig)
+{
+    data << Bits<1>(socialQueueConfig.ToastsDisabled);
+    data << float(socialQueueConfig.ToastDuration);
+    data << float(socialQueueConfig.DelayDuration);
+    data << float(socialQueueConfig.QueueMultiplier);
+    data << float(socialQueueConfig.PlayerMultiplier);
+    data << float(socialQueueConfig.PlayerFriendValue);
+    data << float(socialQueueConfig.PlayerGuildValue);
+    data << float(socialQueueConfig.ThrottleInitialThreshold);
+    data << float(socialQueueConfig.ThrottleDecayTime);
+    data << float(socialQueueConfig.ThrottlePrioritySpike);
+    data << float(socialQueueConfig.ThrottleMinThreshold);
+    data << float(socialQueueConfig.ThrottlePvPPriorityNormal);
+    data << float(socialQueueConfig.ThrottlePvPPriorityLow);
+    data << float(socialQueueConfig.ThrottlePvPHonorThreshold);
+    data << float(socialQueueConfig.ThrottleLfgListPriorityDefault);
+    data << float(socialQueueConfig.ThrottleLfgListPriorityAbove);
+    data << float(socialQueueConfig.ThrottleLfgListPriorityBelow);
+    data << float(socialQueueConfig.ThrottleLfgListIlvlScalingAbove);
+    data << float(socialQueueConfig.ThrottleLfgListIlvlScalingBelow);
+    data << float(socialQueueConfig.ThrottleRfPriorityAbove);
+    data << float(socialQueueConfig.ThrottleRfIlvlScalingAbove);
+    data << float(socialQueueConfig.ThrottleDfMaxItemLevel);
+    data << float(socialQueueConfig.ThrottleDfBestPriority);
+
+    return data;
+}
+
+ByteBuffer& operator<<(ByteBuffer& data, SessionAlertConfig const& sessionAlert)
+{
+    data << int32(sessionAlert.Delay);
+    data << int32(sessionAlert.Period);
+    data << int32(sessionAlert.DisplayTime);
+
+    return data;
+}
+
 ByteBuffer& operator<<(ByteBuffer& data, SavedThrottleObjectState const& throttleState)
 {
     data << uint32(throttleState.MaxTries);
     data << uint32(throttleState.PerMilliseconds);
     data << uint32(throttleState.TryCount);
     data << uint32(throttleState.LastResetTimeBeforeNow);
+
     return data;
 }
 
@@ -36,6 +76,7 @@ ByteBuffer& operator<<(ByteBuffer& data, EuropaTicketConfig const& europaTicketS
     data << Bits<1>(europaTicketSystemStatus.ComplaintsEnabled);
     data << Bits<1>(europaTicketSystemStatus.SuggestionsEnabled);
     data << europaTicketSystemStatus.ThrottleState;
+
     return data;
 }
 
@@ -85,42 +126,14 @@ WorldPacket const* FeatureSystemStatus::Write()
 
     _worldPacket.FlushBits();
 
-    {
-        _worldPacket.WriteBit(QuickJoinConfig.ToastsDisabled);
-        _worldPacket << float(QuickJoinConfig.ToastDuration);
-        _worldPacket << float(QuickJoinConfig.DelayDuration);
-        _worldPacket << float(QuickJoinConfig.QueueMultiplier);
-        _worldPacket << float(QuickJoinConfig.PlayerMultiplier);
-        _worldPacket << float(QuickJoinConfig.PlayerFriendValue);
-        _worldPacket << float(QuickJoinConfig.PlayerGuildValue);
-        _worldPacket << float(QuickJoinConfig.ThrottleInitialThreshold);
-        _worldPacket << float(QuickJoinConfig.ThrottleDecayTime);
-        _worldPacket << float(QuickJoinConfig.ThrottlePrioritySpike);
-        _worldPacket << float(QuickJoinConfig.ThrottleMinThreshold);
-        _worldPacket << float(QuickJoinConfig.ThrottlePvPPriorityNormal);
-        _worldPacket << float(QuickJoinConfig.ThrottlePvPPriorityLow);
-        _worldPacket << float(QuickJoinConfig.ThrottlePvPHonorThreshold);
-        _worldPacket << float(QuickJoinConfig.ThrottleLfgListPriorityDefault);
-        _worldPacket << float(QuickJoinConfig.ThrottleLfgListPriorityAbove);
-        _worldPacket << float(QuickJoinConfig.ThrottleLfgListPriorityBelow);
-        _worldPacket << float(QuickJoinConfig.ThrottleLfgListIlvlScalingAbove);
-        _worldPacket << float(QuickJoinConfig.ThrottleLfgListIlvlScalingBelow);
-        _worldPacket << float(QuickJoinConfig.ThrottleRfPriorityAbove);
-        _worldPacket << float(QuickJoinConfig.ThrottleRfIlvlScalingAbove);
-        _worldPacket << float(QuickJoinConfig.ThrottleDfMaxItemLevel);
-        _worldPacket << float(QuickJoinConfig.ThrottleDfBestPriority);
-    }
+    _worldPacket << QuickJoinConfig;
 
     if (SessionAlert)
-    {
-        _worldPacket << int32(SessionAlert->Delay);
-        _worldPacket << int32(SessionAlert->Period);
-        _worldPacket << int32(SessionAlert->DisplayTime);
-    }
+        _worldPacket << *SessionAlert;
 
     if (RaceClassExpansionLevels)
     {
-        _worldPacket << uint32(RaceClassExpansionLevels->size());
+        _worldPacket << Size<uint32>(*RaceClassExpansionLevels);
         if (!RaceClassExpansionLevels->empty())
             _worldPacket.append(RaceClassExpansionLevels->data(), RaceClassExpansionLevels->size());
     }
@@ -144,7 +157,7 @@ WorldPacket const* FeatureSystemStatusGlueScreen::Write()
 
     _worldPacket << Bits<1>(KioskModeEnabled);
     _worldPacket << Bits<1>(CompetitiveModeEnabled);
-    _worldPacket.WriteBit(false); // not accessed in handler
+    _worldPacket << Bits<1>(false); // not accessed in handler
     _worldPacket << Bits<1>(BoostEnabled);
     _worldPacket << Bits<1>(RedeemForBalanceAvailable);
     _worldPacket << Bits<1>(LiveRegionCharacterListEnabled);
@@ -163,14 +176,15 @@ WorldPacket const* FeatureSystemStatusGlueScreen::Write()
 WorldPacket const* MOTD::Write()
 {
     ASSERT(Text);
-    _worldPacket.WriteBits(Text->size(), 4);
+    _worldPacket << BitsSize<4>(*Text);
     _worldPacket.FlushBits();
 
     for (std::string const& line : *Text)
     {
-        _worldPacket.WriteBits(line.length(), 7);
+        _worldPacket << SizedString::BitsSize<7>(line);
         _worldPacket.FlushBits();
-        _worldPacket.WriteString(line);
+
+        _worldPacket << SizedString::Data(line);
     }
 
     return &_worldPacket;
@@ -178,12 +192,12 @@ WorldPacket const* MOTD::Write()
 
 WorldPacket const* SetTimeZoneInformation::Write()
 {
-    _worldPacket << BitsSize<7>(ServerTimeTZ);
-    _worldPacket << BitsSize<7>(GameTimeTZ);
+    _worldPacket << SizedString::BitsSize<7>(ServerTimeTZ);
+    _worldPacket << SizedString::BitsSize<7>(GameTimeTZ);
     _worldPacket.FlushBits();
 
-    _worldPacket.WriteString(ServerTimeTZ);
-    _worldPacket.WriteString(GameTimeTZ);
+    _worldPacket << SizedString::Data(ServerTimeTZ);
+    _worldPacket << SizedString::Data(GameTimeTZ);
 
     return &_worldPacket;
 }

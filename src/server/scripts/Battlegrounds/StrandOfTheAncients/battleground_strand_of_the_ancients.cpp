@@ -21,6 +21,7 @@
 #include "BattlegroundScore.h"
 #include "Creature.h"
 #include "CreatureAI.h"
+#include "DB2Stores.h"
 #include "GameObject.h"
 #include "GameTime.h"
 #include "Map.h"

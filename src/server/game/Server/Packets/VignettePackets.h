@@ -43,7 +43,7 @@ struct VignetteDataSet
 class VignetteUpdate final : public ServerPacket
 {
 public:
-    VignetteUpdate() : ServerPacket(SMSG_VIGNETTE_UPDATE, 200) { }
+    explicit VignetteUpdate() : ServerPacket(SMSG_VIGNETTE_UPDATE, 200) { }
 
     WorldPacket const* Write() override;
 

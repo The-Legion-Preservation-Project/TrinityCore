@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QueryPackets_h__
-#define QueryPackets_h__
+#ifndef TRINITYCORE_QUERY_PACKETS_H
+#define TRINITYCORE_QUERY_PACKETS_H
 
 #include "Packet.h"
 #include "AuthenticationPackets.h"
@@ -39,7 +39,7 @@ namespace WorldPackets
         class QueryCreature final : public ClientPacket
         {
         public:
-            QueryCreature(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_CREATURE, std::move(packet)) { }
+            explicit QueryCreature(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_CREATURE, std::move(packet)) { }
 
             void Read() override;
 
@@ -72,7 +72,7 @@ namespace WorldPackets
         class QueryCreatureResponse final : public ServerPacket
         {
         public:
-            QueryCreatureResponse() : ServerPacket(SMSG_QUERY_CREATURE_RESPONSE, 76) { }
+            explicit QueryCreatureResponse() : ServerPacket(SMSG_QUERY_CREATURE_RESPONSE, 76) { }
 
             WorldPacket const* Write() override;
 
@@ -84,7 +84,7 @@ namespace WorldPackets
         class QueryPlayerName final : public ClientPacket
         {
         public:
-            QueryPlayerName(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_PLAYER_NAME, std::move(packet)) { }
+            explicit QueryPlayerName(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_PLAYER_NAME, std::move(packet)) { }
 
             void Read() override;
 
@@ -111,7 +111,7 @@ namespace WorldPackets
         class QueryPlayerNameResponse final : public ServerPacket
         {
         public:
-            QueryPlayerNameResponse() : ServerPacket(SMSG_QUERY_PLAYER_NAME_RESPONSE, 60) { }
+            explicit QueryPlayerNameResponse() : ServerPacket(SMSG_QUERY_PLAYER_NAME_RESPONSE, 60) { }
 
             WorldPacket const* Write() override;
 
@@ -123,7 +123,7 @@ namespace WorldPackets
         class QueryPageText final : public ClientPacket
         {
         public:
-            QueryPageText(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_PAGE_TEXT, std::move(packet)) { }
+            explicit QueryPageText(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_PAGE_TEXT, std::move(packet)) { }
 
             void Read() override;
 
@@ -134,7 +134,7 @@ namespace WorldPackets
         class QueryPageTextResponse final : public ServerPacket
         {
         public:
-            QueryPageTextResponse() : ServerPacket(SMSG_QUERY_PAGE_TEXT_RESPONSE, 15) { }
+            explicit QueryPageTextResponse() : ServerPacket(SMSG_QUERY_PAGE_TEXT_RESPONSE, 15) { }
 
             WorldPacket const* Write() override;
 
@@ -155,7 +155,7 @@ namespace WorldPackets
         class QueryNPCText final : public ClientPacket
         {
         public:
-            QueryNPCText(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_NPC_TEXT, std::move(packet)) { }
+            explicit QueryNPCText(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_NPC_TEXT, std::move(packet)) { }
 
             void Read() override;
 
@@ -166,7 +166,7 @@ namespace WorldPackets
         class QueryNPCTextResponse final : public ServerPacket
         {
         public:
-            QueryNPCTextResponse() : ServerPacket(SMSG_QUERY_NPC_TEXT_RESPONSE, 73) { }
+            explicit QueryNPCTextResponse() : ServerPacket(SMSG_QUERY_NPC_TEXT_RESPONSE, 73) { }
 
             WorldPacket const* Write() override;
 
@@ -179,7 +179,7 @@ namespace WorldPackets
         class QueryGameObject final : public ClientPacket
         {
         public:
-            QueryGameObject(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_GAME_OBJECT, std::move(packet)) { }
+            explicit QueryGameObject(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_GAME_OBJECT, std::move(packet)) { }
 
             void Read() override;
 
@@ -204,7 +204,7 @@ namespace WorldPackets
         class QueryGameObjectResponse final : public ServerPacket
         {
         public:
-            QueryGameObjectResponse() : ServerPacket(SMSG_QUERY_GAME_OBJECT_RESPONSE, 165) { }
+            explicit QueryGameObjectResponse() : ServerPacket(SMSG_QUERY_GAME_OBJECT_RESPONSE, 165) { }
 
             WorldPacket const* Write() override;
 
@@ -216,7 +216,7 @@ namespace WorldPackets
         class QueryCorpseLocationFromClient final : public ClientPacket
         {
         public:
-            QueryCorpseLocationFromClient(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_CORPSE_LOCATION_FROM_CLIENT, std::move(packet)) { }
+            explicit QueryCorpseLocationFromClient(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_CORPSE_LOCATION_FROM_CLIENT, std::move(packet)) { }
 
             void Read() override;
 
@@ -226,7 +226,7 @@ namespace WorldPackets
         class CorpseLocation final : public ServerPacket
         {
         public:
-            CorpseLocation() : ServerPacket(SMSG_CORPSE_LOCATION, 1 + (5 * 4) + 16) { }
+            explicit CorpseLocation() : ServerPacket(SMSG_CORPSE_LOCATION, 1 + (5 * 4) + 16) { }
 
             WorldPacket const* Write() override;
 
@@ -241,7 +241,7 @@ namespace WorldPackets
         class QueryCorpseTransport final : public ClientPacket
         {
         public:
-            QueryCorpseTransport(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_CORPSE_TRANSPORT , std::move(packet)) { }
+            explicit QueryCorpseTransport(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_CORPSE_TRANSPORT , std::move(packet)) { }
 
             void Read() override;
 
@@ -252,7 +252,7 @@ namespace WorldPackets
         class CorpseTransportQuery final : public ServerPacket
         {
         public:
-            CorpseTransportQuery() : ServerPacket(SMSG_CORPSE_TRANSPORT_QUERY, 16) { }
+            explicit CorpseTransportQuery() : ServerPacket(SMSG_CORPSE_TRANSPORT_QUERY, 16) { }
 
             WorldPacket const* Write() override;
 
@@ -264,7 +264,7 @@ namespace WorldPackets
         class QueryTime final : public ClientPacket
         {
         public:
-            QueryTime(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_TIME, std::move(packet)) { }
+            explicit QueryTime(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_TIME, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -272,7 +272,7 @@ namespace WorldPackets
         class QueryTimeResponse final : public ServerPacket
         {
         public:
-            QueryTimeResponse() : ServerPacket(SMSG_QUERY_TIME_RESPONSE, 4 + 4) { }
+            explicit QueryTimeResponse() : ServerPacket(SMSG_QUERY_TIME_RESPONSE, 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -282,7 +282,7 @@ namespace WorldPackets
         class QuestPOIQuery final : public ClientPacket
         {
         public:
-            QuestPOIQuery(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_POI_QUERY, std::move(packet)) { }
+            explicit QuestPOIQuery(WorldPacket&& packet) : ClientPacket(CMSG_QUEST_POI_QUERY, std::move(packet)) { }
 
             void Read() override;
 
@@ -293,7 +293,7 @@ namespace WorldPackets
         class QuestPOIQueryResponse final : public ServerPacket
         {
         public:
-            QuestPOIQueryResponse() : ServerPacket(SMSG_QUEST_POI_QUERY_RESPONSE, 4 + 4) { }
+            explicit QuestPOIQueryResponse() : ServerPacket(SMSG_QUEST_POI_QUERY_RESPONSE, 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -303,7 +303,7 @@ namespace WorldPackets
         class QueryQuestCompletionNPCs final : public ClientPacket
         {
         public:
-            QueryQuestCompletionNPCs(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_QUEST_COMPLETION_NPCS, std::move(packet)) { }
+            explicit QueryQuestCompletionNPCs(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_QUEST_COMPLETION_NPCS, std::move(packet)) { }
 
             void Read() override;
 
@@ -319,7 +319,7 @@ namespace WorldPackets
         class QuestCompletionNPCResponse final : public ServerPacket
         {
         public:
-            QuestCompletionNPCResponse() : ServerPacket(SMSG_QUEST_COMPLETION_NPC_RESPONSE, 4) { }
+            explicit QuestCompletionNPCResponse() : ServerPacket(SMSG_QUEST_COMPLETION_NPC_RESPONSE, 4) { }
 
             WorldPacket const* Write() override;
 
@@ -329,7 +329,7 @@ namespace WorldPackets
         class QueryPetName final : public ClientPacket
         {
         public:
-            QueryPetName(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_PET_NAME, std::move(packet)) { }
+            explicit QueryPetName(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_PET_NAME, std::move(packet)) { }
 
             void Read() override;
 
@@ -339,7 +339,7 @@ namespace WorldPackets
         class QueryPetNameResponse final : public ServerPacket
         {
         public:
-            QueryPetNameResponse() : ServerPacket(SMSG_QUERY_PET_NAME_RESPONSE, 16 + 1) { }
+            explicit QueryPetNameResponse() : ServerPacket(SMSG_QUERY_PET_NAME_RESPONSE, 16 + 1) { }
 
             WorldPacket const* Write() override;
 
@@ -355,7 +355,7 @@ namespace WorldPackets
         class ItemTextQuery final : public ClientPacket
         {
         public:
-            ItemTextQuery(WorldPacket&& packet) : ClientPacket(CMSG_ITEM_TEXT_QUERY, std::move(packet)) { }
+            explicit ItemTextQuery(WorldPacket&& packet) : ClientPacket(CMSG_ITEM_TEXT_QUERY, std::move(packet)) { }
 
             void Read() override;
 
@@ -370,7 +370,7 @@ namespace WorldPackets
         class QueryItemTextResponse final : public ServerPacket
         {
         public:
-            QueryItemTextResponse() : ServerPacket(SMSG_QUERY_ITEM_TEXT_RESPONSE) { }
+            explicit QueryItemTextResponse() : ServerPacket(SMSG_QUERY_ITEM_TEXT_RESPONSE) { }
 
             WorldPacket const* Write() override;
 
@@ -382,7 +382,7 @@ namespace WorldPackets
         class QueryRealmName final : public ClientPacket
         {
         public:
-            QueryRealmName(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_REALM_NAME, std::move(packet)) { }
+            explicit QueryRealmName(WorldPacket&& packet) : ClientPacket(CMSG_QUERY_REALM_NAME, std::move(packet)) { }
 
             void Read() override;
 
@@ -392,7 +392,7 @@ namespace WorldPackets
         class RealmQueryResponse final : public ServerPacket
         {
         public:
-            RealmQueryResponse() : ServerPacket(SMSG_REALM_QUERY_RESPONSE) { }
+            explicit RealmQueryResponse() : ServerPacket(SMSG_REALM_QUERY_RESPONSE) { }
 
             WorldPacket const* Write() override;
 
@@ -407,4 +407,4 @@ namespace WorldPackets
 
 ByteBuffer& operator<<(ByteBuffer& data, QuestPOIData const& questPOIData);
 
-#endif // QueryPackets_h__
+#endif // TRINITYCORE_QUERY_PACKETS_H

@@ -111,7 +111,6 @@ class TC_GAME_API Conversation final : public WorldObject, public GridObject<Con
         Position _stationaryPosition;
         ObjectGuid _creatorGuid;
         Milliseconds _duration;
-        uint32 _textureKitId;
         std::set<uint16> _actorIndices;
 
         std::unique_ptr<ConversationAI> _ai;

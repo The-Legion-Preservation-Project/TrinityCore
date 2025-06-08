@@ -17,13 +17,10 @@
 
 #include "AdventureMapPackets.h"
 
-namespace WorldPackets
-{
-namespace AdventureMap
+namespace WorldPackets::AdventureMap
 {
 void AdventureMapStartQuest::Read()
 {
     _worldPacket >> QuestID;
-}
 }
 }

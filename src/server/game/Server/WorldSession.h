@@ -27,6 +27,7 @@
 #include "AuthDefines.h"
 #include "ClientBuildInfo.h"
 #include "DatabaseEnvFwd.h"
+#include "Duration.h"
 #include "LockedQueue.h"
 #include "ObjectGuid.h"
 #include "Opcodes.h"
@@ -109,6 +110,7 @@ namespace WorldPackets
     namespace AreaTrigger
     {
         class AreaTrigger;
+        class UpdateAreaTriggerVisual;
     }
 
     namespace Artifact
@@ -715,6 +717,7 @@ namespace WorldPackets
         class SpellClick;
         class MissileTrajectoryCollision;
         class UpdateMissileTrajectory;
+        class UpdateAuraVisual;
         class TradeSkillSetFavorite;
         class KeyboundOverride;
     }
@@ -1264,6 +1267,7 @@ class TC_GAME_API WorldSession
         void HandleSetContactNotesOpcode(WorldPackets::Social::SetContactNotes& packet);
 
         void HandleAreaTriggerOpcode(WorldPackets::AreaTrigger::AreaTrigger& packet);
+        void HandleUpdateAreaTriggerVisual(WorldPackets::AreaTrigger::UpdateAreaTriggerVisual const& updateAreaTriggerVisual);
 
         void HandleSetFactionAtWar(WorldPackets::Character::SetFactionAtWar& packet);
         void HandleSetFactionNotAtWar(WorldPackets::Character::SetFactionNotAtWar& packet);
@@ -1493,6 +1497,7 @@ class TC_GAME_API WorldSession
         void HandleCancelChanneling(WorldPackets::Spells::CancelChannelling& cancelChanneling);
         void HandleMissileTrajectoryCollision(WorldPackets::Spells::MissileTrajectoryCollision& packet);
         void HandleUpdateMissileTrajectory(WorldPackets::Spells::UpdateMissileTrajectory& packet);
+        void HandleUpdateAuraVisual(WorldPackets::Spells::UpdateAuraVisual const& updateAuraVisual);
 
         void HandleLearnPvpTalentsOpcode(WorldPackets::Talent::LearnPvpTalents& packet);
         void HandleLearnTalentsOpcode(WorldPackets::Talent::LearnTalents& packet);
@@ -1915,7 +1920,7 @@ class TC_GAME_API WorldSession
         Minutes _timezoneOffset;
         std::atomic<uint32> m_latency;
         AccountData _accountData[NUM_ACCOUNT_DATA_TYPES];
-        uint32 _tutorials[MAX_ACCOUNT_TUTORIAL_VALUES];
+        std::array<uint32, MAX_ACCOUNT_TUTORIAL_VALUES> _tutorials;
         uint8 _tutorialsChanged;
         std::vector<std::string> _registeredAddonPrefixes;
         bool _filterAddonMessages;

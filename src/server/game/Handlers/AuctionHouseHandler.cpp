@@ -112,13 +112,13 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
 
     if (sellItem.Items.size() != 1 || sellItem.Items[0].UseCount != 1)
     {
-        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::ItemNotFound); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::ItemNotFound);
         return;
     }
 
     if (!sellItem.MinBid && !sellItem.BuyoutPrice)
     {
-        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::NotEnoughMoney); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::NotEnoughMoney);
         return;
     }
 
@@ -151,7 +151,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
         case 4 * MIN_AUCTION_TIME / MINUTE:
             break;
         default:
-            SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::AuctionHouseBusy); //, throttle.DelayUntilNext);
+            SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::AuctionHouseBusy);
             return;
     }
 
@@ -161,7 +161,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
     Item* item = _player->GetItemByGuid(sellItem.Items[0].Guid);
     if (!item)
     {
-        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::ItemNotFound); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::ItemNotFound);
         return;
     }
 
@@ -169,7 +169,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
         item->GetTemplate()->HasFlag(ITEM_FLAG_CONJURED) || item->GetExpiration() ||
         item->GetCount() != 1)
     {
-        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::DatabaseError); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::DatabaseError);
         return;
     }
 
@@ -179,7 +179,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
     uint64 deposit = AuctionHouseMgr::GetItemAuctionDeposit(_player, item, Minutes(sellItem.RunTime));
     if (!_player->HasEnoughMoney(deposit))
     {
-        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::NotEnoughMoney); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::NotEnoughMoney);
         return;
     }
 
@@ -210,7 +210,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
     // Add to pending auctions, or fail with insufficient funds error
     if (!sAuctionMgr->PendingAuctionAdd(_player, auctionHouse->GetAuctionHouseId(), auctionId, auction.Deposit))
     {
-        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::NotEnoughMoney); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::NotEnoughMoney);
         return;
     }
 
@@ -222,7 +222,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
 
     auctionHouse->AddAuction(trans, std::move(auction));
     _player->SaveInventoryAndGoldToDB(trans);
-    AddTransactionCallback(CharacterDatabase.AsyncCommitTransaction(trans)).AfterComplete([this, auction, auctionPlayerGuid = _player->GetGUID(), throttle](bool success)
+    AddTransactionCallback(CharacterDatabase.AsyncCommitTransaction(trans)).AfterComplete([this, auction, auctionPlayerGuid = _player->GetGUID()](bool success)
     {
         if (GetPlayer() && GetPlayer()->GetGUID() == auctionPlayerGuid)
         {
@@ -232,7 +232,7 @@ void WorldSession::HandleAuctionSellItem(WorldPackets::AuctionHouse::AuctionSell
                 SendAuctionCommandResult(&auction, AuctionCommand::SellItem, AuctionResult::Ok);
             }
             else
-                SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::DatabaseError); //, throttle.DelayUntilNext);
+                SendAuctionCommandResult(nullptr, AuctionCommand::SellItem, AuctionResult::DatabaseError);
         }
     });
 }
@@ -259,7 +259,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPackets::AuctionHouse::AuctionPlac
     AuctionPosting* auction = auctionHouse->GetAuction(placeBid.AuctionID);
     if (!auction)
     {
-        SendAuctionCommandResult(nullptr, AuctionCommand::PlaceBid, AuctionResult::ItemNotFound); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(nullptr, AuctionCommand::PlaceBid, AuctionResult::ItemNotFound);
         return;
     }
 
@@ -268,7 +268,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPackets::AuctionHouse::AuctionPlac
     // check auction owner - cannot buy own auctions
     if (auction->Owner == player->GetGUID() || auction->OwnerAccount == GetAccountGUID())
     {
-        SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::BidOwn); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::BidOwn);
         return;
     }
 
@@ -278,14 +278,14 @@ void WorldSession::HandleAuctionPlaceBid(WorldPackets::AuctionHouse::AuctionPlac
     // buyout attempt with wrong amount
     if (!canBid && placeBid.BidAmount != auction->BuyoutPrice)
     {
-        SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::BidIncrement); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::BidIncrement);
         return;
     }
 
     uint64 minBid = auction->BidAmount ? auction->BidAmount + auction->CalculateMinIncrement() : auction->MinBid;
     if (canBid && placeBid.BidAmount < minBid)
     {
-        SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::HigherBid); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::HigherBid);
         return;
     }
 
@@ -304,7 +304,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPackets::AuctionHouse::AuctionPlac
     // check money
     if (!player->HasEnoughMoney(priceToPay))
     {
-        SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::NotEnoughMoney); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::NotEnoughMoney);
         return;
     }
 
@@ -340,17 +340,17 @@ void WorldSession::HandleAuctionPlaceBid(WorldPackets::AuctionHouse::AuctionPlac
 
     player->SaveInventoryAndGoldToDB(trans);
     AddTransactionCallback(CharacterDatabase.AsyncCommitTransaction(trans)).AfterComplete(
-        [this, auction, bidAmount = placeBid.BidAmount, auctionPlayerGuid = _player->GetGUID(), throttle](bool success)
+        [this, auction, bidAmount = placeBid.BidAmount, auctionPlayerGuid = _player->GetGUID()](bool success)
     {
         if (GetPlayer() && GetPlayer()->GetGUID() == auctionPlayerGuid)
         {
             if (success)
             {
                 GetPlayer()->UpdateCriteria(CriteriaType::HighestAuctionBid, bidAmount);
-                SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::Ok); //, throttle.DelayUntilNext);
+                SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::Ok);
             }
             else
-                SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::DatabaseError); //, throttle.DelayUntilNext);
+                SendAuctionCommandResult(auction, AuctionCommand::PlaceBid, AuctionResult::DatabaseError);
         }
     });
 }
@@ -386,7 +386,7 @@ void WorldSession::HandleAuctionRemoveItem(WorldPackets::AuctionHouse::AuctionRe
             uint64 cancelCost = CalculatePct(auction->BidAmount, 5u);
             if (!player->HasEnoughMoney(cancelCost))          //player doesn't have enough money
             {
-                SendAuctionCommandResult(nullptr, AuctionCommand::Cancel, AuctionResult::NotEnoughMoney); //, throttle.DelayUntilNext);
+                SendAuctionCommandResult(nullptr, AuctionCommand::Cancel, AuctionResult::NotEnoughMoney);
                 return;
             }
             auctionHouse->SendAuctionCancelledToBidder(auction, trans);
@@ -397,7 +397,7 @@ void WorldSession::HandleAuctionRemoveItem(WorldPackets::AuctionHouse::AuctionRe
     }
     else
     {
-        SendAuctionCommandResult(nullptr, AuctionCommand::Cancel, AuctionResult::DatabaseError); //, throttle.DelayUntilNext);
+        SendAuctionCommandResult(nullptr, AuctionCommand::Cancel, AuctionResult::DatabaseError);
         //this code isn't possible ... maybe there should be assert
         TC_LOG_ERROR("entities.player.cheat", "CHEATER : {} tried to cancel auction (id: {}) of another player or auction is NULL", player->GetGUID().ToString(), removeItem.AuctionID);
         return;
@@ -407,14 +407,14 @@ void WorldSession::HandleAuctionRemoveItem(WorldPackets::AuctionHouse::AuctionRe
     player->SaveInventoryAndGoldToDB(trans);
     auctionHouse->RemoveAuction(trans, auction);
     AddTransactionCallback(CharacterDatabase.AsyncCommitTransaction(trans)).AfterComplete(
-        [this, auction, auctionPlayerGuid = _player->GetGUID(), throttle](bool success)
+        [this, auction, auctionPlayerGuid = _player->GetGUID()](bool success)
     {
         if (GetPlayer() && GetPlayer()->GetGUID() == auctionPlayerGuid)
         {
             if (success)
-                SendAuctionCommandResult(auction, AuctionCommand::Cancel, AuctionResult::Ok); //, throttle.DelayUntilNext);        //inform player, that auction is removed
+                SendAuctionCommandResult(auction, AuctionCommand::Cancel, AuctionResult::Ok);        //inform player, that auction is removed
             else
-                SendAuctionCommandResult(nullptr, AuctionCommand::Cancel, AuctionResult::DatabaseError); //, throttle.DelayUntilNext);
+                SendAuctionCommandResult(nullptr, AuctionCommand::Cancel, AuctionResult::DatabaseError);
         }
     });
 }
@@ -530,7 +530,7 @@ void WorldSession::HandleAuctionListItems(WorldPackets::AuctionHouse::AuctionLis
         }
     }
 
-    auctionHouse->BuildListAuctionItems(result, _player, wsearchedname, listItems.MinLevel, listItems.MaxLevel, listItems.OnlyUsable, filters, listItems.Quality, listItems.Offset, listItems.DataSort);
+    auctionHouse->BuildListAuctionItems(result, _player, wsearchedname, listItems.MinLevel, listItems.MaxLevel, listItems.ExactMatch, listItems.OnlyUsable, filters, listItems.Quality, listItems.Offset, listItems.DataSort);
 
     result.DesiredDelay = uint32(throttle.DelayUntilNext.count());
     result.OnlyUsable = listItems.OnlyUsable;

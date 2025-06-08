@@ -109,6 +109,8 @@ class TC_GAME_API AreaTrigger final : public WorldObject, public GridObject<Area
         uint32 GetTimeToTargetExtraScale() const { return GetUInt32Value(AREATRIGGER_TIME_TO_TARGET_EXTRA_SCALE); }
         void SetTimeToTargetExtraScale(uint32 timeToTargetExtraScale) { SetUInt32Value(AREATRIGGER_TIME_TO_TARGET_EXTRA_SCALE, timeToTargetExtraScale); }
 
+        void SetSpellVisual(SpellCastVisual const& visual);
+
         int32 GetDuration() const { return _duration; }
 
         int32 GetTotalDuration() const { return _totalDuration; }
@@ -118,7 +120,7 @@ class TC_GAME_API AreaTrigger final : public WorldObject, public GridObject<Area
         GuidUnorderedSet const& GetInsideUnits() const { return _insideUnits; }
 
         AreaTriggerCreateProperties const* GetCreateProperties() const { return _areaTriggerCreateProperties; }
-        AreaTriggerTemplate const* GetTemplate() const;
+        AreaTriggerTemplate const* GetTemplate() const { return _areaTriggerTemplate; }
         uint32 GetScriptId() const;
 
         ObjectGuid GetCreatorGUID() const override { return GetCasterGuid(); }
@@ -135,12 +137,12 @@ class TC_GAME_API AreaTrigger final : public WorldObject, public GridObject<Area
         Position const& GetTargetRollPitchYaw() const { return _targetRollPitchYaw; }
         void InitSplineOffsets(std::vector<Position> const& offsets, Optional<float> overrideSpeed = {});
         void InitSplines(std::vector<G3D::Vector3> const& splinePoints, Optional<float> overrideSpeed = {});
-        bool HasSplines() const;
-        ::Movement::Spline<int32> const& GetSpline() const { return *std::get<std::unique_ptr<::Movement::Spline<int32>>>(_movement); }
+        bool HasSplines() const { return std::holds_alternative<std::unique_ptr<::Movement::Spline<float>>>(_movement); }
+        ::Movement::Spline<float> const& GetSpline() const { return *std::get<std::unique_ptr<::Movement::Spline<float>>>(_movement); }
         uint32 GetElapsedTimeForMovement() const { return GetTimeSinceCreated(); } /// @todo: research the right value, in sniffs both timers are nearly identical
 
         void InitOrbit(AreaTriggerOrbitInfo const& orbit, Optional<float> overrideSpeed = {});
-        bool HasOrbit() const;
+        bool HasOrbit() const { return std::holds_alternative<std::unique_ptr<AreaTriggerOrbitInfo>>(_movement); }
         AreaTriggerOrbitInfo const& GetOrbit() const { return *std::get<std::unique_ptr<AreaTriggerOrbitInfo>>(_movement); }
 
         void UpdateShape();
@@ -172,8 +174,8 @@ class TC_GAME_API AreaTrigger final : public WorldObject, public GridObject<Area
         void UndoActions(Unit* unit);
 
         void UpdatePolygonVertices();
-        void UpdateOrbitPosition(uint32 diff);
-        void UpdateSplinePosition(uint32 diff);
+        void UpdateOrbitPosition(AreaTriggerOrbitInfo& orbit, uint32 diff);
+        void UpdateSplinePosition(Movement::Spline<float>& spline, uint32 diff);
 
         Position const* GetOrbitCenterPosition() const;
         Position CalculateOrbitPosition() const;
@@ -197,7 +199,7 @@ class TC_GAME_API AreaTrigger final : public WorldObject, public GridObject<Area
         Position _rollPitchYaw;
         Position _targetRollPitchYaw;
         std::vector<Position> _polygonVertices;
-        std::variant<std::monostate, std::unique_ptr<::Movement::Spline<int32>>, std::unique_ptr<AreaTriggerOrbitInfo>> _movement;
+        std::variant<std::monostate, std::unique_ptr<::Movement::Spline<float>>, std::unique_ptr<AreaTriggerOrbitInfo>> _movement;
 
         bool _reachedDestination;
         int32 _lastSplineIndex;

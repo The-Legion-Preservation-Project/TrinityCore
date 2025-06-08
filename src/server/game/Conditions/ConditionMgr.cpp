@@ -2320,10 +2320,12 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond) const
             }
             break;
         }
-        case CONDITION_OBJECT_ENTRY_GUID_LEGACY:
+        // TheLegionPreservationProject: Convert future GUIDs to legacy
+        case CONDITION_OBJECT_ENTRY_GUID_FUTURE:
             cond->ConditionType = CONDITION_OBJECT_ENTRY_GUID;
-            cond->ConditionValue1 = Trinity::Legacy::ConvertLegacyTypeID(Trinity::Legacy::TypeID(cond->ConditionValue1));
+            cond->ConditionValue1 = Trinity::Future::ConvertFutureTypeID(Trinity::Future::TypeID(cond->ConditionValue1));
             [[fallthrough]];
+        // TheLegionPreservationProject: Legacy GUIDs are still used
         case CONDITION_OBJECT_ENTRY_GUID:
         {
             switch (cond->ConditionValue1)
@@ -2387,10 +2389,12 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond) const
             }
             break;
         }
-        case CONDITION_TYPE_MASK_LEGACY:
+        // TheLegionPreservationProject: Legacy type masks are still used; convert future type masks to legacy
+        case CONDITION_TYPE_MASK_FUTURE:
             cond->ConditionType = CONDITION_TYPE_MASK;
-            cond->ConditionValue1 = Trinity::Legacy::ConvertLegacyTypeMask(cond->ConditionValue1);
+            cond->ConditionValue1 = Trinity::Future::ConvertFutureTypeMask(cond->ConditionValue1);
             [[fallthrough]];
+        // TheLegionPreservationProject: Legacy type masks are still used
         case CONDITION_TYPE_MASK:
         {
             if (!cond->ConditionValue1 || (cond->ConditionValue1 & ~(TYPEMASK_UNIT | TYPEMASK_PLAYER | TYPEMASK_GAMEOBJECT | TYPEMASK_CORPSE)))
@@ -3209,14 +3213,7 @@ bool ConditionMgr::IsPlayerMeetingCondition(Player const* player, PlayerConditio
     return true;
 }
 
-ByteBuffer HexToBytes(const std::string& hex)
-{
-    ByteBuffer buffer(hex.length() / 2, ByteBuffer::Resize{});
-    Trinity::Impl::HexStrToByteArray(hex, buffer.contents(), buffer.size());
-    return buffer;
-}
-
-static int32(* const WorldStateExpressionFunctions[WSE_FUNCTION_MAX])(Map const*, uint32, uint32) =
+static constexpr int32(* const WorldStateExpressionFunctions[WSE_FUNCTION_MAX])(Map const*, uint32, uint32) =
 {
     // WSE_FUNCTION_NONE
     [](Map const* /*map*/, uint32 /*arg1*/, uint32 /*arg2*/) -> int32
@@ -3553,21 +3550,24 @@ bool EvalRelOp(ByteBuffer& buffer, Map const* map)
     return false;
 }
 
-bool ConditionMgr::IsMeetingWorldStateExpression(Map const* map, WorldStateExpressionEntry const* expression)
+bool ConditionMgr::IsMeetingWorldStateExpression(Map const* map, WorldStateExpressionEntry const* expression) try
 {
-    ByteBuffer buffer = HexToBytes(expression->Expression);
+    ByteBuffer buffer(HexStrToByteVector(expression->Expression));
     if (buffer.empty())
         return false;
 
-    bool enabled = buffer.read<bool>();
+    uint8 enabled = buffer.read<uint8>();
     if (!enabled)
         return false;
 
     bool finalResult = EvalRelOp(buffer, map);
-    WorldStateExpressionLogic resultLogic = buffer.read<WorldStateExpressionLogic>();
 
-    while (resultLogic != WorldStateExpressionLogic::None)
+    do
     {
+        WorldStateExpressionLogic resultLogic = buffer.read<WorldStateExpressionLogic>();
+        if (resultLogic == WorldStateExpressionLogic::None)
+            break;
+
         bool secondResult = EvalRelOp(buffer, map);
 
         switch (resultLogic)
@@ -3578,14 +3578,14 @@ bool ConditionMgr::IsMeetingWorldStateExpression(Map const* map, WorldStateExpre
             default:
                 break;
         }
-
-        if (buffer.rpos() >= buffer.size())
-            break;
-
-        resultLogic = buffer.read<WorldStateExpressionLogic>();
-    }
+    } while (buffer.rpos() < buffer.size());
 
     return finalResult;
+}
+catch (std::exception const& e)
+{
+    TC_LOG_ERROR("condition", "Failed to parse WorldStateExpression {}: {}", expression->ID, e.what());
+    return false;
 }
 
 int32 GetUnitConditionVariable(Unit const* unit, Unit const* otherUnit, UnitConditionVariable variable, int32 value)

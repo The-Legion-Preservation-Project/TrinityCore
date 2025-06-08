@@ -1013,8 +1013,6 @@ void Player::Update(uint32 p_time)
     // If mute expired, remove it from the DB
     if (GetSession()->m_muteTime && GetSession()->m_muteTime < now)
     {
-        using namespace std::string_view_literals;
-
         GetSession()->m_muteTime = 0;
         LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
         stmt->setInt64(0, 0); // Set the mute time to 0
@@ -3307,7 +3305,7 @@ void Player::RemoveSpell(uint32 spell_id, bool disabled /*= false*/, bool learn_
             RemovePetAura(petSpell);
 
     // update free primary prof.points (if not overflow setting, can be in case GM use before .learn prof. learning)
-    if (spellInfo && spellInfo->IsPrimaryProfessionFirstRank())
+    if (spellInfo->IsPrimaryProfessionFirstRank())
     {
         uint32 freeProfs = GetFreePrimaryProfessionPoints()+1;
         if (freeProfs <= sWorld->getIntConfig(CONFIG_MAX_PRIMARY_TRADE_SKILL))
@@ -3444,7 +3442,7 @@ void Player::RemoveSpell(uint32 spell_id, bool disabled /*= false*/, bool learn_
 
     if (m_canTitanGrip)
     {
-        if (spellInfo && spellInfo->IsPassive() && spellInfo->HasEffect(SPELL_EFFECT_TITAN_GRIP))
+        if (spellInfo->IsPassive() && spellInfo->HasEffect(SPELL_EFFECT_TITAN_GRIP))
         {
             RemoveAurasDueToSpell(m_titanGripPenaltySpellId);
             SetCanTitanGrip(false);
@@ -3453,7 +3451,7 @@ void Player::RemoveSpell(uint32 spell_id, bool disabled /*= false*/, bool learn_
 
     if (m_canDualWield)
     {
-        if (spellInfo && spellInfo->IsPassive() && spellInfo->HasEffect(SPELL_EFFECT_DUAL_WIELD))
+        if (spellInfo->IsPassive() && spellInfo->HasEffect(SPELL_EFFECT_DUAL_WIELD))
             SetCanDualWield(false);
     }
 
@@ -13858,7 +13856,7 @@ Quest const* Player::GetNextQuest(Object const* questGiver, Quest const* quest) 
 
     //we should obtain map pointer from GetMap() in 99% of cases. Special case
     //only for quests which cast teleport spells on player
-    if (WorldObject const* worldObjectQuestGiver = dynamic_cast<WorldObject const*>(questGiver))
+    if (WorldObject const* worldObjectQuestGiver = questGiver->ToWorldObject())
         if (!IsInMap(worldObjectQuestGiver))
             return nullptr;
 
@@ -16479,6 +16477,23 @@ bool Player::IsQuestObjectiveCompletable(uint16 slot, Quest const* quest, QuestO
     return true;
 }
 
+bool Player::IsQuestObjectiveCompletable(uint32 questId, uint32 objectiveId) const
+{
+    Quest const* quest = sObjectMgr->GetQuestTemplate(questId);
+    if (!quest)
+        return false;
+
+    uint16 slot = FindQuestSlot(questId);
+    if (slot >= MAX_QUEST_LOG_SIZE)
+        return false;
+
+    QuestObjective const* obj = sObjectMgr->GetQuestObjective(objectiveId);
+    if (!obj)
+        return false;
+
+    return IsQuestObjectiveCompletable(slot, quest, *obj);
+}
+
 bool Player::IsQuestObjectiveComplete(uint16 slot, Quest const* quest, QuestObjective const& objective) const
 {
     switch (objective.Type)
@@ -16817,7 +16832,7 @@ SpawnTrackingState Player::GetSpawnTrackingStateByObjective(uint32 spawnTracking
         {
             if (IsQuestRewarded(questObjective->QuestID) || IsQuestObjectiveComplete(questObjective->QuestID, questObjective->ID))
                 return SpawnTrackingState::Complete;
-            else if (GetQuestStatus(questObjective->QuestID) != QUEST_STATUS_NONE)
+            else if (GetQuestStatus(questObjective->QuestID) != QUEST_STATUS_NONE && IsQuestObjectiveCompletable(questObjective->QuestID, questObjective->ID))
             {
                 auto itr = m_QuestStatus.find(questObjective->QuestID);
                 if (itr != m_QuestStatus.end() && itr->second.Slot < MAX_QUEST_LOG_SIZE)
@@ -16909,7 +16924,9 @@ void Player::_LoadEquipmentSets(PreparedQueryResult result)
         eqSet.Data.SetName    = fields[2].GetString();
         eqSet.Data.SetIcon    = fields[3].GetString();
         eqSet.Data.IgnoreMask = fields[4].GetUInt32();
-        eqSet.Data.AssignedSpecIndex = fields[5].GetInt32();
+        if (int32 assignedSpecIndex = fields[5].GetInt32(); assignedSpecIndex != -1)
+            eqSet.Data.AssignedSpecIndex = assignedSpecIndex;
+
         eqSet.State           = EQUIPMENT_SET_UNCHANGED;
 
         for (uint32 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
@@ -23272,6 +23289,14 @@ bool Player::IsNeverVisibleFor(WorldObject const* seer, bool allowServersideObje
     return false;
 }
 
+bool Player::CanNeverSee(WorldObject const* obj, bool ignorePhaseShift /*= false*/) const
+{
+    // the intent is to delay sending visible objects until client is ready for them
+    // some gameobjects dont function correctly if they are sent before TransportServerTime is correctly set (after CMSG_MOVE_INIT_ACTIVE_MOVER_COMPLETE)
+    //return !HasPlayerLocalFlag(PLAYER_LOCAL_FLAG_OVERRIDE_TRANSPORT_SERVER_TIME) || WorldObject::CanNeverSee(obj, ignorePhaseShift);
+    return WorldObject::CanNeverSee(obj, ignorePhaseShift);
+}
+
 bool Player::CanAlwaysSee(WorldObject const* obj) const
 {
     // Always can see self
@@ -23430,7 +23455,7 @@ void Player::UpdateVisibilityOf(WorldObject* target)
 {
     if (HaveAtClient(target))
     {
-        if (!CanSeeOrDetect(target, false, true))
+        if (!CanSeeOrDetect(target, { .DistanceCheck = true }))
         {
             switch (target->GetTypeId())
             {
@@ -23461,7 +23486,7 @@ void Player::UpdateVisibilityOf(WorldObject* target)
     }
     else
     {
-        if (CanSeeOrDetect(target, false, true))
+        if (CanSeeOrDetect(target, { .DistanceCheck = true }))
         {
             target->SendUpdateToPlayer(this);
             m_clientGUIDs.insert(target->GetGUID());
@@ -23500,7 +23525,7 @@ void Player::UpdateTriggerVisibility()
             creature->ForceValuesUpdateAtIndex(UNIT_FIELD_DISPLAYID);
             creature->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
             creature->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS_2);
-            creature->BuildValuesUpdateBlockForPlayer(&udata, this);
+            creature->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, {});
         }
         else if (itr->IsAnyTypeGameObject())
         {
@@ -23509,7 +23534,7 @@ void Player::UpdateTriggerVisibility()
                 continue;
 
             go->ForceValuesUpdateAtIndex(OBJECT_DYNAMIC_FLAGS);
-            go->BuildValuesUpdateBlockForPlayer(&udata, this);
+            go->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, {});
         }
     }
 
@@ -23556,7 +23581,7 @@ void Player::UpdateVisibilityOf(T* target, UpdateData& data, std::set<WorldObjec
 {
     if (HaveAtClient(target))
     {
-        if (!CanSeeOrDetect(target, false, true))
+        if (!CanSeeOrDetect(target, { .DistanceCheck = true }))
         {
             BeforeVisibilityDestroy<T>(target, this);
 
@@ -23574,7 +23599,7 @@ void Player::UpdateVisibilityOf(T* target, UpdateData& data, std::set<WorldObjec
     }
     else
     {
-        if (CanSeeOrDetect(target, false, true))
+        if (CanSeeOrDetect(target, { .DistanceCheck = true }))
         {
             target->BuildCreateUpdateBlockForPlayer(&data, this);
             m_clientGUIDs.insert(target->GetGUID());
@@ -24748,7 +24773,7 @@ void Player::UpdateVisibleObjectInteractions(bool allUnits, bool onlySpellClicks
                 }
 
                 if (!indexes.empty())
-                    gameObject->BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &udata.GetBuffer(), this, indexes);
+                    gameObject->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, indexes);
             }
         }
         else if (visibleObjectGuid.IsCreatureOrVehicle() && (allUnits || onlySpellClicks))
@@ -24778,7 +24803,7 @@ void Player::UpdateVisibleObjectInteractions(bool allUnits, bool onlySpellClicks
                     indexes.insert(UNIT_NPC_FLAGS + 1);
 
                 if (!indexes.empty())
-                    creature->BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &udata.GetBuffer(), this, indexes);
+                    creature->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, indexes);
 
                 if (creature->IsQuestGiver())
                     giverStatusMultiple.QuestGiver.emplace_back(visibleObjectGuid, GetQuestDialogStatus(creature));
@@ -24795,7 +24820,7 @@ void Player::UpdateVisibleObjectInteractions(bool allUnits, bool onlySpellClicks
                     if (sConditionMgr->HasConditionsForSpellClickEvent(creature->GetEntry(), clickPair.second.spellId))
                     {
                         // NpcFlags[0] (UNIT_NPC_FLAGS) has UNIT_NPC_FLAG_SPELLCLICK
-                        creature->BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &udata.GetBuffer(), this, { UNIT_NPC_FLAGS });
+                        creature->BuildValuesUpdateBlockForPlayerWithMask(&udata, this, { UNIT_NPC_FLAGS });
                         break;
                     }
                 }
@@ -26923,7 +26948,7 @@ void Player::_SaveEquipmentSets(CharacterDatabaseTransaction trans)
                     stmt->setString(j++, eqSet.Data.SetName);
                     stmt->setString(j++, eqSet.Data.SetIcon);
                     stmt->setUInt32(j++, eqSet.Data.IgnoreMask);
-                    stmt->setInt32(j++, eqSet.Data.AssignedSpecIndex);
+                    stmt->setInt32(j++, eqSet.Data.AssignedSpecIndex.value_or(-1));
                     for (uint8 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
                         stmt->setUInt64(j++, eqSet.Data.Pieces[i].GetCounter());
                     stmt->setUInt64(j++, GetGUID().GetCounter());
@@ -26960,7 +26985,7 @@ void Player::_SaveEquipmentSets(CharacterDatabaseTransaction trans)
                     stmt->setString(j++, eqSet.Data.SetName);
                     stmt->setString(j++, eqSet.Data.SetIcon);
                     stmt->setUInt32(j++, eqSet.Data.IgnoreMask);
-                    stmt->setInt32(j++, eqSet.Data.AssignedSpecIndex);
+                    stmt->setInt32(j++, eqSet.Data.AssignedSpecIndex.value_or(-1));
                     for (uint8 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
                         stmt->setUInt64(j++, eqSet.Data.Pieces[i].GetCounter());
                 }

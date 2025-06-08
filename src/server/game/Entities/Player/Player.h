@@ -1722,6 +1722,7 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         int32 GetQuestObjectiveData(QuestObjective const& objective) const;
         void SetQuestObjectiveData(QuestObjective const& objective, int32 data);
         bool IsQuestObjectiveCompletable(uint16 slot, Quest const* quest, QuestObjective const& objective) const;
+        bool IsQuestObjectiveCompletable(uint32 questId, uint32 objectiveId) const;
         bool IsQuestObjectiveComplete(uint16 slot, Quest const* quest, QuestObjective const& objective) const;
         bool IsQuestObjectiveComplete(uint32 questId, uint32 objectiveId) const;
         bool IsQuestObjectiveProgressBarComplete(uint16 slot, Quest const* quest) const;
@@ -2098,9 +2099,9 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         void UpdateAttackPowerAndDamage(bool ranged = false) override;
         void ApplySpellPowerBonus(int32 amount, bool apply);
         void UpdateSpellDamageAndHealingBonus();
-        void ApplyModDamageDonePos(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + school, mod, apply); }
-        void ApplyModDamageDoneNeg(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + school, mod, apply); }
-        void ApplyModDamageDonePercent(SpellSchools school, float pct, bool apply) { ApplyPercentModFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + school, pct, apply); }
+        void ApplyModDamageDonePos(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + AsUnderlyingType(school), mod, apply); }
+        void ApplyModDamageDoneNeg(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + AsUnderlyingType(school), mod, apply); }
+        void ApplyModDamageDonePercent(SpellSchools school, float pct, bool apply) { ApplyPercentModFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + AsUnderlyingType(school), pct, apply); }
         void SetModDamageDonePercent(uint8 school, float pct) { SetFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + school, pct); }
         void ApplyRatingMod(CombatRating cr, int32 value, bool apply);
         void UpdateRating(CombatRating cr);
@@ -2192,7 +2193,7 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         void KillPlayer();
         static void OfflineResurrect(ObjectGuid const& guid, CharacterDatabaseTransaction trans);
         bool HasCorpse() const { return _corpseLocation.GetMapId() != MAPID_INVALID; }
-        WorldLocation GetCorpseLocation() const { return _corpseLocation; }
+        WorldLocation const& GetCorpseLocation() const { return _corpseLocation; }
         void InitializeSelfResurrectionSpells();
         void ResurrectPlayer(float restore_percent, bool applySickness = false);
         void BuildPlayerRepop();
@@ -2232,12 +2233,12 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         uint16 GetSkillStep(uint32 skill) const;            // 0...6
         bool HasSkill(uint32 skill) const;
         void LearnSkillRewardedSpells(uint32 skillId, uint32 skillValue, Races race);
-        void SetSkillLineId(uint32 pos, uint16 skillLineId) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_ID_OFFSET + pos / 2, pos & 1, skillLineId); }
-        void SetSkillStep(uint32 pos, uint16 step) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_STEP_OFFSET + pos / 2, pos & 1, step); }
-        void SetSkillRank(uint32 pos, uint16 rank) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_RANK_OFFSET + pos / 2, pos & 1, rank); }
-        void SetSkillMaxRank(uint32 pos, uint16 max) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_MAX_RANK_OFFSET + pos / 2, pos & 1, max); }
-        void SetSkillTempBonus(uint32 pos, uint16 bonus) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_TEMP_BONUS_OFFSET + pos / 2, pos & 1, bonus); }
-        void SetSkillPermBonus(uint32 pos, uint16 bonus) { SetUInt16Value(PLAYER_SKILL_LINEID + SKILL_PERM_BONUS_OFFSET + pos / 2, pos & 1, bonus); }
+        void SetSkillLineId(uint32 pos, uint16 skillLineId) { SetUInt16Value(PLAYER_SKILL_LINEID + AsUnderlyingType(SKILL_ID_OFFSET) + pos / 2, pos & 1, skillLineId); }
+        void SetSkillStep(uint32 pos, uint16 step) { SetUInt16Value(PLAYER_SKILL_LINEID + AsUnderlyingType(SKILL_STEP_OFFSET) + pos / 2, pos & 1, step); }
+        void SetSkillRank(uint32 pos, uint16 rank) { SetUInt16Value(PLAYER_SKILL_LINEID + AsUnderlyingType(SKILL_RANK_OFFSET) + pos / 2, pos & 1, rank); }
+        void SetSkillMaxRank(uint32 pos, uint16 max) { SetUInt16Value(PLAYER_SKILL_LINEID + AsUnderlyingType(SKILL_MAX_RANK_OFFSET) + pos / 2, pos & 1, max); }
+        void SetSkillTempBonus(uint32 pos, uint16 bonus) { SetUInt16Value(PLAYER_SKILL_LINEID + AsUnderlyingType(SKILL_TEMP_BONUS_OFFSET) + pos / 2, pos & 1, bonus); }
+        void SetSkillPermBonus(uint32 pos, uint16 bonus) { SetUInt16Value(PLAYER_SKILL_LINEID + AsUnderlyingType(SKILL_PERM_BONUS_OFFSET) + pos / 2, pos & 1, bonus); }
 
         TeleportLocation& GetTeleportDest() { return m_teleport_dest; }
         uint32 GetTeleportOptions() const { return m_teleport_options; }
@@ -2745,10 +2746,10 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
             switch (type)
             {
                 case REST_TYPE_XP:
-                    SetUInt32Value(PLAYER_FIELD_REST_INFO + REST_STATE_XP, state);
+                    SetUInt32Value(PLAYER_FIELD_REST_INFO + AsUnderlyingType(REST_STATE_XP), state);
                     break;
                 case REST_TYPE_HONOR:
-                    SetUInt32Value(PLAYER_FIELD_REST_INFO + REST_STATE_HONOR, state);
+                    SetUInt32Value(PLAYER_FIELD_REST_INFO + AsUnderlyingType(REST_STATE_HONOR), state);
                     break;
                 default:
                     break;
@@ -2759,10 +2760,10 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
             switch (type)
             {
                 case REST_TYPE_XP:
-                    SetUInt32Value(PLAYER_FIELD_REST_INFO + REST_RESTED_XP, threshold);
+                    SetUInt32Value(PLAYER_FIELD_REST_INFO + AsUnderlyingType(REST_RESTED_XP), threshold);
                     break;
                 case REST_TYPE_HONOR:
-                    SetUInt32Value(PLAYER_FIELD_REST_INFO + REST_RESTED_HONOR, threshold);
+                    SetUInt32Value(PLAYER_FIELD_REST_INFO + AsUnderlyingType(REST_RESTED_HONOR), threshold);
                     break;
                 default:
                     break;
@@ -3107,6 +3108,7 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         std::unique_ptr<Runes> m_runes;
         EquipmentSetContainer _equipmentSets;
 
+        bool CanNeverSee(WorldObject const* obj, bool ignorePhaseShift = false) const override;
         bool CanAlwaysSee(WorldObject const* obj) const override;
 
         bool IsAlwaysDetectableFor(WorldObject const* seer) const override;

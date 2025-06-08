@@ -15,13 +15,20 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AreaTriggerPackets_h__
-#define AreaTriggerPackets_h__
+#ifndef TRINITYCORE_AREA_TRIGGER_PACKETS_H
+#define TRINITYCORE_AREA_TRIGGER_PACKETS_H
 
 #include "Packet.h"
 #include "AreaTriggerTemplate.h"
+#include "CombatLogPacketsCommon.h"
 #include "ObjectGuid.h"
 #include "Optional.h"
+
+namespace Movement
+{
+template<class index_type>
+class Spline;
+}
 
 namespace WorldPackets
 {
@@ -31,13 +38,13 @@ namespace WorldPackets
         {
             uint32 TimeToTarget = 0;
             uint32 ElapsedTimeForMovement = 0;
-            std::vector<TaggedPosition<Position::XYZ>> Points;
+            ::Movement::Spline<float>* Points = nullptr;
         };
 
         class AreaTrigger final : public ClientPacket
         {
         public:
-            AreaTrigger(WorldPacket&& packet) : ClientPacket(CMSG_AREA_TRIGGER, std::move(packet)) { }
+            explicit AreaTrigger(WorldPacket&& packet) : ClientPacket(CMSG_AREA_TRIGGER, std::move(packet)) { }
 
             void Read() override;
 
@@ -49,7 +56,7 @@ namespace WorldPackets
         class AreaTriggerDenied final : public ServerPacket
         {
         public:
-            AreaTriggerDenied() : ServerPacket(SMSG_AREA_TRIGGER_DENIED, 5) { }
+            explicit AreaTriggerDenied() : ServerPacket(SMSG_AREA_TRIGGER_DENIED, 5) { }
 
             int32 AreaTriggerID = 0;
             bool Entered = false;
@@ -60,7 +67,7 @@ namespace WorldPackets
         class AreaTriggerNoCorpse final : public ServerPacket
         {
         public:
-            AreaTriggerNoCorpse() : ServerPacket(SMSG_AREA_TRIGGER_NO_CORPSE, 0) { }
+            explicit AreaTriggerNoCorpse() : ServerPacket(SMSG_AREA_TRIGGER_NO_CORPSE, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
@@ -69,7 +76,7 @@ namespace WorldPackets
         {
         public:
             // TODO: not sure if this should be SMSG_AREA_TRIGGER_RE_SHAPE - opcode was changed in TC BFA
-            AreaTriggerRePath() : ServerPacket(SMSG_AREA_TRIGGER_RE_PATH, 17) { }
+            explicit AreaTriggerRePath() : ServerPacket(SMSG_AREA_TRIGGER_RE_PATH, 17) { }
 
             WorldPacket const* Write() override;
 
@@ -77,9 +84,22 @@ namespace WorldPackets
             Optional<AreaTriggerOrbitInfo> AreaTriggerOrbit;
             ObjectGuid TriggerGUID;
         };
+
+        class UpdateAreaTriggerVisual final : public ClientPacket
+        {
+        public:
+            explicit UpdateAreaTriggerVisual(WorldPacket&& packet) : ClientPacket(CMSG_UPDATE_AREA_TRIGGER_VISUAL, std::move(packet)) { }
+
+            void Read() override;
+
+            int32 SpellID = 0;
+            Spells::SpellCastVisual Visual;
+            ObjectGuid TargetGUID;
+        };
+
+        void WriteAreaTriggerSpline(ByteBuffer& data, uint32 timeToTarget, uint32 elapsedTimeForMovement, ::Movement::Spline<float> const& areaTriggerSpline);
+        ByteBuffer& operator<<(ByteBuffer& data, AreaTriggerOrbitInfo const& areaTriggerCircularMovement);
     }
 }
 
-ByteBuffer& operator<<(ByteBuffer& data, AreaTriggerOrbitInfo const& areaTriggerCircularMovement);
-
-#endif // AreaTriggerPackets_h__
+#endif // TRINITYCORE_AREA_TRIGGER_PACKETS_H

@@ -2440,7 +2440,15 @@ void Unit::SendMeleeAttackStart(Unit* victim)
 
 void Unit::SendMeleeAttackStop(Unit* victim)
 {
-    SendMessageToSet(WorldPackets::Combat::SAttackStop(this, victim).Write(), true);
+    WorldPackets::Combat::SAttackStop attackStop;
+    attackStop.Attacker = GetGUID();
+    if (victim)
+    {
+        attackStop.Victim = victim->GetGUID();
+        attackStop.NowDead = !victim->IsAlive();
+    }
+
+    SendMessageToSet(attackStop.Write(), true);
 
     if (victim)
         TC_LOG_DEBUG("entities.unit", "{} stopped attacking {}", GetGUID().ToString(), victim->GetGUID().ToString());
@@ -3412,10 +3420,14 @@ void Unit::_ApplyAura(AuraApplication* aurApp, uint32 effMask)
     aura->HandleAuraSpecificMods(aurApp, caster, true, false);
 
     // apply effects of the aura
-    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+    for (AuraEffect const* aurEff : aura->GetAuraEffects())
     {
-        if (effMask & 1 << i && (!aurApp->GetRemoveMode()))
-            aurApp->_HandleEffect(i, true);
+        if (effMask & 1 << aurEff->GetEffIndex())
+        {
+            aurApp->_HandleEffect(aurEff->GetEffIndex(), true);
+            if (aurApp->GetRemoveMode())
+                break;
+        }
     }
 
     if (Player* player = ToPlayer())
@@ -3481,11 +3493,9 @@ void Unit::_UnapplyAura(AuraApplicationMap::iterator& i, AuraRemoveMode removeMo
     aura->_UnapplyForTarget(this, caster, aurApp);
 
     // remove effects of the spell - needs to be done after removing aura from lists
-    for (uint8 itr = 0; itr < MAX_SPELL_EFFECTS; ++itr)
-    {
-        if (aurApp->HasEffect(itr))
-            aurApp->_HandleEffect(itr, false);
-    }
+    for (AuraEffect const* aurEff : aura->GetAuraEffects())
+        if (aurApp->HasEffect(aurEff->GetEffIndex()))
+            aurApp->_HandleEffect(aurEff->GetEffIndex(), false);
 
     // all effect mustn't be applied
     ASSERT(!aurApp->GetEffectMask());
@@ -3697,10 +3707,10 @@ void Unit::RemoveAura(AuraApplication * aurApp, AuraRemoveMode mode)
     if (aurApp->GetRemoveMode())
     {
         // remove remaining effects of an aura
-        for (uint8 itr = 0; itr < MAX_SPELL_EFFECTS; ++itr)
+        for (AuraEffect const* aurEff : aurApp->GetBase()->GetAuraEffects())
         {
-            if (aurApp->HasEffect(itr))
-                aurApp->_HandleEffect(itr, false);
+            if (aurApp->HasEffect(aurEff->GetEffIndex()))
+                aurApp->_HandleEffect(aurEff->GetEffIndex(), false);
         }
         return;
     }
@@ -3873,26 +3883,19 @@ void Unit::RemoveAurasDueToSpellBySteal(uint32 spellId, ObjectGuid casterGUID, W
         Aura* aura = iter->second;
         if (aura->GetCasterGUID() == casterGUID)
         {
-            int32 damage[MAX_SPELL_EFFECTS];
-            int32 baseDamage[MAX_SPELL_EFFECTS];
-            uint32 effMask = 0;
-            uint32 recalculateMask = 0;
+            std::array<int32, MAX_SPELL_EFFECTS> damage = { };
+            std::array<int32, MAX_SPELL_EFFECTS> baseDamage = { };
+            std::bitset<MAX_SPELL_EFFECTS> effMask;
+            std::bitset<MAX_SPELL_EFFECTS> recalculateMask;
             Unit* caster = aura->GetCaster();
-            for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+            for (AuraEffect const* aurEff : aura->GetAuraEffects())
             {
-                if (aura->GetEffect(i))
-                {
-                    baseDamage[i] = aura->GetEffect(i)->GetBaseAmount();
-                    damage[i] = aura->GetEffect(i)->GetAmount();
-                    effMask |= 1 << i;
-                    if (aura->GetEffect(i)->CanBeRecalculated())
-                        recalculateMask |= 1 << i;
-                }
-                else
-                {
-                    baseDamage[i] = 0;
-                    damage[i] = 0;
-                }
+                SpellEffIndex i = aurEff->GetEffIndex();
+                baseDamage[i] = aurEff->GetBaseAmount();
+                damage[i] = aurEff->GetAmount();
+                effMask[i] = true;
+                if (aurEff->CanBeRecalculated())
+                    recalculateMask[i] = true;
             }
 
             bool stealCharge = aura->GetSpellInfo()->HasAttribute(SPELL_ATTR7_DISPEL_REMOVES_CHARGES);
@@ -3915,10 +3918,10 @@ void Unit::RemoveAurasDueToSpellBySteal(uint32 spellId, ObjectGuid casterGUID, W
                     if (aura->IsSingleTarget())
                         aura->UnregisterSingleTarget();
 
-                    AuraCreateInfo createInfo(aura->GetCastId(), aura->GetSpellInfo(), aura->GetCastDifficulty(), effMask, unitStealer);
+                    AuraCreateInfo createInfo(aura->GetCastId(), aura->GetSpellInfo(), aura->GetCastDifficulty(), effMask.to_ulong(), unitStealer);
                     createInfo
                         .SetCasterGUID(aura->GetCasterGUID())
-                        .SetBaseAmount(baseDamage)
+                        .SetBaseAmount(baseDamage.data())
                         .SetStackAmount(stolenCharges);
 
                     if (Aura* newAura = Aura::TryRefreshStackOrCreate(createInfo))
@@ -3932,7 +3935,7 @@ void Unit::RemoveAurasDueToSpellBySteal(uint32 spellId, ObjectGuid casterGUID, W
                             caster->GetSingleCastAuras().push_front(aura);
                         }
                         // FIXME: using aura->GetMaxDuration() maybe not blizzlike but it fixes stealing of spells like Innervate
-                        newAura->SetLoadedState(aura->GetMaxDuration(), int32(dur), stealCharge ? stolenCharges : aura->GetCharges(), recalculateMask, &damage[0]);
+                        newAura->SetLoadedState(aura->GetMaxDuration(), int32(dur), stealCharge ? stolenCharges : aura->GetCharges(), recalculateMask.to_ulong(), damage.data());
                         newAura->ApplyForTargets();
                     }
                 }
@@ -5439,7 +5442,7 @@ void Unit::SendPeriodicAuraLog(SpellPeriodicAuraLogInfo* info)
     data.SpellID = aura->GetId();
     data.LogData.Initialize(this);
 
-    WorldPackets::CombatLog::SpellPeriodicAuraLog::SpellLogEffect spellLogEffect;
+    WorldPackets::CombatLog::PeriodicAuraLogEffect& spellLogEffect = data.Effects.emplace_back();
     spellLogEffect.Effect = aura->GetAuraType();
     spellLogEffect.Amount = info->damage;
     spellLogEffect.OverHealOrKill = info->overDamage;
@@ -5453,8 +5456,6 @@ void Unit::SendPeriodicAuraLog(SpellPeriodicAuraLogInfo* info)
     if (Unit* caster = ObjectAccessor::GetUnit(*this, aura->GetCasterGUID()))
         if (sandboxScalingData.GenerateDataForUnits(caster, this))
             spellLogEffect.SandboxScaling = sandboxScalingData;
-
-    data.Effects.push_back(spellLogEffect);
 
     SendCombatLogMessage(&data);
 }
@@ -6016,7 +6017,7 @@ void Unit::SetOwnerGUID(ObjectGuid owner)
 
     UpdateData udata(GetMapId());
     WorldPacket packet;
-    BuildValuesUpdateBlockForPlayer(&udata, player);
+    BuildValuesUpdateBlockForPlayerWithMask(&udata, player, {});
     udata.BuildPacket(&packet);
     player->SendDirectMessage(&packet);
 
@@ -12520,7 +12521,7 @@ bool Unit::HandleSpellClick(Unit* clicker, int8 seatId, uint32 spellId, TriggerC
         }
         else    // This can happen during Player::_LoadAuras
         {
-            int32 bp[MAX_SPELL_EFFECTS] = { };
+            std::array<int32, MAX_SPELL_EFFECTS> bp = { };
             for (SpellEffectInfo const& spellEffectInfo : spellEntry->GetEffects())
                 bp[spellEffectInfo.EffectIndex] = int32(spellEffectInfo.BasePoints);
 
@@ -12529,7 +12530,7 @@ bool Unit::HandleSpellClick(Unit* clicker, int8 seatId, uint32 spellId, TriggerC
             AuraCreateInfo createInfo(ObjectGuid::Create<HighGuid::Cast>(SPELL_CAST_SOURCE_NORMAL, GetMapId(), spellEntry->Id, GetMap()->GenerateLowGuid<HighGuid::Cast>()), spellEntry, GetMap()->GetDifficultyID(), MAX_EFFECT_MASK, this);
             createInfo
                 .SetCaster(clicker)
-                .SetBaseAmount(bp)
+                .SetBaseAmount(bp.data())
                 .SetCasterGUID(origCasterGUID);
 
             Aura::TryRefreshStackOrCreate(createInfo);
@@ -13800,11 +13801,6 @@ bool Unit::IsSplineEnabled() const
     return movespline->Initialized() && !movespline->Finalized();
 }
 
-void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const
-{
-    BuildValuesUpdateWithMask(updateType, data, target, {});
-}
-
 void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const
 {
     if (!target)
@@ -13851,7 +13847,7 @@ void Unit::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player 
 
         if (shouldUpdate)
         {
-            UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
+            UpdateMask::SetUpdateBit(data->data() + maskPos, index);
 
             if (index == UNIT_NPC_FLAGS)
             {
@@ -14152,8 +14148,10 @@ bool Unit::IsHighestExclusiveAuraEffect(SpellInfo const* spellInfo, AuraType aur
         {
             int64 diff = int64(abs(effectAmount)) - int64(abs(existingAurEff->GetAmount()));
             if (!diff)
-                for (int32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-                    diff += int64((auraEffectMask & (1 << i)) >> i) - int64((existingAurEff->GetBase()->GetEffectMask() & (1 << i)) >> i);
+            {
+                // treat the aura with more effects as stronger
+                diff = std::popcount(auraEffectMask) - std::popcount(existingAurEff->GetBase()->GetEffectMask());
+            }
 
             if (diff > 0)
             {

@@ -127,7 +127,7 @@ public:
         {
             int64 ordering = CompareColumns(sort.SortOrder, left, right);
             if (ordering != 0)
-                return (ordering < 0) == !sort.ReverseSort;
+                return (ordering < 0) == (sort.ReverseSort <= 0);
         }
 
         // Auctions are processed in LIFO order
@@ -138,59 +138,16 @@ public:
     }
 
 private:
-    int32 GetSortLevel(ItemTemplate const* itemTemplate) const
-    {
-        switch (itemTemplate->GetClass())
-        {
-            case ITEM_CLASS_WEAPON:
-            case ITEM_CLASS_ARMOR:
-                return itemTemplate->GetBaseItemLevel();
-            case ITEM_CLASS_CONTAINER:
-                return itemTemplate->GetContainerSlots();
-            case ITEM_CLASS_GEM:
-            case ITEM_CLASS_ITEM_ENHANCEMENT:
-                return itemTemplate->GetBaseItemLevel();
-                break;
-            case ITEM_CLASS_CONSUMABLE:
-                return std::max<uint8>(1, itemTemplate->GetBaseRequiredLevel());
-            case ITEM_CLASS_MISCELLANEOUS:
-            case ITEM_CLASS_BATTLE_PETS:
-                return 1;
-            case ITEM_CLASS_RECIPE:
-                return itemTemplate->GetSubClass() != ITEM_SUBCLASS_BOOK ? itemTemplate->GetRequiredSkillRank() : itemTemplate->GetBaseRequiredLevel();
-            default:
-                break;
-        }
-
-        return 1;
-    }
-
     int64 CompareColumns(AuctionHouseSortOrder column, AuctionPosting const* left, AuctionPosting const* right) const
     {
         switch (column)
         {
             case AuctionHouseSortOrder::Level:
-            {
-                int32 leftLevel = !left->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_SPECIES_ID)
-                    ? GetSortLevel(left->Item->GetTemplate())
-                    : left->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_LEVEL);
-                int32 rightLevel = !right->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_SPECIES_ID)
-                    ? GetSortLevel(right->Item->GetTemplate())
-                    : right->Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_LEVEL);
-                return leftLevel - rightLevel;
-            }
+                return int32(left->SortLevel) - int32(right->SortLevel);
             case AuctionHouseSortOrder::Quality:
-            {
-                int32 leftQuality = left->Item->GetQuality();
-                int32 rightQuality = right->Item->GetQuality();
-                return leftQuality - rightQuality;
-            }
-            case AuctionHouseSortOrder::Duration:
-            {
-                int32 leftDuration = int32(std::max(std::chrono::duration_cast<Milliseconds>(left->EndTime - GameTime::GetSystemTime()).count(), Milliseconds::zero().count()));
-                int32 rightDuration = int32(std::max(std::chrono::duration_cast<Milliseconds>(right->EndTime - GameTime::GetSystemTime()).count(), Milliseconds::zero().count()));
-                return leftDuration - rightDuration;
-            }
+                return int32(left->Quality) - int32(right->Quality);
+            case AuctionHouseSortOrder::TimeRemaining:
+                return (left->EndTime - right->EndTime).count();
             case AuctionHouseSortOrder::Seller:
             {
                 std::string leftName;
@@ -206,8 +163,8 @@ private:
                 int64 rightPrice = int64(right->BuyoutPrice ? right->BuyoutPrice : (right->BidAmount ? right->BidAmount : right->MinBid)) / right->Item->GetCount();
                 return leftPrice - rightPrice;
             }
-            // case AuctionHouseSortOrder::Name:
-            //     return left->Bucket->FullName[_locale].compare(right->Bucket->FullName[_locale]);
+            case AuctionHouseSortOrder::Name_Unconfirmed:
+                return left->FullName[_locale].compare(right->FullName[_locale]);
             // case AuctionHouseSortOrder::Bid:
             //     return int64(left->BidAmount) - int64(right->BidAmount);
             // case AuctionHouseSortOrder::Buyout:
@@ -722,6 +679,54 @@ AuctionPosting* AuctionHouseObject::GetAuction(uint32 auctionId)
 
 void AuctionHouseObject::AddAuction(CharacterDatabaseTransaction trans, AuctionPosting auction)
 {
+    ItemTemplate const* itemTemplate = auction.Item->GetTemplate();
+    auction.ItemClass = itemTemplate->GetClass();
+    auction.ItemSubClass = itemTemplate->GetSubClass();
+    auction.InventoryType = itemTemplate->GetInventoryType();
+    auction.Quality = itemTemplate->GetQuality();
+    auction.RequiredLevel = auction.Item->GetRequiredLevel();
+    switch (itemTemplate->GetClass())
+    {
+        case ITEM_CLASS_WEAPON:
+        case ITEM_CLASS_ARMOR:
+            auction.SortLevel = itemTemplate->GetBaseItemLevel();
+            break;
+        case ITEM_CLASS_CONTAINER:
+            auction.SortLevel = itemTemplate->GetContainerSlots();
+            break;
+        case ITEM_CLASS_GEM:
+        case ITEM_CLASS_ITEM_ENHANCEMENT:
+            auction.SortLevel = itemTemplate->GetBaseItemLevel();
+            break;
+        case ITEM_CLASS_CONSUMABLE:
+            auction.SortLevel = std::max<uint8>(1, itemTemplate->GetBaseRequiredLevel());
+            break;
+        case ITEM_CLASS_MISCELLANEOUS:
+        case ITEM_CLASS_BATTLE_PETS:
+            if (auction.Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_SPECIES_ID))
+                auction.SortLevel = auction.Item->GetModifier(ITEM_MODIFIER_BATTLE_PET_LEVEL);
+            else
+                auction.SortLevel = 1;
+            break;
+        case ITEM_CLASS_RECIPE:
+            auction.SortLevel = itemTemplate->GetSubClass() != ITEM_SUBCLASS_BOOK ? itemTemplate->GetRequiredSkillRank() : itemTemplate->GetBaseRequiredLevel();
+            break;
+        default:
+            break;
+    }
+
+    for (LocaleConstant locale = LOCALE_enUS; locale < TOTAL_LOCALES; locale = LocaleConstant(locale + 1))
+    {
+        if (locale == LOCALE_none)
+            continue;
+
+        std::wstring utf16name;
+        if (!Utf8toWStr(auction.Item->GetNameForLocaleIdx(locale), utf16name))
+            continue;
+
+        auction.FullName[locale] = wstrCaseAccentInsensitiveParse(utf16name, locale);
+    }
+
     if (trans)
     {
         CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_AUCTION);
@@ -886,7 +891,7 @@ void AuctionHouseObject::BuildListOwnedItems(WorldPackets::AuctionHouse::Auction
 
 
 void AuctionHouseObject::BuildListAuctionItems(WorldPackets::AuctionHouse::AuctionListItemsResult& listItemsResult, Player const* player,
-    std::wstring const& searchedName, uint8 minLevel, uint8 maxLevel, bool onlyUsable, Optional<AuctionSearchClassFilters> const& filters, uint32 quality,
+    std::wstring const& searchedName, uint8 minLevel, uint8 maxLevel, bool exactMatch, bool onlyUsable, Optional<AuctionSearchClassFilters> const& filters, uint32 quality,
     uint32 offset, std::span<WorldPackets::AuctionHouse::AuctionSortDef const> sorts) const
 {
     listItemsResult.TotalCount = 0;
@@ -901,94 +906,63 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPackets::AuctionHouse::Aucti
         if (auction->EndTime < curTime)
             continue;
 
-        //Item* item = sAuctionMgr->GetAItem(auction->itemGUIDLow);
         Item* item = auction->Item;
         if (!item)
             continue;
 
-        ItemTemplate const* proto = item->GetTemplate();
         if (filters)
         {
             // if we dont want any class filters, Optional is not initialized
             // if we dont want this class included, SubclassMask is set to FILTER_SKIP_CLASS
             // if we want this class and did not specify and subclasses, its set to FILTER_SKIP_SUBCLASS
             // otherwise full restrictions apply
-            if (filters->Classes[proto->GetClass()].SubclassMask == AuctionSearchClassFilters::FILTER_SKIP_CLASS)
+            if (filters->Classes[auction->ItemClass].SubclassMask == AuctionSearchClassFilters::FILTER_SKIP_CLASS)
                 continue;
 
-            if (filters->Classes[proto->GetClass()].SubclassMask != AuctionSearchClassFilters::FILTER_SKIP_SUBCLASS)
+            if (filters->Classes[auction->ItemClass].SubclassMask != AuctionSearchClassFilters::FILTER_SKIP_SUBCLASS)
             {
-                if (!(filters->Classes[proto->GetClass()].SubclassMask & (1 << proto->GetSubClass())))
+                if (!(filters->Classes[auction->ItemClass].SubclassMask & (1 << auction->ItemSubClass)))
                     continue;
 
-                if (!(filters->Classes[proto->GetClass()].InvTypes[proto->GetSubClass()] & (1 << proto->GetInventoryType())))
+                if (!(filters->Classes[auction->ItemClass].InvTypes[auction->ItemSubClass] & (1 << auction->InventoryType)))
                     continue;
             }
         }
 
-        if (quality != 0xffffffff && proto->GetQuality() != quality)
+        if (quality != 0xffffffff && auction->Quality != quality)
             continue;
 
-        if (minLevel != 0 && (item->GetRequiredLevel() < minLevel || (maxLevel != 0 && item->GetRequiredLevel() > maxLevel)))
+        if (minLevel != 0 && auction->RequiredLevel < minLevel)
             continue;
 
-        if (onlyUsable && player->CanUseItem(item) != EQUIP_ERR_OK)
+        if (maxLevel != 0 && auction->RequiredLevel > maxLevel)
             continue;
+
+        if (onlyUsable)
+        {
+            if (auction->RequiredLevel && player->GetLevel() < auction->RequiredLevel)
+                continue;
+
+            if (player->CanUseItem(item) != EQUIP_ERR_OK)
+               continue;
+        }
 
         // Allow search by suffix (ie: of the Monkey) or partial name (ie: Monkey)
         // No need to do any of this if no search term was entered
         if (!searchedName.empty())
         {
-            std::string name = proto->GetName(player->GetSession()->GetSessionDbcLocale());
-            if (name.empty())
-                continue;
-
-            // DO NOT use GetItemEnchantMod(proto->RandomProperty) as it may return a result
-            //  that matches the search but it may not equal item->GetItemRandomPropertyId()
-            //  used in BuildAuctionInfo() which then causes wrong items to be listed
-            int32 propRefID = item->GetItemRandomPropertyId();
-
-            if (propRefID)
+            if (exactMatch)
             {
-                // Append the suffix to the name (ie: of the Monkey) if one exists
-                // These are found in ItemRandomSuffix.dbc and ItemRandomProperties.dbc
-                //  even though the DBC names seem misleading
-
-                const char* suffix = nullptr;
-
-                if (propRefID < 0)
-                {
-                    const ItemRandomSuffixEntry* itemRandSuffix = sItemRandomSuffixStore.LookupEntry(-propRefID);
-                    if (itemRandSuffix)
-                        suffix = itemRandSuffix->Name[player->GetSession()->GetSessionDbcLocale()];
-                }
-                else
-                {
-                    const ItemRandomPropertiesEntry* itemRandProp = sItemRandomPropertiesStore.LookupEntry(propRefID);
-                    if (itemRandProp)
-                        suffix = itemRandProp->Name[player->GetSession()->GetSessionDbcLocale()];
-                }
-
-                // dbc local name
-                if (suffix)
-                {
-                    // Append the suffix (ie: of the Monkey) to the name using localization
-                    // or default enUS if localization is invalid
-                    name += ' ';
-                    name += suffix;
-                }
+                if (auction->FullName[player->GetSession()->GetSessionDbcLocale()] != searchedName)
+                    continue;
             }
 
-            // Perform the search (with or without suffix)
-            if (!Utf8FitTo(name, searchedName))
+            if (auction->FullName[player->GetSession()->GetSessionDbcLocale()].find(searchedName) == std::wstring::npos)
                 continue;
         }
 
         // Add the item if no search term or if entered search term was found
         builder.AddItem(auction);
-        // if (packet.Items.size() < 50 && packet.TotalCount >= listfrom)
-        //     Aentry->BuildAuctionInfo(packet.Items, true, item);
-        //
 
         ++listItemsResult.TotalCount;
     }
@@ -1000,8 +974,6 @@ void AuctionHouseObject::BuildListAuctionItems(WorldPackets::AuctionHouse::Aucti
         resultAuction->BuildAuctionItem(&auctionItem, resultAuction->OwnerAccount != player->GetSession()->GetAccountGUID(),
             resultAuction->Bidder.IsEmpty());
     }
-
-    //listItemsResult.HasMoreResults = builder.HasMoreResults();
 }
 
 void AuctionHouseObject::BuildReplicate(WorldPackets::AuctionHouse::AuctionReplicateResponse& replicateResponse, Player* player,

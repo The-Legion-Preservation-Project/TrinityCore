@@ -63,6 +63,7 @@ enum InventorySlot
 };
 
 struct AbstractFollower;
+struct AuraCreateInfo;
 struct CharmInfo;
 struct FactionTemplateEntry;
 struct LiquidData;
@@ -751,14 +752,14 @@ class TC_GAME_API Unit : public WorldObject
         virtual Gender GetNativeGender() const { return GetGender(); }
         virtual void SetNativeGender(Gender gender) { SetGender(gender); }
 
-        float GetStat(Stats stat) const { return float(GetUInt32Value(UNIT_FIELD_STAT + stat)); }
-        void SetStat(Stats stat, int32 val) { SetStatInt32Value(UNIT_FIELD_STAT + stat, val); }
+        float GetStat(Stats stat) const { return float(GetUInt32Value(UNIT_FIELD_STAT + AsUnderlyingType(stat))); }
+        void SetStat(Stats stat, int32 val) { SetStatInt32Value(UNIT_FIELD_STAT + AsUnderlyingType(stat), val); }
         uint32 GetArmor() const { return GetResistance(SPELL_SCHOOL_NORMAL); }
         void SetArmor(int32 val) { SetResistance(SPELL_SCHOOL_NORMAL, val); }
 
-        uint32 GetResistance(SpellSchools school) const { return GetUInt32Value(UNIT_FIELD_RESISTANCES + school); }
+        uint32 GetResistance(SpellSchools school) const { return GetUInt32Value(UNIT_FIELD_RESISTANCES + AsUnderlyingType(school)); }
         uint32 GetResistance(SpellSchoolMask mask) const;
-        void SetResistance(SpellSchools school, int32 val) { SetStatInt32Value(UNIT_FIELD_RESISTANCES + school, val); }
+        void SetResistance(SpellSchools school, int32 val) { SetStatInt32Value(UNIT_FIELD_RESISTANCES + AsUnderlyingType(school), val); }
         static float CalculateAverageResistReduction(WorldObject const* caster, SpellSchoolMask schoolMask, Unit const* victim, SpellInfo const* spellInfo = nullptr);
 
         uint64 GetHealth()    const { return GetUInt64Value(UNIT_FIELD_HEALTH); }
@@ -802,8 +803,8 @@ class TC_GAME_API Unit : public WorldObject
         // returns the change in power
         int32 ModifyPower(Powers power, int32 val, bool withPowerUpdate = true);
 
-        void ApplyModPowerCostModifier(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(UNIT_FIELD_POWER_COST_MODIFIER + school, mod, apply); }
-        void ApplyModPowerCostMultiplier(SpellSchools school, float pct, bool apply) { ApplyModSignedFloatValue(UNIT_FIELD_POWER_COST_MULTIPLIER + school, pct, apply); }
+        void ApplyModPowerCostModifier(SpellSchools school, int32 mod, bool apply) { ApplyModInt32Value(UNIT_FIELD_POWER_COST_MODIFIER + AsUnderlyingType(school), mod, apply); }
+        void ApplyModPowerCostMultiplier(SpellSchools school, float pct, bool apply) { ApplyModSignedFloatValue(UNIT_FIELD_POWER_COST_MULTIPLIER + AsUnderlyingType(school), pct, apply); }
 
         uint32 GetBaseAttackTime(WeaponAttackType att) const;
         void SetBaseAttackTime(WeaponAttackType att, uint32 val);
@@ -1383,8 +1384,8 @@ class TC_GAME_API Unit : public WorldObject
         void SetCreateMana(uint32 val) { SetUInt32Value(UNIT_FIELD_BASE_MANA, val); }
         uint32 GetCreateMana() const { return GetUInt32Value(UNIT_FIELD_BASE_MANA); }
         virtual int32 GetCreatePowerValue(Powers power) const;
-        float GetPosStat(Stats stat) const { return GetFloatValue(UNIT_FIELD_POSSTAT+stat); }
-        float GetNegStat(Stats stat) const { return GetFloatValue(UNIT_FIELD_NEGSTAT+stat); }
+        float GetPosStat(Stats stat) const { return GetFloatValue(UNIT_FIELD_POSSTAT + AsUnderlyingType(stat)); }
+        float GetNegStat(Stats stat) const { return GetFloatValue(UNIT_FIELD_NEGSTAT + AsUnderlyingType(stat)); }
         float GetCreateStat(Stats stat) const { return m_createStats[stat]; }
 
         uint32 GetChannelSpellId() const { return GetUInt32Value(UNIT_FIELD_CHANNEL_DATA); }
@@ -1800,12 +1801,10 @@ class TC_GAME_API Unit : public WorldObject
 
         std::string GetDebugInfo() const override;
 
-        void BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const;
-
     protected:
         explicit Unit (bool isWorldObject);
 
-        void BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const override;
+        void BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> indexes) const override;
         void DestroyForPlayer(Player* target) const override;
 
         void _UpdateSpells(uint32 time);

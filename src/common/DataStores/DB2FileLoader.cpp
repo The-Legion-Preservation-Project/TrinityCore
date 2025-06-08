@@ -913,13 +913,11 @@ char* DB2FileLoaderSparseImpl::AutoProduceData(uint32& indexTableSize, char**& i
 
     uint32 offsetCount = _header->MaxId - _header->MinId + 1;
     uint32 records = 0;
-    uint32 expandedDataSize = 0;
     for (uint32 i = 0; i < offsetCount; ++i)
     {
         if (_catalog[i].FileOffset && _catalog[i].RecordSize)
         {
             ++records;
-            expandedDataSize += _catalog[i].RecordSize;
         }
     }
 
@@ -933,7 +931,6 @@ char* DB2FileLoaderSparseImpl::AutoProduceData(uint32& indexTableSize, char**& i
     memset(dataTable, 0, records * recordsize);
 
     uint32 offset = 0;
-    uint32 recordNum = 0;
 
     for (uint32 y = 0; y < offsetCount; ++y)
     {
@@ -952,52 +949,50 @@ char* DB2FileLoaderSparseImpl::AutoProduceData(uint32& indexTableSize, char**& i
             ++fieldIndex;
         }
 
-            for (uint32 x = 0; x < _header->FieldCount; ++x)
+        for (uint32 x = 0; x < _header->FieldCount; ++x)
+        {
+            for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
             {
-                for (uint32 z = 0; z < _loadInfo->Meta->Fields[x].ArraySize; ++z)
+                switch (_loadInfo->Fields[fieldIndex].Type)
                 {
-                    switch (_loadInfo->Fields[fieldIndex].Type)
-                    {
-                        case FT_FLOAT:
-                            *reinterpret_cast<float*>(&dataTable[offset]) = RecordGetFloat(rawRecord, x, z);
-                            offset += 4;
-                            break;
-                        case FT_INT:
-                            *reinterpret_cast<uint32*>(&dataTable[offset]) = RecordGetVarInt(rawRecord, x, z, _loadInfo->Fields[fieldIndex].IsSigned);
-                            offset += 4;
-                            break;
-                        case FT_BYTE:
-                            *reinterpret_cast<uint8*>(&dataTable[offset]) = RecordGetUInt8(rawRecord, x, z);
-                            offset += 1;
-                            break;
-                        case FT_SHORT:
-                            *reinterpret_cast<uint16*>(&dataTable[offset]) = RecordGetUInt16(rawRecord, x, z);
-                            offset += 2;
-                            break;
-                        case FT_LONG:
-                            *reinterpret_cast<uint64*>(&dataTable[offset]) = RecordGetUInt64(rawRecord, x, z);
-                            offset += 8;
-                            break;
-                        case FT_STRING:
-                            for (char const*& localeStr : reinterpret_cast<LocalizedString*>(&dataTable[offset])->Str)
-                                localeStr = EmptyDb2String;
+                    case FT_FLOAT:
+                        *reinterpret_cast<float*>(&dataTable[offset]) = RecordGetFloat(rawRecord, x, z);
+                        offset += 4;
+                        break;
+                    case FT_INT:
+                        *reinterpret_cast<uint32*>(&dataTable[offset]) = RecordGetVarInt(rawRecord, x, z, _loadInfo->Fields[fieldIndex].IsSigned);
+                        offset += 4;
+                        break;
+                    case FT_BYTE:
+                        *reinterpret_cast<uint8*>(&dataTable[offset]) = RecordGetUInt8(rawRecord, x, z);
+                        offset += 1;
+                        break;
+                    case FT_SHORT:
+                        *reinterpret_cast<uint16*>(&dataTable[offset]) = RecordGetUInt16(rawRecord, x, z);
+                        offset += 2;
+                        break;
+                    case FT_LONG:
+                        *reinterpret_cast<uint64*>(&dataTable[offset]) = RecordGetUInt64(rawRecord, x, z);
+                        offset += 8;
+                        break;
+                    case FT_STRING:
+                        for (char const*& localeStr : reinterpret_cast<LocalizedString*>(&dataTable[offset])->Str)
+                            localeStr = EmptyDb2String;
 
-                            offset += sizeof(LocalizedString);
-                            break;
-                        case FT_STRING_NOT_LOCALIZED:
-                            *reinterpret_cast<char const**>(&dataTable[offset]) = EmptyDb2String;
-                            offset += sizeof(char*);
-                            break;
-                        default:
-                            ABORT_MSG("Unknown format character '%c' found in %s meta for field %s",
-                                _loadInfo->Fields[fieldIndex].Type, _fileName, _loadInfo->Fields[fieldIndex].Name);
-                            break;
-                    }
-                    ++fieldIndex;
+                        offset += sizeof(LocalizedString);
+                        break;
+                    case FT_STRING_NOT_LOCALIZED:
+                        *reinterpret_cast<char const**>(&dataTable[offset]) = EmptyDb2String;
+                        offset += sizeof(char*);
+                        break;
+                    default:
+                        ABORT_MSG("Unknown format character '%c' found in %s meta for field %s",
+                            _loadInfo->Fields[fieldIndex].Type, _fileName, _loadInfo->Fields[fieldIndex].Name);
+                        break;
                 }
+                ++fieldIndex;
             }
-
-        ++recordNum;
+        }
     }
 
     return dataTable;

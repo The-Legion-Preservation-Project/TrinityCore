@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AdventureMapPackets_h__
-#define AdventureMapPackets_h__
+#ifndef TRINITYCORE_ADVENTURE_MAP_PACKETS_H
+#define TRINITYCORE_ADVENTURE_MAP_PACKETS_H
 
 #include "Packet.h"
 
@@ -27,7 +27,7 @@ namespace WorldPackets
         class AdventureMapStartQuest final : public ClientPacket
         {
         public:
-            AdventureMapStartQuest(WorldPacket&& packet) : ClientPacket(CMSG_ADVENTURE_MAP_START_QUEST, std::move(packet)) { }
+            explicit AdventureMapStartQuest(WorldPacket&& packet) : ClientPacket(CMSG_ADVENTURE_MAP_START_QUEST, std::move(packet)) { }
 
             void Read() override;
 
@@ -36,4 +36,4 @@ namespace WorldPackets
     }
 }
 
-#endif // AdventureMapPackets_h__
+#endif // TRINITYCORE_ADVENTURE_MAP_PACKETS_H

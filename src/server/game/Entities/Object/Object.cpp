@@ -228,7 +228,7 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
     buf << uint8(m_objectTypeId);
 
     BuildMovementUpdate(&buf, flags, target);
-    BuildValuesUpdate(updateType, &buf, target);
+    BuildValuesUpdateWithMask(updateType, &buf, target, {});
     BuildDynamicValuesUpdate(updateType, &buf, target);
     data->AddUpdateBlock();
 }
@@ -240,21 +240,21 @@ void Object::SendUpdateToPlayer(Player* player)
     WorldPacket packet;
 
     if (player->HaveAtClient(this))
-        BuildValuesUpdateBlockForPlayer(&upd, player);
+        BuildValuesUpdateBlockForPlayerWithMask(&upd, player, {});
     else
         BuildCreateUpdateBlockForPlayer(&upd, player);
     upd.BuildPacket(&packet);
     player->SendDirectMessage(&packet);
 }
 
-void Object::BuildValuesUpdateBlockForPlayer(UpdateData* data, Player const* target) const
+void Object::BuildValuesUpdateBlockForPlayerWithMask(UpdateData* data, Player const* target, std::unordered_set<uint32> indexes) const
 {
     ByteBuffer& buf = data->GetBuffer();
 
     buf << uint8(UPDATETYPE_VALUES);
     buf << GetGUID();
 
-    BuildValuesUpdate(UPDATETYPE_VALUES, &buf, target);
+    BuildValuesUpdateWithMask(UPDATETYPE_VALUES, &buf, target, indexes);
     BuildDynamicValuesUpdate(UPDATETYPE_VALUES, &buf, target);
 
     data->AddUpdateBlock();
@@ -487,7 +487,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
 
     if (flags.AreaTrigger)
     {
-        AreaTrigger const* areaTrigger = ToAreaTrigger();
+        AreaTrigger const* areaTrigger = static_cast<AreaTrigger const*>(this);
         AreaTriggerCreateProperties const* createProperties = areaTrigger->GetCreateProperties();
         AreaTriggerShapeInfo const& shape = areaTrigger->GetShape();
 
@@ -513,8 +513,6 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         bool hasAreaTriggerBox      = shape.IsBox();
         bool hasAreaTriggerPolygon  = shape.IsPolygon();
         bool hasAreaTriggerCylinder = shape.IsCylinder();
-        bool hasAreaTriggerSpline   = areaTrigger->HasSplines();
-        bool hasOrbit               = areaTrigger->HasOrbit();
 
         data->WriteBit(hasAbsoluteOrientation);
         data->WriteBit(hasDynamicShape);
@@ -534,21 +532,16 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         data->WriteBit(hasAreaTriggerBox);
         data->WriteBit(hasAreaTriggerPolygon);
         data->WriteBit(hasAreaTriggerCylinder);
-        data->WriteBit(hasAreaTriggerSpline);
-        data->WriteBit(hasOrbit);
+        data->WriteBit(areaTrigger->HasSplines());
+        data->WriteBit(areaTrigger->HasOrbit());
 
         if (hasVisualAnimIsDecay)
             data->WriteBit(false);
 
         data->FlushBits();
 
-        if (hasAreaTriggerSpline)
-        {
-            *data << uint32(areaTrigger->GetTimeToTarget());
-            *data << uint32(areaTrigger->GetElapsedTimeForMovement());
-
-            WorldPackets::Movement::CommonMovement::WriteCreateObjectAreaTriggerSpline(areaTrigger->GetSpline(), *data);
-        }
+        if (areaTrigger->HasSplines())
+            WorldPackets::AreaTrigger::WriteAreaTriggerSpline(*data, areaTrigger->GetTimeToTarget(), areaTrigger->GetElapsedTimeForMovement(), areaTrigger->GetSpline());
 
         if (hasTargetRollPitchYaw)
             *data << areaTrigger->GetTargetRollPitchYaw().PositionXYZStream();
@@ -611,8 +604,11 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
             *data << float(shape.CylinderDatas.LocationZOffsetTarget);
         }
 
-        if (hasOrbit)
+        if (areaTrigger->HasOrbit())
+        {
+            using WorldPackets::AreaTrigger::operator<<;
             *data << areaTrigger->GetOrbit();
+        }
     }
 
     if (flags.GameObject)
@@ -783,7 +779,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
     }
 }
 
-void Object::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const* target) const
+void Object::BuildValuesUpdateWithMask(uint8 updateType, ByteBuffer* data, Player const* target, std::unordered_set<uint32> /*indexes*/) const
 {
     if (!target)
         return;
@@ -803,7 +799,7 @@ void Object::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player const*
         if (_fieldNotifyFlags & flags[index] ||
             ((updateType == UPDATETYPE_VALUES ? _changesMask[index] : m_uint32Values[index]) && (flags[index] & visibleFlag)))
         {
-            UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
+            UpdateMask::SetUpdateBit(data->data() + maskPos, index);
             *data << m_uint32Values[index];
         }
     }
@@ -833,7 +829,7 @@ void Object::BuildDynamicValuesUpdate(uint8 updateType, ByteBuffer* data, Player
         if (_fieldNotifyFlags & flags[index] ||
             ((updateType == UPDATETYPE_VALUES ? _dynamicChangesMask[index] != UpdateMask::UNCHANGED : !values.empty()) && (flags[index] & visibleFlag)))
         {
-            UpdateMask::SetUpdateBit(data->contents() + maskPos, index);
+            UpdateMask::SetUpdateBit(data->data() + maskPos, index);
 
             std::size_t arrayBlockCount = UpdateMask::GetBlockCount(values.size());
             *data << uint16(UpdateMask::EncodeDynamicFieldChangeType(arrayBlockCount, _dynamicChangesMask[index], updateType));
@@ -846,7 +842,7 @@ void Object::BuildDynamicValuesUpdate(uint8 updateType, ByteBuffer* data, Player
             {
                 if (updateType != UPDATETYPE_VALUES || _dynamicChangesArrayMask[index][v])
                 {
-                    UpdateMask::SetUpdateBit(data->contents() + arrayMaskPos, v);
+                    UpdateMask::SetUpdateBit(data->data() + arrayMaskPos, v);
                     *data << uint32(values[v]);
                 }
             }
@@ -886,7 +882,7 @@ void Object::BuildFieldsUpdate(Player* player, UpdateDataMapType& data_map) cons
         iter = p.first;
     }
 
-    BuildValuesUpdateBlockForPlayer(&iter->second, iter->first);
+    BuildValuesUpdateBlockForPlayerWithMask(&iter->second, iter->first, {});
 }
 
 uint32 Object::GetUpdateFieldData(Player const* target, uint32*& flags) const
@@ -2163,18 +2159,18 @@ SmoothPhasing* WorldObject::GetOrCreateSmoothPhasing()
     return _smoothPhasing.get();
 }
 
-bool WorldObject::CanSeeOrDetect(WorldObject const* obj, bool implicitDetect, bool distanceCheck, bool checkAlert) const
+bool WorldObject::CanSeeOrDetect(WorldObject const* obj, CanSeeOrDetectExtraArgs const& args /*= { }*/) const
 {
     if (this == obj)
         return true;
 
-    if (obj->IsNeverVisibleFor(this, implicitDetect) || CanNeverSee(obj))
+    if (obj->IsNeverVisibleFor(this, args.ImplicitDetection) || CanNeverSee(obj, args.IgnorePhaseShift))
         return false;
 
     if (obj->IsAlwaysVisibleFor(this) || CanAlwaysSee(obj))
         return true;
 
-    if (!obj->CheckPrivateObjectOwnerVisibility(this))
+    if (!args.IncludeAnyPrivateObject && !obj->CheckPrivateObjectOwnerVisibility(this))
         return false;
 
     if (SmoothPhasing const* smoothPhasing = obj->GetSmoothPhasing())
@@ -2185,13 +2181,14 @@ bool WorldObject::CanSeeOrDetect(WorldObject const* obj, bool implicitDetect, bo
         return false;
 
     // Spawn tracking
-    if (Player const* player = ToPlayer())
-        if (SpawnTrackingStateData const* spawnTrackingStateData = obj->GetSpawnTrackingStateDataForPlayer(player))
-            if (!spawnTrackingStateData->Visible)
-                return false;
+    if (!args.IncludeHiddenBySpawnTracking)
+        if (Player const* player = ToPlayer())
+            if (SpawnTrackingStateData const* spawnTrackingStateData = obj->GetSpawnTrackingStateDataForPlayer(player))
+                if (!spawnTrackingStateData->Visible)
+                    return false;
 
     bool corpseVisibility = false;
-    if (distanceCheck)
+    if (args.DistanceCheck)
     {
         bool corpseCheck = false;
         if (Player const* thisPlayer = ToPlayer())
@@ -2259,15 +2256,15 @@ bool WorldObject::CanSeeOrDetect(WorldObject const* obj, bool implicitDetect, bo
     if (obj->IsInvisibleDueToDespawn(this))
         return false;
 
-    if (!CanDetect(obj, implicitDetect, checkAlert))
+    if (!CanDetect(obj, args.ImplicitDetection, args.AlertCheck))
         return false;
 
     return true;
 }
 
-bool WorldObject::CanNeverSee(WorldObject const* obj) const
+bool WorldObject::CanNeverSee(WorldObject const* obj, bool ignorePhaseShift /*= false*/) const
 {
-    return GetMap() != obj->GetMap() || !InSamePhase(obj);
+    return GetMap() != obj->GetMap() || (!ignorePhaseShift && !InSamePhase(obj));
 }
 
 bool WorldObject::CanDetect(WorldObject const* obj, bool implicitDetect, bool checkAlert) const
@@ -3695,11 +3692,16 @@ bool WorldObject::IsValidAttackTarget(WorldObject const* target, SpellInfo const
     if (unit)
     {
         // can't attack invisible
-        if (!bySpell || !bySpell->HasAttribute(SPELL_ATTR6_IGNORE_PHASE_SHIFT))
+        CanSeeOrDetectExtraArgs canSeeOrDetectExtraArgs;
+        if (bySpell)
         {
-            if (!unit->CanSeeOrDetect(target, bySpell && bySpell->IsAffectingArea()))
-                return false;
+            canSeeOrDetectExtraArgs.ImplicitDetection = bySpell->IsAffectingArea();
+            canSeeOrDetectExtraArgs.IgnorePhaseShift = bySpell->HasAttribute(SPELL_ATTR6_IGNORE_PHASE_SHIFT);
+            canSeeOrDetectExtraArgs.IncludeHiddenBySpawnTracking = bySpell->HasAttribute(SPELL_ATTR8_ALLOW_TARGETS_HIDDEN_BY_SPAWN_TRACKING);
+            canSeeOrDetectExtraArgs.IncludeAnyPrivateObject = bySpell->HasAttribute(SPELL_ATTR0_CU_CAN_TARGET_ANY_PRIVATE_OBJECT);
         }
+        if (!unit->CanSeeOrDetect(target, canSeeOrDetectExtraArgs))
+            return false;
     }
 
     // can't attack dead
@@ -3855,7 +3857,15 @@ bool WorldObject::IsValidAssistTarget(WorldObject const* target, SpellInfo const
     }
 
     // can't assist invisible
-    if ((!bySpell || !bySpell->HasAttribute(SPELL_ATTR6_IGNORE_PHASE_SHIFT)) && !CanSeeOrDetect(target, bySpell && bySpell->IsAffectingArea()))
+    CanSeeOrDetectExtraArgs canSeeOrDetectExtraArgs;
+    if (bySpell)
+    {
+        canSeeOrDetectExtraArgs.ImplicitDetection = bySpell->IsAffectingArea();
+        canSeeOrDetectExtraArgs.IgnorePhaseShift = bySpell->HasAttribute(SPELL_ATTR6_IGNORE_PHASE_SHIFT);
+        canSeeOrDetectExtraArgs.IncludeHiddenBySpawnTracking = bySpell->HasAttribute(SPELL_ATTR8_ALLOW_TARGETS_HIDDEN_BY_SPAWN_TRACKING);
+        canSeeOrDetectExtraArgs.IncludeAnyPrivateObject = bySpell->HasAttribute(SPELL_ATTR0_CU_CAN_TARGET_ANY_PRIVATE_OBJECT);
+    }
+    if (!CanSeeOrDetect(target, canSeeOrDetectExtraArgs))
         return false;
 
     // can't assist dead
@@ -4013,8 +4023,8 @@ void WorldObject::GetCreatureListWithOptionsInGrid(Container& creatureContainer,
 template <typename Container>
 void WorldObject::GetPlayerListInGrid(Container& playerContainer, float maxSearchRange, bool alive /*= true*/) const
 {
-    Trinity::AnyPlayerInObjectRangeCheck checker(this, maxSearchRange, alive);
-    Trinity::PlayerListSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(this, playerContainer, checker);
+    Trinity::AnyUnitInObjectRangeCheck checker(this, maxSearchRange, true, alive);
+    Trinity::PlayerListSearcher searcher(this, playerContainer, checker);
     Cell::VisitWorldObjects(this, searcher, maxSearchRange);
 }
 
@@ -4306,26 +4316,23 @@ void WorldObject::DestroyForNearbyPlayers()
     if (!IsInWorld())
         return;
 
-    std::list<Player*> targets;
-    Trinity::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange(), false);
-    Trinity::PlayerListSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
-    Cell::VisitWorldObjects(this, searcher, GetVisibilityRange());
-    for (std::list<Player*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
+    auto destroyer = [this](Player* player)
     {
-        Player* player = (*iter);
-
         if (player == this)
-            continue;
+            return;
 
         if (!player->HaveAtClient(this))
-            continue;
+            return;
 
         if (Unit const* unit = ToUnit(); unit && unit->GetCharmerGUID() == player->GetGUID()) /// @todo this is for puppet
-            continue;
+            return;
 
         DestroyForPlayer(player);
         player->m_clientGUIDs.erase(GetGUID());
-    }
+    };
+
+    Trinity::PlayerDistWorker worker(this, GetVisibilityRange(), destroyer);
+    Cell::VisitWorldObjects(this, worker, GetVisibilityRange());
 }
 
 void WorldObject::UpdateObjectVisibility(bool /*forced*/)

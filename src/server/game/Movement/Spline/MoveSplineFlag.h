@@ -66,7 +66,7 @@ namespace Movement
         Mask_No_Monster_Move = Done, // SKIP
         // Unused, not suported flags
         Mask_Unused         = No_Spline | Frozen | Unknown_0x100 | Unknown_0x20000 | Unknown_0x40000
-                            | Unknown_0x800000 | FadeObject | UnlimitedSpeed | Unknown_0x40000000 | Unknown_0x80000000 // SKIP
+                            | Unknown_0x800000 | FastSteering | FadeObject | UnlimitedSpeed | Unknown_0x40000000 | Unknown_0x80000000 // SKIP
     };
 
     DEFINE_ENUM_FLAG(MoveSplineFlagEnum);
@@ -77,12 +77,12 @@ namespace Movement
         {
             case MoveSplineFlagEnum::JumpOrientationFixed: return MoveSplineFlagEnum::OrientationFixed;
             case MoveSplineFlagEnum::Falling: return MoveSplineFlagEnum::Parabolic | MoveSplineFlagEnum::Animation | MoveSplineFlagEnum::Flying;
-            case MoveSplineFlagEnum::Flying: return MoveSplineFlagEnum::FallingSlow | MoveSplineFlagEnum::Falling;
+            case MoveSplineFlagEnum::Flying: return MoveSplineFlagEnum::FallingSlow | MoveSplineFlagEnum::Falling | MoveSplineFlagEnum::SmoothGroundPath;
             case MoveSplineFlagEnum::OrientationFixed: return MoveSplineFlagEnum::JumpOrientationFixed;
             case MoveSplineFlagEnum::Catmullrom: return MoveSplineFlagEnum::SmoothGroundPath;
             case MoveSplineFlagEnum::TransportEnter: return MoveSplineFlagEnum::TransportExit;
             case MoveSplineFlagEnum::TransportExit: return MoveSplineFlagEnum::TransportEnter;
-            case MoveSplineFlagEnum::SmoothGroundPath: return MoveSplineFlagEnum::Steering;
+            case MoveSplineFlagEnum::SmoothGroundPath: return MoveSplineFlagEnum::Steering | MoveSplineFlagEnum::Flying;
             case MoveSplineFlagEnum::Animation: return MoveSplineFlagEnum::Falling | MoveSplineFlagEnum::Parabolic | MoveSplineFlagEnum::FallingSlow | MoveSplineFlagEnum::FadeObject;
             case MoveSplineFlagEnum::Parabolic: return MoveSplineFlagEnum::Falling | MoveSplineFlagEnum::Animation | MoveSplineFlagEnum::FallingSlow | MoveSplineFlagEnum::FadeObject;
             case MoveSplineFlagEnum::FadeObject: return MoveSplineFlagEnum::Falling | MoveSplineFlagEnum::Parabolic | MoveSplineFlagEnum::FallingSlow | MoveSplineFlagEnum::Animation;

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ItemPacketsCommon_h__
-#define ItemPacketsCommon_h__
+#ifndef TRINITYCORE_ITEM_PACKETS_COMMON_H
+#define TRINITYCORE_ITEM_PACKETS_COMMON_H
 
 #include "Define.h"
 #include "PacketUtilities.h"
@@ -55,7 +55,7 @@ namespace WorldPackets
             Optional<ItemBonuses> ItemBonus;
             Optional<CompactArray<int32>> Modifications;
 
-            bool operator==(ItemInstance const& r) const;
+            friend bool operator==(ItemInstance const& left, ItemInstance const& right) = default;
         };
 
         struct ItemEnchantData
@@ -99,4 +99,4 @@ namespace WorldPackets
     }
 }
 
-#endif // ItemPacketsCommon_h__
+#endif // TRINITYCORE_ITEM_PACKETS_COMMON_H

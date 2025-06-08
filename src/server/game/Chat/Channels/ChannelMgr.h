@@ -18,6 +18,7 @@
 #define TRINITYCORE_CHANNEL_MGR_H
 
 #include "Define.h"
+#include "Hash.h"
 #include "SharedDefines.h"
 #include <string>
 #include <unordered_map>

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GarrisonPackets_h__
-#define GarrisonPackets_h__
+#ifndef TRINITYCORE_GARRISON_PACKETS_H
+#define TRINITYCORE_GARRISON_PACKETS_H
 
 #include "Packet.h"
 #include "ItemPacketsCommon.h"
@@ -36,7 +36,7 @@ namespace WorldPackets
         class GarrisonCreateResult final : public ServerPacket
         {
         public:
-            GarrisonCreateResult() : ServerPacket(SMSG_GARRISON_CREATE_RESULT, 4 + 4) { }
+            explicit GarrisonCreateResult() : ServerPacket(SMSG_GARRISON_CREATE_RESULT, 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -47,7 +47,7 @@ namespace WorldPackets
         class GarrisonDeleteResult final : public ServerPacket
         {
         public:
-            GarrisonDeleteResult() : ServerPacket(SMSG_GARRISON_DELETE_RESULT, 4 + 4) { }
+            explicit GarrisonDeleteResult() : ServerPacket(SMSG_GARRISON_DELETE_RESULT, 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -58,7 +58,7 @@ namespace WorldPackets
         class GetGarrisonInfo final : public ClientPacket
         {
         public:
-            GetGarrisonInfo(WorldPacket&& packet) : ClientPacket(CMSG_GET_GARRISON_INFO, std::move(packet)) { }
+            explicit GetGarrisonInfo(WorldPacket&& packet) : ClientPacket(CMSG_GET_GARRISON_INFO, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -165,7 +165,7 @@ namespace WorldPackets
         class GetGarrisonInfoResult final : public ServerPacket
         {
         public:
-            GetGarrisonInfoResult() : ServerPacket(SMSG_GET_GARRISON_INFO_RESULT) { }
+            explicit GetGarrisonInfoResult() : ServerPacket(SMSG_GET_GARRISON_INFO_RESULT) { }
 
             WorldPacket const* Write() override;
 
@@ -192,7 +192,7 @@ namespace WorldPackets
         class GarrisonRemoteInfo final : public ServerPacket
         {
         public:
-            GarrisonRemoteInfo() : ServerPacket(SMSG_GARRISON_REMOTE_INFO) { }
+            explicit GarrisonRemoteInfo() : ServerPacket(SMSG_GARRISON_REMOTE_INFO) { }
 
             WorldPacket const* Write() override;
 
@@ -202,7 +202,7 @@ namespace WorldPackets
         class GarrisonPurchaseBuilding final : public ClientPacket
         {
         public:
-            GarrisonPurchaseBuilding(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_PURCHASE_BUILDING, std::move(packet)) { }
+            explicit GarrisonPurchaseBuilding(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_PURCHASE_BUILDING, std::move(packet)) { }
 
             void Read() override;
 
@@ -214,7 +214,7 @@ namespace WorldPackets
         class GarrisonPlaceBuildingResult final : public ServerPacket
         {
         public:
-            GarrisonPlaceBuildingResult() : ServerPacket(SMSG_GARRISON_PLACE_BUILDING_RESULT) { }
+            explicit GarrisonPlaceBuildingResult() : ServerPacket(SMSG_GARRISON_PLACE_BUILDING_RESULT) { }
 
             WorldPacket const* Write() override;
 
@@ -227,7 +227,7 @@ namespace WorldPackets
         class GarrisonCancelConstruction final : public ClientPacket
         {
         public:
-            GarrisonCancelConstruction(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_CANCEL_CONSTRUCTION, std::move(packet)) { }
+            explicit GarrisonCancelConstruction(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_CANCEL_CONSTRUCTION, std::move(packet)) { }
 
             void Read() override;
 
@@ -238,7 +238,7 @@ namespace WorldPackets
         class GarrisonBuildingRemoved final : public ServerPacket
         {
         public:
-            GarrisonBuildingRemoved() : ServerPacket(SMSG_GARRISON_BUILDING_REMOVED, 4 + 4 + 4 + 4) { }
+            explicit GarrisonBuildingRemoved() : ServerPacket(SMSG_GARRISON_BUILDING_REMOVED, 4 + 4 + 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -251,7 +251,7 @@ namespace WorldPackets
         class GarrisonLearnBlueprintResult final : public ServerPacket
         {
         public:
-            GarrisonLearnBlueprintResult() : ServerPacket(SMSG_GARRISON_LEARN_BLUEPRINT_RESULT, 4 + 4 + 4) { }
+            explicit GarrisonLearnBlueprintResult() : ServerPacket(SMSG_GARRISON_LEARN_BLUEPRINT_RESULT, 4 + 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -263,7 +263,7 @@ namespace WorldPackets
         class GarrisonUnlearnBlueprintResult final : public ServerPacket
         {
         public:
-            GarrisonUnlearnBlueprintResult() : ServerPacket(SMSG_GARRISON_UNLEARN_BLUEPRINT_RESULT, 4 + 4) { }
+            explicit GarrisonUnlearnBlueprintResult() : ServerPacket(SMSG_GARRISON_UNLEARN_BLUEPRINT_RESULT, 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -275,7 +275,7 @@ namespace WorldPackets
         class GarrisonRequestBlueprintAndSpecializationData final : public ClientPacket
         {
         public:
-            GarrisonRequestBlueprintAndSpecializationData(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA, std::move(packet)) { }
+            explicit GarrisonRequestBlueprintAndSpecializationData(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -283,7 +283,7 @@ namespace WorldPackets
         class GarrisonRequestBlueprintAndSpecializationDataResult final : public ServerPacket
         {
         public:
-            GarrisonRequestBlueprintAndSpecializationDataResult() : ServerPacket(SMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA_RESULT, 400) { }
+            explicit GarrisonRequestBlueprintAndSpecializationDataResult() : ServerPacket(SMSG_GARRISON_REQUEST_BLUEPRINT_AND_SPECIALIZATION_DATA_RESULT, 400) { }
 
             WorldPacket const* Write() override;
 
@@ -295,7 +295,7 @@ namespace WorldPackets
         class GarrisonGetMapData final : public ClientPacket
         {
         public:
-            GarrisonGetMapData(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_GET_MAP_DATA, std::move(packet)) { }
+            explicit GarrisonGetMapData(WorldPacket&& packet) : ClientPacket(CMSG_GARRISON_GET_MAP_DATA, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -312,7 +312,7 @@ namespace WorldPackets
         class GarrisonMapDataResponse final : public ServerPacket
         {
         public:
-            GarrisonMapDataResponse() : ServerPacket(SMSG_GARRISON_MAP_DATA_RESPONSE) { }
+            explicit GarrisonMapDataResponse() : ServerPacket(SMSG_GARRISON_MAP_DATA_RESPONSE) { }
 
             WorldPacket const* Write() override;
 
@@ -322,7 +322,7 @@ namespace WorldPackets
         class GarrisonPlotPlaced final : public ServerPacket
         {
         public:
-            GarrisonPlotPlaced() : ServerPacket(SMSG_GARRISON_PLOT_PLACED) { }
+            explicit GarrisonPlotPlaced() : ServerPacket(SMSG_GARRISON_PLOT_PLACED) { }
 
             WorldPacket const* Write() override;
 
@@ -333,7 +333,7 @@ namespace WorldPackets
         class GarrisonPlotRemoved final : public ServerPacket
         {
         public:
-            GarrisonPlotRemoved() : ServerPacket(SMSG_GARRISON_PLOT_REMOVED, 4) { }
+            explicit GarrisonPlotRemoved() : ServerPacket(SMSG_GARRISON_PLOT_REMOVED, 4) { }
 
             WorldPacket const* Write() override;
 
@@ -343,7 +343,7 @@ namespace WorldPackets
         class GarrisonAddFollowerResult final : public ServerPacket
         {
         public:
-            GarrisonAddFollowerResult() : ServerPacket(SMSG_GARRISON_ADD_FOLLOWER_RESULT, 8 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 5 * 4 + 4) { }
+            explicit GarrisonAddFollowerResult() : ServerPacket(SMSG_GARRISON_ADD_FOLLOWER_RESULT, 8 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 5 * 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -355,7 +355,7 @@ namespace WorldPackets
         class GarrisonRemoveFollowerResult final : public ServerPacket
         {
         public:
-            GarrisonRemoveFollowerResult() : ServerPacket(SMSG_GARRISON_REMOVE_FOLLOWER_RESULT, 8 + 4 + 4 + 4) { }
+            explicit GarrisonRemoveFollowerResult() : ServerPacket(SMSG_GARRISON_REMOVE_FOLLOWER_RESULT, 8 + 4 + 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -368,7 +368,7 @@ namespace WorldPackets
         class GarrisonBuildingActivated final : public ServerPacket
         {
         public:
-            GarrisonBuildingActivated() : ServerPacket(SMSG_GARRISON_BUILDING_ACTIVATED, 4) { }
+            explicit GarrisonBuildingActivated() : ServerPacket(SMSG_GARRISON_BUILDING_ACTIVATED, 4) { }
 
             WorldPacket const* Write() override;
 
@@ -378,7 +378,7 @@ namespace WorldPackets
         class GarrisonOpenTalentNpc final : public ServerPacket
         {
         public:
-            GarrisonOpenTalentNpc() : ServerPacket(SMSG_GARRISON_OPEN_TALENT_NPC, 16 + 4 + 4) { }
+            explicit GarrisonOpenTalentNpc() : ServerPacket(SMSG_GARRISON_OPEN_TALENT_NPC, 16 + 4 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -389,4 +389,4 @@ namespace WorldPackets
     }
 }
 
-#endif // GarrisonPackets_h__
+#endif // TRINITYCORE_GARRISON_PACKETS_H

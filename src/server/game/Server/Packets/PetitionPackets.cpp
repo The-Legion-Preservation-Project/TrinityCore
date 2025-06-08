@@ -16,7 +16,7 @@
  */
 
 #include "PetitionPackets.h"
-#include "PacketUtilities.h"
+#include "PacketOperators.h"
 
 namespace WorldPackets::Petition
 {
@@ -64,7 +64,7 @@ ByteBuffer& operator<<(ByteBuffer& data, PetitionInfo const& petitionInfo)
 WorldPacket const* QueryPetitionResponse::Write()
 {
     _worldPacket << uint32(PetitionID);
-    _worldPacket.WriteBit(Allow);
+    _worldPacket << Bits<1>(Allow);
     _worldPacket.FlushBits();
 
     if (Allow)
@@ -88,10 +88,10 @@ WorldPacket const* ServerPetitionShowList::Write()
 
 void PetitionBuy::Read()
 {
-    uint32 titleLen = _worldPacket.ReadBits(7);
+    _worldPacket >> SizedString::BitsSize<7>(Title);
 
     _worldPacket >> Unit;
-    Title = _worldPacket.ReadString(titleLen);
+    _worldPacket >> SizedString::Data(Title);
 }
 
 void PetitionShowSignatures::Read()
@@ -106,7 +106,7 @@ WorldPacket const* ServerPetitionShowSignatures::Write()
     _worldPacket << OwnerAccountID;
     _worldPacket << int32(PetitionID);
 
-    _worldPacket << uint32(Signatures.size());
+    _worldPacket << Size<uint32>(Signatures);
     for (PetitionSignature const& signature : Signatures)
     {
         _worldPacket << signature.Signer;
@@ -127,7 +127,7 @@ WorldPacket const* PetitionSignResults::Write()
     _worldPacket << Item;
     _worldPacket << Player;
 
-    _worldPacket.WriteBits(Error, 4);
+    _worldPacket << Bits<4>(Error);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
@@ -152,7 +152,7 @@ void TurnInPetition::Read()
 
 WorldPacket const* TurnInPetitionResult::Write()
 {
-    _worldPacket.WriteBits(Result, 4);
+    _worldPacket << Bits<4>(Result);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
@@ -174,21 +174,19 @@ WorldPacket const* OfferPetitionError::Write()
 void PetitionRenameGuild::Read()
 {
     _worldPacket >> PetitionGuid;
+    _worldPacket >> SizedString::BitsSize<7>(NewGuildName);
 
-    _worldPacket.ResetBitPos();
-    uint32 nameLen = _worldPacket.ReadBits(7);
-
-    NewGuildName = _worldPacket.ReadString(nameLen);
+    _worldPacket >> SizedString::Data(NewGuildName);
 }
 
 WorldPacket const* PetitionRenameGuildResponse::Write()
 {
     _worldPacket << PetitionGuid;
 
-    _worldPacket.WriteBits(NewGuildName.length(), 7);
+    _worldPacket << SizedString::BitsSize<7>(NewGuildName);
     _worldPacket.FlushBits();
 
-    _worldPacket.WriteString(NewGuildName);
+    _worldPacket << SizedString::Data(NewGuildName);
 
     return &_worldPacket;
 }

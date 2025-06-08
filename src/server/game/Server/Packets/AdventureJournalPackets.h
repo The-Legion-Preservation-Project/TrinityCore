@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AdventureJournalPackets_h__
-#define AdventureJournalPackets_h__
+#ifndef TRINITYCORE_ADVENTURE_JOURNAL_PACKETS_H
+#define TRINITYCORE_ADVENTURE_JOURNAL_PACKETS_H
 
 #include "Packet.h"
 
@@ -27,7 +27,7 @@ namespace WorldPackets
         class AdventureJournalOpenQuest final : public ClientPacket
         {
         public:
-            AdventureJournalOpenQuest(WorldPacket&& packet) : ClientPacket(CMSG_ADVENTURE_JOURNAL_OPEN_QUEST, std::move(packet)) { }
+            explicit AdventureJournalOpenQuest(WorldPacket&& packet) : ClientPacket(CMSG_ADVENTURE_JOURNAL_OPEN_QUEST, std::move(packet)) { }
 
             void Read() override;
 
@@ -36,4 +36,4 @@ namespace WorldPackets
     }
 }
 
-#endif // AdventureJournalPackets_h__
+#endif // TRINITYCORE_ADVENTURE_JOURNAL_PACKETS_H

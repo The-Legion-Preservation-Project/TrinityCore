@@ -20,10 +20,9 @@
 #include "DB2Stores.h"
 #include "ObjectGuid.h"
 #include "MailPackets.h"
+#include "PacketOperators.h"
 
-namespace WorldPackets
-{
-namespace AuctionHouse
+namespace WorldPackets::AuctionHouse
 {
 ByteBuffer& operator>>(ByteBuffer& data, AuctionListFilterSubClass& filterSubClass)
 {
@@ -36,7 +35,7 @@ ByteBuffer& operator>>(ByteBuffer& data, AuctionListFilterSubClass& filterSubCla
 ByteBuffer& operator>>(ByteBuffer& data, AuctionListFilterClass& filterClass)
 {
     data >> filterClass.ItemClass;
-    filterClass.SubClassFilters.resize(data.ReadBits(5));
+    data >> BitsSize<5>(filterClass.SubClassFilters);
     for (AuctionListFilterSubClass& filterSubClass : filterClass.SubClassFilters)
         data >> filterSubClass;
 
@@ -45,8 +44,8 @@ ByteBuffer& operator>>(ByteBuffer& data, AuctionListFilterClass& filterClass)
 
 ByteBuffer& operator>>(ByteBuffer& data, AuctionSortDef& sortDef)
 {
-    sortDef.SortOrder = static_cast<AuctionHouseSortOrder>(data.read<uint8>());
-    sortDef.ReverseSort = data.read<uint8>() > 0;
+    data >> As<uint8>(sortDef.SortOrder);
+    data >> sortDef.ReverseSort;
 
     return data;
 }
@@ -64,10 +63,10 @@ ByteBuffer& operator<<(ByteBuffer& data, AuctionItem const& auctionItem)
     data << uint64(auctionItem.BuyoutPrice);
     data << int32(auctionItem.DurationLeft);
     data << uint8(auctionItem.DeleteReason);
-    data.WriteBits(auctionItem.Enchantments.size(), 4);
-    data.WriteBits(auctionItem.Gems.size(), 2);
-    data.WriteBit(auctionItem.CensorServerSideInfo);
-    data.WriteBit(auctionItem.CensorBidInfo);
+    data << BitsSize<4>(auctionItem.Enchantments);
+    data << BitsSize<2>(auctionItem.Gems);
+    data << Bits<1>(auctionItem.CensorServerSideInfo);
+    data << Bits<1>(auctionItem.CensorBidInfo);
     data.FlushBits();
 
     for (WorldPackets::Item::ItemGemData const& gem : auctionItem.Gems)
@@ -130,14 +129,11 @@ void AuctionHelloRequest::Read()
 WorldPacket const* AuctionHelloResponse::Write()
 {
     _worldPacket << Guid;
-    _worldPacket.WriteBit(OpenForBusiness);
+    _worldPacket << Bits<1>(OpenForBusiness);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
-
-AuctionCommandResult::AuctionCommandResult()
-    : ServerPacket(SMSG_AUCTION_COMMAND_RESULT, 4 + 4 + 4 + 8 + 4 + 8 + 8 + 8) { }
 
 void AuctionCommandResult::InitializeAuction(::AuctionPosting const* auction)
 {
@@ -170,10 +166,10 @@ void AuctionSellItem::Read()
     _worldPacket >> BuyoutPrice;
     _worldPacket >> RunTime;
 
-    Items.resize(_worldPacket.ReadBits(5));
+    _worldPacket >> BitsSize<5>(Items);
     _worldPacket.ResetBitPos();
 
-    for (AuctionSellItem::AuctionItemForSale& item : Items)
+    for (AuctionItemForSale& item : Items)
     {
         _worldPacket >> item.Guid;
         _worldPacket >> item.UseCount;
@@ -191,15 +187,11 @@ void AuctionListBiddedItems::Read()
 {
     _worldPacket >> Auctioneer;
     _worldPacket >> Offset;
-    uint8 AuctionIDsCount = _worldPacket.ReadBits(7);
+    _worldPacket >> BitsSize<7>(AuctionIDs);
     _worldPacket.ResetBitPos();
 
-    for (uint8 i = 0; i < AuctionIDsCount; i++)
-    {
-        uint32 AuctionID = 0;
-        _worldPacket >> AuctionID;
-        AuctionIDs.emplace_back(AuctionID);
-    }
+    for (uint32& auctionID : AuctionIDs)
+        _worldPacket >> auctionID;
 }
 
 void AuctionRemoveItem::Read()
@@ -262,22 +254,23 @@ void AuctionListItems::Read()
     _worldPacket >> MinLevel;
     _worldPacket >> MaxLevel;
     _worldPacket >> Quality;
-    DataSort.resize(_worldPacket.read<uint8>());
+    _worldPacket >> Size<uint8>(DataSort);
 
     uint32 knownPetsSize = _worldPacket.read<uint32>();
     uint32 const sizeLimit = sBattlePetSpeciesStore.GetNumRows() / (sizeof(decltype(KnownPets)::value_type) * 8) + 1;
     if (knownPetsSize >= sizeLimit)
-        throw PacketArrayMaxCapacityException(knownPetsSize, sizeLimit);
+        OnInvalidArraySize(knownPetsSize, sizeLimit);
 
     KnownPets.resize(knownPetsSize);
     _worldPacket >> MaxPetLevel;
     for (uint8& knownPetMask : KnownPets)
         _worldPacket >> knownPetMask;
 
-    Name = _worldPacket.ReadString(_worldPacket.ReadBits(8));
-    ClassFilters.resize(_worldPacket.ReadBits(3));
-    OnlyUsable = _worldPacket.ReadBit();
-    ExactMatch = _worldPacket.ReadBit();
+    _worldPacket >> SizedString::BitsSize<8>(Name);
+    _worldPacket >> SizedString::Data(Name);
+    _worldPacket >> BitsSize<3>(ClassFilters);
+    _worldPacket >> Bits<1>(OnlyUsable);
+    _worldPacket >> Bits<1>(ExactMatch);
 
     for (AuctionListFilterClass& filterClass : ClassFilters)
         _worldPacket >> filterClass;
@@ -293,17 +286,9 @@ void AuctionListOwnedItems::Read()
     _worldPacket >> Offset;
 }
 
-AuctionListPendingSalesResult::AuctionListPendingSalesResult() : ServerPacket(SMSG_AUCTION_LIST_PENDING_SALES_RESULT, 140)
-{
-}
-
-AuctionListPendingSalesResult::~AuctionListPendingSalesResult()
-{
-}
-
 WorldPacket const* AuctionListPendingSalesResult::Write()
 {
-    _worldPacket << uint32(Mails.size());
+    _worldPacket << Size<uint32>(Mails);
     _worldPacket << int32(TotalNumRecords);
 
     for (auto const& mail : Mails)
@@ -316,7 +301,7 @@ WorldPacket const* AuctionClosedNotification::Write()
 {
     _worldPacket << Info;
     _worldPacket << float(ProceedsMailDelay);
-    _worldPacket.WriteBit(Sold);
+    _worldPacket << Bits<1>(Sold);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
@@ -354,12 +339,11 @@ WorldPacket const* AuctionReplicateResponse::Write()
     _worldPacket << uint32(ChangeNumberGlobal);
     _worldPacket << uint32(ChangeNumberCursor);
     _worldPacket << uint32(ChangeNumberTombstone);
-    _worldPacket << uint32(Items.size());
+    _worldPacket << Size<uint32>(Items);
 
     for (auto const& item : Items)
         _worldPacket << item;
 
     return &_worldPacket;
-}
 }
 }

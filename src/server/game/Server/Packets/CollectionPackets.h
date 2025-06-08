@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CollectionPackets_h__
-#define CollectionPackets_h__
+#ifndef TRINITYCORE_COLLECTION_PACKETS_H
+#define TRINITYCORE_COLLECTION_PACKETS_H
 
 #include "Packet.h"
 
@@ -35,7 +35,7 @@ namespace WorldPackets
         class CollectionItemSetFavorite final : public ClientPacket
         {
         public:
-            CollectionItemSetFavorite(WorldPacket&& packet) : ClientPacket(CMSG_COLLECTION_ITEM_SET_FAVORITE, std::move(packet)) { }
+            explicit CollectionItemSetFavorite(WorldPacket&& packet) : ClientPacket(CMSG_COLLECTION_ITEM_SET_FAVORITE, std::move(packet)) { }
 
             void Read() override;
 
@@ -46,4 +46,4 @@ namespace WorldPackets
     }
 }
 
-#endif // CollectionPackets_h__
+#endif // TRINITYCORE_COLLECTION_PACKETS_H

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GuildFinderPackets_h__
-#define GuildFinderPackets_h__
+#ifndef TRINITYCORE_GUILDFINDERPACKETS_H
+#define TRINITYCORE_GUILDFINDERPACKETS_H
 
 #include "Packet.h"
 #include "ObjectGuid.h"
@@ -30,7 +30,7 @@ namespace WorldPackets
         class LFGuildAddRecruit final : public ClientPacket
         {
         public:
-            LFGuildAddRecruit(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_ADD_RECRUIT, std::move(packet)) { }
+            explicit LFGuildAddRecruit(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_ADD_RECRUIT, std::move(packet)) { }
 
             void Read() override;
 
@@ -44,7 +44,7 @@ namespace WorldPackets
         class LFGuildApplicationsListChanged final : public ServerPacket
         {
         public:
-            LFGuildApplicationsListChanged() : ServerPacket(SMSG_LF_GUILD_APPLICATIONS_LIST_CHANGED, 0) { }
+            explicit LFGuildApplicationsListChanged() : ServerPacket(SMSG_LF_GUILD_APPLICATIONS_LIST_CHANGED, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
@@ -52,7 +52,7 @@ namespace WorldPackets
         class LFGuildApplicantListChanged final : public ServerPacket
         {
         public:
-            LFGuildApplicantListChanged() : ServerPacket(SMSG_LF_GUILD_APPLICANT_LIST_CHANGED, 0) { }
+            explicit LFGuildApplicantListChanged() : ServerPacket(SMSG_LF_GUILD_APPLICANT_LIST_CHANGED, 0) { }
 
             WorldPacket const* Write() override { return &_worldPacket; }
         };
@@ -60,7 +60,7 @@ namespace WorldPackets
         class LFGuildBrowse final : public ClientPacket
         {
         public:
-            LFGuildBrowse(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_BROWSE, std::move(packet)) { }
+            explicit LFGuildBrowse(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_BROWSE, std::move(packet)) { }
 
             void Read() override;
 
@@ -94,7 +94,7 @@ namespace WorldPackets
         class LFGuildBrowseResult final : public ServerPacket
         {
         public:
-            LFGuildBrowseResult() : ServerPacket(SMSG_LF_GUILD_BROWSE) { }
+            explicit LFGuildBrowseResult() : ServerPacket(SMSG_LF_GUILD_BROWSE) { }
 
             WorldPacket const* Write() override;
 
@@ -104,7 +104,7 @@ namespace WorldPackets
         class LFGuildDeclineRecruit final : public ClientPacket
         {
         public:
-            LFGuildDeclineRecruit(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_DECLINE_RECRUIT, std::move(packet)) { }
+            explicit LFGuildDeclineRecruit(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_DECLINE_RECRUIT, std::move(packet)) { }
 
             void Read() override;
 
@@ -114,7 +114,7 @@ namespace WorldPackets
         class LFGuildGetApplications final : public ClientPacket
         {
         public:
-            LFGuildGetApplications(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_GET_APPLICATIONS, std::move(packet)) { }
+            explicit LFGuildGetApplications(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_GET_APPLICATIONS, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -135,7 +135,7 @@ namespace WorldPackets
         class LFGuildApplications final : public ServerPacket
         {
         public:
-            LFGuildApplications() : ServerPacket(SMSG_LF_GUILD_APPLICATIONS) { }
+            explicit LFGuildApplications() : ServerPacket(SMSG_LF_GUILD_APPLICATIONS) { }
 
             WorldPacket const* Write() override;
 
@@ -146,7 +146,7 @@ namespace WorldPackets
         class LFGuildGetGuildPost final : public ClientPacket
         {
         public:
-            LFGuildGetGuildPost(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_GET_GUILD_POST, std::move(packet)) { }
+            explicit LFGuildGetGuildPost(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_GET_GUILD_POST, std::move(packet)) { }
 
             void Read() override { }
         };
@@ -165,7 +165,7 @@ namespace WorldPackets
         class LFGuildPost final : public ServerPacket
         {
         public:
-            LFGuildPost() : ServerPacket(SMSG_LF_GUILD_POST, 1 + 1 + 4 + 4 + 4 + 4 + 4 + 255) { }
+            explicit LFGuildPost() : ServerPacket(SMSG_LF_GUILD_POST, 1 + 1 + 4 + 4 + 4 + 4 + 4 + 255) { }
 
             WorldPacket const* Write() override;
 
@@ -175,7 +175,7 @@ namespace WorldPackets
         class LFGuildGetRecruits final : public ClientPacket
         {
         public:
-            LFGuildGetRecruits(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_GET_RECRUITS, std::move(packet)) { }
+            explicit LFGuildGetRecruits(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_GET_RECRUITS, std::move(packet)) { }
 
             void Read() override;
 
@@ -201,7 +201,7 @@ namespace WorldPackets
         class LFGuildRecruits final : public ServerPacket
         {
         public:
-            LFGuildRecruits() : ServerPacket(SMSG_LF_GUILD_RECRUITS) { }
+            explicit LFGuildRecruits() : ServerPacket(SMSG_LF_GUILD_RECRUITS) { }
 
             WorldPacket const* Write() override;
 
@@ -212,7 +212,7 @@ namespace WorldPackets
         class LFGuildRemoveRecruit final : public ClientPacket
         {
         public:
-            LFGuildRemoveRecruit(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_REMOVE_RECRUIT, std::move(packet)) { }
+            explicit LFGuildRemoveRecruit(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_REMOVE_RECRUIT, std::move(packet)) { }
 
             void Read() override;
 
@@ -222,7 +222,7 @@ namespace WorldPackets
         class LFGuildSetGuildPost final : public ClientPacket
         {
         public:
-            LFGuildSetGuildPost(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_SET_GUILD_POST, std::move(packet)) { }
+            explicit LFGuildSetGuildPost(WorldPacket&& packet) : ClientPacket(CMSG_LF_GUILD_SET_GUILD_POST, std::move(packet)) { }
 
             void Read() override;
 
@@ -236,4 +236,4 @@ namespace WorldPackets
     }
 }
 
-#endif // GuildFinderPackets_h__
+#endif // TRINITYCORE_GUILDFINDERPACKETS_H

@@ -531,7 +531,7 @@ bool Group::AddMember(Player* player)
                 if (player->HaveAtClient(existingMember))
                 {
                     existingMember->SetFieldNotifyFlag(UF_FLAG_PARTY_MEMBER);
-                    existingMember->BuildValuesUpdateBlockForPlayer(&groupData, player);
+                    existingMember->BuildValuesUpdateBlockForPlayerWithMask(&groupData, player, {});
                     existingMember->RemoveFieldNotifyFlag(UF_FLAG_PARTY_MEMBER);
                 }
 
@@ -539,7 +539,7 @@ bool Group::AddMember(Player* player)
                 {
                     UpdateData newData(player->GetMapId());
                     WorldPacket newDataPacket;
-                    player->BuildValuesUpdateBlockForPlayer(&newData, existingMember);
+                    player->BuildValuesUpdateBlockForPlayerWithMask(&newData, existingMember, {});
                     if (newData.HasData())
                     {
                         newData.BuildPacket(&newDataPacket);
@@ -819,7 +819,7 @@ void Group::SendTargetIconList(WorldSession* session, int8 partyIndex) const
     WorldPackets::Party::SendRaidTargetUpdateAll updateAll;
     updateAll.PartyIndex = partyIndex;
     for (uint8 i = 0; i < TARGET_ICONS_COUNT; i++)
-        updateAll.TargetIcons.try_emplace(i, m_targetIcons[i]);
+        updateAll.TargetIcons.emplace_back(i, m_targetIcons[i]);
 
     session->SendPacket(updateAll.Write());
 }

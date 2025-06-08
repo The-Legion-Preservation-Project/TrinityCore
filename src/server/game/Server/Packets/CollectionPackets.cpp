@@ -16,10 +16,14 @@
  */
 
 #include "CollectionPackets.h"
+#include "PacketOperators.h"
 
-void WorldPackets::Collections::CollectionItemSetFavorite::Read()
+namespace WorldPackets::Collections
 {
-    Type = _worldPacket.read<CollectionType>();
-    ID = _worldPacket.read<uint32>();
+void CollectionItemSetFavorite::Read()
+{
+    _worldPacket >> As<int32>(Type);
+    _worldPacket >> ID;
     _worldPacket >> Bits<1>(IsFavorite);
+}
 }

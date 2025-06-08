@@ -1971,8 +1971,6 @@ public:
             target->GetSession()->m_muteTime = 0;
         }
 
-        using namespace std::string_view_literals;
-
         LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
         stmt->setInt64(0, 0);
         stmt->setString(1, ""sv);

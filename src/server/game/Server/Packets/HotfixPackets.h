@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HotfixPackets_h__
-#define HotfixPackets_h__
+#ifndef TRINITYCORE_HOTFIX_PACKETS_H
+#define TRINITYCORE_HOTFIX_PACKETS_H
 
 #include "Packet.h"
 #include "Common.h"
@@ -37,7 +37,7 @@ namespace WorldPackets
                 uint32 RecordID = 0;
             };
 
-            DBQueryBulk(WorldPacket&& packet) : ClientPacket(CMSG_DB_QUERY_BULK, std::move(packet)) { }
+            explicit DBQueryBulk(WorldPacket&& packet) : ClientPacket(CMSG_DB_QUERY_BULK, std::move(packet)) { }
 
             void Read() override;
 
@@ -48,7 +48,7 @@ namespace WorldPackets
         class DBReply final : public ServerPacket
         {
         public:
-            DBReply() : ServerPacket(SMSG_DB_REPLY, 4 + 4 + 4 + 1 + 4) { }
+            explicit DBReply() : ServerPacket(SMSG_DB_REPLY, 4 + 4 + 4 + 1 + 4) { }
 
             WorldPacket const* Write() override;
 
@@ -62,7 +62,7 @@ namespace WorldPackets
         class AvailableHotfixes final : public ServerPacket
         {
         public:
-            AvailableHotfixes(int32 hotfixCacheVersion, std::map<uint64, int32> const& hotfixes)
+            explicit AvailableHotfixes(int32 hotfixCacheVersion, std::map<uint64, int32> const& hotfixes)
                 : ServerPacket(SMSG_AVAILABLE_HOTFIXES), HotfixCacheVersion(hotfixCacheVersion), Hotfixes(hotfixes) { }
 
             WorldPacket const* Write() override;
@@ -74,7 +74,7 @@ namespace WorldPackets
         class HotfixRequest final : public ClientPacket
         {
         public:
-            HotfixRequest(WorldPacket&& packet) : ClientPacket(CMSG_HOTFIX_REQUEST, std::move(packet)) { }
+            explicit HotfixRequest(WorldPacket&& packet) : ClientPacket(CMSG_HOTFIX_REQUEST, std::move(packet)) { }
 
             void Read() override;
 
@@ -91,7 +91,7 @@ namespace WorldPackets
                 Optional<ByteBuffer> Data;
             };
 
-            HotfixConnect() : ServerPacket(SMSG_HOTFIX_CONNECT) { }
+            explicit HotfixConnect() : ServerPacket(SMSG_HOTFIX_CONNECT) { }
 
             WorldPacket const* Write() override;
 
@@ -100,4 +100,4 @@ namespace WorldPackets
     }
 }
 
-#endif // HotfixPackets_h__
+#endif // TRINITYCORE_HOTFIX_PACKETS_H

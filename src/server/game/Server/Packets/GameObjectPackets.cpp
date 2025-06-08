@@ -16,40 +16,45 @@
  */
 
 #include "GameObjectPackets.h"
+#include "PacketOperators.h"
 
-void WorldPackets::GameObject::GameObjUse::Read()
+namespace WorldPackets::GameObject
+{
+void GameObjUse::Read()
 {
     _worldPacket >> Guid;
 }
 
-void WorldPackets::GameObject::GameObjReportUse::Read()
+void GameObjReportUse::Read()
 {
     _worldPacket >> Guid;
 }
 
-WorldPacket const* WorldPackets::GameObject::GameObjectDespawn::Write()
+WorldPacket const* GameObjectDespawn::Write()
 {
     _worldPacket << ObjectGUID;
+
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::GameObject::PageText::Write()
+WorldPacket const* PageText::Write()
 {
     _worldPacket << GameObjectGUID;
+
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::GameObject::GameObjectActivateAnimKit::Write()
+WorldPacket const* GameObjectActivateAnimKit::Write()
 {
     _worldPacket << ObjectGUID;
     _worldPacket << uint32(AnimKitID);
-    _worldPacket.WriteBit(Maintain);
+    _worldPacket << Bits<1>(Maintain);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-WorldPacket const * WorldPackets::GameObject::DestructibleBuildingDamage::Write()
+WorldPacket const * DestructibleBuildingDamage::Write()
 {
     _worldPacket << Target;
     _worldPacket << Owner;
@@ -60,17 +65,17 @@ WorldPacket const * WorldPackets::GameObject::DestructibleBuildingDamage::Write(
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::GameObject::GameObjectCustomAnim::Write()
+WorldPacket const* GameObjectCustomAnim::Write()
 {
     _worldPacket << ObjectGUID;
     _worldPacket << uint32(CustomAnim);
-    _worldPacket.WriteBit(PlayAsDespawn);
+    _worldPacket << Bits<1>(PlayAsDespawn);
     _worldPacket.FlushBits();
 
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::GameObject::GameObjectUILink::Write()
+WorldPacket const* GameObjectUILink::Write()
 {
     _worldPacket << ObjectGUID;
     _worldPacket << int32(UILink);
@@ -78,7 +83,7 @@ WorldPacket const* WorldPackets::GameObject::GameObjectUILink::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::GameObject::GameObjectPlaySpellVisual::Write()
+WorldPacket const* GameObjectPlaySpellVisual::Write()
 {
     _worldPacket << ObjectGUID;
     _worldPacket << ActivatorGUID;
@@ -87,10 +92,11 @@ WorldPacket const* WorldPackets::GameObject::GameObjectPlaySpellVisual::Write()
     return &_worldPacket;
 }
 
-WorldPacket const* WorldPackets::GameObject::GameObjectSetStateLocal::Write()
+WorldPacket const* GameObjectSetStateLocal::Write()
 {
     _worldPacket << ObjectGUID;
     _worldPacket << uint8(State);
 
     return &_worldPacket;
+}
 }
