@@ -97,7 +97,7 @@ WorldPacket const* ActiveGlyphs::Write()
 
 void LearnPvpTalents::Read()
 {
-    _worldPacket >> Size<uint32>(Talents);
+    _worldPacket >> BitsSize<6>(Talents);
     for (uint16& pvpTalent : Talents)
         _worldPacket >> pvpTalent;
 }
