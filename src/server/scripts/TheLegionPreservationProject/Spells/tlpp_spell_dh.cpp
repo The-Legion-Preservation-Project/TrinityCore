@@ -38,28 +38,62 @@ class tlpp_spell_dh_fel_rush : public SpellScript
     void HandleDashGround(SpellEffIndex /*effIndex*/)
     {
         if (Unit* caster = GetCaster())
+        {
             if (!caster->IsFalling() || caster->IsInWater())
             {
-                caster->CastSpell(caster, SPELL_DH_FEL_RUSH_DASH, true);
-                caster->CastSpell(caster, SPELL_DH_FEL_RUSH_DAMAGE, true);
+                caster->CastSpell(nullptr, SPELL_DH_FEL_RUSH_DAMAGE, CastSpellExtraArgsInit{
+                    .TriggerFlags = TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR
+                });
+                caster->CastSpell(nullptr, SPELL_DH_FEL_RUSH_DASH, CastSpellExtraArgsInit{
+                    .TriggerFlags = TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR
+                });
             }
+        }
     }
 
     void HandleDashAir(SpellEffIndex /*effIndex*/)
     {
         if (Unit* caster = GetCaster())
+        {
             if (caster->IsFalling())
             {
                 caster->SetDisableGravity(true);
-                caster->CastSpell(caster, SPELL_DH_FEL_RUSH_AIR, true);
-                caster->CastSpell(caster, SPELL_DH_FEL_RUSH_DAMAGE, true);
+                caster->CastSpell(nullptr, SPELL_DH_FEL_RUSH_AIR, CastSpellExtraArgsInit{
+                    .TriggerFlags = TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR
+                });
+                caster->CastSpell(nullptr, SPELL_DH_FEL_RUSH_DAMAGE, CastSpellExtraArgsInit{
+                    .TriggerFlags = TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR
+                });
             }
+        }
     }
 
     void Register() override
     {
         OnEffectHitTarget += SpellEffectFn(tlpp_spell_dh_fel_rush::HandleDashGround, EFFECT_0, SPELL_EFFECT_DUMMY);
         OnEffectHitTarget += SpellEffectFn(tlpp_spell_dh_fel_rush::HandleDashAir, EFFECT_1, SPELL_EFFECT_DUMMY);
+    }
+};
+
+// Fel Rush Dash - 197922
+class tlpp_spell_dh_fel_rush_dash : public AuraScript
+{
+    void ChangeRunBackSpeed(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
+    {
+        GetTarget()->SetSpeed(MOVE_RUN, float(GetEffectInfo(EFFECT_4).CalcValue()));
+        GetTarget()->SetSpeed(MOVE_RUN_BACK, float(GetEffectInfo(EFFECT_4).CalcValue()));
+    }
+
+    void RestoreRunBackSpeed(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+    {
+        GetTarget()->UpdateSpeed(MOVE_RUN);
+        GetTarget()->UpdateSpeed(MOVE_RUN_BACK);
+    }
+
+    void Register() override
+    {
+        AfterEffectApply += AuraEffectApplyFn(tlpp_spell_dh_fel_rush_dash::ChangeRunBackSpeed, EFFECT_4, SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED, AURA_EFFECT_HANDLE_REAL);
+        AfterEffectRemove += AuraEffectApplyFn(tlpp_spell_dh_fel_rush_dash::RestoreRunBackSpeed, EFFECT_4, SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED, AURA_EFFECT_HANDLE_REAL);
     }
 };
 
@@ -91,5 +125,6 @@ class tlpp_spell_dh_fel_rush_air : public AuraScript
 void AddCustomDemonHunterSpellScripts()
 {
     RegisterSpellScript(tlpp_spell_dh_fel_rush);
+    RegisterSpellScript(tlpp_spell_dh_fel_rush_dash);
     RegisterSpellScript(tlpp_spell_dh_fel_rush_air);
 }
