@@ -28,6 +28,10 @@
 
 AreaTableEntry const* ChannelMgr::SpecialLinkedArea;
 
+ChannelMgr::ChannelMgr(Team team) : _team(team)
+{
+}
+
 ChannelMgr::~ChannelMgr()
 {
     for (auto itr = _channels.begin(); itr != _channels.end(); ++itr)
