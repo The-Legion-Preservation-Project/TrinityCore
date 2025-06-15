@@ -15,21 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ServiceDispatcher_h__
-#define ServiceDispatcher_h__
+#ifndef TRINITYCORE_BNET_SERVICE_DISPATCHER_H
+#define TRINITYCORE_BNET_SERVICE_DISPATCHER_H
 
 #include "MessageBuffer.h"
-#include "AccountService.h"
-#include "AuthenticationService.h"
-#include "challenge_service.pb.h"
-#include "channel_service.pb.h"
-#include "ConnectionService.h"
-#include "friends_service.pb.h"
-#include "GameUtilitiesService.h"
-#include "presence_service.pb.h"
-#include "report_service.pb.h"
-#include "resource_service.pb.h"
-#include "user_manager_service.pb.h"
+#include <unordered_map>
 
 namespace Battlenet
 {
@@ -64,4 +54,4 @@ namespace Battlenet
 
 #define sServiceDispatcher ServiceDispatcher::Instance()
 
-#endif // ServiceDispatcher_h__
+#endif // TRINITYCORE_BNET_SERVICE_DISPATCHER_H
