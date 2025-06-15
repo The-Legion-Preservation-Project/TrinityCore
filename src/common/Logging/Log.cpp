@@ -262,8 +262,7 @@ Logger const* Log::GetLoggerByType(std::string_view type) const
 
 std::string Log::GetTimestampStr()
 {
-    time_t tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    return TimeToTimestampStr(tt);
+    return TimeToTimestampStr(time(nullptr));
 }
 
 bool Log::SetLogLevel(std::string const& name, int32 newLeveli, bool isLogger /* = true */)
