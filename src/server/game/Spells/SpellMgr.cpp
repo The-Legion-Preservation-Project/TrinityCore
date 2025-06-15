@@ -5042,12 +5042,6 @@ void SpellMgr::LoadSpellInfoTargetCaps()
         spellInfo->_LoadSqrtTargetLimit(5, 0, {}, EFFECT_1, {}, {});
     });
 
-    // Blade of Justice
-    ApplySpellFix({ 404358 }, [](SpellInfo* spellInfo)
-    {
-        spellInfo->_LoadSqrtTargetLimit(5, 0, {}, {}, {}, {});
-    });
-
     // Ice Nova
     ApplySpellFix({ 157997 }, [](SpellInfo* spellInfo)
     {
@@ -5058,6 +5052,18 @@ void SpellMgr::LoadSpellInfoTargetCaps()
     ApplySpellFix({ 212680 }, [](SpellInfo* spellInfo)
     {
         spellInfo->_LoadSqrtTargetLimit(5, 0, 212431, EFFECT_1, {}, {});
+    });
+
+    // Revival
+    ApplySpellFix({ 115310 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->_LoadSqrtTargetLimit(5, 0, {}, {}, {}, {});
+    });
+
+    // Keg Smash
+    ApplySpellFix({ 121253 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->_LoadSqrtTargetLimit(5, 0, {}, {}, {}, {});
     });
 
     TC_LOG_INFO("server.loading", ">> Loaded SpellInfo target caps in {} ms", GetMSTimeDiffToNow(oldMSTime));
