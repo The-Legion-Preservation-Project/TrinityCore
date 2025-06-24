@@ -898,16 +898,15 @@ struct PlayerChoiceResponse
 
 struct PlayerChoice
 {
-    int32 ChoiceId;
-    int32 UiTextureKitId;
+    int32 ChoiceId = 0;
+    int32 UiTextureKitId = 0;
     std::string Question;
     std::vector<PlayerChoiceResponse> Responses;
-    bool HideWarboardHeader;
+    bool HideWarboardHeader = false;
 
     PlayerChoiceResponse const* GetResponse(int32 responseId) const
     {
-        auto itr = std::find_if(Responses.begin(), Responses.end(),
-            [responseId](PlayerChoiceResponse const& playerChoiceResponse) { return playerChoiceResponse.ResponseId == responseId; });
+        auto itr = std::ranges::find(Responses, responseId, &PlayerChoiceResponse::ResponseId);
         return itr != Responses.end() ? &(*itr) : nullptr;
     }
 };

@@ -91,7 +91,7 @@ struct GossipMenuItem
 };
 
 // need an ordered container
-typedef std::map<uint32, GossipMenuItem> GossipMenuItemContainer;
+typedef std::vector<GossipMenuItem> GossipMenuItemContainer;
 
 struct QuestMenuItem
 {

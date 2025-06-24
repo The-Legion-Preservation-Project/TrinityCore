@@ -52,23 +52,19 @@ uint32 GossipMenu::AddMenuItem(int32 menuItemId, GossipOptionNpc optionNpc, std:
         {
             // set baseline menuItemId as higher than whatever exists in db
             Trinity::IteratorPair bounds = sObjectMgr->GetGossipMenuItemsMapBounds(_menuId);
-            auto itr = std::max_element(bounds.begin(), bounds.end(), [](GossipMenuItemsContainer::value_type const& a, GossipMenuItemsContainer::value_type const& b)
-            {
-                return a.second.OptionID < b.second.OptionID;
-            });
+            auto itr = std::ranges::max_element(bounds, std::ranges::less(),
+                [](GossipMenuItemsContainer::value_type const& a) { return a.second.OptionID; });
+
             if (itr != bounds.end())
                 menuItemId = itr->second.OptionID + 1;
         }
 
-        if (!_menuItems.empty())
+        for (GossipMenuItem const& _menuItem : _menuItems)
         {
-            for (GossipMenuItemContainer::const_iterator itr = _menuItems.begin(); itr != _menuItems.end(); ++itr)
-            {
-                if (int32(itr->first) > menuItemId)
-                    break;
+            if (int32(_menuItem.OptionID) > menuItemId)
+                break;
 
-                menuItemId = itr->first + 1;
-            }
+            menuItemId = _menuItem.OptionID + 1;
         }
     }
 
@@ -100,10 +96,8 @@ void GossipMenu::AddMenuItem(uint32 menuId, uint32 menuItemId, uint32 sender, ui
     Trinity::IteratorPair bounds = sObjectMgr->GetGossipMenuItemsMapBounds(menuId);
 
     /// Find the one with the given menu item id.
-    auto itr = std::find_if(bounds.begin(), bounds.end(), [menuItemId](std::pair<uint32 const, GossipMenuItems> const& itemPair)
-    {
-        return itemPair.second.OptionID == menuItemId;
-    });
+    auto itr = std::ranges::find(bounds, menuItemId,
+        [](std::pair<uint32 const, GossipMenuItems> const& itemPair) { return itemPair.second.OptionID; });
 
     if (itr == bounds.end())
         return;
@@ -150,17 +144,16 @@ void GossipMenu::AddMenuItem(GossipMenuItems const& menuItem, uint32 sender, uin
 
 GossipMenuItem const* GossipMenu::GetItem(uint32 menuItemId) const
 {
-    auto const itr = _menuItems.find(menuItemId);
+    auto const itr = std::ranges::find(_menuItems, menuItemId, &GossipMenuItem::OptionID);
     if (itr != _menuItems.end())
-        return &itr->second;
+        return &*itr;
 
     return nullptr;
 }
 
 uint32 GossipMenu::GetMenuItemSender(uint32 menuItemId) const
 {
-    GossipMenuItem const* item = GetItem(menuItemId);
-    if (item)
+    if (GossipMenuItem const* item = GetItem(menuItemId))
         return item->Sender;
 
     return 0;
@@ -168,8 +161,7 @@ uint32 GossipMenu::GetMenuItemSender(uint32 menuItemId) const
 
 uint32 GossipMenu::GetMenuItemAction(uint32 menuItemId) const
 {
-    GossipMenuItem const* item = GetItem(menuItemId);
-    if (item)
+    if (GossipMenuItem const* item = GetItem(menuItemId))
         return item->Action;
 
     return 0;
@@ -177,8 +169,7 @@ uint32 GossipMenu::GetMenuItemAction(uint32 menuItemId) const
 
 bool GossipMenu::IsMenuItemCoded(uint32 menuItemId) const
 {
-    GossipMenuItem const* item = GetItem(menuItemId);
-    if (item)
+    if (GossipMenuItem const* item = GetItem(menuItemId))
         return item->BoxCoded;
 
     return false;
@@ -217,10 +208,9 @@ void PlayerMenu::SendGossipMenu(uint32 titleTextId, ObjectGuid objectGUID)
     packet.TextID = titleTextId;
 
     packet.GossipOptions.reserve(_gossipMenu.GetMenuItems().size());
-    for (auto const &pair : _gossipMenu.GetMenuItems())
+    for (GossipMenuItem const& item : _gossipMenu.GetMenuItems())
     {
         WorldPackets::NPC::ClientGossipOptions& opt = packet.GossipOptions.emplace_back();
-        GossipMenuItem const& item = pair.second;
         opt.OptionID = item.OptionID;
         opt.OptionNPC = item.OptionNpc;
         opt.OptionFlags = item.BoxCoded;    // makes pop up box password
@@ -313,21 +303,15 @@ void QuestMenu::AddMenuItem(uint32 QuestId, uint8 Icon)
 
     ASSERT(_questMenuItems.size() <= GOSSIP_MAX_MENU_ITEMS);
 
-    QuestMenuItem questMenuItem;
+    QuestMenuItem& questMenuItem = _questMenuItems.emplace_back();
 
     questMenuItem.QuestId        = QuestId;
     questMenuItem.QuestIcon      = Icon;
-
-    _questMenuItems.push_back(questMenuItem);
 }
 
 bool QuestMenu::HasItem(uint32 questId) const
 {
-    for (QuestMenuItemList::const_iterator i = _questMenuItems.begin(); i != _questMenuItems.end(); ++i)
-        if (i->QuestId == questId)
-            return true;
-
-    return false;
+    return advstd::ranges::contains(_questMenuItems, questId, &QuestMenuItem::QuestId);
 }
 
 void QuestMenu::ClearMenu()
