@@ -212,6 +212,9 @@ namespace Movement
         packet.Pos = Position(loc.x, loc.y, loc.z, loc.orientation);
         packet.SplineData.StopSplineStyle = 2;
         packet.SplineData.ID = move_spline.GetId();
+        //packet.SplineData.StopUseFaceDirection = args.facing.type == MONSTER_MOVE_FACING_ANGLE;
+        packet.SplineData.Move.Face = args.facing.type;
+        packet.SplineData.Move.FaceDirection = args.facing.angle;
 
         if (transport)
         {

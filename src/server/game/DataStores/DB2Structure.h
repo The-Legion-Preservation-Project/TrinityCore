@@ -420,6 +420,7 @@ struct BattlemasterListEntry
     int8 MaxPlayers;
     int8 Flags;
 
+    BattlemasterType GetType() const { return static_cast<BattlemasterType>(InstanceType); }
     EnumFlag<BattlemasterListFlags> GetFlags() const { return static_cast<BattlemasterListFlags>(Flags); }
 };
 

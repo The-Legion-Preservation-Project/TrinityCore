@@ -29,9 +29,9 @@ Location MoveSpline::computePosition(int32 time_point, int32 point_index) const
     ASSERT(Initialized());
 
     float u = 1.0f;
-    int32 seg_time = spline.length(point_index, point_index + 1);
+    float seg_time = float(spline.length(point_index, point_index + 1));
     if (seg_time > 0)
-        u = (time_point - spline.length(point_index)) / (float)seg_time;
+        u = std::min(float(time_point - spline.length(point_index)) / seg_time, 1.0f);
 
     Location c;
     c.orientation = initialOrientation;

@@ -250,6 +250,12 @@ enum class BattlePetSpeciesFlags : uint16
 
 DEFINE_ENUM_FLAG(BattlePetSpeciesFlags);
 
+enum class BattlemasterType : int32
+{
+    Battleground    = 3,
+    Arena           = 4,
+};
+
 enum class BattlemasterListFlags : uint32
 {
     InternalOnly                = 0x01,
