@@ -50,10 +50,7 @@ public:
     ObjectGuid GetOwnerGUID() const override { return GetGuidValue(SCENEOBJECT_FIELD_CREATEDBY); }
     uint32 GetFaction() const override { return 0; }
 
-    float GetStationaryX() const override { return _stationaryPosition.GetPositionX(); }
-    float GetStationaryY() const override { return _stationaryPosition.GetPositionY(); }
-    float GetStationaryZ() const override { return _stationaryPosition.GetPositionZ(); }
-    float GetStationaryO() const override { return _stationaryPosition.GetOrientation(); }
+    Position const& GetStationaryPosition() const override { return _stationaryPosition; }
     void RelocateStationaryPosition(Position const& pos) { _stationaryPosition.Relocate(pos); }
 
     void SetCreatedBySpellCast(ObjectGuid castId) { _createdBySpellCast = castId; }
