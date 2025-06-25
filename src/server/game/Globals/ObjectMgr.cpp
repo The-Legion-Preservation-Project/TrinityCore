@@ -50,8 +50,10 @@
 #include "ObjectDefines.h"
 #include "PhasingHandler.h"
 #include "Player.h"
+#include "PlayerChoice.h"
 #include "QueryPackets.h"
 #include "QuestDef.h"
+#include "QueryResultStructured.h"
 #include "Random.h"
 #include "RealmList.h"
 #include "ReputationMgr.h"
@@ -10994,8 +10996,7 @@ void ObjectMgr::LoadPlayerChoices()
     uint32 oldMSTime = getMSTime();
     _playerChoices.clear();
 
-    QueryResult choices = WorldDatabase.Query("SELECT ChoiceId, UiTextureKitId, Question, HideWarboardHeader FROM playerchoice");
-
+    QueryResult choices = WorldDatabase.Query("SELECT ChoiceId, UiTextureKitId, Question, InfiniteRange, HideWarboardHeader, MaxResponses, ScriptName FROM playerchoice");
     if (!choices)
     {
         TC_LOG_INFO("server.loading", ">> Loaded 0 player choices. DB table `playerchoice` is empty.");
@@ -11008,28 +11009,35 @@ void ObjectMgr::LoadPlayerChoices()
     uint32 currencyRewardCount = 0;
     uint32 factionRewardCount = 0;
 
-    do
     {
-        Field* fields = choices->Fetch();
+        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(UiTextureKitId)(Question)(InfiniteRange)(HideWarboardHeader)(MaxResponses)(ScriptName)) fields { .Result = *choices };
 
-        int32 choiceId = fields[0].GetInt32();
+        do
+        {
+            int32 choiceId = fields.ChoiceId().GetInt32();
 
-        PlayerChoice& choice = _playerChoices[choiceId];
-        choice.ChoiceId = choiceId;
-        choice.UiTextureKitId = fields[1].GetInt32();
-        choice.Question = fields[2].GetString();
-        choice.HideWarboardHeader = fields[3].GetBool();
+            PlayerChoice& choice = _playerChoices[choiceId];
+            choice.ChoiceId = choiceId;
+            choice.UiTextureKitId = fields.UiTextureKitId().GetInt32();
+            choice.Question = fields.Question().GetString();
+            choice.InfiniteRange = fields.InfiniteRange().GetBool();
+            choice.HideWarboardHeader = fields.HideWarboardHeader().GetBool();
 
-    } while (choices->NextRow());
+            if (!fields.MaxResponses().IsNull())
+                choice.MaxResponses = fields.MaxResponses().GetUInt32();
+
+            choice.ScriptId = GetScriptId(fields.ScriptName().GetString());
+        } while (choices->NextRow());
+    }
 
     if (QueryResult responses = WorldDatabase.Query("SELECT ChoiceId, ResponseId, ChoiceArtFileId, Header, Answer, Description, Confirmation FROM playerchoice_response ORDER BY `Index` ASC"))
     {
+        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(ChoiceArtFileId)(Header)(Answer)(Description)(Confirmation)) fields{ .Result = *responses };
+
         do
         {
-            Field* fields = responses->Fetch();
-
-            int32 choiceId      = fields[0].GetInt32();
-            int32 responseId    = fields[1].GetInt32();
+            int32 choiceId      = fields.ChoiceId().GetInt32();
+            int32 responseId    = fields.ResponseId().GetInt32();
 
             PlayerChoice* choice = Trinity::Containers::MapGetValuePtr(_playerChoices, choiceId);
             if (!choice)
@@ -11042,11 +11050,11 @@ void ObjectMgr::LoadPlayerChoices()
 
             PlayerChoiceResponse& response = choice->Responses.back();
             response.ResponseId         = responseId;
-            response.ChoiceArtFileId    = fields[2].GetInt32();
-            response.Header             = fields[3].GetString();
-            response.Answer             = fields[4].GetString();
-            response.Description        = fields[5].GetString();
-            response.Confirmation       = fields[6].GetString();
+            response.ChoiceArtFileId    = fields.ChoiceArtFileId().GetInt32();
+            response.Header             = fields.Header().GetString();
+            response.Answer             = fields.Answer().GetString();
+            response.Description        = fields.Description().GetString();
+            response.Confirmation       = fields.Confirmation().GetString();
             ++responseCount;
 
         } while (responses->NextRow());
@@ -11054,12 +11062,12 @@ void ObjectMgr::LoadPlayerChoices()
 
     if (QueryResult rewards = WorldDatabase.Query("SELECT ChoiceId, ResponseId, TitleId, PackageId, SkillLineId, SkillPointCount, ArenaPointCount, HonorPointCount, Money, Xp FROM playerchoice_response_reward"))
     {
+        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(TitleId)(PackageId)(SkillLineId)(SkillPointCount)(ArenaPointCount)(HonorPointCount)(Money)(Xp)) fields{ .Result = *rewards };
+
         do
         {
-            Field* fields = rewards->Fetch();
-
-            int32 choiceId      = fields[0].GetInt32();
-            int32 responseId    = fields[1].GetInt32();
+            int32 choiceId      = fields.ChoiceId().GetInt32();
+            int32 responseId    = fields.ResponseId().GetInt32();
 
             PlayerChoice* choice = Trinity::Containers::MapGetValuePtr(_playerChoices, choiceId);
             if (!choice)
@@ -11077,14 +11085,14 @@ void ObjectMgr::LoadPlayerChoices()
             }
 
             PlayerChoiceResponseReward* reward = &responseItr->Reward.emplace();
-            reward->TitleId          = fields[2].GetInt32();
-            reward->PackageId        = fields[3].GetInt32();
-            reward->SkillLineId      = fields[4].GetInt32();
-            reward->SkillPointCount  = fields[5].GetUInt32();
-            reward->ArenaPointCount  = fields[6].GetUInt32();
-            reward->HonorPointCount  = fields[7].GetUInt32();
-            reward->Money            = fields[8].GetUInt64();
-            reward->Xp               = fields[9].GetUInt32();
+            reward->TitleId          = fields.TitleId().GetInt32();
+            reward->PackageId        = fields.PackageId().GetInt32();
+            reward->SkillLineId      = fields.SkillLineId().GetInt32();
+            reward->SkillPointCount  = fields.SkillPointCount().GetUInt32();
+            reward->ArenaPointCount  = fields.ArenaPointCount().GetUInt32();
+            reward->HonorPointCount  = fields.HonorPointCount().GetUInt32();
+            reward->Money            = fields.Money().GetUInt64();
+            reward->Xp               = fields.Xp().GetUInt32();
             ++rewardCount;
 
             if (reward->TitleId && !sCharTitlesStore.LookupEntry(reward->TitleId))
@@ -11114,18 +11122,18 @@ void ObjectMgr::LoadPlayerChoices()
 
     if (QueryResult rewards = WorldDatabase.Query("SELECT ChoiceId, ResponseId, ItemId, BonusListIDs, Quantity FROM playerchoice_response_reward_item ORDER BY `Index` ASC"))
     {
+        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(ItemId)(BonusListIDs)(Quantity)) fields{ .Result = *rewards };
+
         do
         {
-            Field* fields = rewards->Fetch();
-
-            int32 choiceId = fields[0].GetInt32();
-            int32 responseId = fields[1].GetInt32();
-            uint32 itemId = fields[2].GetUInt32();
+            int32 choiceId = fields.ChoiceId().GetInt32();
+            int32 responseId = fields.ResponseId().GetInt32();
+            uint32 itemId = fields.ItemId().GetUInt32();
             std::vector<int32> bonusListIds;
-            for (std::string_view token : Trinity::Tokenize(fields[3].GetStringView(), ' ', false))
+            for (std::string_view token : Trinity::Tokenize(fields.BonusListIDs().GetStringView(), ' ', false))
                 if (Optional<int32> bonusListID = Trinity::StringTo<int32>(token))
                     bonusListIds.push_back(*bonusListID);
-            int32 quantity = fields[4].GetInt32();
+            int32 quantity = fields.Quantity().GetInt32();
 
             PlayerChoice* choice = Trinity::Containers::MapGetValuePtr(_playerChoices, choiceId);
             if (!choice)
@@ -11164,14 +11172,14 @@ void ObjectMgr::LoadPlayerChoices()
 
     if (QueryResult rewards = WorldDatabase.Query("SELECT ChoiceId, ResponseId, CurrencyId, Quantity FROM playerchoice_response_reward_currency ORDER BY `Index` ASC"))
     {
+        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(CurrencyId)(Quantity)) fields { .Result = *rewards };
+
         do
         {
-            Field* fields = rewards->Fetch();
-
-            int32 choiceId = fields[0].GetInt32();
-            int32 responseId = fields[1].GetInt32();
-            uint32 currencyId = fields[2].GetUInt32();
-            int32 quantity = fields[3].GetInt32();
+            int32 choiceId = fields.ChoiceId().GetInt32();
+            int32 responseId = fields.ResponseId().GetInt32();
+            uint32 currencyId = fields.CurrencyId().GetUInt32();
+            int32 quantity = fields.Quantity().GetInt32();
 
             PlayerChoice* choice = Trinity::Containers::MapGetValuePtr(_playerChoices, choiceId);
             if (!choice)
@@ -11210,14 +11218,14 @@ void ObjectMgr::LoadPlayerChoices()
 
     if (QueryResult rewards = WorldDatabase.Query("SELECT ChoiceId, ResponseId, FactionId, Quantity FROM playerchoice_response_reward_faction ORDER BY `Index` ASC"))
     {
+        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(FactionId)(Quantity)) fields { .Result = *rewards };
+
         do
         {
-            Field* fields = rewards->Fetch();
-
-            int32 choiceId = fields[0].GetInt32();
-            int32 responseId = fields[1].GetInt32();
-            uint32 factionId = fields[2].GetUInt32();
-            int32 quantity = fields[3].GetInt32();
+            int32 choiceId = fields.ChoiceId().GetInt32();
+            int32 responseId = fields.ResponseId().GetInt32();
+            uint32 factionId = fields.FactionId().GetUInt32();
+            int32 quantity = fields.Quantity().GetInt32();
 
             PlayerChoice* choice = Trinity::Containers::MapGetValuePtr(_playerChoices, choiceId);
             if (!choice)

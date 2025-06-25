@@ -706,12 +706,27 @@ void WorldSession::HandleRequestWorldQuestUpdate(WorldPackets::Quest::RequestWor
     SendPacket(response.Write());
 }
 
-void WorldSession::HandlePlayerChoiceResponse(WorldPackets::Quest::ChoiceResponse& choiceResponse)
+void WorldSession::HandlePlayerChoiceResponse(WorldPackets::Quest::ChoiceResponse const& choiceResponse)
 {
-    if (_player->PlayerTalkClass->GetInteractionData().GetPlayerChoiceId() != uint32(choiceResponse.ChoiceID))
+    PlayerChoiceData const* playerChoiceData = _player->PlayerTalkClass->GetInteractionData().GetPlayerChoice();
+    if (!playerChoiceData)
     {
-        TC_LOG_ERROR("entities.player.cheat", "Error in CMSG_CHOICE_RESPONSE: {} tried to respond to invalid player choice {} (allowed {}) (possible packet-hacking detected)",
-            GetPlayerInfo(), choiceResponse.ChoiceID, _player->PlayerTalkClass->GetInteractionData().GetPlayerChoiceId());
+        TC_LOG_ERROR("entities.player.cheat", "Error in CMSG_CHOICE_RESPONSE: {} tried to respond to invalid player choice {} (none allowed)",
+            GetPlayerInfo(), choiceResponse.ChoiceID);
+        return;
+    }
+
+    if (playerChoiceData->GetChoiceId() != uint32(choiceResponse.ChoiceID))
+    {
+        TC_LOG_ERROR("entities.player.cheat", "Error in CMSG_CHOICE_RESPONSE: {} tried to respond to invalid player choice {} ({} allowed)",
+            GetPlayerInfo(), choiceResponse.ChoiceID, playerChoiceData->GetChoiceId());
+        return;
+    }
+
+    if (!playerChoiceData->HasResponseId(choiceResponse.ResponseID))
+    {
+        TC_LOG_ERROR("entities.player.cheat", "Error in CMSG_CHOICE_RESPONSE: {} tried to select invalid player choice response id {}",
+            GetPlayerInfo(), choiceResponse.ResponseID);
         return;
     }
 
@@ -720,51 +735,8 @@ void WorldSession::HandlePlayerChoiceResponse(WorldPackets::Quest::ChoiceRespons
         return;
 
     PlayerChoiceResponse const* playerChoiceResponse = playerChoice->GetResponse(choiceResponse.ResponseID);
-    if (!playerChoiceResponse)
-    {
-        TC_LOG_ERROR("entities.player.cheat", "Error in CMSG_CHOICE_RESPONSE: {} tried to select invalid player choice response {} (possible packet-hacking detected)",
-            GetPlayerInfo(), choiceResponse.ResponseID);
-        return;
-    }
 
-    sScriptMgr->OnPlayerChoiceResponse(GetPlayer(), choiceResponse.ChoiceID, choiceResponse.ResponseID);
-
-    if (playerChoiceResponse->Reward)
-    {
-        if (playerChoiceResponse->Reward->TitleId)
-            _player->SetTitle(sCharTitlesStore.AssertEntry(playerChoiceResponse->Reward->TitleId), false);
-
-        if (playerChoiceResponse->Reward->PackageId)
-            _player->RewardQuestPackage(playerChoiceResponse->Reward->PackageId, ItemContext::NONE);
-
-        if (playerChoiceResponse->Reward->SkillLineId && _player->HasSkill(playerChoiceResponse->Reward->SkillLineId))
-            _player->UpdateSkillPro(playerChoiceResponse->Reward->SkillLineId, 1000, playerChoiceResponse->Reward->SkillPointCount);
-
-        if (playerChoiceResponse->Reward->HonorPointCount)
-            _player->AddHonorXP(playerChoiceResponse->Reward->HonorPointCount);
-
-        if (playerChoiceResponse->Reward->Money)
-            _player->ModifyMoney(playerChoiceResponse->Reward->Money, false);
-
-        if (playerChoiceResponse->Reward->Xp)
-            _player->GiveXP(playerChoiceResponse->Reward->Xp, nullptr, 0.0f);
-
-        for (PlayerChoiceResponseRewardItem const& item : playerChoiceResponse->Reward->Items)
-        {
-            ItemPosCountVec dest;
-            if (_player->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, item.Id, item.Quantity) == EQUIP_ERR_OK)
-            {
-                Item* newItem = _player->StoreNewItem(dest, item.Id, true, GenerateItemRandomPropertyId(item.Id), {}, ItemContext::Quest_Reward, &item.BonusListIDs);
-                _player->SendNewItem(newItem, item.Quantity, true, false);
-            }
-        }
-
-        for (PlayerChoiceResponseRewardEntry const& currency : playerChoiceResponse->Reward->Currency)
-            _player->ModifyCurrency(currency.Id, currency.Quantity);
-
-        for (PlayerChoiceResponseRewardEntry const& faction : playerChoiceResponse->Reward->Faction)
-            _player->GetReputationMgr().ModifyReputation(sFactionStore.AssertEntry(faction.Id), faction.Quantity);
-    }
+    sScriptMgr->OnPlayerChoiceResponse(ObjectAccessor::GetWorldObject(*_player, _player->PlayerTalkClass->GetInteractionData().SourceGuid), _player, playerChoice, playerChoiceResponse);
 }
 
 void WorldSession::HandleSpawnTrackingUpdate(WorldPackets::Quest::SpawnTrackingUpdate& spawnTrackingUpdate)

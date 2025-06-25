@@ -31,6 +31,7 @@
 #include "ObjectDefines.h"
 #include "ObjectGuid.h"
 #include "ObjectGuidSequenceGenerator.h"
+#include "PlayerChoice.h"
 #include "Position.h"
 #include "QuestDef.h"
 #include "RaceMask.h"
@@ -53,6 +54,7 @@ enum class GossipOptionNpc : uint8;
 struct AccessRequirement;
 struct DeclinedName;
 struct FactionEntry;
+struct PlayerChoice;
 struct PlayerInfo;
 struct PlayerLevelInfo;
 struct SkillRaceClassInfoEntry;
@@ -850,66 +852,6 @@ struct SceneTemplate
 typedef std::unordered_map<uint32, SceneTemplate> SceneTemplateContainer;
 
 typedef std::unordered_map<uint32, std::string> PhaseNameContainer;
-
-struct PlayerChoiceResponseRewardItem
-{
-    PlayerChoiceResponseRewardItem() : Id(0), Quantity(0) { }
-    PlayerChoiceResponseRewardItem(uint32 id, std::vector<int32> bonusListIDs, int32 quantity) : Id(id), BonusListIDs(std::move(bonusListIDs)), Quantity(quantity) { }
-
-    uint32 Id;
-    std::vector<int32> BonusListIDs;
-    int32 Quantity;
-};
-
-struct PlayerChoiceResponseRewardEntry
-{
-    PlayerChoiceResponseRewardEntry() : Id(0), Quantity(0) { }
-    PlayerChoiceResponseRewardEntry(uint32 id, int32 quantity) : Id(id), Quantity(quantity) { }
-
-    uint32 Id;
-    int32 Quantity;
-};
-
-struct PlayerChoiceResponseReward
-{
-    int32 TitleId;
-    int32 PackageId;
-    int32 SkillLineId;
-    uint32 SkillPointCount;
-    uint32 ArenaPointCount;
-    uint32 HonorPointCount;
-    uint64 Money;
-    uint32 Xp;
-    std::vector<PlayerChoiceResponseRewardItem> Items;
-    std::vector<PlayerChoiceResponseRewardEntry> Currency;
-    std::vector<PlayerChoiceResponseRewardEntry> Faction;
-};
-
-struct PlayerChoiceResponse
-{
-    int32 ResponseId;
-    int32 ChoiceArtFileId;
-    std::string Header;
-    std::string Answer;
-    std::string Description;
-    std::string Confirmation;
-    Optional<PlayerChoiceResponseReward> Reward;
-};
-
-struct PlayerChoice
-{
-    int32 ChoiceId = 0;
-    int32 UiTextureKitId = 0;
-    std::string Question;
-    std::vector<PlayerChoiceResponse> Responses;
-    bool HideWarboardHeader = false;
-
-    PlayerChoiceResponse const* GetResponse(int32 responseId) const
-    {
-        auto itr = std::ranges::find(Responses, responseId, &PlayerChoiceResponse::ResponseId);
-        return itr != Responses.end() ? &(*itr) : nullptr;
-    }
-};
 
 enum SkillRangeType
 {

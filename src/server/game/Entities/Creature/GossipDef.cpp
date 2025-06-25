@@ -144,7 +144,7 @@ void GossipMenu::AddMenuItem(GossipMenuItems const& menuItem, uint32 sender, uin
 
 GossipMenuItem const* GossipMenu::GetItem(uint32 menuItemId) const
 {
-    auto const itr = std::ranges::find(_menuItems, menuItemId, &GossipMenuItem::OptionID);
+    auto const itr = std::ranges::find(_menuItems, static_cast<int32>(menuItemId), &GossipMenuItem::OptionID);
     if (itr != _menuItems.end())
         return &*itr;
 
@@ -312,6 +312,16 @@ void QuestMenu::AddMenuItem(uint32 QuestId, uint8 Icon)
 bool QuestMenu::HasItem(uint32 questId) const
 {
     return advstd::ranges::contains(_questMenuItems, questId, &QuestMenuItem::QuestId);
+}
+
+bool PlayerChoiceData::HasResponseId(uint32 id) const
+{
+    return _responses.contains(id);
+}
+
+void PlayerChoiceData::AddResponse(uint32 id)
+{
+    _responses.emplace(id);
 }
 
 void QuestMenu::ClearMenu()

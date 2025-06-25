@@ -76,6 +76,8 @@ struct CreatureTemplate;
 struct CreatureData;
 struct ItemTemplate;
 struct MapEntry;
+struct PlayerChoice;
+struct PlayerChoiceResponse;
 struct Position;
 struct QuestObjective;
 struct SceneTemplate;
@@ -789,9 +791,6 @@ class TC_GAME_API PlayerScript : public ScriptObject
 
         // Called when a player completes a movie
         virtual void OnMovieComplete(Player* player, uint32 movieId);
-
-        // Called when a player choose a response from a PlayerChoice
-        virtual void OnPlayerChoiceResponse(Player* player, uint32 choiceId, uint32 responseId);
 };
 
 class TC_GAME_API AccountScript : public ScriptObject
@@ -989,6 +988,25 @@ class TC_GAME_API EventScript : public ScriptObject
 
         // Called when a game event is triggered
         virtual void OnTrigger(WorldObject* object, WorldObject* invoker, uint32 eventId);
+};
+
+class TC_GAME_API PlayerChoiceScript : public ScriptObject
+{
+    protected:
+
+        explicit PlayerChoiceScript(char const* name) noexcept;
+
+    public:
+
+        ~PlayerChoiceScript();
+
+        /**
+         * @param object           Source object of the PlayerChoice (can be nullptr)
+         * @param player           Player making the choice
+         * @param choice           Database template of PlayerChoice
+         * @param response         Database template of selected PlayerChoice response
+         */
+        virtual void OnResponse(WorldObject* object, Player* player, PlayerChoice const* choice, PlayerChoiceResponse const* response);
 };
 
 // Manages registration, loading, and execution of scripts.
@@ -1226,7 +1244,7 @@ class TC_GAME_API ScriptMgr
         void OnQuestStatusChange(Player* player, uint32 questId);
         void OnPlayerRepop(Player* player);
         void OnMovieComplete(Player* player, uint32 movieId);
-        void OnPlayerChoiceResponse(Player* player, uint32 choiceId, uint32 responseId);
+        void OnPlayerChoiceResponse(WorldObject *object, Player* player, PlayerChoice const* choice, PlayerChoiceResponse const* response);
 
     public: /* AccountScript */
 
