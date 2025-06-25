@@ -10977,10 +10977,10 @@ void ObjectMgr::LoadPlayerChoices()
     uint32 factionRewardCount = 0;
 
     {
-        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(UiTextureKitId)(Question)(InfiniteRange)(HideWarboardHeader)(MaxResponses)(ScriptName)) fields { .Result = *choices };
-
         do
         {
+            DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(UiTextureKitId)(Question)(InfiniteRange)(HideWarboardHeader)(MaxResponses)(ScriptName)) fields { *choices };
+
             int32 choiceId = fields.ChoiceId().GetInt32();
 
             PlayerChoice& choice = _playerChoices[choiceId];
@@ -10996,10 +10996,10 @@ void ObjectMgr::LoadPlayerChoices()
 
     if (QueryResult responses = WorldDatabase.Query("SELECT ChoiceId, ResponseId, ChoiceArtFileId, Header, Answer, Description, Confirmation FROM playerchoice_response ORDER BY `Index` ASC"))
     {
-        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(ChoiceArtFileId)(Header)(Answer)(Description)(Confirmation)) fields{ .Result = *responses };
-
         do
         {
+            DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(ChoiceArtFileId)(Header)(Answer)(Description)(Confirmation)) fields{ *responses };
+
             int32 choiceId      = fields.ChoiceId().GetInt32();
             int32 responseId    = fields.ResponseId().GetInt32();
 
@@ -11026,10 +11026,10 @@ void ObjectMgr::LoadPlayerChoices()
 
     if (QueryResult rewards = WorldDatabase.Query("SELECT ChoiceId, ResponseId, TitleId, PackageId, SkillLineId, SkillPointCount, ArenaPointCount, HonorPointCount, Money, Xp FROM playerchoice_response_reward"))
     {
-        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(TitleId)(PackageId)(SkillLineId)(SkillPointCount)(ArenaPointCount)(HonorPointCount)(Money)(Xp)) fields{ .Result = *rewards };
-
         do
         {
+            DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(TitleId)(PackageId)(SkillLineId)(SkillPointCount)(ArenaPointCount)(HonorPointCount)(Money)(Xp)) fields{ *rewards };
+
             int32 choiceId      = fields.ChoiceId().GetInt32();
             int32 responseId    = fields.ResponseId().GetInt32();
 
@@ -11086,10 +11086,10 @@ void ObjectMgr::LoadPlayerChoices()
 
     if (QueryResult rewards = WorldDatabase.Query("SELECT ChoiceId, ResponseId, ItemId, BonusListIDs, Quantity FROM playerchoice_response_reward_item ORDER BY `Index` ASC"))
     {
-        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(ItemId)(BonusListIDs)(Quantity)) fields{ .Result = *rewards };
-
         do
         {
+            DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(ItemId)(BonusListIDs)(Quantity)) fields{ *rewards };
+
             int32 choiceId = fields.ChoiceId().GetInt32();
             int32 responseId = fields.ResponseId().GetInt32();
             uint32 itemId = fields.ItemId().GetUInt32();
@@ -11136,10 +11136,10 @@ void ObjectMgr::LoadPlayerChoices()
 
     if (QueryResult rewards = WorldDatabase.Query("SELECT ChoiceId, ResponseId, CurrencyId, Quantity FROM playerchoice_response_reward_currency ORDER BY `Index` ASC"))
     {
-        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(CurrencyId)(Quantity)) fields { .Result = *rewards };
-
         do
         {
+            DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(CurrencyId)(Quantity)) fields { *rewards };
+
             int32 choiceId = fields.ChoiceId().GetInt32();
             int32 responseId = fields.ResponseId().GetInt32();
             uint32 currencyId = fields.CurrencyId().GetUInt32();
@@ -11182,10 +11182,10 @@ void ObjectMgr::LoadPlayerChoices()
 
     if (QueryResult rewards = WorldDatabase.Query("SELECT ChoiceId, ResponseId, FactionId, Quantity FROM playerchoice_response_reward_faction ORDER BY `Index` ASC"))
     {
-        DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(FactionId)(Quantity)) fields { .Result = *rewards };
-
         do
         {
+            DEFINE_FIELD_ACCESSOR_CACHE_ANONYMOUS(ResultSet, (ChoiceId)(ResponseId)(FactionId)(Quantity)) fields { *rewards };
+
             int32 choiceId = fields.ChoiceId().GetInt32();
             int32 responseId = fields.ResponseId().GetInt32();
             uint32 factionId = fields.FactionId().GetUInt32();

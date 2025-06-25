@@ -48,9 +48,9 @@
     (LogTitle)(LogDescription)(QuestDescription)(AreaDescription)(PortraitGiverText)(PortraitGiverName)\
     (PortraitTurnInText)(PortraitTurnInName)(QuestCompletionLog)
 
-DEFINE_FIELD_ACCESSOR_CACHE(Quest::QuestTemplateQueryResult, ResultSet, QUEST_TEMPLATE_FIELDS);
+DEFINE_FIELD_ACCESSOR_CACHE(Quest::, QuestTemplateQueryResult, ResultSet, QUEST_TEMPLATE_FIELDS);
 
-Quest::Quest(QueryResult const& questRecord) : Quest(QuestTemplateQueryResult{ .Result = *questRecord })
+Quest::Quest(QueryResult const& questRecord) : Quest(*questRecord)
 {
 }
 
