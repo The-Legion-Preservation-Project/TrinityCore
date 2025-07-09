@@ -68,7 +68,7 @@ uint32 GossipMenu::AddMenuItem(int32 menuItemId, GossipOptionNpc optionNpc, std:
         }
     }
 
-    auto where = std::ranges::lower_bound(_menuItems, uint32(menuItemId), std::ranges::less(), &GossipMenuItem::OptionID);
+    auto where = std::ranges::lower_bound(_menuItems, menuItemId, std::ranges::less(), &GossipMenuItem::OptionID);
 
     GossipMenuItem& menuItem = *_menuItems.emplace(where);
     menuItem.OptionID = menuItemId;

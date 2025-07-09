@@ -39,7 +39,7 @@ class playerchoice_a_weapon_you_can_hold_priest : public PlayerChoiceScript
 public:
     playerchoice_a_weapon_you_can_hold_priest() : PlayerChoiceScript("playerchoice_a_weapon_you_can_hold_priest") {}
 
-    void OnResponse(WorldObject* /*object*/, Player* player, PlayerChoice const* /*choice*/, PlayerChoiceResponse const* response, uint16 /*clientIdentifier*/)
+    void OnResponse(WorldObject* /*object*/, Player* player, PlayerChoice const* /*choice*/, PlayerChoiceResponse const* response) override
     {
         if (response->ResponseId == PLAYERCHOICE_RESPONSE_CHOOSE_HOLY_WEAPON)
             player->CastSpell(player, SPELL_FORCE_HOLY_SPEC, CastSpellExtraArgsInit{ .TriggerFlags = TRIGGERED_FULL_MASK });

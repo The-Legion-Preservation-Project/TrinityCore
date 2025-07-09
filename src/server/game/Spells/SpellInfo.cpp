@@ -582,18 +582,7 @@ int32 SpellEffectInfo::CalcBaseValue(WorldObject const* caster, Unit const* targ
                 if (_spellInfo->Scaling.ScalesFromItemLevel)
                     effectiveItemLevel = _spellInfo->Scaling.ScalesFromItemLevel;
 
-                /*
-                if (_spellInfo->Scaling.Class == -8)
-                {
-                    RandPropPointsEntry const* randPropPoints = sRandPropPointsStore.LookupEntry(effectiveItemLevel);
-                    if (!randPropPoints)
-                        randPropPoints = sRandPropPointsStore.AssertEntry(sRandPropPointsStore.GetNumRows() - 1);
-
-                    value = randPropPoints->DamageReplaceStat;
-                }
-                else
-                */
-                    value = GetRandomPropertyPoints(effectiveItemLevel, ITEM_QUALITY_RARE, INVTYPE_CHEST, 0);
+                value = GetRandomPropertyPoints(effectiveItemLevel, ITEM_QUALITY_RARE, INVTYPE_CHEST, 0);
             }
             else
                 value = GetSpellScalingColumnForClass(sSpellScalingGameTable.GetRow(level), _spellInfo->Scaling.Class);
