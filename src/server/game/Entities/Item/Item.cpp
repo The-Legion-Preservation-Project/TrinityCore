@@ -2467,7 +2467,10 @@ void Item::AddBonuses(uint32 bonusListID)
 void Item::SetBonuses(std::vector<uint32> const& bonusListIDs)
 {
     for (uint32 bonusListID : bonusListIDs)
+    {
+        AddDynamicValue(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS, bonusListID);
         _bonusData.AddBonusList(bonusListID);
+    }
 
     SetUInt32Value(ITEM_FIELD_APPEARANCE_MOD_ID, _bonusData.AppearanceModID);
 }
@@ -2475,13 +2478,17 @@ void Item::SetBonuses(std::vector<uint32> const& bonusListIDs)
 void Item::SetBonuses(std::vector<int32> const& bonusListIDs)
 {
     for (int32 bonusListID : bonusListIDs)
+    {
+        AddDynamicValue(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS, (uint32)bonusListID);
         _bonusData.AddBonusList(bonusListID);
+    }
 
     SetUInt32Value(ITEM_FIELD_APPEARANCE_MOD_ID, _bonusData.AppearanceModID);
 }
 
 void Item::ClearBonuses()
 {
+    ClearDynamicValue(ITEM_DYNAMIC_FIELD_BONUSLIST_IDS);
     _bonusData.Initialize(GetTemplate());
     SetUInt32Value(ITEM_FIELD_APPEARANCE_MOD_ID, _bonusData.AppearanceModID);
 }
