@@ -177,7 +177,7 @@ class playerchoice_weapons_of_legend_hunter : public PlayerChoiceScript
 public:
     playerchoice_weapons_of_legend_hunter() : PlayerChoiceScript("playerchoice_weapons_of_legend_hunter") {}
 
-    void OnResponse(WorldObject* /*object*/, Player* player, PlayerChoice const* /*choice*/, PlayerChoiceResponse const* response, uint16 /*clientIdentifier*/) override
+    void OnResponse(WorldObject* /*object*/, Player* player, PlayerChoice const* /*choice*/, PlayerChoiceResponse const* response) override
     {
         if (response->ResponseId == PLAYERCHOICE_RESPONSE_CHOOSE_BEAST_MASTERY_WEAPON)
             player->CastSpell(player, SPELL_FORCE_BEAST_MASTERY_SPEC, CastSpellExtraArgsInit{ .TriggerFlags = TRIGGERED_FULL_MASK });

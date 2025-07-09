@@ -28140,9 +28140,8 @@ void Player::SendPlayerChoice(ObjectGuid sender, int32 choiceId)
     LocaleConstant locale = GetSession()->GetSessionDbLocaleIndex();
     PlayerChoiceLocale const* playerChoiceLocale = locale != DEFAULT_LOCALE ? sObjectMgr->GetPlayerChoiceLocale(choiceId) : nullptr;
 
-    PlayerTalkClass->GetInteractionData().Reset();
-    PlayerTalkClass->GetInteractionData().SourceGuid = sender;
-    PlayerTalkClass->GetInteractionData().SetPlayerChoice(choiceId);
+    PlayerTalkClass->GetInteractionData().StartInteraction(sender, PlayerInteractionType::PlayerChoice);
+    PlayerTalkClass->GetInteractionData().GetPlayerChoice()->SetChoiceId(choiceId);
 
     WorldPackets::Quest::DisplayPlayerChoice displayPlayerChoice;
     displayPlayerChoice.SenderGUID = sender;

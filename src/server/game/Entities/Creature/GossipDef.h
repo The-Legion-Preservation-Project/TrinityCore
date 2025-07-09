@@ -27,6 +27,7 @@ class Object;
 class Quest;
 class WorldSession;
 struct GossipMenuItems;
+enum class PlayerInteractionType : int32;
 enum class QuestGiverStatus : uint32;
 
 #define GOSSIP_MAX_MENU_ITEMS               32
@@ -189,7 +190,7 @@ private:
     std::set<uint32> _responses;
 };
 
-class InteractionData
+class TC_GAME_API InteractionData
 {
     template <typename>
     struct TaggedId
@@ -204,20 +205,23 @@ class InteractionData
     using TrainerData = TaggedId<TrainerTag>;
 
 public:
-    void Reset()
-    {
-        SourceGuid.Clear();
-        IsLaunchedByQuest = false;
-        _data.emplace<std::monostate>();
-    }
+    InteractionData();
+    InteractionData(InteractionData const& other);
+    InteractionData(InteractionData&& other) noexcept;
+    InteractionData& operator=(InteractionData const& other);
+    InteractionData& operator=(InteractionData&& other) noexcept;
+    ~InteractionData();
+
+    void StartInteraction(ObjectGuid target, PlayerInteractionType type);
+    bool IsInteractingWith(ObjectGuid target, PlayerInteractionType type) const { return SourceGuid == target && Type == type; }
+    void Reset();
 
     ObjectGuid SourceGuid;
+    PlayerInteractionType Type = { };
 
-    Optional<uint32> GetTrainerId() const { return std::holds_alternative<TrainerData>(_data) ? std::get<TrainerData>(_data).Id : Optional<uint32>(); }
-    void SetTrainerId(uint32 trainerId) { _data.emplace<TrainerData>(trainerId); }
+    TrainerData* GetTrainer() { return std::holds_alternative<TrainerData>(_data) ? &std::get<TrainerData>(_data) : nullptr; }
 
     PlayerChoiceData* GetPlayerChoice() { return std::holds_alternative<PlayerChoiceData>(_data) ? &std::get<PlayerChoiceData>(_data) : nullptr; }
-    void SetPlayerChoice(uint32 choiceId) { _data.emplace<PlayerChoiceData>(choiceId); }
 
     void AddPlayerChoiceResponse(uint32 responseId)
     {
@@ -263,10 +267,10 @@ class TC_GAME_API PlayerMenu
         void SendQuestGiverQuestListMessage(Object* questgiver);
 
         void SendQuestQueryResponse(Quest const* quest) const;
-        void SendQuestGiverQuestDetails(Quest const* quest, ObjectGuid npcGUID, bool autoLaunched, bool displayPopup) const;
+        void SendQuestGiverQuestDetails(Quest const* quest, ObjectGuid npcGUID, bool autoLaunched, bool displayPopup);
 
-        void SendQuestGiverOfferReward(Quest const* quest, ObjectGuid npcGUID, bool autoLaunched) const;
-        void SendQuestGiverRequestItems(Quest const* quest, ObjectGuid npcGUID, bool canComplete, bool autoLaunched) const;
+        void SendQuestGiverOfferReward(Quest const* quest, ObjectGuid npcGUID, bool autoLaunched);
+        void SendQuestGiverRequestItems(Quest const* quest, ObjectGuid npcGUID, bool canComplete, bool autoLaunched);
 
     private:
         GossipMenu _gossipMenu;

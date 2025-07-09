@@ -1662,6 +1662,20 @@ enum class PlayerConditionLfgStatus : uint8
     GearDiff                = 8
 };
 
+enum class PlayerInteractionType : int32
+{
+    None                        = 0,
+
+    Gossip                      = 3,
+    QuestGiver                  = 4,
+
+    Trainer                     = 7,
+
+    MailInfo                    = 17,
+
+    PlayerChoice                = 37,
+};
+
 enum class PowerTypeFlags : int16
 {
     StopRegenWhileCasting         = 0x0001, // NYI
