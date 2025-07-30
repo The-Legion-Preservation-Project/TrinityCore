@@ -17,10 +17,10 @@
 
 #include "Opcodes.h"
 #include "Log.h"
+#include "Util.h"
 #include "WorldSession.h"
 #include "Packets/AllPackets.h"
-#include <iomanip>
-#include <sstream>
+#include <charconv>
 
 namespace
 {
@@ -875,7 +875,7 @@ void OpcodeTable::InitializeClientOpcodes()
 void OpcodeTable::InitializeServerOpcodes()
 {
 #define DEFINE_SERVER_OPCODE_HANDLER(opcode, status, con) \
-    static_assert(status == STATUS_NEVER || status == STATUS_UNHANDLED, "Invalid status for server opcode"); \
+    static_assert((status) == STATUS_NEVER || (status) == STATUS_UNHANDLED, "Invalid status for server opcode"); \
     ValidateAndSetServerOpcode(opcode, #opcode, status, con)
 
     DEFINE_SERVER_OPCODE_HANDLER(SMSG_ABORT_NEW_WORLD,                         STATUS_UNHANDLED,    CONNECTION_TYPE_REALM);
@@ -1863,8 +1863,8 @@ void OpcodeTable::InitializeServerOpcodes()
 #undef DEFINE_SERVER_OPCODE_HANDLER
 }
 
-template<std::size_t MIN_OPCODE, std::size_t MAX_OPCODE, typename T>
-static inline std::string GetOpcodeNameForLoggingImpl(T id)
+template<std::size_t MIN_OPCODE, std::size_t MAX_OPCODE, typename T, typename FormatContext>
+static inline typename FormatContext::iterator GetOpcodeNameForLoggingImpl(T id, FormatContext& ctx)
 {
     uint32 opcode = uint32(id);
     char const* name = nullptr;
@@ -1879,15 +1879,34 @@ static inline std::string GetOpcodeNameForLoggingImpl(T id)
     else
         name = "INVALID OPCODE";
 
-    return Trinity::StringFormat("[{0} 0x{1:04X} ({1})]", name, opcode);
+    std::array<char, 10> value;
+
+    std::ranges::copy_n("[", 1, ctx.out());
+    std::ranges::copy(name, CStringSentinel, ctx.out());
+    std::ranges::copy_n(" 0x", 3, ctx.out());
+    char const* hexEnd = std::to_chars(value.data(), value.data() + value.size(), opcode, 16).ptr;
+    if (std::ptrdiff_t written = std::ranges::distance(value.data(), hexEnd); written < 4)
+        std::ranges::fill_n(ctx.out(), 4 - written, '0');
+
+    std::ranges::transform(value.data(), hexEnd, ctx.out(), charToUpper);
+    std::ranges::copy_n(" (", 2, ctx.out());
+    std::ranges::copy(value.data(), std::to_chars(value.data(), value.data() + value.size(), opcode, 10).ptr, ctx.out());
+    std::ranges::copy_n(")]", 2, ctx.out());
+
+    return ctx.out();
 }
 
-std::string GetOpcodeNameForLogging(OpcodeClient opcode)
+template <typename FormatContext>
+typename FormatContext::iterator fmt::formatter<FormattedOpcodeName<OpcodeClient>>::format(FormattedOpcodeName<OpcodeClient> const& opcode, FormatContext& ctx) const
 {
-    return GetOpcodeNameForLoggingImpl<MIN_CMSG_OPCODE_NUMBER, MAX_CMSG_OPCODE_NUMBER>(opcode);
+    return ::GetOpcodeNameForLoggingImpl<MIN_CMSG_OPCODE_NUMBER, MAX_CMSG_OPCODE_NUMBER>(opcode.Opcode, ctx);
 }
 
-std::string GetOpcodeNameForLogging(OpcodeServer opcode)
+template <typename FormatContext>
+typename FormatContext::iterator fmt::formatter<FormattedOpcodeName<OpcodeServer>>::format(FormattedOpcodeName<OpcodeServer> const& opcode, FormatContext& ctx) const
 {
-    return GetOpcodeNameForLoggingImpl<MIN_SMSG_OPCODE_NUMBER, MAX_SMSG_OPCODE_NUMBER>(opcode);
+    return ::GetOpcodeNameForLoggingImpl<MIN_SMSG_OPCODE_NUMBER, MAX_SMSG_OPCODE_NUMBER>(opcode.Opcode, ctx);
 }
+
+template TC_GAME_API fmt::appender fmt::formatter<FormattedOpcodeName<OpcodeClient>>::format<fmt::format_context>(FormattedOpcodeName<OpcodeClient> const&, format_context&) const;
+template TC_GAME_API fmt::appender fmt::formatter<FormattedOpcodeName<OpcodeServer>>::format<fmt::format_context>(FormattedOpcodeName<OpcodeServer> const&, format_context&) const;
