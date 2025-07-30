@@ -993,7 +993,7 @@ void InstanceScript::ResetCombatResurrections()
 uint32 InstanceScript::GetCombatResurrectionChargeInterval() const
 {
     uint32 interval = 0;
-    if (uint32 playerCount = instance->GetPlayers().getSize())
+    if (uint32 playerCount = instance->GetPlayers().size())
         interval = 90 * MINUTE * IN_MILLISECONDS / playerCount;
 
     return interval;
