@@ -1748,8 +1748,8 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         uint32 GetInGameTime() const { return m_ingametime; }
         void SetInGameTime(uint32 time) { m_ingametime = time; }
 
-        void AddTimedQuest(uint32 questId) { m_timedquests.insert(questId); }
-        void RemoveTimedQuest(uint32 questId) { m_timedquests.erase(questId); }
+        void AddTimedQuest(uint32 questId);
+        void RemoveTimedQuest(uint32 questId);
 
         void SaveCUFProfile(uint8 id, std::nullptr_t) { _CUFProfiles[id] = nullptr; } ///> Empties a CUF profile at position 0-4
         void SaveCUFProfile(uint8 id, std::unique_ptr<CUFProfile> profile) { _CUFProfiles[id] = std::move(profile); } ///> Replaces a CUF profile at position 0-4
@@ -1834,7 +1834,7 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
 
         void RemoveMail(uint32 id);
 
-        void AddMail(Mail* mail) { m_mail.push_front(mail);}// for call from WorldSession::SendMailTo
+        void AddMail(Mail* mail); // for call from WorldSession::SendMailTo
         uint32 GetMailSize() const { return uint32(m_mail.size()); }
         Mail* GetMail(uint32 id);
 
@@ -2150,7 +2150,7 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         Loot* GetLootByWorldObjectGUID(ObjectGuid const& lootWorldObjectGuid) const;
         std::unordered_map<ObjectGuid, Loot*> const& GetAELootView() const { return m_AELootView; }
         LootRoll* GetLootRoll(ObjectGuid const& lootObjectGuid, uint8 lootListId);
-        void AddLootRoll(LootRoll* roll) { m_lootRolls.push_back(roll); }
+        void AddLootRoll(LootRoll* roll);
         void RemoveLootRoll(LootRoll* roll);
 
         void RemovedInsignia(Player* looterPlr);

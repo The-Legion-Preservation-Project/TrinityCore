@@ -718,6 +718,16 @@ void Unit::RemoveVisibleAura(AuraApplication* aurApp)
     UpdateAuraForGroup();
 }
 
+void Unit::SetVisibleAuraUpdate(AuraApplication* aurApp)
+{
+    m_visibleAurasToUpdate.insert(aurApp);
+}
+
+void Unit::RemoveVisibleAuraUpdate(AuraApplication* aurApp)
+{
+    m_visibleAurasToUpdate.erase(aurApp);
+}
+
 void Unit::UpdateInterruptMask()
 {
     m_interruptMask = SpellAuraInterruptFlags::None;
@@ -2915,6 +2925,33 @@ void Unit::_UpdateAutoRepeatSpell()
         Spell* spell = new Spell(this, autoRepeatSpellInfo, TRIGGERED_IGNORE_GCD);
         spell->prepare(m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_targets);
     }
+}
+
+void Unit::AddChannelObject(ObjectGuid guid)
+{
+    AddDynamicStructuredValue(UNIT_DYNAMIC_FIELD_CHANNEL_OBJECTS, &guid);
+}
+
+void Unit::SetChannelObject(uint32 slot, ObjectGuid guid)
+{
+    SetDynamicStructuredValue(UNIT_DYNAMIC_FIELD_CHANNEL_OBJECTS, slot, &guid);
+}
+
+void Unit::RemoveChannelObject(ObjectGuid guid)
+{
+    auto objects = GetChannelObjects();
+    if (std::find(objects.begin(), objects.end(), guid) != objects.end())
+    {
+        ClearChannelObjects();
+        for (auto object : objects)
+            if (object != guid)
+                AddChannelObject(object);
+    }
+}
+
+void Unit::ClearChannelObjects()
+{
+    ClearDynamicValue(UNIT_DYNAMIC_FIELD_CHANNEL_OBJECTS);
 }
 
 void Unit::SetCurrentCastSpell(Spell* pSpell)
@@ -8663,6 +8700,16 @@ void Unit::SetSpeedRate(UnitMoveType mtype, float rate)
     }
 }
 
+void Unit::FollowerAdded(AbstractFollower* f)
+{
+    m_followingMe.insert(f);
+}
+
+void Unit::FollowerRemoved(AbstractFollower* f)
+{
+    m_followingMe.erase(f);
+}
+
 void Unit::RemoveAllFollowers()
 {
     while (!m_followingMe.empty())
@@ -14409,6 +14456,21 @@ float Unit::GetCollisionHeight() const
 
     float const collisionHeight = scaleMod * modelData->CollisionHeight * modelData->ModelScale * displayInfo->CreatureModelScale;
     return collisionHeight == 0.0f ? DEFAULT_COLLISION_HEIGHT : collisionHeight;
+}
+
+void Unit::AddWorldEffect(int32 worldEffectId)
+{
+    AddDynamicValue(UNIT_FIELD_STATE_WORLD_EFFECT_ID, worldEffectId);
+}
+
+void Unit::RemoveWorldEffect(int32 worldEffectId)
+{
+    RemoveDynamicValue(UNIT_FIELD_STATE_WORLD_EFFECT_ID, worldEffectId);
+}
+
+void Unit::ClearWorldEffects()
+{
+    ClearDynamicValue(UNIT_FIELD_STATE_WORLD_EFFECT_ID);
 }
 
 void Unit::SetVignette(uint32 vignetteId)
