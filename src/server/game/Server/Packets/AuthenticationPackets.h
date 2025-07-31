@@ -24,6 +24,7 @@
 #include "PacketUtilities.h"
 #include "Util.h"
 #include <array>
+#include <unordered_map>
 
 struct CharacterTemplate;
 
