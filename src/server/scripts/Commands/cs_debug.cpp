@@ -1168,12 +1168,10 @@ public:
         }
         else
         {
-            /// @fixme: port master's HandleDebugMoveflagsCommand; flags need different handling
+            target->SetUnitMovementFlags(*moveFlags);
 
             if (moveFlagsExtra)
-            {
                 target->SetExtraUnitMovementFlags(*moveFlagsExtra);
-            }
 
             if (target->GetTypeId() != TYPEID_PLAYER)
                 target->DestroyForNearbyPlayers();  // Force new SMSG_UPDATE_OBJECT:CreateObject
