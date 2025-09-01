@@ -19,6 +19,7 @@
 void AddCustomLfgScripts();
 
 // spells
+void AddCustomDemonHunterSpellScripts();
 void AddCustomMageSpellScripts();
 void AddCustomShamanSpellScripts();
 void AddCustomWarriorSpellScripts();
@@ -27,6 +28,7 @@ void AddTheLegionPreservationProjectScripts()
 {
     AddCustomLfgScripts();
 
+    AddCustomDemonHunterSpellScripts();
     AddCustomMageSpellScripts();
     AddCustomShamanSpellScripts();
     AddCustomWarriorSpellScripts();

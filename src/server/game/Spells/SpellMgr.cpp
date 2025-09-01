@@ -4888,6 +4888,15 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->AttributesEx4 |= SPELL_ATTR4_AURA_IS_BUFF;
     });
 
+    // Fel Rush Air
+    ApplySpellFix({ 197923 }, [](SpellInfo* spellInfo)
+    {
+        ApplySpellEffectFix(spellInfo, EFFECT_6, [](SpellEffectInfo* spellEffectInfo)
+        {
+            spellEffectInfo->Effect = SPELL_EFFECT_NONE;
+        });
+    });
+
     // Sigil of Flame
     ApplySpellFix({ 204598 }, [](SpellInfo* spellInfo)
     {
