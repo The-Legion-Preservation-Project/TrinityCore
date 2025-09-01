@@ -46,7 +46,6 @@
 #include "SpellAuraEffects.h"
 #include "SpellMgr.h"
 #include "SpellPackets.h"
-#include "StringConvert.h"
 #include "TemporarySummon.h"
 #include "Totem.h"
 #include "Transport.h"
@@ -450,14 +449,17 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
     }
 
     if (flags.CombatVictim)
-        *data << ToUnit()->GetVictim()->GetGUID();                      // CombatVictim
+    {
+        Unit const* unit = static_cast<Unit const*>(this);
+        *data << unit->GetVictim()->GetGUID();                      // CombatVictim
+    }
 
     if (flags.ServerTime)
         *data << uint32(GameTime::GetGameTimeMS());
 
     if (flags.Vehicle)
     {
-        Unit const* unit = ToUnit();
+        Unit const* unit = static_cast<Unit const*>(this);
         *data << uint32(unit->GetVehicleKit()->GetVehicleInfo()->ID);   // RecID
         *data << float(unit->GetOrientation());                         // InitialRawFacing
     }
@@ -471,7 +473,10 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
     }
 
     if (flags.Rotation)
-        *data << uint64(ToGameObject()->GetPackedLocalRotation());      // Rotation
+    {
+        GameObject const* gameObject = static_cast<GameObject const*>(this);
+        *data << uint64(gameObject->GetPackedLocalRotation());      // Rotation
+    }
 
     if (PauseTimes && !PauseTimes->empty())
         data->append(PauseTimes->data(), PauseTimes->size());
@@ -613,7 +618,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         bool bit8 = false;
         uint32 Int1 = 0;
 
-        GameObject const* gameObject = ToGameObject();
+        GameObject const* gameObject = static_cast<GameObject const*>(this);
 
         *data << uint32(gameObject->GetWorldEffectID());
 
@@ -748,10 +753,10 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
 
     if (flags.ActivePlayer)
     {
-        Player const* player = ToPlayer();
+        Player const* player = static_cast<Player const*>(this);
 
         bool HasSceneInstanceIDs = !player->GetSceneMgr().GetSceneTemplateByInstanceMap().empty();
-        bool HasRuneState = ToUnit()->GetPowerIndex(POWER_RUNES) != MAX_POWERS;
+        bool HasRuneState = player->GetPowerIndex(POWER_RUNES) != MAX_POWERS;
 
         data->WriteBit(HasSceneInstanceIDs);
         data->WriteBit(HasRuneState);
@@ -759,8 +764,8 @@ void Object::BuildMovementUpdate(ByteBuffer* data, CreateObjectBits flags, Playe
         if (HasSceneInstanceIDs)
         {
             *data << uint32(player->GetSceneMgr().GetSceneTemplateByInstanceMap().size());
-            for (auto const& itr : player->GetSceneMgr().GetSceneTemplateByInstanceMap())
-                *data << uint32(itr.first);
+            for (auto const& [sceneInstanceId, _] : player->GetSceneMgr().GetSceneTemplateByInstanceMap())
+                *data << uint32(sceneInstanceId);
         }
         if (HasRuneState)
         {

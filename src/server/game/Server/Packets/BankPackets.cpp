@@ -18,45 +18,48 @@
 #include "BankPackets.h"
 #include "PacketOperators.h"
 
-void WorldPackets::Bank::AutoBankItem::Read()
+namespace WorldPackets::Bank
 {
-    _worldPacket >> Inv
-                 >> Bag
-                 >> Slot;
+void AutoBankItem::Read()
+{
+    _worldPacket >> Inv;
+    _worldPacket >> Bag;
+    _worldPacket >> Slot;
 }
 
-void WorldPackets::Bank::AutoStoreBankItem::Read()
+void AutoStoreBankItem::Read()
 {
-    _worldPacket >> Inv
-                 >> Bag
-                 >> Slot;
+    _worldPacket >> Inv;
+    _worldPacket >> Bag;
+    _worldPacket >> Slot;
 }
 
-void WorldPackets::Bank::BuyBankSlot::Read()
+void BuyBankSlot::Read()
 {
     _worldPacket >> Guid;
 }
 
-void WorldPackets::Bank::AutoBankReagent::Read()
+void AutoBankReagent::Read()
 {
     _worldPacket >> Inv;
     _worldPacket >> PackSlot;
     _worldPacket >> Slot;
 }
 
-void WorldPackets::Bank::AutoStoreBankReagent::Read()
+void AutoStoreBankReagent::Read()
 {
     _worldPacket >> Inv;
     _worldPacket >> Slot;
     _worldPacket >> PackSlot;
 }
 
-void WorldPackets::Bank::ReagentBank::Read()
+void ReagentBank::Read()
 {
     _worldPacket >> Banker;
 }
 
-void WorldPackets::Bank::BankerActivate::Read()
+void BankerActivate::Read()
 {
     _worldPacket >> Banker;
+}
 }

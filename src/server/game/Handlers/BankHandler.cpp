@@ -29,7 +29,7 @@ void WorldSession::HandleAutoBankItemOpcode(WorldPackets::Bank::AutoBankItem& pa
 
     if (!CanUseBank())
     {
-        TC_LOG_ERROR("network", "WORLD: HandleAutoBankItemOpcode - Unit ({}) not found or you can't interact with him.", m_currentBankerGUID.ToString());
+        TC_LOG_ERROR("network", "WORLD: HandleAutoBankItemOpcode - Unit ({}) not found or you can't interact with him.", m_currentBankerGUID);
         return;
     }
 
@@ -80,7 +80,7 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPackets::Bank::AutoStoreBa
 
     if (!CanUseBank())
     {
-        TC_LOG_ERROR("network", "WORLD: HandleAutoStoreBankItemOpcode - Unit ({}) not found or you can't interact with him.", m_currentBankerGUID.ToString());
+        TC_LOG_ERROR("network", "WORLD: HandleAutoStoreBankItemOpcode - Unit ({}) not found or you can't interact with him.", m_currentBankerGUID);
         return;
     }
 
@@ -118,11 +118,11 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPackets::Bank::AutoStoreBa
     }
 }
 
-void WorldSession::HandleBuyBankSlotOpcode(WorldPackets::Bank::BuyBankSlot& packet)
+void WorldSession::HandleBuyBankSlotOpcode(WorldPackets::Bank::BuyBankSlot& buyBankSlot)
 {
-    if (!CanUseBank(packet.Guid))
+    if (!CanUseBank(buyBankSlot.Guid))
     {
-        TC_LOG_ERROR("network", "WORLD: HandleBuyBankSlotOpcode - {} not found or you can't interact with him.", packet.Guid.ToString());
+        TC_LOG_ERROR("network", "WORLD: HandleBuyBankSlotOpcode - {} not found or you can't interact with him.", buyBankSlot.Guid);
         return;
     }
 
@@ -152,7 +152,7 @@ void WorldSession::HandleBuyReagentBankOpcode(WorldPackets::Bank::ReagentBank& r
 {
     if (!CanUseBank(reagentBank.Banker))
     {
-        TC_LOG_DEBUG("network", "WORLD: HandleBuyReagentBankOpcode - {} not found or you can't interact with him.", reagentBank.Banker.ToString());
+        TC_LOG_DEBUG("network", "WORLD: HandleBuyReagentBankOpcode - {} not found or you can't interact with him.", reagentBank.Banker);
         return;
     }
 
@@ -178,7 +178,7 @@ void WorldSession::HandleReagentBankDepositOpcode(WorldPackets::Bank::ReagentBan
 {
     if (!CanUseBank(reagentBank.Banker))
     {
-        TC_LOG_DEBUG("network", "WORLD: HandleReagentBankDepositOpcode - {} not found or you can't interact with him.", reagentBank.Banker.ToString());
+        TC_LOG_DEBUG("network", "WORLD: HandleReagentBankDepositOpcode - {} not found or you can't interact with him.", reagentBank.Banker);
         return;
     }
 
@@ -218,7 +218,7 @@ void WorldSession::HandleAutoBankReagentOpcode(WorldPackets::Bank::AutoBankReage
 {
     if (!CanUseBank())
     {
-        TC_LOG_DEBUG("network", "WORLD: HandleAutoBankReagentOpcode - {} not found or you can't interact with him.", m_currentBankerGUID.ToString());
+        TC_LOG_DEBUG("network", "WORLD: HandleAutoBankReagentOpcode - {} not found or you can't interact with him.", m_currentBankerGUID);
         return;
     }
 
@@ -254,7 +254,7 @@ void WorldSession::HandleAutoStoreBankReagentOpcode(WorldPackets::Bank::AutoStor
 {
     if (!CanUseBank())
     {
-        TC_LOG_DEBUG("network", "WORLD: HandleAutoBankReagentOpcode - {} not found or you can't interact with him.", m_currentBankerGUID.ToString());
+        TC_LOG_DEBUG("network", "WORLD: HandleAutoBankReagentOpcode - {} not found or you can't interact with him.", m_currentBankerGUID);
         return;
     }
 

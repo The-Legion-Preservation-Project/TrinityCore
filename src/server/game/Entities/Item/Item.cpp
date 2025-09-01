@@ -112,9 +112,6 @@ void AddItemsSetItem(Player* player, Item* item)
             if (itemSetSpell->Threshold > eff->EquippedItemCount)
                 continue;
 
-            if (eff->SetBonuses.count(itemSetSpell))
-                continue;
-
             SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itemSetSpell->SpellID, DIFFICULTY_NONE);
             if (!spellInfo)
             {
@@ -122,10 +119,14 @@ void AddItemsSetItem(Player* player, Item* item)
                 continue;
             }
 
-            eff->SetBonuses.insert(itemSetSpell);
+            if (!eff->SetBonuses.insert(itemSetSpell).second)
+                continue;
+
             // spell cast only if fit form requirement, in other case will cast at form change
-            if (!itemSetSpell->ChrSpecID || ChrSpecialization(itemSetSpell->ChrSpecID) == player->GetPrimarySpecialization())
-                player->ApplyEquipSpell(spellInfo, nullptr, true);
+            if (itemSetSpell->ChrSpecID || ChrSpecialization(itemSetSpell->ChrSpecID) == player->GetPrimarySpecialization())
+                continue;
+
+            player->ApplyEquipSpell(spellInfo, nullptr, true);
         }
     }
 }
@@ -167,11 +168,10 @@ void RemoveItemsSetItem(Player* player, ItemTemplate const* proto)
             if (itemSetSpell->Threshold <= eff->EquippedItemCount)
                 continue;
 
-            if (!eff->SetBonuses.count(itemSetSpell))
+            if (!eff->SetBonuses.erase(itemSetSpell))
                 continue;
 
             player->ApplyEquipSpell(sSpellMgr->AssertSpellInfo(itemSetSpell->SpellID, DIFFICULTY_NONE), nullptr, false);
-            eff->SetBonuses.erase(itemSetSpell);
         }
     }
 
