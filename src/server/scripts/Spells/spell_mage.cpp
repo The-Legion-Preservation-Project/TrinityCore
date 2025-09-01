@@ -68,6 +68,7 @@ enum MageSpells
     SPELL_MAGE_FLAME_PATCH_DAMAGE                = 205472,
     SPELL_MAGE_FLAME_PATCH_TALENT                = 205037,
     SPELL_MAGE_FLURRY_DAMAGE                     = 228596,
+    SPELL_MAGE_FRENETIC_SPEED                    = 236060,
     SPELL_MAGE_FROST_NOVA                        = 122,
     SPELL_MAGE_GIRAFFE_FORM                      = 32816,
     SPELL_MAGE_ICE_BARRIER                       = 11426,
@@ -1498,6 +1499,37 @@ class spell_mage_ring_of_frost_freeze_AuraScript : public AuraScript
     }
 };
 
+// 2948 - Scorch
+class spell_mage_scorch : public SpellScript
+{
+    bool Validate(SpellInfo const* /*spellInfo*/) override
+    {
+        return ValidateSpellInfo({ SPELL_MAGE_FRENETIC_SPEED });
+    }
+
+    void CalcCritChance(Unit const* victim, float& critChance)
+    {
+        if (victim->GetHealthPct() < GetEffectInfo(EFFECT_1).CalcValue(GetCaster()))
+            critChance = 100.0f;
+    }
+
+    void HandleFreneticSpeed(SpellEffIndex /*effIndex*/)
+    {
+        Unit* caster = GetCaster();
+        if (GetHitUnit()->GetHealthPct() < GetEffectInfo(EFFECT_1).CalcValue(GetCaster()))
+            caster->CastSpell(caster, SPELL_MAGE_FRENETIC_SPEED, CastSpellExtraArgsInit{
+                .TriggerFlags = TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR,
+                .TriggeringSpell = GetSpell()
+            });
+    }
+
+    void Register() override
+    {
+        OnCalcCritChance += SpellOnCalcCritChanceFn(spell_mage_scorch::CalcCritChance);
+        OnEffectHitTarget += SpellEffectFn(spell_mage_scorch::HandleFreneticSpeed, EFFECT_0, SPELL_EFFECT_SCHOOL_DAMAGE);
+    }
+};
+
 // 157980 - Supernova
 class spell_mage_supernova : public SpellScript
 {
@@ -1652,6 +1684,7 @@ void AddSC_mage_spell_scripts()
     RegisterSpellAndAuraScriptPair(spell_mage_ray_of_frost, spell_mage_ray_of_frost_aura);
     RegisterSpellScript(spell_mage_ring_of_frost);
     RegisterSpellAndAuraScriptPair(spell_mage_ring_of_frost_freeze, spell_mage_ring_of_frost_freeze_AuraScript);
+    RegisterSpellScript(spell_mage_scorch);
     RegisterSpellScript(spell_mage_supernova);
     RegisterSpellScript(spell_mage_tempest_barrier);
     RegisterSpellScript(spell_mage_touch_of_the_magi_aura);
