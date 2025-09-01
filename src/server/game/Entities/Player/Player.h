@@ -2785,7 +2785,7 @@ class TC_GAME_API Player final : public Unit, public GridObject<Player>
         void RemovePlayerFlagEx(PlayerFlagsEx flags) { RemoveFlag(PLAYER_FLAGS_EX, flags); }
         void ReplaceAllPlayerFlagsEx(PlayerFlagsEx flags) { SetUInt32Value(PLAYER_FLAGS_EX, flags); }
 
-        void SetAverageItemLevel(float newItemLevel, AvgItemLevelCategory category) { SetUInt32Value(PLAYER_FIELD_AVG_ITEM_LEVEL + uint32(category), newItemLevel); }
+        void SetAverageItemLevel(float newItemLevel, AvgItemLevelCategory category) { SetFloatValue(PLAYER_FIELD_AVG_ITEM_LEVEL + uint32(category), newItemLevel); }
 
         void SetSkinId(uint8 skinId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_SKIN_ID, skinId); }
         void SetFaceId(uint8 faceId) { SetByteValue(PLAYER_BYTES, PLAYER_BYTES_OFFSET_FACE_ID, faceId); }
