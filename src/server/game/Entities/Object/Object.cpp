@@ -46,6 +46,7 @@
 #include "SpellAuraEffects.h"
 #include "SpellMgr.h"
 #include "SpellPackets.h"
+#include "StringConvert.h"
 #include "TemporarySummon.h"
 #include "Totem.h"
 #include "Transport.h"
