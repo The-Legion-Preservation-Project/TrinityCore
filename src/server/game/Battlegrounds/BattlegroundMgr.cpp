@@ -456,20 +456,21 @@ void BattlegroundMgr::SendBattlegroundList(Player* player, ObjectGuid const& gui
     player->SendDirectMessage(battlefieldList.Write());
 }
 
-void BattlegroundMgr::SendToBattleground(Player* player, uint32 instanceId, BattlegroundTypeId bgTypeId)
+/*static*/ void BattlegroundMgr::SendToBattleground(Player* player, Battleground const* battleground)
 {
-    if (Battleground* bg = GetBattleground(instanceId, bgTypeId))
+    if (!battleground)
     {
-        uint32 mapid = bg->GetMapId();
-        Team team = player->GetBGTeam();
-
-        WorldSafeLocsEntry const* pos = bg->GetTeamStartPosition(Battleground::GetTeamIndexByTeamId(team));
-        WorldLocation compatPos(mapid, pos->Loc.X, pos->Loc.Y, pos->Loc.Z, pos->Facing);
-        TC_LOG_DEBUG("bg.battleground", "BattlegroundMgr::SendToBattleground: Sending {} to map {}, {} (bgType {})", player->GetName(), mapid, compatPos.ToString(), bgTypeId);
-        player->TeleportTo(compatPos);
+        TC_LOG_ERROR("bg.battleground", "BattlegroundMgr::SendToBattleground: Battleground not found while trying to teleport player {}", player->GetName());
+        return;
     }
-    else
-        TC_LOG_ERROR("bg.battleground", "BattlegroundMgr::SendToBattleground: Instance {} (bgType {}) not found while trying to teleport player {}", instanceId, bgTypeId, player->GetName());
+
+    uint32 mapid = battleground->GetMapId();
+    Team team = player->GetBGTeam();
+
+    WorldSafeLocsEntry const* pos = battleground->GetTeamStartPosition(Battleground::GetTeamIndexByTeamId(team));
+    WorldLocation compatPos(mapid, pos->Loc.X, pos->Loc.Y, pos->Loc.Z, pos->Facing);
+    TC_LOG_DEBUG("bg.battleground", "BattlegroundMgr::SendToBattleground: Sending {} to map {}, {} (bgType {})", player->GetName(), mapid, compatPos.ToString(), battleground->GetTypeID());
+    player->TeleportTo(compatPos);
 }
 
 bool BattlegroundMgr::IsArenaType(BattlegroundTypeId bgTypeId)
