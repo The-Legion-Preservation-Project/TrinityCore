@@ -225,7 +225,7 @@ class spell_sha_aftershock : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_AFTERSHOCK_ENERGIZE });
     }
 
-    static bool CheckProc(AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
+    static bool CheckProc(AuraScript const&, AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
     {
         if (Spell const* procSpell = eventInfo.GetProcSpell())
             if (Optional<int32> cost = procSpell->GetPowerTypeCostAmount(POWER_MAELSTROM))
@@ -234,7 +234,7 @@ class spell_sha_aftershock : public AuraScript
         return false;
     }
 
-    static void HandleEffectProc(AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
+    static void HandleEffectProc(AuraScript const&, AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
     {
         Spell const* procSpell = eventInfo.GetProcSpell();
         eventInfo.GetActor()->CastSpell(eventInfo.GetActor(), SPELL_SHAMAN_AFTERSHOCK_ENERGIZE, CastSpellExtraArgsInit{
@@ -260,7 +260,7 @@ class spell_sha_ancestral_guidance : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_ANCESTRAL_GUIDANCE_HEAL });
     }
 
-    static bool CheckProc(ProcEventInfo const& eventInfo)
+    static bool CheckProc(AuraScript const&, ProcEventInfo const& eventInfo)
     {
         if (eventInfo.GetSpellInfo() && eventInfo.GetSpellInfo()->Id == SPELL_SHAMAN_ANCESTRAL_GUIDANCE_HEAL)
             return false;
@@ -300,7 +300,7 @@ class spell_sha_ancestral_guidance_heal : public SpellScript
         return ValidateSpellInfo({ SPELL_SHAMAN_ANCESTRAL_GUIDANCE });
     }
 
-    static void ResizeTargets(std::list<WorldObject*>& targets)
+    static void ResizeTargets(SpellScript const&, std::list<WorldObject*>& targets)
     {
         Trinity::SelectRandomInjuredTargets(targets, 3, true);
     }
@@ -319,7 +319,7 @@ class spell_sha_arctic_snowstorm : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_ARCTIC_SNOWSTORM_AREATRIGGER });
     }
 
-    static void HandleEffectProc(AuraEffect const* /*aurEff*/, ProcEventInfo const& eventInfo)
+    static void HandleEffectProc(AuraScript const&, AuraEffect const* /*aurEff*/, ProcEventInfo const& eventInfo)
     {
         eventInfo.GetActor()->CastSpell(eventInfo.GetActionTarget(), SPELL_SHAMAN_ARCTIC_SNOWSTORM_AREATRIGGER,
             CastSpellExtraArgsInit{ .TriggerFlags = TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR });
@@ -370,7 +370,7 @@ class spell_sha_ascendance_restoration : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_RESTORATIVE_MISTS });
     }
 
-    static bool CheckProc(ProcEventInfo const& procInfo)
+    static bool CheckProc(AuraScript const&, ProcEventInfo const& procInfo)
     {
         return procInfo.GetHealInfo() && procInfo.GetHealInfo()->GetOriginalHeal() && procInfo.GetSpellInfo()->Id != SPELL_SHAMAN_RESTORATIVE_MISTS_INITIAL;
     }
@@ -724,7 +724,7 @@ class spell_sha_downpour : public SpellScript
         return ValidateSpellEffect({ { spellInfo->Id, EFFECT_1 } });
     }
 
-    static void FilterTargets(std::list<WorldObject*>& targets)
+    static void FilterTargets(SpellScript const&, std::list<WorldObject*>& targets)
     {
         Trinity::SelectRandomInjuredTargets(targets, 6, true);
     }
@@ -816,7 +816,7 @@ class spell_sha_earthen_rage_passive : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_EARTHEN_RAGE_PERIODIC, SPELL_SHAMAN_EARTHEN_RAGE_DAMAGE });
     }
 
-    static bool CheckProc(ProcEventInfo const& procInfo)
+    static bool CheckProc(AuraScript const&, ProcEventInfo const& procInfo)
     {
         return procInfo.GetSpellInfo() && procInfo.GetSpellInfo()->Id != SPELL_SHAMAN_EARTHEN_RAGE_DAMAGE;
     }
@@ -1315,7 +1315,7 @@ class spell_sha_healing_rain : public SpellScript
 // 73921 - Healing Rain
 class spell_sha_healing_rain_target_limit : public SpellScript
 {
-    static void SelectTargets(std::list<WorldObject*>& targets)
+    static void SelectTargets(SpellScript const&, std::list<WorldObject*>& targets)
     {
         Trinity::SelectRandomInjuredTargets(targets, 6, true);
     }
@@ -1329,7 +1329,7 @@ class spell_sha_healing_rain_target_limit : public SpellScript
 // 52042 - Healing Stream Totem
 class spell_sha_healing_stream_totem_heal : public SpellScript
 {
-    static void SelectTargets(std::list<WorldObject*>& targets)
+    static void SelectTargets(SpellScript const&, std::list<WorldObject*>& targets)
     {
         Trinity::SelectRandomInjuredTargets(targets, 1, true);
     }
@@ -1343,7 +1343,7 @@ class spell_sha_healing_stream_totem_heal : public SpellScript
 // 201900 - Hot Hand
 class spell_sha_hot_hand : public AuraScript
 {
-    static bool CheckProc(AuraEffect const* /*aurEff*/, ProcEventInfo const& eventInfo)
+    static bool CheckProc(AuraScript const&, AuraEffect const* /*aurEff*/, ProcEventInfo const& eventInfo)
     {
         return eventInfo.GetActor()->HasAura(SPELL_SHAMAN_FLAMETONGUE_WEAPON_AURA);
     }
@@ -1474,7 +1474,7 @@ class spell_sha_item_mana_surge : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_ITEM_MANA_SURGE });
     }
 
-    static bool CheckProc(ProcEventInfo const& eventInfo)
+    static bool CheckProc(AuraScript const&, ProcEventInfo const& eventInfo)
     {
         return eventInfo.GetProcSpell() != nullptr;
     }
@@ -1809,7 +1809,7 @@ class spell_sha_liquid_magma_totem : public SpellScript
             GetCaster()->CastSpell(hitUnit, SPELL_SHAMAN_LIQUID_MAGMA_HIT, CastSpellExtraArgsInit{ .TriggerFlags = TRIGGERED_FULL_MASK });
     }
 
-    static void HandleTargetSelect(std::list<WorldObject*>& targets)
+    static void HandleTargetSelect(SpellScript const&, std::list<WorldObject*>& targets)
     {
         // choose one random target from targets
         if (targets.size() > 1)
@@ -2018,7 +2018,7 @@ class spell_sha_mastery_elemental_overload : public AuraScript
         });
     }
 
-    static bool CheckProc(AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
+    static bool CheckProc(AuraScript const&, AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
     {
         SpellInfo const* spellInfo = eventInfo.GetSpellInfo();
         if (!spellInfo || !eventInfo.GetProcSpell())
@@ -2177,7 +2177,7 @@ class spell_sha_molten_thunder_sundering : public SpellScript
         return GetCaster()->HasAura(SPELL_SHAMAN_MOLTEN_THUNDER_TALENT);
     }
 
-    static void RemoveIncapacitateEffect(std::list<WorldObject*>& targets)
+    static void RemoveIncapacitateEffect(SpellScript const&, std::list<WorldObject*>& targets)
     {
         targets.clear();
     }
@@ -2230,13 +2230,13 @@ class spell_sha_natures_guardian : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_NATURES_GUARDIAN_COOLDOWN });
     }
 
-    static bool CheckProc(AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
+    static bool CheckProc(AuraScript const&, AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
     {
         return eventInfo.GetActionTarget()->HealthBelowPct(aurEff->GetAmount())
             && !eventInfo.GetActionTarget()->HasAura(SPELL_SHAMAN_NATURES_GUARDIAN_COOLDOWN);
     }
 
-    static void StartCooldown(AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
+    static void StartCooldown(AuraScript const&, AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
     {
         Unit* shaman = eventInfo.GetActionTarget();
         shaman->CastSpell(shaman, SPELL_SHAMAN_NATURES_GUARDIAN_COOLDOWN, CastSpellExtraArgsInit{
@@ -2592,7 +2592,7 @@ class spell_sha_stormsurge : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_STORMSURGE_PROC });
     }
 
-    static void HandleProc(AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
+    static void HandleProc(AuraScript const&, AuraEffect const* aurEff, ProcEventInfo const& eventInfo)
     {
         eventInfo.GetActor()->CastSpell(eventInfo.GetActor(), SPELL_SHAMAN_STORMSURGE_PROC, CastSpellExtraArgsInit{
             .TriggerFlags = TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR,
@@ -2619,7 +2619,7 @@ class spell_sha_stormweaver : public SpellScript
         return GetCaster()->HasAura(SPELL_SHAMAN_STORMWEAVER_PVP_TALENT);
     }
 
-    static void PreventAffectingHealingSpells(WorldObject*& target)
+    static void PreventAffectingHealingSpells(SpellScript const&, WorldObject*& target)
     {
         target = nullptr;
     }
@@ -3014,7 +3014,7 @@ class spell_sha_unlimited_power : public AuraScript
         return ValidateSpellInfo({ SPELL_SHAMAN_UNLIMITED_POWER_BUFF });
     }
 
-    static void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo const& procInfo)
+    static void HandleProc(AuraScript const&, AuraEffect const* /*aurEff*/, ProcEventInfo const& procInfo)
     {
         Unit* caster = procInfo.GetActor();
         if (Aura* aura = caster->GetAura(SPELL_SHAMAN_UNLIMITED_POWER_BUFF))
@@ -3143,7 +3143,7 @@ class spell_sha_voltaic_blaze : public SpellScript
 // 470058 - Voltaic Blaze
 class spell_sha_voltaic_blaze_aura : public AuraScript
 {
-    static bool CheckProc(ProcEventInfo const& eventInfo)
+    static bool CheckProc(AuraScript const&, ProcEventInfo const& eventInfo)
     {
         // 470057 - Voltaic Blaze does not have any unique SpellFamilyFlags, check by id
         return eventInfo.GetSpellInfo()->Id == SPELL_SHAMAN_VOLTAIC_BLAZE_DAMAGE;
@@ -3158,12 +3158,12 @@ class spell_sha_voltaic_blaze_aura : public AuraScript
 // 470053 - Voltaic Blaze
 class spell_sha_voltaic_blaze_talent : public AuraScript
 {
-    static bool CheckProc(AuraEffect const* aurEff, ProcEventInfo const& /*eventInfo*/)
+    static bool CheckProc(AuraScript const&, AuraEffect const* aurEff, ProcEventInfo const& /*eventInfo*/)
     {
         return roll_chance_i(aurEff->GetAmount());
     }
 
-    static void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo const& eventInfo)
+    static void HandleProc(AuraScript const&, AuraEffect const* /*aurEff*/, ProcEventInfo const& eventInfo)
     {
         eventInfo.GetActor()->CastSpell(eventInfo.GetActor(), SPELL_SHAMAN_VOLTAIC_BLAZE_OVERRIDE);
     }
