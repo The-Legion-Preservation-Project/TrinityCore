@@ -117,7 +117,7 @@ namespace WorldPackets
 
             WorldPacket const* Write() override;
 
-            std::vector<std::reference_wrapper<BattlePet>> Pets;
+            std::vector<std::reference_wrapper<BattlePet const>> Pets;
             bool PetAdded = false;
         };
 
