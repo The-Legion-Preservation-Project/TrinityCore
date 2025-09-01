@@ -1232,7 +1232,7 @@ class spell_teleport_prep_horde : public SpellScript
         hitUnit->CancelMountAura();
         hitUnit->CastSpell(nullptr, Spells::TeleportTimer, CastSpellExtraArgsInit{
             .TriggerFlags = TRIGGERED_IGNORE_CAST_IN_PROGRESS | TRIGGERED_DONT_REPORT_CAST_ERROR,
-            .OriginalCastId = GetSpell()->m_castId
+            .TriggeringSpell = GetSpell()
         });
     }
 
